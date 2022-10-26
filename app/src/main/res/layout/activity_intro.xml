@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:adjustViewBounds="true"
+    android:gravity="center"
+    tools:ignore="HardcodedText"
+    tools:context=".ui.IntroActivity">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="310dp"
+            android:layout_height="163dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:background="@drawable/kogas_icon2" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="저탄소 친환경 에너지 시대\nKOGAS"
+            android:textSize="25sp"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:layout_marginBottom="65dp"
+            android:textColor="#005FFF"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="사용자 계정 식별 중...."
+            android:textSize="16sp"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:textColor="#696969"/>
+        <ImageView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
+            android:background="@drawable/kogas_icon" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/login_alert_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4D000000"
+        android:visibility="gone"
+        android:clickable="false">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="120dp"
+            app:cardBackgroundColor="#ffffff">
+            <ImageView
+                android:id="@+id/loading_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+</RelativeLayout>
+

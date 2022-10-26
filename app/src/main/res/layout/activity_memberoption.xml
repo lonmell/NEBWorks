@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#00ffffff"
+    android:paddingBottom="15dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/close_btn"
+        app:cardBackgroundColor="#ffffff"
+        app:cardCornerRadius="16dp">
+        <TextView
+            android:id="@+id/list_settingitem02"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:fontFamily="@font/inter_regular"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="현장에서 내보내기"
+            android:textColor="#FF3D00"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/close_btn"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:cardBackgroundColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:text="취소"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
+

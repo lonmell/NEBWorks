@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="UsingOnClickInXml"
+    tools:context=".ui.worksite.PlaceWorkFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:orientation="vertical">
+
+            <!--@+id/top_bar-->
+            <RelativeLayout
+                android:id="@+id/top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:text="KOGAS"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="#1483FE"
+                    android:textSize="20sp"
+                    tools:ignore="HardcodedText" />
+
+                <RelativeLayout
+                    android:id="@+id/notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toStartOf="@+id/out_store"
+                    android:onClick="btnOnclick"
+                    android:padding="5dp"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/notice_cnt_y"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_alignEnd="@+id/bell_icon"
+                        app:cardBackgroundColor="#FF0000"
+                        app:cardCornerRadius="60dp" />
+
+                    <ImageView
+                        android:id="@+id/bell_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/bell" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/out_store"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="16dp"
+                    android:onClick="btnOnclick"
+                    android:padding="5dp"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/out_store" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <!-- total_cnt -->
+            <LinearLayout
+                android:id="@+id/total_cnt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/top_bar"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#dcdcdc" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="76dp"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:id="@+id/cnt_txt01"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_weight="1"
+                        android:background="#ffffff"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="center"
+                        android:text="0\n진행중"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#dcdcdc" />
+
+                    <TextView
+                        android:id="@+id/cnt_txt02"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_weight="1"
+                        android:background="#ffffff"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="center"
+                        android:text="0\n처리중"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#dcdcdc" />
+
+                    <TextView
+                        android:id="@+id/cnt_txt03"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_weight="1"
+                        android:background="#ffffff"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="center"
+                        android:text="0\n승인"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#dcdcdc" />
+
+                    <TextView
+                        android:id="@+id/cnt_txt04"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_weight="1"
+                        android:background="#ffffff"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="center"
+                        android:text="0\n반려"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ffffff" />
+            </LinearLayout>
+
+            <!-- top tab -->
+            <RelativeLayout
+                android:id="@+id/top_tab1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:layout_below="@+id/top_bar">
+                <!-- TabLayou 을 배치한다. -->
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tabTextColor="#696969"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/tabLayout"
+                    android:background="#dcdcdc" />
+                <!-- ViewPager2: 이 위치에 Fragment들이 노출된다. -->
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/tabLayout"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="#ffffff"
+                    android:paddingTop="15dp">
+
+                </androidx.viewpager2.widget.ViewPager2>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/top_bar_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/top_bar"
+                android:background="#dcdcdc"
+                android:orientation="vertical"
+                android:visibility="gone" />
+            <!--  매장기본정보  -->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/top_bar_line2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_below="@+id/top_tab1"-->
+<!--                android:background="#ffffff"-->
+<!--                android:orientation="horizontal" />-->
+
+            <!--            <androidx.recyclerview.widget.RecyclerView-->
+            <!--                android:id="@+id/store_checklist"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_below="@+id/top_bar_line2"-->
+            <!--                android:background="#ffffff" />-->
+            <RelativeLayout
+                android:id="@+id/menu_visible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#E6ffffff"
+                android:visibility="gone"
+                android:clickable="false"/>
+
+            <LinearLayout
+                android:id="@+id/make_work_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/add_work_btn"
+                android:layout_alignEnd="@+id/add_work_btn"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/make_work03"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toStartOf="@+id/make_icon03"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="공지추가"
+                        android:textColor="#000000"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/make_icon03"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="5dp"
+                        app:cardBackgroundColor="#ffffff"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/make_icon03Icon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/post_it" />
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/make_work02"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toStartOf="@+id/make_icon01"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="할일 생성"
+                        android:textColor="#000000"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/make_icon01"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="5dp"
+                        app:cardBackgroundColor="#ffffff"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/make_icon01Icon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/to_do_list" />
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/make_work01"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:layout_toStartOf="@+id/make_icon02"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="즐겨찾기 생성"
+                        android:textColor="#000000"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/make_icon02"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="5dp"
+                        app:cardBackgroundColor="#ffffff"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/make_icon02Icon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/cycle" />
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/add_work_btn"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="100dp"
+                app:cardBackgroundColor="#68B0FF"
+                app:cardCornerRadius="60dp">
+
+                <ImageView
+                    android:id="@+id/wirte_add_img"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/drawing_pen" />
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="#ffffff"
+                android:layout_alignParentBottom="true"/>
+
+            <RelativeLayout
+                android:id="@+id/login_alert_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/loading_view"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    tools:ignore="ContentDescription" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <include layout="@layout/bottom_navigation" />
+</RelativeLayout>

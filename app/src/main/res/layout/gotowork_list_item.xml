@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_total"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:background="#ffffff"
+    android:orientation="horizontal"
+    android:weightSum="6">
+
+    <!--날짜-->
+    <TextView
+        android:id="@+id/gotowork_itme00"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"
+        android:text="날짜"
+        android:textColor="#000"
+        android:textSize="13sp"
+        tools:ignore="HardcodedText" />
+
+    <!--출근/결근-->
+    <TextView
+        android:id="@+id/gotowork_itme01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"
+        android:text="출근"
+        android:textColor="#000"
+        android:textSize="13sp"
+        tools:ignore="HardcodedText" />
+
+    <!--출근시간-->
+
+    <!--퇴근-->
+    <TextView
+        android:id="@+id/gotowork_itme01_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="start|center"
+        android:text=" 00:00"
+        android:textColor="#3498DB"
+        android:textSize="13sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/gotowork_itme02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"
+        android:text="퇴근"
+        android:textColor="#000"
+        android:textSize="13sp"
+        tools:ignore="HardcodedText" />
+
+    <!--퇴근시간-->
+    <TextView
+        android:id="@+id/gotowork_itme03"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="start|center"
+        android:text=" 00:00"
+        android:textColor="#3498DB"
+        android:textSize="13sp"
+        tools:ignore="HardcodedText" />
+
+    <!--하루근로시간-->
+    <TextView
+        android:id="@+id/gotowork_itme04"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="start|center"
+        android:text="0h0m"
+        android:textColor="@color/black"
+        android:textSize="11sp"
+        tools:ignore="HardcodedText" />
+</LinearLayout>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_total"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="77dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="5dp"
+        app:cardBackgroundColor="#f2f2f2"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/area01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="#ffffff"
+                android:layout_toStartOf="@+id/list_setting"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/workimg_url"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        app:cardBackgroundColor="#EDEDED"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/white_plus" />
+
+                            <ImageView
+                                android:id="@+id/workimg"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:id="@+id/titlearea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_alignTop="@+id/workimg_url"
+                        android:layout_toStartOf="@+id/check_work_txt"
+                        android:layout_toEndOf="@+id/workimg_url"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imgwork"
+                            android:layout_width="19dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/emptyimg"
+                            android:layout_marginEnd="10dp"
+                            android:scaleType="fitXY" />
+
+                        <TextView
+                            android:id="@+id/work_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:singleLine="true"
+                            android:text=" 제목"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            tools:ignore="HardcodedText,RtlSymmetry" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/worknanager_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/titlearea"
+                        android:layout_alignStart="@+id/titlearea"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toEndOf="@+id/workimg_url"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="name | position"
+                        android:textColor="#000000"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
+
+                    <TextView
+                        android:id="@+id/work_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/worknanager_info"
+                        android:layout_alignStart="@+id/titlearea"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toEndOf="@+id/workimg_url"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="00:00 AM"
+                        android:textColor="#A9A9A9"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
+
+                    <TextView
+                        android:id="@+id/check_work_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/titlearea"
+                        android:layout_alignBottom="@+id/titlearea"
+                        android:layout_marginEnd="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="center"
+                        android:text="대기"
+                        android:textColor="#6395EC"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/check_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/check_work_txt"
+                        android:layout_alignEnd="@+id/check_work_txt"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:scaleType="center"
+                        android:text="미완료"
+                        android:textColor="#FF3636"
+                        android:textSize="13sp"
+                        tools:ignore="HardcodedText" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+                <RelativeLayout
+                    android:id="@+id/list_setting"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="#3A368A">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        app:cardBackgroundColor="#ffffff"
+                        app:cardCornerRadius="2dp">
+
+                        <ImageView
+                            android:id="@+id/checkarea"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/checkbox_off" />
+
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

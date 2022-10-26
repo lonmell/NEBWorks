@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <root-path name="root" path="."/>
+
+    <cache-path
+        name="cache"
+        path="."/> <!--Context.getCCacheDir() 내부 저장소-->
+    <files-path
+        name="files"
+        path="."/> <!--Context.getFilesDir() 내부 저장소-->
+
+    <external-path
+        name="external"
+        path="."/> <!-- Environment.getExternalStorageDirectory() 외부 저장소 -->
+
+    <external-cache-path
+        name="external-cache"
+        path="."/> <!-- Context.getExternalCacheDir() 외부 저장소 -->
+
+    <external-files-path
+        name="external-files"
+        path="."/> <!-- Context.getExternalFilesDir() 외부저장소 -->
+    <files-path name="app_g_pdf" path="."/>
+
+
+    <!-- SD카드 및 내부 저장소 / 카메라 -->
+    <external-path name="sdcard" path="."/>
+    <external-cache-path name="cache" path="camera"/>
+    <external-path name="external_files" path="."/>
+    <external-path
+        name="my_images"
+        path="Android/data/com.kraft.neb_employer/files/Pictures" />
+</paths>

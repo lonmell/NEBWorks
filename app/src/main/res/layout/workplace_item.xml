@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    app:cardBackgroundColor="#E9EFFF"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="0dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="15dp">
+        <RelativeLayout
+            android:id="@+id/item_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/i_o_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
+                android:elevation="10dp"
+                android:layout_alignParentStart="true"
+                app:cardBackgroundColor="@color/blue"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="5dp">
+
+                <ImageView
+                    android:id="@+id/store_thumnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#dcdcdc"
+                    android:scaleType="fitXY" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/i_o_btn"
+                android:layout_alignBottom="@+id/i_o_btn"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/place_state"
+                android:layout_toEndOf="@+id/i_o_btn"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="start|center"
+                android:maxLines="2"
+                android:text="작업 중"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/place_state"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                app:cardBackgroundColor="#005FFF"
+                app:cardElevation="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/list_setting"
+                app:cardCornerRadius="3dp">
+                    <TextView
+                        android:id="@+id/place_state_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="작업 중"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:textColor="#ffffff"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        tools:ignore="HardcodedText" />
+            </androidx.cardview.widget.CardView>
+            <RelativeLayout
+                android:id="@+id/list_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+                    <RelativeLayout
+                        android:id="@+id/list_img_area"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:visibility="visible">
+                        <ImageView
+                            android:layout_width="3dp"
+                            android:layout_height="15dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/list_setting" />
+                    </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="담당자"
+                android:gravity="center|start"
+                android:textSize="13sp"
+                android:textColor="#000000"
+                android:layout_marginEnd="10dp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="OOO"
+                android:maxLines="1"
+                android:gravity="center|start"
+                android:textSize="13sp"
+                android:textColor="#000000"
+                android:layout_marginEnd="10dp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/start_datetx"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="작업시작일"
+                android:gravity="center|start"
+                android:textSize="13sp"
+                android:textColor="#000000"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="10dp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/start_datetx"
+                android:gravity="center|start"
+                android:maxLines="1"
+                android:text="0000-00-00"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/item_peoplecnt_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/item_peoplecnt"
+                android:background="@drawable/people_icon_resize" />
+
+            <TextView
+                android:id="@+id/item_peoplecnt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/inter_bold"
+                android:singleLine="true"
+                android:text="0"
+                android:textColor="#A9A9A9"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText,TextContrastCheck" />
+        </RelativeLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/goto_place"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardBackgroundColor="#ffffff"
+            app:cardElevation="0dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toStartOf="@+id/move_arrow"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center|start"
+                    android:paddingStart="15dp"
+                    android:text="현장 입장하기"
+                    android:textColor="#1483FE"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+                <ImageView
+                    android:id="@+id/move_arrow"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/blue_right_arrow"
+                    android:layout_gravity="end"/>
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+

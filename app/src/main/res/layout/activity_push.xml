@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.PushActivity"
+    tools:ignore="HardcodedText,SmallSp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingStart="10dp"
+        tools:ignore="RtlSymmetry"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@drawable/back_btn" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="start|center"
+            android:textColor="@color/black"
+            android:text="알림 관리"
+            android:layout_toEndOf="@+id/back_btn"
+            android:layout_toStartOf="@+id/save_btn"
+            android:fontFamily="@font/inter_bold"
+            android:textSize="16sp"
+            android:paddingStart="15dp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/save_btn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:textColor="#8EB3FC"
+            android:layout_gravity="end"
+            android:layout_marginEnd="15dp"
+            android:text="저장"
+            android:fontFamily="@font/inter_bold"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f2f2f2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="start|center"
+        android:text="업무 알림"
+        android:textSize="18sp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/black"
+        tools:ignore="HardcodedText" />
+
+    <!-- 매장 알림 ON/OFF -->
+    <RelativeLayout
+        android:id="@+id/active_on_area01"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Switch
+            android:id="@+id/active_on_bt01"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:checked="true"
+            android:minWidth="50dp"
+            android:track="@drawable/switch_selector"
+            tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:weightSum="2"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="start|center"
+                android:text="현장 업무 알림"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:text="근무자 출근,퇴근 / 현장 작업 보고"
+                android:textSize="13sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText,SmallSp" />
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+    <!-- 결재 알림 ON/OFF -->
+    <RelativeLayout
+        android:id="@+id/active_on_area02"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Switch
+            android:id="@+id/active_on_bt02"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:checked="true"
+            android:minWidth="50dp"
+            android:track="@drawable/switch_selector"
+            tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:weightSum="2"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="start|center"
+                android:text="결재 알림"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:text="작업 결재승인 / 완료알림"
+                android:textSize="13sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText,SmallSp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <!-- 근무시간 알림 -->
+    <RelativeLayout
+        android:id="@+id/active_on_area03"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Switch
+            android:id="@+id/active_on_bt03"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:checked="true"
+            android:minWidth="50dp"
+            android:track="@drawable/switch_selector"
+            tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:weightSum="2"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="start|center"
+                android:text="근무시간 알림"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:text="근로자 근무시간 알림 / 주40시간 / 주52시간"
+                android:textSize="13sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText,SmallSp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+    <!-- 이력서/면접 -->
+    <RelativeLayout
+        android:id="@+id/active_on_area04"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <Switch
+            android:id="@+id/active_on_bt04"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:checked="true"
+            android:minWidth="50dp"
+            android:track="@drawable/switch_selector"
+            tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:weightSum="2"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="start|center"
+                android:text="현장 작업 알림"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:text="현장 작업 시작/종료 알림"
+                android:textSize="13sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText,SmallSp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</LinearLayout>

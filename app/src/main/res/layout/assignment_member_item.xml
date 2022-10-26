@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:id="@+id/area_box"
+    android:padding="10dp">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/profile_area"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cardCornerRadius="20dp"
+        android:layout_marginStart="10dp">
+        <ImageView
+            android:id="@+id/profile_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/certi01"
+            android:layout_alignParentStart="true"/>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_toStartOf="@+id/select_radio_btn"
+        android:layout_toEndOf="@+id/profile_area"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="start|center"
+        android:text="구직자 이름"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        tools:ignore="HardcodedText" />
+
+    <RadioButton
+        android:id="@+id/select_radio_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/selector_radio_button"
+        android:button="@null"
+        android:clickable="false" />
+</RelativeLayout>

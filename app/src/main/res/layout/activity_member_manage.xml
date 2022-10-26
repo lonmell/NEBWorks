@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText,TextContrastCheck,UsingOnClickInXml"
+    tools:context=".ui.member.MemberManagement">
+    <!--@+id/top_bar-->
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#ffffff">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/back_btn"
+            android:onClick="btnOnclick"
+            tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/invate_code_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/inter_regular"
+            android:padding="5dp"
+            android:text="직원관리"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText,RtlSymmetry" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/top_bar"
+        android:background="#000000" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_below="@+id/top_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/inter_bold"
+                android:text="합류한 직원"
+                android:textSize="20sp"
+                android:textColor="@color/black" />
+
+            <RelativeLayout
+                android:id="@+id/member_list_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/member_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp" />
+
+                <TextView
+                    android:id="@+id/nodata_member"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/member_list"
+                    android:layout_alignTop="@+id/member_list"
+                    android:layout_alignEnd="@+id/member_list"
+                    android:layout_alignBottom="@+id/member_list"
+                    android:background="#ffffff"
+                    android:gravity="center"
+                    android:text="직원이 없습니다."
+                    android:textColor="#696969" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!--@+id/bottom_navigation-->
+    <RelativeLayout
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:background="#fff"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/left_menu_icon"
+            android:layout_alignStart="@+id/left_menu_icon"
+            android:layout_alignEnd="@+id/left_menu_icon"
+            android:background="#f2f2f2" />
+        <LinearLayout
+            android:id="@+id/left_menu_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/center_icon"
+            android:elevation="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/bottom_navigation01"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:onClick="btnOnclick"
+                android:padding="5dp"
+                android:text="홈"
+                android:textColor="#696969"
+                android:textSize="15sp"
+                app:drawableTopCompat="@drawable/home_resize"
+                tools:ignore="HardcodedText,TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/bottom_navigation02"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:onClick="btnOnclick"
+                android:padding="5dp"
+                android:text="할일"
+                android:textColor="#696969"
+                android:textSize="15sp"
+                app:drawableTopCompat="@drawable/worktogo_resize"
+                tools:ignore="HardcodedText,TextContrastCheck" />
+        </LinearLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/center_icon"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_centerHorizontal="true"
+            app:cardBackgroundColor="#68B0FF"
+            app:cardCornerRadius="60dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/bottom_navigation03"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:onClick="btnOnclick"
+                    android:padding="5dp"
+                    android:text="캘린더"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp"
+                    app:drawableTopCompat="@drawable/calendar_on_resize"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f2f2f2"
+            android:layout_above="@+id/right_menu_icon"
+            android:layout_alignStart="@+id/right_menu_icon"
+            android:layout_alignEnd="@+id/right_menu_icon"/>
+
+        <LinearLayout
+            android:id="@+id/right_menu_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/center_icon"
+            android:elevation="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/bottom_navigation04"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:onClick="btnOnclick"
+                android:padding="5dp"
+                android:text="근무현황"
+                android:textColor="#696969"
+                android:textSize="15sp"
+                app:drawableTopCompat="@drawable/workstatus_resize"
+                tools:ignore="HardcodedText,TextContrastCheck" />
+
+            <LinearLayout
+                android:id="@+id/bottom_navigation05"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:onClick="btnOnclick"
+                android:orientation="vertical"
+                android:padding="3dp"
+                android:weightSum="2">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/more_icon_resize"
+                    tools:ignore="NestedWeights" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="더보기"
+                    android:textColor="#696969"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/login_alert_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/loading_view"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+</RelativeLayout>
+

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer2"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/close_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/left_arrow_resize" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/user_profile_box"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#ffffff"
+            android:layout_below="@+id/close_btn"
+            android:layout_marginStart="20dp">
+            <ImageView
+                android:id="@+id/user_profile"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/no_image" />
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/store_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/user_profile_box"
+            android:layout_alignBottom="@+id/user_profile_box"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/user_profile_box"
+            android:fontFamily="@font/applesdgothicneo"
+            android:gravity="start|center"
+            android:text="store_name"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            tools:ignore="HardcodedText" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f2f2f2"/>
+
+
+
+</LinearLayout>

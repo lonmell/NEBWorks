@@ -1,0 +1,162 @@
+{
+  "project_info": {
+    "project_number": "1005419359030",
+    "project_id": "nebmanager-94d9b",
+    "storage_bucket": "nebmanager-94d9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005419359030:android:5c7b80954bb23b56e76197",
+        "android_client_info": {
+          "package_name": "com.kraft.neb_employee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005419359030-dqpr15c0kgs4pc17nfcmdcnpgdr5dfe4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChrnZ-obbwc7xOXRDD6sZqRFpChkBUsNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005419359030-dqpr15c0kgs4pc17nfcmdcnpgdr5dfe4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005419359030-mp5eicvnidhgcvo6nlqq5i9v8s2uuvtf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ios.kraft.neb.employer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005419359030:android:bedd631442f39436e76197",
+        "android_client_info": {
+          "package_name": "com.kraft.neb_employer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005419359030-ijt3gtm8avutvn49jhki560q4t2ua641.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kraft.neb_employer",
+            "certificate_hash": "3a29cd06326b9efdf333cc7054a84695a9dc2276"
+          }
+        },
+        {
+          "client_id": "1005419359030-dqpr15c0kgs4pc17nfcmdcnpgdr5dfe4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChrnZ-obbwc7xOXRDD6sZqRFpChkBUsNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005419359030-dqpr15c0kgs4pc17nfcmdcnpgdr5dfe4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005419359030-mp5eicvnidhgcvo6nlqq5i9v8s2uuvtf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ios.kraft.neb.employer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005419359030:android:0ba900289b4217f9e76197",
+        "android_client_info": {
+          "package_name": "com.kraft.workmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005419359030-dqpr15c0kgs4pc17nfcmdcnpgdr5dfe4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChrnZ-obbwc7xOXRDD6sZqRFpChkBUsNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005419359030-dqpr15c0kgs4pc17nfcmdcnpgdr5dfe4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005419359030-mp5eicvnidhgcvo6nlqq5i9v8s2uuvtf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ios.kraft.neb.employer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005419359030:android:7b4e0ceba8af0bd8e76197",
+        "android_client_info": {
+          "package_name": "com.krafte.kogas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005419359030-dqpr15c0kgs4pc17nfcmdcnpgdr5dfe4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChrnZ-obbwc7xOXRDD6sZqRFpChkBUsNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005419359030-dqpr15c0kgs4pc17nfcmdcnpgdr5dfe4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005419359030-mp5eicvnidhgcvo6nlqq5i9v8s2uuvtf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ios.kraft.neb.employer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

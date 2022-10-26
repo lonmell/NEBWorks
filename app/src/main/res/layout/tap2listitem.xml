@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_total"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:cardBackgroundColor="#ffffff"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="10dp">
+
+    <RelativeLayout
+        android:id="@+id/area01"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_margin="10dp">
+
+        <ImageView
+            android:id="@+id/no_img_icon"
+            android:layout_width="19dp"
+            android:layout_height="16dp"
+            android:visibility="gone"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/emptyimg"/>
+
+        <TextView
+            android:id="@+id/work_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="-2dp"
+            android:layout_toStartOf="@+id/list_setting"
+            android:layout_toEndOf="@+id/no_img_icon"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="start|top"
+            android:singleLine="true"
+            android:text="제목"
+            android:textColor="#696969"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,RtlSymmetry" />
+
+        <RelativeLayout
+            android:id="@+id/workmember_img"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_below="@+id/work_title"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@+id/work_date_info"
+            android:orientation="horizontal">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/member_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                android:layout_toStartOf="@+id/plus_add_membercnt" />
+
+            <TextView
+                android:id="@+id/plus_add_membercnt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                android:text="+0"
+                android:textColor="#1483FE"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/work_date_info"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@+id/check_area"
+            android:layout_alignBottom="@+id/workmember_img"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/work_yoil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#696969"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/work_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text="마감시간 : 00:00 AM"
+                android:textColor="#696969"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/work_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="end"
+                android:text="완료상태"
+                android:textColor="#1483FE"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/list_setting"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/work_title"
+            android:layout_alignBottom="@+id/work_title"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@+id/check_area">
+
+            <ImageView
+                android:layout_width="3dp"
+                android:layout_height="15dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/list_setting" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/check_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+            <RelativeLayout
+                android:id="@+id/check_box"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="#8EB3FC">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerInParent="true"
+                    app:cardBackgroundColor="#ffffff"
+                    app:cardCornerRadius="2dp">
+
+                    <ImageView
+                        android:id="@+id/checkarea"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/checkbox_off" />
+
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f2f2f2"/>
+</LinearLayout>
+

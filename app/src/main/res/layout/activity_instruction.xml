@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".ui.main.InstructionActivity">
+
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="45dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:text="KOGAS"
+            android:fontFamily="@font/inter_bold"
+            android:textColor="#1483FE"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText" />
+
+        <RelativeLayout
+            android:id="@+id/notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:layout_toStartOf="@+id/out_store"
+            android:padding="5dp"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/notice_cnt_y"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignEnd="@+id/bell_icon"
+                app:cardBackgroundColor="#FF0000"
+                app:cardCornerRadius="60dp" />
+
+            <ImageView
+                android:id="@+id/bell_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/bell" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/out_store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:padding="5dp"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/out_store" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/top_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/top_bar"
+        android:background="#d9d9d9" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_line"
+        android:layout_above="@+id/confirm_btn">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/place_name"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="place manage office name"
+                android:textColor="#1483FE"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#696969" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="89dp"
+                    android:layout_height="30dp"
+                    app:cardBackgroundColor="#70B2FF"
+                    app:cardCornerRadius="60dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        app:cardBackgroundColor="#70B2FF"
+                        app:cardCornerRadius="60dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="center"
+                            android:text="가좌GS"
+                            android:textColor="#ffffff"
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
+                    </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="89dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    app:cardBackgroundColor="#70B2FF"
+                    app:cardCornerRadius="60dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        app:cardBackgroundColor="#ffffff"
+                        app:cardCornerRadius="60dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="center"
+                            android:text="약암VS"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
+                    </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:text="4대 위험 공종작업 ( 10.13 목요일 )"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="작업명"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="가좌GS"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:layout_gravity="end"
+                    android:text="FE-61B 검교정 관련 취외 및 검교정 의뢰"
+                    android:textColor="#696969"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="부서명"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="설비보전부 KGT 계전"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="작업내용"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#FAFAFA"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:text="▶   FE-61B 계량라인 가스 방산"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="▶   터벤미터 플랜지 설치"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="▶   블라인터 플랜지 설치"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="▶   터빈미터 검교정 의뢰"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="위험요소"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="중량물, 협착, 낙하위험"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="입회시간"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="시작"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="13:00"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="종료"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="18:00"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="감독자명"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="KOGAS"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="과장 이화철"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="KOGAS"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="대리 신영재"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="외부"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="KGT 노계환 외 2명"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="사업소장 안전점검"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:textColor="#000000"
+                android:background="#F2F2F2"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="안전대책"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#FAFAFA"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:text="▶   위험성평가철저"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="▶   수신호철저"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="▶   작업반경 내 접근금지"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="▶   중량물 절차 준수"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="입회여부"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="설비보전부장"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="비고\n(장비명)"
+                    android:textColor="#000000"
+                    android:background="#F2F2F2"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text="카고크레인"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="#000000"
+                    android:background="#FAFAFA"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/confirm_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="15dp"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="#70B2FF">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="확인"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:fontFamily="@font/inter_regular"
+                tools:ignore="HardcodedText" />
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

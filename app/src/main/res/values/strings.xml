@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">kogas</string>
+
+    <!--EmployerMainActivityTest String-->
+    <string name="main_text05">현장직원 관리</string>
+    <string name="main_text06">구인</string>
+    <string name="main_text07">지시사항</string>
+    <string name="main_text08">간편메뉴</string>
+    <string name="main_text09">알림</string>
+    <string name="main_text10">면접지원</string>
+    <string name="main_text10_1">근로계약서</string>
+    <string name="main_text11">결재현황</string>
+    <string name="main_text12">현장관리</string>
+
+    <string name="msg_token_fmt" translatable="false">FCM registration Token: %s</string>
+
+    <string name="default_notification_channel_id">default_notification_channel_id</string>
+    <string name="channel_1">현장 업무 알림</string>
+    <string name="channel_2">업무 결재 알림</string>
+    <string name="channel_3">근무 시간 알림</string>
+    <string name="channel_4">현장 작업 알림</string>
+    <string name="channel_5">현장 공지 알림</string>
+
+    <string name="msg_subscribed">Subscribed to weather topic</string>
+    <string name="msg_subscribe_failed">Failed to subscribe to weather topic</string>
+
+
+    <string name="title_home">홈</string>
+    <string name="title_dashboard">할일</string>
+    <string name="title_calandar">캘린더</string>
+    <string name="title_workstatus">근무현황</string>
+    <string name="title_more">더보기</string>
+
+</resources>

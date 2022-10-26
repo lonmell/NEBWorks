@@ -1,0 +1,615 @@
+package com.krafte.kogas.ui.feed;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.loader.content.CursorLoader;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.krafte.kogas.R;
+import com.krafte.kogas.dataInterface.FeedNotiAddInterface;
+import com.krafte.kogas.dataInterface.MakeFileNameInterface;
+import com.krafte.kogas.dataInterface.UserSelectInterface;
+import com.krafte.kogas.databinding.ActivityPlacenotiAddBinding;
+import com.krafte.kogas.util.DateCurrent;
+import com.krafte.kogas.util.Dlog;
+import com.krafte.kogas.util.PageMoveClass;
+import com.krafte.kogas.util.PreferenceHelper;
+import com.krafte.kogas.util.RetrofitConnect;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
+
+public class FeedAddActivity extends AppCompatActivity {
+    private final static String TAG = "PlaceNotiAddActivity";
+    private ActivityPlacenotiAddBinding binding;
+    Context mContext;
+    int GALLEY_CODE = 10;
+
+    //Other 클래스
+    PageMoveClass pm = new PageMoveClass();
+    Dlog dlog = new Dlog();
+    PreferenceHelper shardpref;
+    DateCurrent dc = new DateCurrent();
+    Handler handler = new Handler();
+    RetrofitConnect rc = new RetrofitConnect();
+
+    //navbar.xml
+    DrawerLayout drawerLayout;
+    View drawerView;
+    ImageView close_btn;
+
+    //shared
+    String USER_INFO_ID = "";
+    String place_id = "";
+    String place_name = "";
+    String place_owner_id = "";
+    String place_owner_name = "";
+    String place_management_office = "";
+    String place_address = "";
+    String place_latitude = "";
+    String place_longitude = "";
+    String place_start_time = "";
+    String place_end_time = "";
+    String place_img_path = "";
+    String place_start_date = "";
+    String place_created_at = "";
+    String USER_INFO_EMAIL = "";
+
+    File file;
+    SimpleDateFormat dateFormat;
+    @SuppressLint("SdCardPath")
+    String BACKUP_PATH = "/sdcard/Download/heypass/";
+    String ProfileUrl = "";
+    private Bitmap saveBitmap;
+    String ImgfileMaker = "";
+    Drawable icon_off;
+    Drawable icon_on;
+
+    //Check Data
+    String noti_title,noti_contents,noti_link,noti_img;
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+        binding = ActivityPlacenotiAddBinding.inflate(getLayoutInflater()); // 1
+        setContentView(binding.getRoot()); // 2
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
+
+        mContext = this;
+        dlog.DlogContext(mContext);
+        shardpref = new PreferenceHelper(mContext);
+
+        icon_on = mContext.getResources().getDrawable(R.drawable.resize_service_on);
+        icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
+
+        setBtnEvent();
+
+        //UI 데이터 세팅
+        try {
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
+            place_id = shardpref.getString("place_id", "0");
+            place_name = shardpref.getString("place_name", "0");
+            place_owner_id = shardpref.getString("place_owner_id", "0");
+            place_owner_name = shardpref.getString("place_owner_name", "0");
+            place_management_office = shardpref.getString("place_management_office", "0");
+            place_address = shardpref.getString("place_address", "0");
+            place_latitude = shardpref.getString("place_latitude", "0");
+            place_longitude = shardpref.getString("place_longitude", "0");
+            place_start_time = shardpref.getString("place_start_time", "0");
+            place_end_time = shardpref.getString("place_end_time", "0");
+            place_img_path = shardpref.getString("place_img_path", "0");
+            place_start_date = shardpref.getString("place_start_date", "0");
+            place_created_at = shardpref.getString("place_created_at", "0");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
+            shardpref.putInt("selectposition", 0);
+            UserCheck(USER_INFO_EMAIL);
+        } catch (Exception e) {
+            dlog.i("onCreate Exception : " + e);
+        }
+
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public void onResume() {
+        super.onResume();
+        ImgfileMaker = ImageNameMaker();
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        pm.PlaceWorkBack(mContext);
+    }
+
+    public void setBtnEvent() {
+        binding.closeBtn.setOnClickListener(v -> {
+            pm.PlaceWorkBack(mContext);
+        });
+
+        binding.workSave.setOnClickListener(v -> {
+            dlog.i("DataCheck() : " + DataCheck());
+            if(DataCheck()){
+                AddStroeNoti();
+            }
+        });
+
+        binding.cancel.setOnClickListener(v -> {
+            pm.PlaceWorkBack(mContext);
+        });
+
+        binding.notiSetimg.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, GALLEY_CODE);
+        });
+
+        binding.closeBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
+
+
+        if(saveBitmap != null){
+            binding.clearImg.setVisibility(View.VISIBLE);
+            binding.imgPlus.setVisibility(View.GONE);
+        }else{
+            binding.clearImg.setVisibility(View.GONE);
+            binding.imgPlus.setVisibility(View.VISIBLE);
+        }
+        binding.clearImg.setOnClickListener(v -> {
+            try {
+                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
+                saveBitmap.eraseColor(Color.TRANSPARENT);
+                binding.notiSetimg.setImageBitmap(saveBitmap);
+                binding.notiSetimg.setBackgroundResource(R.drawable.img_box_round);
+                ProfileUrl = "";
+                binding.clearImg.setVisibility(View.GONE);
+                binding.imgPlus.setVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                dlog.i("clearImg Exception : " + e);
+            }
+        });
+    }
+
+
+    public void UserCheck(String account) {
+        dlog.i("UserCheck account : " + account);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(account);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
+                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            try {
+                                if (!response.body().equals("[]")) {
+                                    JSONArray Response = new JSONArray(response.body());
+                                    String id = Response.getJSONObject(0).getString("id");
+                                    String name = Response.getJSONObject(0).getString("name");
+                                    String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
+                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
+                                    String department = Response.getJSONObject(0).getString("department");
+                                    String position = Response.getJSONObject(0).getString("position");
+                                    String img_path = Response.getJSONObject(0).getString("img_path");
+
+                                    try {
+                                        Glide.with(mContext).load(img_path)
+//                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                .skipMemoryCache(true)
+                                                .placeholder(R.drawable.no_image)
+                                                .into(binding.profileImg);
+
+                                        binding.userName.setText((name.equals("null") ? "" : name) + "|" + (position.equals("null") ? "" : position));
+
+                                        dlog.i("------UserCheck-------");
+                                        dlog.i("프로필 사진 url : " + img_path);
+                                        dlog.i("성명 : " + name);
+                                        dlog.i("부서 : " + department);
+                                        dlog.i("직책 : " + position);
+                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
+                                        dlog.i("------UserCheck-------");
+                                    } catch (Exception e) {
+                                        dlog.i("UserCheck Exception : " + e);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void AddStroeNoti() {
+        dlog.i("-----AddStroeNoti Check-----");
+        dlog.i("title : " + noti_title);
+        dlog.i("content : " + noti_contents);
+        dlog.i("link : " + noti_link);
+        dlog.i("Profile Url : " + ProfileUrl);
+        dlog.i("-----AddStroeNoti Check-----");
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FeedNotiAddInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
+        Call<String> call = api.getData(place_id,noti_title,noti_contents,USER_INFO_ID,noti_link,ProfileUrl,"");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                            try {
+                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                    if (!ProfileUrl.isEmpty()) {
+                                        saveBitmapAndGetURI();
+                                    }
+                                    Toast.makeText(mContext, "현장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    pm.PlaceWorkGo(mContext);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    private boolean DataCheck(){
+        /*
+            1. 제목
+            2. 내용
+            3. 링크
+            4. 사진
+       * */
+        noti_title = binding.inputWorktitle.getText().toString();
+        noti_contents = binding.inputWorkcontents.getText().toString();
+        noti_link = binding.inputMovelink.getText().toString();
+
+        if(noti_title.isEmpty()){
+            Toast.makeText(mContext,"제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(noti_contents.isEmpty()){
+            Toast.makeText(mContext,"내용을 입력해주세요",Toast.LENGTH_SHORT).show();
+            return false;
+        }else{
+            return true;
+        }
+    }
+    private String ImageNameMaker() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MakeFileNameInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MakeFileNameInterface api = retrofit.create(MakeFileNameInterface.class);
+        Call<String> call = api.getData("");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+//                    String jsonResponse = rc.getBase64decode(response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(response.body());
+                        if (!Response.toString().equals("[]")) {
+                            for (int i = 0; i < Response.length(); i++) {
+                                JSONObject jsonObject = Response.getJSONObject(i);
+                                ImgfileMaker = jsonObject.getString("id");
+                                dlog.i("ImgfileMaker : " + ImgfileMaker);
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+        return ImgfileMaker;
+    }
+
+
+    //이미지 업로드에 필요한 소스 START
+    @SuppressLint("LongLogTag")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALLEY_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                String imagePath = "";
+                try {
+                    //1) data의 주소 사용하는 방법
+                    imagePath = data.getDataString(); // "content://media/external/images/media/7215"
+
+                    Glide.with(this)
+                            .load(imagePath)
+                            .into(binding.notiSetimg);
+                    binding.clearImg.setVisibility(View.VISIBLE);
+                    binding.imgPlus.setVisibility(View.GONE);
+
+                    Glide.with(getApplicationContext()).asBitmap().load(imagePath).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                            saveBitmap = resource;
+                        }
+                    });
+
+                    final String IMG_FILE_EXTENSION = ".JPEG";
+                    String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+                    ProfileUrl = "http://krafte.net/kogas/image/feed_img/" + file_name;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else if (resultCode == RESULT_CANCELED) {
+                binding.imgPlus.setVisibility(View.VISIBLE);
+                binding.clearImg.setVisibility(View.GONE);
+                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    //절대경로를 구한다.
+    private String getRealPathFromUri(Uri uri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+
+        CursorLoader cursorLoader = new CursorLoader(this, uri, proj, null, null, null);
+        Cursor cursor = cursorLoader.loadInBackground();
+
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        dlog.i("columnIndex = " + columnIndex);
+        cursor.moveToFirst();
+        String url = cursor.getString(columnIndex);
+
+
+        cursor.close();
+        return url;
+    }
+
+    @SuppressLint({"SimpleDateFormat", "LongLogTag"})
+    public Uri saveBitmapAndGetURI() {
+        //Create Bitmap
+        binding.loginAlertText.setVisibility(View.VISIBLE);
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        saveBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        byte[] ba = bao.toByteArray();
+        String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
+
+        //Create Bitmap -> File
+        final String IMG_FILE_EXTENSION = ".JPEG";
+        new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+        String fullFileName = BACKUP_PATH;
+
+        dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
+        dlog.i("(saveBitmapAndGetURI)USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("(saveBitmapAndGetURI)fullFileName : " + fullFileName);
+
+        File file_path;
+        try {
+            file_path = new File(fullFileName);
+            if (!file_path.isDirectory()) {
+                file_path.mkdirs();
+            }
+            dlog.i("(saveBitmapAndGetURI)file_path : " + file_path);
+            dlog.i("(saveBitmapAndGetURI)file_name : " + file_name);
+            file = new File(file_path, file_name);
+            FileOutputStream out = new FileOutputStream(file);
+            saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+
+            ProfileUrl = "http://krafte.net/kogas/image/feed_img/" + file_name;
+            saveBitmapToFile(file);
+
+            dlog.e("사인 저장 경로 : " + ProfileUrl);
+
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
+            RetrofitInterface retrofitInterface = ApiClient.getApiClient().create(RetrofitInterface.class);
+            Call<String> call = retrofitInterface.request(body);
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.e("uploaded_file()", "성공 : call = " + call + "response = " + response);
+
+                    if (fileDelete(String.valueOf(file))) {
+                        Log.e("uploaded_file()", "기존 이미지 삭제 완료");
+                    } else {
+                        Log.e("uploaded_file()", "이미지 삭제 오류");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.e("uploaded_file()", "에러 : " + t.getMessage());
+                }
+            });
+            Log.d("(saveBitmapAndGetURI)이미지 경로 : ", Uri.fromFile(file).toString());
+
+            out.close();
+            binding.loginAlertText.setVisibility(View.GONE);
+            dlog.i("(saveBitmapAndGetURI)file : " + file);
+        } catch (FileNotFoundException exception) {
+            dlog.e("FileNotFoundException : " + exception.getMessage());
+        } catch (IOException exception) {
+            dlog.e("IOException : " + exception.getMessage());
+        }
+        return null;
+    }
+
+    @SuppressLint("LongLogTag")
+    public static boolean fileDelete(String filePath) {
+        try {
+            File file = new File(filePath);
+            if (file.exists()) {
+                file.delete();
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e("PlaceAddActivity fileDelete", e.getMessage());
+        }
+        return false;
+    }
+
+    public static class ApiClient {
+        private static final String BASE_URL = "http://krafte.net/kogas/image/";
+        private static Retrofit retrofit;
+
+        public static Retrofit getApiClient() {
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
+            if (retrofit == null) {
+                retrofit = new Retrofit.Builder()
+                        .baseUrl(BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .build();
+            }
+            return retrofit;
+        }
+
+    }
+
+    public interface RetrofitInterface {
+        //api를 관리해주는 인터페이스
+        @Multipart
+        @POST("upload_feed_img.php")
+        Call<String> request(@Part MultipartBody.Part file);
+    }
+
+    public File saveBitmapToFile(File file) {
+        try {
+            // BitmapFactory options to downsize the image
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            o.inSampleSize = 8;
+            // factor of downsizing the image
+
+            FileInputStream inputStream = new FileInputStream(file);
+            //Bitmap selectedBitmap = null;
+            BitmapFactory.decodeStream(inputStream, null, o);
+            inputStream.close();
+
+            // The new size we want to scale to
+            final int REQUIRED_SIZE = 50;
+
+            // Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while (o.outWidth / scale / 8 >= REQUIRED_SIZE &&
+                    o.outHeight / scale / 8 >= REQUIRED_SIZE) {
+                scale *= 8;
+            }
+
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            inputStream = new FileInputStream(file);
+
+            Bitmap selectedBitmap = BitmapFactory.decodeStream(inputStream, null, o2);
+            inputStream.close();
+
+            // here i override the original image file
+            file.createNewFile();
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+
+            return file;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+}
