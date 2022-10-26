@@ -4,16 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import com.krafte.kogas.R;
 import com.krafte.kogas.databinding.ActivityAccountDeleteBinding;
-import com.krafte.kogas.databinding.ActivityMainBinding;
 import com.krafte.kogas.pop.TwoButtonPopActivity;
 import com.krafte.kogas.util.PreferenceHelper;
 

@@ -163,19 +163,27 @@ public class PlaceEditActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        mContext = this;
-        dlog.DlogContext(mContext);
-        shardpref = new PreferenceHelper(mContext);
+        try{
+            mContext = this;
+            dlog.DlogContext(mContext);
+            shardpref = new PreferenceHelper(mContext);
 
-        place_id = shardpref.getString("place_id","0");
-        USER_INFO_ID = shardpref.getString("USER_INFO_NO","0");
-        USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
+            place_id = shardpref.getString("place_id","0");
+            USER_INFO_ID = shardpref.getString("USER_INFO_NO","0");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
 
-        gpsTracker = new GpsTracker(mContext);
-        geocoder = new Geocoder(mContext);
+            shardpref.putInt("SELECT_POSITION", 0);
+            shardpref.putInt("SELECT_POSITION_sub",1);
 
-        setBtnEvent();
-        getPlaceData();
+            gpsTracker = new GpsTracker(mContext);
+            geocoder = new Geocoder(mContext);
+
+            setBtnEvent();
+            getPlaceData();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private void setBtnEvent(){

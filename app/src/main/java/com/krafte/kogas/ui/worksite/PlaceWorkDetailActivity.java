@@ -158,9 +158,11 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         place_name = shardpref.getString("place_name", "0");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1"); //0-관리자 / 1- 근로자
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1"); //0-관리자 / 1- 근로자
         task_no = shardpref.getString("task_no", "");
 
+        shardpref.putInt("SELECT_POSITION", 0);
+        shardpref.putInt("SELECT_POSITION_sub", 1);
 
         fileName = USER_INFO_ID;
         dateFormat = new SimpleDateFormat("HH:mm:ss", getResources().getConfiguration().locale);
@@ -219,6 +221,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
          */
 
     }
+
     public void UserCheck(String account) {
         dlog.i("UserCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -283,6 +286,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             }
         });
     }
+
     @SuppressLint("SetTextI18n")
     private void getTaskContents() {
 
@@ -298,9 +302,9 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         end_time = shardpref.getString("end_time", "0");
         create_date = shardpref.getString("task_date", "0");
 
-        ProfileUrl = shardpref.getString("img_path", "0").equals("null")?"":shardpref.getString("img_path", "0");
-        complete_yn = shardpref.getString("complete_yn", "y").equals("null")?"y":"n";// y:완료, n:미완료
-        incomplete_reason = shardpref.getString("incomplete_reason", "n").equals("null")?"":shardpref.getString("incomplete_reason", "0"); // n: 미완료 사유
+        ProfileUrl = shardpref.getString("img_path", "0").equals("null") ? "" : shardpref.getString("img_path", "0");
+        complete_yn = shardpref.getString("complete_yn", "y").equals("null") ? "y" : "n";// y:완료, n:미완료
+        incomplete_reason = shardpref.getString("incomplete_reason", "n").equals("null") ? "" : shardpref.getString("incomplete_reason", "0"); // n: 미완료 사유
 
         try {
             dlog.i("-----getTaskContents-----");
@@ -319,21 +323,22 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             dlog.i("ProfileUrl : " + ProfileUrl);
             dlog.i("complete_yn : " + complete_yn);
             dlog.i("incomplete_reason : " + incomplete_reason);
+            dlog.i("user_id.contains(USER_INFO_ID) : " + user_id.contains(USER_INFO_ID));
             dlog.i("-----getTaskContents-----");
             binding.endtimeTxt.setText(end_time);
 
-            binding.inputWorktitle.setText(WorkTitle.equals("null")?"":WorkTitle);
-            binding.workContentSet.setText(WorkContents.equals("null")?"":WorkContents);
-            binding.incompleteInput.setText(incomplete_reason.equals("null")?"":incomplete_reason);
+            binding.inputWorktitle.setText(WorkTitle.equals("null") ? "" : WorkTitle);
+            binding.workContentSet.setText(WorkContents.equals("null") ? "" : WorkContents);
+            binding.incompleteInput.setText(incomplete_reason.equals("null") ? "" : incomplete_reason);
 
-            if(user_id.contains(USER_INFO_ID)){
+            if (user_id.contains(USER_INFO_ID)) {
                 binding.success01Txt.setClickable(true);
                 binding.success01Txt.setEnabled(true);
                 binding.success02Txt.setEnabled(true);
                 binding.success02Txt.setClickable(true);
                 binding.incompleteInput.setEnabled(true);
                 binding.bottomBtnBox.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 binding.success01Txt.setClickable(false);
                 binding.success01Txt.setEnabled(false);
                 binding.success02Txt.setEnabled(false);
@@ -343,42 +348,38 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                 binding.imgPlus.setVisibility(View.GONE);
                 binding.bottomBtnBox.setVisibility(View.GONE);
             }
+
             //0:체크, 1:사진
-            if(complete_kind.equals("0")){
+            if (complete_kind.equals("0")) {
                 binding.imgArea.setVisibility(View.GONE);
                 binding.successCheckBox.setVisibility(View.VISIBLE);
-                if(complete_yn.equals("y")){
+                if (!complete_yn.equals("null")) {
                     binding.incompleteInput.setBackgroundColor(Color.parseColor("#dcdcdc"));
                     binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
                     binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                }else if(complete_yn.equals("n")){
-                    binding.incompleteInput.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                    binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                    binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-                    binding.incompleteInput.setEnabled(true);
-                }else{
+                } else  {
                     binding.incompleteInput.setEnabled(true);
                     binding.incompleteInput.setBackgroundColor(Color.parseColor("#f2f2f2"));
                     binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
                     binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
                 }
-            }else{
+            } else {
                 binding.imgArea.setVisibility(View.VISIBLE);
                 binding.successCheckBox.setVisibility(View.GONE);
-                if(!ProfileUrl.equals("null")) {
+                if (!ProfileUrl.equals("null")) {
                     Glide.with(mContext).load(ProfileUrl)
                             .skipMemoryCache(true).into(binding.uploadSuccessImg);
                     binding.clearImg.setVisibility(View.VISIBLE);
                     binding.imgPlus.setVisibility(View.GONE);
-                }else{
+                } else {
                     saveBitmap = null;
                     binding.clearImg.setVisibility(View.GONE);
                     binding.imgPlus.setVisibility(View.VISIBLE);
                 }
-                if(incomplete_reason.isEmpty()){
+                if (incomplete_reason.isEmpty()) {
                     binding.incompleteInput.setVisibility(View.GONE);
                     binding.incompleteTitle.setVisibility(View.GONE);
-                }else{
+                } else {
                     binding.incompleteTitle.setVisibility(View.VISIBLE);
                     binding.incompleteInput.setVisibility(View.VISIBLE);
                 }
@@ -426,7 +427,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                 startActivityForResult(intent, GALLEY_CODE);
             });
 
-            binding.workadd01Txt.setText(complete_kind.equals("1")?"현장사진":"체크");
+            binding.workadd01Txt.setText(complete_kind.equals("1") ? "현장사진" : "체크");
 
 //            if (complete_yn.equals("y")) {
 //                binding.successCheckArea.setVisibility(View.GONE);
@@ -481,16 +482,16 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             String reject_reason = binding.incompleteInput.getText().toString();
 
             //0:체크 1:사진
-            if(complete_kind.equals("0")){
-                setSaveTask(task_id,task_date,ProfileUrl,complete_yn,reject_reason);
-            }else{
-                if(ProfileUrl != null){
-                    setSaveTask(task_id,task_date,ProfileUrl,"y",reject_reason);
-                }else{
-                    if(!reject_reason.isEmpty()){
-                        setSaveTask(task_id,task_date,ProfileUrl,"y",reject_reason);
-                    }else{
-                        Toast.makeText(mContext,"현장 사진을 추가해주세요.",Toast.LENGTH_SHORT).show();
+            if (complete_kind.equals("0")) {
+                setSaveTask(task_id, task_date, ProfileUrl, complete_yn, reject_reason);
+            } else {
+                if (ProfileUrl != null) {
+                    setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
+                } else {
+                    if (!reject_reason.isEmpty()) {
+                        setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
+                    } else {
+                        Toast.makeText(mContext, "현장 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -507,14 +508,16 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         });
 
         binding.menu.setOnClickListener(v -> {
-                pm.PlaceWorkBack(mContext);
+            shardpref.putInt("SELECT_POSITION", 0);
+            shardpref.putInt("SELECT_POSITION_sub",0);
+            pm.PlaceWorkBack(mContext);
         });
 
     }
 
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         ImgfileMaker = ImageNameMaker();
     }
@@ -525,7 +528,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
 
     }
 
-    public void setSaveTask(String task_id,String task_date,String img_path,String complete_yn,String reject_reason) {
+    public void setSaveTask(String task_id, String task_date, String img_path, String complete_yn, String reject_reason) {
         dlog.i("------setSaveTask------");
         dlog.i("task_id : " + task_id);
         dlog.i("task_date : " + task_date);
@@ -533,7 +536,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         dlog.i("complete_yn : " + complete_yn);
         dlog.i("reject_reason : " + reject_reason);
         dlog.i("------setSaveTask------");
-        img_path = img_path.equals("null")?"":img_path;
+        img_path = img_path.equals("null") ? "" : img_path;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TaskSaveInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -589,7 +592,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         dlog.i("-----getPushBoolean-----");
         dlog.i("writer_id : " + writer_id);
         dlog.i("type : 0 ");
-        type = USER_INFO_AUTH.equals("0")?"0":"1";
+        type = USER_INFO_AUTH.equals("0") ? "0" : "1";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FCMSelectInterface.URL)
@@ -609,12 +612,12 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                     dlog.i("type : " + type);
                     dlog.i("token : " + gettoken);
                     channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
-                    String place_id = shardpref.getString("place_id","0");
+                    String place_id = shardpref.getString("place_id", "0");
 
                     FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
                         Log.i(TAG, "token : " + token);
                         if (channelId1) {
-                            FcmTestFunctionCall(writer_id,"KOGAS", message, gettoken, "2",place_id);
+                            FcmTestFunctionCall(writer_id, "KOGAS", message, gettoken, "2", place_id);
                         }
                     });
 
@@ -633,12 +636,13 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
     }
 
     DBConnection dbConnection = new DBConnection();
-    private void FcmTestFunctionCall(String topic,String title, String message, String token,String tag, String place_id) {
+
+    private void FcmTestFunctionCall(String topic, String title, String message, String token, String tag, String place_id) {
 
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
             click_action = "PlaceListActivity";
-            dbConnection.FcmTestFunction(topic,place_name,message,token,click_action,tag,place_id);
+            dbConnection.FcmTestFunction(topic, place_name, message, token, click_action, tag, place_id);
             runOnUiThread(() -> {
             });
         });
@@ -905,7 +909,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
     }
 }

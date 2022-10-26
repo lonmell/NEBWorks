@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.kogas.R;
 import com.krafte.kogas.data.TaskCheckData;
-import com.krafte.kogas.fragment.approval.ApprovalFragment1;
+import com.krafte.kogas.ui.fragment.approval.ApprovalFragment1;
 import com.krafte.kogas.util.Dlog;
 import com.krafte.kogas.util.PageMoveClass;
 import com.krafte.kogas.util.PreferenceHelper;

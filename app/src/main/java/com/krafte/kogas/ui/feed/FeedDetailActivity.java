@@ -108,22 +108,30 @@ public class FeedDetailActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        mContext = this;
-        dlog.DlogContext(mContext);
-        shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-        USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-        place_id = shardpref.getString("place_id", "0");
-        feed_id = shardpref.getString("feed_id", "0");
-        state = shardpref.getString("editstate", "");
+        try{
+            mContext = this;
+            dlog.DlogContext(mContext);
+            shardpref = new PreferenceHelper(mContext);
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
+            place_id = shardpref.getString("place_id", "0");
+            feed_id = shardpref.getString("feed_id", "0");
+            state = shardpref.getString("editstate", "");
 
-        icon_on = mContext.getResources().getDrawable(R.drawable.resize_service_on);
-        icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
-        imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        shardpref.putInt("selectposition", 0);
-        setBtnEvent();
-        UserCheck(USER_INFO_EMAIL);
-        GETFeed();
+
+            icon_on = mContext.getResources().getDrawable(R.drawable.resize_service_on);
+            icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
+            imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+            shardpref.putInt("SELECT_POSITION", 0);
+            shardpref.putInt("SELECT_POSITION_sub",0);
+            setBtnEvent();
+            UserCheck(USER_INFO_EMAIL);
+            GETFeed();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -605,7 +613,10 @@ public class FeedDetailActivity extends AppCompatActivity {
             }
         });
     }
-    public void hideKeypad(){
 
+    @Override
+    public void onBackPressed(){
+//        super.onBackPressed();
+        pm.PlaceWorkBack(mContext);
     }
 }

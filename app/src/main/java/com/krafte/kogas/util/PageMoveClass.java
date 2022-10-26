@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.krafte.kogas.R;
-import com.krafte.kogas.ui.BottomNavi.MoreActivity;
-import com.krafte.kogas.ui.BottomNavi.TaskCalenderActivity;
-import com.krafte.kogas.ui.BottomNavi.WorkState1Activity;
-import com.krafte.kogas.ui.BottomNavi.WorkState2Activity;
+import com.krafte.kogas.ui.worksite.WorkState2Activity;
 import com.krafte.kogas.ui.PushActivity;
 import com.krafte.kogas.ui.approval.TaskApprovalDetail;
 import com.krafte.kogas.ui.approval.TaskApprovalFragment;
@@ -16,7 +13,7 @@ import com.krafte.kogas.ui.feed.FeedAddActivity;
 import com.krafte.kogas.ui.feed.FeedDetailActivity;
 import com.krafte.kogas.ui.feed.FeedEditActivity;
 import com.krafte.kogas.ui.login.LoginActivity;
-import com.krafte.kogas.ui.main.MainActivity;
+import com.krafte.kogas.ui.main.MainFragment;
 import com.krafte.kogas.ui.member.MemberManagement;
 import com.krafte.kogas.ui.notify.NotifyListActivity;
 import com.krafte.kogas.ui.user.DeleteUserActivity;
@@ -28,10 +25,9 @@ import com.krafte.kogas.ui.worksite.PlaceAddWorkActivity;
 import com.krafte.kogas.ui.worksite.PlaceEditActivity;
 import com.krafte.kogas.ui.worksite.PlaceListActivity;
 import com.krafte.kogas.ui.worksite.PlaceWorkDetailActivity;
-import com.krafte.kogas.ui.worksite.PlaceWorkFragment;
 
 public class PageMoveClass implements MovePage {
-
+    PreferenceHelper shardpref;
     /*Activity*/
     @Override
     public void LoginGo(Context context) {
@@ -51,14 +47,14 @@ public class PageMoveClass implements MovePage {
 
     @Override
     public void MainGo(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
     @Override
     public void MainBack(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -122,14 +118,14 @@ public class PageMoveClass implements MovePage {
     //--ui.state
     @Override
     public void WorkStateListGo(Context context) {
-        Intent intent = new Intent(context, WorkState1Activity.class);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
     @Override
     public void WorkStateListBack(Context context) {
-        Intent intent = new Intent(context, WorkState1Activity.class);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -153,14 +149,14 @@ public class PageMoveClass implements MovePage {
     //--ui.calendar
     @Override
     public void CalenderGo(Context context) {
-        Intent intent = new Intent(context, TaskCalenderActivity.class);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
     @Override
     public void CalenderBack(Context context) {
-        Intent intent = new Intent(context, TaskCalenderActivity.class);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -239,7 +235,7 @@ public class PageMoveClass implements MovePage {
 
     @Override
     public void PlaceWorkGo(Context context) {
-        Intent intent = new Intent(context, PlaceWorkFragment.class);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -247,7 +243,7 @@ public class PageMoveClass implements MovePage {
 
     @Override
     public void PlaceWorkBack(Context context) {
-        Intent intent = new Intent(context, PlaceWorkFragment.class);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -346,7 +342,9 @@ public class PageMoveClass implements MovePage {
     //--ui.BottomNavi
     @Override
     public void MoreGo(Context context) {
-        Intent intent = new Intent(context, MoreActivity.class);
+        shardpref = new PreferenceHelper(context);
+        shardpref.putInt("SELECT_POSITION",4);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -354,7 +352,9 @@ public class PageMoveClass implements MovePage {
 
     @Override
     public void MoreBack(Context context) {
-        Intent intent = new Intent(context, MoreActivity.class);
+        shardpref = new PreferenceHelper(context);
+        shardpref.putInt("SELECT_POSITION",4);
+        Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

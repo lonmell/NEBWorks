@@ -613,7 +613,6 @@ public class TaskApprovalDetail extends AppCompatActivity {
         work_save_accept = findViewById(R.id.work_save_accept);
         work_delete = findViewById(R.id.work_delete);
         applove_state = findViewById(R.id.applove_state);
-        work_retry = findViewById(R.id.work_retry);
         workadd_01_txt = findViewById(R.id.workadd_01_txt);
         workadd_02_txt = findViewById(R.id.workadd_02_txt);
         work_content_set = findViewById(R.id.work_content_set);

@@ -90,7 +90,7 @@ public class MyPlaceListActivity extends AppCompatActivity {
             binding.addPlace.setVisibility(View.GONE);
             dlog.i("------onCreate DataCheck-----");
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-            LoginCheck(USER_INFO_ID);
+            LoginCheck(USER_INFO_EMAIL);
             setBtnEvent();
             GetMyPlaceList(USER_INFO_ID);
         } catch (Exception e) {
@@ -152,7 +152,8 @@ public class MyPlaceListActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_SOSOK", department);
                                     shardpref.putString("USER_INFO_JIKGUP", jikchk);
                                     shardpref.putString("USER_INFO_PROFILE_URL", img_path);
-
+                                    dlog.i("id : " + id);
+                                    dlog.i("USER_INFO_ID : " +USER_INFO_ID);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

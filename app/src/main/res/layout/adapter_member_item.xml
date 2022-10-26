@@ -47,6 +47,7 @@
             android:layout_alignEnd="@+id/workimg_url"
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
+            android:singleLine="true"
             android:scaleType="fitXY"
             android:text="name"
             android:textColor="#696969"

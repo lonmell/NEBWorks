@@ -24,12 +24,13 @@ public class TodolistData {
         String img_path;
         String complete_yn;
         String incomplete_reason;
+        String approval_state;
 
         public TodolistData_list(String id, String writer_id, String kind,
                                  String title, String contents, String complete_kind, List<String> users,
                                  String task_date, String start_time, String end_time, String sun,
                                  String mon, String tue, String wed, String thu,String fri, String sat,
-                                 String img_path, String complete_yn, String incomplete_reason) {
+                                 String img_path, String complete_yn, String incomplete_reason, String approval_state) {
             this.id = id;
             this.writer_id = writer_id;
             this.kind = kind;
@@ -50,6 +51,7 @@ public class TodolistData {
             this.img_path = img_path;
             this.complete_yn = complete_yn;
             this.incomplete_reason = incomplete_reason;
+            this.approval_state = approval_state;
         }
 
         public String getId() {
@@ -210,6 +212,14 @@ public class TodolistData {
 
         public void setIncomplete_reason(String incomplete_reason) {
             this.incomplete_reason = incomplete_reason;
+        }
+
+        public String getApproval_state() {
+            return approval_state;
+        }
+
+        public void setApproval_state(String approval_state) {
+            this.approval_state = approval_state;
         }
     }
 }

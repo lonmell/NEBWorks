@@ -10,12 +10,15 @@ android {
         applicationId "com.krafte.kogas"
         minSdk 24
         targetSdk 32
-        versionCode 10
-        versionName "10"
+        versionCode 11
+        versionName "11"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
+    lintOptions {
+        checkOnly 'NewApi', 'HandlerLeak'
+        baseline file("lint-baseline.xml")
+    }
     buildTypes {
         debug{
             //코드 난독화 + 프로가드 파일 예외처리 ↓ ( 코드 난독화 + 리소스 축소화는 난독화를 true 하지 않으면 리소스 축소를 할수 없음.)

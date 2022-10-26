@@ -97,7 +97,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.PushActivity" />
-        <activity android:name=".ui.BottomNavi.MoreActivity" />
 
         <!--approval-->
         <activity android:name=".ui.approval.TaskApprovalFragment" />
@@ -112,7 +111,6 @@
         <activity android:name=".ui.login.LoginActivity" />
 
         <!-- main -->
-        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.main.MainFragment" />
         <activity android:name=".ui.main.InstructionActivity" />
 
@@ -123,13 +121,11 @@
         <activity android:name=".ui.member.MemberManagement" />
 
         <!-- state -->
-        <activity android:name=".ui.BottomNavi.WorkState1Activity" />
-        <activity android:name=".ui.BottomNavi.WorkState2Activity" />
+        <activity android:name=".ui.worksite.WorkState2Activity" />
 
         <!-- worksite -->
         <activity android:name=".ui.worksite.PlaceListActivity" />
         <activity android:name=".ui.worksite.PlaceAddActivity" />
-        <activity android:name=".ui.worksite.PlaceWorkFragment" />
         <activity android:name=".ui.worksite.PlaceAddWorkActivity" />
         <activity android:name=".ui.worksite.PlaceWorkDetailActivity" />
         <activity android:name=".ui.worksite.PlaceEditActivity" />
@@ -144,8 +140,6 @@
         <activity android:name=".ui.user.MyPlaceListActivity" />
 
         <!-- calendar -->
-        <activity android:name=".ui.BottomNavi.TaskCalenderActivity" />
-
 
 
         <!-- 팝업 영역 -->

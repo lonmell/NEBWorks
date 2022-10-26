@@ -37,7 +37,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -111,46 +110,28 @@ public class PlaceListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         LoginCheck(USER_INFO_EMAIL);
-        timer = new Timer();
-
-        TimerTask TT = new TimerTask() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void run() {
-                // 반복실행할 구문
-                runOnUiThread(() -> {
-                    GetPlaceList(USER_INFO_EMAIL);
-                });
-            }
-        };
-        timer.schedule(TT, 1000, 10000); //Timer 실행
         GetPlaceList(USER_INFO_EMAIL);
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        timer.cancel();
     }
     @Override
     public void onDestroy(){
         super.onDestroy();
-        timer.cancel();
     }
     private void setBtnEvent() {
         binding.addPlace.setOnClickListener(v -> {
-            timer.cancel();
             pm.PlaceAddGo(mContext);
         });
 
         binding.refreshBtn.setVisibility(View.GONE);
         binding.refreshBtn.setOnClickListener(v -> {
-            timer.cancel();
             GetPlaceList(USER_INFO_EMAIL);
         });
 
         binding.shutdownApp.setOnClickListener(v -> {
-            timer.cancel();
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
             intent.putExtra("data", "앱을 종료 하시겠습니까?");
             intent.putExtra("flag", "종료");
@@ -199,6 +180,8 @@ public class PlaceListActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_JIKGUP", position);
                                     shardpref.putString("USER_INFO_PROFILE_URL", img_path);
 
+                                    dlog.i("id : " + id);
+                                    dlog.i("USER_INFO_ID : " +shardpref.getString("USER_INFO_ID", "0"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -289,11 +272,9 @@ public class PlaceListActivity extends AppCompatActivity {
 
                                                     if (department.equals("null") || department.isEmpty() || position.equals("null") || position.isEmpty()) {
                                                         pm.ProfileEditGo(mContext);
-                                                        timer.cancel();
                                                     } else {
                                                         ConfirmUserPlacemember(place_id, myid, owner_id, palce_name);
                                                         pm.UserPlsceMapGo(mContext);
-                                                        timer.cancel();
                                                     }
                                                 } catch (Exception e) {
                                                     dlog.i("GetPlaceList OnItemClickListener Exception :" + e);

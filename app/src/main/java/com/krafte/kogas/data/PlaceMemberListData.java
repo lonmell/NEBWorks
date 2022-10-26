@@ -4,17 +4,19 @@ public class PlaceMemberListData {
     private static final String TAG = "WorkPlaceMemberListData";
 
     public static class PlaceMemberListData_list{
-        private String id = null;
-        private String name = null;
-        private String account = null;
-        private String employee_no = null;
-        private String department = null;
-        private String position = null;
-        private String img_path = null;
+        String id = null;
+        String name = null;
+        String kind = null;
+        String account = null;
+        String employee_no = null;
+        String department = null;
+        String position = null;
+        String img_path = null;
 
-        public PlaceMemberListData_list(String id, String name,String account, String employee_no,String department, String position,String img_path){
+        public PlaceMemberListData_list(String id, String name, String kind, String account, String employee_no,String department, String position,String img_path){
             this.id = id;
             this.name = name;
+            this.kind = kind;
             this.account = account;
             this.employee_no = employee_no;
             this.department = department;
@@ -36,6 +38,14 @@ public class PlaceMemberListData {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public String getKind() {
+            return kind;
+        }
+
+        public void setKind(String kind) {
+            this.kind = kind;
         }
 
         public String getAccount() {

@@ -47,7 +47,8 @@
                         android:paddingEnd="5dp"
                         android:textColor="#696969"
                         android:textColorHint="#D9D9D9"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
                     <RelativeLayout
                         android:id="@+id/search_icon"

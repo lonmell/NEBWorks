@@ -2,6 +2,7 @@ package com.krafte.kogas.ui.login;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import com.krafte.kogas.R;
 import com.krafte.kogas.dataInterface.UserInsertInterface;
 import com.krafte.kogas.dataInterface.UserSelectInterface;
 import com.krafte.kogas.databinding.ActivityLoginBinding;
+import com.krafte.kogas.pop.TwoButtonPopActivity;
 import com.krafte.kogas.util.DateCurrent;
 import com.krafte.kogas.util.Dlog;
 import com.krafte.kogas.util.HashCode;
@@ -123,6 +125,8 @@ public class LoginActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
 
+        shardpref.putInt("SELECT_POSITION", 0);
+        shardpref.putInt("SELECT_POSITION_sub",0);
 
         onEvent();
         permissionCheck();
@@ -280,6 +284,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
+        shardpref.remove("task_no");
         dlog.i("----------Success Google Login Data----------");
         dlog.i("getEmail : " + user.getEmail());
         dlog.i("getPhoneNumber : " + user.getPhoneNumber());
@@ -314,6 +319,7 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         if (response.body().replace("\"", "").equals("success")) {
                             USER_LOGIN_CONFIRM = true;
+                            shardpref.putString("USER_INFO_EMAIL",account);
                             pm.PlaceListGo(mContext);
                             binding.loginAlertText.setVisibility(View.GONE);
                         }
@@ -485,5 +491,16 @@ public class LoginActivity extends AppCompatActivity {
     }
     //----콜백 영역 END
 
-
+    @Override
+    public void onBackPressed(){
+//        super.onBackPressed();
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("data", "앱을 종료 하시겠습니까?");
+        intent.putExtra("flag", "종료");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "종료");
+        mContext.startActivity(intent);
+        ((Activity) mContext).overridePendingTransition(R.anim.translate_up,0);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 }

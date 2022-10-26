@@ -18,9 +18,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.krafte.kogas.ui.approval.TaskApprovalFragment;
-import com.krafte.kogas.ui.main.MainActivity;
+import com.krafte.kogas.ui.main.MainFragment;
 import com.krafte.kogas.ui.worksite.PlaceListActivity;
-import com.krafte.kogas.ui.worksite.PlaceWorkFragment;
 import com.krafte.kogas.util.PreferenceHelper;
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
@@ -162,9 +161,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
         if(click_action.equals("MainActivity")){
-            notificationIntent = new Intent(this, MainActivity.class);
+            shardpref.putInt("SELECT_POSITION",0);
+            notificationIntent = new Intent(this, MainFragment.class);
         }else if(click_action.equals("PlaceWorkFragment")){
-            notificationIntent = new Intent(this, PlaceWorkFragment.class);
+            shardpref.putInt("SELECT_POSITION",1);
+            shardpref.putInt("SELECT_POSITION_sub",1);
+            notificationIntent = new Intent(this, MainFragment.class);
             shardpref.putInt("SELECT_POSITION",1);
         }else if(click_action.equals("TaskApprovalFragment")){
             notificationIntent = new Intent(this, TaskApprovalFragment.class);
@@ -197,9 +199,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
         if(click_action.equals("MainActivity")){
-            intent = new Intent(this, MainActivity.class);
+            shardpref.putInt("SELECT_POSITION",0);
+            intent = new Intent(this, MainFragment.class);
         }else if(click_action.equals("PlaceWorkFragment")){
-            intent = new Intent(this, PlaceWorkFragment.class);
+            shardpref.putInt("SELECT_POSITION",1);
+            shardpref.putInt("SELECT_POSITION_sub",1);
+            intent = new Intent(this, MainFragment.class);
             shardpref.putInt("SELECT_POSITION",1);
         }else if(click_action.equals("TaskApprovalFragment")){
             intent = new Intent(this, TaskApprovalFragment.class);

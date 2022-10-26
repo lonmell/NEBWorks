@@ -21,13 +21,13 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.krafte.kogas.R;
 import com.krafte.kogas.adapter.ApprovalAdapter;
 import com.krafte.kogas.adapter.ViewPagerFregmentAdapter;
-import com.krafte.kogas.data.GetResultData;
-import com.krafte.kogas.fragment.approval.ApprovalFragment1;
-import com.krafte.kogas.ui.navi.CalendarFragment;
-import com.krafte.kogas.ui.navi.HomeFragment;
-import com.krafte.kogas.ui.navi.MoreFragment;
-import com.krafte.kogas.ui.navi.WorkgotoFragment;
-import com.krafte.kogas.ui.navi.WorkstatusFragment;
+import com.krafte.kogas.databinding.ActivityMainfragmentBinding;
+import com.krafte.kogas.ui.fragment.approval.ApprovalFragment1;
+import com.krafte.kogas.ui.naviFragment.CalendarFragment;
+import com.krafte.kogas.ui.naviFragment.HomeFragment;
+import com.krafte.kogas.ui.naviFragment.MoreFragment;
+import com.krafte.kogas.ui.naviFragment.WorkgotoFragment;
+import com.krafte.kogas.ui.naviFragment.WorkstatusFragment;
 import com.krafte.kogas.util.DateCurrent;
 import com.krafte.kogas.util.Dlog;
 import com.krafte.kogas.util.PageMoveClass;
@@ -40,30 +40,28 @@ import java.util.List;
 
 public class MainFragment extends AppCompatActivity {
     private static final String TAG = "TaskApprovalFragment";
+    private ActivityMainfragmentBinding binding;
     Context mContext;
-
     private final DateCurrent dc = new DateCurrent();
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
-    //XML ID
-    ViewPager2 viewPager;
-    TabLayout tabLayout;
-    ImageView menu;
+    //BottomNavigation
+    ImageView home_icon,worktogo_icon,workstatus_icon,more_icon;
+    TextView home_tv,worktogo_tv,workstatus_tv,more_tv;
 
     // shared 저장값
     PreferenceHelper shardpref;
-    //    ArrayList<WorkCheckListData.WorkCheckListData_list> mList;
     ApprovalAdapter mAdapter = null;
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
     int SELECT_POSITION = 0;
+    int SELECT_POSITION_sub = 0;
     String store_no;
     boolean wifi_certi_flag = false;
     boolean gps_certi_flag = false;
 
     //Other
-    GetResultData resultData = new GetResultData();
     /*라디오 버튼들 boolean*/
     Drawable icon_off;
     Drawable icon_on;
@@ -80,7 +78,9 @@ public class MainFragment extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mainfragment);
+//        setContentView(R.layout.activity_mainfragment);
+        binding = ActivityMainfragmentBinding.inflate(getLayoutInflater()); // 1
+        setContentView(binding.getRoot()); // 2
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -88,82 +88,112 @@ public class MainFragment extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
 
-        icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
-        icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
+        try{
+            icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
+            icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
-        shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-        SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
-        wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
-        gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-        return_page = shardpref.getString("return_page", "");
-        store_no = shardpref.getString("store_no", "");
-        shardpref.putString("returnPage", "BusinessApprovalActivity");
+            shardpref = new PreferenceHelper(mContext);
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
+            SELECT_POSITION_sub =  shardpref.getInt("SELECT_POSITION_sub", 0);
+            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
+            return_page = shardpref.getString("return_page", "");
+            store_no = shardpref.getString("store_no", "");
+            shardpref.putString("returnPage", "BusinessApprovalActivity");
 
-        viewPager = findViewById(R.id.viewPager);
-        tabLayout = findViewById(R.id.tabLayout);
-        menu = findViewById(R.id.menu);
+            home_icon = binding.getRoot().findViewById(R.id.home_icon);
+            worktogo_icon = binding.getRoot().findViewById(R.id.worktogo_icon);
+            workstatus_icon = binding.getRoot().findViewById(R.id.workstatus_icon);
+            more_icon = binding.getRoot().findViewById(R.id.more_icon);
 
-        final List<String> tabElement;
-        tabElement = Arrays.asList("홈", "할일", "캘린더", "근무현황", "더보기");
-        ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(HomeFragment.newInstance(0));
-        fragments.add(WorkgotoFragment.newInstance(1));
-        fragments.add(CalendarFragment.newInstance(2));
-        fragments.add(WorkstatusFragment.newInstance(2));
-        fragments.add(MoreFragment.newInstance(2));
+            home_tv = binding.getRoot().findViewById(R.id.home_tv);
+            worktogo_tv = binding.getRoot().findViewById(R.id.worktogo_tv);
+            workstatus_tv = binding.getRoot().findViewById(R.id.workstatus_tv);
+            more_tv = binding.getRoot().findViewById(R.id.more_tv);
 
-        viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
-        viewPager.setAdapter(viewPagerFregmentAdapter);
+            final List<String> tabElement;
+            tabElement = Arrays.asList("홈", "할일", "캘린더", "근무현황", "더보기");
+            ArrayList<Fragment> fragments = new ArrayList<>();
+            fragments.add(HomeFragment.newInstance(0));
+            fragments.add(WorkgotoFragment.newInstance(1));
+            fragments.add(CalendarFragment.newInstance(2));
+            fragments.add(WorkstatusFragment.newInstance(3));
+            fragments.add(MoreFragment.newInstance(4));
+
+            viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
+            binding.viewPager.setAdapter(viewPagerFregmentAdapter);
 //        viewPager.setUserInputEnabled(false);
 
-        //ViewPager2와 TabLayout을 연결
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            TextView textView = new TextView(MainFragment.this);
-            textView.setText(tabElement.get(position));
-            textView.setTextColor(Color.parseColor("#696969"));
-            textView.setGravity(Gravity.CENTER);
-            tab.setCustomView(textView);
-        }).attach();
+            //ViewPager2와 TabLayout을 연결
+            new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
+                TextView textView = new TextView(MainFragment.this);
+                textView.setText(tabElement.get(position));
+                textView.setTextColor(Color.parseColor("#696969"));
+                textView.setGravity(Gravity.CENTER);
+                tab.setCustomView(textView);
+            }).attach();
+            binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    binding.viewPager.setCurrentItem(tab.getPosition(),false);
+                }
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+            binding.viewPager.setUserInputEnabled(false);
+            binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    super.onPageSelected(position);
+                    paging_position = position;
+                    ChangePosition(position);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    super.onPageScrollStateChanged(state);
+                }
+            });
+            new Handler().postDelayed(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.tabLayout.getTabAt(SELECT_POSITION).select();
+                        }
+                    }, 100);
+
+            if (SELECT_POSITION != -99) {
+                binding.viewPager.setCurrentItem(SELECT_POSITION);
             }
-
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                paging_position = position;
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
-            }
-        });
-        new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        tabLayout.getTabAt(SELECT_POSITION).select();
-                    }
-                }, 100);
-
-        if (SELECT_POSITION != -99) {
-            viewPager.setCurrentItem(SELECT_POSITION);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
     }
 
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        pm.PlaceListBack(mContext);
+        if(paging_position == 0){
+            pm.PlaceListBack(mContext);
+        }else{
+            binding.tabLayout.getTabAt(0).select();
+        }
     }
 
     @Override
@@ -175,16 +205,52 @@ public class MainFragment extends AppCompatActivity {
         if (view.getId() == R.id.out_store) {
             pm.PlaceListBack(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {
-            tabLayout.getTabAt(0).select();
+            binding.tabLayout.getTabAt(0).select();
         } else if (view.getId() == R.id.bottom_navigation02) {
-            tabLayout.getTabAt(1).select();
+            binding.tabLayout.getTabAt(1).select();
+            shardpref.putInt("SELECT_POSITION",1);
+            shardpref.putInt("SELECT_POSITION_sub",0);
         } else if (view.getId() == R.id.bottom_navigation03) {
-            tabLayout.getTabAt(2).select();
+            binding.tabLayout.getTabAt(2).select();
         } else if (view.getId() == R.id.bottom_navigation04) {
-            tabLayout.getTabAt(3).select();
+            binding.tabLayout.getTabAt(3).select();
         } else if (view.getId() == R.id.bottom_navigation05) {
-            tabLayout.getTabAt(4).select();
+            binding.tabLayout.getTabAt(4).select();
         }
+    }
+
+    private void ChangePosition(int i){
+        home_icon.setBackgroundResource(R.drawable.home_resize);
+        home_tv.setTextColor(Color.parseColor("#000000"));
+
+        worktogo_icon.setBackgroundResource(R.drawable.worktogo_resize);
+        worktogo_tv.setTextColor(Color.parseColor("#000000"));
+
+        workstatus_icon.setBackgroundResource(R.drawable.workstatus_resize);
+        workstatus_tv.setTextColor(Color.parseColor("#000000"));
+
+        more_icon.setBackgroundResource(R.drawable.more_icon_resize);
+        more_tv.setTextColor(Color.parseColor("#000000"));
+        if(i == 0){
+            home_icon.setBackgroundResource(R.drawable.home_on_resize);
+            home_tv.setTextColor(Color.parseColor("#68B0FF"));
+        }else if(i == 1){
+            worktogo_icon.setBackgroundResource(R.drawable.worktogo_on_resize);
+            worktogo_tv.setTextColor(Color.parseColor("#68B0FF"));
+        }else if(i == 2){
+           dlog.i("calendar view");
+        }else if(i == 3){
+            workstatus_icon.setBackgroundResource(R.drawable.workstatus_on_resize);
+            workstatus_tv.setTextColor(Color.parseColor("#68B0FF"));
+        }else if(i == 4){
+            more_icon.setBackgroundResource(R.drawable.more_icon_on_resize);
+            more_tv.setTextColor(Color.parseColor("#68B0FF"));
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
     //    //-------몰입화면 설정
 //    @Override

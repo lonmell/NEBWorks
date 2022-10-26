@@ -118,7 +118,8 @@ public class IntroActivity extends AppCompatActivity {
 
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "null");
         dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
-
+        shardpref.putInt("SELECT_POSITION", 0);
+        shardpref.putInt("SELECT_POSITION_sub",0);
         //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
         FirebaseMessaging.getInstance().subscribeToTopic("KOGAS").addOnCompleteListener(task -> {
             String msg = getString(R.string.msg_subscribed);

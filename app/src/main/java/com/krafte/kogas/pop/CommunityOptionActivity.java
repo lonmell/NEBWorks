@@ -94,10 +94,13 @@ public class CommunityOptionActivity extends Activity {
 
     private void setBtnEvent() {
         feed_edit.setOnClickListener(v -> {
-            shardpref.putString("editstate","EditComment");
-            shardpref.putString("comment_no",comment_no);
-            shardpref.putString("comment_contents",comment_contents);
-
+            if(state.equals("EditComment")){
+                shardpref.putString("editstate","EditComment");
+                shardpref.putString("comment_no",comment_no);
+                shardpref.putString("comment_contents",comment_contents);
+            }else if(state.equals("EditFeed")){
+                dlog.i("edit_feed_id : " + shardpref.getString("edit_feed_id","0"));
+            }
             setUpdateWorktodo();
             closePop();
         });

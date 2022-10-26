@@ -167,7 +167,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         USER_INFO_NO = shardpref.getString("USER_INFO_NO", "0");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-
+        dlog.i("USER_INFO_ID : " +USER_INFO_ID);
         gpsTracker = new GpsTracker(mContext);
         geocoder = new Geocoder(mContext);
 

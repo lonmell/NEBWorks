@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#ffffff"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff">
 
     <LinearLayout
         android:id="@+id/search_date"
@@ -12,12 +12,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
         android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:visibility="gone"
+        android:visibility="visible"
         android:weightSum="2">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="5dp">
@@ -29,23 +28,35 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="#ffffff"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="0dp">
 
-                <TextView
-                    android:id="@+id/selectdate"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#6395EC"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="center"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="  0000.00.00  "
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/white_calendar_resize"
-                    tools:ignore="HardcodedText" />
+                    android:orientation="horizontal"
+                    android:paddingEnd="15dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/calendar_resize" />
+
+                    <TextView
+                        android:id="@+id/selectdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="15dp"
+                        android:background="#ffffff"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="end|center"
+                        android:text="0000.00.00"
+                        android:textColor="#696969"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </LinearLayout>
@@ -57,8 +68,8 @@
         android:layout_below="@+id/search_date"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
-        android:layout_marginEnd="30dp">
+        android:layout_marginEnd="30dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/check_cnt"
@@ -116,6 +127,8 @@
         </LinearLayout>
     </RelativeLayout>
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/total_applove_list1"
         android:layout_width="match_parent"
@@ -132,8 +145,8 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="15dp"
-        android:visibility="gone"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:weightSum="2">
 
         <androidx.cardview.widget.CardView

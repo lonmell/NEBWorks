@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.krafte.kogas.R;
 import com.krafte.kogas.adapter.AssignmentMemberAdapter;
+import com.krafte.kogas.adapter.AssignmentMemberAdapter2;
 import com.krafte.kogas.data.GetResultData;
 import com.krafte.kogas.data.PlaceMemberListData;
 import com.krafte.kogas.data.YoilList;
@@ -88,6 +89,10 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     //Other
     AssignmentMemberAdapter mAdapter;
     ArrayList<PlaceMemberListData.PlaceMemberListData_list> mList = new ArrayList<>();
+
+    AssignmentMemberAdapter2 mAdapter2;
+    ArrayList<PlaceMemberListData.PlaceMemberListData_list> mList2 = new ArrayList<>();
+
     //    DBConnection dbConnection = new DBConnection();
     DateCurrent dc = new DateCurrent();
     ArrayList<String> SetMemberList;
@@ -138,7 +143,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     String SelectKind = "0";
     String searchDate = "";
     List<String> Ac_memberArray = new ArrayList<>();
-
+    List<String> Ac_memberArray2 = new ArrayList<>();
 
     /*-------------------*/
     boolean yoil01 = true, yoil02 = true, yoil03 = true, yoil04 = true, yoil05 = true, yoil06 = true, yoil07 = true, yoil08 = true;
@@ -161,6 +166,8 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     List<String> getYoil = new ArrayList<>();
     String[] setYoil = new String[7];
 
+    int a = 0;//정직원 수
+    int b = 0;//협력업체 직원 수
     /*--------------------*/
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat", "LongLogTag"})
     @Override
@@ -174,150 +181,155 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        mContext = this;
-        dlog.DlogContext(mContext);
-        shardpref = new PreferenceHelper(mContext);
+        try{
+            mContext = this;
+            dlog.DlogContext(mContext);
+            shardpref = new PreferenceHelper(mContext);
+            shardpref.putInt("SELECT_POSITION_sub",1);
+            place_id = shardpref.getString("place_id", "0");
+            place_name = shardpref.getString("place_name", "0");
+            place_owner_id = shardpref.getString("place_owner_id", "0");
+            place_owner_name = shardpref.getString("place_owner_name", "0");
+            place_management_office = shardpref.getString("place_management_office", "0");
+            place_address = shardpref.getString("place_address", "0");
+            place_latitude = shardpref.getString("place_latitude", "0");
+            place_longitude = shardpref.getString("place_longitude", "0");
+            place_start_time = shardpref.getString("place_start_time", "0");
+            place_end_time = shardpref.getString("place_end_time", "0");
+            place_img_path = shardpref.getString("place_img_path", "0");
+            place_start_date = shardpref.getString("place_start_date", "0");
+            place_created_at = shardpref.getString("place_created_at", "0");
+            return_page = shardpref.getString("return_page","0");
+            make_kind = shardpref.getInt("make_kind", 0);
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
 
-        place_id = shardpref.getString("place_id", "0");
-        place_name = shardpref.getString("place_name", "0");
-        place_owner_id = shardpref.getString("place_owner_id", "0");
-        place_owner_name = shardpref.getString("place_owner_name", "0");
-        place_management_office = shardpref.getString("place_management_office", "0");
-        place_address = shardpref.getString("place_address", "0");
-        place_latitude = shardpref.getString("place_latitude", "0");
-        place_longitude = shardpref.getString("place_longitude", "0");
-        place_start_time = shardpref.getString("place_start_time", "0");
-        place_end_time = shardpref.getString("place_end_time", "0");
-        place_img_path = shardpref.getString("place_img_path", "0");
-        place_start_date = shardpref.getString("place_start_date", "0");
-        place_created_at = shardpref.getString("place_created_at", "0");
-        return_page = shardpref.getString("return_page","0");
-        make_kind = shardpref.getInt("make_kind", 0);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+            shardpref.putInt("SELECT_POSITION", 0);
+            shardpref.putInt("SELECT_POSITION_sub",1);
 
-        //캘린더에서 넘어온 경우 - 선택한 날짜를 가져옴
-        searchDate = shardpref.getString("searchDate", "");
+            //캘린더에서 넘어온 경우 - 선택한 날짜를 가져옴
+            searchDate = shardpref.getString("searchDate", "");
 
-        channelId1 = shardpref.getBoolean("channelId1", false);
-        channelId2 = shardpref.getBoolean("channelId2", false);
-        WorkAddSecond = new String[7];
+            channelId1 = shardpref.getBoolean("channelId1", false);
+            channelId2 = shardpref.getBoolean("channelId2", false);
+            WorkAddSecond = new String[7];
 
-        //수정할때 필요
-        task_no = shardpref.getString("task_no", "0");
-        icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
-        icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+            //수정할때 필요
+            task_no = shardpref.getString("task_no", "0");
+            icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
+            icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
 
-        setBtnEvent();
-        SetAllMemberList();
-        toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-        binding.inputWorkstartDay.setText(toDay);
-        dlog.i("------------------Data Check onCreate------------------");
-        dlog.i("tap_kind : " + tap_kind);
-        dlog.i("make_kind : " + make_kind);
-        dlog.i("searchDate : " + searchDate);
-        dlog.i("today : " + toDay);
-        dlog.i("------------------Data Check onCreate------------------");
-        if(make_kind == 1 || make_kind == 2){
-            binding.title.setText("할일 생성");
-        }else{
-            binding.title.setText("일정 생성");
-        }
+            setBtnEvent();
+            SetAllMemberList();
+            toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+            binding.inputWorkstartDay.setText(toDay);
+            dlog.i("------------------Data Check onCreate------------------");
+            dlog.i("tap_kind : " + tap_kind);
+            dlog.i("make_kind : " + make_kind);
+            dlog.i("searchDate : " + searchDate);
+            dlog.i("today : " + toDay);
+            dlog.i("------------------Data Check onCreate------------------");
+            if(make_kind == 1 || make_kind == 2){
+                binding.title.setText("할일 생성");
+            }else{
+                binding.title.setText("일정 생성");
+            }
 
-        //--searchDate값이 없을 때는 반복업무 영역 보이기, 있을때는 캘린더에서 해당 날짜에 추가
-        if (searchDate.isEmpty()) {
-            binding.firstSelect.setVisibility(View.VISIBLE);
-            binding.secondSelect.setVisibility(View.VISIBLE);
-            binding.linearLayout2.setVisibility(View.VISIBLE);
-        } else {
-            binding.firstSelect.setVisibility(View.GONE);
-            binding.secondSelect.setVisibility(View.GONE);
-            binding.linearLayout2.setVisibility(View.GONE);
-        }
-        //--처음에는 공통임무로 설정된채로 시작
-        user_id = "";
-        if (!task_no.equals("0")) {
-            getTaskContents();
-        }
-
-        TaskKind = String.valueOf(make_kind);
-        dlog.i("onCreate make_kind : " + make_kind);
-        if (make_kind == 1) {//할일 배정,공통 할일,개인일정
-            SelectKind = String.valueOf(make_kind);
+            //--searchDate값이 없을 때는 반복업무 영역 보이기, 있을때는 캘린더에서 해당 날짜에 추가
+            if (searchDate.isEmpty()) {
+                binding.firstSelect.setVisibility(View.VISIBLE);
+                binding.secondSelect.setVisibility(View.VISIBLE);
+                binding.linearLayout2.setVisibility(View.VISIBLE);
+            } else {
+                binding.firstSelect.setVisibility(View.GONE);
+                binding.secondSelect.setVisibility(View.GONE);
+                binding.linearLayout2.setVisibility(View.GONE);
+            }
+            //--처음에는 공통임무로 설정된채로 시작
             user_id = "";
-            shardpref.putInt("selectposition", 1);
-            binding.linearLayout10.setVisibility(View.VISIBLE);
-            binding.memberListArea.setVisibility(View.VISIBLE);
-        } else if (make_kind == 2) {//반복업무 생성
-            user_id = "";
-            binding.linearLayout7.setVisibility(View.GONE);
-            binding.linearLayout10.setVisibility(View.GONE);
-            binding.memberListArea.setVisibility(View.GONE);
-            shardpref.putInt("selectposition", 2);
-        } else if (make_kind == 4) {
-            binding.linearLayout4.setVisibility(View.GONE);
-            binding.linearLayout10.setVisibility(View.GONE);
-        } else {
-            binding.linearLayout10.setVisibility(View.VISIBLE);
-            binding.memberListArea.setVisibility(View.VISIBLE);
+            if (!task_no.equals("0")) {
+                getTaskContents();
+            }
+
+            TaskKind = String.valueOf(make_kind);
+            dlog.i("onCreate make_kind : " + make_kind);
+            if (make_kind == 1) {//할일 배정,공통 할일,개인일정
+                SelectKind = String.valueOf(make_kind);
+                user_id = "";
+                shardpref.putInt("SELECT_POSITION", 1);
+                binding.linearLayout10.setVisibility(View.VISIBLE);
+                binding.memberListArea.setVisibility(View.VISIBLE);
+            } else if (make_kind == 2) {//반복업무 생성
+                user_id = "";
+                binding.linearLayout7.setVisibility(View.GONE);
+                binding.linearLayout10.setVisibility(View.GONE);
+                binding.memberListArea.setVisibility(View.GONE);
+                shardpref.putInt("SELECT_POSITION", 2);
+            } else if (make_kind == 4) {
+                binding.linearLayout4.setVisibility(View.GONE);
+                binding.linearLayout10.setVisibility(View.GONE);
+            } else {
+                binding.linearLayout10.setVisibility(View.VISIBLE);
+                binding.memberListArea.setVisibility(View.VISIBLE);
+            }
+
+            java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            Calendar c1 = Calendar.getInstance();
+            Calendar c2 = Calendar.getInstance();
+            Calendar c3 = Calendar.getInstance();
+            Calendar c4 = Calendar.getInstance();
+            Calendar c5 = Calendar.getInstance();
+            Calendar c6 = Calendar.getInstance();
+            Calendar c7 = Calendar.getInstance();
+            dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+            c1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            c2.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+            c3.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+            c4.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+            c5.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+            c6.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+            c7.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            toDayFromMon = formatter.format(c1.getTime());
+            toDayFromTue = formatter.format(c2.getTime());
+            toDayFromWed = formatter.format(c3.getTime());
+            toDayFromThu = formatter.format(c4.getTime());
+            toDayFromFri = formatter.format(c5.getTime());
+            toDayFromSat = formatter.format(c6.getTime());
+            toDayFromSun = formatter.format(c7.getTime());
+            dlog.i("toDayFromMon : " + toDayFromMon);
+            dlog.i("toDayFromTue : " + toDayFromTue);
+            dlog.i("toDayFromWed : " + toDayFromWed);
+            dlog.i("toDayFromThu : " + toDayFromThu);
+            dlog.i("toDayFromFri : " + toDayFromFri);
+            dlog.i("toDayFromSat : " + toDayFromSat);
+            dlog.i("toDayFromSun : " + toDayFromSun);
+
+            switch (dayOfWeek) {
+                case 1:
+                    toDayYoil = "월";
+                    break;
+                case 2:
+                    toDayYoil = "화";
+                    break;
+                case 3:
+                    toDayYoil = "수";
+                    break;
+                case 4:
+                    toDayYoil = "목";
+                    break;
+                case 5:
+                    toDayYoil = "금";
+                    break;
+                case 6:
+                    toDayYoil = "토";
+                    break;
+                case 7:
+                    toDayYoil = "일";
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        Calendar cal = Calendar.getInstance();
-        Calendar c1 = Calendar.getInstance();
-        Calendar c2 = Calendar.getInstance();
-        Calendar c3 = Calendar.getInstance();
-        Calendar c4 = Calendar.getInstance();
-        Calendar c5 = Calendar.getInstance();
-        Calendar c6 = Calendar.getInstance();
-        Calendar c7 = Calendar.getInstance();
-        dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-        c1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        c2.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-        c3.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-        c4.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-        c5.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-        c6.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-        c7.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        toDayFromMon = formatter.format(c1.getTime());
-        toDayFromTue = formatter.format(c2.getTime());
-        toDayFromWed = formatter.format(c3.getTime());
-        toDayFromThu = formatter.format(c4.getTime());
-        toDayFromFri = formatter.format(c5.getTime());
-        toDayFromSat = formatter.format(c6.getTime());
-        toDayFromSun = formatter.format(c7.getTime());
-        dlog.i("toDayFromMon : " + toDayFromMon);
-        dlog.i("toDayFromTue : " + toDayFromTue);
-        dlog.i("toDayFromWed : " + toDayFromWed);
-        dlog.i("toDayFromThu : " + toDayFromThu);
-        dlog.i("toDayFromFri : " + toDayFromFri);
-        dlog.i("toDayFromSat : " + toDayFromSat);
-        dlog.i("toDayFromSun : " + toDayFromSun);
-
-        switch (dayOfWeek) {
-            case 1:
-                toDayYoil = "월";
-                break;
-            case 2:
-                toDayYoil = "화";
-                break;
-            case 3:
-                toDayYoil = "수";
-                break;
-            case 4:
-                toDayYoil = "목";
-                break;
-            case 5:
-                toDayYoil = "금";
-                break;
-            case 6:
-                toDayYoil = "토";
-                break;
-            case 7:
-                toDayYoil = "일";
-                break;
-        }
-
-
     }
 
 
@@ -694,6 +706,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                             if (Response.length() == 0) {
                                 binding.noMember.setVisibility(View.VISIBLE);
                                 binding.recyclerView2.setVisibility(View.INVISIBLE);
+                                binding.recyclerView2.setVisibility(View.GONE);
                             } else {
                                 binding.noMember.setVisibility(View.INVISIBLE);
                                 binding.recyclerView2.setVisibility(View.VISIBLE);
@@ -709,21 +722,25 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                                 }
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    mAdapter.addItem(new PlaceMemberListData.PlaceMemberListData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("name"),
-                                            jsonObject.getString("account"),
-                                            jsonObject.getString("employee_no"),
-                                            jsonObject.getString("department"),
-                                            jsonObject.getString("position"),
-                                            jsonObject.getString("img_path")
-                                    ));
-                                }
+                                    //정직원만
+                                    if(jsonObject.getString("kind").equals("0")){
+                                        a++;
+                                        mAdapter.addItem(new PlaceMemberListData.PlaceMemberListData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("name"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("account"),
+                                                jsonObject.getString("employee_no"),
+                                                jsonObject.getString("department"),
+                                                jsonObject.getString("position"),
+                                                jsonObject.getString("img_path")
+                                        ));
+                                    }
 
+                                }
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.setOnItemClickListener((v, position, memberArray) -> {
                                     try {
-                                        int cnt = 0;
                                         dlog.i("Select Member id :" + Response.getJSONObject(position).getString("id"));
                                         user_id = Response.getJSONObject(position).getString("id");
                                         EmployeeSelect = 1;
@@ -735,6 +752,49 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                 });
+
+                                binding.recyclerView3.setVisibility(View.VISIBLE);
+                                mList2 = new ArrayList<>();
+                                mAdapter2 = new AssignmentMemberAdapter2(mContext, mList2);
+                                binding.recyclerView3.setHasFixedSize(true);
+                                binding.recyclerView3.setAdapter(mAdapter2);
+                                binding.recyclerView3.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                RecyclerView.ItemAnimator animator2 = binding.recyclerView3.getItemAnimator();
+                                if (animator2 instanceof SimpleItemAnimator) {
+                                    ((SimpleItemAnimator) animator2).setSupportsChangeAnimations(false);
+                                }
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    //외부협력업체 직원
+                                    if(jsonObject.getString("kind").equals("1")){
+                                        b++;
+                                        mAdapter2.addItem(new PlaceMemberListData.PlaceMemberListData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("name"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("account"),
+                                                jsonObject.getString("employee_no"),
+                                                jsonObject.getString("department"),
+                                                jsonObject.getString("position"),
+                                                jsonObject.getString("img_path")
+                                        ));
+                                    }
+
+                                }
+                                mAdapter2.notifyDataSetChanged();
+                                mAdapter2.setOnItemClickListener((v, position, memberArray) -> {
+                                    try {
+                                        dlog.i("Select Member id :" + Response.getJSONObject(position).getString("id"));
+                                        user_id = Response.getJSONObject(position).getString("id");
+                                        EmployeeSelect = 1;
+                                        Ac_memberArray2 = memberArray.stream().distinct().collect(Collectors.toList());
+                                        dlog.i("Ac_memberArray2 :" + Ac_memberArray2);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+
+                                dlog.i("정직원 수 : " + a + "/ 협력업체 직원 수 : " + b);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -1319,14 +1379,20 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
 
         TaskKind = String.valueOf(make_kind);
         String users = shardpref.getString("users", "0");
+        String users2 = shardpref.getString("users2", "0");
         if (Ac_memberArray.size() == 0) {
             Ac_memberArray.addAll(Arrays.asList(users.split(", ")));
         }
+        if (Ac_memberArray2.size() == 0) {
+            Ac_memberArray2.addAll(Arrays.asList(users2.split(", ")));
+        }
         Ac_memberArray.remove("0");
+        Ac_memberArray2.remove("0");
+
+        Ac_memberArray.addAll(Ac_memberArray2);
+
         user_id = Ac_memberArray.toString().replace(" ", "").replace("[", "").replace("]", "").trim();
-
-
-        total_member_cnt = Ac_memberArray.size();
+        total_member_cnt = Ac_memberArray.size() + Ac_memberArray2.size();
 
         dlog.i("EmployeeSelect : " + EmployeeSelect);
         dlog.i("SelectKind : " + SelectKind);
@@ -1449,7 +1515,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             message = "[배정업무수정] :" + binding.title.getText().toString();
         }
         for(int a = 0; a < member.size(); a++){
-            if(place_address.equals(member.get(a))){
+            if(place_owner_id.equals(member.get(a))){
                 getManagerToken(member.get(a),"0", place_id,place_name);
             }else{
                 getManagerToken(member.get(a),"1", place_id,place_name);

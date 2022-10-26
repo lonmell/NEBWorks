@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
+        android:layout_above="@+id/accept_area"
         android:orientation="vertical">
 
         <LinearLayout
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="2">
 
             <LinearLayout
@@ -36,29 +37,28 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     app:cardCornerRadius="5dp"
-                    app:cardBackgroundColor="#6395EC"
+                    app:cardBackgroundColor="#ffffff"
                     app:cardElevation="0dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingStart="15dp"
                         android:paddingEnd="15dp"
                         android:orientation="horizontal">
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:background="@drawable/white_calendar_resize"/>
+                            android:background="@drawable/calendar_resize"/>
                         <TextView
                             android:id="@+id/selectdate"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#6395EC"
+                            android:background="#ffffff"
                             android:fontFamily="@font/inter_regular"
                             android:gravity="end|center"
                             android:layout_marginStart="15dp"
                             android:text="0000.00.00"
-                            android:textColor="#ffffff"
+                            android:textColor="#696969"
                             android:textSize="16sp"/>
                     </LinearLayout>
 
@@ -128,115 +128,101 @@
 
             </LinearLayout>
         </RelativeLayout>
-
-
-        <androidx.core.widget.NestedScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#ffffff">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/workimg_url"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="16dp"
+                android:layout_marginTop="5dp"
+                app:cardBackgroundColor="#EDEDED"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="0dp">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff">
+                    android:layout_height="match_parent">
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/workimg_url"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_margin="16dp"
-                        android:layout_marginTop="5dp"
-                        app:cardBackgroundColor="#EDEDED"
-                        app:cardCornerRadius="60dp"
-                        app:cardElevation="0dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/white_plus" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_centerInParent="true"
-                                android:background="@drawable/white_plus" />
-
-                            <ImageView
-                                android:id="@+id/workimg"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="fitXY" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/work_cnt_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/workimg_url"
-                        android:layout_alignBottom="@+id/workimg_url"
-                        android:layout_toEndOf="@+id/workimg_url"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="오늘 남은 할일 : "
-                        android:textColor="#000000"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:id="@+id/work_cnt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/workimg_url"
-                        android:layout_alignBottom="@+id/workimg_url"
-                        android:layout_toEndOf="@+id/work_cnt_title"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:text=" 0"
-                        android:textColor="#6395EC"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText" />
-                </RelativeLayout>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/store_checklist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#ffffff"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/accept_area"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_margin="10dp"
-                    android:layout_marginTop="20dp"
-                    app:cardBackgroundColor="#8EB3FC"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="0dp">
-
-                    <TextView
-                        android:id="@+id/accept_btn"
+                    <ImageView
+                        android:id="@+id/workimg"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:text="넵"
-                        android:textColor="#ffffff"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                        android:scaleType="fitXY" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
+            <TextView
+                android:id="@+id/work_cnt_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/workimg_url"
+                android:layout_alignBottom="@+id/workimg_url"
+                android:layout_toEndOf="@+id/workimg_url"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="오늘 남은 할일 : "
+                android:textColor="#000000"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/work_cnt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/workimg_url"
+                android:layout_alignBottom="@+id/workimg_url"
+                android:layout_toEndOf="@+id/work_cnt_title"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text=" 0"
+                android:textColor="#6395EC"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+        </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/store_checklist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#ffffff"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never" />
     </LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/accept_area"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentBottom="true"
+        app:cardBackgroundColor="#8EB3FC"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp">
 
+        <TextView
+            android:id="@+id/accept_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text="넵"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+    </androidx.cardview.widget.CardView>
     <RelativeLayout
         android:id="@+id/login_alert_text"
         android:layout_width="match_parent"
@@ -257,9 +243,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
         android:background="#ffffff"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/user_manualimg"
@@ -276,6 +263,7 @@
             android:padding="10dp"
             android:text="공지 사항 카테고리에 등록된 공지사항이 없습니다.\n + 를 터치하여 공지사항을 등록 해 보세요."
             android:textColor="#C6C6C6"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:ignore="TextContrastCheck" />
     </LinearLayout>
 </RelativeLayout>

@@ -13,6 +13,7 @@ public interface TaskSelectMInterface
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(
-            @Field("place_id") String place_id
+            @Field("place_id") String place_id,
+            @Field("selected_date") String selected_date
     );
 }

@@ -38,7 +38,7 @@
             android:layout_centerInParent="true"
             android:fontFamily="@font/applesdgothicneo"
             android:gravity="center"
-            android:text="매장공지"
+            android:text="현장공지"
             android:textColor="#000"
             android:textSize="20sp"
             tools:ignore="HardcodedText" />

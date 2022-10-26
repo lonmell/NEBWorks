@@ -187,6 +187,10 @@ public class PublicWorkAddActivity  extends AppCompatActivity {
         place_start_date = shardpref.getString("place_start_date", "0");
         place_created_at = shardpref.getString("place_created_at", "0");
 
+
+        shardpref.putInt("SELECT_POSITION", 0);
+        shardpref.putInt("SELECT_POSITION_sub",2);
+
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
 
         //캘린더에서 넘어온 경우 - 선택한 날짜를 가져옴
@@ -234,7 +238,7 @@ public class PublicWorkAddActivity  extends AppCompatActivity {
         if (shardpref.getInt("make_kind", 0) == 0 || shardpref.getInt("make_kind", 0) == 1) {//할일 배정,공통 할일,개인일정
             SelectKind = String.valueOf(shardpref.getInt("make_kind", 0));
             user_id = "";
-            shardpref.putInt("selectposition", 1);
+            shardpref.putInt("SELECT_POSITION", 1);
             binding.linearLayout10.setVisibility(View.VISIBLE);
             binding.memberListArea.setVisibility(View.VISIBLE);
         } else if (shardpref.getInt("make_kind", 0) == 2) {//반복업무 생성
@@ -242,7 +246,7 @@ public class PublicWorkAddActivity  extends AppCompatActivity {
             binding.linearLayout7.setVisibility(View.GONE);
             binding.linearLayout10.setVisibility(View.GONE);
             binding.memberListArea.setVisibility(View.GONE);
-            shardpref.putInt("selectposition", 2);
+            shardpref.putInt("SELECT_POSITION", 2);
         } else if (shardpref.getInt("make_kind", 0) == 4) {
             binding.linearLayout4.setVisibility(View.GONE);
             binding.linearLayout10.setVisibility(View.GONE);
@@ -704,6 +708,7 @@ public class PublicWorkAddActivity  extends AppCompatActivity {
                                     mAdapter.addItem(new PlaceMemberListData.PlaceMemberListData_list(
                                             jsonObject.getString("id"),
                                             jsonObject.getString("name"),
+                                            jsonObject.getString("kind"),
                                             jsonObject.getString("account"),
                                             jsonObject.getString("employee_no"),
                                             jsonObject.getString("department"),

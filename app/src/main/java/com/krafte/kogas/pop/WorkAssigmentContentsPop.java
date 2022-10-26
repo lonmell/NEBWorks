@@ -255,6 +255,7 @@ public class WorkAssigmentContentsPop extends Activity {
                                     mAdapter.addItem(new PlaceMemberListData.PlaceMemberListData_list(
                                             jsonObject.getString("id"),
                                             jsonObject.getString("name"),
+                                            jsonObject.getString("kind"),
                                             jsonObject.getString("account"),
                                             jsonObject.getString("employee_no"),
                                             jsonObject.getString("department"),

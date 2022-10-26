@@ -31,4 +31,7 @@
     <string name="title_workstatus">근무현황</string>
     <string name="title_more">더보기</string>
 
+    <string name="approval_tv01">결\n재\n대\n기\n중</string>
+    <string name="approval_tv02">승\n인</string>
+    <string name="approval_tv03">반\n려</string>
 </resources>

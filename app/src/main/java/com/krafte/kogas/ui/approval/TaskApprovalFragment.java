@@ -21,9 +21,9 @@ import com.krafte.kogas.R;
 import com.krafte.kogas.adapter.ApprovalAdapter;
 import com.krafte.kogas.adapter.ViewPagerFregmentAdapter;
 import com.krafte.kogas.data.GetResultData;
-import com.krafte.kogas.fragment.approval.ApprovalFragment1;
-import com.krafte.kogas.fragment.approval.ApprovalFragment2;
-import com.krafte.kogas.fragment.approval.ApprovalFragment3;
+import com.krafte.kogas.ui.fragment.approval.ApprovalFragment1;
+import com.krafte.kogas.ui.fragment.approval.ApprovalFragment2;
+import com.krafte.kogas.ui.fragment.approval.ApprovalFragment3;
 import com.krafte.kogas.util.DateCurrent;
 import com.krafte.kogas.util.Dlog;
 import com.krafte.kogas.util.PageMoveClass;
@@ -159,11 +159,8 @@ public class TaskApprovalFragment extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        if(return_page.equals("WorkState2Activity")){
-            pm.WorkStateDetailGo(mContext);
-        }else{
-            pm.MainBack(mContext);
-        }
+        shardpref.putInt("SELECT_POSITION",0);
+        pm.MainBack(mContext);
     }
 
     @Override

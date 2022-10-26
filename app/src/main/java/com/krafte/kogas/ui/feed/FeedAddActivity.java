@@ -155,7 +155,9 @@ public class FeedAddActivity extends AppCompatActivity {
             place_start_date = shardpref.getString("place_start_date", "0");
             place_created_at = shardpref.getString("place_created_at", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
-            shardpref.putInt("selectposition", 0);
+
+            shardpref.putInt("SELECT_POSITION", 0);
+            shardpref.putInt("SELECT_POSITION_sub",0);
             UserCheck(USER_INFO_EMAIL);
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -263,7 +265,7 @@ public class FeedAddActivity extends AppCompatActivity {
                                                 .placeholder(R.drawable.no_image)
                                                 .into(binding.profileImg);
 
-                                        binding.userName.setText((name.equals("null") ? "" : name) + "|" + (position.equals("null") ? "" : position));
+                                        binding.userName.setText((name.equals("null") ? "" : name) + "(" + (department.equals("null") ? "" : department) + " " +(position.equals("null") ? "" : position) + ")");
 
                                         dlog.i("------UserCheck-------");
                                         dlog.i("프로필 사진 url : " + img_path);

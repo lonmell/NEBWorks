@@ -143,14 +143,14 @@ public class FeedEditActivity extends AppCompatActivity {
 
         icon_on = mContext.getResources().getDrawable(R.drawable.resize_service_on);
         icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
-        shardpref.putInt("selectposition", 0);
+        shardpref.putInt("SELECT_POSITION", 0);
         setBtnEvent();
 
         //UI 데이터 세팅
         try {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
             place_id = shardpref.getString("place_id", "0");
-            feed_id = shardpref.getString("feed_id","0");
+            feed_id = shardpref.getString("edit_feed_id","0");
             place_name = shardpref.getString("place_name", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
             place_owner_name = shardpref.getString("place_owner_name", "0");
@@ -165,6 +165,8 @@ public class FeedEditActivity extends AppCompatActivity {
             place_created_at = shardpref.getString("place_created_at", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
 
+            shardpref.putInt("SELECT_POSITION", 0);
+            shardpref.putInt("SELECT_POSITION_sub",0);
             UserCheck(USER_INFO_EMAIL);
             GETFeed();
         } catch (Exception e) {
