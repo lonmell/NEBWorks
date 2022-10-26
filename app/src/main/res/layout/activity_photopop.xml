@@ -30,7 +30,7 @@
         android:id="@+id/thumnail_in"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="center"
+        android:layout_above="@+id/close_box"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/close_box"/>
+        android:scaleType="center" />
 </RelativeLayout>

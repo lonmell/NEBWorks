@@ -168,6 +168,9 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
 
     int a = 0;//정직원 수
     int b = 0;//협력업체 직원 수
+    List<String> inmember = new ArrayList<>();
+    List<String> othermember = new ArrayList<>();
+
     /*--------------------*/
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat", "LongLogTag"})
     @Override
@@ -258,18 +261,22 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                 shardpref.putInt("SELECT_POSITION", 1);
                 binding.linearLayout10.setVisibility(View.VISIBLE);
                 binding.memberListArea.setVisibility(View.VISIBLE);
+                binding.otherMemberArea.setVisibility(View.VISIBLE);
             } else if (make_kind == 2) {//반복업무 생성
                 user_id = "";
                 binding.linearLayout7.setVisibility(View.GONE);
                 binding.linearLayout10.setVisibility(View.GONE);
                 binding.memberListArea.setVisibility(View.GONE);
+                binding.otherMemberArea.setVisibility(View.GONE);
                 shardpref.putInt("SELECT_POSITION", 2);
             } else if (make_kind == 4) {
                 binding.linearLayout4.setVisibility(View.GONE);
                 binding.linearLayout10.setVisibility(View.GONE);
+                binding.otherMemberArea.setVisibility(View.GONE);
             } else {
                 binding.linearLayout10.setVisibility(View.VISIBLE);
                 binding.memberListArea.setVisibility(View.VISIBLE);
+                binding.otherMemberArea.setVisibility(View.VISIBLE);
             }
 
             java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -725,6 +732,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                                     //정직원만
                                     if(jsonObject.getString("kind").equals("0")){
                                         a++;
+                                        inmember.add(jsonObject.getString("id"));
                                         mAdapter.addItem(new PlaceMemberListData.PlaceMemberListData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("name"),
@@ -768,6 +776,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                                     //외부협력업체 직원
                                     if(jsonObject.getString("kind").equals("1")){
                                         b++;
+                                        othermember.add(jsonObject.getString("id"));
                                         mAdapter2.addItem(new PlaceMemberListData.PlaceMemberListData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("name"),
@@ -793,8 +802,16 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                 });
-
+                                inmember.addAll(othermember);
+                                dlog.i("총 직원 배열 : " + inmember);
                                 dlog.i("정직원 수 : " + a + "/ 협력업체 직원 수 : " + b);
+                                if(a == 0){
+                                    binding.linearLayout10.setVisibility(View.GONE);
+                                    binding.memberListArea.setVisibility(View.GONE);
+                                }
+                                if(b == 0){
+                                    binding.otherMemberArea.setVisibility(View.GONE);
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -1499,8 +1516,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             return true;
         }
     }
-
-
 
     /* -- 할일 추가 FCM 전송 영역 */
     private void SendUserCheck(int flag){

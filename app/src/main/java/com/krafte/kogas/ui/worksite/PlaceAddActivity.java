@@ -37,6 +37,7 @@ import com.krafte.kogas.R;
 import com.krafte.kogas.data.GetResultData;
 import com.krafte.kogas.dataInterface.MakeFileNameInterface;
 import com.krafte.kogas.dataInterface.PlaceAddInterface;
+import com.krafte.kogas.dataInterface.UserSelectInterface;
 import com.krafte.kogas.databinding.ActivityAddplaceBinding;
 import com.krafte.kogas.pop.DatePickerActivity;
 import com.krafte.kogas.pop.WorkTimePicker;
@@ -96,9 +97,6 @@ public class PlaceAddActivity extends AppCompatActivity {
     Handler mHandler;
     RetrofitConnect rc = new RetrofitConnect();
 
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
-
     File file;
     SimpleDateFormat dateFormat;
     @SuppressLint("SdCardPath")
@@ -133,7 +131,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     String EndTime02 = "-99";
 
     //Shared
-    String USER_INFO_NO = "";
+    String USER_INFO_EMAIL = "";
     String USER_INFO_ID = "";
 
     //CheckData Param
@@ -164,14 +162,21 @@ public class PlaceAddActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
 
-
-        USER_INFO_NO = shardpref.getString("USER_INFO_NO", "0");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-        dlog.i("USER_INFO_ID : " +USER_INFO_ID);
+        USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
+
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
         gpsTracker = new GpsTracker(mContext);
         geocoder = new Geocoder(mContext);
 
         setBtnEvent();
+        if(USER_INFO_EMAIL.equals("0")){
+            Toast.makeText(mContext,"사용자 정보를 가져오지 못했습니다.\n다시 로그인하세요.",Toast.LENGTH_SHORT).show();
+            pm.LoginBack(mContext);
+        }else{
+            UserCheck(USER_INFO_EMAIL);
+        }
     }
 
     private void setBtnEvent() {
@@ -247,7 +252,65 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         });
     }
+    public void UserCheck(String account) {
+        dlog.i("UserCheck account : " + account);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(account);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
+                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            try {
+                                if (!response.body().equals("[]")) {
+                                    JSONArray Response = new JSONArray(response.body());
+                                    String id = Response.getJSONObject(0).getString("id");
+                                    String name = Response.getJSONObject(0).getString("name");
+                                    String kind = Response.getJSONObject(0).getString("kind");
+                                    String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
+                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
+                                    String department = Response.getJSONObject(0).getString("department");
+                                    String position = Response.getJSONObject(0).getString("position");
+                                    ProfileUrl = Response.getJSONObject(0).getString("img_path");
+                                    try {
 
+                                        dlog.i("------UserCheck-------");
+                                        dlog.i("프로필 사진 url : " + ProfileUrl);
+                                        dlog.i("이메일 : " + account);
+                                        dlog.i("성명 : " + name);
+                                        dlog.i("부서 : " + department);
+                                        dlog.i("직책 : " + position);
+                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
+                                        dlog.i("kind : " + kind); //-- 사번이 없는 회사도 있을 수 있으니 필수X
+                                        dlog.i("------UserCheck-------");
+                                    } catch (Exception e) {
+                                        dlog.i("UserCheck Exception : " + e);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
     public void AddPlace() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceAddInterface.URL)
@@ -412,7 +475,11 @@ public class PlaceAddActivity extends AppCompatActivity {
         } else if (start_date.isEmpty()) {
             Toast.makeText(mContext, "작업 시작일을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
-        } else {
+        } else if(USER_INFO_ID.equals("0")){
+            Toast.makeText(mContext, "사용자 정보를 가져올수 없습니다.", Toast.LENGTH_SHORT).show();
+            pm.LoginBack(mContext);
+            return false;
+        }else {
             return true;
         }
     }
@@ -449,7 +516,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                     });
 
                     final String IMG_FILE_EXTENSION = ".JPEG";
-                    String file_name = USER_INFO_NO + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+                    String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
                     ProfileUrl = "http://krafte.net/kogas/image/place_img/" + file_name;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -546,11 +613,11 @@ public class PlaceAddActivity extends AppCompatActivity {
         final String IMG_FILE_EXTENSION = ".JPEG";
         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String file_name = USER_INFO_NO + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
         String fullFileName = BACKUP_PATH;
 
         dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
-        dlog.i("(saveBitmapAndGetURI)USER_INFO_NO : " + USER_INFO_NO);
+        dlog.i("(saveBitmapAndGetURI)USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("(saveBitmapAndGetURI)fullFileName : " + fullFileName);
 
         File file_path;

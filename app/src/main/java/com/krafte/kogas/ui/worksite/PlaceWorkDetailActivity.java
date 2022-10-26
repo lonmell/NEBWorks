@@ -72,7 +72,7 @@ import retrofit2.http.Part;
 
 public class PlaceWorkDetailActivity extends AppCompatActivity {
     private final static String TAG = "PlaceWorkDetailActivity";
-    private com.krafte.kogas.databinding.ActivityPlaceworkDetailBinding binding;
+    private ActivityPlaceworkDetailBinding binding;
     Context mContext;
     int GALLEY_CODE = 10;
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
@@ -102,7 +102,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
     String ProfileUrl = "";
 
     Dlog dlog = new Dlog();
-    boolean channelId1 = false;
+    boolean channelId = false;
     boolean rcvchannelId2 = false;
 
     String task_no = "";
@@ -115,6 +115,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
     String WorkDay = "";
     String complete_yn = "y";
     String incomplete_reason = "";
+    String approval_state = "";
 
     //업무 종류
     String complete_kind = "1";
@@ -303,9 +304,9 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         create_date = shardpref.getString("task_date", "0");
 
         ProfileUrl = shardpref.getString("img_path", "0").equals("null") ? "" : shardpref.getString("img_path", "0");
-        complete_yn = shardpref.getString("complete_yn", "y").equals("null") ? "y" : "n";// y:완료, n:미완료
+        complete_yn = shardpref.getString("complete_yn", "null");// y:완료, n:미완료
         incomplete_reason = shardpref.getString("incomplete_reason", "n").equals("null") ? "" : shardpref.getString("incomplete_reason", "0"); // n: 미완료 사유
-
+        approval_state = shardpref.getString("approval_state", "3");// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
         try {
             dlog.i("-----getTaskContents-----");
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
@@ -323,21 +324,49 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             dlog.i("ProfileUrl : " + ProfileUrl);
             dlog.i("complete_yn : " + complete_yn);
             dlog.i("incomplete_reason : " + incomplete_reason);
+            dlog.i("approval_state : " + approval_state);
             dlog.i("user_id.contains(USER_INFO_ID) : " + user_id.contains(USER_INFO_ID));
             dlog.i("-----getTaskContents-----");
-            binding.endtimeTxt.setText(end_time);
 
+            binding.endtimeTxt.setText(end_time);
             binding.inputWorktitle.setText(WorkTitle.equals("null") ? "" : WorkTitle);
             binding.workContentSet.setText(WorkContents.equals("null") ? "" : WorkContents);
             binding.incompleteInput.setText(incomplete_reason.equals("null") ? "" : incomplete_reason);
+            String approvalStatetv = "";
+            // 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
+
+            if(approval_state.equals("0")){
+                approvalStatetv = "결재대기";
+                binding.apploveState.setTextColor(Color.parseColor("#696969"));
+            }else if(approval_state.equals("1")){
+                approvalStatetv = "승인";
+                binding.apploveState.setTextColor(Color.parseColor("#5B93FF"));
+            }else if(approval_state.equals("2")){
+                approvalStatetv = "반려";
+                binding.apploveState.setTextColor(Color.parseColor("#FF0000"));
+            }else if(approval_state.equals("3")){
+                binding.apploveState.setVisibility(View.GONE);
+            }
+            binding.apploveState.setText(approvalStatetv);
 
             if (user_id.contains(USER_INFO_ID)) {
-                binding.success01Txt.setClickable(true);
-                binding.success01Txt.setEnabled(true);
-                binding.success02Txt.setEnabled(true);
-                binding.success02Txt.setClickable(true);
-                binding.incompleteInput.setEnabled(true);
-                binding.bottomBtnBox.setVisibility(View.VISIBLE);
+                if(!complete_yn.equals("null")){
+                    binding.success01Txt.setClickable(false);
+                    binding.success01Txt.setEnabled(false);
+                    binding.success02Txt.setEnabled(false);
+                    binding.success02Txt.setClickable(false);
+                    binding.incompleteInput.setEnabled(false);
+                    binding.clearImg.setVisibility(View.GONE);
+                    binding.imgPlus.setVisibility(View.GONE);
+                    binding.workSaveAccept.setVisibility(View.GONE);
+                }else{
+                    binding.success01Txt.setClickable(true);
+                    binding.success01Txt.setEnabled(true);
+                    binding.success02Txt.setEnabled(true);
+                    binding.success02Txt.setClickable(true);
+                    binding.incompleteInput.setEnabled(true);
+                    binding.workSaveAccept.setVisibility(View.VISIBLE);
+                }
             } else {
                 binding.success01Txt.setClickable(false);
                 binding.success01Txt.setEnabled(false);
@@ -346,23 +375,17 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                 binding.incompleteInput.setEnabled(false);
                 binding.clearImg.setVisibility(View.GONE);
                 binding.imgPlus.setVisibility(View.GONE);
-                binding.bottomBtnBox.setVisibility(View.GONE);
+                binding.workSaveAccept.setVisibility(View.GONE);
             }
 
             //0:체크, 1:사진
             if (complete_kind.equals("0")) {
+                complete_yn = "y";
                 binding.imgArea.setVisibility(View.GONE);
                 binding.successCheckBox.setVisibility(View.VISIBLE);
-                if (!complete_yn.equals("null")) {
-                    binding.incompleteInput.setBackgroundColor(Color.parseColor("#dcdcdc"));
-                    binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-                    binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                } else  {
-                    binding.incompleteInput.setEnabled(true);
-                    binding.incompleteInput.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                    binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                    binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-                }
+                binding.incompleteInput.setBackgroundColor(Color.parseColor("#dcdcdc"));
+                binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
+                binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
             } else {
                 binding.imgArea.setVisibility(View.VISIBLE);
                 binding.successCheckBox.setVisibility(View.GONE);
@@ -383,7 +406,6 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                     binding.incompleteTitle.setVisibility(View.VISIBLE);
                     binding.incompleteInput.setVisibility(View.VISIBLE);
                 }
-
                 binding.clearImg.setOnClickListener(v -> {
                     try {
                         saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
@@ -508,8 +530,8 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         });
 
         binding.menu.setOnClickListener(v -> {
-            shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub",0);
+            shardpref.putInt("SELECT_POSITION", 1);
+            shardpref.putInt("SELECT_POSITION_sub",1);
             pm.PlaceWorkBack(mContext);
         });
 
@@ -560,11 +582,13 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                                     if (!ProfileUrl.isEmpty() && saveBitmap != null) {
                                         saveBitmapAndGetURI();
                                     }
+                                    shardpref.putInt("SELECT_POSITION",1);
+                                    shardpref.putInt("SELECT_POSITION_sub", 1);
                                     pm.PlaceWorkBack(mContext);
-                                    //근로자일때
+//                                    //근로자일때 -- 저장할때는 알림 필요없음
 //                                    topic = task_id;
 //                                    message = "업무 결제요청이 도착하였습니다";
-//                                    click_action = "EmployeeMyWorkList";
+//                                    click_action = "PlaceWorkFragment";
 //                                    Log.i(TAG, "task_input_id : " + writer_id);
 //                                    Log.i(TAG, "task_conduct_id : " + USER_INFO_ID);
 //                                    getPushBoolean();
@@ -611,13 +635,13 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                     gettoken = Response.getJSONObject(0).getString("token");
                     dlog.i("type : " + type);
                     dlog.i("token : " + gettoken);
-                    channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                    channelId = Response.getJSONObject(0).getString("channel2").equals("1");
                     String place_id = shardpref.getString("place_id", "0");
 
                     FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
                         Log.i(TAG, "token : " + token);
-                        if (channelId1) {
-                            FcmTestFunctionCall(writer_id, "KOGAS", message, gettoken, "2", place_id);
+                        if (channelId) {
+                            FcmTestFunctionCall(writer_id, "", message, gettoken, "1", place_id);
                         }
                     });
 
@@ -641,8 +665,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
 
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceListActivity";
-            dbConnection.FcmTestFunction(topic, place_name, message, token, click_action, tag, place_id);
+            dbConnection.FcmTestFunction(topic, "", message, token, click_action, tag, place_id);
             runOnUiThread(() -> {
             });
         });
@@ -650,7 +673,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         try {
             th.join();
 //            pm.BusinessResult(mContext);
-            pm.PlaceWorkBack(mContext);
+//            pm.PlaceWorkBack(mContext);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

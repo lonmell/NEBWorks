@@ -348,6 +348,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 shardpref.putString("img_path", item.getImg_path());
                 shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
                 shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // n: 미완료 사요
+                shardpref.putString("approval_state", item.getApproval_state()); // n: 미완료 사요
                 shardpref.putInt("make_kind", Integer.parseInt(item.getKind()));
                 Intent intent = new Intent(mContext, Tap2OptionActivity.class);
                 intent.putExtra("left_btn_txt", "닫기");

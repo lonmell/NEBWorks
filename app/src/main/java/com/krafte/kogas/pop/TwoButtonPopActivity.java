@@ -328,7 +328,7 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("LoginCheck jsonResponse : " + response.body());
                             try {
                                 if(response.body().replace("\"","").equals("success")){
-                                    pm.MainBack(mContext);
+                                    ClosePop();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

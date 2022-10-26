@@ -32,10 +32,13 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.kogas.R;
+import com.krafte.kogas.dataInterface.FCMSelectInterface;
 import com.krafte.kogas.dataInterface.FeedNotiAddInterface;
 import com.krafte.kogas.dataInterface.MakeFileNameInterface;
+import com.krafte.kogas.dataInterface.PlaceMemberallInterface;
 import com.krafte.kogas.dataInterface.UserSelectInterface;
 import com.krafte.kogas.databinding.ActivityPlacenotiAddBinding;
+import com.krafte.kogas.util.DBConnection;
 import com.krafte.kogas.util.DateCurrent;
 import com.krafte.kogas.util.Dlog;
 import com.krafte.kogas.util.PageMoveClass;
@@ -53,7 +56,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -115,7 +120,12 @@ public class FeedAddActivity extends AppCompatActivity {
     Drawable icon_on;
 
     //Check Data
-    String noti_title,noti_contents,noti_link,noti_img;
+    String noti_title, noti_contents, noti_link, noti_img;
+
+    int a = 0;//정직원 수
+    int b = 0;//협력업체 직원 수
+    List<String> inmember = new ArrayList<>();
+    List<String> othermember = new ArrayList<>();
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -140,7 +150,7 @@ public class FeedAddActivity extends AppCompatActivity {
 
         //UI 데이터 세팅
         try {
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             place_id = shardpref.getString("place_id", "0");
             place_name = shardpref.getString("place_name", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
@@ -154,10 +164,10 @@ public class FeedAddActivity extends AppCompatActivity {
             place_img_path = shardpref.getString("place_img_path", "0");
             place_start_date = shardpref.getString("place_start_date", "0");
             place_created_at = shardpref.getString("place_created_at", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
 
             shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub",0);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
             UserCheck(USER_INFO_EMAIL);
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -170,6 +180,7 @@ public class FeedAddActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         ImgfileMaker = ImageNameMaker();
+        SetAllMemberList();
     }
 
     @Override
@@ -185,7 +196,7 @@ public class FeedAddActivity extends AppCompatActivity {
 
         binding.workSave.setOnClickListener(v -> {
             dlog.i("DataCheck() : " + DataCheck());
-            if(DataCheck()){
+            if (DataCheck()) {
                 AddStroeNoti();
             }
         });
@@ -206,10 +217,10 @@ public class FeedAddActivity extends AppCompatActivity {
         });
 
 
-        if(saveBitmap != null){
+        if (saveBitmap != null) {
             binding.clearImg.setVisibility(View.VISIBLE);
             binding.imgPlus.setVisibility(View.GONE);
-        }else{
+        } else {
             binding.clearImg.setVisibility(View.GONE);
             binding.imgPlus.setVisibility(View.VISIBLE);
         }
@@ -228,6 +239,69 @@ public class FeedAddActivity extends AppCompatActivity {
         });
     }
 
+    public void SetAllMemberList() {
+        dlog.i("SetAllMemberList place_id : " + place_id);
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(PlaceMemberallInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            PlaceMemberallInterface api = retrofit.create(PlaceMemberallInterface.class);
+            Call<String> call = api.getData(place_id);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(response.body());
+                            dlog.i("SetAllMemberList response.body() length : " + response.body());
+                            if (Response.length() == 0) {
+                                dlog.i("ZERO SIZE : " + Response.length());
+                            } else {
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    //정직원만
+                                    if (jsonObject.getString("kind").equals("0")) {
+                                        a++;
+                                        inmember.add(jsonObject.getString("id"));
+                                    }
+
+                                }
+
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    //외부협력업체 직원
+                                    if (jsonObject.getString("kind").equals("1")) {
+                                        b++;
+                                        othermember.add(jsonObject.getString("id"));
+                                    }
+
+                                }
+
+                                inmember.addAll(othermember);
+                                dlog.i("총 직원 배열 : " + inmember);
+                                dlog.i("정직원 수 : " + a + "/ 협력업체 직원 수 : " + b);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void UserCheck(String account) {
         dlog.i("UserCheck account : " + account);
@@ -265,7 +339,7 @@ public class FeedAddActivity extends AppCompatActivity {
                                                 .placeholder(R.drawable.no_image)
                                                 .into(binding.profileImg);
 
-                                        binding.userName.setText((name.equals("null") ? "" : name) + "(" + (department.equals("null") ? "" : department) + " " +(position.equals("null") ? "" : position) + ")");
+                                        binding.userName.setText((name.equals("null") ? "" : name) + "(" + (department.equals("null") ? "" : department) + " " + (position.equals("null") ? "" : position) + ")");
 
                                         dlog.i("------UserCheck-------");
                                         dlog.i("프로필 사진 url : " + img_path);
@@ -307,7 +381,7 @@ public class FeedAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id,noti_title,noti_contents,USER_INFO_ID,noti_link,ProfileUrl,"");
+        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -323,7 +397,14 @@ public class FeedAddActivity extends AppCompatActivity {
                                     if (!ProfileUrl.isEmpty()) {
                                         saveBitmapAndGetURI();
                                     }
+                                    dlog.i("inmember size : " + inmember.size());
+                                    if(inmember.size() > 0){
+                                        SendUserCheck();
+                                    }
+
                                     Toast.makeText(mContext, "현장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    shardpref.putInt("SELECT_POSITION",1);
+                                    shardpref.putInt("SELECT_POSITION_sub",0);
                                     pm.PlaceWorkGo(mContext);
                                 }
                             } catch (Exception e) {
@@ -342,7 +423,7 @@ public class FeedAddActivity extends AppCompatActivity {
         });
     }
 
-    private boolean DataCheck(){
+    private boolean DataCheck() {
         /*
             1. 제목
             2. 내용
@@ -353,16 +434,17 @@ public class FeedAddActivity extends AppCompatActivity {
         noti_contents = binding.inputWorkcontents.getText().toString();
         noti_link = binding.inputMovelink.getText().toString();
 
-        if(noti_title.isEmpty()){
-            Toast.makeText(mContext,"제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
+        if (noti_title.isEmpty()) {
+            Toast.makeText(mContext, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(noti_contents.isEmpty()){
-            Toast.makeText(mContext,"내용을 입력해주세요",Toast.LENGTH_SHORT).show();
+        } else if (noti_contents.isEmpty()) {
+            Toast.makeText(mContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+
     private String ImageNameMaker() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MakeFileNameInterface.URL)
@@ -614,4 +696,86 @@ public class FeedAddActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    /* -- 할일 추가 FCM 전송 영역 */
+    String message = "";
+    String click_action = "";
+    String tag = "";
+    private void SendUserCheck() {
+        List<String> member = new ArrayList<>();
+        dlog.i("보내야 하는 직원 배열 :" + inmember);
+//        member.addAll(Arrays.asList(user_id.split(",")));
+        dlog.i("보내야 하는 직원 수 :" + inmember.size());
+        dlog.i("보내야 하는 직원 List<String>  :" + inmember);
+
+        message = "[공지사항] :" + binding.title.getText().toString();
+        click_action = "PlaceWorkFragment";
+        tag = "0";
+        for (int a = 0; a < inmember.size(); a++) {
+            if (place_owner_id.equals(inmember.get(a))) {
+                getManagerToken(inmember.get(a), "0", place_id, place_name);
+            } else {
+                getManagerToken(inmember.get(a), "1", place_id, place_name);
+            }
+        }
+    }
+
+    public void getManagerToken(String user_id, String type, String place_id, String place_name) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        String department = shardpref.getString("USER_INFO_SOSOK", "");
+                        String position = shardpref.getString("USER_INFO_JIKGUP", "");
+                        String name = shardpref.getString("USER_INFO_NAME", "");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId = Response.getJSONObject(0).getString("channel2").equals("1");
+                        if (!token.isEmpty() && channelId) {
+                            PushFcmSend(id, "", message, token, tag, place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+    DBConnection dbConnection = new DBConnection();
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+            runOnUiThread(() -> {
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    /* -- 할일 추가 FCM 전송 영역 */
 }

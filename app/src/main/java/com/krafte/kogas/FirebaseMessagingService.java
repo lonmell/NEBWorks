@@ -22,6 +22,10 @@ import com.krafte.kogas.ui.main.MainFragment;
 import com.krafte.kogas.ui.worksite.PlaceListActivity;
 import com.krafte.kogas.util.PreferenceHelper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -74,12 +78,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Log.d(TAG, "1getData Notification title: " + remoteMessage.getNotification().getTitle());
             Log.d(TAG, "1getData Notification Body: " + remoteMessage.getNotification().getBody());
             Log.d(TAG, "1getData Notification clickAction: " + remoteMessage.getNotification().getClickAction());
-            String[] splitTag;
+            Log.d(TAG, "1Message Notification getTag: " + remoteMessage.getNotification().getTag());
 
-            splitTag = remoteMessage.getNotification().getTag().split(",");
+            List<String> splitTag = new ArrayList<>(Arrays.asList(remoteMessage.getNotification().getTag().split(",")));
             if (remoteMessage.getNotification().getTag().length() != 1) {
-                message0 = splitTag[0].isEmpty()?splitTag[0]:"";
-                message1 = splitTag[1].isEmpty()?splitTag[1]:"";
+                Log.d(TAG, "splitTag 0 : " + splitTag.get(0));
+                Log.d(TAG, "splitTag 1 : " + splitTag.get(1));
+                message0 = splitTag.get(0);
+                message1 = splitTag.get(1);
                 Log.i(TAG, "1message0[0] : " + message0);
                 Log.i(TAG, "1message1[1] : " + message1);
                 Log.d(TAG, "1getData Notification TAG : " + message0);
@@ -122,14 +128,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Log.d(TAG, "2Message Notification title: " + remoteMessage.getNotification().getTitle());
             Log.d(TAG, "2Message Notification Body: " + remoteMessage.getNotification().getBody());
             Log.d(TAG, "2Message Notification clickAction: " + remoteMessage.getNotification().getClickAction());
-            sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
-            String[] splitTag;
-            splitTag = remoteMessage.getNotification().getTag().split(",");
+            Log.d(TAG, "2Message Notification getTag: " + remoteMessage.getNotification().getTag());
+
+            List<String> splitTag = new ArrayList<>(Arrays.asList(remoteMessage.getNotification().getTag().split(",")));
             if (remoteMessage.getNotification().getTag().length() != 1 || remoteMessage.getNotification().getTag().length() != 2) {
-                message0 = splitTag[0];
-                message1 = splitTag[1];
-                Log.i(TAG, "2message0[0] : " + message0);
-                Log.i(TAG, "2message1[1] : " + message1);
+                Log.d(TAG, "2splitTag 0 : " + splitTag.get(0));
+                Log.d(TAG, "2splitTag 1 : " + splitTag.get(1));
+                message0 = splitTag.get(0);
+                message1 = splitTag.get(1);
                 Log.d(TAG, "2getData Notification TAG : " + message0);
                 Log.d(TAG, "2getData Notification place_id : " + message1);
             }
@@ -146,6 +152,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             } else if (message0.equals("3") && channelId3) {
                 sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
             } else if (message0.equals("4") && channelId4) {
+                sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
+            } else if (message0.equals("0") && channelId2) {//공지사항 받을때
                 sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
             } else if (message0.equals("9")) {
                 showNotification(remoteMessage.getNotification().getTitle()
@@ -165,15 +173,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             notificationIntent = new Intent(this, MainFragment.class);
         }else if(click_action.equals("PlaceWorkFragment")){
             shardpref.putInt("SELECT_POSITION",1);
-            shardpref.putInt("SELECT_POSITION_sub",1);
+            shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
             notificationIntent = new Intent(this, MainFragment.class);
-            shardpref.putInt("SELECT_POSITION",1);
         }else if(click_action.equals("TaskApprovalFragment")){
+            shardpref.putInt("SELECT_POSITION",Integer.parseInt(message0));
             notificationIntent = new Intent(this, TaskApprovalFragment.class);
-            shardpref.putInt("SELECT_POSITION",0);
         }else if(click_action.equals("PlaceListActivity")){
             notificationIntent = new Intent(this, PlaceListActivity.class);
-            shardpref.putInt("SELECT_POSITION",0);
         }
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
@@ -203,15 +209,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             intent = new Intent(this, MainFragment.class);
         }else if(click_action.equals("PlaceWorkFragment")){
             shardpref.putInt("SELECT_POSITION",1);
-            shardpref.putInt("SELECT_POSITION_sub",1);
+            shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
             intent = new Intent(this, MainFragment.class);
-            shardpref.putInt("SELECT_POSITION",1);
         }else if(click_action.equals("TaskApprovalFragment")){
+            shardpref.putInt("SELECT_POSITION", Integer.parseInt(message0));
             intent = new Intent(this, TaskApprovalFragment.class);
-            shardpref.putInt("SELECT_POSITION",0);
         }else if(click_action.equals("PlaceListActivity")){
             intent = new Intent(this, PlaceListActivity.class);
-            shardpref.putInt("SELECT_POSITION",0);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_MUTABLE);

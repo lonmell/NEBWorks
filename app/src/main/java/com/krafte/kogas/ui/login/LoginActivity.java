@@ -272,7 +272,12 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i("Kakao", "GET_JOIN_CONFIRM = " + GET_JOIN_CONFIRM);
                     Log.i("Kakao", "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
 
-                    LoginCheck(GET_ACCOUNT_EMAIL);
+                    if(GET_ACCOUNT_EMAIL.isEmpty()){
+                        Toast.makeText(mContext,"네트워크 통신연결이 불안정 합니다.",Toast.LENGTH_SHORT).show();
+                    }else{
+                        LoginCheck(GET_ACCOUNT_EMAIL);
+                    }
+
                 }, 1000); //1초 후 인트로 실행
             }
 
@@ -296,7 +301,11 @@ public class LoginActivity extends AppCompatActivity {
 
         shardpref.putString("USER_LOGIN_METHOD", "Google");
         shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
-        LoginCheck(user.getEmail());
+        if(user.getEmail().isEmpty()){
+            Toast.makeText(mContext,"네트워크 통신연결이 불안정 합니다.",Toast.LENGTH_SHORT).show();
+        }else{
+            LoginCheck(user.getEmail());
+        }
         GET_ACCOUNT_EMAIL = user.getEmail();
         GET_NAME = user.getDisplayName();
         GET_PROFILE_URL = String.valueOf(user.getPhotoUrl());
@@ -365,7 +374,7 @@ public class LoginActivity extends AppCompatActivity {
                                     String position = Response.getJSONObject(0).getString("position");
                                     String img_path = Response.getJSONObject(0).getString("img_path");
 
-                                    shardpref.putString("USER_INFO_NO", id);
+                                    shardpref.putString("USER_INFO_ID", id);
                                     shardpref.putString("USER_INFO_NAME", name);
                                     shardpref.putString("USER_INFO_EMAIL", account);
                                     shardpref.putString("USER_INFO_SABUN", employee_no);
@@ -376,7 +385,11 @@ public class LoginActivity extends AppCompatActivity {
                                     pm.PlaceListGo(mContext);
                                     binding.loginAlertText.setVisibility(View.GONE);
                                 }else{
-                                    INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL);
+                                    if(GET_ACCOUNT_EMAIL.isEmpty()){
+                                        Toast.makeText(mContext,"통신연결이 불안정합니다. 다시 로그인해주세요.",Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL);
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

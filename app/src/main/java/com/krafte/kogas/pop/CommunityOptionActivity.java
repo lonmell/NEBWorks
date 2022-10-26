@@ -64,7 +64,6 @@ public class CommunityOptionActivity extends Activity {
         dlog.DlogContext(mContext);
 
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_NO = shardpref.getString("USER_INFO_NO", "");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
 
 

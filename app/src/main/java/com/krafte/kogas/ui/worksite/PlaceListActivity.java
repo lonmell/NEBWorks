@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,28 +95,46 @@ public class PlaceListActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        mContext = this;
-        dlog.DlogContext(mContext);
-        shardpref = new PreferenceHelper(mContext);
+        try{
+            mContext = this;
+            dlog.DlogContext(mContext);
+            shardpref = new PreferenceHelper(mContext);
 
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        setBtnEvent();
-
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
+            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+            setBtnEvent();
+            LoginCheck(USER_INFO_EMAIL);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        LoginCheck(USER_INFO_EMAIL);
-        GetPlaceList(USER_INFO_EMAIL);
+        GetPlaceList();
+
+        timer = new Timer();
+        TimerTask TT = new TimerTask() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void run() {
+                // 반복실행할 구문
+                runOnUiThread(() -> {
+                    GetPlaceList();
+                });
+            }
+        };
+        timer.schedule(TT, 3000, 5000); //Timer 실행
+
     }
 
     @Override
     public void onStop(){
         super.onStop();
+        timer.cancel();
     }
     @Override
     public void onDestroy(){
@@ -128,15 +147,15 @@ public class PlaceListActivity extends AppCompatActivity {
 
         binding.refreshBtn.setVisibility(View.GONE);
         binding.refreshBtn.setOnClickListener(v -> {
-            GetPlaceList(USER_INFO_EMAIL);
+            GetPlaceList();
         });
 
         binding.shutdownApp.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
             intent.putExtra("data", "앱을 종료 하시겠습니까?");
-            intent.putExtra("flag", "종료");
+            intent.putExtra("flag", "로그아웃");
             intent.putExtra("left_btn_txt", "닫기");
-            intent.putExtra("right_btn_txt", "종료");
+            intent.putExtra("right_btn_txt", "로그아웃");
             mContext.startActivity(intent);
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up,0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -182,6 +201,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
                                     dlog.i("id : " + id);
                                     dlog.i("USER_INFO_ID : " +shardpref.getString("USER_INFO_ID", "0"));
+                                    dlog.i("USER_INFO_EMAIL : " +shardpref.getString("USER_INFO_EMAIL", "0"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -200,8 +220,7 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
 
-    public void GetPlaceList(String account) {
-        dlog.i("GetPlaceList account : " + account);
+    public void GetPlaceList() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())

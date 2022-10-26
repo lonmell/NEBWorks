@@ -28,6 +28,7 @@ import com.krafte.kogas.data.TaskCheckData;
 import com.krafte.kogas.dataInterface.ApprovalUpdateInterface;
 import com.krafte.kogas.dataInterface.FCMSelectInterface;
 import com.krafte.kogas.dataInterface.TaskSapprovalInterface;
+import com.krafte.kogas.dataInterface.TaskSelectMInterface;
 import com.krafte.kogas.pop.DatePickerActivity;
 import com.krafte.kogas.pop.OneButtonPopActivity;
 import com.krafte.kogas.pop.OneButtonTItlePopActivity;
@@ -44,6 +45,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -73,6 +75,7 @@ public class ApprovalFragment3 extends Fragment {
     PreferenceHelper shardpref;
     String place_id = "";
     String place_name = "";
+    String place_owner_id = "";
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
 
@@ -88,8 +91,12 @@ public class ApprovalFragment3 extends Fragment {
     boolean AllCheck = false;
     List<String> member = new ArrayList<>();
     int i = 0;
+
     String totalSendCheck = "";
     String totalSendUser = "";
+    String totalTaskno = "";
+    String totalTaskdate = "";
+
     String message = "";
     String toDay = "";
     String[] splitArray;
@@ -143,6 +150,7 @@ public class ApprovalFragment3 extends Fragment {
         shardpref = new PreferenceHelper(mContext);
         place_id = shardpref.getString("place_id", "0");
         place_name = shardpref.getString("place_name", "0");
+        place_owner_id = shardpref.getString("place_owner_id", "0");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
 
@@ -190,6 +198,22 @@ public class ApprovalFragment3 extends Fragment {
             totalSendUser = Arrays.toString(splitArray1).replace("[", "").replace("]", "").replace(" ", "");
             dlog.i("----------totalSendUser-----------");
 
+            dlog.i("----------totaltask_no-----------");
+            String getArray2 = shardpref.getString("tasknoList", "").replace("[", "").replace("]", "").replace(",", "").replace("  ", " ").trim();
+            dlog.i("getArray2 : " + getArray1);
+            List<String> tasknoList = new ArrayList<>(Arrays.asList(getArray2.split(",")));
+            dlog.i("splitArray2 : " + tasknoList.size());
+            totalTaskno = tasknoList.toString();
+            dlog.i("----------totaltask_no-----------");
+
+            dlog.i("----------totaltaskdate-----------");
+            String getArray3 = shardpref.getString("taskdate", "").replace("[", "").replace("]", "").replace(",", "").replace("  ", " ").trim();
+            dlog.i("getArray3 : " + getArray3);
+            List<String> taskdate = new ArrayList<>(Arrays.asList(getArray3.split(",")));
+            dlog.i("splitArray3 : " + taskdate.size());
+            totalTaskdate = taskdate.toString().replace("[", "").replace("]", "").replace(" ", "");
+            dlog.i("----------totaltaskdate-----------");
+
             if (totalSendCheck.isEmpty()) {
                 Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                 intent.putExtra("data", "선택한 업무가 없습니다.");
@@ -197,12 +221,14 @@ public class ApprovalFragment3 extends Fragment {
                 startActivity(intent);
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             } else {
-                SUCCESS_POSITION = 2;
-                setUpdateWorktodo("0",totalSendCheck);
-                SendUserCheck(1, "반려 취소");
+                SUCCESS_POSITION = 0;
+                setUpdateWorktodo("0", totalSendCheck);
+                for(int i = 0; i < tasknoList.size(); i++){
+                    setTodoData(taskdate.get(i),tasknoList.get(i));
+                }
             }
-//            totalSendCheck = "";
-//            totalSendUser = "";
+            totalSendCheck = "";
+            totalSendUser = "";
         });
 
         accept_btn.setText("승인");
@@ -227,6 +253,22 @@ public class ApprovalFragment3 extends Fragment {
             totalSendUser = Arrays.toString(splitArray1).replace("[", "").replace("]", "").replace(" ", "");
             dlog.i("----------totalSendUser-----------");
 
+            dlog.i("----------totaltask_no-----------");
+            String getArray2 = shardpref.getString("tasknoList", "").replace("[", "").replace("]", "").replace(",", "").replace("  ", " ").trim();
+            dlog.i("getArray2 : " + getArray1);
+            List<String> tasknoList = new ArrayList<>(Arrays.asList(getArray2.split(",")));
+            dlog.i("splitArray2 : " + tasknoList.size());
+            totalTaskno = tasknoList.toString();
+            dlog.i("----------totaltask_no-----------");
+
+            dlog.i("----------totaltaskdate-----------");
+            String getArray3 = shardpref.getString("taskdate", "").replace("[", "").replace("]", "").replace(",", "").replace("  ", " ").trim();
+            dlog.i("getArray3 : " + getArray3);
+            List<String> taskdate = new ArrayList<>(Arrays.asList(getArray3.split(",")));
+            dlog.i("splitArray3 : " + taskdate.size());
+            totalTaskdate = taskdate.toString().replace("[", "").replace("]", "").replace(" ", "");
+            dlog.i("----------totaltaskdate-----------");
+
             if (totalSendCheck.isEmpty()) {
                 Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                 intent.putExtra("data", "선택한 업무가 없습니다.");
@@ -236,10 +278,12 @@ public class ApprovalFragment3 extends Fragment {
             } else {
                 SUCCESS_POSITION = 1;
                 setUpdateWorktodo("1", totalSendCheck);
-                SendUserCheck(1, "승인");
+                for(int i = 0; i < tasknoList.size(); i++){
+                    setTodoData(taskdate.get(i),tasknoList.get(i));
+                }
             }
-//            totalSendCheck = "";
-//            totalSendUser = "";
+            totalSendCheck = "";
+            totalSendUser = "";
         });
 
         all_check.setOnClickListener(v -> {
@@ -269,17 +313,97 @@ public class ApprovalFragment3 extends Fragment {
     }
 
 
-    /* -- 할일 추가 FCM 전송 영역 */
-    private void SendUserCheck(int flag, String state) {
-        member = new ArrayList<>();
-        dlog.i("state :" + state);
-        dlog.i("보내야 하는 직원 배열 :" + totalSendUser);
-        member.addAll(Arrays.asList(totalSendUser.split(",")));
-        dlog.i("보내야 하는 직원 수 :" + member.size());
-        dlog.i("보내야 하는 직원 List<String>  :" + member);
+    List<String> inmember = new ArrayList<>();
+    List<String> user_id = new ArrayList<>();
+    List<String> task_member_id = new ArrayList<>();
+    public void setTodoData(String selectdate, String task_no) {
+        dlog.i("setTodoMList place_id : " + place_id);
+        dlog.i("setTodoMList selectdate : " + selectdate);
+        dlog.i("setTodoMList task_no : " + task_no);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaskSelectMInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaskSelectMInterface api = retrofit.create(TaskSelectMInterface.class);
+        Call<String> call = api.getData(place_id,selectdate);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "WorkTapListFragment1 / setRecyclerView");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                Log.e(TAG, "response 2: " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(response.body());
+                        Log.i(TAG, "GET SIZE : " + Response.length());
+                        if (Response.length() == 0) {
+                            Log.i(TAG, "SetNoticeListview Thread run! ");
+                            Log.i(TAG, "GET SIZE : " + Response.length());
+                        } else {
+                            for (int i = 0; i < Response.length(); i++) {
+                                JSONObject jsonObject = Response.getJSONObject(i);
+                                if(jsonObject.getString("id").equals(task_no)){
+                                    task_member_id = Collections.singletonList(jsonObject.getString("users"));
+                                }
+                            }
+                            JSONArray Response2 = new JSONArray(task_member_id.toString().replace("[[", "[").replace("]]", "]"));
+                            if (Response2.length() > 3) {
+                                for (int i = 0; i < 3; i++) {
+                                    JSONObject jsonObject = Response2.getJSONObject(i);
+                                    inmember.add(jsonObject.getString("user_id"));
+                                }
+                            } else {
+                                for (int i = 0; i < Response2.length(); i++) {
+                                    JSONObject jsonObject = Response2.getJSONObject(i);
+                                    inmember.add(jsonObject.getString("user_id"));
+                                }
+                            }
+                            user_id.removeAll(user_id);
+                            for (int i = 0; i < Response2.length(); i++) {
+                                JSONObject jsonObject = Response2.getJSONObject(i);
+                                if (!jsonObject.getString("user_name").equals("null")) {
+                                    user_id.add(jsonObject.getString("user_id"));
+                                }
+                            }
+                            dlog.i("이 작업에 배정된 직원 : " + user_id);
+                            if(SUCCESS_POSITION == 1){
+                                SendUserCheck("승인");
+                           }else if(SUCCESS_POSITION == 0){
+                                SendUserCheck("반려취소");
+                            }
 
-        for (int a = 0; a < member.size(); a++) {
-            getManagerToken(member.get(a), "1", place_id, place_name,state);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
+    }
+
+    /* -- 할일 추가 FCM 전송 영역 */
+    private void SendUserCheck(String state) {
+//        List<String> member = new ArrayList<>();
+//        dlog.i("보내야 하는 직원 배열 :" + user_id);
+//        member.addAll(Arrays.asList(user_id.split(",")));
+//        dlog.i("보내야 하는 직원 수 :" + member.size());
+//        dlog.i("보내야 하는 직원 List<String>  :" + member);
+
+        for (int a = 0; a < user_id.size(); a++) {
+            if(place_owner_id.equals(user_id.get(a))){
+                getManagerToken(user_id.get(a), "0", place_id, place_name,state);
+            }else{
+                getManagerToken(user_id.get(a), "1", place_id, place_name,state);
+            }
         }
     }
 
@@ -313,7 +437,7 @@ public class ApprovalFragment3 extends Fragment {
                         boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
                         if (!token.isEmpty() && channelId1) {
                             message = "[" + place_name + "]" + state + "된 업무보고가 있습니다.";
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, String.valueOf(SUCCESS_POSITION), place_id);
                         }
                     }
                 } catch (JSONException e) {
@@ -380,8 +504,8 @@ public class ApprovalFragment3 extends Fragment {
                             intent.putExtra("title", "반려취소 완료");
                             intent.putExtra("data", "반려취소 처리가 완료 되었습니다.");
                         }else{
-                            intent.putExtra("title", "반려 완료");
-                            intent.putExtra("data", "반려처리가 완료 되었습니다.");
+                            intent.putExtra("title", "승인 완료");
+                            intent.putExtra("data", "승인처리가 완료 되었습니다.");
                         }
                         mContext.startActivity(intent);
                         ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
@@ -437,6 +561,7 @@ public class ApprovalFragment3 extends Fragment {
                                 mAdapter.addItem(new TaskCheckData.TaskCheckData_list(
                                         jsonObject.getString("id"),
                                         jsonObject.getString("state"),
+                                        jsonObject.getString("request_task_no"),
                                         jsonObject.getString("requester_id"),
                                         jsonObject.getString("requester_name"),
                                         jsonObject.getString("requester_img_path"),
@@ -477,6 +602,7 @@ public class ApprovalFragment3 extends Fragment {
                                 try {
                                     shardpref.putString("id", Response.getJSONObject(position).getString("id"));
                                     shardpref.putString("state", Response.getJSONObject(position).getString("state"));
+                                    shardpref.putString("request_task_no", Response.getJSONObject(position).getString("request_task_no"));
                                     shardpref.putString("requester_id", Response.getJSONObject(position).getString("requester_id"));
                                     shardpref.putString("requester_name", Response.getJSONObject(position).getString("requester_name"));
                                     shardpref.putString("requester_img_path", Response.getJSONObject(position).getString("requester_img_path"));

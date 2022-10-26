@@ -366,7 +366,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="반복 업무 생성"
+                        android:text="즐겨찾기 생성"
                         android:textColor="#000000"
                         tools:ignore="HardcodedText" />
 

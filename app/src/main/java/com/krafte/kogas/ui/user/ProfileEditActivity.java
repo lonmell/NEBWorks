@@ -28,8 +28,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.user.UserApiClient;
 import com.krafte.kogas.R;
 import com.krafte.kogas.adapter.WorkplaceListAdapter;
 import com.krafte.kogas.data.PlaceListData;
@@ -56,7 +62,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -72,6 +82,7 @@ import retrofit2.http.Part;
 
 public class ProfileEditActivity extends AppCompatActivity {
     private ActivityProfileeditBinding binding;
+    private static final String TAG = "ProfileEditActivity";
     Context mContext;
     int GALLEY_CODE = 10;
 
@@ -92,6 +103,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     String USER_INFO_NAME = "";
     String USER_INFO_KIND = "0";
     String USER_INFO_SABEON = "";
+    String USER_LOGIN_METHOD = "";
 
     String user_name = "";
     String department = "";
@@ -130,6 +142,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "0");
         USER_INFO_KIND = shardpref.getString("USER_INFO_KIND","0");
+        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","0");
+
+        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
         setBtnEvent();
         UserCheck(USER_INFO_EMAIL);
     }
@@ -234,6 +249,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                                         } else {
                                             binding.clearImg.setVisibility(View.VISIBLE);
                                             binding.imgPlus.setVisibility(View.GONE);
+
                                             Glide.with(mContext).load(ProfileUrl)
                                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                                                     .skipMemoryCache(true)
@@ -331,50 +347,111 @@ public class ProfileEditActivity extends AppCompatActivity {
         shardpref.putString("USER_INFO_JIKGUP",jikchk);
         shardpref.putString("name",user_name);
         dlog.i("------SaveUser-------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserSaveInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        UserSaveInterface api = retrofit.create(UserSaveInterface.class);
-        Call<String> call = api.getData(USER_INFO_ID, user_name, USER_INFO_KIND, USER_INFO_SABEON, department, jikchk, ProfileUrl);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
+        if(!USER_INFO_ID.equals("0")){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(UserSaveInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            UserSaveInterface api = retrofit.create(UserSaveInterface.class);
+            Call<String> call = api.getData(USER_INFO_ID, user_name, USER_INFO_KIND, USER_INFO_SABEON, department, jikchk, ProfileUrl);
+            call.enqueue(new Callback<String>() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        runOnUiThread(() -> {
+                            if (response.isSuccessful() && response.body() != null) {
 //                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("SaveUser jsonResponse length : " + response.body().length());
-                            dlog.i("SaveUser jsonResponse : " + response.body());
-                            try {
+                                dlog.i("SaveUser jsonResponse length : " + response.body().length());
+                                dlog.i("SaveUser jsonResponse : " + response.body());
+                                try {
 
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
-                                    if (!ProfileUrl.isEmpty() && saveBitmap != null) {
-                                        saveBitmapAndGetURI();
+                                    if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                        if (!ProfileUrl.isEmpty() && saveBitmap != null) {
+                                            saveBitmapAndGetURI();
+                                        }
+                                        Toast.makeText(mContext, "프로필 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                        String return_page = shardpref.getString("retrun_page","");
+                                        if(return_page.equals("MoreActivity")){
+                                            pm.MoreBack(mContext);
+                                        }else{
+                                            pm.UserPlsceMapBack(mContext);
+                                        }
                                     }
-                                    Toast.makeText(mContext, "프로필 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                    String return_page = shardpref.getString("retrun_page","");
-                                    if(return_page.equals("MoreActivity")){
-                                        pm.MoreBack(mContext);
-                                    }else{
-                                        pm.UserPlsceMapBack(mContext);
-                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
 
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러1 = " + t.getMessage());
+                }
+            });
+        }else{
+            Toast.makeText(mContext,"사용자 정보를 가져 올수 없습니다.\n다시 로그인해주세요",Toast.LENGTH_SHORT).show();
+            DataAllRemove();
+        }
+
+    }
+
+    // [START declare_auth]
+    private FirebaseAuth mAuth;
+    // [END declare_auth]
+    private GoogleSignInClient mGoogleSignInClient;
+    //카카오 로그인 콜백
+    Function2<OAuthToken, Throwable, Unit> kakaoCallback = (oAuthToken, throwable) -> {
+        if (oAuthToken != null) {
+            Log.i(TAG, "kakaoCallback oAuthToken not null");
+        }
+        if (throwable != null) {
+            Log.i(TAG, "kakaoCallback throwable not null");
+            Log.i("Kakao", "Message : " + throwable.getLocalizedMessage());
+            if (Objects.equals(throwable.getLocalizedMessage(), "user cancelled.")) {
             }
-        });
+        }
+        return null;
+    };
+    private void DataAllRemove(){
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
+
+        shardpref.clear();
+        shardpref.putBoolean("USER_LOGIN_CONFIRM", false);
+        shardpref.putString("USER_LOGIN_METHOD", USER_LOGIN_METHOD);
+        shardpref.remove("ALARM_ONOFF");
+        shardpref.remove("USER_LOGIN_METHOD");
+        shardpref.putBoolean("isFirstLogin", true);
+
+        if (USER_LOGIN_METHOD.equals("Google")) {
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, task -> {
+                        pm.LoginBack(mContext);
+                    });
+        } else if(USER_LOGIN_METHOD.equals("Kakao")){
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
+                    @Override
+                    public Unit invoke(Throwable throwable) {
+                        pm.LoginBack(mContext);
+                        return null;
+                    }
+                });
+            }, 100); //0.5초 후 인트로 실행
+        }else{
+            pm.LoginBack(mContext);
+        }
+        finish();
     }
 
     private String ImageNameMaker() {
@@ -450,7 +527,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 }
 
             } else if (resultCode == RESULT_CANCELED) {
-                binding.imgPlus.setVisibility(View.VISIBLE);
+                binding.imgPlus.setVisibility(View.GONE);
                 binding.clearImg.setVisibility(View.GONE);
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }

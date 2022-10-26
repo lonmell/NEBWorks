@@ -226,7 +226,7 @@ public class Page2Fragment extends Fragment {
                         search_date.setVisibility(View.VISIBLE);
                         accept_area.setVisibility(View.VISIBLE);
                     }
-                    check_cnt.setText(mList.size() + "건");
+
 //                    dlog.i("totalSendCheck : " + totalSendCheck);
 //                    if(totalSendCheck.isEmpty()){
 //                        Toast.makeText(mContext,"저장된 업무가 없습니다.",Toast.LENGTH_SHORT).show();
@@ -258,7 +258,6 @@ public class Page2Fragment extends Fragment {
             dlog.i("----------totalSendCheck-----------");
             String getArray = shardpref.getString("checkworkno", "").replace("[", "").replace("]", "").replace(" ", "").replace(" ,","").trim();
             dlog.i("getArray : " + getArray);
-            String[] splitArray;
             List<String> total_array = new ArrayList<>(Arrays.asList(getArray.split(",")));
 //            splitArray = getArray.split(",");
 //            for (int i = 0; i < splitArray.length; i++) {
@@ -272,10 +271,9 @@ public class Page2Fragment extends Fragment {
             dlog.i("----------totalSendUser-----------");
             String getArray1 = shardpref.getString("checkworkno", "").replace("[", "").replace("]", "").replace(",", "").replace("  ", " ").trim();
             dlog.i("getArray1 : " + getArray1);
-            String[] splitArray1;
-            splitArray1 = getArray1.replace("  ", " ").split(" ");
-            dlog.i("splitArray1 : " + splitArray1.length);
-            totalSendUser = Arrays.toString(splitArray1).replace("[", "").replace("]", "").replace(" ", "");
+            List<String> splitArray1 = new ArrayList<>(Arrays.asList(getArray1.split(",")));
+            dlog.i("splitArray1 : " + splitArray1.size());
+            totalSendUser = splitArray1.toString().replace("[", "").replace("]", "").replace(" ", "");
             dlog.i("----------totalSendUser-----------");
 
             if (totalSendCheck.isEmpty()) {
@@ -432,13 +430,17 @@ public class Page2Fragment extends Fragment {
                                 }
                             }
                             for (int a = 0; a < Response.length(); a++) {
-                                dlog.i("state : " + Response.getJSONObject(a).getString("complete_yn"));
-                                if (Response.getJSONObject(a).getString("complete_yn").equals("null")) {
+                                dlog.i("approval_state 1 : " + Response.getJSONObject(a).getString("approval_state"));
+                                if (Response.getJSONObject(a).getString("approval_state").equals("3")
+                                        || Response.getJSONObject(a).getString("approval_state").equals("null")) {
                                     if(!Response.getJSONObject(a).getString("id").isEmpty() || !Response.getJSONObject(a).getString("id").equals("null")){
                                         state_null++;
                                     }
                                 }
                             }
+
+                            check_cnt.setText(state_null + "건");
+
                             dlog.i("state_null : " + state_null);
                             work_cnt.setText(String.valueOf(state_null));
                             mAdapter.setOnItemClickListener((v, position, Tcnt, Fcnt) -> {
@@ -535,13 +537,15 @@ public class Page2Fragment extends Fragment {
                                 }
                             }
                             for (int a = 0; a < Response.length(); a++) {
-                                dlog.i("state : " + Response.getJSONObject(a).getString("complete_yn"));
-                                if (Response.getJSONObject(a).getString("complete_yn").equals("null")) {
+                                dlog.i("approval_state 2 : " + Response.getJSONObject(a).getString("approval_state"));
+                                if (Response.getJSONObject(a).getString("approval_state").equals("3")
+                                        || Response.getJSONObject(a).getString("approval_state").equals("null")) {
                                     if(!Response.getJSONObject(a).getString("id").isEmpty() || !Response.getJSONObject(a).getString("id").equals("null")){
                                         state_null++;
                                     }
                                 }
                             }
+                            check_cnt.setText(state_null + "건");
                             dlog.i("state_null : " + state_null);
                             work_cnt.setText(String.valueOf(state_null));
                             mAdapter.setOnItemClickListener((v, position, Tcnt, Fcnt) -> {
@@ -594,7 +598,7 @@ public class Page2Fragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null) {
                             dlog.i("setUpdateWorktodo jsonResponse length : " + response.body().length());
                             dlog.i("setUpdateWorktodo jsonResponse : " + response.body());
-                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
+//                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
 
                             if (response.body().replace("\"", "").equals("success")) {
                                 if (USER_INFO_AUTH.equals("0")) {
@@ -604,7 +608,9 @@ public class Page2Fragment extends Fragment {
                                     accept_area.setVisibility(View.VISIBLE);
                                 } else {
                                     setTodoWList();
-                                    SendUserCheck(1,"완료");
+                                    message = "[" + place_name + "] 완료 된 업무보고가 있습니다.";
+                                    dlog.i("place_owner_id :" +place_owner_id);
+                                    getManagerToken(place_owner_id,"0", place_id,place_name);
                                     cnt_area.setVisibility(View.VISIBLE);
                                     search_date.setVisibility(View.VISIBLE);
                                     accept_area.setVisibility(View.VISIBLE);
@@ -625,17 +631,6 @@ public class Page2Fragment extends Fragment {
     }
     String message = "";
     /* -- 할일 추가 FCM 전송 영역 */
-    private void SendUserCheck(int flag,String state){
-        List<String> member = new ArrayList<>();
-        dlog.i("보내야 하는 직원 배열 :" + totalSendUser);
-        member.addAll(Arrays.asList(totalSendUser.split(",")));
-        dlog.i("보내야 하는 직원 수 :" + member.size());
-        dlog.i("보내야 하는 직원 List<String>  :" + member);
-
-        message = "[" + place_name + "]" + state + "된 업무보고가 있습니다.";
-        dlog.i("place_owner_id :" +place_owner_id);
-        getManagerToken(place_owner_id,"0", place_id,place_name);
-    }
     public void getManagerToken(String user_id, String type, String place_id, String place_name) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FCMSelectInterface.URL)
@@ -662,7 +657,7 @@ public class Page2Fragment extends Fragment {
                         dlog.i("-----getManagerToken-----");
                         boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
                         if (!token.isEmpty() && channelId1) {
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, "0", place_id);
                         }
                     }
                 } catch (JSONException e) {
@@ -683,8 +678,8 @@ public class Page2Fragment extends Fragment {
     private void PushFcmSend(String topic,String title, String message, String token,String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceWorkFragment";
-            dbConnection.FcmTestFunction(topic,title,message,token,click_action,tag,place_id);
+            click_action = "TaskApprovalFragment";
+            dbConnection.FcmTestFunction(topic,"",message,token,click_action,tag,place_id);
             activity.runOnUiThread(() -> {
             });
         });

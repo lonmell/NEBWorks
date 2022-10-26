@@ -101,7 +101,7 @@
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/drawable/worktogo_on_resize.xml" value="0.1955" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/drawable/worktogo_resize.xml" value="0.1955" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_account_delete.xml" value="0.15572916666666667" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_addplace.xml" value="0.3605072463768116" />
+        <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_addplace.xml" value="0.16" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_calender.xml" value="0.2" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_feed_detail.xml" value="0.1" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_gotowork_detail.xml" value="0.33" />
@@ -112,9 +112,11 @@
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_more.xml" value="0.33" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_notify.xml" value="0.16822916666666668" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_onebutton_pop2.xml" value="0.16822916666666668" />
+        <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_photopop.xml" value="0.1278324070115434" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_pinselect.xml" value="0.1875" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_placeaddwork.xml" value="0.1" />
+        <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_placeaddwork.xml" value="0.18" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_placework.xml" value="0.2" />
+        <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_placework_detail.xml" value="0.33" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_profileedit.xml" value="0.43766937669376693" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_push.xml" value="0.15572916666666667" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/kogas/app/src/main/res/layout/activity_task_approval.xml" value="0.18" />

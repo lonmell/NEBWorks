@@ -169,7 +169,7 @@ public class PlaceEditActivity extends AppCompatActivity {
             shardpref = new PreferenceHelper(mContext);
 
             place_id = shardpref.getString("place_id","0");
-            USER_INFO_ID = shardpref.getString("USER_INFO_NO","0");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
 
             shardpref.putInt("SELECT_POSITION", 0);
@@ -653,7 +653,7 @@ public class PlaceEditActivity extends AppCompatActivity {
         String fullFileName = BACKUP_PATH;
 
         dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
-        dlog.i("(saveBitmapAndGetURI)USER_INFO_NO : " + USER_INFO_ID);
+        dlog.i("(saveBitmapAndGetURI)USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("(saveBitmapAndGetURI)fullFileName : " + fullFileName);
 
         File file_path;

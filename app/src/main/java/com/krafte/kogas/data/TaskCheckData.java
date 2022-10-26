@@ -6,6 +6,7 @@ public class TaskCheckData {
     public static class TaskCheckData_list {
         String id = "";
         String state = "";
+        String request_task_no = "";
         String requester_id = "";
         String requester_name = "";
         String requester_img_path = "";
@@ -26,6 +27,7 @@ public class TaskCheckData {
 
         public TaskCheckData_list(String id,
                                   String state,
+                                  String request_task_no,
                                   String requester_id,
                                   String requester_name,
                                   String requester_img_path,
@@ -45,6 +47,7 @@ public class TaskCheckData {
                                   String approval_date) {
             this.id = id;
             this.state = state;
+            this.request_task_no = request_task_no;
             this.requester_id = requester_id;
             this.requester_name = requester_name;
             this.requester_img_path = requester_img_path;
@@ -78,6 +81,14 @@ public class TaskCheckData {
 
         public void setState(String state) {
             this.state = state;
+        }
+
+        public String getRequest_task_no() {
+            return request_task_no;
+        }
+
+        public void setRequest_task_no(String request_task_no) {
+            this.request_task_no = request_task_no;
         }
 
         public String getRequester_id() {

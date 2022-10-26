@@ -150,30 +150,8 @@ public class HomeFragment extends Fragment {
             //0-관리자 / 1- 근로자
             dlog.i("gotoplace location view USER_INFO_AUTH : " + USER_INFO_AUTH);
             //USER_INFO_AUTH 가 -1일때
-            if (USER_INFO_AUTH.equals("-1")) {
-                if (place_owner_id.equals(USER_INFO_ID)) {
-                    USER_INFO_AUTH = "0";
-                } else {
-                    USER_INFO_AUTH = "1";
-                }
-                switch (USER_INFO_AUTH) {
-                    case "0":
-                        binding.gotoPlace.setVisibility(View.VISIBLE);
-                        break;
-                    case "1":
-                        binding.gotoPlace.setVisibility(View.GONE);
-                        break;
-                }
-            } else {
-                switch (USER_INFO_AUTH) {
-                    case "0":
-                        binding.gotoPlace.setVisibility(View.VISIBLE);
-                        break;
-                    case "1":
-                        binding.gotoPlace.setVisibility(View.GONE);
-                        break;
-                }
-            }
+            USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID)?"0":"1";
+            shardpref.putString("USER_INFO_AUTH",USER_INFO_AUTH);
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -341,6 +319,7 @@ public class HomeFragment extends Fragment {
                                     binding.itemPeoplecnt.setText(place_totalcnt);
                                     binding.memberCntY.setVisibility(View.GONE);
                                     binding.approvalCntY.setVisibility(View.GONE);
+                                    binding.stateCnt01.setText("근무 중  " + place_totalcnt);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -397,6 +376,14 @@ public class HomeFragment extends Fragment {
                                         dlog.i("직책 : " + position);
                                         dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
                                         dlog.i("------UserCheck-------");
+
+                                        if(place_owner_id.equals(id)){
+                                            USER_INFO_AUTH = "0";
+                                            binding.gotoPlace.setVisibility(View.VISIBLE);
+                                        }else{
+                                            USER_INFO_AUTH = "1";
+                                            binding.gotoPlace.setVisibility(View.GONE);
+                                        }
                                         getFCMToken();
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -476,7 +463,7 @@ public class HomeFragment extends Fragment {
                                                 + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
 
                                         binding.noticeCnt.setText(String.valueOf(total_cnt));
-                                        binding.stateCnt01.setText("근무 중  " + i_cnt);
+//                                        binding.stateCnt01.setText("근무 중  " + i_cnt);
                                         binding.stateCnt02.setText("퇴근  " + o_cnt);
                                         binding.stateCnt05.setText(task_incomplete_cnt);
                                         binding.stateCnt06.setText(task_complete_cnt);

@@ -29,6 +29,7 @@ import com.krafte.kogas.util.PreferenceHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHolder> {
     private static final String TAG = "ApprovalAdapter";
@@ -51,7 +52,9 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
     boolean allcheck = false;
 
     String[] checkworkno;
-    String[] ConductUser;
+    List<String> ConductUser = new ArrayList<>();
+    List<String> tasknoList = new ArrayList<>();
+    List<String> taskdate = new ArrayList<>();
 
     private boolean animationsLocked = false;
     private boolean delayEnterAnimation = true;
@@ -138,17 +141,23 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                 if(!checkareatf[position]){
                     checkworkno[position] = item.getId();
                     checkareatf[position] = true;
-                    ConductUser[position] = item.getRequester_id();
+                    ConductUser.add(item.getRequester_id());
+                    tasknoList.add(item.getRequest_task_no());
+                    taskdate.add(item.getRequest_date());
                     holder.checkarea.setBackgroundResource(R.drawable.checkbox_on);
                 }else{
                     checkworkno[position] = "";
                     checkareatf[position] = false;
-                    ConductUser[position] = "";
+                    ConductUser.remove(item.getRequester_id());
+                    tasknoList.remove(item.getRequest_task_no());
+                    taskdate.remove(item.getRequest_date());
                     holder.checkarea.setBackgroundResource(R.drawable.checkbox_off);
                 }
 
                 shardpref.putString("checkworkno", Arrays.toString(checkworkno));
-                shardpref.putString("ConductUser", Arrays.toString(ConductUser));
+                shardpref.putString("ConductUser", String.valueOf(ConductUser));
+                shardpref.putString("tasknoList", String.valueOf(tasknoList));
+                shardpref.putString("taskdate", String.valueOf(taskdate));
 
                 int Tcnt = 0;
                 int Fcnt = 0;
@@ -224,7 +233,6 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             checkarea.setBackgroundResource(R.drawable.checkbox_off);
             checkareatf = new boolean[mData.size()];
             checkworkno = new String[mData.size()];
-            ConductUser = new String[mData.size()];
 
 
             if(USER_INFO_AUTH.equals("0")){//0-관리자 / 1- 근로자
@@ -239,20 +247,30 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                 for(int i = 0;i < mData.size(); i++){
                     checkareatf[i] = true;
                     checkworkno[i] = mData.get(i).getId();
-                    ConductUser[i] = mData.get(i).getRequester_id();
+                    ConductUser.add(mData.get(i).getRequester_id());
+                    tasknoList.add(mData.get(i).getRequest_task_no());
+                    taskdate.add(mData.get(i).getRequest_date());
                 }
                 Log.i(TAG,"checkworkno : " + Arrays.toString(checkworkno));
                 shardpref.putString("checkworkno", Arrays.toString(checkworkno));
-                shardpref.putString("ConductUser", Arrays.toString(ConductUser));
+                shardpref.putString("ConductUser", String.valueOf(ConductUser));
+                shardpref.putString("tasknoList", String.valueOf(tasknoList));
+                shardpref.putString("taskdate", String.valueOf(taskdate));
             }else{
                 checkarea.setBackgroundResource(R.drawable.checkbox_off);
                 Log.i(TAG,"mData.size() : " + mData.size());
                 for(int i = 0;i < mData.size(); i++){
                     checkareatf[i] = false;
                     checkworkno[i] = "";
-                    ConductUser[i] = "";
+                    ConductUser.remove(mData.get(i).getRequester_id());
+                    tasknoList.remove(mData.get(i).getRequest_task_no());
+                    taskdate.remove(mData.get(i).getRequest_date());
                 }
                 Log.i(TAG,"checkworkno : " + Arrays.toString(checkworkno));
+                shardpref.remove("checkworkno");
+                shardpref.remove("ConductUser");
+                shardpref.remove("tasknoList");
+                shardpref.remove("taskdate");
             }
 
 

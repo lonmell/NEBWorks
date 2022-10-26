@@ -138,7 +138,7 @@
                     android:textColor="#6395EC"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 

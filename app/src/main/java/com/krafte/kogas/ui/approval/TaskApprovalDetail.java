@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -29,6 +27,7 @@ import com.krafte.kogas.R;
 import com.krafte.kogas.data.GetResultData;
 import com.krafte.kogas.dataInterface.ApprovalUpdateInterface;
 import com.krafte.kogas.dataInterface.FCMSelectInterface;
+import com.krafte.kogas.dataInterface.TaskSelectMInterface;
 import com.krafte.kogas.pop.PhotoPopActivity;
 import com.krafte.kogas.util.DBConnection;
 import com.krafte.kogas.util.Dlog;
@@ -38,10 +37,14 @@ import com.krafte.kogas.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,6 +80,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
     String place_id = "";
     String id = "";
     String state = "";
+    String request_task_no = "";
     String requester_id = "";
     String requester_name = "";
     String requester_img_path = "";
@@ -108,17 +112,8 @@ public class TaskApprovalDetail extends AppCompatActivity {
     @SuppressLint("SdCardPath")
     String fileName = "";
     String task_image_url = "0";
-    String task_confirmx = "0";
-    private Bitmap saveBitmap;
-
     String message = "";
-    String topic = "";
-
     PageMoveClass pm = new PageMoveClass();
-    Handler mHandler;
-    String sendTopic = "";
-    String sendToken = "";
-    boolean rcvchannelId2 = false;
     /*
      * task_loop_kind
      * 1 = 매일
@@ -152,6 +147,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
         place_name = shardpref.getString("place_name", "");
         id = shardpref.getString("id", "");
         state = shardpref.getString("state", "");
+        request_task_no = shardpref.getString("request_task_no", "");
         requester_id = shardpref.getString("requester_id",  "");
         requester_name = shardpref.getString("requester_name",  "");
         requester_img_path = shardpref.getString("requester_img_path",  "");
@@ -177,11 +173,13 @@ public class TaskApprovalDetail extends AppCompatActivity {
 
         try {
             Log.i(TAG, "-------------------------TaskApprovalDetail-------------------------");
+            Log.i(TAG, "task_no : " + id);
             Log.i(TAG, "GET_TIME : " + getTime.substring(0, 2));
             Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
             Log.i(TAG, "업무내용 : " + contents);
             Log.i(TAG, "업무종류 : " + (complete_kind.equals("0")?"체크":"현장사진"));
             Log.i(TAG, "state : " + state);
+            Log.i(TAG, "요청 업무 번호 : " + request_task_no);
             Log.i(TAG, "task_input_id : " + requester_name);
             Log.i(TAG, "task_success_method : " + complete_kind);
             Log.i(TAG, "task_check : " + complete_yn);
@@ -191,6 +189,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
             Log.i(TAG, "reject_reason : " + reject_reason);
             String success_time = request_date;
             Log.i(TAG, "request_date : " + request_date);
+            setTodoData(request_date,id);
             Log.i(TAG, "----------------------------------------------------------------------");
 
             /**
@@ -230,18 +229,18 @@ public class TaskApprovalDetail extends AppCompatActivity {
              * task_notsuccess_txt
              *
              */
-            Glide.with(mContext).load(requester_img_path)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(workimg);
-
-            select_employee_date.setText(request_date);
-            select_employee_txt.setText(requester_name);
-
-            input_worktitle.setText(title);
-            work_content_set.setText(contents);
-
             try {
+                Glide.with(mContext).load(requester_img_path)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(workimg);
+
+                select_employee_date.setText(request_date);
+                select_employee_txt.setText(requester_name);
+
+                input_worktitle.setText(title);
+                work_content_set.setText(contents);
+
                 endtime_txt.setText(end_time + " " + (Integer.parseInt(end_time.substring(0,2)) > 12 ? "AM" : "PM"));
                 endtime_txt2.setText(complete_time + " " + (Integer.parseInt(complete_time.substring(0, 2)) > 12 ? "AM" : "PM"));
             } catch (Exception e) {
@@ -268,13 +267,16 @@ public class TaskApprovalDetail extends AppCompatActivity {
 
             Glide.with(mContext).load(task_img_path)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(canvasContainer);
-            inreject_input.setText(reject_reason);
+
+            inreject_input.setText(reject_reason.equals("null")?"":reject_reason);
+            dlog.i("reject_reason : " + reject_reason);
             dlog.i("task_img_path : " + task_img_path);
             if(!task_img_path.equals("0")){
                 canvasContainer.setOnClickListener(v -> {
                     Intent intent = new Intent(this, PhotoPopActivity.class);
-                    intent.putExtra("data", task_image_url);
+                    intent.putExtra("data", task_img_path);
                     mContext.startActivity(intent);
                     ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -324,9 +326,6 @@ public class TaskApprovalDetail extends AppCompatActivity {
                     success_check_area.setVisibility(View.GONE);
                     upload_success_img.setVisibility(View.VISIBLE);
                     canvasContainer.setVisibility(View.VISIBLE);
-                    Glide.with(mContext).load(task_image_url)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true).into(canvasContainer);
                 } else {
                     success_01_txt.setClickable(false);
                     success_01_txt.setEnabled(false);
@@ -359,9 +358,6 @@ public class TaskApprovalDetail extends AppCompatActivity {
                     applove_state.setText("반려");
                     upload_success_img.setVisibility(View.VISIBLE);
                     canvasContainer.setVisibility(View.VISIBLE);
-                    Glide.with(mContext).load(task_image_url)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true).into(canvasContainer);
                 } else {
                     success_01_txt.setClickable(false);
                     success_01_txt.setEnabled(false);
@@ -452,6 +448,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
         super.onStop();
         shardpref.remove("id");
         shardpref.remove("state");
+        shardpref.remove("request_task_no");
         shardpref.remove("requester_id");
         shardpref.remove("requester_name");
         shardpref.remove("requester_img_path");
@@ -501,7 +498,14 @@ public class TaskApprovalDetail extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.i(TAG, "resultData : " + resultData.getRESULT());
                     if (response.body().replace("\"", "").equals("success")) {
-                        getManagerToken(requester_id, "1", place_id, place_name,state);
+                        for(int a = 0; a < user_id.size(); a++){
+                            if(place_owner_id.equals(user_id.get(a))){
+                                getManagerToken(user_id.get(a), "0", place_id, place_name,state);
+                            }else{
+                                getManagerToken(user_id.get(a), "1", place_id, place_name,state);
+                            }
+                        }
+
                         Log.i(TAG, "complete_kind : " + complete_kind);
                         pm.ApprovalBack(mContext);
                     } else {
@@ -517,9 +521,76 @@ public class TaskApprovalDetail extends AppCompatActivity {
         });
     }
 
+    List<String> inmember = new ArrayList<>();
+    List<String> user_id = new ArrayList<>();
+    List<String> task_member_id = new ArrayList<>();
+    public void setTodoData(String selectdate, String task_no) {
+        dlog.i("setTodoMList place_id : " + place_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaskSelectMInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaskSelectMInterface api = retrofit.create(TaskSelectMInterface.class);
+        Call<String> call = api.getData(place_id,selectdate);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "WorkTapListFragment1 / setRecyclerView");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                Log.e(TAG, "response 2: " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(response.body());
+                        Log.i(TAG, "GET SIZE : " + Response.length());
+                        if (Response.length() == 0) {
+                            Log.i(TAG, "SetNoticeListview Thread run! ");
+                            Log.i(TAG, "GET SIZE : " + Response.length());
+                        } else {
+                            for (int i = 0; i < Response.length(); i++) {
+                                JSONObject jsonObject = Response.getJSONObject(i);
+                                if(jsonObject.getString("id").equals(request_task_no)){
+                                    task_member_id = Collections.singletonList(jsonObject.getString("users"));
+                                }
+                            }
+                            JSONArray Response2 = new JSONArray(task_member_id.toString().replace("[[", "[").replace("]]", "]"));
+                            if (Response2.length() > 3) {
+                                for (int i = 0; i < 3; i++) {
+                                    JSONObject jsonObject = Response2.getJSONObject(i);
+                                    inmember.add(jsonObject.getString("user_id"));
+                                }
+                            } else {
+                                for (int i = 0; i < Response2.length(); i++) {
+                                    JSONObject jsonObject = Response2.getJSONObject(i);
+                                    inmember.add(jsonObject.getString("user_id"));
+                                }
+                            }
+                            user_id.removeAll(user_id);
+                            for (int i = 0; i < Response2.length(); i++) {
+                                JSONObject jsonObject = Response2.getJSONObject(i);
+                                if (!jsonObject.getString("user_name").equals("null")) {
+                                    user_id.add(jsonObject.getString("user_id"));
+                                }
+                            }
+                            dlog.i("이 작업에 배정된 직원 : " + user_id);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
+    }
 
     /* -- 할일 추가 FCM 전송 영역 */
-
     public void getManagerToken(String user_id, String type, String place_id, String place_name, String state) {
         dlog.i("-----getManagerToken-----");
         dlog.i("user_id : " + user_id);

@@ -11,7 +11,9 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/addPlaceBtn">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -1030,31 +1032,29 @@
                 </androidx.cardview.widget.CardView>
 
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/addPlaceBtn"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="60dp"
-                android:background="#244A9C">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="center"
-                    android:text="저장"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp"
-                    tools:ignore="HardcodedText,TextContrastCheck" />
-
-            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 
 
+    <LinearLayout
+        android:id="@+id/addPlaceBtn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="#244A9C">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="저장"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText,TextContrastCheck" />
+
+    </LinearLayout>
     <RelativeLayout
         android:id="@+id/login_alert_text"
         android:layout_width="match_parent"

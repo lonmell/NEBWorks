@@ -276,6 +276,7 @@ public class WorkgotoFragment extends Fragment {
         });
 
         binding.makeWork03.setOnClickListener(v -> {
+            //공지등록
             shardpref.putInt("make_kind", 1);
             shardpref.putInt("assignment_kind", 2);
             shardpref.putInt("SELECT_POSITION", 0);
