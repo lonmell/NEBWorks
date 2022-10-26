@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    tools:context=".ui.main.MainActivity"
+    tools:ignore="UsingOnClickInXml">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="90dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/setting_list01_txt"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/applesdgothicneo"
+                android:gravity="center|start"
+                android:text="알림"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:drawableEndCompat="@drawable/right_arrow_resize"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f2f2f2"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/setting_list02_txt"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/applesdgothicneo"
+                android:gravity="center|start"
+                android:paddingTop="5dp"
+                android:text="MY 프로필"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:drawableEndCompat="@drawable/right_arrow_resize"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f2f2f2"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/setting_list03_txt"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/applesdgothicneo"
+                android:gravity="center|start"
+                android:paddingTop="5dp"
+                android:text="알림 관리"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:drawableEndCompat="@drawable/right_arrow_resize"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f2f2f2"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/setting_list04_txt"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/applesdgothicneo"
+                android:gravity="center|start"
+                android:paddingTop="5dp"
+                android:text="안전지침"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:drawableEndCompat="@drawable/right_arrow_resize"
+                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f2f2f2"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/setting_list05_txt"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/applesdgothicneo"
+                android:gravity="center|start"
+                android:paddingTop="5dp"
+                android:text="현장확인"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:drawableEndCompat="@drawable/right_arrow_resize"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f2f2f2"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/setting_list06_txt"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/applesdgothicneo"
+                android:gravity="center|start"
+                android:paddingTop="5dp"
+                android:text="회원탈퇴"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:drawableEndCompat="@drawable/right_arrow_resize"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f2f2f2"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
