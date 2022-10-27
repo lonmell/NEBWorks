@@ -309,7 +309,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             holder.work_date.setText("마감시간 : " + item.getEnd_time() + " " + AMPM);
 
             if (item.getApproval_state().equals("3")) {
-                if(!item.getComplete_yn().equals("n")){
+                if(item.getComplete_yn().equals("n")){
                     holder.work_confirm.setText("미완료");
                 }
                 holder.work_confirm.setVisibility(View.VISIBLE);
@@ -321,7 +321,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 } else if (item.getApproval_state().equals("0")) {
                     //결재대기중
                 }
-                if(!item.getComplete_yn().equals("n")){
+                if(item.getComplete_yn().equals("n")){
                     holder.work_confirm.setText("미완료");
                 }
                 holder.work_confirm.setVisibility(View.GONE);

@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="end"
-                    android:text="완료상태"
+                    android:text=""
                     android:textColor="#1483FE"
                     tools:ignore="HardcodedText,RtlSymmetry" />
             </LinearLayout>

@@ -11,6 +11,7 @@ public interface MainWorkCntInterface {
     @FormUrlEncoded
     @POST("get_main.php")
     Call<String> getData(
-            @Field("place_id") String place_id
+            @Field("place_id") String place_id,
+            @Field("user_id") String user_id
     );
 }

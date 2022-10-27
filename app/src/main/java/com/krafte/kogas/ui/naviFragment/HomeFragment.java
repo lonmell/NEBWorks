@@ -319,7 +319,6 @@ public class HomeFragment extends Fragment {
                                     binding.itemPeoplecnt.setText(place_totalcnt);
                                     binding.memberCntY.setVisibility(View.GONE);
                                     binding.approvalCntY.setVisibility(View.GONE);
-                                    binding.stateCnt01.setText("근무 중  " + place_totalcnt);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -412,7 +411,7 @@ public class HomeFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
-        Call<String> call = api.getData(place_id);
+        Call<String> call = api.getData(place_id,USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -463,7 +462,7 @@ public class HomeFragment extends Fragment {
                                                 + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
 
                                         binding.noticeCnt.setText(String.valueOf(total_cnt));
-//                                        binding.stateCnt01.setText("근무 중  " + i_cnt);
+                                        binding.stateCnt01.setText("출근  " + i_cnt);
                                         binding.stateCnt02.setText("퇴근  " + o_cnt);
                                         binding.stateCnt05.setText(task_incomplete_cnt);
                                         binding.stateCnt06.setText(task_complete_cnt);
