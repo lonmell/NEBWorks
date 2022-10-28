@@ -159,7 +159,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="4dp"
             android:fontFamily="@font/inter_bold"
-            android:text="현장 도착 후 작업시작 버튼을 눌러주세요."
+            android:text="매장 도착 후 작업시작 버튼을 눌러주세요."
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />

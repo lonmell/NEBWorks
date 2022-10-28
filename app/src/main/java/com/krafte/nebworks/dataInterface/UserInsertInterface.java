@@ -7,13 +7,17 @@ import retrofit2.http.POST;
 
 public interface UserInsertInterface
 {
-    String URL = "http://krafte.net/kogas/user/";
-
+    String URL = "http://krafte.net/NEBWorks/user/";
+//    http://krafte.net/NEBWorks/user/post.php?account=lonmell0213@gmail.com&name=방창배&password=yento0213!!&phone=01085529025&gender=1&img_path=
     @FormUrlEncoded
     @POST("post.php")
     Call<String> getData(
             @Field("account") String account,
             @Field("name") String name,
-            @Field("img_path") String img_path
+            @Field("password") String password,
+            @Field("phone") String phone,
+            @Field("gender") String gender,
+            @Field("img_path") String img_path,
+            @Field("platform") String platform
     );
 }

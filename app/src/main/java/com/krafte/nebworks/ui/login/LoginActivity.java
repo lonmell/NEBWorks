@@ -97,19 +97,20 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //Kakao 가입/로그인시 불러오는 값
-    public String GET_NAME = "";
-    public String GET_ACCOUNT_EMAIL = "";
-    public String GET_PROFILE_URL = "";
-    public String GET_USER_PHONE = "";
-    public String GET_USER_AGENCY = "";
-    public String GET_USER_BIRTH = "";
-    public String GET_USER_AGEROUNGE = "";
-    public String GET_USER_SEX = "";
-    public String GET_USER_PW = "";
-    public String GET_USER_JOIN_DATE = "";
-    public String GET_USER_AUTH = "9";
-    public String GET_USER_SERVICE = "S";
-    public boolean GET_JOIN_CONFIRM = false;
+    String GET_NAME = "";
+    String GET_ACCOUNT_EMAIL = "";
+    String GET_PROFILE_URL = "";
+    String GET_USER_PHONE = "";
+    String GET_USER_AGENCY = "";
+    String GET_USER_BIRTH = "";
+    String GET_USER_AGEROUNGE = "";
+    String GET_USER_SEX = "";
+    String GET_USER_PW = "";
+    String GET_USER_JOIN_DATE = "";
+    String GET_USER_AUTH = "9";
+    String GET_USER_SERVICE = "S";
+    boolean GET_JOIN_CONFIRM = false;
+    String USER_INFO_PW = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,12 +130,25 @@ public class LoginActivity extends AppCompatActivity {
         permissionCheck();
         KakaoSetting();
         GoogleSetting();
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        GET_ACCOUNT_EMAIL = shardpref.getString("USER_INFO_EMAIL","-99");
+        USER_INFO_PW = shardpref.getString("USER_INFO_PW","-99");
+        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","-99");
+        if(!USER_LOGIN_METHOD.equals("-99")){
+            if(!GET_ACCOUNT_EMAIL.equals("-99")){
+                binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
+            }
+            if(!USER_INFO_PW.equals("-99")){
+                binding.pwdEdit.setText(USER_INFO_PW);
+            }
+            if(!GET_ACCOUNT_EMAIL.equals("-99") && !USER_INFO_PW.equals("-99")){
+                LoginCheck(GET_ACCOUNT_EMAIL,USER_INFO_PW,"NEB");
+            }
+        }
         // Check if user is signed in (non-null) and update UI accordingly.
     }
 
@@ -151,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.kakaoLoginArea.setOnClickListener(v -> {
             binding.loginAlertText.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.drawable.kogas_icon)
+            Glide.with(this).load(R.drawable.identificon)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(binding.loadingView);
             shardpref.putString("USER_LOGIN_METHOD", "Kakao");
@@ -178,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         binding.googleLoginArea.setOnClickListener(v -> {
-            Glide.with(this).load(R.drawable.kogas_icon)
+            Glide.with(this).load(R.drawable.identificon)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(binding.loadingView);
             shardpref.putString("USER_LOGIN_METHOD", "Google");
@@ -188,24 +202,28 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onEvent() {
-        binding.deviceNumEdit.setOnClickListener(v -> {
-            LockTost();
-        });
-
-        binding.pwdEdit.setOnClickListener(v -> {
-            LockTost();
-        });
+//        binding.deviceNumEdit.setOnClickListener(v -> {
+//            LockTost();
+//        });
+//
+//        binding.pwdEdit.setOnClickListener(v -> {
+//            LockTost();
+//        });
 
         binding.loginBtn.setOnClickListener(v -> {
             String email = binding.deviceNumEdit.getText().toString();
-            if(email.equals("guest")){
-                LoginCheck(email);
-            }else{
-                LockTost();
-            }
-
+            String pw = binding.pwdEdit.getText().toString();
+            LoginCheck(email,pw,"NEB");
+//            if(email.equals("guest")){
+//                LoginCheck(email);
+//            }else{
+//                LockTost();
+//            }
         });
 
+        binding.joinBtn.setOnClickListener(v -> {
+                pm.Join(mContext);
+        });
         binding.turnPwdChar.setOnClickListener(v -> {
             if (turnvisible == 0) {
                 turnvisible = 1;
@@ -272,7 +290,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(GET_ACCOUNT_EMAIL.isEmpty()){
                         Toast.makeText(mContext,"네트워크 통신연결이 불안정 합니다.",Toast.LENGTH_SHORT).show();
                     }else{
-                        LoginCheck(GET_ACCOUNT_EMAIL);
+                        LoginCheck(GET_ACCOUNT_EMAIL,"","Kakao");
                     }
 
                 }, 1000); //1초 후 인트로 실행
@@ -301,7 +319,7 @@ public class LoginActivity extends AppCompatActivity {
         if(user.getEmail().isEmpty()){
             Toast.makeText(mContext,"네트워크 통신연결이 불안정 합니다.",Toast.LENGTH_SHORT).show();
         }else{
-            LoginCheck(user.getEmail());
+            LoginCheck(user.getEmail(),"","Google");
         }
         GET_ACCOUNT_EMAIL = user.getEmail();
         GET_NAME = user.getDisplayName();
@@ -309,13 +327,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void INPUT_JOIN_DATA(String account, String name, String img_path) {
+    public void INPUT_JOIN_DATA(String account, String name, String img_path,String platform) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UserInsertInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserInsertInterface api = retrofit.create(UserInsertInterface.class);
-        Call<String> call = api.getData(account, name, img_path);
+        Call<String> call = api.getData(account, name, "","","",img_path,platform);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -344,7 +362,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void LoginCheck(String account) {
+    public void LoginCheck(String account,String pw, String platform) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UserSelectInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -363,29 +381,39 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 if(!response.body().equals("[]")){
                                     JSONArray Response = new JSONArray(response.body());
-                                    String id = Response.getJSONObject(0).getString("id");
-                                    String name = Response.getJSONObject(0).getString("name");
-                                    String account = Response.getJSONObject(0).getString("account");
-                                    String employee_no = Response.getJSONObject(0).getString("employee_no");
-                                    String department = Response.getJSONObject(0).getString("department");
-                                    String position = Response.getJSONObject(0).getString("position");
-                                    String img_path = Response.getJSONObject(0).getString("img_path");
+                                    String getid = Response.getJSONObject(0).getString("id");
+                                    String getname = Response.getJSONObject(0).getString("name");
+                                    String getaccount = Response.getJSONObject(0).getString("account");
+                                    String getPassword = Response.getJSONObject(0).getString("password");
+                                    String getphone = Response.getJSONObject(0).getString("phone");
+                                    String getgender = Response.getJSONObject(0).getString("gender");
+                                    String getimg_path = Response.getJSONObject(0).getString("img_path");
+                                    String getPlatform = Response.getJSONObject(0).getString("platform");
 
-                                    shardpref.putString("USER_INFO_ID", id);
-                                    shardpref.putString("USER_INFO_NAME", name);
-                                    shardpref.putString("USER_INFO_EMAIL", account);
-                                    shardpref.putString("USER_INFO_SABUN", employee_no);
-                                    shardpref.putString("USER_INFO_SOSOK", department);
-                                    shardpref.putString("USER_INFO_JIKGUP", position);
-                                    shardpref.putString("USER_INFO_PROFILE_URL", img_path);
+                                    shardpref.putString("USER_INFO_ID", getid);
+                                    shardpref.putString("USER_INFO_NAME", getname);
+                                    shardpref.putString("USER_INFO_EMAIL", getaccount);
+                                    shardpref.putString("USER_INFO_PW", getPassword);
+                                    shardpref.putString("USER_INFO_PHONE", getphone);
+                                    shardpref.putString("USER_INFO_SEX", getgender);
+                                    shardpref.putString("USER_INFO_PROFILE_URL", getimg_path);
+                                    shardpref.putString("USER_INFO_METHOD", getimg_path);
+                                    shardpref.putString("USER_LOGIN_METHOD",getPlatform);
 
-                                    pm.PlaceListGo(mContext);
+                                    dlog.i("LoginCheck platform : " + platform);
+                                    if(platform.equals("NEB")){
+                                        if(getaccount.equals(account) && getPassword.equals(pw)){
+                                            pm.PlaceListGo(mContext);
+                                        }
+                                    }else{
+                                        pm.PlaceListGo(mContext);
+                                    }
                                     binding.loginAlertText.setVisibility(View.GONE);
                                 }else{
                                     if(GET_ACCOUNT_EMAIL.isEmpty()){
                                         Toast.makeText(mContext,"통신연결이 불안정합니다. 다시 로그인해주세요.",Toast.LENGTH_SHORT).show();
                                     }else{
-                                        INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL);
+                                        INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL,platform);
                                     }
                                 }
                             } catch (JSONException e) {

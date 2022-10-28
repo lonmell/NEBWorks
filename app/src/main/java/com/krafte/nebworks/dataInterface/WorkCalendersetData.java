@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface WorkCalendersetData
 {
-    String URL = "http://krafte.net/kogas/task/";
+    String URL = "http://krafte.net/NEBWorks/task/";
 
     @FormUrlEncoded
     @POST("get_calendar.php")

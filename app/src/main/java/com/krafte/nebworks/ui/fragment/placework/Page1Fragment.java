@@ -48,7 +48,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /*
- * 2022-10-07 현장 공지사항 방창배 작성
+ * 2022-10-07 매장 공지사항 방창배 작성
  * */
 public class Page1Fragment extends Fragment {
     private final static String TAG = "Page1Fragment";

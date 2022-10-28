@@ -96,7 +96,7 @@ public class OneButtonPopActivity  extends Activity {
                 startActivity(intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            }else if(left_btn_txt.equals("회원정보 변경이 완료되었습니다.") || left_btn_txt.equals("현장 추가가 완료되었습니다.")){
+            }else if(left_btn_txt.equals("회원정보 변경이 완료되었습니다.") || left_btn_txt.equals("매장 추가가 완료되었습니다.")){
                 intent = new Intent(mContext, PlaceListActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0, R.anim.translate_down);

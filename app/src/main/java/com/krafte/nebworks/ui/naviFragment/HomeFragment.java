@@ -296,7 +296,7 @@ public class HomeFragment extends Fragment {
 
                                     Glide.with(mContext).load(place_img_path)
                                             .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .placeholder(R.drawable.kogas_icon)
+                                            .placeholder(R.drawable.identificon)
                                             .skipMemoryCache(true)
                                             .into(binding.storeThumnail);
 

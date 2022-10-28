@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface FeedSearchInterface
 {
-    String URL = "http://krafte.net/kogas/feed/";
+    String URL = "http://krafte.net/NEBWorks/feed/";
 
     @FormUrlEncoded
     @POST("search_feed.php")

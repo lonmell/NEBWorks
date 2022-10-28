@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface FCMSelectInterface {
-    String URL = "http://krafte.net/kogas/fcm_token/";
+    String URL = "http://krafte.net/NEBWorks/fcm_token/";
 
     @FormUrlEncoded
     @POST("get.php")

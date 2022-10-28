@@ -32,6 +32,8 @@ public interface MovePage {
 
     void Push(Context context);
 
+    void Join(Context context);
+
     //--ui.notify
     void NotifyListGo(Context context);
 

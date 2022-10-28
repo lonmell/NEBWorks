@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface TaskreuseAssignmember
 {
-    String URL = "http://krafte.net/kogas/task_reuse/";
+    String URL = "http://krafte.net/NEBWorks/task_reuse/";
 
     @FormUrlEncoded
     @POST("assign_member.php")

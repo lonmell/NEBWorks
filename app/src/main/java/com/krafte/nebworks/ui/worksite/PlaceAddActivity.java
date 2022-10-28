@@ -145,7 +145,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     String start_date = "";
 
 
-    //--현장 정보 수정할때
+    //--매장 정보 수정할때
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -333,10 +333,10 @@ public class PlaceAddActivity extends AppCompatActivity {
                                     if (saveBitmap != null) {
                                         saveBitmapAndGetURI();
                                     }
-                                    Toast.makeText(mContext, "현장 추가가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "매장 추가가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     pm.PlaceListBack(mContext);
 //                                    Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-//                                    intent.putExtra("data", "현장 추가가 완료되었습니다.");
+//                                    intent.putExtra("data", "매장 추가가 완료되었습니다.");
 //                                    intent.putExtra("left_btn_txt", "확인");
 //                                    startActivity(intent);
 //                                    overridePendingTransition(R.anim.translate_up, 0);
@@ -466,10 +466,10 @@ public class PlaceAddActivity extends AppCompatActivity {
             Toast.makeText(mContext, "관리소 명을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (placeName.isEmpty()) {
-            Toast.makeText(mContext, "현장 명을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "매장 명을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (placeAddress.isEmpty()) {
-            Toast.makeText(mContext, "현장 주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "매장 주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (start_date.isEmpty()) {
             Toast.makeText(mContext, "작업 시작일을 입력해주세요.", Toast.LENGTH_SHORT).show();
@@ -516,7 +516,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
                     final String IMG_FILE_EXTENSION = ".JPEG";
                     String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                    ProfileUrl = "http://krafte.net/kogas/image/place_img/" + file_name;
+                    ProfileUrl = "http://krafte.net/NEBWorks/image/place_img/" + file_name;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -631,7 +631,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
 
-            ProfileUrl = "http://krafte.net/kogas/image/place_img/" + file_name;
+            ProfileUrl = "http://krafte.net/NEBWorks/image/place_img/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("사인 저장 경로 : " + ProfileUrl);
@@ -687,7 +687,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     }
 
     public static class ApiClient {
-        private static final String BASE_URL = "http://krafte.net/kogas/image/";
+        private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
         private static Retrofit retrofit;
 
         public static Retrofit getApiClient() {

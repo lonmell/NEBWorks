@@ -157,7 +157,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
             Log.i(TAG, "GET_TIME : " + getTime.substring(0, 2));
             Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
             Log.i(TAG, "업무내용 : " + contents);
-            Log.i(TAG, "업무종류 : " + (complete_kind.equals("0")?"체크":"현장사진"));
+            Log.i(TAG, "업무종류 : " + (complete_kind.equals("0")?"체크":"매장사진"));
             Log.i(TAG, "state : " + state);
             Log.i(TAG, "요청 업무 번호 : " + request_task_no);
             Log.i(TAG, "task_input_id : " + requester_name);

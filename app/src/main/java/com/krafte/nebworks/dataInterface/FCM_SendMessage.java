@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface FCM_SendMessage {
-    String URL = "http://krafte.net/kogas/";
+    String URL = "http://krafte.net/NEBWorks/";
 
     @FormUrlEncoded
     @POST("kogas_fcmsend.php")

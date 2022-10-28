@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface WorkStatusDataInterface
 {
-    String URL = "http://krafte.net/kogas/work_status/";
+    String URL = "http://krafte.net/NEBWorks/work_status/";
 
     @FormUrlEncoded
     @POST("get_member.php")

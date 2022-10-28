@@ -76,9 +76,8 @@ public class PlaceListActivity extends AppCompatActivity {
     String id = "";
     String name = "";
     String email = "";
-    String employee_no = "";
-    String department = "";
-    String position = "";
+    String phone = "";
+    String gender = "";
     String img_path = "";
 
     int confirm_cnt = 0;
@@ -190,17 +189,15 @@ public class PlaceListActivity extends AppCompatActivity {
                                     id = Response.getJSONObject(0).getString("id");
                                     name = Response.getJSONObject(0).getString("name");
                                     email = Response.getJSONObject(0).getString("account");
-                                    employee_no = Response.getJSONObject(0).getString("employee_no");
-                                    department = Response.getJSONObject(0).getString("department");
-                                    position = Response.getJSONObject(0).getString("position");
+                                    phone = Response.getJSONObject(0).getString("phone");
+                                    gender = Response.getJSONObject(0).getString("gender");
                                     img_path = Response.getJSONObject(0).getString("img_path");
 
                                     shardpref.putString("USER_INFO_ID", id);
                                     shardpref.putString("USER_INFO_NAME", name);
                                     shardpref.putString("USER_INFO_EMAIL", account);
-                                    shardpref.putString("USER_INFO_SABUN", employee_no);
-                                    shardpref.putString("USER_INFO_SOSOK", department);
-                                    shardpref.putString("USER_INFO_JIKGUP", position);
+                                    shardpref.putString("USER_INFO_SABUN", phone);
+                                    shardpref.putString("USER_INFO_SOSOK", gender);
                                     shardpref.putString("USER_INFO_PROFILE_URL", img_path);
 
                                     dlog.i("id : " + id);
@@ -294,7 +291,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                                     String myid = shardpref.getString("USER_INFO_ID", "0");
                                                     String place_id = Response.getJSONObject(pos).getString("id");
 
-                                                    if (department.equals("null") || department.isEmpty() || position.equals("null") || position.isEmpty()) {
+                                                    if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
                                                         pm.ProfileEditGo(mContext);
                                                     } else {
                                                         ConfirmUserPlacemember(place_id, myid, owner_id, palce_name);
@@ -399,7 +396,7 @@ public class PlaceListActivity extends AppCompatActivity {
                     String token = Response.getJSONObject(0).getString("token");
                     boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
                     if (!token.isEmpty() && channelId1) {
-                        String message = department + " " + position + " " + name + " 님이 " + place_name + " 현장에 참여하셨습니다";
+                        String message = name + " 님이 " + place_name + " 매장에 참여하셨습니다";
                         PushFcmSend(id, "", message, token, "1", place_id);
                     }
                 } catch (JSONException e) {

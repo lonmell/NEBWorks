@@ -86,7 +86,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             Glide.with(mContext).load(item.getImg_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .placeholder(R.drawable.kogas_icon)
+                    .placeholder(R.drawable.identificon)
                     .into(holder.store_thumnail);
 
             holder.title.setText(item.getName());

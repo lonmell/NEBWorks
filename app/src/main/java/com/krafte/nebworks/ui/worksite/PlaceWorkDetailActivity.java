@@ -449,7 +449,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                 startActivityForResult(intent, GALLEY_CODE);
             });
 
-            binding.workadd01Txt.setText(complete_kind.equals("1") ? "현장사진" : "체크");
+            binding.workadd01Txt.setText(complete_kind.equals("1") ? "매장사진" : "체크");
 
 //            if (complete_yn.equals("y")) {
 //                binding.successCheckArea.setVisibility(View.GONE);
@@ -513,7 +513,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                     if (!reject_reason.isEmpty()) {
                         setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
                     } else {
-                        Toast.makeText(mContext, "현장 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "매장 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -707,7 +707,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
 
                     final String IMG_FILE_EXTENSION = ".JPEG";
                     String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                    ProfileUrl = "http://krafte.net/kogas/image/task_img/" + file_name;
+                    ProfileUrl = "http://krafte.net/NEBWorks/image/task_img/" + file_name;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -767,7 +767,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
 
-            ProfileUrl = "http://krafte.net/kogas/image/task_img/" + file_name;
+            ProfileUrl = "http://krafte.net/NEBWorks/image/task_img/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("사인 저장 경로 : " + ProfileUrl);
@@ -825,7 +825,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
     }
 
     public static class ApiClient {
-        private static final String BASE_URL = "http://krafte.net/kogas/image/";
+        private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
         private static Retrofit retrofit;
 
         public static Retrofit getApiClient() {

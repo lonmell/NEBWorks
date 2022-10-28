@@ -131,7 +131,7 @@ public class IntroActivity extends AppCompatActivity {
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
         //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
-        FirebaseMessaging.getInstance().subscribeToTopic("KOGAS").addOnCompleteListener(task -> {
+        FirebaseMessaging.getInstance().subscribeToTopic("NEBWorks").addOnCompleteListener(task -> {
             String msg = getString(R.string.msg_subscribed);
             if (!task.isSuccessful()) {
                 msg = getString(R.string.msg_subscribe_failed);
@@ -171,7 +171,7 @@ public class IntroActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
 
-        Glide.with(this).load(R.drawable.kogas_icon)
+        Glide.with(this).load(R.drawable.identificon)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(binding.loadingView);
         shardpref.putString("USER_LOGIN_METHOD", "Google");
@@ -253,7 +253,7 @@ public class IntroActivity extends AppCompatActivity {
         UserApiClient.getInstance().me((user, throwable) -> {
             if (user != null) {
                 binding.loginAlertText.setVisibility(View.VISIBLE);
-                Glide.with(this).load(R.drawable.kogas_icon)
+                Glide.with(this).load(R.drawable.identificon)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true).into(binding.loadingView);
                 shardpref.putString("USER_LOGIN_METHOD", "Kakao");

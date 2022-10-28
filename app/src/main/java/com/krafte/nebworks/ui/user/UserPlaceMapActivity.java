@@ -60,7 +60,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /*
  * 2022-10-06 방창배 작업 시작
- * 2022-10-07 위치 트래킹 및 현재 위치 표시, 현장과 사용자 거리 계산 후 작업시작 기능 추가
+ * 2022-10-07 위치 트래킹 및 현재 위치 표시, 매장과 사용자 거리 계산 후 작업시작 기능 추가
  *
  * */
 public class UserPlaceMapActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener {
@@ -242,7 +242,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
                             dlog.i("UserCheck jsonResponse length : " + response.body().length());
                             dlog.i("UserCheck jsonResponse : " + response.body());
                             if (!response.body().replace("\"", "").equals("success")) {
-                                dlog.i("현장 멤버 추가 완료");
+                                dlog.i("매장 멤버 추가 완료");
                             }
                         }
                     });
@@ -345,7 +345,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
                     boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
                     if (!token.isEmpty() && channelId1) {
                         String workse = kind.equals("0") ? "작업종료" : "작업시작"; // 현작 작업 시작, 퇴근
-                        String message = department + " " + position + " " + name + " 님이 " + place_name + " 현장 " + workse + "했습니다.";
+                        String message = department + " " + position + " " + name + " 님이 " + place_name + " 매장 " + workse + "했습니다.";
                         PushFcmSend(id, "", message, token, "1", place_id);
                     }
                 } catch (JSONException e) {
@@ -751,7 +751,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
      * @param //dest the destination location
      * @return the approximate distance in meters
      */
-    //설정된 현장과 현재 내 위치의 거리를 재고 작업시작/종료 버튼의 활성화 비활성화 목적
+    //설정된 매장과 현재 내 위치의 거리를 재고 작업시작/종료 버튼의 활성화 비활성화 목적
     @SuppressLint("LongLogTag")
     public double getDistance(double lat1, double lng1, double lat2, double lng2) {
         double distance;

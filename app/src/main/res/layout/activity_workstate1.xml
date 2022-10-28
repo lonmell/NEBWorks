@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:text="KOGAS"
+                android:text="NEBWorks"
                 android:fontFamily="@font/inter_bold"
                 android:textColor="#1483FE"
                 android:textSize="20sp"

@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface MemberOutPlaceInterface
 {
-    String URL = "http://krafte.net/kogas/place/";
+    String URL = "http://krafte.net/NEBWorks/place/";
 
     @FormUrlEncoded
     @POST("delete_member.php")

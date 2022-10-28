@@ -402,7 +402,7 @@ public class FeedAddActivity extends AppCompatActivity {
                                         SendUserCheck();
                                     }
 
-                                    Toast.makeText(mContext, "현장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     shardpref.putInt("SELECT_POSITION",1);
                                     shardpref.putInt("SELECT_POSITION_sub",0);
                                     pm.PlaceWorkGo(mContext);
@@ -512,7 +512,7 @@ public class FeedAddActivity extends AppCompatActivity {
 
                     final String IMG_FILE_EXTENSION = ".JPEG";
                     String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                    ProfileUrl = "http://krafte.net/kogas/image/feed_img/" + file_name;
+                    ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -574,7 +574,7 @@ public class FeedAddActivity extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
 
-            ProfileUrl = "http://krafte.net/kogas/image/feed_img/" + file_name;
+            ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("사인 저장 경로 : " + ProfileUrl);
@@ -629,7 +629,7 @@ public class FeedAddActivity extends AppCompatActivity {
     }
 
     public static class ApiClient {
-        private static final String BASE_URL = "http://krafte.net/kogas/image/";
+        private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
         private static Retrofit retrofit;
 
         public static Retrofit getApiClient() {

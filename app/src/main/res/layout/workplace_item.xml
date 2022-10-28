@@ -204,7 +204,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:gravity="center|start"
                     android:paddingStart="15dp"
-                    android:text="현장 입장하기"
+                    android:text="매장 입장하기"
                     android:textColor="#1483FE"
                     android:textSize="16sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />

@@ -94,7 +94,7 @@ public class Tap3ListAdapter extends RecyclerView.Adapter<Tap3ListAdapter.ViewHo
 
             holder.work_title.setText(item.getTitle());
             holder.work_date.setText("마감시간 : " + item.getEnd_time());
-            holder.work_kind.setText(item.getComplete_kind().equals("0")?"체크":"현장사진");
+            holder.work_kind.setText(item.getComplete_kind().equals("0")?"체크":"매장사진");
 
             holder.list_setting.setOnClickListener(v -> {
                 shardpref.putString("task_no",item.getId());

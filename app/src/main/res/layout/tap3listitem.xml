@@ -63,7 +63,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="start|center"
                 android:singleLine="true"
-                android:text="현장사진"
+                android:text="매장사진"
                 android:textColor="#1483FE"
                 android:textSize="13sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />

@@ -121,7 +121,7 @@ public class WorkMemberOptionActivity extends Activity {
 
 
     public void TaskDel() {
-//        현장 멤버 삭제 (현장에서 나가기, 현장에서 내보내기)
+//        매장 멤버 삭제 (매장에서 나가기, 매장에서 내보내기)
 //        http://krafte.net/kogas/place/delete_member.php?place_id=28&user_id=24
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MemberOutPlaceInterface.URL)

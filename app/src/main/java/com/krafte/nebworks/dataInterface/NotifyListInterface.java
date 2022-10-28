@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface NotifyListInterface
 {
-    String URL = "http://krafte.net/kogas/push/";
+    String URL = "http://krafte.net/NEBWorks/push/";
 
     @FormUrlEncoded
     @POST("get.php")

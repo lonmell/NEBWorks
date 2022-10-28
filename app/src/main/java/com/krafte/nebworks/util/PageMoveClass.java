@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.ui.member.JoinActivity;
 import com.krafte.nebworks.ui.worksite.WorkState2Activity;
 import com.krafte.nebworks.ui.PushActivity;
 import com.krafte.nebworks.ui.approval.TaskApprovalDetail;
@@ -63,6 +64,14 @@ public class PageMoveClass implements MovePage {
     @Override
     public void Push(Context context){
         Intent intent = new Intent(context, PushActivity.class);
+        context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void Join(Context context){
+        Intent intent = new Intent(context, JoinActivity.class);
         context.startActivity(intent);
         ((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -87,8 +87,8 @@ public class PlaceBottomNaviActivity extends Activity {
         list_settingitem01 = findViewById(R.id.list_settingitem01);
         list_settingitem02 = findViewById(R.id.list_settingitem02);
 
-        list_settingitem01.setText("현장 수정");
-        list_settingitem02.setText("현장 삭제");
+        list_settingitem01.setText("매장 수정");
+        list_settingitem02.setText("매장 삭제");
 
         close_btn = findViewById(R.id.close_btn);
         setBtnEvent();
@@ -159,7 +159,7 @@ public class PlaceBottomNaviActivity extends Activity {
                             dlog.i("TaskDel jsonResponse : " + response.body());
                             try {
                                 if(response.body().replace("\"","").equals("success")){
-                                    Toast.makeText(mContext,"해당 현장이 삭제완료되었습니다.",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext,"해당 매장이 삭제완료되었습니다.",Toast.LENGTH_SHORT).show();
                                     finish();
                                     Intent intent = new Intent();
                                     intent.putExtra("result", "Close Popup");

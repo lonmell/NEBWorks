@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface ApprovalUpdateInterface {
-    String URL = "http://krafte.net/kogas/task_approval/";
+    String URL = "http://krafte.net/NEBWorks/task_approval/";
 
     @FormUrlEncoded
     @POST("update.php")

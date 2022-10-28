@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface UserSelectInterface
 {
-    String URL = "http://krafte.net/kogas/user/";
+    String URL = "http://krafte.net/NEBWorks/user/";
 
     @FormUrlEncoded
     @POST("get.php")

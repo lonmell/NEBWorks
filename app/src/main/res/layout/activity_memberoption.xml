@@ -23,7 +23,7 @@
             android:padding="5dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="현장에서 내보내기"
+            android:text="매장에서 내보내기"
             android:textColor="#FF3D00"
             android:textSize="16sp"
             tools:ignore="HardcodedText" />

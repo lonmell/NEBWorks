@@ -23,6 +23,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!--전화와 메시지를 보내기 위한 퍼미션-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.DIAL_PHONE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -52,7 +56,7 @@
         <!-- - 안드로이드 8.0 이상 푸시 처리 추가 코드 -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/kogas_icon" />
+            android:resource="@drawable/identificon" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/black" />
@@ -68,6 +72,15 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service> <!-- FCM END -->
+
+        <receiver
+            android:name=".util.Sms_receiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".ui.IntroActivity"
             android:exported="true">
@@ -119,6 +132,7 @@
 
         <!-- member -->
         <activity android:name=".ui.member.MemberManagement" />
+        <activity android:name=".ui.member.JoinActivity" />
 
         <!-- state -->
         <activity android:name=".ui.worksite.WorkState2Activity" />
@@ -205,7 +219,15 @@
         <activity
             android:name=".pop.WorkMemberOptionActivity"
             android:theme="@android:style/Theme.Dialog" />
-
+        <activity
+            android:name=".pop.JoinPopActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".pop.AlertPopActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".pop.TermViewActivity"
+            android:theme="@android:style/Theme.Dialog" />
     </application>
 
 </manifest>

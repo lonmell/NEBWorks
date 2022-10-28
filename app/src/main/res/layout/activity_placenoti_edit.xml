@@ -230,7 +230,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"
             android:fontFamily="@font/inter_bold"
-            android:text="현장사진"
+            android:text="매장사진"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
