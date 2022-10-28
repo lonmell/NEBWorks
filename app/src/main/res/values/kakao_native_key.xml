@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="kakao_app_key">KOGASAPPKey</string>
-    <string name="kakao_native_key">bbdb38e0900e2bbe65b3348cf26015fa</string>
-    <string name="kakao_2_native_key">kakaobbdb38e0900e2bbe65b3348cf26015fa</string>
-    <string name="kakao_restapi_key">61aa50c1f61025355658c21794aa6613</string>
-    <string name="kakao_javascript_key">22b3bfc2a56d0847a9dddd3feb5a0626</string>
+    <string name="kakao_native_key">9da7a14dc42c1b7492967727cab4831a</string>
+    <string name="kakao_2_native_key">kakao9da7a14dc42c1b7492967727cab4831a</string>
+    <string name="kakao_restapi_key">c6d872b0a757a546c7ff51013253e0d9</string>
+    <string name="kakao_javascript_key">f61368bfd296829e8eb913249c80dc93</string>
 </resources>
