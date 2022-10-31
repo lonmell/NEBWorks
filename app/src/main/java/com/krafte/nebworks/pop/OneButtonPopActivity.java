@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.databinding.ActivityOnebuttonPopBinding;
 import com.krafte.nebworks.ui.login.LoginActivity;
+import com.krafte.nebworks.ui.user.JoinActivity;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 
 public class OneButtonPopActivity  extends Activity {
@@ -101,8 +102,13 @@ public class OneButtonPopActivity  extends Activity {
                 startActivity(intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            }else if(data.equals("사용자정보를 찾을 수 없습니다, 다시 로그인해 주세요.")){
+            }else if(data.equals("사용자정보를 찾을 수 없습니다, 다시 로그인해 주세요.") || data.equals("이미 가입한 내역이 있습니다.")){
                 intent = new Intent(mContext, LoginActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, R.anim.translate_down);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            } else if(data.equals("가입하지 않은 사용자입니다.")){
+                intent = new Intent(mContext, JoinActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

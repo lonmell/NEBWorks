@@ -1,10 +1,6 @@
 package com.krafte.nebworks.util;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-
-import com.krafte.nebworks.ui.login.LoginActivity;
 
 public interface MovePage {
 
@@ -31,6 +27,8 @@ public interface MovePage {
     void MainBack(Context context);
 
     void Push(Context context);
+
+    void JoinBefore(Context context);
 
     void Join(Context context);
 
@@ -96,6 +94,13 @@ public interface MovePage {
     void workDetailGo(Context context);
 
     void workDetailBack(Context context);
+
+    //--ui.user
+    void SearchEmail(Context context);
+
+    void FindEmail(Context context);
+
+    void ChangePw(Context context);
 
     void ProfileEditGo(Context context);
 

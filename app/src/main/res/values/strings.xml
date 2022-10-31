@@ -37,4 +37,7 @@
     <string name="approval_tv03">반\n려</string>
 
     <string name="check_validation_String">※ 비밀번호는 숫자, 특수문자, 영문자가 적어도 하나씩은 포함되어야 합니다.</string>
+
+
+    <string name="view_tv"><u>전문보기</u></string>
 </resources>

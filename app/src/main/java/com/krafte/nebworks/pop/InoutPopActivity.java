@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
@@ -33,6 +34,7 @@ public class InoutPopActivity extends Activity {
     Intent intent;
     PreferenceHelper shardpref;
     PageMoveClass pm = new PageMoveClass();
+    Dlog dlog = new Dlog();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")

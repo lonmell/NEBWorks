@@ -132,7 +132,7 @@
 
         <!-- member -->
         <activity android:name=".ui.member.MemberManagement" />
-        <activity android:name=".ui.member.JoinActivity" />
+
 
         <!-- state -->
         <activity android:name=".ui.worksite.WorkState2Activity" />
@@ -152,6 +152,11 @@
         <activity android:name=".ui.user.UserPlaceMapActivity" />
         <activity android:name=".ui.user.DeleteUserActivity" />
         <activity android:name=".ui.user.MyPlaceListActivity" />
+        <activity android:name=".ui.user.SearchAccountActivity" />
+        <activity android:name=".ui.user.FindEmailActivity" />
+        <activity android:name=".ui.user.VerificationActivity" />
+        <activity android:name=".ui.user.JoinActivity" />
+        <activity android:name=".ui.user.ChangePWActivity" />
 
         <!-- calendar -->
 

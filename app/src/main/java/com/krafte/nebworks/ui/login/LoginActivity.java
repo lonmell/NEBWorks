@@ -125,11 +125,14 @@ public class LoginActivity extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
-
+        GET_ACCOUNT_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
         onEvent();
         permissionCheck();
         KakaoSetting();
         GoogleSetting();
+        if(!GET_ACCOUNT_EMAIL.isEmpty()){
+            binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
+        }
     }
 
     @Override
@@ -222,7 +225,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.joinBtn.setOnClickListener(v -> {
-                pm.Join(mContext);
+                pm.JoinBefore(mContext);
         });
         binding.turnPwdChar.setOnClickListener(v -> {
             if (turnvisible == 0) {
@@ -237,11 +240,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.findEmail.setOnClickListener(v -> {
-            LockTost();
+            shardpref.putString("findkind","email");
+            pm.SearchEmail(mContext);
         });
 
         binding.findPw.setOnClickListener(v -> {
-            LockTost();
+            shardpref.putString("findkind","password");
+            pm.SearchEmail(mContext);
         });
     }
 
