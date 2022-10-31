@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#ffffff"
+    tools:context=".ui.user.FindEmailActivity">
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text="이메일 찾기"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
+
+        <RelativeLayout
+            android:id="@+id/back_btn"
+            android:layout_width="45dp"
+            android:layout_height="45dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@drawable/find_right_arrow"
+                android:padding="20dp"
+                android:rotation="180" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/find_email_img"
+        android:layout_width="172dp"
+        android:layout_height="155dp"
+        android:layout_below="@+id/top_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:background="@drawable/find_ur_email"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="5dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:cardBackgroundColor="#f2f2f2"
+        android:layout_below="@+id/find_email_img">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/find_my_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toStartOf="@+id/copy_email"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="10dp"
+                    android:text="xxxx@gmail.com"
+                    android:textColor="#000000" />
+                    <RelativeLayout
+                        android:id="@+id/copy_email"
+                        android:layout_width="41dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true">
+                        <ImageView
+                            android:layout_width="19dp"
+                            android:layout_height="22dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/clip_icon"/>
+                    </RelativeLayout>
+            </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/go_login"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/find_pw_btn"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#6395EC">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="로그인 하기"
+            android:gravity="center"
+            android:fontFamily="@font/inter_bold"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/find_pw_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#f2f2f2">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="비밀번호도 찾기"
+                android:gravity="center"
+                android:fontFamily="@font/inter_bold"
+                android:textSize="18sp"
+                android:textColor="#54585A"/>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
