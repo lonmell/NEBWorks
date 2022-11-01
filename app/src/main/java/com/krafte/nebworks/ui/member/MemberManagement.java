@@ -178,7 +178,7 @@ public class MemberManagement extends AppCompatActivity {
 
     public void btnOnclick(View view) {
         if (view.getId() == R.id.out_store) {
-            pm.PlaceListBack(mContext);
+            pm.PlaceList(mContext);
         } else if (view.getId() == R.id.notice) {
 //            pm.EmployeeNotifyListL(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {

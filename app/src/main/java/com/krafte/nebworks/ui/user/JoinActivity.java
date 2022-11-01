@@ -467,7 +467,7 @@ public class JoinActivity extends AppCompatActivity {
                             shardpref.remove("USER_INFO_PHONE");
                             shardpref.remove("USER_INFO_PW");
                             Toast.makeText(mContext,"회원가입이 완료되었습니다.",Toast.LENGTH_SHORT).show();
-                            pm.PlaceListGo(mContext);
+                            pm.PlaceList(mContext);
                         }
                     } catch (Exception e) {
                         dlog.i("Exception : " + e);

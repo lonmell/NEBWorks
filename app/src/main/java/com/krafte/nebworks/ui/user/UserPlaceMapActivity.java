@@ -313,7 +313,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
         });
 
         binding.outStore.setOnClickListener(v -> {
-            pm.PlaceListBack(mContext);
+            pm.PlaceList(mContext);
         });
     }
 
@@ -713,7 +713,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        pm.PlaceListBack(mContext);
+        pm.PlaceList(mContext);
         shardpref.remove("pin_store_address");
         shardpref.remove("pin_zipcode");
         shardpref.remove("pin_store_addressdetail");

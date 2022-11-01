@@ -349,7 +349,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (response.body().replace("\"", "").equals("success")) {
                             USER_LOGIN_CONFIRM = true;
                             shardpref.putString("USER_INFO_EMAIL",account);
-                            pm.PlaceListGo(mContext);
+                            pm.AuthSelect(mContext);
                             binding.loginAlertText.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
@@ -408,10 +408,10 @@ public class LoginActivity extends AppCompatActivity {
                                     dlog.i("LoginCheck platform : " + platform);
                                     if(platform.equals("NEB")){
                                         if(getaccount.equals(account) && getPassword.equals(pw)){
-                                            pm.PlaceListGo(mContext);
+                                            pm.PlaceList(mContext);
                                         }
                                     }else{
-                                        pm.PlaceListGo(mContext);
+                                        pm.PlaceList(mContext);
                                     }
                                     binding.loginAlertText.setVisibility(View.GONE);
                                 }else{

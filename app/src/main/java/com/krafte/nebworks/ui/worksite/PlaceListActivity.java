@@ -94,7 +94,7 @@ public class PlaceListActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        try{
+        try {
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
@@ -104,20 +104,26 @@ public class PlaceListActivity extends AppCompatActivity {
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
 
             shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub",0);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
 
             setBtnEvent();
             LoginCheck(USER_INFO_EMAIL);
-        }catch (Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        GetPlaceList();
+    }
+    @Override
     public void onResume() {
         super.onResume();
-        GetPlaceList();
+//        GetPlaceList();
 
         timer = new Timer();
         TimerTask TT = new TimerTask() {
@@ -135,33 +141,23 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         timer.cancel();
     }
+
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
     }
+
     private void setBtnEvent() {
         binding.addPlace.setOnClickListener(v -> {
             pm.PlaceAddGo(mContext);
-        });
 
-        binding.refreshBtn.setVisibility(View.GONE);
-        binding.refreshBtn.setOnClickListener(v -> {
-            GetPlaceList();
         });
-
-        binding.shutdownApp.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-            intent.putExtra("data", "앱을 종료 하시겠습니까?");
-            intent.putExtra("flag", "로그아웃");
-            intent.putExtra("left_btn_txt", "닫기");
-            intent.putExtra("right_btn_txt", "로그아웃");
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up,0);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        binding.addPlace2.setOnClickListener(v -> {
+            pm.PlaceAddGo(mContext);
         });
     }
 
@@ -201,8 +197,8 @@ public class PlaceListActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_PROFILE_URL", img_path);
 
                                     dlog.i("id : " + id);
-                                    dlog.i("USER_INFO_ID : " +shardpref.getString("USER_INFO_ID", "0"));
-                                    dlog.i("USER_INFO_EMAIL : " +shardpref.getString("USER_INFO_EMAIL", "0"));
+                                    dlog.i("USER_INFO_ID : " + shardpref.getString("USER_INFO_ID", "0"));
+                                    dlog.i("USER_INFO_EMAIL : " + shardpref.getString("USER_INFO_EMAIL", "0"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -249,34 +245,40 @@ public class PlaceListActivity extends AppCompatActivity {
                                     binding.placeList.setAdapter(mAdapter);
                                     binding.placeList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                     listitemsize = Response.length();
+
                                     if (Response.length() == 0) {
+                                        binding.noData.setVisibility(View.VISIBLE);
                                         dlog.i("SetNoticeListview Thread run! ");
                                         dlog.i("GET SIZE : " + Response.length());
+                                        binding.storeCnt.setText(String.valueOf(Response.length()));
                                     } else {
-
+                                        binding.noData.setVisibility(View.GONE);
+                                        binding.storeCnt.setText(String.valueOf(Response.length()));
                                         for (int i = 0; i < Response.length(); i++) {
                                             JSONObject jsonObject = Response.getJSONObject(i);
-                                            //작업 일자가 없으면 표시되지 않음.
-                                            if (!jsonObject.getString("start_date").equals("null")) {
-                                                mAdapter.addItem(new PlaceListData.PlaceListData_list(
-                                                        jsonObject.getString("id"),
-                                                        jsonObject.getString("name"),
-                                                        jsonObject.getString("owner_id"),
-                                                        jsonObject.getString("owner_name"),
-                                                        jsonObject.getString("management_office"),
-                                                        jsonObject.getString("address"),
-                                                        jsonObject.getString("latitude"),
-                                                        jsonObject.getString("longitude"),
-                                                        jsonObject.getString("start_time"),
-                                                        jsonObject.getString("end_time"),
-                                                        jsonObject.getString("img_path"),
-                                                        jsonObject.getString("start_date"),
-                                                        jsonObject.getString("total_cnt"),
-                                                        jsonObject.getString("i_cnt"),
-                                                        jsonObject.getString("o_cnt"),
-                                                        jsonObject.getString("created_at")
-                                                ));
-                                            }
+                                            mAdapter.addItem(new PlaceListData.PlaceListData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("name"),
+                                                    jsonObject.getString("owner_id"),
+                                                    jsonObject.getString("owner_name"),
+                                                    jsonObject.getString("registr_num"),
+                                                    jsonObject.getString("store_kind"),
+                                                    jsonObject.getString("address"),
+                                                    jsonObject.getString("latitude"),
+                                                    jsonObject.getString("longitude"),
+                                                    jsonObject.getString("pay_day"),
+                                                    jsonObject.getString("test_period"),
+                                                    jsonObject.getString("vacation_select"),
+                                                    jsonObject.getString("insurance"),
+                                                    jsonObject.getString("start_time"),
+                                                    jsonObject.getString("end_time"),
+                                                    jsonObject.getString("save_kind"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("total_cnt"),
+                                                    jsonObject.getString("i_cnt"),
+                                                    jsonObject.getString("o_cnt"),
+                                                    jsonObject.getString("created_at")
+                                            ));
                                         }
 
                                         mAdapter.notifyDataSetChanged();

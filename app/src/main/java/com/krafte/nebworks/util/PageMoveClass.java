@@ -11,9 +11,11 @@ import com.krafte.nebworks.ui.feed.FeedDetailActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
 import com.krafte.nebworks.ui.login.LoginActivity;
 import com.krafte.nebworks.ui.main.MainFragment;
+import com.krafte.nebworks.ui.member.AuthSelectActivity;
 import com.krafte.nebworks.ui.member.MemberManagement;
 import com.krafte.nebworks.ui.notify.NotifyListActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
+import com.krafte.nebworks.ui.user.ChangePWActivity2;
 import com.krafte.nebworks.ui.user.DeleteUserActivity;
 import com.krafte.nebworks.ui.user.FindEmailActivity;
 import com.krafte.nebworks.ui.user.JoinActivity;
@@ -23,6 +25,7 @@ import com.krafte.nebworks.ui.user.SearchAccountActivity;
 import com.krafte.nebworks.ui.user.UserPlaceMapActivity;
 import com.krafte.nebworks.ui.user.VerificationActivity;
 import com.krafte.nebworks.ui.worksite.PlaceAddActivity;
+import com.krafte.nebworks.ui.worksite.PlaceAddActivity2;
 import com.krafte.nebworks.ui.worksite.PlaceAddWorkActivity;
 import com.krafte.nebworks.ui.worksite.PlaceEditActivity;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
@@ -214,23 +217,24 @@ public class PageMoveClass implements MovePage {
 
     //--ui.worksite
     @Override
-    public void PlaceListGo(Context context) {
+    public void PlaceList(Context context) {
         Intent intent = new Intent(context, PlaceListActivity.class);
         context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
-    @Override
-    public void PlaceListBack(Context context) {
-        Intent intent = new Intent(context, PlaceListActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
+
 
     @Override
     public void PlaceAddGo(Context context) {
         Intent intent = new Intent(context, PlaceAddActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void PlaceAdd2Go(Context context) {
+        Intent intent = new Intent(context, PlaceAddActivity2.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -336,7 +340,13 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
-
+    @Override
+    public void ChangePW2(Context context) {
+        Intent intent = new Intent(context, ChangePWActivity2.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
     @Override
     public void ProfileEditGo(Context context) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
@@ -413,11 +423,12 @@ public class PageMoveClass implements MovePage {
     }
 
     @Override
-    public void MemberBack(Context context) {
-        Intent intent = new Intent(context, MemberManagement.class);
+    public void AuthSelect(Context context) {
+        Intent intent = new Intent(context, AuthSelectActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
 
 }

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    tools:context=".ui.worksite.PlaceAddActivity2">
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text="매장추가"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
+
+        <RelativeLayout
+            android:id="@+id/back_btn"
+            android:layout_width="45dp"
+            android:layout_height="45dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@drawable/find_right_arrow"
+                android:padding="20dp"
+                android:rotation="180" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/save2btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="임시저장"
+            android:textColor="#8F9191"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="와이파이등록"
+        android:fontFamily="@font/inter_bold"
+        android:textSize="25dp"
+        android:layout_margin="20dp"
+        android:textColor="#000000"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검색된 와이파이"
+            android:fontFamily="@font/inter_bold"
+            android:textSize="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:textColor="#000000"/>
+        <RelativeLayout
+            android:id="@+id/refresh_wifi"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/refresh"
+                    android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="35dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wifi_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f2f2f2"
+            android:layout_above="@+id/addPlaceBtn"
+            android:layout_alignParentTop="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <RelativeLayout
+            android:id="@+id/no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/addPlaceBtn"
+            android:layout_alignParentTop="true"
+            android:background="#ffffff"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/no_data_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Wifi를 검색중입니다."/>
+        </RelativeLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/addPlaceBtn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="124dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="78dp"
+            android:layout_alignParentBottom="true"
+            app:cardBackgroundColor="#6395EC"
+            app:cardCornerRadius="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="저장하기"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText,TextContrastCheck" />
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</LinearLayout>

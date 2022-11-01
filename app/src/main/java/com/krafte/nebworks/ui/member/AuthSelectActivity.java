@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.databinding.ActivityAuthselectBinding;
+import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 public class AuthSelectActivity extends AppCompatActivity {
@@ -15,7 +16,8 @@ public class AuthSelectActivity extends AppCompatActivity {
     private final static String TAG = "DeleteUserActivity";
     Context mContext;
 
-    PreferenceHelper shardpref;;
+    PreferenceHelper shardpref;
+    ;
 
     //Shared
     String USER_INFO_NAME = "";
@@ -24,6 +26,7 @@ public class AuthSelectActivity extends AppCompatActivity {
 
     //other
     boolean check = false;
+    PageMoveClass pm = new PageMoveClass();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,18 @@ public class AuthSelectActivity extends AppCompatActivity {
     }
 
 
-    private void setBtnEvent(){
-
+    private void setBtnEvent() {
+        binding.goOwner.setOnClickListener(v -> {
+            shardpref.putInt("USER_INFO_AUTH", 0);
+            shardpref.putInt("SELECT_POSITION", 0);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.PlaceList(mContext);
+        });
+        binding.goOwner.setOnClickListener(v -> {
+            shardpref.putInt("USER_INFO_AUTH", 1);
+            shardpref.putInt("SELECT_POSITION", 0);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.PlaceList(mContext);
+        });
     }
 }

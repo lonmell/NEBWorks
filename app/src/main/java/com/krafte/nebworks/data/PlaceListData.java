@@ -4,41 +4,50 @@ public class PlaceListData {
     private static final String TAG = "ContractData";
 
     public static class PlaceListData_list {
-        private String id;
-        private String name;
-        private String owner_id;
-        private String owner_name;
-        private String management_office;
-        private String address;
-        private String latitude;
-        private String longitude;
-        private String start_time;
-        private String end_time;
-        private String img_path;
-        private String start_date;
-        private String total_cnt;
-        private String i_cnt;
-        private String o_cnt;
-        private String created_at;
+        String id;
+        String name;
+        String owner_id;
+        String owner_name;
+        String registr_num;
+        String store_kind;
+        String address;
+        String latitude;
+        String longitude;
+        String pay_day;
+        String test_period;
+        String vacation_select;
+        String insurance;
+        String start_time;
+        String end_time;
+        String save_kind;
+        String img_path;
+        String total_cnt;
+        String i_cnt;
+        String o_cnt;
+        String created_at;
 
 
-        public PlaceListData_list(String id, String name, String owner_id, String owner_name,
-                                  String management_office, String address, String latitude,
-                                  String longitude, String start_time, String end_time,
-                                  String img_path, String start_date, String total_cnt,
-                                  String i_cnt, String o_cnt, String created_at) {
+        public PlaceListData_list(String id, String name, String owner_id, String owner_name, String registr_num,
+                                    String store_kind, String address, String latitude, String longitude, String pay_day, String test_period,
+                                    String vacation_select, String insurance, String start_time, String end_time, String save_kind,
+                                    String img_path, String total_cnt, String i_cnt, String o_cnt, String created_at) {
             this.id = id;
             this.name = name;
             this.owner_id = owner_id;
             this.owner_name = owner_name;
-            this.management_office = management_office;
+            this.registr_num = registr_num;
+            this.store_kind = store_kind;
             this.address = address;
             this.latitude = latitude;
             this.longitude = longitude;
+            this.pay_day = pay_day;
+            this.test_period = test_period;
+            this.vacation_select = vacation_select;
+            this.insurance = insurance;
             this.start_time = start_time;
             this.end_time = end_time;
+            this.save_kind = save_kind;
             this.img_path = img_path;
-            this.start_date = start_date;
             this.total_cnt = total_cnt;
             this.i_cnt = i_cnt;
             this.o_cnt = o_cnt;
@@ -77,12 +86,20 @@ public class PlaceListData {
             this.owner_name = owner_name;
         }
 
-        public String getManagement_office() {
-            return management_office;
+        public String getRegistr_num() {
+            return registr_num;
         }
 
-        public void setManagement_office(String management_office) {
-            this.management_office = management_office;
+        public void setRegistr_num(String registr_num) {
+            this.registr_num = registr_num;
+        }
+
+        public String getStore_kind() {
+            return store_kind;
+        }
+
+        public void setStore_kind(String store_kind) {
+            this.store_kind = store_kind;
         }
 
         public String getAddress() {
@@ -109,6 +126,38 @@ public class PlaceListData {
             this.longitude = longitude;
         }
 
+        public String getPay_day() {
+            return pay_day;
+        }
+
+        public void setPay_day(String pay_day) {
+            this.pay_day = pay_day;
+        }
+
+        public String getTest_period() {
+            return test_period;
+        }
+
+        public void setTest_period(String test_period) {
+            this.test_period = test_period;
+        }
+
+        public String getVacation_select() {
+            return vacation_select;
+        }
+
+        public void setVacation_select(String vacation_select) {
+            this.vacation_select = vacation_select;
+        }
+
+        public String getInsurance() {
+            return insurance;
+        }
+
+        public void setInsurance(String insurance) {
+            this.insurance = insurance;
+        }
+
         public String getStart_time() {
             return start_time;
         }
@@ -125,20 +174,20 @@ public class PlaceListData {
             this.end_time = end_time;
         }
 
+        public String getSave_kind() {
+            return save_kind;
+        }
+
+        public void setSave_kind(String save_kind) {
+            this.save_kind = save_kind;
+        }
+
         public String getImg_path() {
             return img_path;
         }
 
         public void setImg_path(String img_path) {
             this.img_path = img_path;
-        }
-
-        public String getStart_date() {
-            return start_date;
-        }
-
-        public void setStart_date(String start_date) {
-            this.start_date = start_date;
         }
 
         public String getTotal_cnt() {
@@ -172,7 +221,6 @@ public class PlaceListData {
         public void setCreated_at(String created_at) {
             this.created_at = created_at;
         }
-
     }
 
 

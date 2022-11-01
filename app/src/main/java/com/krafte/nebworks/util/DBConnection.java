@@ -37,7 +37,7 @@ public class DBConnection {
 
         // Log.i(TAG, "WorkPlaceEmployeeNotifyUpdate Starting...");
         try {
-            String page = URL + "/kogas/kogas_fcmsend.php";
+            String page = URL + "/NEBWorks/kogas_fcmsend.php";
             // URL 객체 생성
             java.net.URL url = new URL(page);
             // 연결 객체 생성
@@ -96,7 +96,7 @@ public class DBConnection {
         // Log.i(TAG, "GetLastAPPVersionCode Starting...");
         try {
 //            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-            String page = URL + "/kogas/getlast_version.php";
+            String page = URL + "/NEBWorks/getlast_version.php";
 
 
             // URL 객체 생성

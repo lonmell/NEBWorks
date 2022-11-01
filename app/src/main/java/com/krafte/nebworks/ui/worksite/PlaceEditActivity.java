@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -37,11 +36,8 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
-import com.krafte.nebworks.dataInterface.PlaceEditInterface;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.databinding.ActivityAddplaceBinding;
-import com.krafte.nebworks.pop.DatePickerActivity;
-import com.krafte.nebworks.pop.WorkTimePicker;
 import com.krafte.nebworks.ui.PinSelectLocationActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -188,21 +184,42 @@ public class PlaceEditActivity extends AppCompatActivity {
 
     private void setBtnEvent(){
         binding.backBtn.setOnClickListener(v -> {
-            pm.PlaceListBack(mContext);
+            pm.PlaceList(mContext);
         });
 
         //------매장 이미지 등록 / 갤러리 열기
-        binding.profileImg.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent, GALLEY_CODE);
-        });
-
+//        binding.profileImg.setOnClickListener(v -> {
+//            Intent intent = new Intent();
+//            intent.setType("image/*");
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//            startActivityForResult(intent, GALLEY_CODE);
+//        });
+//        if(saveBitmap != null){
+//            binding.clearImg.setVisibility(View.VISIBLE);
+//            binding.imgPlus.setVisibility(View.GONE);
+//        }else{
+//            binding.clearImg.setVisibility(View.GONE);
+//            binding.imgPlus.setVisibility(View.VISIBLE);
+//        }
+//        binding.clearImg.setOnClickListener(v -> {
+//            try{
+//                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
+//                saveBitmap.eraseColor(Color.TRANSPARENT);
+//                binding.profileSetimg.setImageBitmap(saveBitmap);
+//                binding.profileSetimg.setBackgroundResource(R.drawable.img_box_round);
+//                ProfileUrl = "";
+//                binding.clearImg.setVisibility(View.GONE);
+//                binding.imgPlus.setVisibility(View.VISIBLE);
+//            }catch (Exception e){
+//                dlog.i("clearImg Exception : " + e);
+//            }
+//
+//        });
+//
         binding.addPlaceBtn.setOnClickListener(v -> {
-            if(CheckData()){
-                AddPlace();
-            }
+//            if(CheckData()){
+//                AddPlace();
+//            }
         });
 
 
@@ -212,52 +229,7 @@ public class PlaceEditActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         });
 
-        binding.inputWorkstartDay.setOnClickListener(v -> {
-            if(binding.inputWorkstartDay.getText().toString().length() == 0){
-                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-                binding.inputWorkstartDay.setText(today);
-            }else{
-                shardpref.putInt("timeSelect_flag",6);
-                Intent intent = new Intent(this, DatePickerActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
-            }
-        });
 
-        binding.worktime01Select.setOnClickListener(v -> {
-            Intent intent = new Intent(this, WorkTimePicker.class);
-            intent.putExtra("timeSelect_flag", 4);
-            startActivity(intent);
-            overridePendingTransition(R.anim.translate_up, 0);
-        });
-        binding.worktime02Select.setOnClickListener(v -> {
-            Intent intent = new Intent(this, WorkTimePicker.class);
-            intent.putExtra("timeSelect_flag", 5);
-            startActivity(intent);
-            overridePendingTransition(R.anim.translate_up, 0);
-        });
-
-        if(saveBitmap != null){
-            binding.clearImg.setVisibility(View.VISIBLE);
-            binding.imgPlus.setVisibility(View.GONE);
-        }else{
-            binding.clearImg.setVisibility(View.GONE);
-            binding.imgPlus.setVisibility(View.VISIBLE);
-        }
-        binding.clearImg.setOnClickListener(v -> {
-            try{
-                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
-                saveBitmap.eraseColor(Color.TRANSPARENT);
-                binding.profileSetimg.setImageBitmap(saveBitmap);
-                binding.profileSetimg.setBackgroundResource(R.drawable.img_box_round);
-                ProfileUrl = "";
-                binding.clearImg.setVisibility(View.GONE);
-                binding.imgPlus.setVisibility(View.VISIBLE);
-            }catch (Exception e){
-                dlog.i("clearImg Exception : " + e);
-            }
-
-        });
     }
     private void getPlaceData() {
         dlog.i("PlaceCheck place_id : " + place_id);
@@ -333,14 +305,14 @@ public class PlaceEditActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
 
                                     ProfileUrl = place_img_path;
-                                    binding.storeNameInputBox.setText(place_name);
-                                    binding.storeNameInputBox1.setText(place_management_office);
-                                    binding.popText14.setText(place_address);
-                                    binding.inputWorkstartDay.setText(place_start_date);
-                                    latitude = Double.parseDouble(place_latitude);
-                                    longitube = Double.parseDouble(place_longitude);
-                                    binding.worktime01Select.setText(place_start_time.length() >= 5?place_start_time.substring(0,5):place_start_time);
-                                    binding.worktime02Select.setText(place_end_time.length() >= 5?place_end_time.substring(0,5):place_end_time);
+//                                    binding.storeNameInputBox.setText(place_name);
+//                                    binding.storeNameInputBox1.setText(place_management_office);
+//                                    binding.popText14.setText(place_address);
+//                                    binding.inputWorkstartDay.setText(place_start_date);
+//                                    latitude = Double.parseDouble(place_latitude);
+//                                    longitube = Double.parseDouble(place_longitude);
+//                                    binding.worktime01Select.setText(place_start_time.length() >= 5?place_start_time.substring(0,5):place_start_time);
+//                                    binding.worktime02Select.setText(place_end_time.length() >= 5?place_end_time.substring(0,5):place_end_time);
 
                                 }
                             } catch (JSONException e) {
@@ -360,44 +332,44 @@ public class PlaceEditActivity extends AppCompatActivity {
     }
 
     public void AddPlace() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceEditInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
-        String placeAddress_get = place_address;
-        Call<String> call = api.getData(place_id,place_name,place_management_office,placeAddress_get,String.valueOf(latitude),String.valueOf(longitube),place_start_time,place_end_time,ProfileUrl,place_start_date);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                            dlog.i("LoginCheck jsonResponse : " + response.body());
-                            try {
-                                if(!response.body().equals("[]") && response.body().replace("\"","").equals("success")){
-                                    if(!ProfileUrl.isEmpty() && saveBitmap != null){
-                                        saveBitmapAndGetURI();
-                                    }
-                                    Toast.makeText(mContext,"매장 수정이 완료되었습니다.",Toast.LENGTH_SHORT).show();
-                                    pm.PlaceListBack(mContext);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(PlaceEditInterface.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
+//        String placeAddress_get = place_address;
+//        Call<String> call = api.getData(place_id,place_name,place_management_office,placeAddress_get,String.valueOf(latitude),String.valueOf(longitube),place_start_time,place_end_time,ProfileUrl,place_start_date);
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    runOnUiThread(() -> {
+//                        if (response.isSuccessful() && response.body() != null) {
+//                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
+//                            dlog.i("LoginCheck jsonResponse : " + response.body());
+//                            try {
+//                                if(!response.body().equals("[]") && response.body().replace("\"","").equals("success")){
+//                                    if(!ProfileUrl.isEmpty() && saveBitmap != null){
+//                                        saveBitmapAndGetURI();
+//                                    }
+//                                    Toast.makeText(mContext,"매장 수정이 완료되었습니다.",Toast.LENGTH_SHORT).show();
+//                                    pm.PlaceList(mContext);
+//                                }
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                dlog.e("에러1 = " + t.getMessage());
+//            }
+//        });
     }
 
     @Override
@@ -408,59 +380,59 @@ public class PlaceEditActivity extends AppCompatActivity {
 
         ImgfileMaker = ImageNameMaker();
 
-        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
-        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
-        dlog.i("Min : " + shardpref.getInt("Min", 0));
-        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-        int hourOfDay = shardpref.getInt("Hour", 0);
-        int minute = shardpref.getInt("Min", 0);
-
-        dlog.i("timeSelect_flag : " + timeSelect_flag);
-        if (timeSelect_flag == 4) {
-            StartTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-            shardpref.remove("timeSelect_flag");
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
-            if (hourOfDay != 0) {
-                String ampm = "";
-                if (Integer.parseInt(StartTime01) < 12) {
-                    ampm = " AM";
-                    SelectStartTime = 1;
-                } else {
-                    ampm = " PM";
-                    SelectStartTime = 2;
-                }
-                binding.worktime01Select.setText(StartTime01 + ":" + StartTime02 + ampm);
-                place_start_time = StartTime01 + ":" + StartTime02;
-                imm.hideSoftInputFromWindow(binding.worktime01Select.getWindowToken(), 0);
-            }
-        } else if (timeSelect_flag == 5) {
-            EndTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-            shardpref.remove("timeSelect_flag");
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
-            if (hourOfDay != 0) {
-                String ampm = "";
-                if (Integer.parseInt(EndTime01) < 12) {
-                    ampm = " AM";
-                    SelectEndTime = 1;
-                } else {
-                    ampm = " PM";
-                    SelectEndTime = 2;
-                }
-                binding.worktime02Select.setText(EndTime01 + ":" + EndTime02 + ampm);
-                place_end_time = EndTime01 + ":" + EndTime02;
-                imm.hideSoftInputFromWindow(binding.worktime02Select.getWindowToken(), 0);
-            }
-
-        }else if (timeSelect_flag == 6) {
-            //-- DatePickerActivity에서 받아오는 값
-            String getDatePicker = shardpref.getString("vDateGetDate","");
-            binding.inputWorkstartDay.setText(getDatePicker);
-            shardpref.remove("vDateGetDate");
-        }
+//        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
+//        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
+//        dlog.i("Min : " + shardpref.getInt("Min", 0));
+//        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
+//        int hourOfDay = shardpref.getInt("Hour", 0);
+//        int minute = shardpref.getInt("Min", 0);
+//
+//        dlog.i("timeSelect_flag : " + timeSelect_flag);
+//        if (timeSelect_flag == 4) {
+//            StartTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+//            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+//            shardpref.remove("timeSelect_flag");
+//            shardpref.remove("Hour");
+//            shardpref.remove("Min");
+//            if (hourOfDay != 0) {
+//                String ampm = "";
+//                if (Integer.parseInt(StartTime01) < 12) {
+//                    ampm = " AM";
+//                    SelectStartTime = 1;
+//                } else {
+//                    ampm = " PM";
+//                    SelectStartTime = 2;
+//                }
+//                binding.worktime01Select.setText(StartTime01 + ":" + StartTime02 + ampm);
+//                place_start_time = StartTime01 + ":" + StartTime02;
+//                imm.hideSoftInputFromWindow(binding.worktime01Select.getWindowToken(), 0);
+//            }
+//        } else if (timeSelect_flag == 5) {
+//            EndTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+//            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+//            shardpref.remove("timeSelect_flag");
+//            shardpref.remove("Hour");
+//            shardpref.remove("Min");
+//            if (hourOfDay != 0) {
+//                String ampm = "";
+//                if (Integer.parseInt(EndTime01) < 12) {
+//                    ampm = " AM";
+//                    SelectEndTime = 1;
+//                } else {
+//                    ampm = " PM";
+//                    SelectEndTime = 2;
+//                }
+//                binding.worktime02Select.setText(EndTime01 + ":" + EndTime02 + ampm);
+//                place_end_time = EndTime01 + ":" + EndTime02;
+//                imm.hideSoftInputFromWindow(binding.worktime02Select.getWindowToken(), 0);
+//            }
+//
+//        }else if (timeSelect_flag == 6) {
+//            //-- DatePickerActivity에서 받아오는 값
+//            String getDatePicker = shardpref.getString("vDateGetDate","");
+//            binding.inputWorkstartDay.setText(getDatePicker);
+//            shardpref.remove("vDateGetDate");
+//        }
 
         dlog.i("onResume Area");
         String getlatitude = shardpref.getString("pin_latitude", "0.0");
@@ -471,8 +443,8 @@ public class PlaceEditActivity extends AppCompatActivity {
         String getstore_addressdetail = shardpref.getString("pin_store_addressdetail", "");
 
         if(!getstore_address.isEmpty()){
-            binding.popText14.setText(getstore_address);
-            binding.popText15.setText(getstore_addressdetail);
+//            binding.popText14.setText(getstore_address);
+//            binding.popText15.setText(getstore_addressdetail);
 
             latitude = Double.parseDouble(getlatitude);
             longitube = Double.parseDouble(getlongitube);
@@ -486,39 +458,39 @@ public class PlaceEditActivity extends AppCompatActivity {
 
     }
 
-    private boolean CheckData(){
-        dlog.i("----------CheckData----------");
-        place_management_office = binding.storeNameInputBox.getText().toString();
-        place_name = binding.storeNameInputBox1.getText().toString();
-        place_address = binding.popText14.getText().toString();
-        place_start_date = binding.inputWorkstartDay.getText().toString();
-        dlog.i("ProfileUrl : " + ProfileUrl);
-        dlog.i("manageplaceName : " + place_management_office);
-        dlog.i("placeName : " + place_name);
-        dlog.i("placeAddress : " + place_address);
-        dlog.i("latitude : " + latitude);
-        dlog.i("longitube : " + longitube);
-        dlog.i("place_starttime : " + place_start_time);
-        dlog.i("place_endtime : " + place_end_time);
-        dlog.i("start_date : " + place_start_date);
-        dlog.i("----------CheckData----------");
-
-        if(place_management_office.isEmpty()){
-            Toast.makeText(mContext,"관리소 명을 입력해주세요.",Toast.LENGTH_SHORT).show();
-            return false;
-        }else if(place_name.isEmpty()){
-            Toast.makeText(mContext,"매장 명을 입력해주세요.",Toast.LENGTH_SHORT).show();
-            return false;
-        }else if(place_address.isEmpty()){
-            Toast.makeText(mContext,"매장 주소를 입력해주세요.",Toast.LENGTH_SHORT).show();
-            return false;
-        }else if(place_start_date.isEmpty()){
-            Toast.makeText(mContext,"작업 시작일을 입력해주세요.",Toast.LENGTH_SHORT).show();
-            return false;
-        }else{
-            return true;
-        }
-    }
+//    private boolean CheckData(){
+//        dlog.i("----------CheckData----------");
+//        place_management_office = binding.storeNameInputBox.getText().toString();
+//        place_name = binding.storeNameInputBox1.getText().toString();
+//        place_address = binding.popText14.getText().toString();
+//        place_start_date = binding.inputWorkstartDay.getText().toString();
+//        dlog.i("ProfileUrl : " + ProfileUrl);
+//        dlog.i("manageplaceName : " + place_management_office);
+//        dlog.i("placeName : " + place_name);
+//        dlog.i("placeAddress : " + place_address);
+//        dlog.i("latitude : " + latitude);
+//        dlog.i("longitube : " + longitube);
+//        dlog.i("place_starttime : " + place_start_time);
+//        dlog.i("place_endtime : " + place_end_time);
+//        dlog.i("start_date : " + place_start_date);
+//        dlog.i("----------CheckData----------");
+//
+//        if(place_management_office.isEmpty()){
+//            Toast.makeText(mContext,"관리소 명을 입력해주세요.",Toast.LENGTH_SHORT).show();
+//            return false;
+//        }else if(place_name.isEmpty()){
+//            Toast.makeText(mContext,"매장 명을 입력해주세요.",Toast.LENGTH_SHORT).show();
+//            return false;
+//        }else if(place_address.isEmpty()){
+//            Toast.makeText(mContext,"매장 주소를 입력해주세요.",Toast.LENGTH_SHORT).show();
+//            return false;
+//        }else if(place_start_date.isEmpty()){
+//            Toast.makeText(mContext,"작업 시작일을 입력해주세요.",Toast.LENGTH_SHORT).show();
+//            return false;
+//        }else{
+//            return true;
+//        }
+//    }
 
     @Override
     public void onBackPressed(){
@@ -572,9 +544,9 @@ public class PlaceEditActivity extends AppCompatActivity {
                     dlog.i("RESULT_OK 1 : " + GetData.substring(0, 5));
                     dlog.i("RESULT_OK 2 : " + GetData.substring(7));
                     zipcode = GetData.substring(0, 5);
-                    binding.popText14.setText(GetData.substring(7));
-                    latitude = findGeoPoint_lat(mContext, binding.popText14.getText().toString());
-                    longitube = findGeoPoint_lon(mContext, binding.popText14.getText().toString());
+//                    binding.popText14.setText(GetData.substring(7));
+//                    latitude = findGeoPoint_lat(mContext, binding.popText14.getText().toString());
+//                    longitube = findGeoPoint_lon(mContext, binding.popText14.getText().toString());
                 }
             }
             binding.loginAlertText.setVisibility(View.GONE);

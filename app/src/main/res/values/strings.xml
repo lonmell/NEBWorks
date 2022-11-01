@@ -40,4 +40,15 @@
 
 
     <string name="view_tv"><u>전문보기</u></string>
+
+    <string name="store_category01">일반음식점</string>
+    <string name="store_category02">편의점</string>
+    <string name="store_category03">피시방</string>
+    <string name="store_category04">테마파크</string>
+    <string name="store_category05">호텔숙박</string>
+    <string name="store_category06">패스트푸드</string>
+    <string name="store_category07">아이스크림\n&amp;\n디저트</string>
+    <string name="store_category08">호프/일반주점</string>
+    <string name="store_category09">피트니스</string>
+    <string name="store_category10">패밀리레스토랑</string>
 </resources>

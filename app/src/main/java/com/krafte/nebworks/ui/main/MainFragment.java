@@ -190,7 +190,7 @@ public class MainFragment extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
         if(paging_position == 0){
-            pm.PlaceListBack(mContext);
+            pm.PlaceList(mContext);
         }else{
             binding.tabLayout.getTabAt(0).select();
         }
@@ -203,7 +203,7 @@ public class MainFragment extends AppCompatActivity {
 
     public void btnOnclick(View view) {
         if (view.getId() == R.id.out_store) {
-            pm.PlaceListBack(mContext);
+            pm.PlaceList(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {
             binding.tabLayout.getTabAt(0).select();
         } else if (view.getId() == R.id.bottom_navigation02) {

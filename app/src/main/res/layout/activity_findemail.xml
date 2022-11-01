@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
@@ -48,6 +49,7 @@
         android:background="@drawable/find_ur_email"/>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/copyemail_area"
         android:layout_width="match_parent"
         android:layout_height="41dp"
         app:cardElevation="0dp"
@@ -96,6 +98,7 @@
         app:cardCornerRadius="8dp"
         app:cardBackgroundColor="#6395EC">
         <TextView
+            android:id="@+id/go_logintv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="로그인 하기"
@@ -113,6 +116,7 @@
         app:cardCornerRadius="8dp"
         app:cardBackgroundColor="#f2f2f2">
             <TextView
+                android:id="@+id/find_pwtv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="비밀번호도 찾기"

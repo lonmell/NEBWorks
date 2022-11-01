@@ -69,11 +69,11 @@ public interface MovePage {
 
     void FeedEditBack(Context context);
 
-    void PlaceListGo(Context context);
-
-    void PlaceListBack(Context context);
+    void PlaceList(Context context);
 
     void PlaceAddGo(Context context);
+
+    void PlaceAdd2Go(Context context);
 
     void PlaceEidtGo(Context context);
 
@@ -102,6 +102,8 @@ public interface MovePage {
 
     void ChangePw(Context context);
 
+    void ChangePW2(Context context);
+
     void ProfileEditGo(Context context);
 
     void UserPlsceMapGo(Context context);
@@ -111,5 +113,5 @@ public interface MovePage {
     //--ui.member
     void MemberGo(Context context);
 
-    void MemberBack(Context context);
+    void AuthSelect(Context context);
 }

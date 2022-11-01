@@ -14,13 +14,20 @@ public interface PlaceEditInterface
     Call<String> getData(
             @Field("id") String id,
             @Field("name") String name,
-            @Field("management_office") String management_office,
+            @Field("registr_num") String registr_num,
+            @Field("store_kind") String store_kind,
             @Field("address") String address,
             @Field("latitude") String latitude,
             @Field("longitude") String longitude,
+            @Field("pay_day") String pay_day,
+            @Field("test_period") String test_period,
+            @Field("vacation_select") String vacation_select,
+            @Field("insurance") String insurance,
             @Field("start_time") String start_time,
             @Field("end_time") String end_time,
             @Field("img_path") String img_path,
-            @Field("start_date") String start_date
+            @Field("save_kind") String save_kind,
+            @Field("start_date") String start_date,
+            @Field("wifi_name") String wifi_name
     );
 }

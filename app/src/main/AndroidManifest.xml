@@ -4,28 +4,41 @@
     package="com.krafte.nebworks">
 
     <!-- 인터넷 권한 설정 -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 연결 확인 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 인터넷 연결 확인 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 카메라 권한설정 -->
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- 단말기 정보 가져오기 -->
+
+    <!-- 카메라 권한설정 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 단말기 정보 가져오기 -->
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 전화와 메시지를 보내기 위한 퍼미션 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 전화와 메시지를 보내기 위한 퍼미션 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.DIAL_PHONE" /> <!-- 내부에 저장된 파일 읽는 권한 -->
+    <uses-permission android:name="android.permission.DIAL_PHONE" />
+    <!-- 내부에 저장된 파일 읽는 권한 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" /> -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" /> -->
     <!-- //모든 파일 액세스 권한은 앱의 핵심기능이 아니면 앱 정책에 위반됨 -->
     <!-- 전체화면캡쳐 -->
-    <uses-permission android:name="android.intent.action.MEDIA_MOUNTED" /> <!-- 포그라운드 알림 권한 요청 -->
+    <uses-permission android:name="android.intent.action.MEDIA_MOUNTED" />
+    <!-- 포그라운드 알림 권한 요청 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!--전화와 메시지를 보내기 위한 퍼미션-->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.DIAL_PHONE" />
+
+    <!--와이파이 퍼미션-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION " />
+
 
     <application
         android:allowBackup="true"
@@ -140,6 +153,7 @@
         <!-- worksite -->
         <activity android:name=".ui.worksite.PlaceListActivity" />
         <activity android:name=".ui.worksite.PlaceAddActivity" />
+        <activity android:name=".ui.worksite.PlaceAddActivity2" />
         <activity android:name=".ui.worksite.PlaceAddWorkActivity" />
         <activity android:name=".ui.worksite.PlaceWorkDetailActivity" />
         <activity android:name=".ui.worksite.PlaceEditActivity" />
@@ -157,6 +171,7 @@
         <activity android:name=".ui.user.VerificationActivity" />
         <activity android:name=".ui.user.JoinActivity" />
         <activity android:name=".ui.user.ChangePWActivity" />
+        <activity android:name=".ui.user.ChangePWActivity2" />
 
         <!-- calendar -->
 

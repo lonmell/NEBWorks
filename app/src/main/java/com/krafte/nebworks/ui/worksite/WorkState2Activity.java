@@ -331,7 +331,7 @@ public class WorkState2Activity extends AppCompatActivity {
 
     public void btnOnclick(View view) {
         if (view.getId() == R.id.out_store) {
-            pm.PlaceListBack(mContext);
+            pm.PlaceList(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {
             pm.MainBack(mContext);
         } else if (view.getId() == R.id.bottom_navigation02) {

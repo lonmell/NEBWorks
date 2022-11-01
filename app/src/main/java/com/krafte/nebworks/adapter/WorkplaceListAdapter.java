@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -90,14 +92,23 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     .into(holder.store_thumnail);
 
             holder.title.setText(item.getName());
-            holder.name.setText(item.getOwner_name());
-            holder.date.setText(item.getStart_date());
+            holder.address.setText(item.getAddress());
 
             if(item.getOwner_id().equals(USER_INFO_ID)){
                 //관리자일경우
                 holder.list_img_area.setVisibility(View.VISIBLE);
             }else{
                 holder.list_img_area.setVisibility(View.GONE);
+            }
+
+            if(item.getSave_kind().equals("0")){
+                holder.money_area.setVisibility(View.INVISIBLE);
+                holder.store_kind_state.setVisibility(View.VISIBLE);
+                holder.total_item.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+            }else if(item.getSave_kind().equals("1")){
+                holder.money_area.setVisibility(View.VISIBLE);
+                holder.store_kind_state.setVisibility(View.INVISIBLE);
+                holder.total_item.setCardBackgroundColor(Color.parseColor("#ffffff"));
             }
 
             holder.item_peoplecnt.setText(item.getTotal_cnt());
@@ -124,24 +135,26 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView store_thumnail;
-        TextView title,place_state_tv,name,date;
+        TextView title,name,address;
         TextView item_peoplecnt;
-        CardView place_state,goto_place;
-        RelativeLayout list_setting,list_img_area;
+        CardView store_kind_state,total_item;
+        RelativeLayout list_setting,list_img_area,place_state;
+        LinearLayout money_area;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            store_thumnail = itemView.findViewById(R.id.store_thumnail);
-            title = itemView.findViewById(R.id.title);
-            place_state_tv = itemView.findViewById(R.id.place_state_tv);
-            item_peoplecnt = itemView.findViewById(R.id.item_peoplecnt);
-            name = itemView.findViewById(R.id.name);
-            date = itemView.findViewById(R.id.date);
-            place_state = itemView.findViewById(R.id.place_state);
-            goto_place = itemView.findViewById(R.id.goto_place);
-            list_setting = itemView.findViewById(R.id.list_setting);
-            list_img_area= itemView.findViewById(R.id.list_img_area);
+            store_thumnail  = itemView.findViewById(R.id.store_thumnail);
+            title           = itemView.findViewById(R.id.title);
+            item_peoplecnt  = itemView.findViewById(R.id.item_peoplecnt);
+            name            = itemView.findViewById(R.id.name);
+            place_state     = itemView.findViewById(R.id.place_state);
+            address         = itemView.findViewById(R.id.address);
+            list_setting    = itemView.findViewById(R.id.list_setting);
+            list_img_area   = itemView.findViewById(R.id.list_img_area);
+            money_area      = itemView.findViewById(R.id.money_area);
+            store_kind_state= itemView.findViewById(R.id.store_kind_state);
+            total_item      = itemView.findViewById(R.id.total_item);
 
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
@@ -154,18 +167,6 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     Log.i("WorkplaceListAdapter", "pos : " + pos);
 
                     shardpref.putString("place_id", item.getId());
-                    shardpref.putString("place_name", item.getName());
-                    shardpref.putString("place_owner_id", item.getOwner_id());
-                    shardpref.putString("place_owner_name", item.getOwner_name());
-                    shardpref.putString("place_management_office", item.getManagement_office());
-                    shardpref.putString("place_address", item.getAddress());
-                    shardpref.putString("place_latitude", item.getLatitude());
-                    shardpref.putString("place_longitude",item.getLongitude());
-                    shardpref.putString("place_start_time", item.getStart_time());
-                    shardpref.putString("place_end_time", item.getEnd_time());
-                    shardpref.putString("place_img_path", item.getImg_path());
-                    shardpref.putString("place_start_date", item.getStart_date());
-                    shardpref.putString("place_created_at", item.getCreated_at());
 
                     if (mListener != null) {
                         mListener.onItemClick(view, pos);

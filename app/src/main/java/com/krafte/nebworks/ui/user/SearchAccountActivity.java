@@ -11,7 +11,11 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -186,11 +190,13 @@ public class SearchAccountActivity extends AppCompatActivity {
 
         binding.confirmPhoneBtn.setOnClickListener(view -> {
             if (binding.editConfirmNum.getText().toString().isEmpty()) {
-                Toast.makeText(this, "인증번호가 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
+                Toast_Nomal("인증번호가 입력되지 않았습니다");
+//                Toast.makeText(this, "인증번호가 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
             } else {
                 if (Sms_receiver.receiverNum.equals(SND_NUM) && Sms_receiver.receiverNum.equals(binding.editConfirmNum.getText().toString())) {
                     CertiSuccessTF = true;
-                    Toast.makeText(this, "인증번호가 확인되었습니다.", Toast.LENGTH_LONG).show();
+                    Toast_Nomal("인증번호가 확인되었습니다.");
+//                    Toast.makeText(this, "인증번호가 확인되었습니다.", Toast.LENGTH_LONG).show();
                     binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#dcdcdc"));
                     binding.confirmPhoneBtn.setText("인증완료");
                     binding.confirmPhoneBtn.setTextColor(Color.parseColor("#000000"));
@@ -248,7 +254,8 @@ public class SearchAccountActivity extends AppCompatActivity {
                     }
                 } else {
                     CertiSuccessTF = false;
-                    Toast.makeText(this, "유효하지 않은 인증번호 입니다.", Toast.LENGTH_LONG).show();
+                    Toast_Nomal("유효하지 않은 인증번호 입니다.");
+//                    Toast.makeText(this, "유효하지 않은 인증번호 입니다.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -355,11 +362,14 @@ public class SearchAccountActivity extends AppCompatActivity {
             dlog.i("약관동의여부 4: " + Uservice04);
             dlog.i("-----회원가입-----");
             if (Uname.isEmpty()) {
-                Toast.makeText(mContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                Toast_Nomal("이름을 입력해주세요.");
+//                Toast.makeText(mContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
             } else if (!CertiSuccessTF) {
-                Toast.makeText(mContext, "번호 인증이 필요합니다.", Toast.LENGTH_SHORT).show();
+                Toast_Nomal("번호 인증이 필요합니다.");
+//                Toast.makeText(mContext, "번호 인증이 필요합니다.", Toast.LENGTH_SHORT).show();
             } else if (!Uservice01 || !Uservice02 || !Uservice03 || !Uservice04) {
-                Toast.makeText(mContext, "필수약관에 동의해주세요", Toast.LENGTH_SHORT).show();
+                Toast_Nomal("필수약관에 동의해주세요");
+//                Toast.makeText(mContext, "필수약관에 동의해주세요", Toast.LENGTH_SHORT).show();
             } else {
                 UserCheck();
             }
@@ -557,8 +567,22 @@ public class SearchAccountActivity extends AppCompatActivity {
             myTimer.cancel();
             binding.confirmNumCounting.setText("0 초");
             binding.confirmNumCounting.setVisibility(View.GONE);
-            Toast.makeText(mContext, "인증번호의 유효기간이 만료되었습니다.", Toast.LENGTH_LONG).show();
+            Toast_Nomal("인증번호의 유효기간이 만료되었습니다.");
             SND_NUM = "";
         }
+    }
+
+    public void Toast_Nomal(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
+        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }

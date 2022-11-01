@@ -111,9 +111,6 @@ public class MyPlaceListActivity extends AppCompatActivity {
             pm.PlaceAddGo(mContext);
         });
 
-        binding.refreshBtn.setOnClickListener(v -> {
-            GetMyPlaceList(USER_INFO_ID);
-        });
     }
 
     public void LoginCheck(String account) {
@@ -214,14 +211,19 @@ public class MyPlaceListActivity extends AppCompatActivity {
                                                         jsonObject.getString("name"),
                                                         jsonObject.getString("owner_id"),
                                                         jsonObject.getString("owner_name"),
-                                                        jsonObject.getString("management_office"),
+                                                        jsonObject.getString("registr_num"),
+                                                        jsonObject.getString("store_kind"),
                                                         jsonObject.getString("address"),
                                                         jsonObject.getString("latitude"),
                                                         jsonObject.getString("longitude"),
+                                                        jsonObject.getString("pay_day"),
+                                                        jsonObject.getString("test_period"),
+                                                        jsonObject.getString("vacation_select"),
+                                                        jsonObject.getString("insurance"),
                                                         jsonObject.getString("start_time"),
                                                         jsonObject.getString("end_time"),
+                                                        jsonObject.getString("save_kind"),
                                                         jsonObject.getString("img_path"),
-                                                        jsonObject.getString("start_date"),
                                                         jsonObject.getString("total_cnt"),
                                                         jsonObject.getString("i_cnt"),
                                                         jsonObject.getString("o_cnt"),
