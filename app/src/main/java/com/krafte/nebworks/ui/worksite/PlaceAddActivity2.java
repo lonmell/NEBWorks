@@ -295,6 +295,8 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                             dlog.i("UpdatePlace jsonResponse : " + response.body());
                             try {
                                 if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                    shardpref.remove("place_name");
+                                    shardpref.remove("place_owner_id");
                                     if(i == 0){
                                         Toast_Nomal("임시저장 완료되었습니다.");
                                     }else{

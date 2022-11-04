@@ -55,6 +55,7 @@ public class MyPlaceListActivity extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_EMAIL = "";
+    String USER_INFO_AUTH = "";
 
     //사용자 정보 체크
     String id = "";
@@ -87,6 +88,7 @@ public class MyPlaceListActivity extends AppCompatActivity {
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
             return_page = shardpref.getString("return_page", "");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             binding.addPlace.setVisibility(View.GONE);
             dlog.i("------onCreate DataCheck-----");
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -148,7 +150,7 @@ public class MyPlaceListActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_SABUN", employee_no);
                                     shardpref.putString("USER_INFO_SOSOK", department);
                                     shardpref.putString("USER_INFO_JIKGUP", jikchk);
-                                    shardpref.putString("USER_INFO_PROFILE_URL", img_path);
+                                    shardpref.putString("USER_INFO_PROFILE", img_path);
                                     dlog.i("id : " + id);
                                     dlog.i("USER_INFO_ID : " +USER_INFO_ID);
                                 }
@@ -276,7 +278,11 @@ public class MyPlaceListActivity extends AppCompatActivity {
         if(return_page.equals("MoreActivity")){
             pm.MoreBack(mContext);
         }else if(return_page.equals("MainActivity")){
-            pm.MainBack(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else{
+                pm.Main2(mContext);
+            }
         }else{
             super.onBackPressed();
         }

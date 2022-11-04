@@ -140,7 +140,7 @@ public class Page2Fragment extends Fragment {
     String place_start_date = "";
     String place_created_at = "";
     String USER_INFO_AUTH = "";
-    String USER_INFO_PROFILE_URL = "";
+    String USER_INFO_PROFILE = "";
     String toDay = "";
     String writer_id = "";
 
@@ -178,7 +178,7 @@ public class Page2Fragment extends Fragment {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1"); //0-관리자 / 1- 근로자
-            USER_INFO_PROFILE_URL = shardpref.getString("USER_INFO_PROFILE_URL", "0");
+            USER_INFO_PROFILE = shardpref.getString("USER_INFO_PROFILE", "0");
             place_id = shardpref.getString("place_id", "0");
             place_name = shardpref.getString("place_name", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
@@ -230,7 +230,7 @@ public class Page2Fragment extends Fragment {
             });
             //--selectdate 변경
 
-            Glide.with(mContext).load(USER_INFO_PROFILE_URL)
+            Glide.with(mContext).load(USER_INFO_PROFILE)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(workimg);

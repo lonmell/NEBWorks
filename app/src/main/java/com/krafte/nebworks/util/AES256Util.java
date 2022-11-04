@@ -30,7 +30,7 @@ public class AES256Util {
         System.arraycopy(b, 0, keyBytes, 0, len);
         SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
         this.keySpec = keySpec;
-    } // 암호화
+    } // 암호키 생성
 
     public String encode(String str) throws UnsupportedEncodingException, NoSuchAlgorithmException
             , NoSuchPaddingException, InvalidKeyException
@@ -41,7 +41,7 @@ public class AES256Util {
         byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
         String enStr = new String(Base64.encodeToString(encrypted, 0));
         return enStr;
-    } //복호화
+    } // 암호화
 
     public String decode(String str) throws UnsupportedEncodingException, NoSuchAlgorithmException
             , NoSuchPaddingException, InvalidKeyException
@@ -51,5 +51,5 @@ public class AES256Util {
         c.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes("UTF-8")));
         byte[] byteStr = Base64.decode(str.getBytes(), 0);
         return new String(c.doFinal(byteStr), "UTF-8");
-    }
+    } //복호화
 }

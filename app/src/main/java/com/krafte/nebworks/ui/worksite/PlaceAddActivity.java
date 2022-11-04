@@ -15,8 +15,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -141,6 +139,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     //Shared
     String USER_INFO_EMAIL = "";
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
 
     //CheckData Param
     String placeName = "";
@@ -169,21 +168,23 @@ public class PlaceAddActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-
-
         try{
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
             gpsTracker = new GpsTracker(mContext);
             geocoder = new Geocoder(mContext);
 
             setBtnEvent();
+            if(USER_INFO_AUTH.equals("1")){
+                binding.area02.setVisibility(View.GONE);
+
+            }
             if (USER_INFO_EMAIL.equals("0")) {
                 Toast.makeText(mContext, "사용자 정보를 가져오지 못했습니다.\n다시 로그인하세요.", Toast.LENGTH_SHORT).show();
                 pm.LoginBack(mContext);
@@ -254,20 +255,21 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
 
         //사업자번호 체크
-        binding.inputbox02.addTextChangedListener(new TextWatcher() {
+        binding.inputbox02.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    if(!SearchRestrnum(binding.inputbox02.getText().toString())){
+                        binding.registrNumState.setText("국세청에 등록되지 않은 사업자등록번호입니다.");
+                        binding.registrNumState.setTextColor(R.color.red);
+                    }else{
+                        binding.registrNumState.setText("정상적으로 등록된 사업자 번호입니다.");
+                        binding.registrNumState.setTextColor(R.color.blue);
+                    }
+                }
             }
         });
+
         //매장분류
         binding.inputbox03.setOnClickListener(v -> {
             dlog.i("area03 click!");
@@ -564,11 +566,11 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         });
         //Debuge
-        if (dlog.isDebuggable(mContext)) {
-            return true;
-        } else {
+//        if (dlog.isDebuggable(mContext)) {
+//            return true;
+//        } else {
             return tax_type.equals("국세청에 등록되지 않은 사업자등록번호입니다.");
-        }
+//        }
     }
 
 
@@ -667,8 +669,6 @@ public class PlaceAddActivity extends AppCompatActivity {
 //                                    }
                                     if(i == 0){
                                         Toast_Nomal("임시저장 완료되었습니다.");
-                                    }else{
-                                        Toast_Nomal("매장 추가가 완료되었습니다.");
                                     }
                                     shardpref.putString("place_name", placeName);
                                     shardpref.putString("place_owner_id", USER_INFO_ID);

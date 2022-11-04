@@ -138,14 +138,15 @@
 
         <!-- main -->
         <activity android:name=".ui.main.MainFragment" />
-        <activity android:name=".ui.main.InstructionActivity" />
+        <activity android:name=".ui.main.MainFragment2" />
 
         <!--notify-->
         <activity android:name=".ui.notify.NotifyListActivity" />
 
         <!-- member -->
         <activity android:name=".ui.member.MemberManagement" />
-
+        <activity android:name=".ui.member.AuthSelectActivity" />
+        <activity android:name=".ui.member.AdddirectlyMember" />
 
         <!-- state -->
         <activity android:name=".ui.worksite.WorkState2Activity" />
@@ -157,6 +158,9 @@
         <activity android:name=".ui.worksite.PlaceAddWorkActivity" />
         <activity android:name=".ui.worksite.PlaceWorkDetailActivity" />
         <activity android:name=".ui.worksite.PlaceEditActivity" />
+        <activity android:name=".ui.worksite.PlaceEditActivity2" />
+        <activity android:name=".ui.worksite.PlaceSearchActivity" />
+
 
         <!-- Other -->
         <activity android:name=".ui.PinSelectLocationActivity" />
@@ -173,7 +177,9 @@
         <activity android:name=".ui.user.ChangePWActivity" />
         <activity android:name=".ui.user.ChangePWActivity2" />
 
-        <!-- calendar -->
+        <!-- career -->
+        <activity android:name=".ui.career.CareerActivity"
+            android:theme="@style/Theme.Kogas"/>
 
 
         <!-- 팝업 영역 -->
@@ -248,6 +254,11 @@
         <activity
             android:name=".pop.TermViewActivity"
             android:theme="@android:style/Theme.Dialog" />
+
+        <activity
+            android:name=".pop.MemberOption"
+            android:theme="@android:style/Theme.Dialog" />
+
     </application>
 
 </manifest>

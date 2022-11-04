@@ -282,9 +282,9 @@ public class IntroActivity extends AppCompatActivity {
                     shardpref.putString("USER_INFO_PHONE", GET_KAKAO_USER_PHONE);
                     shardpref.putString("USER_INFO_AGENCY", GET_KAKAO_USER_AGENCY);
                     shardpref.putString("USER_INFO_JOIN_DATE", GET_KAKAO_USER_JOIN_DATE);
-                    shardpref.putString("USER_INFO_SEX", GET_KAKAO_USER_SEX);
+                    shardpref.putString("USER_INFO_GENDER", GET_KAKAO_USER_SEX);
                     shardpref.putString("USER_INFO_SERVICE", GET_KAKAO_USER_SERVICE);
-                    shardpref.putString("USER_INFO_PROFILE_URL", GET_KAKAO_PROFILE_URL);
+                    shardpref.putString("USER_INFO_PROFILE", GET_KAKAO_PROFILE_URL);
                     shardpref.putString("USER_INFO_AGEROUNGE", GET_KAKAO_USER_AGEROUNGE);
                     shardpref.putString("USER_LOGIN_METHOD", "Kakao");
                     shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
@@ -335,9 +335,9 @@ public class IntroActivity extends AppCompatActivity {
         shardpref.putString("USER_INFO_BIRTH", "");
         shardpref.putString("USER_INFO_AGENCY", "");
         shardpref.putString("USER_INFO_JOIN_DATE", "");
-        shardpref.putString("USER_INFO_SEX", "");
+        shardpref.putString("USER_INFO_GENDER", "");
         shardpref.putString("USER_INFO_SERVICE", "");
-        shardpref.putString("USER_INFO_PROFILE_URL", String.valueOf(user.getPhotoUrl()));
+        shardpref.putString("USER_INFO_PROFILE", String.valueOf(user.getPhotoUrl()));
         shardpref.putString("USER_INFO_AGEROUNGE", "");
         shardpref.putString("USER_LOGIN_METHOD", "Google");
         shardpref.putBoolean("USER_LOGIN_CONFIRM", true);

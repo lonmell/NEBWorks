@@ -9,16 +9,22 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,18 +34,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.bottomsheet.StoreDivisionPopActivity;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
-import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
+import com.krafte.nebworks.dataInterface.PlaceEditInterface;
+import com.krafte.nebworks.dataInterface.PlaceListInterface;
+import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
+import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityAddplaceBinding;
+import com.krafte.nebworks.pop.WorkTimePicker;
 import com.krafte.nebworks.ui.PinSelectLocationActivity;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.GpsTracker;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -82,39 +90,28 @@ public class PlaceEditActivity extends AppCompatActivity {
     private static final int PINSELECT_LOCATION_ACTIVITY = 20000;
 
     //Other
-    GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
     PreferenceHelper shardpref;
     Dlog dlog = new Dlog();
-    DateCurrent dc = new DateCurrent();
-    ArrayList<String> mList;
-    Handler mHandler;
     RetrofitConnect rc = new RetrofitConnect();
 
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
-
     File file;
-    SimpleDateFormat dateFormat;
     @SuppressLint("SdCardPath")
     String BACKUP_PATH = "/sdcard/Download/heypass/";
     String ProfileUrl = "";
 
     Geocoder geocoder;
 
-    LocationManager locationManager;
     private Bitmap saveBitmap;
     String ImgfileMaker = "";
-    String[] test = new String[6];
     String b_stt = "";
     String tax_type = "";
 
     GpsTracker gpsTracker;
-    String SSID = "";
-    String ConnectNetwork = "";
-    double latitude = 0.1;
-    double longitube = 0.1;
+    //    double latitude = 0.1;
+//    double longitube = 0.1;
     String zipcode = "0";
+
 
     //시작시간
     int SelectStartTime = 1;
@@ -126,26 +123,43 @@ public class PlaceEditActivity extends AppCompatActivity {
     String EndTime01 = "-99";
     String EndTime02 = "-99";
 
-    //CheckData Param
-    String place_id = "";
-    String place_name = "";
-    String place_owner_id = "";
-    String place_owner_name = "";
-    String place_management_office = "";
-    String place_address = "";
-    String place_latitude = "";
-    String place_longitude = "";
-    String place_start_time = "";
-    String place_end_time = "";
-    String place_img_path = "";
-    String place_start_date = "";
-    String place_created_at = "";
-
-    String USER_INFO_ID = "";
+    //Shared
     String USER_INFO_EMAIL = "";
     String USER_INFO_AUTH = "";
+    String USER_INFO_ID = "";
 
+    //CheckData Param
+    String place_id = "";
+    String placeName = "";
+    String placeAddress = "";
+    String placeDtailAddress = "";
+    String place_starttime = "";
+    String place_endtime = "";
+    String payday = "";
+    String test_day = "";
+    String restday = "";
+    String place_kind = "";
+    String placeAddress_get = "";
+    boolean registrTF = false;
 
+    String name = "";
+    String registr_num = "";
+    String store_kind = "";
+    String address = "";
+    String latitude = "";
+    String longitude = "";
+    String pay_day = "";
+    String test_period = "";
+    String vacation_select = "";
+    String insurance = "";
+    String start_time = "";
+    String end_time = "";
+    String save_kind = "";
+    String img_path = "";
+    String start_date = "";
+    String SSIDName = "";
+
+    List<String> boheom = new ArrayList<>();
     //--매장 정보 수정할때
 
     @Override
@@ -159,30 +173,47 @@ public class PlaceEditActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        try{
+        try {
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
+            place_id = shardpref.getString("place_id", "-99");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "-99");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "-99");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-99");
 
-            place_id = shardpref.getString("place_id","0");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
-
-            shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub",1);
-
+            dlog.i("place_id : " + place_id);
+            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
             gpsTracker = new GpsTracker(mContext);
             geocoder = new Geocoder(mContext);
 
             setBtnEvent();
-            getPlaceData();
-        }catch (Exception e){
+            if (USER_INFO_EMAIL.equals("0")) {
+                Toast.makeText(mContext, "사용자 정보를 가져오지 못했습니다.\n다시 로그인하세요.", Toast.LENGTH_SHORT).show();
+                pm.LoginBack(mContext);
+            } else {
+                UserCheck(USER_INFO_EMAIL);
+            }
+            if(USER_INFO_AUTH.equals("1")){
+                binding.area02.setVisibility(View.GONE);
+
+            }
+            getPlaceContents();
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void setBtnEvent(){
+    boolean boheom01TF = false;
+    boolean boheom02TF = false;
+    boolean boheom03TF = false;
+    boolean boheom04TF = false;
+    boolean boheom05TF = false;
+
+    private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
             pm.PlaceList(mContext);
         });
@@ -194,15 +225,15 @@ public class PlaceEditActivity extends AppCompatActivity {
 //            intent.setAction(Intent.ACTION_GET_CONTENT);
 //            startActivityForResult(intent, GALLEY_CODE);
 //        });
-//        if(saveBitmap != null){
+//        if (saveBitmap != null) {
 //            binding.clearImg.setVisibility(View.VISIBLE);
 //            binding.imgPlus.setVisibility(View.GONE);
-//        }else{
+//        } else {
 //            binding.clearImg.setVisibility(View.GONE);
 //            binding.imgPlus.setVisibility(View.VISIBLE);
 //        }
 //        binding.clearImg.setOnClickListener(v -> {
-//            try{
+//            try {
 //                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
 //                saveBitmap.eraseColor(Color.TRANSPARENT);
 //                binding.profileSetimg.setImageBitmap(saveBitmap);
@@ -210,18 +241,21 @@ public class PlaceEditActivity extends AppCompatActivity {
 //                ProfileUrl = "";
 //                binding.clearImg.setVisibility(View.GONE);
 //                binding.imgPlus.setVisibility(View.VISIBLE);
-//            }catch (Exception e){
+//            } catch (Exception e) {
 //                dlog.i("clearImg Exception : " + e);
 //            }
-//
 //        });
-//
-        binding.addPlaceBtn.setOnClickListener(v -> {
-//            if(CheckData()){
-//                AddPlace();
-//            }
-        });
 
+        binding.addPlaceBtn.setOnClickListener(v -> {
+            if (CheckData()) {
+                AddPlace(1);
+            }
+        });
+        binding.save2btn.setOnClickListener(v -> {
+            if (CheckData()) {
+                AddPlace(0);
+            }
+        });
 
         binding.searchLocation.setOnClickListener(v -> {
             Intent i = new Intent(this, PinSelectLocationActivity.class);
@@ -229,91 +263,388 @@ public class PlaceEditActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         });
 
+        //사업자번호 체크
+        binding.inputbox02.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        //매장분류
+        binding.inputbox03.setOnClickListener(v -> {
+            dlog.i("area03 click!");
+            StoreDivisionPopActivity storedivi = new StoreDivisionPopActivity();
+            storedivi.show(getSupportFragmentManager(), "StoreDivisionPopActivity");
+            storedivi.setOnItemClickListener((v1, category) -> binding.inputbox03.setText(category));
+        });
+        //급여정산일
+        binding.inputbox05.setOnClickListener(v -> {
+
+        });
+
+        binding.boheomarea01.setOnClickListener(v -> {
+            if (!boheom01TF) {
+                boheom01TF = true;
+                boheom05TF = false;
+                boheom.add("고용보험");
+                boheom.remove("없음");
+                binding.boheom01.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+            } else {
+                boheom01TF = false;
+                boheom.remove("고용보험");
+                binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
+            }
+        });
+
+        binding.boheomarea02.setOnClickListener(v -> {
+            if (!boheom02TF) {
+                boheom02TF = true;
+                boheom05TF = false;
+                boheom.add("산재보험");
+                boheom.remove("없음");
+                binding.boheom02.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+            } else {
+                boheom02TF = false;
+                boheom.remove("산재보험");
+                binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
+            }
+        });
+
+        binding.boheomarea03.setOnClickListener(v -> {
+            if (!boheom03TF) {
+                boheom03TF = true;
+                boheom05TF = false;
+                boheom.add("국민연금");
+                boheom.remove("없음");
+                binding.boheom03.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+            } else {
+                boheom03TF = false;
+                boheom.remove("국민연금");
+                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
+            }
+        });
+
+        binding.boheomarea04.setOnClickListener(v -> {
+            if (!boheom04TF) {
+                boheom04TF = true;
+                boheom05TF = false;
+                boheom.add("건강보험");
+                boheom.remove("없음");
+                binding.boheom04.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+            } else {
+                boheom04TF = false;
+                boheom.remove("건강보험");
+                binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
+            }
+        });
+
+        binding.boheomarea05.setOnClickListener(v -> {
+            if (!boheom05TF) {
+                boheom01TF = false;
+                boheom02TF = false;
+                boheom03TF = false;
+                boheom04TF = false;
+                boheom05TF = true;
+                boheom.clear();
+                boheom.add("없음");
+                boheom.remove("없음");
+                binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom05.setBackgroundResource(R.drawable.resize_service_on);
+            } else {
+                boheom01TF = false;
+                boheom.clear();
+                binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
+            }
+        });
+
+        binding.inputbox08.setOnClickListener(v -> {
+            Intent intent = new Intent(this, WorkTimePicker.class);
+            intent.putExtra("timeSelect_flag", 4);
+            startActivity(intent);
+            overridePendingTransition(R.anim.translate_up, 0);
+        });
+        binding.inputbox09.setOnClickListener(v -> {
+            Intent intent = new Intent(this, WorkTimePicker.class);
+            intent.putExtra("timeSelect_flag", 5);
+            startActivity(intent);
+            overridePendingTransition(R.anim.translate_up, 0);
+        });
     }
-    private void getPlaceData() {
-        dlog.i("PlaceCheck place_id : " + place_id);
+
+    private void getPlaceContents() {
+        dlog.i("-----getPlaceContents-----");
+        dlog.i("place_id : " + place_id);
+        dlog.i("owner_id : " + USER_INFO_ID);
+        dlog.i("-----getPlaceContents-----");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceThisDataInterface.URL)
+                .baseUrl(PlaceListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        PlaceThisDataInterface api = retrofit.create(PlaceThisDataInterface.class);
-        Call<String> call = api.getData(place_id);
+        PlaceListInterface api = retrofit.create(PlaceListInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("getPlaceData jsonResponse length : " + response.body().length());
-                            dlog.i("getPlaceData jsonResponse : " + response.body());
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + response.body().length());
+                            dlog.i("GetPlaceList jsonResponse : " + response.body());
+                            try {
+                                //Array데이터를 받아올 때
+                                JSONArray Response = new JSONArray(response.body());
+                                name = Response.getJSONObject(0).getString("name");
+                                registr_num = Response.getJSONObject(0).getString("registr_num");
+                                store_kind = Response.getJSONObject(0).getString("store_kind");
+                                address = Response.getJSONObject(0).getString("address");
+                                latitude = Response.getJSONObject(0).getString("latitude");
+                                longitude = Response.getJSONObject(0).getString("longitude");
+
+                                pay_day = Response.getJSONObject(0).getString("pay_day");
+                                payday = Response.getJSONObject(0).getString("pay_day");
+
+                                test_period = Response.getJSONObject(0).getString("test_period");
+                                test_day = Response.getJSONObject(0).getString("test_period");
+
+                                vacation_select = Response.getJSONObject(0).getString("vacation_select");
+                                restday = Response.getJSONObject(0).getString("vacation_select");
+
+                                insurance = Response.getJSONObject(0).getString("insurance");
+
+                                start_time = Response.getJSONObject(0).getString("start_time");
+                                place_starttime = Response.getJSONObject(0).getString("start_time");
+                                end_time = Response.getJSONObject(0).getString("end_time");
+                                place_endtime = Response.getJSONObject(0).getString("end_time");
+
+                                save_kind = Response.getJSONObject(0).getString("save_kind");
+                                img_path = Response.getJSONObject(0).getString("img_path").equals("null") ? "" : Response.getJSONObject(0).getString("img_path");
+                                start_date = Response.getJSONObject(0).getString("start_date");
+                                SSIDName = Response.getJSONObject(0).getString("wifi_name");
+                                binding.inputbox01.setText(name);
+                                binding.inputbox02.setText(registr_num);
+                                binding.inputbox03.setText(store_kind);
+                                binding.inputbox04.setText(address);
+
+                                for (String str : insurance.split(",")) {
+                                    boheom.add(str.replace(" ", ""));
+                                    if (str.contains("고용보험")) {
+                                        boheom01TF = true;
+                                        boheom05TF = false;
+                                        binding.boheom01.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                                    } else if (str.contains("산재보험")) {
+                                        boheom02TF = true;
+                                        boheom05TF = false;
+                                        binding.boheom02.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                                    } else if (str.contains("국민연금")) {
+                                        boheom03TF = true;
+                                        boheom05TF = false;
+                                        binding.boheom03.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                                    } else if (str.contains("건강보험")) {
+                                        boheom04TF = true;
+                                        boheom05TF = false;
+                                        binding.boheom04.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                                    } else if (str.contains("없음")) {
+                                        boheom05TF = true;
+                                        binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
+                                        binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
+                                        binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
+                                        binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
+                                        binding.boheom05.setBackgroundResource(R.drawable.resize_service_on);
+                                    }
+                                }
+                                binding.inputbox08.setText(start_time);
+                                binding.inputbox09.setText(end_time);
+                                spinnerSetData();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    private void spinnerSetData() {
+
+        /*급여 정산날짜*/
+        ArrayList<String> stringCategory1 = new ArrayList<>();
+        stringCategory1.add("급여 정산날짜");
+        stringCategory1.add("매월 1일");
+        stringCategory1.add("매월 2일");
+        stringCategory1.add("매월 3일");
+        stringCategory1.add("매월 4일");
+        stringCategory1.add("매월 5일");
+        stringCategory1.add("매월 6일");
+        stringCategory1.add("매월 7일");
+        stringCategory1.add("매월 8일");
+        stringCategory1.add("매월 9일");
+        stringCategory1.add("매월 10일");
+        stringCategory1.add("매월 11일");
+        stringCategory1.add("매월 초");
+        stringCategory1.add("매월 중");
+        stringCategory1.add("매월 말");
+
+        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory1);
+        binding.inputbox05Spinner.setAdapter(select_filter1);
+        if (!pay_day.isEmpty()) {
+            for (int a = 0; a < stringCategory1.size(); a++) {
+                if (stringCategory1.get(a).equals(pay_day)) {
+                    binding.inputbox05.setText(stringCategory1.get(a));
+                    dlog.i("a : " + stringCategory1.get(a));
+                    binding.inputbox05Spinner.setSelection(a);
+                }
+            }
+        }
+        binding.inputbox05Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                dlog.i("pay_day : " + pay_day);
+                binding.inputbox05.setText(stringCategory1.get(i));
+                dlog.i("i : " + stringCategory1.get(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                binding.inputbox05.setText("매월 초");
+            }
+        });
+
+        /*수습기간*/
+        ArrayList<String> stringCategory4 = new ArrayList<>();
+        stringCategory4.add("수습기간");
+        stringCategory4.add("없음");
+        stringCategory4.add("1 개월");
+        stringCategory4.add("2 개월");
+        stringCategory4.add("3 개월");
+        stringCategory4.add("4 개월");
+
+        ArrayAdapter<String> select_filter4 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory4);
+        binding.inputbox06Spinner.setAdapter(select_filter4);
+
+        if (!test_period.isEmpty()) {
+            for (int a = 0; a < stringCategory4.size(); a++) {
+                if (stringCategory4.get(a).equals(test_period)) {
+                    binding.inputbox06.setText(stringCategory4.get(a));
+                    binding.inputbox06Spinner.setSelection(a);
+                }
+            }
+        }
+        binding.inputbox06Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                binding.inputbox06.setText(stringCategory4.get(i));
+                dlog.i("i : " + stringCategory4.get(i));
+            }
+
+            @Override
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                binding.inputbox06.setText("매월 초");
+            }
+        });
+
+
+        /*휴가*/
+        ArrayList<String> stringCategory5 = new ArrayList<>();
+        stringCategory5.add("휴가");
+        stringCategory5.add("없음");
+        stringCategory5.add("자유");
+        stringCategory5.add("월차");
+        stringCategory5.add("연차");
+
+        ArrayAdapter<String> select_filter5 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory5);
+        binding.inputbox07Spinner.setAdapter(select_filter5);
+        if (!vacation_select.isEmpty()) {
+            for (int a = 0; a < stringCategory5.size(); a++) {
+                if (stringCategory5.get(a).equals(vacation_select)) {
+                    binding.inputbox07.setText(stringCategory5.get(a));
+                    binding.inputbox07Spinner.setSelection(a);
+                }
+            }
+        }
+        binding.inputbox07Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                binding.inputbox07.setText(stringCategory5.get(i));
+                dlog.i("i : " + stringCategory5.get(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                if (!vacation_select.isEmpty()) {
+                    binding.inputbox07.setText(vacation_select);
+                } else {
+                    binding.inputbox07.setText("매월 초");
+                }
+            }
+        });
+    }
+
+    public void UserCheck(String account) {
+        dlog.i("UserCheck account : " + account);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(account);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
+                            dlog.i("UserCheck jsonResponse : " + response.body());
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
-                                    shardpref.putString("place_name", Response.getJSONObject(0).getString("name"));
-                                    shardpref.putString("place_owner_id", Response.getJSONObject(0).getString("owner_id"));
-                                    shardpref.putString("place_owner_name", Response.getJSONObject(0).getString("owner_name"));
-                                    shardpref.putString("place_management_office", Response.getJSONObject(0).getString("management_office"));
-                                    shardpref.putString("place_address", Response.getJSONObject(0).getString("address"));
-                                    shardpref.putString("place_latitude", Response.getJSONObject(0).getString("latitude"));
-                                    shardpref.putString("place_longitude", Response.getJSONObject(0).getString("longitude"));
-                                    shardpref.putString("place_start_time", Response.getJSONObject(0).getString("start_time"));
-                                    shardpref.putString("place_end_time", Response.getJSONObject(0).getString("end_time"));
-                                    shardpref.putString("place_img_path", Response.getJSONObject(0).getString("img_path"));
-                                    shardpref.putString("place_start_date", Response.getJSONObject(0).getString("start_date"));
-                                    shardpref.putString("place_created_at", Response.getJSONObject(0).getString("created_at"));
+                                    String id = Response.getJSONObject(0).getString("id");
+                                    String name = Response.getJSONObject(0).getString("name");
+                                    String img_path = Response.getJSONObject(0).getString("img_path");
 
-                                    place_name = shardpref.getString("place_name", "0");
-                                    place_owner_id = shardpref.getString("place_owner_id", "0");
-                                    place_owner_name = shardpref.getString("place_owner_name", "0");
-                                    place_management_office = shardpref.getString("place_management_office", "0");
-                                    place_address = shardpref.getString("place_address", "0");
-                                    place_latitude = shardpref.getString("place_latitude", "0");
-                                    place_longitude = shardpref.getString("place_longitude", "0");
-                                    place_start_time = shardpref.getString("place_start_time", "0");
-                                    place_end_time = shardpref.getString("place_end_time", "0");
-                                    place_img_path = shardpref.getString("place_img_path", "0");
-                                    place_start_date = shardpref.getString("place_start_date", "0");
-                                    place_created_at = shardpref.getString("place_created_at", "0");
-                                    USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-                                    USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-
-                                    if(!place_img_path.isEmpty()){
-                                        binding.clearImg.setVisibility(View.VISIBLE);
-                                        binding.imgPlus.setVisibility(View.GONE);
-                                    }else{
-                                        binding.clearImg.setVisibility(View.GONE);
-                                        binding.imgPlus.setVisibility(View.VISIBLE);
+                                    try {
+                                        dlog.i("------UserCheck-------");
+                                        dlog.i("프로필 사진 url : " + img_path);
+                                        dlog.i("이메일 : " + account);
+                                        dlog.i("성명 : " + name);
+                                        dlog.i("------UserCheck-------");
+                                    } catch (Exception e) {
+                                        dlog.i("UserCheck Exception : " + e);
                                     }
-
-                                    Glide.with(mContext).load(place_img_path)
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .placeholder(R.drawable.no_image)
-                                            .skipMemoryCache(true)
-                                            .into(binding.profileSetimg);
-
-                                    if (USER_INFO_ID.equals(place_owner_id)) {
-                                        USER_INFO_AUTH = "0";
-                                    } else {
-                                        USER_INFO_AUTH = "1";
-                                    }
-
-                                    dlog.i("place_owner_id : " + place_owner_id);
-                                    dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-                                    dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-                                    shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-
-                                    ProfileUrl = place_img_path;
-//                                    binding.storeNameInputBox.setText(place_name);
-//                                    binding.storeNameInputBox1.setText(place_management_office);
-//                                    binding.popText14.setText(place_address);
-//                                    binding.inputWorkstartDay.setText(place_start_date);
-//                                    latitude = Double.parseDouble(place_latitude);
-//                                    longitube = Double.parseDouble(place_longitude);
-//                                    binding.worktime01Select.setText(place_start_time.length() >= 5?place_start_time.substring(0,5):place_start_time);
-//                                    binding.worktime02Select.setText(place_end_time.length() >= 5?place_end_time.substring(0,5):place_end_time);
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -331,108 +662,234 @@ public class PlaceEditActivity extends AppCompatActivity {
         });
     }
 
-    public void AddPlace() {
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(PlaceEditInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
-//        String placeAddress_get = place_address;
-//        Call<String> call = api.getData(place_id,place_name,place_management_office,placeAddress_get,String.valueOf(latitude),String.valueOf(longitube),place_start_time,place_end_time,ProfileUrl,place_start_date);
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    runOnUiThread(() -> {
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-//                            dlog.i("LoginCheck jsonResponse : " + response.body());
-//                            try {
-//                                if(!response.body().equals("[]") && response.body().replace("\"","").equals("success")){
-//                                    if(!ProfileUrl.isEmpty() && saveBitmap != null){
+    private boolean SearchRestrnum(String registr_num) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RegistrSearchInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        RegistrSearchInterface api = retrofit.create(RegistrSearchInterface.class);
+        Call<String> call = api.getData(registr_num);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                dlog.e("SearchRestrnum function START");
+                dlog.e("response 1: " + response.isSuccessful());
+                dlog.e("response 2: " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    String jsonResponse = rc.getBase64decode(String.valueOf(response.body()));
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        b_stt = Response.getJSONObject(0).getString("b_stt");
+                        tax_type = Response.getJSONObject(0).getString("tax_type");
+                        dlog.i("response.body() : " + response.body());
+                        dlog.i("Response : " + Response);
+                        dlog.i("b_no : " + Response.getJSONObject(0).getString("b_no"));
+                        dlog.i("b_stt : " + Response.getJSONObject(0).getString("b_stt"));
+                        dlog.i("b_stt_cd : " + Response.getJSONObject(0).getString("b_stt_cd"));
+                        dlog.i("tax_type : " + Response.getJSONObject(0).getString("tax_type"));
+                        dlog.i("tax_type_cd : " + Response.getJSONObject(0).getString("tax_type_cd"));
+                        dlog.i("end_dt : " + Response.getJSONObject(0).getString("end_dt"));
+                        dlog.i("utcc_yn : " + Response.getJSONObject(0).getString("utcc_yn"));
+                        dlog.i("tax_type_change_dt : " + Response.getJSONObject(0).getString("tax_type_change_dt"));
+                        dlog.i("invoice_apply_dt : " + Response.getJSONObject(0).getString("invoice_apply_dt"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+
+        });
+        //Debuge
+        if (dlog.isDebuggable(mContext)) {
+            return true;
+        } else {
+            return tax_type.equals("국세청에 등록되지 않은 사업자등록번호입니다.");
+        }
+    }
+
+
+    private boolean CheckData() {
+        dlog.i("----------CheckData----------");
+        placeName = binding.inputbox01.getText().toString();
+        placeAddress = binding.inputbox04.getText().toString();
+        placeDtailAddress = binding.inputbox041.getText().toString();
+        payday = binding.inputbox05.getText().toString();
+        test_day = binding.inputbox06.getText().toString();
+        restday = binding.inputbox07.getText().toString();
+        placeAddress_get = placeAddress + " " + placeDtailAddress;
+        registr_num = binding.inputbox02.getText().toString();
+        place_kind = binding.inputbox03.getText().toString();
+
+        if (SearchRestrnum(binding.inputbox02.getText().toString())) {
+            registrTF = true;
+            binding.inputbox02.setTextColor(R.color.blue);
+        } else {
+            registrTF = false;
+            binding.inputbox02.setTextColor(R.color.red);
+        }
+        if (boheom.size() == 0) {
+            boheom.add("없음");
+        }
+        dlog.i("매장이미지 : " + ProfileUrl);
+        dlog.i("매장명 : " + placeName);
+        dlog.i("매장주소 : " + placeAddress);
+        dlog.i("매장 상세주소 : " + placeDtailAddress);
+        dlog.i("매장분류 : " + place_kind);
+        dlog.i("위도 : " + latitude);
+        dlog.i("경도 : " + longitude);
+        dlog.i("급여정산일 : " + payday);
+        dlog.i("수습기간 : " + test_day);
+        dlog.i("휴가기간 : " + restday);
+        dlog.i("보험 : " + boheom);
+        dlog.i("주 운영 시작시간 : " + place_starttime);
+        dlog.i("주 운영 마감시간 : " + place_endtime);
+        dlog.i("----------CheckData----------");
+
+        if (placeName.isEmpty()) {
+            Toast.makeText(mContext, "매장 명을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (placeAddress.isEmpty()) {
+            Toast.makeText(mContext, "매장 주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (payday.isEmpty()) {
+            Toast.makeText(mContext, "급여정산일을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (test_day.isEmpty()) {
+            Toast.makeText(mContext, "수습기간을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (restday.isEmpty()) {
+            Toast.makeText(mContext, "휴가기간을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (place_starttime.isEmpty()) {
+            Toast.makeText(mContext, "주 운영 시작시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (place_endtime.isEmpty()) {
+            Toast.makeText(mContext, "주 운영 마감시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (USER_INFO_ID.equals("0")) {
+            Toast.makeText(mContext, "사용자 정보를 가져올수 없습니다.", Toast.LENGTH_SHORT).show();
+            pm.LoginBack(mContext);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void AddPlace(int i) {
+        //i = 0:임시저장 / 1:저장
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceEditInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
+        Call<String> call = api.getData(place_id, placeName, registr_num, place_kind, placeAddress_get
+                , String.valueOf(latitude), String.valueOf(longitude), payday, test_day, restday
+                , (String.valueOf(boheom).replace("[", "").replace("]", "")), place_starttime, place_endtime, ProfileUrl, String.valueOf(i), start_date, SSIDName);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
+                            dlog.i("LoginCheck jsonResponse : " + response.body());
+                            try {
+
+                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+//                                    if (saveBitmap != null) {
 //                                        saveBitmapAndGetURI();
 //                                    }
-//                                    Toast.makeText(mContext,"매장 수정이 완료되었습니다.",Toast.LENGTH_SHORT).show();
+                                    if (i == 0) {
+                                        Toast_Nomal("임시저장 완료되었습니다.");
+                                    }
+                                    pm.PlaceEdit2Go(mContext);
 //                                    pm.PlaceList(mContext);
-//                                }
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                dlog.e("에러1 = " + t.getMessage());
-//            }
-//        });
+                                } else if (!response.body().equals("[]") && response.body().replace("\"", "").equals("duplicate")) {
+                                    Toast_Nomal("중복되는 데이터가 있습니다.");
+                                } else {
+                                    Toast_Nomal("추가 매장을 생성하지 못했습니다.");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
-        ImgfileMaker = ImageNameMaker();
-
-//        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
-//        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
-//        dlog.i("Min : " + shardpref.getInt("Min", 0));
-//        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-//        int hourOfDay = shardpref.getInt("Hour", 0);
-//        int minute = shardpref.getInt("Min", 0);
 //
-//        dlog.i("timeSelect_flag : " + timeSelect_flag);
-//        if (timeSelect_flag == 4) {
-//            StartTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-//            shardpref.remove("timeSelect_flag");
-//            shardpref.remove("Hour");
-//            shardpref.remove("Min");
-//            if (hourOfDay != 0) {
-//                String ampm = "";
-//                if (Integer.parseInt(StartTime01) < 12) {
-//                    ampm = " AM";
-//                    SelectStartTime = 1;
-//                } else {
-//                    ampm = " PM";
-//                    SelectStartTime = 2;
-//                }
-//                binding.worktime01Select.setText(StartTime01 + ":" + StartTime02 + ampm);
-//                place_start_time = StartTime01 + ":" + StartTime02;
-//                imm.hideSoftInputFromWindow(binding.worktime01Select.getWindowToken(), 0);
-//            }
-//        } else if (timeSelect_flag == 5) {
-//            EndTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-//            shardpref.remove("timeSelect_flag");
-//            shardpref.remove("Hour");
-//            shardpref.remove("Min");
-//            if (hourOfDay != 0) {
-//                String ampm = "";
-//                if (Integer.parseInt(EndTime01) < 12) {
-//                    ampm = " AM";
-//                    SelectEndTime = 1;
-//                } else {
-//                    ampm = " PM";
-//                    SelectEndTime = 2;
-//                }
-//                binding.worktime02Select.setText(EndTime01 + ":" + EndTime02 + ampm);
-//                place_end_time = EndTime01 + ":" + EndTime02;
-//                imm.hideSoftInputFromWindow(binding.worktime02Select.getWindowToken(), 0);
-//            }
+//        ImgfileMaker = ImageNameMaker();
 //
-//        }else if (timeSelect_flag == 6) {
-//            //-- DatePickerActivity에서 받아오는 값
-//            String getDatePicker = shardpref.getString("vDateGetDate","");
-//            binding.inputWorkstartDay.setText(getDatePicker);
-//            shardpref.remove("vDateGetDate");
-//        }
+        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
+        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
+        dlog.i("Min : " + shardpref.getInt("Min", 0));
+        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
+        int hourOfDay = shardpref.getInt("Hour", 0);
+        int minute = shardpref.getInt("Min", 0);
+
+        dlog.i("timeSelect_flag : " + timeSelect_flag);
+        if (timeSelect_flag == 4) {
+            StartTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+            shardpref.remove("timeSelect_flag");
+            shardpref.remove("Hour");
+            shardpref.remove("Min");
+            if (hourOfDay != 0) {
+                String ampm = "";
+                if (Integer.parseInt(StartTime01) < 12) {
+                    ampm = " AM";
+                    SelectStartTime = 1;
+                } else {
+                    ampm = " PM";
+                    SelectStartTime = 2;
+                }
+                binding.inputbox08.setText(StartTime01 + ":" + StartTime02 + ampm);
+                place_starttime = StartTime01 + ":" + StartTime02;
+                imm.hideSoftInputFromWindow(binding.inputbox08.getWindowToken(), 0);
+            }
+        } else if (timeSelect_flag == 5) {
+            EndTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+            shardpref.remove("timeSelect_flag");
+            shardpref.remove("Hour");
+            shardpref.remove("Min");
+            if (hourOfDay != 0) {
+                String ampm = "";
+                if (Integer.parseInt(EndTime01) < 12) {
+                    ampm = " AM";
+                    SelectEndTime = 1;
+                } else {
+                    ampm = " PM";
+                    SelectEndTime = 2;
+                }
+                binding.inputbox09.setText(EndTime01 + ":" + EndTime02 + ampm);
+                place_endtime = EndTime01 + ":" + EndTime02;
+                imm.hideSoftInputFromWindow(binding.inputbox09.getWindowToken(), 0);
+            }
+
+        }
 
         dlog.i("onResume Area");
         String getlatitude = shardpref.getString("pin_latitude", "0.0");
@@ -442,12 +899,12 @@ public class PlaceEditActivity extends AppCompatActivity {
         String getstore_address = shardpref.getString("pin_store_address", "");
         String getstore_addressdetail = shardpref.getString("pin_store_addressdetail", "");
 
-        if(!getstore_address.isEmpty()){
-//            binding.popText14.setText(getstore_address);
-//            binding.popText15.setText(getstore_addressdetail);
+        if (!getstore_address.isEmpty()) {
+            binding.inputbox04.setText(getstore_address);
+            binding.inputbox041.setText(getstore_addressdetail);
 
-            latitude = Double.parseDouble(getlatitude);
-            longitube = Double.parseDouble(getlongitube);
+            latitude = getlatitude;
+            longitude = getlongitube;
 
             shardpref.remove("pin_store_address");
             shardpref.remove("pin_zipcode");
@@ -458,42 +915,9 @@ public class PlaceEditActivity extends AppCompatActivity {
 
     }
 
-//    private boolean CheckData(){
-//        dlog.i("----------CheckData----------");
-//        place_management_office = binding.storeNameInputBox.getText().toString();
-//        place_name = binding.storeNameInputBox1.getText().toString();
-//        place_address = binding.popText14.getText().toString();
-//        place_start_date = binding.inputWorkstartDay.getText().toString();
-//        dlog.i("ProfileUrl : " + ProfileUrl);
-//        dlog.i("manageplaceName : " + place_management_office);
-//        dlog.i("placeName : " + place_name);
-//        dlog.i("placeAddress : " + place_address);
-//        dlog.i("latitude : " + latitude);
-//        dlog.i("longitube : " + longitube);
-//        dlog.i("place_starttime : " + place_start_time);
-//        dlog.i("place_endtime : " + place_end_time);
-//        dlog.i("start_date : " + place_start_date);
-//        dlog.i("----------CheckData----------");
-//
-//        if(place_management_office.isEmpty()){
-//            Toast.makeText(mContext,"관리소 명을 입력해주세요.",Toast.LENGTH_SHORT).show();
-//            return false;
-//        }else if(place_name.isEmpty()){
-//            Toast.makeText(mContext,"매장 명을 입력해주세요.",Toast.LENGTH_SHORT).show();
-//            return false;
-//        }else if(place_address.isEmpty()){
-//            Toast.makeText(mContext,"매장 주소를 입력해주세요.",Toast.LENGTH_SHORT).show();
-//            return false;
-//        }else if(place_start_date.isEmpty()){
-//            Toast.makeText(mContext,"작업 시작일을 입력해주세요.",Toast.LENGTH_SHORT).show();
-//            return false;
-//        }else{
-//            return true;
-//        }
-//    }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
     }
 
@@ -544,9 +968,9 @@ public class PlaceEditActivity extends AppCompatActivity {
                     dlog.i("RESULT_OK 1 : " + GetData.substring(0, 5));
                     dlog.i("RESULT_OK 2 : " + GetData.substring(7));
                     zipcode = GetData.substring(0, 5);
-//                    binding.popText14.setText(GetData.substring(7));
-//                    latitude = findGeoPoint_lat(mContext, binding.popText14.getText().toString());
-//                    longitube = findGeoPoint_lon(mContext, binding.popText14.getText().toString());
+                    binding.inputbox04.setText(GetData.substring(7));
+//                    latitude = findGeoPoint_lat(mContext, binding.inputbox04.getText().toString() + " " + PlaceAddressDetail);
+//                    longitube = findGeoPoint_lon(mContext, binding.inputbox04.getText().toString() + " " + PlaceAddressDetail);
                 }
             }
             binding.loginAlertText.setVisibility(View.GONE);
@@ -803,4 +1227,19 @@ public class PlaceEditActivity extends AppCompatActivity {
         return 0;
     }
     /*지오 코딩용 소스 (예비용) - 주소 >> 위도,경도로 변경하는 소스  END*/
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
+
 }

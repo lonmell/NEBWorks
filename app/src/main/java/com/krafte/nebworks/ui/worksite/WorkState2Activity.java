@@ -77,6 +77,7 @@ public class WorkState2Activity extends AppCompatActivity {
     PreferenceHelper shardpref;
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
+    String USER_INFO_AUTH = "";
     String place_id;
     String place_name;
     String userthumnail = "";
@@ -179,6 +180,7 @@ public class WorkState2Activity extends AppCompatActivity {
 
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
         gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
         place_id = shardpref.getString("place_id", "");
@@ -333,7 +335,11 @@ public class WorkState2Activity extends AppCompatActivity {
         if (view.getId() == R.id.out_store) {
             pm.PlaceList(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {
-            pm.MainBack(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else{
+                pm.Main2(mContext);
+            }
         } else if (view.getId() == R.id.bottom_navigation02) {
             pm.PlaceWorkGo(mContext);
         } else if (view.getId() == R.id.bottom_navigation03) {

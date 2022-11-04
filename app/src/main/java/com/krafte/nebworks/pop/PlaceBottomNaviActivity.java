@@ -18,7 +18,6 @@ import androidx.fragment.app.FragmentManager;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.PlaceDelInterface;
-import com.krafte.nebworks.dataInterface.TaskDelInterface;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -79,7 +78,7 @@ public class PlaceBottomNaviActivity extends Activity {
         shardpref = new PreferenceHelper(mContext);
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-99");
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
         place_id = shardpref.getString("place_id", "-1");
         make_kind = shardpref.getInt("make_kind", 0);

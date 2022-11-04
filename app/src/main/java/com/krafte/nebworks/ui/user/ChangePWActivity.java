@@ -21,12 +21,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.dataInterface.UserSaveInterface;
 import com.krafte.nebworks.databinding.ActivityChangepwBinding;
+import com.krafte.nebworks.util.AES256Util;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,6 +67,7 @@ public class ChangePWActivity extends AppCompatActivity {
     //Other
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
+    AES256Util aes256Util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +81,11 @@ public class ChangePWActivity extends AppCompatActivity {
         }
         mContext = this;
         setBtnEvent();
-
+        try {
+            aes256Util = new AES256Util("kraftmysecretkey");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
@@ -155,7 +169,7 @@ public class ChangePWActivity extends AppCompatActivity {
     private Boolean check_validation(String password) {
         // 비밀번호 유효성 검사식1 : 숫자, 특수문자가 포함되어야 한다.
 //        String val_symbol = "([0-9].*[!,@,#,^,&,*,(,)])|([!,@,#,^,&,*,(,)].*[0-9])";
-        String val_symbol = "[a-zA-Z0-9]{8}$";
+        String val_symbol = "[a-zA-Z0-9]*$";
         // 비밀번호 유효성 검사식2 : 영문자 대소문자가 적어도 하나씩은 포함되어야 한다.
 //        String val_alpha = "([a-z].*[A-Z])|([A-Z].*[a-z])";
         // 정규표현식 컴파일
@@ -178,6 +192,15 @@ public class ChangePWActivity extends AppCompatActivity {
     }
 
     public void SaveUser() {
+        USER_INFO_PW = changePw2;
+        try {
+            USER_INFO_PW = aes256Util.encode("[kraftmysecretkey]" + USER_INFO_PW + "["+R.string.kakao_native_key+"]");
+        } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
+                | NoSuchPaddingException | IllegalBlockSizeException
+                | NoSuchAlgorithmException | BadPaddingException
+                | InvalidKeyException e) {
+            e.printStackTrace();
+        }
         dlog.i("------SaveUser-------");
         dlog.i("USER ID : " + USER_INFO_ID);
         dlog.i("프로필 사진 url : " + USER_INFO_IMG);
@@ -192,7 +215,7 @@ public class ChangePWActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserSaveInterface api = retrofit.create(UserSaveInterface.class);
-        Call<String> call = api.getData(USER_INFO_ID, USER_INFO_NAME, USER_INFO_EMAIL, changePw2, USER_INFO_PHONE, USER_INFO_GENDER, USER_INFO_IMG);
+        Call<String> call = api.getData(USER_INFO_ID, USER_INFO_NAME, USER_INFO_EMAIL, USER_INFO_PW, USER_INFO_PHONE, USER_INFO_GENDER, USER_INFO_IMG);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override

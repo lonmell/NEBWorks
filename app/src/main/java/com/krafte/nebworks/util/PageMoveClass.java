@@ -6,11 +6,14 @@ import android.content.Intent;
 import com.krafte.nebworks.ui.PushActivity;
 import com.krafte.nebworks.ui.approval.TaskApprovalDetail;
 import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
+import com.krafte.nebworks.ui.career.CareerActivity;
 import com.krafte.nebworks.ui.feed.FeedAddActivity;
 import com.krafte.nebworks.ui.feed.FeedDetailActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
 import com.krafte.nebworks.ui.login.LoginActivity;
 import com.krafte.nebworks.ui.main.MainFragment;
+import com.krafte.nebworks.ui.main.MainFragment2;
+import com.krafte.nebworks.ui.member.AdddirectlyMember;
 import com.krafte.nebworks.ui.member.AuthSelectActivity;
 import com.krafte.nebworks.ui.member.MemberManagement;
 import com.krafte.nebworks.ui.notify.NotifyListActivity;
@@ -28,7 +31,9 @@ import com.krafte.nebworks.ui.worksite.PlaceAddActivity;
 import com.krafte.nebworks.ui.worksite.PlaceAddActivity2;
 import com.krafte.nebworks.ui.worksite.PlaceAddWorkActivity;
 import com.krafte.nebworks.ui.worksite.PlaceEditActivity;
+import com.krafte.nebworks.ui.worksite.PlaceEditActivity2;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
+import com.krafte.nebworks.ui.worksite.PlaceSearchActivity;
 import com.krafte.nebworks.ui.worksite.PlaceWorkDetailActivity;
 import com.krafte.nebworks.ui.worksite.WorkState2Activity;
 
@@ -52,19 +57,21 @@ public class PageMoveClass implements MovePage {
     }
 
     @Override
-    public void MainGo(Context context) {
+    public void Main(Context context) {
         Intent intent = new Intent(context, MainFragment.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
     @Override
-    public void MainBack(Context context) {
-        Intent intent = new Intent(context, MainFragment.class);
+    public void Main2(Context context) {
+        Intent intent = new Intent(context, MainFragment2.class);
         context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
+
 
     @Override
     public void Push(Context context){
@@ -241,8 +248,8 @@ public class PageMoveClass implements MovePage {
     }
 
     @Override
-    public void PlaceEidtGo(Context context) {
-        Intent intent = new Intent(context, PlaceEditActivity.class);
+    public void PlaceEdit2Go(Context context) {
+        Intent intent = new Intent(context, PlaceEditActivity2.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -354,6 +361,15 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
+    @Override
+    public void PlaceSearch(Context context) {
+        Intent intent = new Intent(context, PlaceSearchActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
     @Override
     public void UserPlsceMapGo(Context context) {
         Intent intent = new Intent(context, UserPlaceMapActivity.class);
@@ -391,7 +407,14 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
-
+    //--ui.career
+    @Override
+    public void Career(Context context) {
+        Intent intent = new Intent(context, CareerActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
     //--ui.BottomNavi
     @Override
     public void MoreGo(Context context) {
@@ -429,6 +452,15 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
+    @Override
+    public void DirectAddMember(Context context) {
+        Intent intent = new Intent(context, AdddirectlyMember.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
 
 
 }

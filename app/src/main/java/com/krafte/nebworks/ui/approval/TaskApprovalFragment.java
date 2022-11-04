@@ -153,14 +153,22 @@ public class TaskApprovalFragment extends AppCompatActivity {
         }
 
         menu.setOnClickListener(v -> {
-            pm.MainBack(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else{
+                pm.Main2(mContext);
+            }
         });
     }
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
         shardpref.putInt("SELECT_POSITION",0);
-        pm.MainBack(mContext);
+        if(USER_INFO_AUTH.equals("0")){
+            pm.Main(mContext);
+        }else{
+            pm.Main2(mContext);
+        }
     }
 
     @Override

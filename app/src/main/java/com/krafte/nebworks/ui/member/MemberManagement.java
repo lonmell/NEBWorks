@@ -98,7 +98,6 @@ public class MemberManagement extends AppCompatActivity {
         returnPage = shardpref.getString("returnPage", "");
         shardpref.putString("returnPage", TAG);
         dlog.i("USER_INFO_NAME:  " + USER_INFO_NAME);
-        binding.bottomNavigation.setVisibility(View.GONE);
     }
 
     @Override
@@ -182,7 +181,11 @@ public class MemberManagement extends AppCompatActivity {
         } else if (view.getId() == R.id.notice) {
 //            pm.EmployeeNotifyListL(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {
-            pm.MainBack(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else{
+                pm.Main2(mContext);
+            }
         } else if (view.getId() == R.id.bottom_navigation02) {
             pm.PlaceWorkBack(mContext);
         } else if (view.getId() == R.id.bottom_navigation03) {
@@ -197,7 +200,11 @@ public class MemberManagement extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            pm.MainBack(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else{
+                pm.Main2(mContext);
+            }
         });
     }
 
@@ -209,7 +216,7 @@ public class MemberManagement extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        pm.MainBack(mContext);
+        pm.Main(mContext);
     }
 
 }

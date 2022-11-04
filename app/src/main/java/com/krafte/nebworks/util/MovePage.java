@@ -12,19 +12,22 @@ public interface MovePage {
     /*Activity*/
     void LoginBack(Context context);
 
-    void MainGo(Context context);
-
     void MyPlsceGo(Context context);
 
     void MyPlsceBack(Context context);
 
     void UserDel(Context context);
 
+    void Main(Context context);
+
+    //--ui.career
+    void Career(Context context);
+
     void MoreGo(Context context);
 
     void MoreBack(Context context);
 
-    void MainBack(Context context);
+    void Main2(Context context);
 
     void Push(Context context);
 
@@ -75,7 +78,7 @@ public interface MovePage {
 
     void PlaceAdd2Go(Context context);
 
-    void PlaceEidtGo(Context context);
+    void PlaceEdit2Go(Context context);
 
     void PlaceEditGo(Context context);
 
@@ -106,6 +109,8 @@ public interface MovePage {
 
     void ProfileEditGo(Context context);
 
+    void PlaceSearch(Context context);
+
     void UserPlsceMapGo(Context context);
 
     void UserPlsceMapBack(Context context);
@@ -114,4 +119,6 @@ public interface MovePage {
     void MemberGo(Context context);
 
     void AuthSelect(Context context);
+
+    void DirectAddMember(Context context);
 }

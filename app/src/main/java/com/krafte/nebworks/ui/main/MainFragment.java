@@ -23,8 +23,8 @@ import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
 import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
-import com.krafte.nebworks.ui.naviFragment.CalendarFragment;
 import com.krafte.nebworks.ui.naviFragment.HomeFragment;
+import com.krafte.nebworks.ui.naviFragment.MemberFragment;
 import com.krafte.nebworks.ui.naviFragment.MoreFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkgotoFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkstatusFragment;
@@ -37,7 +37,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/*
+* 점주용 메인페이지 프래그먼트
+* */
 public class MainFragment extends AppCompatActivity {
     private static final String TAG = "TaskApprovalFragment";
     private ActivityMainfragmentBinding binding;
@@ -46,8 +48,7 @@ public class MainFragment extends AppCompatActivity {
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     //BottomNavigation
-    ImageView home_icon,worktogo_icon,workstatus_icon,more_icon;
-    TextView home_tv,worktogo_tv,workstatus_tv,more_tv;
+    ImageView bottom_icon01, bottom_icon02, bottom_icon03, bottom_icon04, bottom_icon05;
 
     // shared 저장값
     PreferenceHelper shardpref;
@@ -88,7 +89,7 @@ public class MainFragment extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
 
-        try{
+        try {
             icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
@@ -97,35 +98,37 @@ public class MainFragment extends AppCompatActivity {
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
-            SELECT_POSITION_sub =  shardpref.getInt("SELECT_POSITION_sub", 0);
+            SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
             return_page = shardpref.getString("return_page", "");
             store_no = shardpref.getString("store_no", "");
             shardpref.putString("returnPage", "BusinessApprovalActivity");
 
-            home_icon = binding.getRoot().findViewById(R.id.home_icon);
-            worktogo_icon = binding.getRoot().findViewById(R.id.worktogo_icon);
-            workstatus_icon = binding.getRoot().findViewById(R.id.workstatus_icon);
-            more_icon = binding.getRoot().findViewById(R.id.more_icon);
+            bottom_icon01 = binding.getRoot().findViewById(R.id.bottom_icon01);
+            bottom_icon02 = binding.getRoot().findViewById(R.id.bottom_icon02);
+            bottom_icon03 = binding.getRoot().findViewById(R.id.bottom_icon03);
+            bottom_icon04 = binding.getRoot().findViewById(R.id.bottom_icon04);
+            bottom_icon05 = binding.getRoot().findViewById(R.id.bottom_icon05);
 
-            home_tv = binding.getRoot().findViewById(R.id.home_tv);
-            worktogo_tv = binding.getRoot().findViewById(R.id.worktogo_tv);
-            workstatus_tv = binding.getRoot().findViewById(R.id.workstatus_tv);
-            more_tv = binding.getRoot().findViewById(R.id.more_tv);
-
+            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+            if(USER_INFO_AUTH.equals("0")){
+                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03);
+            }else{
+                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1);
+            }
             final List<String> tabElement;
             tabElement = Arrays.asList("홈", "할일", "캘린더", "근무현황", "더보기");
             ArrayList<Fragment> fragments = new ArrayList<>();
+            //점주일때
             fragments.add(HomeFragment.newInstance(0));
             fragments.add(WorkgotoFragment.newInstance(1));
-            fragments.add(CalendarFragment.newInstance(2));
+            fragments.add(MemberFragment.newInstance(2));
             fragments.add(WorkstatusFragment.newInstance(3));
             fragments.add(MoreFragment.newInstance(4));
-
             viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
+
             binding.viewPager.setAdapter(viewPagerFregmentAdapter);
-//        viewPager.setUserInputEnabled(false);
 
             //ViewPager2와 TabLayout을 연결
             new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
@@ -135,10 +138,11 @@ public class MainFragment extends AppCompatActivity {
                 textView.setGravity(Gravity.CENTER);
                 tab.setCustomView(textView);
             }).attach();
+
             binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    binding.viewPager.setCurrentItem(tab.getPosition(),false);
+                    binding.viewPager.setCurrentItem(tab.getPosition(), false);
                 }
 
                 @Override
@@ -181,7 +185,7 @@ public class MainFragment extends AppCompatActivity {
             if (SELECT_POSITION != -99) {
                 binding.viewPager.setCurrentItem(SELECT_POSITION);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -189,9 +193,9 @@ public class MainFragment extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        if(paging_position == 0){
+        if (paging_position == 0) {
             pm.PlaceList(mContext);
-        }else{
+        } else {
             binding.tabLayout.getTabAt(0).select();
         }
     }
@@ -205,54 +209,61 @@ public class MainFragment extends AppCompatActivity {
         if (view.getId() == R.id.out_store) {
             pm.PlaceList(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {
+            dlog.i("메인 Click!");
             binding.tabLayout.getTabAt(0).select();
         } else if (view.getId() == R.id.bottom_navigation02) {
+            dlog.i("할일 Click!");
             binding.tabLayout.getTabAt(1).select();
-            shardpref.putInt("SELECT_POSITION",1);
-            shardpref.putInt("SELECT_POSITION_sub",0);
+            shardpref.putInt("SELECT_POSITION", 1);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
         } else if (view.getId() == R.id.bottom_navigation03) {
+            dlog.i("직원관리 Click!");
+            binding.title.setVisibility(View.VISIBLE);
+            binding.title.setText("직원목록");
             binding.tabLayout.getTabAt(2).select();
         } else if (view.getId() == R.id.bottom_navigation04) {
+            dlog.i("커뮤니티 Click!");
             binding.tabLayout.getTabAt(3).select();
         } else if (view.getId() == R.id.bottom_navigation05) {
+            dlog.i("더보기 Click!");
             binding.tabLayout.getTabAt(4).select();
         }
     }
 
-    private void ChangePosition(int i){
-        home_icon.setBackgroundResource(R.drawable.home_resize);
-        home_tv.setTextColor(Color.parseColor("#000000"));
+    private void ChangePosition(int i) {
+        bottom_icon01.setBackgroundResource(R.drawable.bottom_icon01);
+        bottom_icon02.setBackgroundResource(R.drawable.bottom_icon02);
+        if(USER_INFO_AUTH.equals("0")){
+            bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03);
+        }else{
+            bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1);
+        }
+        bottom_icon04.setBackgroundResource(R.drawable.bottom_icon04);
+        bottom_icon05.setBackgroundResource(R.drawable.bottom_icon05);
 
-        worktogo_icon.setBackgroundResource(R.drawable.worktogo_resize);
-        worktogo_tv.setTextColor(Color.parseColor("#000000"));
-
-        workstatus_icon.setBackgroundResource(R.drawable.workstatus_resize);
-        workstatus_tv.setTextColor(Color.parseColor("#000000"));
-
-        more_icon.setBackgroundResource(R.drawable.more_icon_resize);
-        more_tv.setTextColor(Color.parseColor("#000000"));
-        if(i == 0){
-            home_icon.setBackgroundResource(R.drawable.home_on_resize);
-            home_tv.setTextColor(Color.parseColor("#68B0FF"));
-        }else if(i == 1){
-            worktogo_icon.setBackgroundResource(R.drawable.worktogo_on_resize);
-            worktogo_tv.setTextColor(Color.parseColor("#68B0FF"));
-        }else if(i == 2){
-           dlog.i("calendar view");
-        }else if(i == 3){
-            workstatus_icon.setBackgroundResource(R.drawable.workstatus_on_resize);
-            workstatus_tv.setTextColor(Color.parseColor("#68B0FF"));
-        }else if(i == 4){
-            more_icon.setBackgroundResource(R.drawable.more_icon_on_resize);
-            more_tv.setTextColor(Color.parseColor("#68B0FF"));
+        if (i == 0) {
+            bottom_icon01.setBackgroundResource(R.drawable.bottom_icon01_on);
+        } else if (i == 1) {
+            bottom_icon02.setBackgroundResource(R.drawable.bottom_icon02_on);
+        } else if (i == 2) {
+            if(USER_INFO_AUTH.equals("0")){
+                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_on);
+            }else{
+                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1_on);
+            }
+        } else if (i == 3) {
+            bottom_icon04.setBackgroundResource(R.drawable.bottom_icon04_on);
+        } else if (i == 4) {
+            bottom_icon05.setBackgroundResource(R.drawable.bottom_icon05_on);
         }
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
     }
-    //    //-------몰입화면 설정
+
+//    //-------몰입화면 설정
 //    @Override
 //    public void onWindowFocusChanged(boolean hasFocus) {
 //        super.onWindowFocusChanged(hasFocus);

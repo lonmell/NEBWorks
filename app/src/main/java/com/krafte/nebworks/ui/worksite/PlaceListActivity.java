@@ -1,11 +1,8 @@
 package com.krafte.nebworks.ui.worksite;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,21 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceListAdapter;
+import com.krafte.nebworks.bottomsheet.StoreListBottomSheet;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityWorksiteBinding;
-import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,8 +53,6 @@ public class PlaceListActivity extends AppCompatActivity {
     Dlog dlog = new Dlog();
     PreferenceHelper shardpref;
     DateCurrent dc = new DateCurrent();
-    Handler handler = new Handler();
-    RetrofitConnect rc = new RetrofitConnect();
     PageMoveClass pm = new PageMoveClass();
 
     //Other 변수
@@ -69,7 +62,7 @@ public class PlaceListActivity extends AppCompatActivity {
     String USER_INFO_EMAIL = "";
     String USER_INFO_NAME = "";
     String USER_INFO_ID = "";
-    String USER_INFO_NICKNAME = "";
+    String USER_INFO_AUTH = "";
 
     //사용자 정보 체크
     Timer timer = new Timer();
@@ -102,10 +95,11 @@ public class PlaceListActivity extends AppCompatActivity {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-99");// 0:점주 / 1:근로자
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
-
+            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             setBtnEvent();
             LoginCheck(USER_INFO_EMAIL);
 
@@ -116,10 +110,11 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         GetPlaceList();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -153,12 +148,22 @@ public class PlaceListActivity extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.addPlace.setOnClickListener(v -> {
-            pm.PlaceAddGo(mContext);
-
+            onStartAuth();
         });
         binding.addPlace2.setOnClickListener(v -> {
-            pm.PlaceAddGo(mContext);
+            onStartAuth();
         });
+    }
+    private void onStartAuth(){
+        if(USER_INFO_AUTH.equals("0")){
+            pm.PlaceAddGo(mContext);
+        }else{
+            StoreListBottomSheet slb = new StoreListBottomSheet();
+            slb.show(getSupportFragmentManager(), "StoreListBottomSheet");
+            slb.setOnClickListener01(v -> pm.PlaceSearch(mContext));
+            slb.setOnClickListener02(v -> pm.PlaceAddGo(mContext));
+            slb.setOnClickListener03(v -> pm.Career(mContext));
+        }
     }
 
     public void LoginCheck(String account) {
@@ -194,7 +199,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_EMAIL", account);
                                     shardpref.putString("USER_INFO_SABUN", phone);
                                     shardpref.putString("USER_INFO_SOSOK", gender);
-                                    shardpref.putString("USER_INFO_PROFILE_URL", img_path);
+                                    shardpref.putString("USER_INFO_PROFILE", img_path);
 
                                     dlog.i("id : " + id);
                                     dlog.i("USER_INFO_ID : " + shardpref.getString("USER_INFO_ID", "0"));
@@ -224,7 +229,7 @@ public class PlaceListActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData("", "");
+        Call<String> call = api.getData("", USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -292,12 +297,26 @@ public class PlaceListActivity extends AppCompatActivity {
                                                     String palce_name = Response.getJSONObject(pos).getString("name");
                                                     String myid = shardpref.getString("USER_INFO_ID", "0");
                                                     String place_id = Response.getJSONObject(pos).getString("id");
+                                                    String save_kind = Response.getJSONObject(pos).getString("save_kind");
 
-                                                    if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
-                                                        pm.ProfileEditGo(mContext);
+                                                    if (save_kind.equals("0")) {
+                                                        //임시저장된 매장
+                                                        shardpref.putString("place_id",place_id);
+                                                        pm.PlaceEditGo(mContext);
                                                     } else {
-                                                        ConfirmUserPlacemember(place_id, myid, owner_id, palce_name);
-                                                        pm.UserPlsceMapGo(mContext);
+                                                        //저장된 매장
+                                                        if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
+                                                            pm.ProfileEditGo(mContext);
+                                                        } else {
+                                                            ConfirmUserPlacemember(place_id, myid, owner_id, palce_name);
+                                                            shardpref.putInt("SELECT_POSITION",0);
+                                                            if(USER_INFO_AUTH.equals("0")){
+                                                                pm.Main(mContext);
+                                                            }else{
+                                                                pm.Main2(mContext);
+                                                            }
+
+                                                        }
                                                     }
                                                 } catch (Exception e) {
                                                     dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
@@ -436,13 +455,6 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("data", "로그아웃하시겠습니까?");
-        intent.putExtra("flag", "로그아웃");
-        intent.putExtra("left_btn_txt", "닫기");
-        intent.putExtra("right_btn_txt", "로그아웃");
-        mContext.startActivity(intent);
-        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        pm.AuthSelect(mContext);
     }
 }

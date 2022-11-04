@@ -25,7 +25,7 @@ public class InoutPopActivity extends Activity {
 
     ImageView inout_icon;
     TextView pop_title,inout_tv,inout_tv2,close_btn;
-
+    String USER_INFO_AUTH = "";
     private String title            = "";
     private String time             = "";
     private String state            = "";
@@ -49,6 +49,7 @@ public class InoutPopActivity extends Activity {
 
         mContext = this;
         shardpref = new PreferenceHelper(mContext);
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
         //데이터 가져오기
         intent = getIntent();
@@ -91,7 +92,11 @@ public class InoutPopActivity extends Activity {
 //            overridePendingTransition(R.anim.translate_down, 0);
             //액티비티(팝업) 닫기
 //            finish();
-            pm.MainGo(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else{
+                pm.Main2(mContext);
+            }
         });
     }
 

@@ -104,11 +104,11 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             if(item.getSave_kind().equals("0")){
                 holder.money_area.setVisibility(View.INVISIBLE);
                 holder.store_kind_state.setVisibility(View.VISIBLE);
-                holder.total_item.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+                holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
             }else if(item.getSave_kind().equals("1")){
                 holder.money_area.setVisibility(View.VISIBLE);
                 holder.store_kind_state.setVisibility(View.INVISIBLE);
-                holder.total_item.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                holder.item_area.setCardBackgroundColor(Color.parseColor("#ffffff"));
             }
 
             holder.item_peoplecnt.setText(item.getTotal_cnt());
@@ -137,7 +137,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         ImageView store_thumnail;
         TextView title,name,address;
         TextView item_peoplecnt;
-        CardView store_kind_state,total_item;
+        CardView store_kind_state,item_area,total_item;
         RelativeLayout list_setting,list_img_area,place_state;
         LinearLayout money_area;
 
@@ -155,7 +155,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             money_area      = itemView.findViewById(R.id.money_area);
             store_kind_state= itemView.findViewById(R.id.store_kind_state);
             total_item      = itemView.findViewById(R.id.total_item);
-
+            item_area       = itemView.findViewById(R.id.item_area);
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

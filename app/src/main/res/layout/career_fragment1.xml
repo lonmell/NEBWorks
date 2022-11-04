@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:text="한글"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/kor_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="예)홍길동"
+                android:gravity="center"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:text="영문"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/eng_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="영문 : 예) Hong Gil Dong"
+                android:textColor="#000000"
+                android:gravity="center"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="#f2f2f2"
+            android:layout_marginTop="23dp"
+            android:layout_marginBottom="23dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:text="생년월일"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/birth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="예) 19910302"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:text="연락처"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/user_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="예) 010-0000-0000"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:text="이메일"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/user_mail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="예) abcd@mail.com"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:text="주소지"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/user_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="예) OO시 OO구 OO동 123-1 OO빌라 202호"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="#f2f2f2"
+            android:layout_marginTop="23dp"
+            android:layout_marginBottom="23dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="23dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="희망근무조건"
+            android:textColor="#000000"
+            tools:ignore="HardcodedText" />
+
+        <!--희망급여-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="희망급여"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="13dp"
+                android:background="@color/black"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:id="@+id/input_hope01"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="end|center"
+                android:paddingEnd="15dp"
+                android:text="예) 1,200,000"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+        <!--근무기간-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="근무기간"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="13dp"
+                android:background="@color/black"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:id="@+id/input_hope02"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="end|center"
+                android:paddingEnd="15dp"
+                android:text="0000.00.00 ~ 0000.00.00"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+
+        <!--희망근무요일-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="희망근무요일"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="13dp"
+                android:background="@color/black"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:id="@+id/input_hope03"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="end|center"
+                android:paddingEnd="15dp"
+                android:text="예) 월,수,금"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+
+        <!--희망근무시간-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="희망근무시간"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="13dp"
+                android:background="@color/black"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:id="@+id/input_hope04"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="end|center"
+                android:paddingEnd="15dp"
+                android:text="예) 09:30 ~ 14:30"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

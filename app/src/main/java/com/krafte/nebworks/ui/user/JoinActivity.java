@@ -33,9 +33,16 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.disconnectHandler;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +60,7 @@ public class JoinActivity extends AppCompatActivity {
     String USER_INFO_EMAIL = "";
     String USER_INFO_PHONE = "";
     String USER_INFO_PW = "";
-    String USER_INFO_SEX = "0";
+    String USER_INFO_GENDER = "0";
     String USER_INFO_JOIN_DATE = "";
     String USER_INFO_SERVICE = "";
     String USER_LOGIN_METHOD = "NEP";
@@ -184,7 +191,7 @@ public class JoinActivity extends AppCompatActivity {
             binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
         });
         binding.selectMan.setOnClickListener(v -> {
-            USER_INFO_SEX = "1";
+            USER_INFO_GENDER = "1";
             binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
             binding.manTxt.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.selectMan.setBackgroundColor(Color.parseColor("#1E90FF"));
@@ -195,7 +202,7 @@ public class JoinActivity extends AppCompatActivity {
         });
 
         binding.selectWoman.setOnClickListener(v -> {
-            USER_INFO_SEX = "2";
+            USER_INFO_GENDER = "2";
             binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
             binding.manTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
             binding.selectMan.setBackgroundColor(Color.parseColor("#a9a9a9"));
@@ -439,20 +446,28 @@ public class JoinActivity extends AppCompatActivity {
 
     public void INPUT_JOIN_DATA() {
         USER_INFO_PW = binding.editPw.getText().toString();
-
+        try {
+            USER_INFO_PW = aes256Util.encode("[kraftmysecretkey]" + USER_INFO_PW + "["+R.string.kakao_native_key+"]");
+        } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
+                | NoSuchPaddingException | IllegalBlockSizeException
+                | NoSuchAlgorithmException | BadPaddingException
+                | InvalidKeyException e) {
+            e.printStackTrace();
+        }
         dlog.i("-----INPUT_JOIN_DATA-----");
         dlog.i("account : " + USER_INFO_EMAIL);
         dlog.i("name : " + USER_INFO_NAME);
         dlog.i("phone : " + USER_INFO_PHONE);
-        dlog.i("gender : " + USER_INFO_SEX);
+        dlog.i("gender : " + USER_INFO_GENDER);
         dlog.i("UserCheckCnt : " + UserCheckCnt);
         dlog.i("-----INPUT_JOIN_DATA-----");
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UserInsertInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserInsertInterface api = retrofit.create(UserInsertInterface.class);
-        Call<String> call = api.getData(USER_INFO_EMAIL, USER_INFO_NAME, USER_INFO_PW, USER_INFO_PHONE, USER_INFO_SEX, "", "NEB");
+        Call<String> call = api.getData(USER_INFO_EMAIL, USER_INFO_NAME, USER_INFO_PW, USER_INFO_PHONE, USER_INFO_GENDER, "", "NEB");
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -467,7 +482,7 @@ public class JoinActivity extends AppCompatActivity {
                             shardpref.remove("USER_INFO_PHONE");
                             shardpref.remove("USER_INFO_PW");
                             Toast.makeText(mContext,"회원가입이 완료되었습니다.",Toast.LENGTH_SHORT).show();
-                            pm.PlaceList(mContext);
+                            pm.AuthSelect(mContext);
                         }
                     } catch (Exception e) {
                         dlog.i("Exception : " + e);

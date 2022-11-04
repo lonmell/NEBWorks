@@ -54,12 +54,13 @@
             android:text="관리중인 매장"
             android:textColor="#000000"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/store_cnt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/store_cnt_tv"
             android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/store_cnt_tv"
             android:fontFamily="@font/inter_bold"
             android:text="0"
             android:textColor="#6395EC"
@@ -89,24 +90,15 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/add_place" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/add_place"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:background="#244A9C">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/inter_regular"
-                android:gravity="center"
-                android:text="   매장추가"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:drawableStartCompat="@drawable/resize_plus" />
-        </RelativeLayout>
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="34dp"
+            android:background="@drawable/addstorebtn" />
 
         <RelativeLayout
             android:id="@+id/login_alert_text"
@@ -137,7 +129,8 @@
             android:id="@+id/no_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff">
+            android:background="#ffffff"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/add_place2"

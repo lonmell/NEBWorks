@@ -230,7 +230,16 @@
                     android:textSize="16sp"
                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
-
+                <TextView
+                    android:id="@+id/registr_num_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start|center"
+                    android:text=""
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
@@ -376,6 +385,7 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="5dp"
                         android:textColor="#696969"
+                        android:visibility="gone"
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />

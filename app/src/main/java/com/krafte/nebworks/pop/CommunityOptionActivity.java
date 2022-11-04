@@ -19,7 +19,6 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import java.text.DecimalFormat;
 
 public class CommunityOptionActivity extends Activity {
-
     private static final String TAG = "CommunityOptionActivity";
     Context mContext;
     private View view;

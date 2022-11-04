@@ -90,6 +90,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
     String kind = "";
     String place_id = "";
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
     String USER_INFO_EMAIL = "";
     Double place_latitude = 0.0;
     Double place_longitude = 0.0;
@@ -137,6 +138,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
             place_owner_id = shardpref.getString("place_owner_id", "0");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             place_latitude = Double.parseDouble(shardpref.getString("place_latitude", "0"));
             place_longitude = Double.parseDouble(shardpref.getString("place_longitude", "0"));
             place_name = shardpref.getString("place_management_office", "");
@@ -158,7 +160,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
     public void onResume() {
         super.onResume();
         try {
-            AddPlaceMember(place_id, USER_INFO_ID);
+//            AddPlaceMember(place_id, USER_INFO_ID);
             InOutLogMember();
 
             try {
@@ -230,7 +232,7 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberAddInterface api = retrofit.create(PlaceMemberAddInterface.class);
-        Call<String> call = api.getData(place_id, account);
+        Call<String> call = api.getData(place_id, account,"","","");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -303,13 +305,21 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
                     InOutInsert(kind);
                 }
             }else {
-                pm.MainGo(mContext);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.Main(mContext);
+                }else{
+                    pm.Main2(mContext);
+                }
             }
 
         });
 
         binding.close.setOnClickListener(v -> {
-            pm.MainGo(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else{
+                pm.Main2(mContext);
+            }
         });
 
         binding.outStore.setOnClickListener(v -> {

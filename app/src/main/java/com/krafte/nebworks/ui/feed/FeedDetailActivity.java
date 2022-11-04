@@ -74,6 +74,7 @@ public class FeedDetailActivity extends AppCompatActivity {
 
     //shared
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
     String place_id = "";
     String feed_id = "";
     String USER_INFO_EMAIL = "";
@@ -114,6 +115,7 @@ public class FeedDetailActivity extends AppCompatActivity {
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             place_id = shardpref.getString("place_id", "0");
             feed_id = shardpref.getString("feed_id", "0");
             state = shardpref.getString("editstate", "");
@@ -623,6 +625,10 @@ public class FeedDetailActivity extends AppCompatActivity {
 //        super.onBackPressed();
         shardpref.putInt("SELECT_POSITION", 1);
         shardpref.putInt("SELECT_POSITION_sub",0);
-        pm.MainBack(mContext);
+        if(USER_INFO_AUTH.equals("0")){
+            pm.Main(mContext);
+        }else{
+            pm.Main2(mContext);
+        }
     }
 }

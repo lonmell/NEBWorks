@@ -3,8 +3,6 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -30,7 +28,6 @@ import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.HomefragmentBinding;
-import com.krafte.nebworks.ui.main.InstructionActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -45,6 +42,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+/**
+ * 2022 11 03 방창배 작성 / 점주용 페이지
+ */
 
 public class HomeFragment extends Fragment {
     private final static String TAG = "HomeFragment";
@@ -62,7 +63,8 @@ public class HomeFragment extends Fragment {
     String place_name = "";
     String place_owner_id = "";
     String place_owner_name = "";
-    String place_management_office = "";
+    String registr_num = "";
+    String store_kind = "";
     String place_address = "";
     String place_latitude = "";
     String place_longitude = "";
@@ -72,6 +74,15 @@ public class HomeFragment extends Fragment {
     String place_start_date = "";
     String place_created_at = "";
     String place_totalcnt = "";
+
+    String place_pay_day = "";
+    String place_test_period = "";
+    String place_vacation_select = "";
+    String place_insurance = "";
+    String place_save_kind = "";
+    String place_wifi_name = "";
+    String place_icnt = "";
+    String place_ocnt = "";
 
     String USER_INFO_ID = "";
     String USER_INFO_EMAIL = "";
@@ -113,7 +124,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -127,19 +137,14 @@ public class HomeFragment extends Fragment {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             setBtnEvent();
-
+            dlog.i("HomeFragment START!");
             place_id = shardpref.getString("place_id", "0");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
 
-            home_icon = binding.getRoot().findViewById(R.id.home_icon);
-            home_tv = binding.getRoot().findViewById(R.id.home_tv);
-            home_icon.setBackgroundResource(R.drawable.home_on_resize);
-            home_tv.setTextColor(Color.parseColor("#6395EC"));
-
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
-            FirebaseMessaging.getInstance().subscribeToTopic("P"+place_id).addOnCompleteListener(task -> {
+            FirebaseMessaging.getInstance().subscribeToTopic("P" + place_id).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);
                 if (!task.isSuccessful()) {
                     msg = getString(R.string.msg_subscribe_failed);
@@ -150,8 +155,8 @@ public class HomeFragment extends Fragment {
             //0-관리자 / 1- 근로자
             dlog.i("gotoplace location view USER_INFO_AUTH : " + USER_INFO_AUTH);
             //USER_INFO_AUTH 가 -1일때
-            USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID)?"0":"1";
-            shardpref.putString("USER_INFO_AUTH",USER_INFO_AUTH);
+            USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
+            shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -180,62 +185,57 @@ public class HomeFragment extends Fragment {
     }
 
     public void setBtnEvent() {
-        binding.workstateGo.setOnClickListener(v -> {
-            shardpref.putInt("SELECT_POSITION",3);
-            shardpref.remove("SELECT_POSITION_sub");
-            pm.WorkStateListGo(mContext);
-        });
-
-        binding.taskstateGo.setOnClickListener(v -> {
-            pm.PlaceWorkGo(mContext);
-            shardpref.putInt("SELECT_POSITION",1);
-            shardpref.putInt("SELECT_POSITION_sub",1);
-        });
-
-        binding.taskoverGo.setOnClickListener(v -> {
-            pm.PlaceWorkGo(mContext);
-            shardpref.putInt("SELECT_POSITION",1);
-            shardpref.putInt("SELECT_POSITION_sub",1);
-        });
-
-        binding.approval1Go.setOnClickListener(v -> {
-            pm.ApprovalGo(mContext);
-            shardpref.putInt("SELECT_POSITION",0);
-        });
-        binding.approval2Go.setOnClickListener(v -> {
-            pm.ApprovalGo(mContext);
-            shardpref.putInt("SELECT_POSITION",1);
-        });
-        binding.approval3Go.setOnClickListener(v -> {
-            pm.ApprovalGo(mContext);
-            shardpref.putInt("SELECT_POSITION",2);
-        });
-
-        binding.myplace.setOnClickListener(v -> {
-            shardpref.putString("return_page", "MainActivity");
-            pm.MyPlsceGo(mContext);
-        });
-
-        binding.communityBtn.setOnClickListener(view -> {
-            //지시사항 페이지
-            Intent intent = new Intent(mContext, InstructionActivity.class);
-            startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        });
-
-        binding.gotoPlace.setOnClickListener(v -> {
-            pm.PlaceEditGo(mContext);
-        });
-
-        binding.paymentText.setOnClickListener(v -> {
-            pm.MemberGo(mContext);
-        });
-
-        binding.businessApproval.setOnClickListener(view -> {
-            pm.ApprovalGo(mContext);
-            shardpref.putInt("SELECT_POSITION",0);
-        });
+//        binding.workstateGo.setOnClickListener(v -> {
+//            shardpref.putInt("SELECT_POSITION",3);
+//            shardpref.remove("SELECT_POSITION_sub");
+//            pm.WorkStateListGo(mContext);
+//        });
+//
+//        binding.taskstateGo.setOnClickListener(v -> {
+//            pm.PlaceWorkGo(mContext);
+//            shardpref.putInt("SELECT_POSITION",1);
+//            shardpref.putInt("SELECT_POSITION_sub",1);
+//        });
+//
+//        binding.taskoverGo.setOnClickListener(v -> {
+//            pm.PlaceWorkGo(mContext);
+//            shardpref.putInt("SELECT_POSITION",1);
+//            shardpref.putInt("SELECT_POSITION_sub",1);
+//        });
+//
+//        binding.approval1Go.setOnClickListener(v -> {
+//            pm.ApprovalGo(mContext);
+//            shardpref.putInt("SELECT_POSITION",0);
+//        });
+//        binding.approval2Go.setOnClickListener(v -> {
+//            pm.ApprovalGo(mContext);
+//            shardpref.putInt("SELECT_POSITION",1);
+//        });
+//        binding.approval3Go.setOnClickListener(v -> {
+//            pm.ApprovalGo(mContext);
+//            shardpref.putInt("SELECT_POSITION",2);
+//        });
+//
+//        binding.myplace.setOnClickListener(v -> {
+//            shardpref.putString("return_page", "MainActivity");
+//            pm.MyPlsceGo(mContext);
+//        });
+//
+//        binding.communityBtn.setOnClickListener(view -> {
+//        });
+//
+//        binding.gotoPlace.setOnClickListener(v -> {
+//            pm.PlaceEditGo(mContext);
+//        });
+//
+//        binding.paymentText.setOnClickListener(v -> {
+//            pm.MemberGo(mContext);
+//        });
+//
+//        binding.businessApproval.setOnClickListener(view -> {
+//            pm.ApprovalGo(mContext);
+//            shardpref.putInt("SELECT_POSITION",0);
+//        });
     }
 
     private void getPlaceData() {
@@ -263,15 +263,24 @@ public class HomeFragment extends Fragment {
                                     place_name = Response.getJSONObject(0).getString("name");
                                     place_owner_id = Response.getJSONObject(0).getString("owner_id");
                                     place_owner_name = Response.getJSONObject(0).getString("owner_name");
-                                    place_management_office = Response.getJSONObject(0).getString("management_office");
+                                    registr_num = Response.getJSONObject(0).getString("registr_num");
+                                    store_kind = Response.getJSONObject(0).getString("store_kind");
                                     place_address = Response.getJSONObject(0).getString("address");
                                     place_latitude = Response.getJSONObject(0).getString("latitude");
                                     place_longitude = Response.getJSONObject(0).getString("longitude");
+                                    place_pay_day = Response.getJSONObject(0).getString("pay_day");
+                                    place_test_period = Response.getJSONObject(0).getString("test_period");
+                                    place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
+                                    place_insurance = Response.getJSONObject(0).getString("insurance");
                                     place_start_time = Response.getJSONObject(0).getString("start_time");
                                     place_end_time = Response.getJSONObject(0).getString("end_time");
+                                    place_save_kind = Response.getJSONObject(0).getString("save_kind");
+                                    place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
                                     place_img_path = Response.getJSONObject(0).getString("img_path");
                                     place_start_date = Response.getJSONObject(0).getString("start_date");
                                     place_created_at = Response.getJSONObject(0).getString("created_at");
+                                    place_icnt = Response.getJSONObject(0).getString("i_cnt");
+                                    place_ocnt = Response.getJSONObject(0).getString("o_cnt");
                                     place_totalcnt = Response.getJSONObject(0).getString("total_cnt");
 
                                     if (place_owner_id.equals(USER_INFO_ID)) {
@@ -279,28 +288,12 @@ public class HomeFragment extends Fragment {
                                     } else {
                                         USER_INFO_AUTH = "1";
                                     }
-                                    shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-                                    shardpref.putString("place_name", place_name);
-                                    shardpref.putString("place_owner_id", place_owner_id);
-                                    shardpref.putString("place_owner_name", place_owner_name);
-                                    shardpref.putString("place_management_office", place_management_office);
-                                    shardpref.putString("place_address", place_address);
-                                    shardpref.putString("place_latitude", place_latitude);
-                                    shardpref.putString("place_longitude", place_longitude);
-                                    shardpref.putString("place_start_time", place_start_time);
-                                    shardpref.putString("place_end_time", place_end_time);
-                                    shardpref.putString("place_img_path", place_img_path);
-                                    shardpref.putString("place_start_date", place_start_date);
-                                    shardpref.putString("place_created_at", place_created_at);
-                                    shardpref.putString("place_totalcnt", place_totalcnt);
 
                                     Glide.with(mContext).load(place_img_path)
                                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.identificon)
                                             .skipMemoryCache(true)
                                             .into(binding.storeThumnail);
-
-                                    binding.placeName.setText(place_management_office);
 
                                     if (USER_INFO_ID.equals(place_owner_id)) {
                                         USER_INFO_AUTH = "0";
@@ -314,11 +307,7 @@ public class HomeFragment extends Fragment {
                                     shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
 
                                     binding.title.setText(place_name);
-                                    binding.name.setText(place_owner_name);
-                                    binding.date.setText(place_start_date);
-                                    binding.itemPeoplecnt.setText(place_totalcnt);
-                                    binding.memberCntY.setVisibility(View.GONE);
-                                    binding.approvalCntY.setVisibility(View.GONE);
+                                    binding.memberCnt.setText(place_totalcnt);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -376,10 +365,10 @@ public class HomeFragment extends Fragment {
                                         dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
                                         dlog.i("------UserCheck-------");
 
-                                        if(place_owner_id.equals(id)){
+                                        if (place_owner_id.equals(id)) {
                                             USER_INFO_AUTH = "0";
                                             binding.gotoPlace.setVisibility(View.VISIBLE);
-                                        }else{
+                                        } else {
                                             USER_INFO_AUTH = "1";
                                             binding.gotoPlace.setVisibility(View.GONE);
                                         }
@@ -411,7 +400,7 @@ public class HomeFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
-        Call<String> call = api.getData(place_id,USER_INFO_ID);
+        Call<String> call = api.getData(place_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -461,14 +450,14 @@ public class HomeFragment extends Fragment {
                                                 + Integer.parseInt(task_complete_cnt) + Integer.parseInt(task_incomplete_cnt) + Integer.parseInt(approval_total_cnt)
                                                 + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
 
-                                        binding.noticeCnt.setText(String.valueOf(total_cnt));
-                                        binding.stateCnt01.setText("출근  " + i_cnt);
-                                        binding.stateCnt02.setText("퇴근  " + o_cnt);
-                                        binding.stateCnt05.setText(task_incomplete_cnt);
-                                        binding.stateCnt06.setText(task_complete_cnt);
-                                        binding.stateCnt07.setText(waiting_cnt);
-                                        binding.stateCnt08.setText(approval_cnt);
-                                        binding.stateCnt09.setText(reject_cnt);
+//                                        binding.noticeCnt.setText(String.valueOf(total_cnt));
+//                                        binding.stateCnt01.setText("출근  " + i_cnt);
+//                                        binding.stateCnt02.setText("퇴근  " + o_cnt);
+//                                        binding.stateCnt05.setText(task_incomplete_cnt);
+//                                        binding.stateCnt06.setText(task_complete_cnt);
+//                                        binding.stateCnt07.setText(waiting_cnt);
+//                                        binding.stateCnt08.setText(approval_cnt);
+//                                        binding.stateCnt09.setText(reject_cnt);
                                         dlog.i("------UserCheck-------");
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -522,6 +511,7 @@ public class HomeFragment extends Fragment {
                 });
 
     }
+
     private void FcmStateSelect(String token) {
         //메인페이지 처음 들어왔을때 생성 - 본인
 

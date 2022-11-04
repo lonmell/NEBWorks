@@ -41,6 +41,7 @@ import com.krafte.nebworks.dataInterface.UserInsertInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityLoginBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
+import com.krafte.nebworks.util.AES256Util;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.HashCode;
@@ -51,8 +52,17 @@ import com.krafte.nebworks.util.RetrofitConnect;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -78,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
     PageMoveClass pm = new PageMoveClass();
+    AES256Util aes256Util;
 
     //Other 변수
     int turnvisible = 0;
@@ -125,12 +136,18 @@ public class LoginActivity extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
-        GET_ACCOUNT_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
+        try {
+            aes256Util = new AES256Util("kraftmysecretkey");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        GET_ACCOUNT_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
         onEvent();
         permissionCheck();
         KakaoSetting();
         GoogleSetting();
-        if(!GET_ACCOUNT_EMAIL.isEmpty()){
+        if (!GET_ACCOUNT_EMAIL.isEmpty()) {
             binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
         }
     }
@@ -138,18 +155,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        GET_ACCOUNT_EMAIL = shardpref.getString("USER_INFO_EMAIL","-99");
-        USER_INFO_PW = shardpref.getString("USER_INFO_PW","-99");
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","-99");
-        if(!USER_LOGIN_METHOD.equals("-99")){
-            if(!GET_ACCOUNT_EMAIL.equals("-99")){
+        GET_ACCOUNT_EMAIL = shardpref.getString("USER_INFO_EMAIL", "-99");
+        USER_INFO_PW = shardpref.getString("USER_INFO_PW", "-99");
+        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "-99");
+        if (!USER_LOGIN_METHOD.equals("-99")) {
+            if (!GET_ACCOUNT_EMAIL.equals("-99")) {
                 binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
             }
-            if(!USER_INFO_PW.equals("-99")){
+            if (!USER_INFO_PW.equals("-99")) {
                 binding.pwdEdit.setText(USER_INFO_PW);
             }
-            if(!GET_ACCOUNT_EMAIL.equals("-99") && !USER_INFO_PW.equals("-99")){
-                LoginCheck(GET_ACCOUNT_EMAIL,USER_INFO_PW,"NEB");
+            if (!GET_ACCOUNT_EMAIL.equals("-99") && !USER_INFO_PW.equals("-99")) {
+                LoginCheck(GET_ACCOUNT_EMAIL, USER_INFO_PW, "NEB");
             }
         }
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -216,7 +233,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginBtn.setOnClickListener(v -> {
             String email = binding.deviceNumEdit.getText().toString();
             String pw = binding.pwdEdit.getText().toString();
-            LoginCheck(email,pw,"NEB");
+            LoginCheck(email, pw, "NEB");
 //            if(email.equals("guest")){
 //                LoginCheck(email);
 //            }else{
@@ -225,7 +242,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.joinBtn.setOnClickListener(v -> {
-                pm.JoinBefore(mContext);
+            pm.JoinBefore(mContext);
         });
         binding.turnPwdChar.setOnClickListener(v -> {
             if (turnvisible == 0) {
@@ -240,12 +257,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.findEmail.setOnClickListener(v -> {
-            shardpref.putString("findkind","email");
+            shardpref.putString("findkind", "email");
             pm.SearchEmail(mContext);
         });
 
         binding.findPw.setOnClickListener(v -> {
-            shardpref.putString("findkind","password");
+            shardpref.putString("findkind", "password");
             pm.SearchEmail(mContext);
         });
     }
@@ -292,10 +309,10 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i("Kakao", "GET_JOIN_CONFIRM = " + GET_JOIN_CONFIRM);
                     Log.i("Kakao", "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
 
-                    if(GET_ACCOUNT_EMAIL.isEmpty()){
-                        Toast.makeText(mContext,"네트워크 통신연결이 불안정 합니다.",Toast.LENGTH_SHORT).show();
-                    }else{
-                        LoginCheck(GET_ACCOUNT_EMAIL,"","Kakao");
+                    if (GET_ACCOUNT_EMAIL.isEmpty()) {
+                        Toast.makeText(mContext, "네트워크 통신연결이 불안정 합니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        LoginCheck(GET_ACCOUNT_EMAIL, "", "Kakao");
                     }
 
                 }, 1000); //1초 후 인트로 실행
@@ -321,10 +338,10 @@ public class LoginActivity extends AppCompatActivity {
 
         shardpref.putString("USER_LOGIN_METHOD", "Google");
         shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
-        if(user.getEmail().isEmpty()){
-            Toast.makeText(mContext,"네트워크 통신연결이 불안정 합니다.",Toast.LENGTH_SHORT).show();
-        }else{
-            LoginCheck(user.getEmail(),"","Google");
+        if (user.getEmail().isEmpty()) {
+            Toast.makeText(mContext, "네트워크 통신연결이 불안정 합니다.", Toast.LENGTH_SHORT).show();
+        } else {
+            LoginCheck(user.getEmail(), "", "Google");
         }
         GET_ACCOUNT_EMAIL = user.getEmail();
         GET_NAME = user.getDisplayName();
@@ -332,13 +349,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void INPUT_JOIN_DATA(String account, String name, String img_path,String platform) {
+    public void INPUT_JOIN_DATA(String account, String name, String img_path, String platform) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UserInsertInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserInsertInterface api = retrofit.create(UserInsertInterface.class);
-        Call<String> call = api.getData(account, name, "","","",img_path,platform);
+        Call<String> call = api.getData(account, name, "", "", "", img_path, platform);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -348,7 +365,7 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         if (response.body().replace("\"", "").equals("success")) {
                             USER_LOGIN_CONFIRM = true;
-                            shardpref.putString("USER_INFO_EMAIL",account);
+                            shardpref.putString("USER_INFO_EMAIL", account);
                             pm.AuthSelect(mContext);
                             binding.loginAlertText.setVisibility(View.GONE);
                         }
@@ -367,7 +384,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void LoginCheck(String account,String pw, String platform) {
+    public void LoginCheck(String account, String pw, String platform) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UserSelectInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -384,41 +401,93 @@ public class LoginActivity extends AppCompatActivity {
                             dlog.i("LoginCheck jsonResponse length : " + response.body().length());
                             dlog.i("LoginCheck jsonResponse : " + response.body());
                             try {
-                                if(!response.body().equals("[]")){
+
+                                if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
-                                    String getid = Response.getJSONObject(0).getString("id");
-                                    String getname = Response.getJSONObject(0).getString("name");
-                                    String getaccount = Response.getJSONObject(0).getString("account");
-                                    String getPassword = Response.getJSONObject(0).getString("password");
-                                    String getphone = Response.getJSONObject(0).getString("phone");
-                                    String getgender = Response.getJSONObject(0).getString("gender");
-                                    String getimg_path = Response.getJSONObject(0).getString("img_path");
-                                    String getPlatform = Response.getJSONObject(0).getString("platform");
+                                    if (Response.length() != 0) {
+                                        String getid = Response.getJSONObject(0).getString("id");
+                                        String getname = Response.getJSONObject(0).getString("name");
+                                        String getaccount = Response.getJSONObject(0).getString("account");
+                                        String getPassword = Response.getJSONObject(0).getString("password");
+                                        String getphone = Response.getJSONObject(0).getString("phone");
+                                        String getgender = Response.getJSONObject(0).getString("gender");
+                                        String getimg_path = Response.getJSONObject(0).getString("img_path");
+                                        String getPlatform = Response.getJSONObject(0).getString("platform");
 
-                                    shardpref.putString("USER_INFO_ID", getid);
-                                    shardpref.putString("USER_INFO_NAME", getname);
-                                    shardpref.putString("USER_INFO_EMAIL", getaccount);
-                                    shardpref.putString("USER_INFO_PW", getPassword);
-                                    shardpref.putString("USER_INFO_PHONE", getphone);
-                                    shardpref.putString("USER_INFO_SEX", getgender);
-                                    shardpref.putString("USER_INFO_PROFILE_URL", getimg_path);
-                                    shardpref.putString("USER_INFO_METHOD", getimg_path);
-                                    shardpref.putString("USER_LOGIN_METHOD",getPlatform);
 
-                                    dlog.i("LoginCheck platform : " + platform);
-                                    if(platform.equals("NEB")){
-                                        if(getaccount.equals(account) && getPassword.equals(pw)){
-                                            pm.PlaceList(mContext);
+                                        String decodePw = "";
+                                        dlog.i("LoginCheck platform : " + platform);
+                                        try {
+//                                            try {
+//                                                USER_INFO_PW = aes256Util.encode("[kraftmysecretkey]" + "onon0817!!" + "["+R.string.kakao_native_key+"]");
+//                                                dlog.i("USER_INFO_PW ; " + USER_INFO_PW);
+//                                            } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
+//                                                    | NoSuchPaddingException | IllegalBlockSizeException
+//                                                    | NoSuchAlgorithmException | BadPaddingException
+//                                                    | InvalidKeyException e) {
+//                                                e.printStackTrace();
+//                                            }
+
+                                            String repalcekey0 = "[kraftmysecretkey]";
+                                            String replacekey1 = "["+R.string.kakao_native_key+"]";
+                                            decodePw = aes256Util.decode(getPassword).replace(repalcekey0,"").replace(replacekey1,"");
+                                            shardpref.putString("USER_INFO_ID", getid);
+                                            shardpref.putString("USER_INFO_NAME", getname);
+                                            shardpref.putString("USER_INFO_EMAIL", getaccount);
+                                            shardpref.putString("USER_INFO_PW", decodePw);
+                                            shardpref.putString("USER_INFO_PHONE", getphone);
+                                            shardpref.putString("USER_INFO_GENDER", getgender);
+                                            shardpref.putString("USER_INFO_PROFILE", getimg_path);
+                                            shardpref.putString("USER_INFO_METHOD", getimg_path);
+                                            shardpref.putString("USER_LOGIN_METHOD", getPlatform);
+                                        } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
+                                                | NoSuchPaddingException | IllegalBlockSizeException
+                                                | NoSuchAlgorithmException | BadPaddingException
+                                                | InvalidKeyException e) {
+                                            e.printStackTrace();
                                         }
-                                    }else{
-                                        pm.PlaceList(mContext);
+                                        dlog.i("LoginCheck decodePw : " + decodePw);
+                                        dlog.i("LoginCheck pw : " + pw);
+                                        if (platform.equals("NEB")) {
+                                            if (getaccount.equals(account) && decodePw.equals(pw)) {
+                                                pm.AuthSelect(mContext);
+                                            }
+                                        } else {
+                                            pm.AuthSelect(mContext);
+                                        }
+                                        binding.loginAlertText.setVisibility(View.GONE);
+                                    } else {
+                                        shardpref.remove("USER_INFO_ID");
+                                        shardpref.remove("USER_INFO_NAME");
+                                        shardpref.remove("USER_INFO_EMAIL");
+                                        shardpref.remove("USER_INFO_PW");
+                                        shardpref.remove("USER_INFO_PHONE");
+                                        shardpref.remove("USER_INFO_GENDER");
+                                        shardpref.remove("USER_INFO_PROFILE");
+                                        shardpref.remove("USER_INFO_METHOD");
+                                        shardpref.remove("USER_LOGIN_METHOD");
+                                        binding.deviceNumEdit.setText("");
+                                        binding.pwdEdit.setText("");
                                     }
-                                    binding.loginAlertText.setVisibility(View.GONE);
-                                }else{
-                                    if(GET_ACCOUNT_EMAIL.isEmpty()){
-                                        Toast.makeText(mContext,"통신연결이 불안정합니다. 다시 로그인해주세요.",Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL,platform);
+                                } else {
+                                    if (GET_ACCOUNT_EMAIL.isEmpty()) {
+                                        Toast.makeText(mContext, "통신연결이 불안정합니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        if (!platform.equals("NEB")) {
+                                            INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL, platform);
+                                        }else{
+                                            shardpref.remove("USER_INFO_ID");
+                                            shardpref.remove("USER_INFO_NAME");
+                                            shardpref.remove("USER_INFO_EMAIL");
+                                            shardpref.remove("USER_INFO_PW");
+                                            shardpref.remove("USER_INFO_PHONE");
+                                            shardpref.remove("USER_INFO_GENDER");
+                                            shardpref.remove("USER_INFO_PROFILE");
+                                            shardpref.remove("USER_INFO_METHOD");
+                                            shardpref.remove("USER_LOGIN_METHOD");
+                                            binding.deviceNumEdit.setText("");
+                                            binding.pwdEdit.setText("");
+                                        }
                                     }
                                 }
                             } catch (JSONException e) {
@@ -534,8 +603,31 @@ public class LoginActivity extends AppCompatActivity {
     }
     //----콜백 영역 END
 
+    // *** 스틱코드 등록 코드 ***
+    public static String getHash(String str) {
+        String digest = "";
+        try {
+            //암호화
+            MessageDigest sh = MessageDigest.getInstance("SHA-256"); // SHA-256 해시함수를 사용
+            sh.update(str.getBytes()); // str의 문자열을 해싱하여 sh에 저장
+            byte byteData[] = sh.digest(); // sh 객체의 다이제스트를 얻는다.
+
+            //얻은 결과를 string으로 변환
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            digest = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            digest = null;
+        }
+        return digest;
+    }
+    // *** 스틱코드 등록 코드 ***
+
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
 //        super.onBackPressed();
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
         intent.putExtra("data", "앱을 종료 하시겠습니까?");
@@ -543,7 +635,7 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "종료");
         mContext.startActivity(intent);
-        ((Activity) mContext).overridePendingTransition(R.anim.translate_up,0);
+        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 }
