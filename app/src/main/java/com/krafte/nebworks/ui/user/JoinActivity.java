@@ -52,7 +52,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class JoinActivity extends AppCompatActivity {
     private ActivityJoinBinding binding;
-    private final static String TAG = "JoinActivity";
+//    private final static String TAG = "JoinActivity";
+    private static final String TAG = "AES256Util";
     Context mContext;
 
     // shared 저장값
@@ -105,7 +106,7 @@ public class JoinActivity extends AppCompatActivity {
         intent = getIntent();
         dlog.DlogContext(mContext);
         try {
-            aes256Util = new AES256Util("kraftmysecretkey");
+            aes256Util = new AES256Util("dkwj12fisne349vnlkw904mlk13490nv");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -118,7 +119,7 @@ public class JoinActivity extends AppCompatActivity {
         USER_INFO_ID = shardpref.getString("USER_INFO_EMAIL", "");
         shardpref.putString("GET_TIME", dc.GET_TIME);
 
-        Log.i(TAG, "현재시간 : " + dc.GET_TIME);
+        dlog.i( "현재시간 : " + dc.GET_TIME);
 
         Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
@@ -304,7 +305,7 @@ public class JoinActivity extends AppCompatActivity {
         });
 
         binding.joinBtn.setOnClickListener(v1 -> {
-            Log.i(TAG, "Click binding.JoinBtn");
+            dlog.i( "Click binding.JoinBtn");
             if (Join_Info_Check()) {
                 SAVE_USER_IFNO();
             }
@@ -323,7 +324,6 @@ public class JoinActivity extends AppCompatActivity {
     }
 
     public boolean Join_Info_Check() {
-
         Log.e(TAG, "confirmEmail : " + confirmEmail);
         if (!Uservice01 || !Uservice02 || !Uservice03 || !Uservice04) {
             Toast.makeText(mContext, "필수약관에 동의해주세요", Toast.LENGTH_SHORT).show();
@@ -362,7 +362,7 @@ public class JoinActivity extends AppCompatActivity {
 
     public void SAVE_USER_IFNO() {
         NetworkStates();
-        Log.i(TAG, "USER_INFO_PHONE : " + USER_INFO_PHONE);
+        dlog.i( "USER_INFO_PHONE : " + USER_INFO_PHONE);
         if (USER_INFO_PHONE.contains("+82")) {
             USER_INFO_PHONE = USER_INFO_PHONE.replace("+82", "0");
         }
@@ -384,9 +384,9 @@ public class JoinActivity extends AppCompatActivity {
     public void NetworkStates() {
         int status = disconnectHandler.getConnectivityStatus(getApplicationContext());
         if (status == disconnectHandler.TYPE_MOBILE) {
-            Log.i(TAG, "모바일로 연결됨");
+            dlog.i( "모바일로 연결됨");
         } else if (status == disconnectHandler.TYPE_WIFI) {
-            Log.i(TAG, "무선랜으로 연결됨");
+            dlog.i( "무선랜으로 연결됨");
         } else {
             Intent intent = new Intent(mContext, OneButtonPopActivity.class);
             intent.putExtra("data", "네트워크가 \n 연결되지 않았습니다.");
@@ -394,7 +394,7 @@ public class JoinActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.translate_up, 0);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            Log.i(TAG, "연결 안됨.");
+            dlog.i( "연결 안됨.");
         }
     }
 
@@ -446,8 +446,10 @@ public class JoinActivity extends AppCompatActivity {
 
     public void INPUT_JOIN_DATA() {
         USER_INFO_PW = binding.editPw.getText().toString();
+        Log.i(TAG,"인코딩 전 USER_INFO_PW : " + USER_INFO_PW);
         try {
-            USER_INFO_PW = aes256Util.encode("[kraftmysecretkey]" + USER_INFO_PW + "["+R.string.kakao_native_key+"]");
+            USER_INFO_PW = aes256Util.encode("kraftmysecretkey" + USER_INFO_PW + "nrkwl3nkv54");
+//            USER_INFO_PW = aes256Util.encode(USER_INFO_PW);
         } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
                 | NoSuchPaddingException | IllegalBlockSizeException
                 | NoSuchAlgorithmException | BadPaddingException
@@ -456,6 +458,8 @@ public class JoinActivity extends AppCompatActivity {
         }
         dlog.i("-----INPUT_JOIN_DATA-----");
         dlog.i("account : " + USER_INFO_EMAIL);
+        dlog.i("pw : " + USER_INFO_PW);
+        Log.i(TAG,"인코딩 후 USER_INFO_PW : " + USER_INFO_PW);
         dlog.i("name : " + USER_INFO_NAME);
         dlog.i("phone : " + USER_INFO_PHONE);
         dlog.i("gender : " + USER_INFO_GENDER);

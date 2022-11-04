@@ -27,6 +27,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/selector_sex_radio_button.xml" value="0.227" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/switch_selector.xml" value="0.304" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_adddirectly_member.xml" value="0.25982905982905985" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_addmember_detail.xml" value="0.16" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_addplace.xml" value="0.18" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_addplace2.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_authselect.xml" value="0.22" />
@@ -52,8 +53,10 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_storedivisionpop.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_storelist_menu.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_termview.xml" value="0.2594017094017094" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_timepicker_pop.xml" value="0.2606837606837607" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_verification.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_worksite.xml" value="0.2" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/assignment_member_item.xml" value="0.5" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/bottom_navigation.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/career_fragment1.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/career_fragment2.xml" value="0.33" />
@@ -71,6 +74,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/workchecklist_item.xml" value="0.25854700854700857" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/workgotofragment.xml" value="0.2623931623931624" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/workplace_item.xml" value="0.5" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/workplace_member_item.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/worktap_fragment1.xml" value="0.2606837606837607" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3085" />
         <entry key="..\:/Users/Administrator/gradle-7.3.3-bin/gradle-7.3.3/caches/transforms-3/1d649125fa61f0192d101b44b9e195b9/transformed/jetified-usermgmt-1.27.0/res/drawable/selector_login_button.xml" value="0.304" />

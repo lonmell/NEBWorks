@@ -4,138 +4,145 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/default_gray_round"
     android:orientation="horizontal"
+    android:padding="13dp"
+    android:minHeight="52dp"
+    android:layout_marginTop="11dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
     tools:ignore="HardcodedText,RtlSymmetry">
 
-    <RelativeLayout
-        android:id="@+id/member_area"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:padding="10dp">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/add_detail"
+        android:fontFamily="@font/inter_bold"
+        android:text="name"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/profile_box"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="5dp"
-            app:cardBackgroundColor="#ffffff"
-            app:cardCornerRadius="80dp">
-
-            <ImageView
-                android:id="@+id/profile_img"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/certi01"
-                android:scaleType="fitXY" />
-        </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/add_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/list_setting"
+        app:cardBackgroundColor="@color/blue"
+        app:cardCornerRadius="5dp">
 
         <TextView
-            android:id="@+id/item_employee_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_toStartOf="@+id/edit_bottom"
-            android:layout_toEndOf="@+id/profile_box"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="start|center"
-            android:padding="3dp"
-            android:singleLine="true"
-            android:text="근로자 이름"
-            android:textColor="#000"
-            android:textSize="16sp" />
-
-        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/item_employee_name"
-            android:layout_alignStart="@+id/item_employee_name"
-            android:layout_toEndOf="@+id/profile_box"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="추가정보입력"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+    </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/member_inputdate"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/inter_regular"
-                android:gravity="start|center"
-                android:text="사번 : 000000"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+    <RelativeLayout
+        android:id="@+id/list_setting"
+        android:layout_width="35dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/name"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/member_jikgup"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="start|center"
-                    android:text="부서"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/member_contract"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="center|end"
-                    android:padding="3dp"
-                    android:text="직급"
-                    android:textColor="#696969"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/edit_bottom"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignTop="@+id/item_employee_name"
+        <ImageView
+            android:layout_width="3dp"
+            android:layout_height="15dp"
             android:layout_alignParentEnd="true"
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:scaleType="fitCenter">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="4dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center"
-                android:alpha="0.6"
-                app:cardBackgroundColor="#000000"
-                app:cardCornerRadius="60dp" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="4dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="3dp"
-                android:alpha="0.6"
-                app:cardBackgroundColor="#000000"
-                app:cardCornerRadius="60dp" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="4dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="3dp"
-                android:alpha="0.6"
-                app:cardBackgroundColor="#000000"
-                app:cardCornerRadius="60dp" />
-        </LinearLayout>
-
+            android:layout_centerVertical="true"
+            android:background="@drawable/list_setting" />
     </RelativeLayout>
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#f2f2f2"
-        android:layout_below="@+id/member_area"/>
+        android:id="@+id/linear01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/name"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="직급"
+            android:textColor="#696969"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/jikgup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/linear01">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="급여"
+            android:textColor="#696969"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+    </LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/list_setting"
+        android:layout_alignBottom="@+id/linear02"
+        android:layout_alignEnd="@+id/list_setting"
+        app:cardBackgroundColor="#f2f2f2"
+        app:cardCornerRadius="5dp">
+
+        <TextView
+            android:id="@+id/state_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="휴직"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

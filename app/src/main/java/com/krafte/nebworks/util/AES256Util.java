@@ -1,6 +1,7 @@
 package com.krafte.nebworks.util;
 
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -16,12 +17,13 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AES256Util {
+    private static final String TAG = "AES256Util";
     private String iv;
     private Key keySpec;
 
     public AES256Util(String key) throws UnsupportedEncodingException {
         this.iv = key.substring(0, 16);
-        byte[] keyBytes = new byte[16];
+        byte[] keyBytes = new byte[32];
         byte[] b = key.getBytes("UTF-8");
         int len = b.length;
         if (len > keyBytes.length) {
@@ -29,6 +31,8 @@ public class AES256Util {
         }
         System.arraycopy(b, 0, keyBytes, 0, len);
         SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+        Log.i(TAG,"iv : " + iv);
+        Log.i(TAG,"key : " + key);
         this.keySpec = keySpec;
     } // 암호키 생성
 

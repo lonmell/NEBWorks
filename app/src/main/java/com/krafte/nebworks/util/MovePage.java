@@ -121,4 +121,6 @@ public interface MovePage {
     void AuthSelect(Context context);
 
     void DirectAddMember(Context context);
+
+    void AddMemberDetail(Context context);
 }

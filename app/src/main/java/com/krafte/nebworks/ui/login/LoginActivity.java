@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
         try {
-            aes256Util = new AES256Util("kraftmysecretkey");
+            aes256Util = new AES256Util("dkwj12fisne349vnlkw904mlk13490nv");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -418,6 +418,7 @@ public class LoginActivity extends AppCompatActivity {
                                         String decodePw = "";
                                         dlog.i("LoginCheck platform : " + platform);
                                         try {
+                                            //-- 확인할때 사용
 //                                            try {
 //                                                USER_INFO_PW = aes256Util.encode("[kraftmysecretkey]" + "onon0817!!" + "["+R.string.kakao_native_key+"]");
 //                                                dlog.i("USER_INFO_PW ; " + USER_INFO_PW);
@@ -427,9 +428,8 @@ public class LoginActivity extends AppCompatActivity {
 //                                                    | InvalidKeyException e) {
 //                                                e.printStackTrace();
 //                                            }
-
-                                            String repalcekey0 = "[kraftmysecretkey]";
-                                            String replacekey1 = "["+R.string.kakao_native_key+"]";
+                                            String repalcekey0 = "kraftmysecretkey";
+                                            String replacekey1 = "nrkwl3nkv54";
                                             decodePw = aes256Util.decode(getPassword).replace(repalcekey0,"").replace(replacekey1,"");
                                             shardpref.putString("USER_INFO_ID", getid);
                                             shardpref.putString("USER_INFO_NAME", getname);

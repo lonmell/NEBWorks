@@ -60,7 +60,7 @@ public class AssignmentMemberAdapter extends RecyclerView.Adapter<AssignmentMemb
         PlaceMemberListData.PlaceMemberListData_list item = mData.get(position);
         try{
             Log.i(TAG, "item.getThumnail_url() : " + item.getImg_path());
-            Log.i(TAG, "item.getEmployment_name() : " + item.getName() + "|" + item.getDepartment() + " " + item.getPosition());
+            Log.i(TAG, "item.getEmployment_name() : " + item.getName() + "|" + item.getJikgup());
 
             users = shardpref.getString("users", "0").replace("[", "").replace("]", "");
             if (!users.isEmpty()) {
@@ -74,7 +74,7 @@ public class AssignmentMemberAdapter extends RecyclerView.Adapter<AssignmentMemb
                     dlog.i("limit_cnt memberArray : " + memberArray);
                 }
             }
-            holder.user_name.setText(item.getName() + "(" + (item.getDepartment().equals("null") ? "" : item.getDepartment()) + " " + (item.getPosition().equals("null") ? "" : item.getPosition()) + ")");
+            holder.user_name.setText(item.getName() + "(" + (item.getJikgup().equals("null") ? "" : item.getJikgup()) + ")");
 //        Log.i(TAG,"select_radio_btn : " + (position == select_flag));
 //        holder.select_radio_btn.setChecked(position == select_flag);
 

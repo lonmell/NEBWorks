@@ -1,0 +1,690 @@
+package com.krafte.nebworks.ui.member;
+
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.PlaceMemberInsertDetail;
+import com.krafte.nebworks.dataInterface.PlaceMemberInsertOther;
+import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
+import com.krafte.nebworks.databinding.ActivityAddmemberDetailBinding;
+import com.krafte.nebworks.util.Dlog;
+import com.krafte.nebworks.util.PageMoveClass;
+import com.krafte.nebworks.util.PreferenceHelper;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+public class AddMemberDetail extends AppCompatActivity {
+    private ActivityAddmemberDetailBinding binding;
+    private final static String TAG = "AddMemberDetail";
+    Context mContext;
+
+    PreferenceHelper shardpref;
+
+    //Shared
+    String place_id = "";
+    String USER_INFO_NAME = "";
+    String USER_INFO_PHONE = "";
+    String USER_LOGIN_METHOD = "";
+
+    //other
+    boolean check = false;
+    PageMoveClass pm = new PageMoveClass();
+    Dlog dlog = new Dlog();
+    DatePickerDialog datePickerDialog;
+
+    String toDay = "";
+    String Year = "";
+    String Month = "";
+    String Day = "";
+    int Hour = 0;
+    int Minute = 0;
+    int Sec = 0;
+    String getDatePicker = "";
+    String getYMPicker = "";
+    String result = "";
+
+    //Parameter
+    //--BasicInfo
+    String mem_id = "";
+    String mem_name = "";
+    String mem_phone = "";
+    String mem_gender = "";
+    String mem_jumin = "";
+    String mem_join_date = "";
+
+    //--DetailInfo
+    String mem_state = "";
+    String mem_jikgup = "";
+    String mem_paykind = "";
+    String mem_pay = "";
+    String mem_worktime = "";
+    String mem_task = "";
+    String mem_age = "";
+    String mem_email = "";
+    String mem_address = "";
+    String mem_introduce = "";
+    String mem_career = "";
+
+    //점주의 직접입력인지 초대된 직원의 상세정보 입력인지 구분
+    int input_kind = -1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_account_delete);
+        binding = ActivityAddmemberDetailBinding.inflate(getLayoutInflater()); // 1
+        setContentView(binding.getRoot()); // 2
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
+        mContext = this;
+        dlog.DlogContext(mContext);
+        setBtnEvent();
+
+        shardpref = new PreferenceHelper(mContext);
+        place_id = shardpref.getString("place_id", "");
+        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+        USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
+        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
+        Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
+        Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
+        Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+
+        mem_id = shardpref.getString("mem_id", "");
+        mem_name = shardpref.getString("mem_name", "");
+        mem_phone = shardpref.getString("mem_phone", "");
+        mem_gender = shardpref.getString("mem_gender", "");
+        mem_jumin = shardpref.getString("mem_jumin", "");
+        mem_join_date = shardpref.getString("mem_join_date", "");
+        mem_state = shardpref.getString("mem_state", "");
+        mem_jikgup = shardpref.getString("mem_jikgup", "");
+        mem_pay = shardpref.getString("mem_pay", "");
+
+        if (mem_id.equals(mem_phone)) {
+            //직접추가한 직원
+            input_kind = 0;
+        } else {
+            //초대로 추가한 회원인 직원
+            input_kind = 1;
+            setInputSetting();
+        }
+
+        setBasicInfo();
+        setDetailInfo();
+        setOtherInfo();
+    }
+
+    private void setInputSetting() {
+        //--초대로 추가한 회원인 직원의 경우 개인정보는 수정할 수 없도록 입력을 막는다
+        //이름
+        binding.inputbox01.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox01.setEnabled(false);
+        binding.inputbox01.setClickable(false);
+        //연락처
+        binding.inputbox02.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox02.setEnabled(false);
+        binding.inputbox02.setClickable(false);
+        //주민등록번호
+        binding.inputbox03.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox03.setEnabled(false);
+        binding.inputbox03.setClickable(false);
+        //입사날짜
+        binding.inputbox04.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox04.setEnabled(false);
+        binding.inputbox04.setClickable(false);
+        //나이
+        binding.inputbox07.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox07.setEnabled(false);
+        binding.inputbox07.setClickable(false);
+        //이메일
+        binding.inputbox08.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox08.setEnabled(false);
+        binding.inputbox08.setClickable(false);
+        //주소
+        binding.inputbox09.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox09.setEnabled(false);
+        binding.inputbox09.setClickable(false);
+        //자기소개
+        binding.inputbox10.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox10.setEnabled(false);
+        binding.inputbox10.setClickable(false);
+        //경력및학력
+        binding.inputbox11.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.inputbox11.setEnabled(false);
+        binding.inputbox11.setClickable(false);
+    }
+
+    private void setBasicInfo() {
+        //---기본정보
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        datePickerDialog = new DatePickerDialog(mContext, (view, year, month, dayOfMonth) -> {
+            Year = String.valueOf(year);
+            Month = String.valueOf(month + 1);
+            Day = String.valueOf(dayOfMonth);
+            Day = Day.length() == 1 ? "0" + Day : Day;
+            Month = Month.length() == 1 ? "0" + Month : Month;
+            binding.inputbox04.setText(year + "-" + Month + "-" + Day);
+            getYMPicker = binding.inputbox04.getText().toString().substring(0, 7);
+        }, mYear, mMonth, mDay);
+
+        binding.inputbox01.setText(mem_name);
+        binding.inputbox01.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_name = s.toString();
+            }
+        });
+
+        binding.inputbox02.setText(mem_phone);
+        binding.inputbox02.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_phone = s.toString();
+            }
+        });
+
+        binding.inputbox03.setText(mem_jumin);
+        binding.inputbox03.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_jumin = s.toString();
+            }
+        });
+
+        binding.inputbox04.setText(mem_join_date);
+        binding.inputbox04.setOnClickListener(v -> {
+            datePickerDialog.show();
+        });
+        //---기본정보
+    }
+
+    boolean select01TF = false;
+    boolean select02TF = false;
+    final DecimalFormat decimalFormat = new DecimalFormat("#,###");
+
+    private void setDetailInfo() {
+        binding.select01Box.setOnClickListener(v -> {
+            binding.select02.setBackgroundResource(R.drawable.select_empty_round);
+            if (!select01TF) {
+                mem_state = "1";
+                binding.select01.setBackgroundResource(R.drawable.resize_service_on);
+            } else {
+                mem_state = "0";
+                binding.select01.setBackgroundResource(R.drawable.select_empty_round);
+            }
+        });
+        binding.select02Box.setOnClickListener(v -> {
+            binding.select01.setBackgroundResource(R.drawable.select_empty_round);
+            if (!select02TF) {
+                mem_state = "2";
+                binding.select02.setBackgroundResource(R.drawable.resize_service_on);
+            } else {
+                mem_state = "0";
+                binding.select02.setBackgroundResource(R.drawable.select_empty_round);
+            }
+        });
+
+        /*직급*/
+        ArrayList<String> stringCategory1 = new ArrayList<>();
+        stringCategory1.add("알바");
+        stringCategory1.add("정직원");
+        stringCategory1.add("매니저");
+        stringCategory1.add("기타");
+
+        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory1);
+        binding.jikgupSpinner.setAdapter(select_filter1);
+        binding.jikgupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                binding.jikgup.setText(stringCategory1.get(i));
+                dlog.i("i : " + stringCategory1.get(i));
+                mem_jikgup = stringCategory1.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+//                binding.jikgup.setText("알바");
+                mem_jikgup = "알바";
+            }
+        });
+
+        /*급여 지급방식*/
+        ArrayList<String> stringCategory2 = new ArrayList<>();
+        stringCategory2.add("근로자에게 직접지급");
+        stringCategory2.add("근로자명의 예금통장에 입금");
+
+        ArrayAdapter<String> select_filter2 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory2);
+        binding.paySpinner.setAdapter(select_filter2);
+        binding.paySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                binding.pay.setText(stringCategory2.get(i));
+                dlog.i("i : " + stringCategory2.get(i));
+                mem_paykind = stringCategory2.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+//                binding.pay.setText("근로자에게 직접지급");
+                mem_paykind = "근로자에게 직접지급";
+            }
+        });
+
+        /*급여액*/
+        binding.inputbox05.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(result)) {
+                    result = decimalFormat.format(Double.parseDouble(s.toString().replaceAll(",", "")));
+                    binding.inputbox05.setText(result);
+                    binding.inputbox05.setSelection(result.length());
+                }
+                mem_pay = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        /*근무시간*/
+        binding.worktime.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_worktime = s.toString();
+            }
+        });
+
+        /*주요직무*/
+        binding.inputbox06.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_task = s.toString();
+            }
+        });
+
+    }
+
+    private void setOtherInfo() {
+        //-- 기타정보 시작
+        /*나이*/
+        binding.inputbox07.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_age = s.toString();
+            }
+        });
+
+        /*이메일*/
+        binding.inputbox08.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_email = s.toString();
+            }
+        });
+
+        /*주소*/
+        binding.inputbox09.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_address = s.toString();
+            }
+        });
+
+
+        /*자기소개*/
+        binding.inputbox10.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_address = s.toString();
+            }
+        });
+
+        /*경력 및 학력*/
+        binding.inputbox11.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mem_career = s.toString();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        shardpref.remove("mem_id");
+        shardpref.remove("mem_name");
+        shardpref.remove("mem_phone");
+        shardpref.remove("mem_gender");
+        shardpref.remove("mem_jumin");
+        shardpref.remove("mem_join_date");
+        shardpref.remove("mem_state");
+        shardpref.remove("mem_jikgup");
+        shardpref.remove("mem_pay");
+    }
+
+
+    private void setBtnEvent() {
+        binding.backBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
+
+        binding.addMemberBtn.setOnClickListener(v -> {
+            if(input_kind == 0){
+                if (SaveCheck() && SaveCheckOtherInfo()) {
+                    dlog.i("addMemberBtn SaveCheck" + SaveCheck());
+                    UpdateDirectMemberBasic();
+
+                }
+            }else{
+                if(SaveCheckDetail()){
+                    AddMemberDetail();
+                }
+            }
+        });
+
+        binding.inputbox04.setOnClickListener(v -> {
+            datePickerDialog.show();
+        });
+    }
+
+    private boolean SaveCheck() {
+        //회원 기본정보 체크
+        mem_join_date = binding.inputbox04.getText().toString();
+        if (place_id.isEmpty()) {
+            Toast.makeText(mContext, "매장 ID가 저장되어있지 않습니다, 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            pm.PlaceList(mContext);
+            return false;
+        } else if (mem_name.isEmpty()) {
+            Toast.makeText(mContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (mem_phone.isEmpty()) {
+            Toast.makeText(mContext, "전화번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (mem_jumin.isEmpty()) {
+            Toast.makeText(mContext, "주민번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (mem_join_date.isEmpty()) {
+            Toast.makeText(mContext, "입사일자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            //상세정보 체크
+            dlog.i("------SaveCheck------");
+            dlog.i("매장ID : " + place_id);
+            dlog.i("이름 : " + mem_name);
+            dlog.i("전화번호 : " + mem_phone);
+            dlog.i("주민번호 : " + mem_jumin);
+            dlog.i("입사날짜 : " + mem_join_date);
+            dlog.i("------SaveCheck------");
+            return true;
+        }
+    }
+    private boolean SaveCheckOtherInfo(){
+        dlog.i("------SaveCheckOtherInfo------");
+        dlog.i("나이 : " + mem_age);
+        dlog.i("이메일 : " + mem_email);
+        dlog.i("주소 : " + mem_address);
+        dlog.i("자기소개 : " + mem_introduce);
+        dlog.i("경력및학력 : " + mem_career);
+        dlog.i("------SaveCheckOtherInfo------");
+        return true;
+    }
+    private boolean SaveCheckDetail() {
+        dlog.i("------SaveCheckDetail------");
+        dlog.i("매장ID : " + place_id);
+        dlog.i("재직상태 : " + mem_state);
+        dlog.i("직급 : " + mem_jikgup);
+        dlog.i("급여지급방식 : " + mem_paykind);
+        dlog.i("급여액 : " + mem_pay);
+        dlog.i("근무시간 : " + mem_worktime);
+        dlog.i("주요직무 : " + mem_task);
+        dlog.i("주요직무 : " + mem_task);
+        dlog.i("------SaveCheckDetail------");
+        return true;
+    }
+    private void UpdateDirectMemberBasic(){
+        //직접 입력직원 기본정보 업데이트
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceMemberUpdateBasic.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceMemberUpdateBasic api = retrofit.create(PlaceMemberUpdateBasic.class);
+        Call<String> call = api.getData(place_id, mem_id, mem_name, mem_phone, mem_jumin, mem_join_date);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
+                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
+                            if (response.body().replace("\"", "").equals("success")) {
+                                AddDirectMemberOther();
+
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Toast_Nomal("기본정보 업데이트 에러  = " + t.getMessage());
+            }
+        });
+    }
+
+    private void AddDirectMemberOther(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceMemberInsertOther.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceMemberInsertOther api = retrofit.create(PlaceMemberInsertOther.class);
+        Call<String> call = api.getData(place_id, mem_id, mem_age, mem_email, mem_address, mem_introduce, mem_career);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("AddDirectMemberOther jsonResponse length : " + response.body().length());
+                            dlog.i("AddDirectMemberOther jsonResponse : " + response.body());
+                            if (response.body().replace("\"", "").equals("success")) {
+                                AddMemberDetail();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Toast_Nomal("기타정보 업데이트 에러  = " + t.getMessage());
+            }
+        });
+    }
+
+    private void AddMemberDetail() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceMemberInsertDetail.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceMemberInsertDetail api = retrofit.create(PlaceMemberInsertDetail.class);
+        Call<String> call = api.getData(place_id, mem_id, mem_state, mem_jikgup, mem_paykind, mem_pay, mem_worktime, mem_task);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
+                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
+                            if (response.body().replace("\"", "").equals("success")) {
+                                shardpref.putInt("SELECT_POSITION", 2);
+                                shardpref.putInt("SELECT_POSITION_sub", 0);
+                                Toast_Nomal("직원정보가 업데이트 되었습니다.");
+                                pm.Main(mContext);
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Toast_Nomal("상세정보 업데이트 에러  = " + t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
+}

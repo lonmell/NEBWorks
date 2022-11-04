@@ -13,6 +13,7 @@ import com.krafte.nebworks.ui.feed.FeedEditActivity;
 import com.krafte.nebworks.ui.login.LoginActivity;
 import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.main.MainFragment2;
+import com.krafte.nebworks.ui.member.AddMemberDetail;
 import com.krafte.nebworks.ui.member.AdddirectlyMember;
 import com.krafte.nebworks.ui.member.AuthSelectActivity;
 import com.krafte.nebworks.ui.member.MemberManagement;
@@ -456,6 +457,14 @@ public class PageMoveClass implements MovePage {
     @Override
     public void DirectAddMember(Context context) {
         Intent intent = new Intent(context, AdddirectlyMember.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void AddMemberDetail(Context context) {
+        Intent intent = new Intent(context, AddMemberDetail.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -4,24 +4,29 @@ public class PlaceMemberListData {
     private static final String TAG = "WorkPlaceMemberListData";
 
     public static class PlaceMemberListData_list{
-        String id = null;
-        String name = null;
-        String kind = null;
-        String account = null;
-        String employee_no = null;
-        String department = null;
-        String position = null;
-        String img_path = null;
+        String id;
+        String name;
+        String phone;
+        String gender;
+        String img_path;
+        String jumin;
+        String join_date;
+        String state;
+        String jikgup;
+        String pay;
 
-        public PlaceMemberListData_list(String id, String name, String kind, String account, String employee_no,String department, String position,String img_path){
+        public PlaceMemberListData_list( String id, String name, String phone,
+                String gender, String img_path, String jumin, String join_date, String state, String jikgup, String pay){
             this.id = id;
             this.name = name;
-            this.kind = kind;
-            this.account = account;
-            this.employee_no = employee_no;
-            this.department = department;
-            this.position = position;
+            this.phone = phone;
+            this.gender = gender;
             this.img_path = img_path;
+            this.jumin = jumin;
+            this.join_date = join_date;
+            this.state = state;
+            this.jikgup = jikgup;
+            this.pay = pay;
         }
 
         public String getId() {
@@ -40,44 +45,20 @@ public class PlaceMemberListData {
             this.name = name;
         }
 
-        public String getKind() {
-            return kind;
+        public String getPhone() {
+            return phone;
         }
 
-        public void setKind(String kind) {
-            this.kind = kind;
+        public void setPhone(String phone) {
+            this.phone = phone;
         }
 
-        public String getAccount() {
-            return account;
+        public String getGender() {
+            return gender;
         }
 
-        public void setAccount(String account) {
-            this.account = account;
-        }
-
-        public String getEmployee_no() {
-            return employee_no;
-        }
-
-        public void setEmployee_no(String employee_no) {
-            this.employee_no = employee_no;
-        }
-
-        public String getDepartment() {
-            return department;
-        }
-
-        public void setDepartment(String department) {
-            this.department = department;
-        }
-
-        public String getPosition() {
-            return position;
-        }
-
-        public void setPosition(String position) {
-            this.position = position;
+        public void setGender(String gender) {
+            this.gender = gender;
         }
 
         public String getImg_path() {
@@ -86,6 +67,46 @@ public class PlaceMemberListData {
 
         public void setImg_path(String img_path) {
             this.img_path = img_path;
+        }
+
+        public String getJumin() {
+            return jumin;
+        }
+
+        public void setJumin(String jumin) {
+            this.jumin = jumin;
+        }
+
+        public String getJoin_date() {
+            return join_date;
+        }
+
+        public void setJoin_date(String join_date) {
+            this.join_date = join_date;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public String getJikgup() {
+            return jikgup;
+        }
+
+        public void setJikgup(String jikgup) {
+            this.jikgup = jikgup;
+        }
+
+        public String getPay() {
+            return pay;
+        }
+
+        public void setPay(String pay) {
+            this.pay = pay;
         }
     }
 }

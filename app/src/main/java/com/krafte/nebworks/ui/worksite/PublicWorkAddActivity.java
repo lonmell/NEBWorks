@@ -708,12 +708,14 @@ public class PublicWorkAddActivity  extends AppCompatActivity {
                                     mAdapter.addItem(new PlaceMemberListData.PlaceMemberListData_list(
                                             jsonObject.getString("id"),
                                             jsonObject.getString("name"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("account"),
-                                            jsonObject.getString("employee_no"),
-                                            jsonObject.getString("department"),
-                                            jsonObject.getString("position"),
-                                            jsonObject.getString("img_path")
+                                            jsonObject.getString("phone"),
+                                            jsonObject.getString("gender"),
+                                            jsonObject.getString("img_path"),
+                                            jsonObject.getString("jumin"),
+                                            jsonObject.getString("join_date"),
+                                            jsonObject.getString("state"),
+                                            jsonObject.getString("jikgup"),
+                                            jsonObject.getString("pay")
                                     ));
                                 }
 

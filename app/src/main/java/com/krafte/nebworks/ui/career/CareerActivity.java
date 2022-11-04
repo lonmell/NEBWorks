@@ -169,7 +169,7 @@ public class CareerActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(listener);
         drawerView.setOnTouchListener((v, event) -> true);
         try {
-            aes256Util = new AES256Util("kraftmysecretkey");
+            aes256Util = new AES256Util("dkwj12fisne349vnlkw904mlk13490nv");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -599,7 +599,7 @@ public class CareerActivity extends AppCompatActivity {
     AES256Util aes256Util;
     public void SaveUser() {
         try {
-            USER_INFO_PW = aes256Util.encode("[kraftmysecretkey]" + USER_INFO_PW + "["+R.string.kakao_native_key+"]");
+            USER_INFO_PW = aes256Util.encode("kraftmysecretkey" + USER_INFO_PW + "nrkwl3nkv54");
         } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
                 | NoSuchPaddingException | IllegalBlockSizeException
                 | NoSuchAlgorithmException | BadPaddingException

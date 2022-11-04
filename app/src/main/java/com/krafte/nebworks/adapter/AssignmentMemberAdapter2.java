@@ -2,7 +2,6 @@ package com.krafte.nebworks.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +13,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceMemberListData;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AssignmentMemberAdapter2 extends RecyclerView.Adapter<AssignmentMemberAdapter2.ViewHolder> {
 
@@ -59,52 +54,52 @@ public class AssignmentMemberAdapter2 extends RecyclerView.Adapter<AssignmentMem
     public void onBindViewHolder(@NonNull AssignmentMemberAdapter2.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         PlaceMemberListData.PlaceMemberListData_list item = mData.get(position);
         try{
-            Log.i(TAG, "item.getThumnail_url() : " + item.getImg_path());
-            Log.i(TAG, "item.getEmployment_name() : " + item.getName() + "|" + item.getDepartment() + " " + item.getPosition());
-
-            users = shardpref.getString("users2", "0").replace("[", "").replace("]", "");
-            if (!users.isEmpty()) {
-                limit_cnt++;
-                dlog.i("users : " + users);
-                String str = Arrays.toString(users.split(", ")).replace("[", "").replace("]", "");
-//            dlog.i("member check : " + item.getId() + " / check " + (str.contains(item.getId())));
-                holder.select_radio_btn.setChecked((str.contains(item.getId())));
-                if (limit_cnt == mData.size()) {
-                    memberArray.addAll(Arrays.asList(users.split(", ")).stream().distinct().collect(Collectors.toList()));
-                    dlog.i("limit_cnt memberArray : " + memberArray);
-                }
-            }
-            holder.user_name.setText(item.getName() + "(" + (item.getDepartment().equals("null") ? "" : item.getDepartment()) + " " + (item.getPosition().equals("null") ? "" : item.getPosition()) + ")");
-//        Log.i(TAG,"select_radio_btn : " + (position == select_flag));
-//        holder.select_radio_btn.setChecked(position == select_flag);
-
-            if (!item.getImg_path().isEmpty()) {
-                Glide.with(mContext).load(item.getImg_path())
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .into(holder.profile_img);
-            }
-
-
-            holder.area_box.setOnClickListener(v -> {
-                select_flag = position;
-
-                if (holder.select_radio_btn.isChecked()) {
-                    holder.select_radio_btn.setChecked(false);
-                    memberArray.remove(item.getId());
-                    dlog.i("remove : " + item.getId());
-                    dlog.i("memberArray check " + item.getId() + " / " + Arrays.asList(memberArray).contains(item.getId()));
-                    dlog.i("OnClick memberArray remove : " + memberArray.removeIf(str -> str.equals(item.getId())));
-                } else {
-                    holder.select_radio_btn.setChecked(true);
-                    memberArray.add(item.getId());
-                    dlog.i("add : " + item.getId());
-                    dlog.i("OnClick memberArray add : " + memberArray);
-                }
-
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, memberArray);
-                }
-            });
+//            Log.i(TAG, "item.getThumnail_url() : " + item.getImg_path());
+//            Log.i(TAG, "item.getEmployment_name() : " + item.getName() + "|" + item.getDepartment() + " " + item.getPosition());
+//
+//            users = shardpref.getString("users2", "0").replace("[", "").replace("]", "");
+//            if (!users.isEmpty()) {
+//                limit_cnt++;
+//                dlog.i("users : " + users);
+//                String str = Arrays.toString(users.split(", ")).replace("[", "").replace("]", "");
+////            dlog.i("member check : " + item.getId() + " / check " + (str.contains(item.getId())));
+//                holder.select_radio_btn.setChecked((str.contains(item.getId())));
+//                if (limit_cnt == mData.size()) {
+//                    memberArray.addAll(Arrays.asList(users.split(", ")).stream().distinct().collect(Collectors.toList()));
+//                    dlog.i("limit_cnt memberArray : " + memberArray);
+//                }
+//            }
+//            holder.user_name.setText(item.getName() + "(" + (item.getDepartment().equals("null") ? "" : item.getDepartment()) + " " + (item.getPosition().equals("null") ? "" : item.getPosition()) + ")");
+////        Log.i(TAG,"select_radio_btn : " + (position == select_flag));
+////        holder.select_radio_btn.setChecked(position == select_flag);
+//
+//            if (!item.getImg_path().isEmpty()) {
+//                Glide.with(mContext).load(item.getImg_path())
+//                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                        .into(holder.profile_img);
+//            }
+//
+//
+//            holder.area_box.setOnClickListener(v -> {
+//                select_flag = position;
+//
+//                if (holder.select_radio_btn.isChecked()) {
+//                    holder.select_radio_btn.setChecked(false);
+//                    memberArray.remove(item.getId());
+//                    dlog.i("remove : " + item.getId());
+//                    dlog.i("memberArray check " + item.getId() + " / " + Arrays.asList(memberArray).contains(item.getId()));
+//                    dlog.i("OnClick memberArray remove : " + memberArray.removeIf(str -> str.equals(item.getId())));
+//                } else {
+//                    holder.select_radio_btn.setChecked(true);
+//                    memberArray.add(item.getId());
+//                    dlog.i("add : " + item.getId());
+//                    dlog.i("OnClick memberArray add : " + memberArray);
+//                }
+//
+//                if (mListener != null) {
+//                    mListener.onItemClick(v, position, memberArray);
+//                }
+//            });
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }

@@ -232,31 +232,31 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberAddInterface api = retrofit.create(PlaceMemberAddInterface.class);
-        Call<String> call = api.getData(place_id, account,"","","");
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
-                            if (!response.body().replace("\"", "").equals("success")) {
-                                dlog.i("매장 멤버 추가 완료");
-                            }
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
+//        Call<String> call = api.getData(place_id, account,"","","");
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    runOnUiThread(() -> {
+//                        if (response.isSuccessful() && response.body() != null) {
+////                            String jsonResponse = rc.getBase64decode(response.body());
+//                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
+//                            dlog.i("UserCheck jsonResponse : " + response.body());
+//                            if (!response.body().replace("\"", "").equals("success")) {
+//                                dlog.i("매장 멤버 추가 완료");
+//                            }
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                dlog.e("에러1 = " + t.getMessage());
+//            }
+//        });
     }
 
     @Override
