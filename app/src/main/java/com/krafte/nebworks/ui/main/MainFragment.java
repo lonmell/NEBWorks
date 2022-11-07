@@ -23,8 +23,8 @@ import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
 import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
+import com.krafte.nebworks.ui.naviFragment.CalendarFragment;
 import com.krafte.nebworks.ui.naviFragment.HomeFragment;
-import com.krafte.nebworks.ui.naviFragment.MemberFragment;
 import com.krafte.nebworks.ui.naviFragment.MoreFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkgotoFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkstatusFragment;
@@ -123,8 +123,8 @@ public class MainFragment extends AppCompatActivity {
             //점주일때
             fragments.add(HomeFragment.newInstance(0));
             fragments.add(WorkgotoFragment.newInstance(1));
-            fragments.add(MemberFragment.newInstance(2));
-            fragments.add(WorkstatusFragment.newInstance(3));
+            fragments.add(WorkstatusFragment.newInstance(2));
+            fragments.add(CalendarFragment.newInstance(3));
             fragments.add(MoreFragment.newInstance(4));
             viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
 

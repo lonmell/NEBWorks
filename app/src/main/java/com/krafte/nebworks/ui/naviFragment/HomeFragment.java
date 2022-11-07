@@ -236,6 +236,10 @@ public class HomeFragment extends Fragment {
 //            pm.ApprovalGo(mContext);
 //            shardpref.putInt("SELECT_POSITION",0);
 //        });
+
+        binding.memberManagement011.setOnClickListener(v -> {
+                pm.MemberManagement(mContext);
+        });
     }
 
     private void getPlaceData() {
@@ -291,7 +295,7 @@ public class HomeFragment extends Fragment {
 
                                     Glide.with(mContext).load(place_img_path)
                                             .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .placeholder(R.drawable.identificon)
+                                            .placeholder(R.drawable.no_image)
                                             .skipMemoryCache(true)
                                             .into(binding.storeThumnail);
 
@@ -347,7 +351,7 @@ public class HomeFragment extends Fragment {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
                                     String id = Response.getJSONObject(0).getString("id");
-                                    String kind = Response.getJSONObject(0).getString("kind");
+//                                    String kind = Response.getJSONObject(0).getString("kind");
                                     String name = Response.getJSONObject(0).getString("name");
                                     String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
                                     String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
@@ -358,7 +362,6 @@ public class HomeFragment extends Fragment {
                                     try {
                                         dlog.i("------UserCheck-------");
                                         dlog.i("프로필 사진 url : " + img_path);
-                                        dlog.i("직원소속구분분 : " + (kind.equals("0") ? "정직원" : "협력업체"));
                                         dlog.i("성명 : " + name);
                                         dlog.i("부서 : " + department);
                                         dlog.i("직책 : " + position);

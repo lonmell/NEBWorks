@@ -10,6 +10,7 @@ public class WorkPlaceMemberListData {
         String gender;
         String img_path;
         String jumin;
+        String kind;
         String join_date;
         String state;
         String jikgup;
@@ -17,13 +18,14 @@ public class WorkPlaceMemberListData {
 
 
         public WorkPlaceMemberListData_list( String id, String name, String phone,
-                  String gender, String img_path, String jumin, String join_date, String state, String jikgup, String pay){
+                  String gender, String img_path, String jumin, String kind, String join_date, String state, String jikgup, String pay){
             this.id = id;
             this.name = name;
             this.phone = phone;
             this.gender = gender;
             this.img_path = img_path;
             this.jumin = jumin;
+            this.kind = kind;
             this.join_date = join_date;
             this.state = state;
             this.jikgup = jikgup;
@@ -76,6 +78,14 @@ public class WorkPlaceMemberListData {
 
         public void setJumin(String jumin) {
             this.jumin = jumin;
+        }
+
+        public String getKind() {
+            return kind;
+        }
+
+        public void setKind(String kind) {
+            this.kind = kind;
         }
 
         public String getJoin_date() {

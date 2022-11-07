@@ -226,6 +226,7 @@ public class MyPlaceListActivity extends AppCompatActivity {
                                                         jsonObject.getString("end_time"),
                                                         jsonObject.getString("save_kind"),
                                                         jsonObject.getString("img_path"),
+                                                        jsonObject.getString("place_kind"),
                                                         jsonObject.getString("total_cnt"),
                                                         jsonObject.getString("i_cnt"),
                                                         jsonObject.getString("o_cnt"),

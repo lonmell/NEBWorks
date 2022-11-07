@@ -7,9 +7,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,8 +26,8 @@ import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
 import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
+import com.krafte.nebworks.ui.naviFragment.CalendarFragment;
 import com.krafte.nebworks.ui.naviFragment.HomeFragment2;
-import com.krafte.nebworks.ui.naviFragment.MemberFragment;
 import com.krafte.nebworks.ui.naviFragment.MoreFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkgotoFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkstatusFragment;
@@ -57,6 +60,7 @@ public class MainFragment2 extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
+    int place_kind = 0;
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
     String store_no;
@@ -104,6 +108,7 @@ public class MainFragment2 extends AppCompatActivity {
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
             return_page = shardpref.getString("return_page", "");
             store_no = shardpref.getString("store_no", "");
+            place_kind = shardpref.getInt("place_kind",-99);
             shardpref.putString("returnPage", "BusinessApprovalActivity");
 
             bottom_icon01 = binding.getRoot().findViewById(R.id.bottom_icon01);
@@ -121,8 +126,8 @@ public class MainFragment2 extends AppCompatActivity {
             //근로자일때
             fragments.add(HomeFragment2.newInstance(0));
             fragments.add(WorkgotoFragment.newInstance(1));
-            fragments.add(MemberFragment.newInstance(2));
-            fragments.add(WorkstatusFragment.newInstance(3));
+            fragments.add(WorkstatusFragment.newInstance(2));
+            fragments.add(CalendarFragment.newInstance(3));
             fragments.add(MoreFragment.newInstance(4));
             viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
 
@@ -249,6 +254,20 @@ public class MainFragment2 extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    public void Toast_Nomal(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
+        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 
 //    //-------몰입화면 설정

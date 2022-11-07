@@ -48,10 +48,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
-
-    // 리스너 객체 참조를 저장하는 변수
     private OnItemClickListener mListener = null;
-    // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
@@ -85,6 +82,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         PlaceListData.PlaceListData_list item = mData.get(position);
 
         try{
+
             Glide.with(mContext).load(item.getImg_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
@@ -102,13 +100,51 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             }
 
             if(item.getSave_kind().equals("0")){
-                holder.money_area.setVisibility(View.INVISIBLE);
-                holder.store_kind_state.setVisibility(View.VISIBLE);
-                holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+                if(item.getOwner_id().equals(USER_INFO_ID)){
+                    //본인이 생성한 매장
+                    holder.money_area.setVisibility(View.INVISIBLE);
+                    holder.store_kind_state.setVisibility(View.VISIBLE);
+                    holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+                }else{
+                    //다른사람이 생성한 매장 ( 초대 받았을 경우 )
+                    if(item.getPlace_kind().equals("0")){
+                        holder.money_area.setVisibility(View.INVISIBLE);
+                        holder.store_kind_state.setVisibility(View.VISIBLE);
+                        holder.state_tv.setText("임시저장 중 / 승인대기 중");
+                        holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+                        holder.list_setting.setVisibility(View.INVISIBLE);
+                        holder.list_setting.setClickable(false);
+                    }else{
+                        holder.money_area.setVisibility(View.INVISIBLE);
+                        holder.store_kind_state.setVisibility(View.VISIBLE);
+                        holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+                        holder.list_setting.setVisibility(View.INVISIBLE);
+                        holder.list_setting.setClickable(false);
+                    }
+                }
             }else if(item.getSave_kind().equals("1")){
-                holder.money_area.setVisibility(View.VISIBLE);
-                holder.store_kind_state.setVisibility(View.INVISIBLE);
-                holder.item_area.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                if(item.getOwner_id().equals(USER_INFO_ID)){
+                    //본인이 생성한 매장
+                    holder.money_area.setVisibility(View.VISIBLE);
+                    holder.store_kind_state.setVisibility(View.INVISIBLE);
+                    holder.item_area.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                }else{
+                    //다른사람이 생성한 매장 ( 초대 받았을 경우 )
+                    if(item.getPlace_kind().equals("0")){
+                        holder.money_area.setVisibility(View.INVISIBLE);
+                        holder.store_kind_state.setVisibility(View.VISIBLE);
+                        holder.state_tv.setText("승인대기중");
+                        holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+                        holder.list_setting.setVisibility(View.INVISIBLE);
+                        holder.list_setting.setClickable(false);
+                    }else{
+                        holder.money_area.setVisibility(View.VISIBLE);
+                        holder.store_kind_state.setVisibility(View.INVISIBLE);
+                        holder.item_area.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                        holder.list_setting.setVisibility(View.INVISIBLE);
+                        holder.list_setting.setClickable(false);
+                    }
+                }
             }
 
             holder.item_peoplecnt.setText(item.getTotal_cnt());
@@ -135,9 +171,9 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView store_thumnail;
-        TextView title,name,address;
+        TextView title,name,address,state_tv;
         TextView item_peoplecnt;
-        CardView store_kind_state,item_area,total_item;
+        CardView store_kind_state,item_area,total_item,store_invite_accept;
         RelativeLayout list_setting,list_img_area,place_state;
         LinearLayout money_area;
 
@@ -156,6 +192,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             store_kind_state= itemView.findViewById(R.id.store_kind_state);
             total_item      = itemView.findViewById(R.id.total_item);
             item_area       = itemView.findViewById(R.id.item_area);
+            state_tv        = itemView.findViewById(R.id.state_tv);
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
@@ -165,13 +202,10 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                 if (pos != RecyclerView.NO_POSITION) {
                     PlaceListData.PlaceListData_list item = mData.get(pos);
                     Log.i("WorkplaceListAdapter", "pos : " + pos);
-
                     shardpref.putString("place_id", item.getId());
-
                     if (mListener != null) {
                         mListener.onItemClick(view, pos);
                     }
-
 //                    pm.EmployerStoreSetting(mContext);
                 }
             });
@@ -182,5 +216,6 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
     public void addItem(PlaceListData.PlaceListData_list workPlaceListData_list) {
         mData.add(workPlaceListData_list);
     }
+
 
 }

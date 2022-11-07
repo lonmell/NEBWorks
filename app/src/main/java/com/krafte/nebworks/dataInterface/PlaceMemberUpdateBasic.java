@@ -18,6 +18,7 @@ public interface PlaceMemberUpdateBasic
             @Field("name") String name,
             @Field("phone") String phone,
             @Field("jumin") String jumin,
+            @Field("kind") String kind,
             @Field("join_date") String join_date
     );
 }

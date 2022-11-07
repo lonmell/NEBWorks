@@ -77,6 +77,7 @@ public class AddMemberDetail extends AppCompatActivity {
     String mem_phone = "";
     String mem_gender = "";
     String mem_jumin = "";
+    String mem_kind = "";
     String mem_join_date = "";
 
     //--DetailInfo
@@ -123,6 +124,7 @@ public class AddMemberDetail extends AppCompatActivity {
         mem_phone = shardpref.getString("mem_phone", "");
         mem_gender = shardpref.getString("mem_gender", "");
         mem_jumin = shardpref.getString("mem_jumin", "");
+        mem_kind = shardpref.getString("mem_kind", "");
         mem_join_date = shardpref.getString("mem_join_date", "");
         mem_state = shardpref.getString("mem_state", "");
         mem_jikgup = shardpref.getString("mem_jikgup", "");
@@ -480,6 +482,7 @@ public class AddMemberDetail extends AppCompatActivity {
         shardpref.remove("mem_phone");
         shardpref.remove("mem_gender");
         shardpref.remove("mem_jumin");
+        shardpref.remove("mem_kind");
         shardpref.remove("mem_join_date");
         shardpref.remove("mem_state");
         shardpref.remove("mem_jikgup");
@@ -537,6 +540,7 @@ public class AddMemberDetail extends AppCompatActivity {
             dlog.i("이름 : " + mem_name);
             dlog.i("전화번호 : " + mem_phone);
             dlog.i("주민번호 : " + mem_jumin);
+            dlog.i("초대 승인상태 : " + mem_kind);
             dlog.i("입사날짜 : " + mem_join_date);
             dlog.i("------SaveCheck------");
             return true;
@@ -572,7 +576,7 @@ public class AddMemberDetail extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberUpdateBasic api = retrofit.create(PlaceMemberUpdateBasic.class);
-        Call<String> call = api.getData(place_id, mem_id, mem_name, mem_phone, mem_jumin, mem_join_date);
+        Call<String> call = api.getData(place_id, mem_id, mem_name, mem_phone, mem_jumin,mem_kind, mem_join_date);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

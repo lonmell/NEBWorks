@@ -86,17 +86,17 @@ public class InoutPopActivity extends Activity {
     private void setBtnEvent() {
         close_btn.setOnClickListener(v -> {
             //데이터 전달하기
-//            Intent intent = new Intent();
-//            intent.putExtra("result", "Close Popup");
-//            setResult(RESULT_OK, intent);
-//            overridePendingTransition(R.anim.translate_down, 0);
+            Intent intent = new Intent();
+            intent.putExtra("result", "Close Popup");
+            setResult(RESULT_OK, intent);
+            overridePendingTransition(R.anim.translate_down, 0);
+            finish();
             //액티비티(팝업) 닫기
-//            finish();
-            if(USER_INFO_AUTH.equals("0")){
-                pm.Main(mContext);
-            }else{
-                pm.Main2(mContext);
-            }
+//            if(USER_INFO_AUTH.equals("0")){
+//                pm.Main(mContext);
+//            }else{
+//                pm.Main2(mContext);
+//            }
         });
     }
 

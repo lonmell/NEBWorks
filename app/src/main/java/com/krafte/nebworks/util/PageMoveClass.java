@@ -16,6 +16,7 @@ import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.ui.member.AddMemberDetail;
 import com.krafte.nebworks.ui.member.AdddirectlyMember;
 import com.krafte.nebworks.ui.member.AuthSelectActivity;
+import com.krafte.nebworks.ui.member.InviteMemberActivity;
 import com.krafte.nebworks.ui.member.MemberManagement;
 import com.krafte.nebworks.ui.notify.NotifyListActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
@@ -470,6 +471,20 @@ public class PageMoveClass implements MovePage {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    @Override
+    public void InviteMember(Context context) {
+        Intent intent = new Intent(context, InviteMemberActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 
+    @Override
+    public void MemberManagement(Context context) {
+        Intent intent = new Intent(context, MemberManagement.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 
 }

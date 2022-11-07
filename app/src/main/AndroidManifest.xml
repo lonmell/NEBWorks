@@ -148,6 +148,7 @@
         <activity android:name=".ui.member.AuthSelectActivity" />
         <activity android:name=".ui.member.AdddirectlyMember" />
         <activity android:name=".ui.member.AddMemberDetail" />
+        <activity android:name=".ui.member.InviteMemberActivity" />
 
         <!-- state -->
         <activity android:name=".ui.worksite.WorkState2Activity" />

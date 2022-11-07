@@ -193,6 +193,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                     phone = Response.getJSONObject(0).getString("phone");
                                     gender = Response.getJSONObject(0).getString("gender");
                                     img_path = Response.getJSONObject(0).getString("img_path");
+                                    img_path = Response.getJSONObject(0).getString("img_path");
 
                                     shardpref.putString("USER_INFO_ID", id);
                                     shardpref.putString("USER_INFO_NAME", name);
@@ -222,7 +223,7 @@ public class PlaceListActivity extends AppCompatActivity {
         });
     }
 
-
+    int store_cnt = 0;
     public void GetPlaceList() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceListInterface.URL)
@@ -243,7 +244,11 @@ public class PlaceListActivity extends AppCompatActivity {
                             try {
                                 //Array데이터를 받아올 때
                                 JSONArray Response = new JSONArray(response.body());
-
+                                if(USER_INFO_AUTH.equals("0")){
+                                    binding.storeCntTv.setText("관리중인 매장");
+                                }else{
+                                    binding.storeCntTv.setText("참여중인 매장");
+                                }
                                 if (listitemsize != Response.length()) {
                                     mList = new ArrayList<>();
                                     mAdapter = new WorkplaceListAdapter(mContext, mList);
@@ -258,33 +263,67 @@ public class PlaceListActivity extends AppCompatActivity {
                                         binding.storeCnt.setText(String.valueOf(Response.length()));
                                     } else {
                                         binding.noData.setVisibility(View.GONE);
-                                        binding.storeCnt.setText(String.valueOf(Response.length()));
                                         for (int i = 0; i < Response.length(); i++) {
                                             JSONObject jsonObject = Response.getJSONObject(i);
-                                            mAdapter.addItem(new PlaceListData.PlaceListData_list(
-                                                    jsonObject.getString("id"),
-                                                    jsonObject.getString("name"),
-                                                    jsonObject.getString("owner_id"),
-                                                    jsonObject.getString("owner_name"),
-                                                    jsonObject.getString("registr_num"),
-                                                    jsonObject.getString("store_kind"),
-                                                    jsonObject.getString("address"),
-                                                    jsonObject.getString("latitude"),
-                                                    jsonObject.getString("longitude"),
-                                                    jsonObject.getString("pay_day"),
-                                                    jsonObject.getString("test_period"),
-                                                    jsonObject.getString("vacation_select"),
-                                                    jsonObject.getString("insurance"),
-                                                    jsonObject.getString("start_time"),
-                                                    jsonObject.getString("end_time"),
-                                                    jsonObject.getString("save_kind"),
-                                                    jsonObject.getString("img_path"),
-                                                    jsonObject.getString("total_cnt"),
-                                                    jsonObject.getString("i_cnt"),
-                                                    jsonObject.getString("o_cnt"),
-                                                    jsonObject.getString("created_at")
-                                            ));
+                                            if(USER_INFO_AUTH.equals("0")){
+                                                if(jsonObject.getString("owner_id").equals(USER_INFO_ID)){
+                                                    store_cnt ++;
+                                                    mAdapter.addItem(new PlaceListData.PlaceListData_list(
+                                                            jsonObject.getString("id"),
+                                                            jsonObject.getString("name"),
+                                                            jsonObject.getString("owner_id"),
+                                                            jsonObject.getString("owner_name"),
+                                                            jsonObject.getString("registr_num"),
+                                                            jsonObject.getString("store_kind"),
+                                                            jsonObject.getString("address"),
+                                                            jsonObject.getString("latitude"),
+                                                            jsonObject.getString("longitude"),
+                                                            jsonObject.getString("pay_day"),
+                                                            jsonObject.getString("test_period"),
+                                                            jsonObject.getString("vacation_select"),
+                                                            jsonObject.getString("insurance"),
+                                                            jsonObject.getString("start_time"),
+                                                            jsonObject.getString("end_time"),
+                                                            jsonObject.getString("save_kind"),
+                                                            jsonObject.getString("img_path"),
+                                                            jsonObject.getString("place_kind"),
+                                                            jsonObject.getString("total_cnt"),
+                                                            jsonObject.getString("i_cnt"),
+                                                            jsonObject.getString("o_cnt"),
+                                                            jsonObject.getString("created_at")
+                                                    ));
+                                                }
+                                            }else{
+                                                if(!jsonObject.getString("owner_id").equals(USER_INFO_ID)){
+                                                    store_cnt ++;
+                                                    mAdapter.addItem(new PlaceListData.PlaceListData_list(
+                                                            jsonObject.getString("id"),
+                                                            jsonObject.getString("name"),
+                                                            jsonObject.getString("owner_id"),
+                                                            jsonObject.getString("owner_name"),
+                                                            jsonObject.getString("registr_num"),
+                                                            jsonObject.getString("store_kind"),
+                                                            jsonObject.getString("address"),
+                                                            jsonObject.getString("latitude"),
+                                                            jsonObject.getString("longitude"),
+                                                            jsonObject.getString("pay_day"),
+                                                            jsonObject.getString("test_period"),
+                                                            jsonObject.getString("vacation_select"),
+                                                            jsonObject.getString("insurance"),
+                                                            jsonObject.getString("start_time"),
+                                                            jsonObject.getString("end_time"),
+                                                            jsonObject.getString("save_kind"),
+                                                            jsonObject.getString("img_path"),
+                                                            jsonObject.getString("place_kind"),
+                                                            jsonObject.getString("total_cnt"),
+                                                            jsonObject.getString("i_cnt"),
+                                                            jsonObject.getString("o_cnt"),
+                                                            jsonObject.getString("created_at")
+                                                    ));
+                                                }
+                                            }
                                         }
+                                        binding.storeCnt.setText(String.valueOf(store_cnt));
 
                                         mAdapter.notifyDataSetChanged();
                                         mAdapter.setOnItemClickListener(new WorkplaceListAdapter.OnItemClickListener() {
@@ -298,6 +337,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                                     String myid = shardpref.getString("USER_INFO_ID", "0");
                                                     String place_id = Response.getJSONObject(pos).getString("id");
                                                     String save_kind = Response.getJSONObject(pos).getString("save_kind");
+                                                    String place_kind = Response.getJSONObject(pos).getString("place_kind");
 
                                                     if (save_kind.equals("0")) {
                                                         //임시저장된 매장
@@ -308,6 +348,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                                         if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
                                                             pm.ProfileEditGo(mContext);
                                                         } else {
+                                                            shardpref.putInt("place_kind",Integer.parseInt(place_kind));
                                                             ConfirmUserPlacemember(place_id, myid, owner_id, palce_name);
                                                             shardpref.putInt("SELECT_POSITION",0);
                                                             if(USER_INFO_AUTH.equals("0")){
@@ -343,6 +384,8 @@ public class PlaceListActivity extends AppCompatActivity {
         });
     }
 
+
+
     public void ConfirmUserPlacemember(String place_id, String myid, String owner_id, String place_name) {
         dlog.i("---------SetAllMemberList Check---------");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -353,7 +396,7 @@ public class PlaceListActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-        Call<String> call = api.getData(place_id);
+        Call<String> call = api.getData(place_id,"");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override

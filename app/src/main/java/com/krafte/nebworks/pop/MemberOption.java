@@ -19,9 +19,9 @@ public class MemberOption extends Activity {
     Context mContext;
 
     //Other
-    String btn01            = "";
-    String btn02            = "";
-    String data             = "";
+    String btn01 = "";
+    String btn02 = "";
+    String data = "";
     Intent intent;
 
     //Other
@@ -45,28 +45,28 @@ public class MemberOption extends Activity {
 
         //데이터 가져오기
         intent = getIntent();
-        data   = intent.getStringExtra("data");
-        btn01  = intent.getStringExtra("btn01");
-        btn02  = intent.getStringExtra("btn02");
+        data = intent.getStringExtra("data");
+        btn01 = intent.getStringExtra("btn01");
+        btn02 = intent.getStringExtra("btn02");
 
         binding.directlyAdd.setText(btn01);
         binding.invateAdd.setText(btn02);
 
         setBtnEvent();
-        Log.i(TAG,"data : " + data);
+        Log.i(TAG, "data : " + data);
 
     }
 
     //확인 버튼 클릭
     private void setBtnEvent() {
         binding.directlyAdd.setOnClickListener(v -> {
-            if(data.equals("직원등록")){
+            if (data.equals("직원등록")) {
                 pm.DirectAddMember(mContext);
             }
         });
         binding.invateAdd.setOnClickListener(v -> {
-            if(data.equals("직원등록")){
-
+            if (data.equals("직원등록")) {
+                pm.InviteMember(mContext);
             }
         });
         binding.cancel.setOnClickListener(v -> {
@@ -86,7 +86,7 @@ public class MemberOption extends Activity {
         //안드로이드 백버튼 막기
     }
 
-    private void ClosePop(){
+    private void ClosePop() {
         finish();
         Intent intent = new Intent();
         intent.putExtra("result", "Close Popup");

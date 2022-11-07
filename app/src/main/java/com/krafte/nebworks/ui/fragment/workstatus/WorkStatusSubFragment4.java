@@ -1,4 +1,4 @@
-package com.krafte.nebworks.ui.fragment.member;
+package com.krafte.nebworks.ui.fragment.workstatus;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -37,7 +37,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class MemberSubFragment1 extends Fragment {
+public class WorkStatusSubFragment4 extends Fragment {
     private MembersubFragment1Binding binding;
     private final static String TAG = "Page1Fragment";
     Context mContext;
@@ -57,16 +57,10 @@ public class MemberSubFragment1 extends Fragment {
     int listitemsize = 0;
     Dlog dlog = new Dlog();
 
-//    public static MemberSubFragment1 newInstance(){
-//        return new MemberSubFragment1();
-//    }
-    public static MemberSubFragment1 newInstance(int number) {
-        MemberSubFragment1 fragment = new MemberSubFragment1();
-        Bundle bundle = new Bundle();
-        bundle.putInt("number", number);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static WorkStatusSubFragment4 newInstance() {
+        return new WorkStatusSubFragment4();
     }
+
     /*Fragment 콜백함수*/
     @Override
     public void onAttach(Context context) {

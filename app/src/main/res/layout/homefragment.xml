@@ -481,6 +481,7 @@
             android:weightSum="4">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/member_management01_1"
                 android:layout_width="74dp"
                 android:layout_height="106dp"
                 android:layout_marginStart="5dp"

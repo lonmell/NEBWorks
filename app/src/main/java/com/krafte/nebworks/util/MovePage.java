@@ -123,4 +123,8 @@ public interface MovePage {
     void DirectAddMember(Context context);
 
     void AddMemberDetail(Context context);
+
+    void InviteMember(Context context);
+
+    void MemberManagement(Context context);
 }

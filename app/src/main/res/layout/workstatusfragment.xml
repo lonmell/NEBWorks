@@ -1,166 +1,354 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="HardcodedText"
+    tools:context=".ui.main.MainFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-
-        <LinearLayout
-            android:id="@+id/workstatus_bar"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/place_status"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_height="135dp"
             android:layout_alignParentTop="true"
-            android:padding="5dp"
-            android:weightSum="4">
-
-            <TextView
-                android:id="@+id/top_num01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/inter_bold"
-                android:gravity="center"
-                android:text="0\n전체인원"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
-            <LinearLayout
-                android:layout_width="1dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:background="#DCDCDC" />
-
-            <TextView
-                android:id="@+id/top_num02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/inter_bold"
-                android:gravity="center"
-                android:text="0\n근무 중"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
-            <LinearLayout
-                android:layout_width="1dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:background="#DCDCDC" />
-
-            <TextView
-                android:id="@+id/top_num03"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/inter_bold"
-                android:gravity="center"
-                android:text="0\n퇴근"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
-            <LinearLayout
-                android:layout_width="1dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:background="#DCDCDC" />
-
-            <TextView
-                android:id="@+id/top_num04"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/inter_bold"
-                android:gravity="center"
-                android:text="0\n휴무"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-        </LinearLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/workstatus_bar">
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            app:cardBackgroundColor="#F5F6F8"
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="25dp"
-                android:paddingEnd="25dp">
+                android:padding="15dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="31dp"
-                    android:fontFamily="@font/inter_bold"
-                    android:gravity="center"
-                    android:text="근무 중인 직원"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/StatusList01"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="오늘의 업무"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="더보기 >"
+                        android:textColor="#696969" />
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="17dp" />
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="31dp"
-                    android:fontFamily="@font/inter_bold"
-                    android:gravity="center"
-                    android:text="퇴근한 직원"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/StatusList02"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="17dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:text="근무중"
+                            android:textColor="#696969" />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:text="미출근"
+                            android:textColor="#696969" />
+
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#dbdbdb" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:text="전체"
+                            android:textColor="#696969" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:text="휴무"
+                            android:textColor="#696969" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center|bottom"
+                            android:text="10"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center|bottom"
+                            android:text="1"
+                            android:textColor="@color/red" />
+
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#dbdbdb" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center|bottom"
+                            android:text="2"
+                            android:textColor="#dbdbdb" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center|bottom"
+                            android:text="1"
+                            android:textColor="#dbdbdb" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </androidx.cardview.widget.CardView>
 
         <RelativeLayout
-            android:id="@+id/login_alert_text"
+            android:id="@+id/place_status2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/place_status"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="40dp"
+                    android:layout_height="45dp"
+                    android:gravity="center|start">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/find_right_arrow"
+                        android:rotation="-180" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="0000년 00월 00일"
+                    android:textColor="@color/black" />
+
+                <RelativeLayout
+                    android:layout_width="40dp"
+                    android:layout_height="45dp"
+                    android:gravity="center|end">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/find_right_arrow" />
+                </RelativeLayout>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentEnd="true">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/calendar_resize" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <!-- TabLayou 을 배치한다. -->
+        <LinearLayout
+            android:id="@+id/status_select_area"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_below="@+id/place_status2"
+            android:orientation="horizontal"
+            android:layout_marginTop="23dp"
+            android:weightSum="4">
+
+            <LinearLayout
+                android:id="@+id/status_fragmentbtn1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="전체"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,NestedWeights" />
+
+                <LinearLayout
+                    android:id="@+id/status_fragmentline1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#8EB3FC"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/status_fragmentbtn2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="근무"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,NestedWeights" />
+
+                <LinearLayout
+                    android:id="@+id/status_fragmentline2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#ffffff"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/status_fragmentbtn3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="미출근"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,NestedWeights" />
+
+                <LinearLayout
+                    android:id="@+id/status_fragmentline3"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_weight="1"
+                    android:background="#ffffff"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/status_fragmentbtn4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="휴무"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,NestedWeights" />
+
+                <LinearLayout
+                    android:id="@+id/status_fragmentline4"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_weight="1"
+                    android:background="#ffffff"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/status_child_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="false"
-            android:visibility="gone">
+            android:layout_below="@+id/status_select_area" />
 
-            <ImageView
-                android:id="@+id/loading_view"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                tools:ignore="ContentDescription" />
-
-        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>

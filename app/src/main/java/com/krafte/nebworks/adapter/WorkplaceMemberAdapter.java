@@ -127,6 +127,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 shardpref.putString("mem_phone",item.getPhone());
                 shardpref.putString("mem_gender",item.getGender());
                 shardpref.putString("mem_jumin",item.getJumin());
+                shardpref.putString("mem_kind",item.getKind());
                 shardpref.putString("mem_join_date",item.getJoin_date());
                 shardpref.putString("mem_state",item.getState());
                 shardpref.putString("mem_jikgup",item.getJikgup());

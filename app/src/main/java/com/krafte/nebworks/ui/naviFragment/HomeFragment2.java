@@ -1,15 +1,21 @@
 package com.krafte.nebworks.ui.naviFragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,21 +27,35 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
+import com.krafte.nebworks.dataInterface.InOutInsertInterface;
+import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
+import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
-import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
+import com.krafte.nebworks.pop.InoutPopActivity;
+import com.krafte.nebworks.ui.main.MainFragment2;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
+import com.krafte.nebworks.util.GpsTracker;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,12 +67,12 @@ public class HomeFragment2 extends Fragment {
     private final static String TAG = "HomeFragment2";
     private Homefragment2Binding binding;
 
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
+    private static final int PERMISSIONS_REQUEST_CODE = 100;
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
     Context mContext;
     Activity activity;
-
-    //XML ID
-    ImageView home_icon;
-    TextView home_tv;
 
     //shared
     String place_id = "";
@@ -61,9 +81,10 @@ public class HomeFragment2 extends Fragment {
     String place_owner_name = "";
     String registr_num = "";
     String store_kind = "";
+    int place_kind = 0;
     String place_address = "";
-    String place_latitude = "";
-    String place_longitude = "";
+    Double place_latitude = 0.0;
+    Double place_longitude = 0.0;
     String place_start_time = "";
     String place_end_time = "";
     String place_img_path = "";
@@ -79,10 +100,25 @@ public class HomeFragment2 extends Fragment {
     String place_wifi_name = "";
     String place_icnt = "";
     String place_ocnt = "";
+    String kind = "";
 
     String USER_INFO_ID = "";
     String USER_INFO_EMAIL = "";
     String USER_INFO_AUTH = "";
+
+
+    String mem_id = "";
+    String mem_kind = "";
+    String mem_name = "";
+    String mem_phone = "";
+    String mem_gender = "";
+    String mem_jumin = "";
+    String mem_join_date = "";
+    String mem_state = "";
+    String mem_jikgup = "";
+    String mem_pay = "";
+    String mem_img_path = "";
+    String io_state = "";
 
     //Other 클래스
     PageMoveClass pm = new PageMoveClass();
@@ -91,6 +127,29 @@ public class HomeFragment2 extends Fragment {
     DateCurrent dc = new DateCurrent();
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
+    MainFragment2 mainFragment2 = new MainFragment2();
+    LocationManager locationManager;
+    Timer timer;
+    GpsTracker gpsTracker;
+    double latitude = 0;
+    double longitude = 0;
+    int getDistance = 0;
+    int location_cnt = 0;
+
+    long now = System.currentTimeMillis();
+    Date mDate = new Date(now);
+    @SuppressLint("SimpleDateFormat")
+    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
+
+    @SuppressLint("SimpleDateFormat")
+    SimpleDateFormat simpleDate_age = new SimpleDateFormat("yyyy");
+
+    @SuppressLint("SimpleDateFormat")
+    SimpleDateFormat simpleDate_time = new SimpleDateFormat("HH:mm:ss");
+
+    String GET_DAY = simpleDate.format(mDate) + " " + simpleDate_time.format(mDate);
+    String GET_TIME_AGE = simpleDate_age.format(mDate);
+    String GET_TIME = simpleDate_time.format(mDate);
 
     public static HomeFragment2 newInstance(int number) {
         HomeFragment2 fragment = new HomeFragment2();
@@ -132,12 +191,14 @@ public class HomeFragment2 extends Fragment {
         try {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
+
             setBtnEvent();
             dlog.i("HomeFragment 2 START!");
             place_id = shardpref.getString("place_id", "0");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
+            place_kind = shardpref.getInt("place_kind", -99);
 
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + place_id).addOnCompleteListener(task -> {
@@ -153,6 +214,13 @@ public class HomeFragment2 extends Fragment {
             //USER_INFO_AUTH 가 -1일때
             USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
             shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
+
+            if (place_kind == 0) {
+                //승인 대기중
+                binding.acceptArea.setVisibility(View.VISIBLE);
+            } else {
+                binding.acceptArea.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -165,6 +233,8 @@ public class HomeFragment2 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        UserCheck();
+
     }
 
     @Override
@@ -173,11 +243,127 @@ public class HomeFragment2 extends Fragment {
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        UserCheck(USER_INFO_EMAIL);
+        UserCheck();
         getPlaceData();
+
         PlaceWorkCheck(place_id);
+        InOutLogMember();
+        MoveMyLocation();
+
+        timer = new Timer();
+        TimerTask TT = new TimerTask() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void run() {
+                // 반복실행할 구문
+                activity.runOnUiThread(() -> {
+                    if(location_cnt > 3){
+                        timer.cancel();
+                    }
+                    location_cnt ++;
+                    long now = System.currentTimeMillis();
+                    Date mDate = new Date(now);
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+
+                    dlog.i("location_cnt : " + location_cnt);
+                    dlog.i("GET_TIME : " + simpleDate.format(mDate));
+//                    binding.timeSet.setText(simpleDate.format(mDate));
+                    latitude = gpsTracker.getLatitude();
+                    longitude = gpsTracker.getLongitude();
+//                    binding.lonLat.setText("위도 : " + latitude + ", 경도 : " + longitude);
+                    binding.distance.setText(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))) + "m");
+                    getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+                    if(getDistance <= 30){
+                        if (kind.equals("-1")) {
+                            binding.ioAbleTv.setText("출근처리 가능");
+                            binding.ioAbleTv.setTextColor(R.color.red);
+                        } else if (kind.equals("0")) {
+                            binding.ioAbleTv.setText("퇴근처리 가능");
+                            binding.ioAbleTv.setTextColor(R.color.red);
+                        }
+                    }else{
+                        if (kind.equals("-1")) {
+                            binding.ioAbleTv.setText("출근처리 불가능");
+                            binding.ioAbleTv.setTextColor(R.color.blue);
+                        } else if (kind.equals("0")) {
+                            binding.ioAbleTv.setText("퇴근처리 불가능");
+                            binding.ioAbleTv.setTextColor(R.color.blue);
+                        }
+
+                    }
+                });
+            }
+        };
+        timer.schedule(TT, 5000, 5000); //Timer 실행
+
+    }
+
+    public void InOutLogMember() {
+        dlog.i("--------InOutLogMember--------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("--------InOutLogMember--------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(InOutLogInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        InOutLogInterface api = retrofit.create(InOutLogInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.body().replace("[", "").replace("]", "").length() == 0) {
+                            //그날 최초 출근
+                            kind = "-1";
+//                            InOutInsert("0");
+                        } else if (response.body().replace("[", "").replace("]", "").length() > 0) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                dlog.i("InOutLogMember jsonResponse length : " + response.body().length());
+                                dlog.i("InOutLogMember jsonResponse : " + response.body());
+                                try {
+                                    JSONArray Response = new JSONArray(response.body());
+                                    kind = Response.getJSONObject(0).getString("kind");
+                                    dlog.i("InOutLogMember kind : " + kind);
+                                    if(kind.equals("1")){
+                                        kind = "-1";
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        if (kind.equals("-1")) {
+                            binding.ioImg.setBackgroundResource(R.drawable.workinout01);
+                            binding.state.setText("현재 퇴근 중");
+                        } else if (kind.equals("0")) {
+                            binding.ioImg.setBackgroundResource(R.drawable.workinout02);
+                            binding.state.setText("현재 출근 중");
+                        }
+//                        else {
+//                            binding.selectWorkse.setText("확인");
+//                            binding.closeArea.setVisibility(View.GONE);
+//                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 
     public void setBtnEvent() {
@@ -232,6 +418,101 @@ public class HomeFragment2 extends Fragment {
 //            pm.ApprovalGo(mContext);
 //            shardpref.putInt("SELECT_POSITION",0);
 //        });
+        binding.memberManagement01.setOnClickListener(v -> {
+            pm.MemberManagement(mContext);
+        });
+
+        binding.ioArea.setOnClickListener(v -> {
+            if (kind.equals("-1") || kind.equals("0")) {
+                if (kind.equals("-1")) {
+                    kind = "0";
+                } else {
+                    kind = "1";
+                }
+                if (getDistance > 30) {
+                    Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
+                } else {
+                    dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+                    InOutLogMember();
+                    if (!place_owner_id.equals(USER_INFO_ID)) {
+                        getManagerToken(place_owner_id, "0", place_id, place_name);
+                    }
+                    InOutInsert(kind);
+                }
+            }else {
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.Main(mContext);
+                }else{
+                    pm.Main2(mContext);
+                }
+            }
+        });
+        binding.acceptBtn.setOnClickListener(v -> {
+            UpdateDirectMemberBasic();
+        });
+    }
+
+    private void InOutInsert(String kind) {
+        dlog.i("--------InOutInsert--------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("kind - 0출근, 1퇴근 : " + kind);
+        dlog.i("--------InOutInsert--------");
+
+        if (kind.equals("0")) {
+            io_state = "출근";
+        } else {
+            io_state = "퇴근";
+        }
+        binding.state.setText("현재" + io_state + " 중");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(InOutInsertInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        InOutInsertInterface api = retrofit.create(InOutInsertInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID, kind);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.body().replace("[", "").replace("]", "").replace("\"", "").length() == 0) {
+                            //최초 출근
+
+                        } else if (response.body().replace("[", "").replace("]", "").length() > 0) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                dlog.i("LoginCheck jsonResponse length : " + response.body().length());
+                                dlog.i("LoginCheck jsonResponse : " + response.body());
+                                try {
+                                    if (response.body().replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
+                                        Intent intent = new Intent(mContext, InoutPopActivity.class);
+                                        intent.putExtra("title", io_state + " 처리되었습니다.");
+                                        intent.putExtra("time", GET_TIME);
+                                        intent.putExtra("state", "1");
+                                        intent.putExtra("store_name", place_name);
+                                        mContext.startActivity(intent);
+                                        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                        if (!place_owner_id.equals(USER_INFO_ID)) {
+//                                            getEmployerToken();
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 
     private void getPlaceData() {
@@ -262,8 +543,8 @@ public class HomeFragment2 extends Fragment {
                                     registr_num = Response.getJSONObject(0).getString("registr_num");
                                     store_kind = Response.getJSONObject(0).getString("store_kind");
                                     place_address = Response.getJSONObject(0).getString("address");
-                                    place_latitude = Response.getJSONObject(0).getString("latitude");
-                                    place_longitude = Response.getJSONObject(0).getString("longitude");
+                                    place_latitude = Double.parseDouble(Response.getJSONObject(0).getString("latitude"));
+                                    place_longitude = Double.parseDouble(Response.getJSONObject(0).getString("longitude"));
                                     place_pay_day = Response.getJSONObject(0).getString("pay_day");
                                     place_test_period = Response.getJSONObject(0).getString("test_period");
                                     place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
@@ -287,7 +568,7 @@ public class HomeFragment2 extends Fragment {
 
                                     Glide.with(mContext).load(place_img_path)
                                             .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .placeholder(R.drawable.identificon)
+                                            .placeholder(R.drawable.no_image)
                                             .skipMemoryCache(true)
                                             .into(binding.storeThumnail);
 
@@ -320,68 +601,72 @@ public class HomeFragment2 extends Fragment {
         });
     }
 
-    public void UserCheck(String account) {
-        dlog.i("UserCheck account : " + account);
+    public void UserCheck() {
+        dlog.i("---------UserCheck---------");
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
+        dlog.i("---------UserCheck---------");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserSelectInterface.URL)
+                .baseUrl(AllMemberInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
-        Call<String> call = api.getData(account);
+        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                dlog.e("UserCheck function START");
+                dlog.e("response 1: " + response.isSuccessful());
+                activity.runOnUiThread(() -> {
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(response.body());
+
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
-                                    String id = Response.getJSONObject(0).getString("id");
-                                    String kind = Response.getJSONObject(0).getString("kind");
-                                    String name = Response.getJSONObject(0).getString("name");
-                                    String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
-                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
-                                    String department = Response.getJSONObject(0).getString("department");
-                                    String position = Response.getJSONObject(0).getString("position");
-                                    String img_path = Response.getJSONObject(0).getString("img_path");
+                                mem_id = Response.getJSONObject(0).getString("id");
+                                mem_name = Response.getJSONObject(0).getString("name");
+                                mem_phone = Response.getJSONObject(0).getString("phone");
+                                mem_gender = Response.getJSONObject(0).getString("gender");
+                                mem_img_path = Response.getJSONObject(0).getString("img_path");
+                                mem_jumin = Response.getJSONObject(0).getString("jumin");
+                                mem_kind = Response.getJSONObject(0).getString("kind");
+                                mem_join_date = Response.getJSONObject(0).getString("join_date");
+                                mem_state = Response.getJSONObject(0).getString("state");
+                                mem_jikgup = Response.getJSONObject(0).getString("jikgup");
+                                mem_pay = Response.getJSONObject(0).getString("pay");
 
-                                    try {
-                                        dlog.i("------UserCheck-------");
-                                        dlog.i("프로필 사진 url : " + img_path);
-                                        dlog.i("직원소속구분분 : " + (kind.equals("0") ? "정직원" : "협력업체"));
-                                        dlog.i("성명 : " + name);
-                                        dlog.i("부서 : " + department);
-                                        dlog.i("직책 : " + position);
-                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
-                                        dlog.i("------UserCheck-------");
+                                dlog.i("------UserCheck-------");
+                                USER_INFO_ID = mem_id;
+                                dlog.i("프로필 사진 url : " + mem_img_path);
+                                dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
+                                dlog.i("성명 : " + mem_name);
+                                dlog.i("부서 : " + mem_jikgup);
+                                dlog.i("급여 : " + mem_pay);
+                                dlog.i("------UserCheck-------");
 
-                                        if (place_owner_id.equals(id)) {
-                                            USER_INFO_AUTH = "0";
-                                        } else {
-                                            USER_INFO_AUTH = "1";
-                                        }
-                                        getFCMToken();
-                                    } catch (Exception e) {
-                                        dlog.i("UserCheck Exception : " + e);
-                                    }
+                                if (place_owner_id.equals(id)) {
+                                    USER_INFO_AUTH = "0";
+                                } else {
+                                    USER_INFO_AUTH = "1";
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                getFCMToken();
+                            } catch (Exception e) {
+                                dlog.i("UserCheck Exception : " + e);
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    });
-                }
+                    }
+                });
+
             }
 
-            @SuppressLint("LongLogTag")
             @Override
+            @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
+                Log.e(TAG, "에러2 = " + t.getMessage());
             }
         });
     }
@@ -446,11 +731,11 @@ public class HomeFragment2 extends Fragment {
 //                                        binding.noticeCnt.setText(String.valueOf(total_cnt));
 //                                        binding.stateCnt01.setText("출근  " + i_cnt);
 //                                        binding.stateCnt02.setText("퇴근  " + o_cnt);
-//                                        binding.stateCnt05.setText(task_incomplete_cnt);
-//                                        binding.stateCnt06.setText(task_complete_cnt);
-//                                        binding.stateCnt07.setText(waiting_cnt);
-//                                        binding.stateCnt08.setText(approval_cnt);
-//                                        binding.stateCnt09.setText(reject_cnt);
+                                        binding.stateCnt05.setText(task_complete_cnt);
+                                        binding.stateCnt06.setText(task_incomplete_cnt);
+                                        binding.stateCnt07.setText(waiting_cnt);
+                                        binding.stateCnt08.setText(approval_cnt);
+                                        binding.stateCnt09.setText(reject_cnt);
                                         dlog.i("------UserCheck-------");
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -468,6 +753,51 @@ public class HomeFragment2 extends Fragment {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    private void UpdateDirectMemberBasic() {
+        //직접 입력직원 기본정보 업데이트
+        dlog.i("------UpdateDirectMemberBasic------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("mem_id : " + mem_id);
+        dlog.i("mem_name : " + mem_name);
+        dlog.i("mem_phone : " + mem_phone);
+        dlog.i("mem_jumin : " + mem_jumin);
+        dlog.i("mem_kind : 1");
+        dlog.i("mem_join_date : " + mem_join_date);
+        dlog.i("------UpdateDirectMemberBasic------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceMemberUpdateBasic.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceMemberUpdateBasic api = retrofit.create(PlaceMemberUpdateBasic.class);
+        Call<String> call = api.getData(place_id, mem_id, mem_name, mem_phone, mem_jumin, "1", mem_join_date);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
+                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
+                            if (response.body().replace("\"", "").equals("success")) {
+                                Toast_Nomal("초대 수락이 완료되었습니다.");
+                                binding.acceptArea.setVisibility(View.GONE);
+                                place_kind = 1;
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Toast_Nomal("기본정보 업데이트 에러  = " + t.getMessage());
             }
         });
     }
@@ -587,6 +917,70 @@ public class HomeFragment2 extends Fragment {
         });
     }
 
+    public void getManagerToken(String user_id, String type, String place_id, String place_name) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+
+                    String id = Response.getJSONObject(0).getString("id");
+                    String token = Response.getJSONObject(0).getString("token");
+                    String department = shardpref.getString("USER_INFO_SOSOK", "");
+                    String position = shardpref.getString("USER_INFO_JIKGUP", "");
+                    String name = shardpref.getString("USER_INFO_NAME", "");
+                    dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                    dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                    dlog.i("department : " + Response.getJSONObject(0).getString("department"));
+                    dlog.i("position : " + Response.getJSONObject(0).getString("position"));
+
+                    boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                    if (!token.isEmpty() && channelId1) {
+                        String workse = kind.equals("0") ? "작업종료" : "작업시작"; // 현작 작업 시작, 퇴근
+                        String message = department + " " + position + " " + name + " 님이 " + place_name + " 매장 " + workse + "했습니다.";
+                        PushFcmSend(id, "", message, token, "1", place_id);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    DBConnection dbConnection = new DBConnection();
+    String click_action = "";
+
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "PlaceListActivity";
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+            activity.runOnUiThread(() -> {
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void FcmTokenCreate(String token) {
         //메인페이지 처음 들어왔을때 생성 - 본인
         dlog.i("------FcmTokenCreate-------");
@@ -665,5 +1059,127 @@ public class HomeFragment2 extends Fragment {
 
     private void CountingSubscribeTopic() {
 
+    }
+
+    private void MoveMyLocation() {
+        try {
+            gpsTracker = new GpsTracker(mContext);
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+
+//            mapViewContainer.addView(mapView);
+//
+//            /*현재 내 위치로 지도 중앙을 이동, 위치 트래킹 기능 on*/
+//            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+//            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, true);
+//            mapView.setZoomLevel(0, true);
+//            mapView.zoomIn(true);
+            reverseCoding(latitude, longitude);
+        } catch (Exception e) {
+            dlog.i("Exception : " + e);
+        }
+    }
+
+    //역 지오코딩 ( 위,경도 >> 주소 ) START
+    @SuppressLint({"SetTextI18n", "LongLogTag"})
+    public void reverseCoding(double latitude, double longitube) { // 위도 경도 넣어서 역지오코딩 주소값 뽑아낸다
+        Geocoder geocoder = new Geocoder(mContext);
+        List<Address> gList = null;
+        String Setaddress = "";
+        dlog.i("(reverseCoding)latitude,longitube : " + latitude + "," + longitube);
+        try {
+            gList = geocoder.getFromLocation(latitude, longitube, 6);
+        } catch (IOException e) {
+            e.printStackTrace();
+            dlog.e("setMaskLocation() - 서버에서 주소변환시 에러발생");
+            // Fragment1 으로 강제이동 시키기
+        }
+        if (gList != null) {
+            if (gList.size() == 0) {
+                Toast.makeText(mContext, " 현재위치에서 검색된 주소정보가 없습니다. ", Toast.LENGTH_SHORT).show();
+            } else {
+                Address address = gList.get(0);
+                Address address1 = gList.get(1);
+                Address address2 = gList.get(2);
+                Address address3 = gList.get(3);
+                dlog.i("address : " + address);
+                dlog.i("address1 : " + address1);
+                dlog.i("address2 : " + address2);
+                dlog.i("address3 : " + address3);
+                String addresslines = address.getAddressLine(0);
+                String subaddresslines = address1.getAddressLine(0);
+
+//                String city = address.getLocality() == null ? "" : address.getLocality();
+//                String state = address.getAdminArea() == null ? "" : address.getAdminArea();
+//
+//                String country = address.getCountryName() == null ? "" : address.getCountryName();
+//                String jibun = address.getFeatureName() == null ? "" : address.getFeatureName();
+//                String postalCode = address.getPostalCode() == null ? "" : address.getPostalCode();
+//                String roadAddress = address.getSubAdminArea() == null ? "" : address.getSubAdminArea();
+
+                Setaddress = addresslines.replace("대한민국", "").trim();
+                String dong = address1.getThoroughfare() == null ? "" : address1.getThoroughfare();
+                String jibun = address1.getFeatureName() == null ? "" : address1.getFeatureName();
+                String postalCode = address1.getPostalCode() == null ? "" : address1.getPostalCode();
+                subaddresslines = dong + " " + jibun;
+                dlog.i("Setaddress : " + Setaddress);
+                dlog.i("subaddresslines : " + subaddresslines);
+
+//                //MainAddrerss
+//                address01.setText(Setaddress);
+//
+//                //subAddress
+//                address02.setText("[지번] " + subaddresslines);
+                shardpref.putString("pin_store_address", Setaddress);
+                shardpref.putString("pin_store_addressdetail", subaddresslines);
+                shardpref.putString("pin_zipcode", postalCode);
+                shardpref.putString("pin_latitude", String.valueOf(latitude));
+                shardpref.putString("pin_longitube", String.valueOf(longitube));
+            }
+        }
+    }
+    //역 지오코딩 ( 위,경도 >> 주소 ) END
+
+    /**
+     * Returns The approximate distance in meters between this
+     * location and the given location. Distance is defined using
+     * the WGS84 ellipsoid.
+     *
+     * @param //dest the destination location
+     * @return the approximate distance in meters
+     */
+    //설정된 매장과 현재 내 위치의 거리를 재고 작업시작/종료 버튼의 활성화 비활성화 목적
+    @SuppressLint("LongLogTag")
+    public double getDistance(double lat1, double lng1, double lat2, double lng2) {
+        double distance;
+        dlog.i("매장 위치 : " + lat1 + "," + lng1);
+        dlog.i("현재 위치 : " + lat2 + "," + lng2);
+
+        Location locationA = new Location("point A");
+        locationA.setLatitude(lat1);
+        locationA.setLongitude(lng1);
+
+        Location locationB = new Location("point B");
+        locationB.setLatitude(lat2);
+        locationB.setLongitude(lng2);
+
+        distance = locationA.distanceTo(locationB);
+
+        return distance;
+    }
+
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, null);
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(mContext);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }

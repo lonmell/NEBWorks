@@ -32,10 +32,10 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiAddInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
-import com.krafte.nebworks.dataInterface.PlaceMemberallInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityPlacenotiAddBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -243,11 +243,11 @@ public class FeedAddActivity extends AppCompatActivity {
         dlog.i("SetAllMemberList place_id : " + place_id);
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(PlaceMemberallInterface.URL)
+                    .baseUrl(AllMemberInterface.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
-            PlaceMemberallInterface api = retrofit.create(PlaceMemberallInterface.class);
-            Call<String> call = api.getData(place_id);
+            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+            Call<String> call = api.getData(place_id,"");
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

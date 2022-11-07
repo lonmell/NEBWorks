@@ -1,120 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#fff"
     android:orientation="vertical"
-    tools:ignore="HardcodedText,TextContrastCheck,UsingOnClickInXml"
-    tools:context=".ui.member.MemberManagement">
-    <!--@+id/top_bar-->
+    tools:ignore="HardcodedText"
+    tools:context=".ui.main.MainFragment">
+
     <RelativeLayout
-        android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="#ffffff">
-
-        <ImageView
-            android:id="@+id/back_btn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/back_btn"
-            android:onClick="btnOnclick"
-            tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-        <TextView
-            android:id="@+id/invate_code_input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/inter_regular"
-            android:padding="5dp"
-            android:text="직원관리"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            tools:ignore="HardcodedText,RtlSymmetry" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/top_bar"
-        android:background="#000000" />
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_navigation"
-        android:layout_below="@+id/top_bar">
-
-        <LinearLayout
+        android:layout_height="wrap_content">
+        <!--@+id/top_bar-->
+        <RelativeLayout
+            android:id="@+id/top_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical">
+            android:layout_height="59dp"
+            android:layout_alignParentTop="true"
+            android:background="#ffffff">
 
+            <ImageView
+                android:id="@+id/menu"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/menu"
+                android:onClick="btnOnclick"
+                tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:text="직원관리"
+                android:textSize="16sp"
+                android:layout_centerInParent="true"
                 android:fontFamily="@font/inter_bold"
-                android:text="합류한 직원"
-                android:textSize="20sp"
-                android:textColor="@color/black" />
-
+                android:textColor="@color/black"/>
             <RelativeLayout
-                android:id="@+id/member_list_area"
-                android:layout_width="match_parent"
+                android:id="@+id/notice"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="80dp">
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:onClick="btnOnclick"
+                android:padding="5dp"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/member_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp" />
-
-                <TextView
-                    android:id="@+id/nodata_member"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/member_list"
-                    android:layout_alignTop="@+id/member_list"
-                    android:layout_alignEnd="@+id/member_list"
-                    android:layout_alignBottom="@+id/member_list"
-                    android:background="#ffffff"
-                    android:gravity="center"
-                    android:text="직원이 없습니다."
-                    android:textColor="#696969" />
+                <ImageView
+                    android:id="@+id/bell_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bell" />
             </RelativeLayout>
+        </RelativeLayout>
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        <!-- TabLayou 을 배치한다. -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/top_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabTextColor="#696969"
+            tools:ignore="SpeakableTextPresentCheck" />
 
-    <RelativeLayout
-        android:id="@+id/login_alert_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:visibility="gone">
+        <!-- ViewPager2: 이 위치에 Fragment들이 노출된다. -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tabLayout"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="-1dp">
 
-        <ImageView
-            android:id="@+id/loading_view"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_centerInParent="true"
-            tools:ignore="ContentDescription" />
 
+        </androidx.viewpager2.widget.ViewPager2>
     </RelativeLayout>
-</RelativeLayout>
-
+</LinearLayout>
