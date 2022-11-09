@@ -9,6 +9,29 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/area01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/area02"
+        app:cardBackgroundColor="#ffffff"
+        app:cardCornerRadius="16dp">
+        <TextView
+            android:id="@+id/list_settingitem01"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:fontFamily="@font/inter_regular"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="수정"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/area02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

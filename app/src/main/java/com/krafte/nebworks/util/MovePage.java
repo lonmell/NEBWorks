@@ -12,10 +12,6 @@ public interface MovePage {
     /*Activity*/
     void LoginBack(Context context);
 
-    void MyPlsceGo(Context context);
-
-    void MyPlsceBack(Context context);
-
     void UserDel(Context context);
 
     void Main(Context context);
@@ -127,4 +123,7 @@ public interface MovePage {
     void InviteMember(Context context);
 
     void MemberManagement(Context context);
+
+    //.ui.workstatus
+    void AddWorkPart(Context context);
 }

@@ -2,6 +2,7 @@ package com.krafte.nebworks.ui.member;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -21,10 +22,12 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
+import com.krafte.nebworks.pop.MemberOption;
 import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
 import com.krafte.nebworks.ui.fragment.member.MemberSubFragment1;
 import com.krafte.nebworks.ui.fragment.member.MemberSubFragment2;
 import com.krafte.nebworks.ui.fragment.member.MemberSubFragment3;
+import com.krafte.nebworks.ui.fragment.member.MemberSubFragment4;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -106,7 +109,7 @@ public class MemberManagement extends AppCompatActivity {
             fragments.add(MemberSubFragment1.newInstance(0));
             fragments.add(MemberSubFragment2.newInstance(1));
             fragments.add(MemberSubFragment3.newInstance(2));
-            fragments.add(MemberSubFragment3.newInstance(3));
+            fragments.add(MemberSubFragment4.newInstance(3));
             viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
 
             binding.viewPager.setAdapter(viewPagerFregmentAdapter);
@@ -165,9 +168,19 @@ public class MemberManagement extends AppCompatActivity {
             if (SELECT_POSITION != -99) {
                 binding.viewPager.setCurrentItem(SELECT_POSITION);
             }
+
+            binding.addMemberBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, MemberOption.class);
+                intent.putExtra("data", "직원등록");
+                intent.putExtra("btn01", "직접등록");
+                intent.putExtra("btn02", "초대메세지 발송");
+                startActivity(intent);
+                overridePendingTransition(R.anim.translate_up, 0);
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @Override

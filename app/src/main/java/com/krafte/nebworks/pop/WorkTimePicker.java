@@ -65,9 +65,14 @@ public class WorkTimePicker extends Activity {
                 Hour = binding.timeSetpicker.getCurrentHour();
                 Min = binding.timeSetpicker.getCurrentMinute();
             }
+//            if(Hour > 12){
+//                Hour = Hour - 12;
+//            }
             shardpref.putInt("timeSelect_flag",data);
             shardpref.putInt("Hour",Hour);
             shardpref.putInt("Min",Min);
+            dlog.i("WorkTimePicker Hour : " + Hour);
+            dlog.i("WorkTimePicker Min : " + Min);
             //데이터 전달하기
             //액티비티(팝업) 닫기
             finish();

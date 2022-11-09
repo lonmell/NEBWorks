@@ -3,14 +3,13 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +27,7 @@ import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.HomefragmentBinding;
+import com.krafte.nebworks.pop.MemberOption;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -54,9 +54,6 @@ public class HomeFragment extends Fragment {
     Context mContext;
     Activity activity;
 
-    //XML ID
-    ImageView home_icon;
-    TextView home_tv;
 
     //shared
     String place_id = "";
@@ -237,6 +234,16 @@ public class HomeFragment extends Fragment {
 //            shardpref.putInt("SELECT_POSITION",0);
 //        });
 
+        binding.addMemberBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, MemberOption.class);
+            intent.putExtra("data", "직원등록");
+            intent.putExtra("btn01", "직접등록");
+            intent.putExtra("btn02", "초대메세지 발송");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        });
+
         binding.memberManagement011.setOnClickListener(v -> {
                 pm.MemberManagement(mContext);
         });
@@ -354,18 +361,18 @@ public class HomeFragment extends Fragment {
 //                                    String kind = Response.getJSONObject(0).getString("kind");
                                     String name = Response.getJSONObject(0).getString("name");
                                     String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
-                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
-                                    String department = Response.getJSONObject(0).getString("department");
-                                    String position = Response.getJSONObject(0).getString("position");
+//                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
+//                                    String department = Response.getJSONObject(0).getString("department");
+//                                    String position = Response.getJSONObject(0).getString("position");
                                     String img_path = Response.getJSONObject(0).getString("img_path");
 
                                     try {
                                         dlog.i("------UserCheck-------");
                                         dlog.i("프로필 사진 url : " + img_path);
                                         dlog.i("성명 : " + name);
-                                        dlog.i("부서 : " + department);
-                                        dlog.i("직책 : " + position);
-                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
+//                                        dlog.i("부서 : " + department);
+//                                        dlog.i("직책 : " + position);
+//                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
                                         dlog.i("------UserCheck-------");
 
                                         if (place_owner_id.equals(id)) {

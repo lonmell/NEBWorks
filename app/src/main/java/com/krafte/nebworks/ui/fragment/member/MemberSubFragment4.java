@@ -16,14 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.adapter.WorkplaceMemberAdapter;
-import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.MembersubFragment1Binding;
 import com.krafte.nebworks.util.Dlog;
-import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,15 +48,9 @@ public class MemberSubFragment4 extends Fragment {
     //Other
     ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mList;
     WorkplaceMemberAdapter mAdapter = null;
-    RetrofitConnect rc = new RetrofitConnect();
-    GetResultData resultData = new GetResultData();
-    PageMoveClass pm = new PageMoveClass();
-    int listitemsize = 0;
     Dlog dlog = new Dlog();
 
-//    public static MemberSubFragment4 newInstance(){
-//        return new MemberSubFragment4();
-//    }
+
 
     public static MemberSubFragment4 newInstance(int number) {
         MemberSubFragment4 fragment = new MemberSubFragment4();
@@ -89,21 +80,6 @@ public class MemberSubFragment4 extends Fragment {
 
     //shared
     String place_id = "";
-    String place_name = "";
-    String place_owner_id = "";
-    String place_owner_name = "";
-    String place_management_office = "";
-    String place_address = "";
-    String place_latitude = "";
-    String place_longitude = "";
-    String place_start_time = "";
-    String place_end_time = "";
-    String place_img_path = "";
-    String place_start_date = "";
-    String place_created_at = "";
-
-    String NotiSearch = "";
-
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -185,6 +161,7 @@ public class MemberSubFragment4 extends Fragment {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if (jsonObject.getString("state").equals("2")) {
+                                        dlog.i("i : Response.length() : " + i);
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("name"),
@@ -196,7 +173,8 @@ public class MemberSubFragment4 extends Fragment {
                                                 jsonObject.getString("join_date"),
                                                 jsonObject.getString("state"),
                                                 jsonObject.getString("jikgup"),
-                                                jsonObject.getString("pay")
+                                                jsonObject.getString("pay"),
+                                                jsonObject.getString("worktime")
                                         ));
                                     }
                                 }

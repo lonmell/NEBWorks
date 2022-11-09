@@ -81,7 +81,7 @@ public class HomeFragment2 extends Fragment {
     String place_owner_name = "";
     String registr_num = "";
     String store_kind = "";
-    int place_kind = 0;
+    int accept_state = 0;
     String place_address = "";
     Double place_latitude = 0.0;
     Double place_longitude = 0.0;
@@ -198,7 +198,7 @@ public class HomeFragment2 extends Fragment {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
-            place_kind = shardpref.getInt("place_kind", -99);
+            accept_state = shardpref.getInt("accept_state", -99);
 
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + place_id).addOnCompleteListener(task -> {
@@ -215,7 +215,7 @@ public class HomeFragment2 extends Fragment {
             USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
             shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
 
-            if (place_kind == 0) {
+            if (accept_state == 0) {
                 //승인 대기중
                 binding.acceptArea.setVisibility(View.VISIBLE);
             } else {
@@ -787,7 +787,7 @@ public class HomeFragment2 extends Fragment {
                             if (response.body().replace("\"", "").equals("success")) {
                                 Toast_Nomal("초대 수락이 완료되었습니다.");
                                 binding.acceptArea.setVisibility(View.GONE);
-                                place_kind = 1;
+                                accept_state = 1;
                             }
                         }
                     });

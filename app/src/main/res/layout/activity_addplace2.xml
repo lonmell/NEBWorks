@@ -63,16 +63,64 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="검색된 와이파이"
-            android:fontFamily="@font/inter_bold"
-            android:textSize="16dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:textColor="#000000"/>
+            android:fontFamily="@font/inter_bold"
+            android:text="처음 설정한 와이파이"
+            android:textColor="#000000"
+            android:textSize="16dp" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="#ffffff">
+
+        <ImageView
+            android:id="@+id/wifi_icon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/wifi" />
+
+        <TextView
+            android:id="@+id/wifi_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/wifi_icon"
+            android:layout_alignBottom="@+id/wifi_icon"
+            android:text="wifi name"
+            android:singleLine="true"
+            android:fontFamily="@font/inter_regular"
+            android:textSize="20sp"
+            android:gravity="start|center"
+            android:textColor="#000000"
+            android:paddingStart="15dp"
+            android:layout_toEndOf="@+id/wifi_icon" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="검색된 와이파이 (와이파이 변경시 선택)"
+            android:textColor="#000000"
+            android:textSize="16dp" />
         <RelativeLayout
             android:id="@+id/refresh_wifi"
             android:layout_width="45dp"
@@ -85,6 +133,18 @@
                     android:layout_centerInParent="true"/>
         </RelativeLayout>
     </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="15dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="와이파이 변경시 선택"
+        android:textColor="#a7a7a7"
+        android:textSize="16dp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -94,9 +154,9 @@
             android:id="@+id/wifi_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#f2f2f2"
             android:layout_above="@+id/addPlaceBtn"
             android:layout_alignParentTop="true"
+            android:background="#f2f2f2"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         <RelativeLayout
             android:id="@+id/no_data"

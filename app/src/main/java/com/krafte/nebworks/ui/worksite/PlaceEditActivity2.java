@@ -144,6 +144,9 @@ public class PlaceEditActivity2 extends AppCompatActivity {
                                 save_kind = Response.getJSONObject(0).getString("save_kind");
                                 img_path = Response.getJSONObject(0).getString("img_path").equals("null")?"":Response.getJSONObject(0).getString("img_path");
                                 start_date = Response.getJSONObject(0).getString("start_date");
+                                SSIDName = Response.getJSONObject(0).getString("wifi_name");
+
+                                binding.wifiName.setText(SSIDName);
 
                                 binding.save2btn.setOnClickListener(v -> {
                                     UpdatePlace(0);

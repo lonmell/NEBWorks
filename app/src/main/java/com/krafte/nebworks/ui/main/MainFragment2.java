@@ -11,14 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.krafte.nebworks.R;
@@ -51,6 +56,11 @@ public class MainFragment2 extends AppCompatActivity {
     private final DateCurrent dc = new DateCurrent();
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
+    DrawerLayout drawerLayout;
+    View drawerView;
+    ImageView close_btn;
+    LinearLayout store_info,member_info,workstate_info,pay_management_info,community_info,contract_info,mypage,help_info;
+
     //BottomNavigation
     ImageView bottom_icon01, bottom_icon02, bottom_icon03, bottom_icon04, bottom_icon05;
 
@@ -60,12 +70,15 @@ public class MainFragment2 extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
-    int place_kind = 0;
+    int accept_state = 0;
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
     String store_no;
     boolean wifi_certi_flag = false;
     boolean gps_certi_flag = false;
+
+    String place_name = "";
+    String place_imgpath = "";
 
     //Other
     /*라디오 버튼들 boolean*/
@@ -108,8 +121,11 @@ public class MainFragment2 extends AppCompatActivity {
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
             return_page = shardpref.getString("return_page", "");
             store_no = shardpref.getString("store_no", "");
-            place_kind = shardpref.getInt("place_kind",-99);
+            accept_state = shardpref.getInt("accept_state",-99);
             shardpref.putString("returnPage", "BusinessApprovalActivity");
+
+            place_name = shardpref.getString("place_name", "");
+            place_imgpath = shardpref.getString("place_imgpath", "");
 
             bottom_icon01 = binding.getRoot().findViewById(R.id.bottom_icon01);
             bottom_icon02 = binding.getRoot().findViewById(R.id.bottom_icon02);
@@ -188,9 +204,65 @@ public class MainFragment2 extends AppCompatActivity {
             if (SELECT_POSITION != -99) {
                 binding.viewPager.setCurrentItem(SELECT_POSITION);
             }
+
+            binding.drawerLayout.addDrawerListener(listener);
+            binding.drawerLayout.setOnTouchListener((v, event) -> true);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+            //슬라이드 했을때
+        }
+
+        @Override
+        public void onDrawerOpened(@NonNull View drawerView) {
+            //Drawer가 오픈된 상황일때 호출
+        }
+
+        @Override
+        public void onDrawerClosed(@NonNull View drawerView) {
+            // 닫힌 상황일 때 호출
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+            // 특정상태가 변결될 때 호출
+        }
+    };
+
+    @SuppressLint("LongLogTag")
+    public void setNavBarBtnEvent() {
+        drawerView = findViewById(R.id.drawer2);
+        close_btn = findViewById(R.id.close_btn);
+        store_info          = findViewById(R.id.store_info);
+        member_info         = findViewById(R.id.member_info);
+        workstate_info      = findViewById(R.id.workstate_info);
+        pay_management_info = findViewById(R.id.pay_management_info);
+        community_info      = findViewById(R.id.community_info);
+        contract_info       = findViewById(R.id.contract_info);
+        mypage              = findViewById(R.id.mypage);
+        help_info           = findViewById(R.id.help_info);
+
+        ImageView user_profile = findViewById(R.id.user_profile);
+        TextView store_name = findViewById(R.id.store_name);
+        store_name.setText(place_name);
+
+        Glide.with(mContext).load(place_imgpath)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(user_profile);
+        close_btn.setOnClickListener(v -> {
+            drawerLayout.closeDrawer(drawerView);
+        });
+
+        member_info.setOnClickListener(v -> {
+            dlog.i("직원관리 Click!");
+            binding.tabLayout.getTabAt(2).select();
+        });
     }
 
     @Override
@@ -206,10 +278,13 @@ public class MainFragment2 extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        setNavBarBtnEvent();
     }
 
     public void btnOnclick(View view) {
-        if (view.getId() == R.id.out_store) {
+        if (view.getId() == R.id.menu) {
+            drawerLayout.openDrawer(drawerView);
+        } else if (view.getId() == R.id.out_store) {
             pm.PlaceList(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {
             dlog.i("메인 Click!");

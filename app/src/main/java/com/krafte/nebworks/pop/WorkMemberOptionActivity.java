@@ -9,16 +9,15 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
+import com.krafte.nebworks.databinding.ActivityMemberoptionBinding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -33,7 +32,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class WorkMemberOptionActivity extends Activity {
-
+    private ActivityMemberoptionBinding binding;
     private static final String TAG = "WorkMemberOptionActivity";
     Context mContext;
     private View view;
@@ -41,22 +40,9 @@ public class WorkMemberOptionActivity extends Activity {
     Activity activity;
     FragmentManager fragmentManager;
 
-    //XML ID
-    TextView list_settingitem02;
-    CardView close_btn;
-
     // shared 저장값
     PreferenceHelper shardpref;
-    String USER_INFO_ID = "";
-    String USER_INFO_NAME = "";
-    String USER_INFO_AUTH = "";
-    int SELECTED_POSITION = 0;
-    String Employee_id = "";
-    String Employer_id = "";
-    String notify_store_no = "";
-    String TaskNo = "";
-    int make_kind = 0;
-    String store_no = "";
+
 
     String place_id            = "";
     String user_id             = "";
@@ -79,7 +65,9 @@ public class WorkMemberOptionActivity extends Activity {
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_memberoption);
+        binding = ActivityMemberoptionBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+//        setContentView(R.layout.activity_memberoption);
         mContext = this;
 
         dlog.DlogContext(mContext);
@@ -92,16 +80,21 @@ public class WorkMemberOptionActivity extends Activity {
         Log.i(TAG,"user_id : " + user_id);
 
         shardpref = new PreferenceHelper(mContext);
-
-        list_settingitem02 = findViewById(R.id.list_settingitem02);
-        close_btn = findViewById(R.id.close_btn);
         setBtnEvent();
-
     }
 
     private void setBtnEvent(){
 
-        list_settingitem02.setOnClickListener(v -> {
+        binding.listSettingitem01.setOnClickListener(v -> {
+            pm.AddMemberDetail(mContext);
+            finish();
+            Intent intent = new Intent();
+            intent.putExtra("result", "Close Popup");
+            setResult(RESULT_OK, intent);
+            overridePendingTransition(0, R.anim.translate_down);
+        });
+
+        binding.listSettingitem02.setOnClickListener(v -> {
             TaskDel();
             finish();
             Intent intent = new Intent();
@@ -110,7 +103,7 @@ public class WorkMemberOptionActivity extends Activity {
             overridePendingTransition(0, R.anim.translate_down);
         });
 
-        close_btn.setOnClickListener(v -> {
+        binding.closeBtn.setOnClickListener(v -> {
             finish();
             Intent intent = new Intent();
             intent.putExtra("result", "Close Popup");

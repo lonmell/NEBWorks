@@ -199,7 +199,8 @@ public class MemberSubFragment2 extends Fragment {
                                                 jsonObject.getString("join_date"),
                                                 jsonObject.getString("state"),
                                                 jsonObject.getString("jikgup"),
-                                                jsonObject.getString("pay")
+                                                jsonObject.getString("pay"),
+                                                jsonObject.getString("worktime")
                                         ));
                                     }
                                 }

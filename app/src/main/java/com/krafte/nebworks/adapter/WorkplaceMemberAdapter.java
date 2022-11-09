@@ -3,6 +3,7 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
+import com.krafte.nebworks.pop.WorkMemberOptionActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -37,7 +39,8 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
     GetResultData resultData = new GetResultData();
     Dlog dlog = new Dlog();
 
-    boolean item_flag = true;
+    boolean option_visible = true;
+    int before_pos = 0;
     String item_worktime = "";
     String item_hourpay = "";
     String item_status = "";
@@ -96,30 +99,52 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 holder.state.setVisibility(View.GONE);
                 holder.linear01.setVisibility(View.GONE);
                 holder.linear02.setVisibility(View.GONE);
+                holder.linear03.setVisibility(View.GONE);
             }else{
                 holder.add_detail.setVisibility(View.GONE);
-                if(item.getState().equals("1")){
-                    //등록,재직
-                    holder.state.setCardBackgroundColor(R.color.blue);
-                }else if(item.getState().equals("2")){
-                    //휴직
-                    holder.state.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-                }else{
-                    //null
-                    holder.state.setVisibility(View.GONE);
-                }
                 if((item.getJikgup().equals("null") || item.getJikgup().isEmpty())){
                     holder.linear01.setVisibility(View.GONE);
                 }else{
                     holder.jikgup.setText(item.getJikgup());
                 }
-                if((item.getJikgup().equals("null") || item.getJikgup().isEmpty())){
+                if((item.getPay().equals("null") || item.getPay().isEmpty())){
                     holder.linear02.setVisibility(View.GONE);
                 }else{
                     holder.pay.setText(item.getPay());
                 }
-                holder.state_tv.setText(item.getState());
+                if((item.getState().equals("null") || item.getState().isEmpty())){
+                    holder.linear03.setVisibility(View.GONE);
+                }else{
+                    String jejikState = "";
+                    if(item.getState().equals("1")){
+                        //등록,재직
+                        jejikState = "재직";
+                    }else if(item.getState().equals("2")){
+                        //휴직
+                        jejikState = "휴직";
+                    }
+                    holder.jejik.setText(jejikState);
+                }
+
+                if(item.getWorktime().equals("오전")) {
+                    holder.state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
+                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                }else if(item.getWorktime().equals("주간")) {
+                    holder.state.setCardBackgroundColor(Color.parseColor("#44F905"));
+                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                }else if(item.getWorktime().equals("야간")) {
+                    holder.state.setCardBackgroundColor(Color.parseColor("#1D1D1D"));
+                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                }else if(item.getWorktime().equals("주말")) {
+                    holder.state.setCardBackgroundColor(Color.parseColor("#FF687A"));
+                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                }else {
+                    holder.state.setCardBackgroundColor(Color.parseColor("#696969"));
+                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                }
+                holder.state_tv.setText(item.getWorktime());
             }
+
 
             holder.add_detail.setOnClickListener(v -> {
                 shardpref.putString("mem_id",item.getId());
@@ -134,7 +159,32 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 shardpref.putString("mem_pay",item.getPay());
                 pm.AddMemberDetail(mContext);
             });
-
+            if(!item.getId().equals(place_owner_id)){
+                holder.list_setting.setVisibility(View.VISIBLE);
+            }else{
+                holder.list_setting.setVisibility(View.GONE);
+            }
+            holder.list_setting.setOnClickListener(v -> {
+                shardpref.putString("mem_id",item.getId());
+                shardpref.putString("mem_name",item.getName());
+                shardpref.putString("mem_phone",item.getPhone());
+                shardpref.putString("mem_gender",item.getGender());
+                shardpref.putString("mem_jumin",item.getJumin());
+                shardpref.putString("mem_kind",item.getKind());
+                shardpref.putString("mem_join_date",item.getJoin_date());
+                shardpref.putString("mem_state",item.getState());
+                shardpref.putString("mem_jikgup",item.getJikgup());
+                shardpref.putString("mem_pay",item.getPay());
+                Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
+                intent.putExtra("place_id", place_id);
+                intent.putExtra("user_id",item.getId());
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                if (mListener != null) {
+                    mListener.onItemClick(v, position);
+                }
+            });
 //            holder.edit_bottom.setOnClickListener(v -> {
 //                Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
 //                intent.putExtra("place_id", place_id);
@@ -159,26 +209,25 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name,jikgup,pay,state_tv;
+        TextView name,jikgup,pay,state_tv,jejik;
         CardView add_detail,state;
         RelativeLayout list_setting;
-        LinearLayout linear01,linear02;
+        LinearLayout linear01,linear02,linear03;
+
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            name = itemView.findViewById(R.id.name);
-            jikgup = itemView.findViewById(R.id.jikgup);
-            pay = itemView.findViewById(R.id.pay);
-            state_tv = itemView.findViewById(R.id.state_tv);
-
-            add_detail = itemView.findViewById(R.id.add_detail);
-            state = itemView.findViewById(R.id.state);
-
-            list_setting = itemView.findViewById(R.id.list_setting);
-
-            linear01 = itemView.findViewById(R.id.linear01);
-            linear02 = itemView.findViewById(R.id.linear02);
-
+            name            = itemView.findViewById(R.id.name);
+            jikgup          = itemView.findViewById(R.id.jikgup);
+            pay             = itemView.findViewById(R.id.pay);
+            state_tv        = itemView.findViewById(R.id.state_tv);
+            add_detail      = itemView.findViewById(R.id.add_detail);
+            state           = itemView.findViewById(R.id.state);
+            list_setting    = itemView.findViewById(R.id.list_setting);
+            linear01        = itemView.findViewById(R.id.linear01);
+            linear02        = itemView.findViewById(R.id.linear02);
+            linear03        = itemView.findViewById(R.id.linear03);
+            jejik           = itemView.findViewById(R.id.jejik);
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             place_id = shardpref.getString("place_id", "");

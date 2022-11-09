@@ -138,7 +138,7 @@ public class PlaceEditActivity extends AppCompatActivity {
     String payday = "";
     String test_day = "";
     String restday = "";
-    String place_kind = "";
+    String accept_state = "";
     String placeAddress_get = "";
     boolean registrTF = false;
 
@@ -726,7 +726,7 @@ public class PlaceEditActivity extends AppCompatActivity {
         restday = binding.inputbox07.getText().toString();
         placeAddress_get = placeAddress + " " + placeDtailAddress;
         registr_num = binding.inputbox02.getText().toString();
-        place_kind = binding.inputbox03.getText().toString();
+        accept_state = binding.inputbox03.getText().toString();
 
         if (SearchRestrnum(binding.inputbox02.getText().toString())) {
             registrTF = true;
@@ -742,7 +742,7 @@ public class PlaceEditActivity extends AppCompatActivity {
         dlog.i("매장명 : " + placeName);
         dlog.i("매장주소 : " + placeAddress);
         dlog.i("매장 상세주소 : " + placeDtailAddress);
-        dlog.i("매장분류 : " + place_kind);
+        dlog.i("매장분류 : " + accept_state);
         dlog.i("위도 : " + latitude);
         dlog.i("경도 : " + longitude);
         dlog.i("급여정산일 : " + payday);
@@ -790,7 +790,7 @@ public class PlaceEditActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
-        Call<String> call = api.getData(place_id, placeName, registr_num, place_kind, placeAddress_get
+        Call<String> call = api.getData(place_id, placeName, registr_num, accept_state, placeAddress_get
                 , String.valueOf(latitude), String.valueOf(longitude), payday, test_day, restday
                 , (String.valueOf(boheom).replace("[", "").replace("]", "")), place_starttime, place_endtime, ProfileUrl, String.valueOf(i), start_date, SSIDName);
         call.enqueue(new Callback<String>() {

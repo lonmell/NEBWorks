@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.fragment.workstatus;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,10 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.krafte.nebworks.adapter.WorkplaceMemberAdapter;
+import com.krafte.nebworks.adapter.WorkTapMemberAdapter;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.data.WorkPlaceMemberListData;
-import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.data.WorkStatusTapData;
+import com.krafte.nebworks.dataInterface.WorkStatusTapInterface;
 import com.krafte.nebworks.databinding.MembersubFragment1Binding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,8 +51,8 @@ public class WorkStatusSubFragment2 extends Fragment {
     String USER_INFO_EMAIL = "";
 
     //Other
-    ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mList;
-    WorkplaceMemberAdapter mAdapter = null;
+    ArrayList<WorkStatusTapData.WorkStatusTapData_list> mList;
+    WorkTapMemberAdapter mAdapter = null;
     RetrofitConnect rc = new RetrofitConnect();
     GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
@@ -82,20 +84,11 @@ public class WorkStatusSubFragment2 extends Fragment {
 
     //shared
     String place_id = "";
-    String place_name = "";
-    String place_owner_id = "";
-    String place_owner_name = "";
-    String place_management_office = "";
-    String place_address = "";
-    String place_latitude = "";
-    String place_longitude = "";
-    String place_start_time = "";
-    String place_end_time = "";
-    String place_img_path = "";
-    String place_start_date = "";
-    String place_created_at = "";
 
-    String NotiSearch = "";
+    String toDay = "";
+    Calendar cal;
+    String format = "yyyy-MM-dd";
+    SimpleDateFormat sdf = new SimpleDateFormat(format);
     int total_member_cnt = 0;
 
     @SuppressLint("SetTextI18n")
@@ -138,6 +131,10 @@ public class WorkStatusSubFragment2 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        cal = Calendar.getInstance();
+        toDay = sdf.format(cal.getTime());
+        dlog.i("오늘 :" + toDay);
+        toDay = shardpref.getString("FtoDay",toDay);
         SetAllMemberList();
     }
 
@@ -150,15 +147,12 @@ public class WorkStatusSubFragment2 extends Fragment {
         total_member_cnt = 0;
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(AllMemberInterface.URL)
+                    .baseUrl(WorkStatusTapInterface.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
-            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-            Call<String> call = api.getData(place_id,"");
-//            @Field("flag") int flag,
-//            @Field("place_id") String place_id,
-//            @Field("user_id") String user_id,
-//            @Field("getMonth") String getMonth
+            WorkStatusTapInterface api = retrofit.create(WorkStatusTapInterface.class);
+            Call<String> call = api.getData(place_id,"0",toDay);
+
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -169,7 +163,7 @@ public class WorkStatusSubFragment2 extends Fragment {
                             JSONArray Response = new JSONArray(response.body());
 
                             mList = new ArrayList<>();
-                            mAdapter = new WorkplaceMemberAdapter(mContext, mList, getParentFragmentManager());
+                            mAdapter = new WorkTapMemberAdapter(mContext, mList, getParentFragmentManager());
                             binding.allMemberlist.setAdapter(mAdapter);
                             binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
 
@@ -181,18 +175,17 @@ public class WorkStatusSubFragment2 extends Fragment {
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                    mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
                                             jsonObject.getString("id"),
+                                            jsonObject.getString("place_id"),
+                                            jsonObject.getString("user_id"),
                                             jsonObject.getString("name"),
-                                            jsonObject.getString("phone"),
-                                            jsonObject.getString("gender"),
                                             jsonObject.getString("img_path"),
-                                            jsonObject.getString("jumin"),
                                             jsonObject.getString("kind"),
-                                            jsonObject.getString("join_date"),
-                                            jsonObject.getString("state"),
                                             jsonObject.getString("jikgup"),
-                                            jsonObject.getString("pay")
+                                            jsonObject.getString("join_date"),
+                                            jsonObject.getString("io_date"),
+                                            jsonObject.getString("io_time")
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();

@@ -57,9 +57,7 @@ public class MemberSubFragment1 extends Fragment {
     int listitemsize = 0;
     Dlog dlog = new Dlog();
 
-//    public static MemberSubFragment1 newInstance(){
-//        return new MemberSubFragment1();
-//    }
+
     public static MemberSubFragment1 newInstance(int number) {
         MemberSubFragment1 fragment = new MemberSubFragment1();
         Bundle bundle = new Bundle();
@@ -161,10 +159,7 @@ public class MemberSubFragment1 extends Fragment {
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
             Call<String> call = api.getData(place_id,"");
-//            @Field("flag") int flag,
-//            @Field("place_id") String place_id,
-//            @Field("user_id") String user_id,
-//            @Field("getMonth") String getMonth
+
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -198,7 +193,8 @@ public class MemberSubFragment1 extends Fragment {
                                             jsonObject.getString("join_date"),
                                             jsonObject.getString("state"),
                                             jsonObject.getString("jikgup"),
-                                            jsonObject.getString("pay")
+                                            jsonObject.getString("pay"),
+                                            jsonObject.getString("worktime")
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();

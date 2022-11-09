@@ -226,7 +226,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/default_input_round"
+                    android:background="@drawable/default_gray_round"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="start|center"
                     android:hint="YY-MM-DD"
@@ -523,45 +523,186 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
-                <RelativeLayout
+
+                <LinearLayout
+                    android:id="@+id/select_area01"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/default_gray_round"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/select01time"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/select_empty_round" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/select01tvtime"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="1dp"
+                        android:text="오전"
+                        android:textColor="#a9a9a9"
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/select_area02"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/default_gray_round"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/select02time"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/select_empty_round" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/select02tvtime"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="1dp"
+                        android:text="주간"
+                        android:textColor="#a9a9a9"
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/select_area03"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/default_gray_round"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/select03time"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/select_empty_round" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/select03tvtime"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="1dp"
+                        android:text="야간"
+                        android:textColor="#a9a9a9"
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/select_area04"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/default_gray_round"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/select04time"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/select_empty_round" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/select04tvtime"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="1dp"
+                        android:text="주말"
+                        android:textColor="#a9a9a9"
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/select_area05"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/default_gray_round"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/select05time"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/select_empty_round" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/select05tvtime"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="1dp"
+                        android:text="기타"
+                        android:textColor="#a9a9a9"
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/worktime"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="4dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/default_gray_round">
-
-                    <EditText
-                        android:id="@+id/worktime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="16dp"
-                        android:layout_toStartOf="@+id/time_tv"
-                        android:background="@color/white"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center|start"
-                        android:hint="근무시간 입력"
-                        android:inputType="number"
-                        android:paddingEnd="15dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="#949494"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText" />
-                    <TextView
-                        android:id="@+id/time_tv"
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="시간"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:layout_marginStart="10dp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-                </RelativeLayout>
+                    android:background="@drawable/default_gray_round"
+                    android:layout_marginTop="10dp"
+                    android:inputType="text"
+                    android:hint="기타 입력"
+                    android:textColorHint="#a9a9a9"
+                    android:paddingStart="15dp"/>
             </LinearLayout>
 
 

@@ -171,7 +171,6 @@
         <activity android:name=".ui.user.ProfileEditActivity" />
         <activity android:name=".ui.user.UserPlaceMapActivity" />
         <activity android:name=".ui.user.DeleteUserActivity" />
-        <activity android:name=".ui.user.MyPlaceListActivity" />
         <activity android:name=".ui.user.SearchAccountActivity" />
         <activity android:name=".ui.user.FindEmailActivity" />
         <activity android:name=".ui.user.VerificationActivity" />
@@ -183,6 +182,8 @@
         <activity android:name=".ui.career.CareerActivity"
             android:theme="@style/Theme.Kogas"/>
 
+        <!-- workstatus-->
+        <activity android:name=".ui.workstatus.AddWorkPartActivity" />
 
         <!-- 팝업 영역 -->
         <activity

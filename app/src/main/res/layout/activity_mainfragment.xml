@@ -1,93 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="#00ff0000"
     android:orientation="vertical"
-    tools:ignore="HardcodedText"
-    tools:context=".ui.main.MainFragment">
+    android:theme="@style/Theme.Kogas"
+    tools:context=".ui.main.MainFragment"
+    tools:ignore="HardcodedText,UsingOnClickInXml">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!--@+id/top_bar-->
-        <RelativeLayout
-            android:id="@+id/top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="59dp"
-            android:layout_alignParentTop="true"
-            android:background="#ffffff">
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:orientation="vertical"
+        tools:ignore="HardcodedText">
 
-            <ImageView
-                android:id="@+id/menu"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/menu"
-                android:onClick="btnOnclick"
-                tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="title"
-                android:textSize="16sp"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/inter_bold"
-                android:visibility="gone"
-                android:textColor="@color/black"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--@+id/top_bar-->
             <RelativeLayout
-                android:id="@+id/notice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:onClick="btnOnclick"
-                android:padding="5dp"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
+                android:id="@+id/top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="59dp"
+                android:layout_alignParentTop="true"
+                android:background="#ffffff">
 
                 <ImageView
-                    android:id="@+id/bell_icon"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/bell" />
+                    android:id="@+id/menu"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/menu"
+                    android:onClick="btnOnclick"
+                    tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/inter_bold"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <RelativeLayout
+                    android:id="@+id/notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:onClick="btnOnclick"
+                    android:padding="5dp"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
+
+                    <ImageView
+                        android:id="@+id/bell_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/bell" />
+                </RelativeLayout>
             </RelativeLayout>
+
+            <!-- TabLayou 을 배치한다. -->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_below="@+id/top_bar"
+                android:background="#fff"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabTextColor="#696969"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <!-- ViewPager2: 이 위치에 Fragment들이 노출된다. -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/top_bar"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="-1dp"
+                android:layout_marginBottom="70dp">
+
+
+            </androidx.viewpager2.widget.ViewPager2>
+
+            <include layout="@layout/bottom_navigation" />
         </RelativeLayout>
+    </LinearLayout>
 
-        <!-- TabLayou 을 배치한다. -->
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="#fff"
-            android:layout_below="@+id/top_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabTextColor="#696969"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <!-- ViewPager2: 이 위치에 Fragment들이 노출된다. -->
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/top_bar"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="-1dp"
-            android:layout_marginBottom="70dp">
-
-
-        </androidx.viewpager2.widget.ViewPager2>
-
-        <include layout="@layout/bottom_navigation" />
-    </RelativeLayout>
-</LinearLayout>
+    <include layout="@layout/navbar" />
+</androidx.drawerlayout.widget.DrawerLayout>

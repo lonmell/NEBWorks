@@ -147,10 +147,6 @@ public class MoreFragment extends Fragment {
             pm.Push(mContext);
         });
 
-        binding.settingList05Txt.setOnClickListener(v -> {
-            pm.MyPlsceGo(mContext);
-        });
-
         binding.settingList06Txt.setOnClickListener(v -> {
             pm.UserDel(mContext);
         });

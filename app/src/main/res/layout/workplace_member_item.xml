@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="11dp"
+    android:layout_marginEnd="20dp"
     android:background="@drawable/default_gray_round"
+    android:minHeight="52dp"
     android:orientation="horizontal"
     android:padding="13dp"
-    android:minHeight="52dp"
-    android:layout_marginTop="11dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
     tools:ignore="HardcodedText,RtlSymmetry">
 
     <TextView
@@ -52,22 +52,24 @@
         android:layout_height="30dp"
         android:layout_alignTop="@+id/name"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="15dp">
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="10dp">
 
         <ImageView
             android:layout_width="3dp"
             android:layout_height="15dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
             android:background="@drawable/list_setting" />
     </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/linear01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@+id/name"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,6 +81,7 @@
             android:text="직급"
             android:textColor="#696969"
             android:textSize="13sp" />
+
         <TextView
             android:id="@+id/jikgup"
             android:layout_width="wrap_content"
@@ -92,12 +95,14 @@
             android:textColor="@color/black"
             android:textSize="13sp" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/linear02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/linear01">
+        android:layout_below="@+id/linear01"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,6 +114,7 @@
             android:text="급여"
             android:textColor="#696969"
             android:textSize="13sp" />
+
         <TextView
             android:id="@+id/pay"
             android:layout_width="wrap_content"
@@ -122,13 +128,48 @@
             android:textColor="@color/black"
             android:textSize="13sp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear02"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="상태"
+            android:textColor="#696969"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/jejik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+    </LinearLayout>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/list_setting"
-        android:layout_alignBottom="@+id/linear02"
         android:layout_alignEnd="@+id/list_setting"
+        android:layout_alignBottom="@+id/linear03"
+        android:layout_toStartOf="@+id/list_setting"
+        android:minWidth="70dp"
         app:cardBackgroundColor="#f2f2f2"
         app:cardCornerRadius="5dp">
 
@@ -145,4 +186,6 @@
             android:textColor="@color/black"
             android:textSize="13sp" />
     </androidx.cardview.widget.CardView>
+
+
 </RelativeLayout>

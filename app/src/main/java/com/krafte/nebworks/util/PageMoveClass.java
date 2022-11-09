@@ -24,7 +24,6 @@ import com.krafte.nebworks.ui.user.ChangePWActivity2;
 import com.krafte.nebworks.ui.user.DeleteUserActivity;
 import com.krafte.nebworks.ui.user.FindEmailActivity;
 import com.krafte.nebworks.ui.user.JoinActivity;
-import com.krafte.nebworks.ui.user.MyPlaceListActivity;
 import com.krafte.nebworks.ui.user.ProfileEditActivity;
 import com.krafte.nebworks.ui.user.SearchAccountActivity;
 import com.krafte.nebworks.ui.user.UserPlaceMapActivity;
@@ -38,6 +37,7 @@ import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.ui.worksite.PlaceSearchActivity;
 import com.krafte.nebworks.ui.worksite.PlaceWorkDetailActivity;
 import com.krafte.nebworks.ui.worksite.WorkState2Activity;
+import com.krafte.nebworks.ui.workstatus.AddWorkPartActivity;
 
 public class PageMoveClass implements MovePage {
     PreferenceHelper shardpref;
@@ -388,21 +388,6 @@ public class PageMoveClass implements MovePage {
     }
 
     @Override
-    public void MyPlsceGo(Context context) {
-        Intent intent = new Intent(context, MyPlaceListActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-    @Override
-    public void MyPlsceBack(Context context) {
-        Intent intent = new Intent(context, MyPlaceListActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-
-    @Override
     public void UserDel(Context context) {
         Intent intent = new Intent(context, DeleteUserActivity.class);
         context.startActivity(intent);
@@ -486,5 +471,15 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
+    //.ui.workstatus
+    @Override
+    public void AddWorkPart(Context context) {
+        Intent intent = new Intent(context, AddWorkPartActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
 
 }

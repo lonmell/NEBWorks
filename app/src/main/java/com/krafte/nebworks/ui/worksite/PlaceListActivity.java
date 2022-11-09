@@ -136,12 +136,6 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        timer.cancel();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -230,7 +224,7 @@ public class PlaceListActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData("", USER_INFO_ID);
+        Call<String> call = api.getData("", (USER_INFO_AUTH.equals("0")?"":USER_INFO_ID));
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -286,7 +280,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                                             jsonObject.getString("end_time"),
                                                             jsonObject.getString("save_kind"),
                                                             jsonObject.getString("img_path"),
-                                                            jsonObject.getString("place_kind"),
+                                                            jsonObject.getString("accept_state"),
                                                             jsonObject.getString("total_cnt"),
                                                             jsonObject.getString("i_cnt"),
                                                             jsonObject.getString("o_cnt"),
@@ -314,7 +308,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                                             jsonObject.getString("end_time"),
                                                             jsonObject.getString("save_kind"),
                                                             jsonObject.getString("img_path"),
-                                                            jsonObject.getString("place_kind"),
+                                                            jsonObject.getString("accept_state"),
                                                             jsonObject.getString("total_cnt"),
                                                             jsonObject.getString("i_cnt"),
                                                             jsonObject.getString("o_cnt"),
@@ -333,23 +327,40 @@ public class PlaceListActivity extends AppCompatActivity {
                                                     dlog.i("place_latitude : " + shardpref.getString("place_latitude", ""));
                                                     dlog.i("place_longitude : " + shardpref.getString("place_longitude", ""));
                                                     String owner_id = Response.getJSONObject(pos).getString("owner_id");
-                                                    String palce_name = Response.getJSONObject(pos).getString("name");
+                                                    String place_name = Response.getJSONObject(pos).getString("name");
                                                     String myid = shardpref.getString("USER_INFO_ID", "0");
                                                     String place_id = Response.getJSONObject(pos).getString("id");
                                                     String save_kind = Response.getJSONObject(pos).getString("save_kind");
-                                                    String place_kind = Response.getJSONObject(pos).getString("place_kind");
+                                                    String accept_state = Response.getJSONObject(pos).getString("accept_state");
+                                                    String place_imgpath = Response.getJSONObject(pos).getString("img_path");
+                                                    dlog.i("owner_id : " + owner_id);
+                                                    dlog.i("place_name : " + place_name);
+                                                    dlog.i("myid : " + myid);
+                                                    dlog.i("place_id : " + place_id);
+                                                    dlog.i("save_kind : " + save_kind);
+                                                    dlog.i("accept_state : " + accept_state);
+                                                    dlog.i("place_imgpath : " + place_imgpath);
 
+                                                    shardpref.putString("place_id",place_id);
+                                                    shardpref.putString("place_name",place_name);
+                                                    shardpref.putString("place_imgpath",place_imgpath);
                                                     if (save_kind.equals("0")) {
                                                         //임시저장된 매장
-                                                        shardpref.putString("place_id",place_id);
                                                         pm.PlaceEditGo(mContext);
                                                     } else {
                                                         //저장된 매장
                                                         if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
                                                             pm.ProfileEditGo(mContext);
                                                         } else {
-                                                            shardpref.putInt("place_kind",Integer.parseInt(place_kind));
-                                                            ConfirmUserPlacemember(place_id, myid, owner_id, palce_name);
+                                                            if(accept_state.equals("null")){
+                                                                if(!owner_id.equals(USER_INFO_ID)){
+                                                                    accept_state = "1";
+                                                                }else{
+                                                                    accept_state = "0";
+                                                                }
+                                                            }
+                                                            shardpref.putInt("accept_state",Integer.parseInt(accept_state));
+                                                            ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
                                                             shardpref.putInt("SELECT_POSITION",0);
                                                             if(USER_INFO_AUTH.equals("0")){
                                                                 pm.Main(mContext);
@@ -359,7 +370,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
                                                         }
                                                     }
-                                                } catch (Exception e) {
+                                                } catch (JSONException e) {
                                                     dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                                 }
 

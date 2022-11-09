@@ -21,7 +21,7 @@ public class PlaceListData {
         String end_time;
         String save_kind;
         String img_path;
-        String place_kind;
+        String accept_state;
         String total_cnt;
         String i_cnt;
         String o_cnt;
@@ -31,7 +31,7 @@ public class PlaceListData {
         public PlaceListData_list(String id, String name, String owner_id, String owner_name, String registr_num,
                                     String store_kind, String address, String latitude, String longitude, String pay_day, String test_period,
                                     String vacation_select, String insurance, String start_time, String end_time, String save_kind,
-                                    String img_path, String place_kind, String total_cnt, String i_cnt, String o_cnt, String created_at) {
+                                    String img_path, String accept_state, String total_cnt, String i_cnt, String o_cnt, String created_at) {
             this.id = id;
             this.name = name;
             this.owner_id = owner_id;
@@ -49,7 +49,7 @@ public class PlaceListData {
             this.end_time = end_time;
             this.save_kind = save_kind;
             this.img_path = img_path;
-            this.place_kind = place_kind;
+            this.accept_state = accept_state;
             this.total_cnt = total_cnt;
             this.i_cnt = i_cnt;
             this.o_cnt = o_cnt;
@@ -192,12 +192,12 @@ public class PlaceListData {
             this.img_path = img_path;
         }
 
-        public String getPlace_kind() {
-            return place_kind;
+        public String getAccept_state() {
+            return accept_state;
         }
 
-        public void setPlace_kind(String place_kind) {
-            this.place_kind = place_kind;
+        public void setAccept_state(String accept_state) {
+            this.accept_state = accept_state;
         }
 
         public String getTotal_cnt() {
