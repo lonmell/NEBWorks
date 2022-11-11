@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,8 +37,8 @@ import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiAddInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
-import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityPlacenotiAddBinding;
+import com.krafte.nebworks.pop.DatePickerActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -97,16 +98,6 @@ public class FeedAddActivity extends AppCompatActivity {
     String place_id = "";
     String place_name = "";
     String place_owner_id = "";
-    String place_owner_name = "";
-    String place_management_office = "";
-    String place_address = "";
-    String place_latitude = "";
-    String place_longitude = "";
-    String place_start_time = "";
-    String place_end_time = "";
-    String place_img_path = "";
-    String place_start_date = "";
-    String place_created_at = "";
     String USER_INFO_EMAIL = "";
 
     File file;
@@ -119,8 +110,11 @@ public class FeedAddActivity extends AppCompatActivity {
     Drawable icon_off;
     Drawable icon_on;
 
+    String Time01 = "-99";
+    String Time02 = "-99";
+
     //Check Data
-    String noti_title, noti_contents, noti_link, noti_img;
+    String noti_title, noti_contents, noti_link, noti_event_start, noti_event_end;
 
     int a = 0;//정직원 수
     int b = 0;//협력업체 직원 수
@@ -152,23 +146,11 @@ public class FeedAddActivity extends AppCompatActivity {
         try {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            place_owner_name = shardpref.getString("place_owner_name", "0");
-            place_management_office = shardpref.getString("place_management_office", "0");
-            place_address = shardpref.getString("place_address", "0");
-            place_latitude = shardpref.getString("place_latitude", "0");
-            place_longitude = shardpref.getString("place_longitude", "0");
-            place_start_time = shardpref.getString("place_start_time", "0");
-            place_end_time = shardpref.getString("place_end_time", "0");
-            place_img_path = shardpref.getString("place_img_path", "0");
-            place_start_date = shardpref.getString("place_start_date", "0");
-            place_created_at = shardpref.getString("place_created_at", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
-            UserCheck(USER_INFO_EMAIL);
+            UserCheck();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -181,62 +163,36 @@ public class FeedAddActivity extends AppCompatActivity {
         super.onResume();
         ImgfileMaker = ImageNameMaker();
         SetAllMemberList();
-    }
 
-    @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
-        pm.PlaceWorkBack(mContext);
-    }
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        String thumnail_url = shardpref.getString("thumnail_url", "");
+        String name = shardpref.getString("name", "");
+        String writer_id = shardpref.getString("writer_id", "");
+        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
 
-    public void setBtnEvent() {
-        binding.closeBtn.setOnClickListener(v -> {
-            pm.PlaceWorkBack(mContext);
-        });
+        dlog.i("------------------Data Check onResume------------------");
+        dlog.i("thumnail_url : " + thumnail_url);
+        dlog.i("name : " + name);
+        dlog.i("writer_id : " + writer_id);
+        dlog.i("vDateGetDate : " + shardpref.getString("vDateGetDate", ""));
+        dlog.i("timeSelect_flag : " + timeSelect_flag);
+        dlog.i("------------------Data Check onResume------------------");
 
-        binding.workSave.setOnClickListener(v -> {
-            dlog.i("DataCheck() : " + DataCheck());
-            if (DataCheck()) {
-                AddStroeNoti();
-            }
-        });
+        final String GetTime = shardpref.getString("vDateGetDate", "");
 
-        binding.cancel.setOnClickListener(v -> {
-            pm.PlaceWorkBack(mContext);
-        });
-
-        binding.notiSetimg.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent, GALLEY_CODE);
-        });
-
-        binding.closeBtn.setOnClickListener(v -> {
-            super.onBackPressed();
-        });
-
-
-        if (saveBitmap != null) {
-            binding.clearImg.setVisibility(View.VISIBLE);
-            binding.imgPlus.setVisibility(View.GONE);
-        } else {
-            binding.clearImg.setVisibility(View.GONE);
-            binding.imgPlus.setVisibility(View.VISIBLE);
+        if (timeSelect_flag == 1) {
+            Time01 = GetTime;
+            shardpref.remove("vDateGetDate");
+            binding.eventStarttime.setText(GetTime);
+            binding.inputWorktitle.clearFocus();
+            binding.inputWorkcontents.clearFocus();
+        } else if (timeSelect_flag == 2) {
+            Time02 = GetTime;
+            shardpref.remove("vDateGetDate");
+            binding.eventEndttime.setText(GetTime);
+            binding.inputWorktitle.clearFocus();
+            binding.inputWorkcontents.clearFocus();
         }
-        binding.clearImg.setOnClickListener(v -> {
-            try {
-                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
-                saveBitmap.eraseColor(Color.TRANSPARENT);
-                binding.notiSetimg.setImageBitmap(saveBitmap);
-                binding.notiSetimg.setBackgroundResource(R.drawable.img_box_round);
-                ProfileUrl = "";
-                binding.clearImg.setVisibility(View.GONE);
-                binding.imgPlus.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                dlog.i("clearImg Exception : " + e);
-            }
-        });
     }
 
     public void SetAllMemberList() {
@@ -248,6 +204,7 @@ public class FeedAddActivity extends AppCompatActivity {
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
             Call<String> call = api.getData(place_id,"");
+
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -303,67 +260,158 @@ public class FeedAddActivity extends AppCompatActivity {
         }
     }
 
-    public void UserCheck(String account) {
-        dlog.i("UserCheck account : " + account);
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        pm.PlaceWorkBack(mContext);
+    }
+
+    public void setBtnEvent() {
+        binding.closeBtn.setOnClickListener(v -> {
+            pm.PlaceWorkBack(mContext);
+        });
+
+        binding.workSave.setOnClickListener(v -> {
+            dlog.i("DataCheck() : " + DataCheck());
+            if (DataCheck()) {
+                AddStroeNoti();
+            }
+        });
+
+        binding.notiSetimg.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, GALLEY_CODE);
+        });
+
+        binding.closeBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
+
+
+        if (saveBitmap != null) {
+            binding.clearImg.setVisibility(View.VISIBLE);
+            binding.imgPlus.setVisibility(View.GONE);
+        } else {
+            binding.clearImg.setVisibility(View.GONE);
+            binding.imgPlus.setVisibility(View.VISIBLE);
+        }
+
+        binding.clearImg.setOnClickListener(v -> {
+            try {
+                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
+                saveBitmap.eraseColor(Color.TRANSPARENT);
+                binding.notiSetimg.setImageBitmap(saveBitmap);
+                binding.notiSetimg.setBackgroundResource(R.drawable.img_box_round);
+                ProfileUrl = "";
+                binding.clearImg.setVisibility(View.GONE);
+                binding.imgPlus.setVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                dlog.i("clearImg Exception : " + e);
+            }
+        });
+
+
+        binding.eventStarttime.setOnClickListener(v -> {
+            if(binding.eventStarttime.getText().toString().isEmpty()){
+                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+                binding.eventStarttime.setText(today);
+            }else{
+                shardpref.putInt("timeSelect_flag", 1);
+                Intent intent = new Intent(this, DatePickerActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.translate_up, 0);
+            }
+        });
+        binding.eventEndttime.setOnClickListener(v -> {
+            if(binding.eventEndttime.getText().toString().isEmpty()){
+                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+                binding.eventEndttime.setText(today);
+            }else{
+                shardpref.putInt("timeSelect_flag", 2);
+                Intent intent = new Intent(this, DatePickerActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.translate_up, 0);
+            }
+        });
+    }
+
+    String mem_id = "";
+    String mem_kind = "";
+    String mem_name = "";
+    String mem_phone = "";
+    String mem_gender = "";
+    String mem_jumin = "";
+    String mem_join_date = "";
+    String mem_state = "";
+    String mem_jikgup = "";
+    String mem_pay = "";
+    String mem_img_path = "";
+    String io_state = "";
+
+    public void UserCheck() {
+        dlog.i("---------UserCheck---------");
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
+        dlog.i("---------UserCheck---------");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserSelectInterface.URL)
+                .baseUrl(AllMemberInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
-        Call<String> call = api.getData(account);
+        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                dlog.e("UserCheck function START");
+                dlog.e("response 1: " + response.isSuccessful());
+                runOnUiThread(() -> {
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(response.body());
+
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
-                                    String id = Response.getJSONObject(0).getString("id");
-                                    String name = Response.getJSONObject(0).getString("name");
-                                    String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
-                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
-                                    String department = Response.getJSONObject(0).getString("department");
-                                    String position = Response.getJSONObject(0).getString("position");
-                                    String img_path = Response.getJSONObject(0).getString("img_path");
+                                mem_id = Response.getJSONObject(0).getString("id");
+                                mem_name = Response.getJSONObject(0).getString("name");
+                                mem_phone = Response.getJSONObject(0).getString("phone");
+                                mem_gender = Response.getJSONObject(0).getString("gender");
+                                mem_img_path = Response.getJSONObject(0).getString("img_path");
+                                mem_jumin = Response.getJSONObject(0).getString("jumin");
+                                mem_kind = Response.getJSONObject(0).getString("kind");
+                                mem_join_date = Response.getJSONObject(0).getString("join_date");
+                                mem_state = Response.getJSONObject(0).getString("state");
+                                mem_jikgup = Response.getJSONObject(0).getString("jikgup");
+                                mem_pay = Response.getJSONObject(0).getString("pay");
 
-                                    try {
-                                        Glide.with(mContext).load(img_path)
-//                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                .skipMemoryCache(true)
-                                                .placeholder(R.drawable.no_image)
-                                                .into(binding.profileImg);
+                                dlog.i("------UserCheck-------");
+                                USER_INFO_ID = mem_id;
+                                dlog.i("프로필 사진 url : " + mem_img_path);
+                                dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
+                                dlog.i("성명 : " + mem_name);
+                                dlog.i("부서 : " + mem_jikgup);
+                                dlog.i("급여 : " + mem_pay);
+                                dlog.i("------UserCheck-------");
 
-                                        binding.userName.setText((name.equals("null") ? "" : name) + "(" + (department.equals("null") ? "" : department) + " " + (position.equals("null") ? "" : position) + ")");
+                                binding.userName.setText(mem_name + "|" + mem_jikgup);
 
-                                        dlog.i("------UserCheck-------");
-                                        dlog.i("프로필 사진 url : " + img_path);
-                                        dlog.i("성명 : " + name);
-                                        dlog.i("부서 : " + department);
-                                        dlog.i("직책 : " + position);
-                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
-                                        dlog.i("------UserCheck-------");
-                                    } catch (Exception e) {
-                                        dlog.i("UserCheck Exception : " + e);
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            } catch (Exception e) {
+                                dlog.i("UserCheck Exception : " + e);
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    });
-                }
+                    }
+                });
+
             }
 
-            @SuppressLint("LongLogTag")
             @Override
+            @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
+                Log.e(TAG, "에러2 = " + t.getMessage());
             }
         });
     }
@@ -374,6 +422,8 @@ public class FeedAddActivity extends AppCompatActivity {
         dlog.i("content : " + noti_contents);
         dlog.i("link : " + noti_link);
         dlog.i("Profile Url : " + ProfileUrl);
+        dlog.i("EventStart : " + binding.eventStarttime.getText().toString());
+        dlog.i("EventEnd : " + binding.eventEndttime.getText().toString());
         dlog.i("-----AddStroeNoti Check-----");
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -381,7 +431,7 @@ public class FeedAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "");
+        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "",noti_event_start,noti_event_end);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -401,11 +451,8 @@ public class FeedAddActivity extends AppCompatActivity {
                                     if(inmember.size() > 0){
                                         SendUserCheck();
                                     }
-
                                     Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                    shardpref.putInt("SELECT_POSITION",1);
-                                    shardpref.putInt("SELECT_POSITION_sub",0);
-                                    pm.PlaceWorkGo(mContext);
+                                    pm.FeedList(mContext);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -433,6 +480,8 @@ public class FeedAddActivity extends AppCompatActivity {
         noti_title = binding.inputWorktitle.getText().toString();
         noti_contents = binding.inputWorkcontents.getText().toString();
         noti_link = binding.inputMovelink.getText().toString();
+        noti_event_start = binding.eventStarttime.getText().toString();
+        noti_event_end = binding.eventEndttime.getText().toString();
 
         if (noti_title.isEmpty()) {
             Toast.makeText(mContext, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();

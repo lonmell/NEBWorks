@@ -14,8 +14,7 @@ public class PlaceNotiData {
         String writer_id = "";
         String writer_name = "";
         String writer_img_path = "";
-        String writer_department = "";
-        String writer_position = "";
+        String jikgup = "";
         String view_cnt = "0";
         String comment_cnt = "0";
         String link = "";
@@ -24,7 +23,7 @@ public class PlaceNotiData {
         String updated_at = "";
 
         public PlaceNotiData_list(String id, String place_id, String title, String contents,
-                String writer_id, String writer_name, String writer_img_path, String writer_department, String writer_position,
+                String writer_id, String writer_name, String writer_img_path, String jikgup,
                 String view_cnt, String comment_cnt, String link,
                 String feed_img_path, String created_at, String updated_at
                 ) {
@@ -35,8 +34,7 @@ public class PlaceNotiData {
             this.writer_id = writer_id;
             this.writer_name = writer_name;
             this.writer_img_path = writer_img_path;
-            this.writer_department = writer_department;
-            this.writer_position = writer_position;
+            this.jikgup = jikgup;
             this.view_cnt = view_cnt;
             this.comment_cnt = comment_cnt;
             this.link = link;
@@ -101,20 +99,12 @@ public class PlaceNotiData {
             this.writer_img_path = writer_img_path;
         }
 
-        public String getWriter_department() {
-            return writer_department;
+        public String getJikgup() {
+            return jikgup;
         }
 
-        public void setWriter_department(String writer_department) {
-            this.writer_department = writer_department;
-        }
-
-        public String getWriter_position() {
-            return writer_position;
-        }
-
-        public void setWriter_position(String writer_position) {
-            this.writer_position = writer_position;
+        public void setJikgup(String jikgup) {
+            this.jikgup = jikgup;
         }
 
         public String getView_cnt() {

@@ -16,6 +16,8 @@ public interface FeedNotiEditInterface {
             @Field("contents") String contents,
             @Field("link") String writer_id,
             @Field("img_path") String img_path,
-            @Field("file_path") String file_path
+            @Field("file_path") String file_path,
+            @Field("open_date") String open_date,
+            @Field("close_date") String close_date
     );
 }

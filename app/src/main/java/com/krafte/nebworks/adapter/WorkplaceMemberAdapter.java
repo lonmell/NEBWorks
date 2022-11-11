@@ -210,7 +210,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name,jikgup,pay,state_tv,jejik;
-        CardView add_detail,state;
+        CardView add_detail,state,contract_state;
         RelativeLayout list_setting;
         LinearLayout linear01,linear02,linear03;
 
@@ -228,6 +228,8 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
             linear02        = itemView.findViewById(R.id.linear02);
             linear03        = itemView.findViewById(R.id.linear03);
             jejik           = itemView.findViewById(R.id.jejik);
+            contract_state  = itemView.findViewById(R.id.contract_state);
+
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             place_id = shardpref.getString("place_id", "");

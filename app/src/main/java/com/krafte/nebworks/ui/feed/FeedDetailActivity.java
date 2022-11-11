@@ -54,7 +54,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class FeedDetailActivity extends AppCompatActivity {
-    private final static String TAG = "PlaceNotiAddActivity";
+    private final static String TAG = "FeedDetailActivity";
     private ActivityFeedDetailBinding binding;
     Context mContext;
     int GALLEY_CODE = 10;
@@ -120,6 +120,9 @@ public class FeedDetailActivity extends AppCompatActivity {
             feed_id = shardpref.getString("feed_id", "0");
             state = shardpref.getString("editstate", "");
 
+            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+            dlog.i("place_id : " + place_id);
+            dlog.i("feed_id : " + feed_id);
 
             icon_on = mContext.getResources().getDrawable(R.drawable.resize_service_on);
             icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
@@ -324,8 +327,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     String writer_name = "";
     String writer_img_path = "";
 
-    String writer_department = "";
-    String writer_position = "";
+    String jikgup = "";
     String view_cnt = "";
     String comment_cnt = "";
     String link = "";
@@ -381,7 +383,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, feed_id);
+        Call<String> call = api.getData(place_id, feed_id,"");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -403,8 +405,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                                     writer_name = Response.getJSONObject(0).getString("writer_name");
                                     writer_img_path = Response.getJSONObject(0).getString("writer_img_path");
 
-                                    writer_department = Response.getJSONObject(0).getString("writer_department");
-                                    writer_position = Response.getJSONObject(0).getString("writer_position");
+                                    jikgup = Response.getJSONObject(0).getString("jikgup");
                                     view_cnt = Response.getJSONObject(0).getString("view_cnt");
                                     comment_cnt = Response.getJSONObject(0).getString("comment_cnt");
                                     link = Response.getJSONObject(0).getString("link");
@@ -414,7 +415,7 @@ public class FeedDetailActivity extends AppCompatActivity {
 
                                     try {
                                         binding.feedTitle.setText(title);
-                                        binding.userName.setText(writer_name + "(" + writer_department + " " + writer_position + ")");
+                                        binding.userName.setText(writer_name + "|" + jikgup);
 
                                         if (link.isEmpty() || link.equals("null")) {
                                             binding.linkTxt.setVisibility(View.GONE);
@@ -452,12 +453,6 @@ public class FeedDetailActivity extends AppCompatActivity {
                                         }
                                         dlog.i("kind : " + kind);
                                         dlog.i("total_watermark : " + total_watermark.toString());
-                                        if(kind.equals("0")){
-                                            binding.waterMark.setVisibility(View.GONE);
-                                        }else{
-                                            binding.waterMark.setVisibility(View.VISIBLE);
-                                        }
-                                        binding.waterMark.setText(total_watermark.toString());
 
                                         binding.notiSetimg.setOnClickListener(v -> {
                                             Intent intent = new Intent(mContext, PhotoPopActivity.class);
@@ -623,12 +618,6 @@ public class FeedDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
 //        super.onBackPressed();
-        shardpref.putInt("SELECT_POSITION", 1);
-        shardpref.putInt("SELECT_POSITION_sub",0);
-        if(USER_INFO_AUTH.equals("0")){
-            pm.Main(mContext);
-        }else{
-            pm.Main2(mContext);
-        }
+        pm.FeedList(mContext);
     }
 }

@@ -86,20 +86,6 @@ public class MemberSubFragment1 extends Fragment {
 
     //shared
     String place_id = "";
-    String place_name = "";
-    String place_owner_id = "";
-    String place_owner_name = "";
-    String place_management_office = "";
-    String place_address = "";
-    String place_latitude = "";
-    String place_longitude = "";
-    String place_start_time = "";
-    String place_end_time = "";
-    String place_img_path = "";
-    String place_start_date = "";
-    String place_created_at = "";
-
-    String NotiSearch = "";
     int total_member_cnt = 0;
 
     @SuppressLint("SetTextI18n")

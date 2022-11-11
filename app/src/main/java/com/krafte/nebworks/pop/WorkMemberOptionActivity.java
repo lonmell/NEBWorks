@@ -112,6 +112,20 @@ public class WorkMemberOptionActivity extends Activity {
         });
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        shardpref.remove("mem_id");
+        shardpref.remove("mem_name");
+        shardpref.remove("mem_phone");
+        shardpref.remove("mem_gender");
+        shardpref.remove("mem_jumin");
+        shardpref.remove("mem_kind");
+        shardpref.remove("mem_join_date");
+        shardpref.remove("mem_state");
+        shardpref.remove("mem_jikgup");
+        shardpref.remove("mem_pay");
+    }
 
     public void TaskDel() {
 //        매장 멤버 삭제 (매장에서 나가기, 매장에서 내보내기)

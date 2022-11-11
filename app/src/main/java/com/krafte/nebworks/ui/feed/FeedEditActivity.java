@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,11 +36,12 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
-import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityPlacenotiAddBinding;
+import com.krafte.nebworks.pop.DatePickerActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -122,8 +124,11 @@ public class FeedEditActivity extends AppCompatActivity {
     Drawable icon_off;
     Drawable icon_on;
 
+    String Time01 = "-99";
+    String Time02 = "-99";
+
     //Check Data
-    String noti_title,noti_contents,noti_link,noti_img;
+    String noti_title, noti_contents, noti_link, noti_event_start, noti_event_end;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -148,26 +153,14 @@ public class FeedEditActivity extends AppCompatActivity {
 
         //UI 데이터 세팅
         try {
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             place_id = shardpref.getString("place_id", "0");
-            feed_id = shardpref.getString("edit_feed_id","0");
-            place_name = shardpref.getString("place_name", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            place_owner_name = shardpref.getString("place_owner_name", "0");
-            place_management_office = shardpref.getString("place_management_office", "0");
-            place_address = shardpref.getString("place_address", "0");
-            place_latitude = shardpref.getString("place_latitude", "0");
-            place_longitude = shardpref.getString("place_longitude", "0");
-            place_start_time = shardpref.getString("place_start_time", "0");
-            place_end_time = shardpref.getString("place_end_time", "0");
-            place_img_path = shardpref.getString("place_img_path", "0");
-            place_start_date = shardpref.getString("place_start_date", "0");
-            place_created_at = shardpref.getString("place_created_at", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","0");
+            feed_id = shardpref.getString("edit_feed_id", "0");
+
 
             shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub",0);
-            UserCheck(USER_INFO_EMAIL);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            UserCheck();
             GETFeed();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -176,7 +169,7 @@ public class FeedEditActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
     }
 
@@ -185,28 +178,55 @@ public class FeedEditActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         ImgfileMaker = ImageNameMaker();
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        String thumnail_url = shardpref.getString("thumnail_url", "");
+        String name = shardpref.getString("name", "");
+        String writer_id = shardpref.getString("writer_id", "");
+        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
+
+        dlog.i("------------------Data Check onResume------------------");
+        dlog.i("thumnail_url : " + thumnail_url);
+        dlog.i("name : " + name);
+        dlog.i("writer_id : " + writer_id);
+        dlog.i("vDateGetDate : " + shardpref.getString("vDateGetDate", ""));
+        dlog.i("timeSelect_flag : " + timeSelect_flag);
+        dlog.i("------------------Data Check onResume------------------");
+
+        final String GetTime = shardpref.getString("vDateGetDate", "");
+
+        if (timeSelect_flag == 1) {
+            Time01 = GetTime;
+            shardpref.remove("vDateGetDate");
+            binding.eventStarttime.setText(GetTime);
+            binding.inputWorktitle.clearFocus();
+            binding.inputWorkcontents.clearFocus();
+        } else if (timeSelect_flag == 2) {
+            Time02 = GetTime;
+            shardpref.remove("vDateGetDate");
+            binding.eventEndttime.setText(GetTime);
+            binding.inputWorktitle.clearFocus();
+            binding.inputWorkcontents.clearFocus();
+        }
     }
 
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        pm.PlaceWorkBack(mContext);
+        pm.FeedList(mContext);
     }
 
     public void setBtnEvent() {
         binding.closeBtn.setOnClickListener(v -> {
-            pm.PlaceWorkBack(mContext);
+            pm.FeedList(mContext);
         });
 
+        binding.workSave.setText("공지 수정하기");
         binding.workSave.setOnClickListener(v -> {
             dlog.i("DataCheck() : " + DataCheck());
-            if(DataCheck()){
+            if (DataCheck()) {
                 AddStroeNoti();
             }
-        });
-
-        binding.cancel.setOnClickListener(v -> {
-            pm.PlaceWorkBack(mContext);
         });
 
         binding.notiSetimg.setOnClickListener(v -> {
@@ -217,14 +237,14 @@ public class FeedEditActivity extends AppCompatActivity {
         });
 
         binding.closeBtn.setOnClickListener(v -> {
-            super.onBackPressed();
+            pm.FeedList(mContext);
         });
 
 
-        if(saveBitmap != null){
+        if (saveBitmap != null) {
             binding.clearImg.setVisibility(View.VISIBLE);
             binding.imgPlus.setVisibility(View.GONE);
-        }else{
+        } else {
             binding.clearImg.setVisibility(View.GONE);
             binding.imgPlus.setVisibility(View.VISIBLE);
         }
@@ -241,70 +261,107 @@ public class FeedEditActivity extends AppCompatActivity {
                 dlog.i("clearImg Exception : " + e);
             }
         });
+
+        binding.eventStarttime.setOnClickListener(v -> {
+            if(binding.eventStarttime.getText().toString().isEmpty()){
+                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+                binding.eventStarttime.setText(today);
+            }else{
+                shardpref.putInt("timeSelect_flag", 1);
+                Intent intent = new Intent(this, DatePickerActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.translate_up, 0);
+            }
+        });
+        binding.eventEndttime.setOnClickListener(v -> {
+            if(binding.eventEndttime.getText().toString().isEmpty()){
+                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+                binding.eventEndttime.setText(today);
+            }else{
+                shardpref.putInt("timeSelect_flag", 2);
+                Intent intent = new Intent(this, DatePickerActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.translate_up, 0);
+            }
+        });
     }
 
 
-    public void UserCheck(String account) {
-        dlog.i("UserCheck account : " + account);
+    String mem_id = "";
+    String mem_kind = "";
+    String mem_name = "";
+    String mem_phone = "";
+    String mem_gender = "";
+    String mem_jumin = "";
+    String mem_join_date = "";
+    String mem_state = "";
+    String mem_jikgup = "";
+    String mem_pay = "";
+    String mem_img_path = "";
+    String io_state = "";
+
+    public void UserCheck() {
+        dlog.i("---------UserCheck---------");
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
+        dlog.i("---------UserCheck---------");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserSelectInterface.URL)
+                .baseUrl(AllMemberInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
-        Call<String> call = api.getData(account);
+        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                dlog.e("UserCheck function START");
+                dlog.e("response 1: " + response.isSuccessful());
+                runOnUiThread(() -> {
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(response.body());
+
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
-                                    String id = Response.getJSONObject(0).getString("id");
-                                    String name = Response.getJSONObject(0).getString("name");
-                                    String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
-                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
-                                    String department = Response.getJSONObject(0).getString("department");
-                                    String position = Response.getJSONObject(0).getString("position");
-                                    String img_path = Response.getJSONObject(0).getString("img_path");
+                                mem_id = Response.getJSONObject(0).getString("id");
+                                mem_name = Response.getJSONObject(0).getString("name");
+                                mem_phone = Response.getJSONObject(0).getString("phone");
+                                mem_gender = Response.getJSONObject(0).getString("gender");
+                                mem_img_path = Response.getJSONObject(0).getString("img_path");
+                                mem_jumin = Response.getJSONObject(0).getString("jumin");
+                                mem_kind = Response.getJSONObject(0).getString("kind");
+                                mem_join_date = Response.getJSONObject(0).getString("join_date");
+                                mem_state = Response.getJSONObject(0).getString("state");
+                                mem_jikgup = Response.getJSONObject(0).getString("jikgup");
+                                mem_pay = Response.getJSONObject(0).getString("pay");
 
-                                    try {
-                                        Glide.with(mContext).load(img_path)
-//                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                .skipMemoryCache(true)
-                                                .placeholder(R.drawable.no_image)
-                                                .into(binding.profileImg);
+                                dlog.i("------UserCheck-------");
+                                USER_INFO_ID = mem_id;
+                                dlog.i("프로필 사진 url : " + mem_img_path);
+                                dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
+                                dlog.i("성명 : " + mem_name);
+                                dlog.i("부서 : " + mem_jikgup);
+                                dlog.i("급여 : " + mem_pay);
+                                dlog.i("------UserCheck-------");
 
-                                        binding.userName.setText((name.equals("null") ? "" : name) + "|" + (position.equals("null") ? "" : position));
+                                binding.userName.setText(mem_name + "|" + mem_jikgup);
 
-                                        dlog.i("------UserCheck-------");
-                                        dlog.i("프로필 사진 url : " + img_path);
-                                        dlog.i("성명 : " + name);
-                                        dlog.i("부서 : " + department);
-                                        dlog.i("직책 : " + position);
-                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
-                                        dlog.i("------UserCheck-------");
-                                    } catch (Exception e) {
-                                        dlog.i("UserCheck Exception : " + e);
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            } catch (Exception e) {
+                                dlog.i("UserCheck Exception : " + e);
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    });
-                }
+                    }
+                });
+
             }
 
-            @SuppressLint("LongLogTag")
             @Override
+            @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
+                Log.e(TAG, "에러2 = " + t.getMessage());
             }
         });
     }
@@ -317,7 +374,7 @@ public class FeedEditActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, feed_id);
+        Call<String> call = api.getData(place_id, feed_id, "");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "CheckResult"})
             @Override
@@ -339,14 +396,16 @@ public class FeedEditActivity extends AppCompatActivity {
                                     String writer_name = Response.getJSONObject(0).getString("writer_name");
                                     String writer_img_path = Response.getJSONObject(0).getString("writer_img_path");
 
-                                    String writer_department = Response.getJSONObject(0).getString("writer_department");
-                                    String writer_position = Response.getJSONObject(0).getString("writer_position");
+                                    String jikgup = Response.getJSONObject(0).getString("jikgup");
                                     String view_cnt = Response.getJSONObject(0).getString("view_cnt");
                                     String comment_cnt = Response.getJSONObject(0).getString("comment_cnt");
                                     String link = Response.getJSONObject(0).getString("link");
                                     String feed_img_path = Response.getJSONObject(0).getString("feed_img_path");
                                     String created_at = Response.getJSONObject(0).getString("created_at");
                                     String updated_at = Response.getJSONObject(0).getString("updated_at");
+
+                                    String open_date = Response.getJSONObject(0).getString("open_date");
+                                    String close_date = Response.getJSONObject(0).getString("close_date");
 
                                     RequestOptions requestOptions = new RequestOptions();
                                     requestOptions.diskCacheStrategy(DiskCacheStrategy.NONE);
@@ -360,7 +419,7 @@ public class FeedEditActivity extends AppCompatActivity {
                                         }).start();
                                         runOnUiThread(() -> {
                                             binding.inputWorktitle.setText(title);
-                                            binding.userName.setText(writer_name + "| " + writer_department + " " + writer_position);
+                                            binding.userName.setText(writer_name + "| " + jikgup);
 
                                             Glide.with(mContext).load(writer_img_path)
                                                     .apply(requestOptions)
@@ -380,6 +439,9 @@ public class FeedEditActivity extends AppCompatActivity {
                                                         .apply(requestOptions)
                                                         .into(binding.notiSetimg);
                                             }
+
+                                            binding.eventStarttime.setText(open_date);
+                                            binding.eventEndttime.setText(close_date);
                                         });
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -408,18 +470,18 @@ public class FeedEditActivity extends AppCompatActivity {
 
         Bitmap retBitmap = null;
 
-        try{
+        try {
             imgUrl = new URL(url);
             connection = (HttpURLConnection) imgUrl.openConnection();
             connection.setDoInput(true); //url로 input받는 flag 허용
             connection.connect(); //연결
             is = connection.getInputStream(); // get inputstream
             retBitmap = BitmapFactory.decodeStream(is);
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }finally {
-            if(connection!=null) {
+        } finally {
+            if (connection != null) {
                 connection.disconnect();
             }
             return retBitmap;
@@ -432,6 +494,8 @@ public class FeedEditActivity extends AppCompatActivity {
         dlog.i("content : " + noti_contents);
         dlog.i("link : " + noti_link);
         dlog.i("Profile Url : " + ProfileUrl);
+        dlog.i("EventStart : " + binding.eventStarttime.getText().toString());
+        dlog.i("EventEnd : " + binding.eventEndttime.getText().toString());
         dlog.i("-----AddStroeNoti Check-----");
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -439,7 +503,7 @@ public class FeedEditActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id,noti_title,noti_contents,noti_link,ProfileUrl,"");
+        Call<String> call = api.getData(feed_id, noti_title, noti_contents, noti_link, ProfileUrl, "",noti_event_start,noti_event_end);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -456,7 +520,7 @@ public class FeedEditActivity extends AppCompatActivity {
                                         saveBitmapAndGetURI();
                                     }
                                     Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                    pm.PlaceWorkGo(mContext);
+                                    pm.FeedList(mContext);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -474,7 +538,7 @@ public class FeedEditActivity extends AppCompatActivity {
         });
     }
 
-    private boolean DataCheck(){
+    private boolean DataCheck() {
         /*
             1. 제목
             2. 내용
@@ -484,17 +548,20 @@ public class FeedEditActivity extends AppCompatActivity {
         noti_title = binding.inputWorktitle.getText().toString();
         noti_contents = binding.inputWorkcontents.getText().toString();
         noti_link = binding.inputMovelink.getText().toString();
+        noti_event_start = binding.eventStarttime.getText().toString();
+        noti_event_end = binding.eventEndttime.getText().toString();
 
-        if(noti_title.isEmpty()){
-            Toast.makeText(mContext,"제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
+        if (noti_title.isEmpty()) {
+            Toast.makeText(mContext, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(noti_contents.isEmpty()){
-            Toast.makeText(mContext,"내용을 입력해주세요",Toast.LENGTH_SHORT).show();
+        } else if (noti_contents.isEmpty()) {
+            Toast.makeText(mContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+
     private String ImageNameMaker() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MakeFileNameInterface.URL)

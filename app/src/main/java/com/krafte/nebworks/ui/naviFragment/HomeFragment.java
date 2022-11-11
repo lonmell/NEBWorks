@@ -182,57 +182,19 @@ public class HomeFragment extends Fragment {
     }
 
     public void setBtnEvent() {
-//        binding.workstateGo.setOnClickListener(v -> {
-//            shardpref.putInt("SELECT_POSITION",3);
-//            shardpref.remove("SELECT_POSITION_sub");
-//            pm.WorkStateListGo(mContext);
-//        });
-//
-//        binding.taskstateGo.setOnClickListener(v -> {
-//            pm.PlaceWorkGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",1);
-//            shardpref.putInt("SELECT_POSITION_sub",1);
-//        });
-//
-//        binding.taskoverGo.setOnClickListener(v -> {
-//            pm.PlaceWorkGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",1);
-//            shardpref.putInt("SELECT_POSITION_sub",1);
-//        });
-//
-//        binding.approval1Go.setOnClickListener(v -> {
-//            pm.ApprovalGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",0);
-//        });
-//        binding.approval2Go.setOnClickListener(v -> {
-//            pm.ApprovalGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",1);
-//        });
-//        binding.approval3Go.setOnClickListener(v -> {
-//            pm.ApprovalGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",2);
-//        });
-//
-//        binding.myplace.setOnClickListener(v -> {
-//            shardpref.putString("return_page", "MainActivity");
-//            pm.MyPlsceGo(mContext);
-//        });
-//
-//        binding.communityBtn.setOnClickListener(view -> {
-//        });
-//
-//        binding.gotoPlace.setOnClickListener(v -> {
-//            pm.PlaceEditGo(mContext);
-//        });
-//
-//        binding.paymentText.setOnClickListener(v -> {
-//            pm.MemberGo(mContext);
-//        });
-//
-//        binding.businessApproval.setOnClickListener(view -> {
-//            pm.ApprovalGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",0);
-//        });
+        binding.cardview00.setOnClickListener(v -> {
+            pm.FeedList(mContext);
+        });
+
+        binding.itemArea.setOnClickListener(v -> {
+            shardpref.putString("USER_INFO_AUTH","0");
+            pm.PlaceList(mContext);
+        });
+
+        binding.allMemberGo.setOnClickListener(v -> {
+            shardpref.putInt("SELECT_POSITION", 2);
+            pm.Main(mContext);
+        });
 
         binding.addMemberBtn.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, MemberOption.class);
@@ -419,8 +381,8 @@ public class HomeFragment extends Fragment {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
 //                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            dlog.i("PlaceWorkCheck jsonResponse length : " + response.body().length());
+                            dlog.i("PlaceWorkCheck jsonResponse : " + response.body());
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
@@ -433,7 +395,8 @@ public class HomeFragment extends Fragment {
 //                                    waiting_cnt;          // 결재 대기
 //                                    approval_cnt;         // 결재 승인
 //                                    reject_cnt;           // 결재 반려
-
+//                                    rest_cnt              // 휴무 직원 수
+//                                     absence_cnt           // 결석
                                     try {
                                         String i_cnt = Response.getJSONObject(0).getString("i_cnt");
                                         String o_cnt = Response.getJSONObject(0).getString("o_cnt");
@@ -444,8 +407,10 @@ public class HomeFragment extends Fragment {
                                         String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
                                         String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
                                         String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
+                                        String rest_cnt = Response.getJSONObject(0).getString("rest_cnt");
+                                        String absence_cnt = Response.getJSONObject(0).getString("absence_cnt");
 
-                                        dlog.i("------UserCheck-------");
+                                        dlog.i("------PlaceWorkCheck-------");
                                         dlog.i("출근 count(퇴근한 인원은 제외) : " + i_cnt);
                                         dlog.i("퇴근 count : " + o_cnt);
                                         dlog.i("할일 전체 : " + task_total_cnt);
@@ -455,11 +420,16 @@ public class HomeFragment extends Fragment {
                                         dlog.i("결재 대기 : " + waiting_cnt);
                                         dlog.i("결재 승인 : " + approval_cnt);
                                         dlog.i("결재 반려 : " + reject_cnt);
+                                        dlog.i("휴무 : " + rest_cnt);
+                                        dlog.i("결석/미출근 : " + absence_cnt);
                                         int total_cnt = 0;
                                         total_cnt = Integer.parseInt(i_cnt) + Integer.parseInt(o_cnt) + Integer.parseInt(task_total_cnt)
                                                 + Integer.parseInt(task_complete_cnt) + Integer.parseInt(task_incomplete_cnt) + Integer.parseInt(approval_total_cnt)
                                                 + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
-
+                                        binding.inCnt.setText(i_cnt);
+                                        binding.notinCnt.setText(absence_cnt);
+                                        binding.outCnt.setText(o_cnt);
+                                        binding.restCnt.setText(rest_cnt);
 //                                        binding.noticeCnt.setText(String.valueOf(total_cnt));
 //                                        binding.stateCnt01.setText("출근  " + i_cnt);
 //                                        binding.stateCnt02.setText("퇴근  " + o_cnt);
@@ -468,7 +438,7 @@ public class HomeFragment extends Fragment {
 //                                        binding.stateCnt07.setText(waiting_cnt);
 //                                        binding.stateCnt08.setText(approval_cnt);
 //                                        binding.stateCnt09.setText(reject_cnt);
-                                        dlog.i("------UserCheck-------");
+                                        dlog.i("------PlaceWorkCheck-------");
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }

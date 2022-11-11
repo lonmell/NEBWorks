@@ -3,76 +3,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#00ffffff"
-    android:paddingBottom="15dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    tools:context=".pop.MemberOption">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/area01"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_above="@+id/area02"
-        app:cardBackgroundColor="#ffffff"
-        app:cardCornerRadius="16dp">
+        android:orientation="vertical"
+        android:background="@drawable/loginbox_round"
+        android:layout_above="@+id/closeBtn">
         <TextView
-            android:id="@+id/list_settingitem01"
+            android:id="@+id/listSettingitem01"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:fontFamily="@font/inter_regular"
-            android:padding="5dp"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="수정"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
+            android:textColor="#3498DB"
+            android:textSize="15sp"
+            android:textStyle="bold"
             tools:ignore="HardcodedText" />
-    </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dcdcdc" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/area02"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_above="@+id/close_btn"
-        app:cardBackgroundColor="#ffffff"
-        app:cardCornerRadius="16dp">
         <TextView
-            android:id="@+id/list_settingitem02"
+            android:id="@+id/listSettingitem02"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:fontFamily="@font/inter_regular"
-            android:padding="5dp"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="매장에서 내보내기"
             android:textColor="#FF3D00"
-            android:textSize="16sp"
+            android:textSize="15sp"
+            android:textStyle="bold"
             tools:ignore="HardcodedText" />
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:id="@+id/close_btn"
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/closeBtn"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        app:cardBackgroundColor="#ffffff"
         android:layout_alignParentBottom="true"
-        app:cardCornerRadius="16dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/inter_regular"
-                android:text="취소"
-                android:gravity="center"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                tools:ignore="HardcodedText" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        android:layout_marginTop="8dp"
+        android:background="@drawable/loginbox_round"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="center"
+        android:text="취소"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
 </RelativeLayout>
-

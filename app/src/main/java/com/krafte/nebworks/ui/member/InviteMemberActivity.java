@@ -180,7 +180,7 @@ public class InviteMemberActivity extends AppCompatActivity {
         });
     }
 
-    String cnt = "0";
+    int cnt = 0;
     private boolean ConfrimPlaceMember(String user_id){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(GetConfirmPlaceInterface.URL)
@@ -201,7 +201,7 @@ public class InviteMemberActivity extends AppCompatActivity {
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
-                                    cnt = Response.getJSONObject(0).getString("cnt");
+                                    cnt = Integer.parseInt(Response.getJSONObject(0).getString("cnt"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -217,7 +217,7 @@ public class InviteMemberActivity extends AppCompatActivity {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
-        return cnt.equals("0");
+        return cnt == 0;
     }
     public void AddPlaceMember(String user_id, String name, String phone, String Jumin, String JoinDate) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -242,6 +242,8 @@ public class InviteMemberActivity extends AppCompatActivity {
                                 shardpref.putInt("SELECT_POSITION", 2);
                                 shardpref.putInt("SELECT_POSITION_sub",0);
                                 pm.MemberGo(mContext);
+                            }else{
+                                Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
                             }
                         }
                     });

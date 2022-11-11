@@ -18,6 +18,7 @@ import com.krafte.nebworks.ui.member.AdddirectlyMember;
 import com.krafte.nebworks.ui.member.AuthSelectActivity;
 import com.krafte.nebworks.ui.member.InviteMemberActivity;
 import com.krafte.nebworks.ui.member.MemberManagement;
+import com.krafte.nebworks.ui.notify.FeedListActivity;
 import com.krafte.nebworks.ui.notify.NotifyListActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity2;
@@ -98,21 +99,24 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
     //--ui.notify
     @Override
-    public void NotifyListGo(Context context) {
+    public void NotifyList(Context context) {
         Intent intent = new Intent(context, NotifyListActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
     @Override
-    public void NotifyListBack(Context context) {
-        Intent intent = new Intent(context, NotifyListActivity.class);
+    public void FeedList(Context context) {
+        Intent intent = new Intent(context, FeedListActivity.class);
         context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
 
     //--ui.approval
     @Override

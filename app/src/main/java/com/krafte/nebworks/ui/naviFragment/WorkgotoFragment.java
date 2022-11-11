@@ -3,7 +3,6 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -16,19 +15,19 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.Tap2ListAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
+import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
-import com.krafte.nebworks.ui.fragment.placework.Page1Fragment;
-import com.krafte.nebworks.ui.fragment.placework.Page2Fragment;
-import com.krafte.nebworks.ui.fragment.placework.Page3Fragment;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
+
+import java.util.ArrayList;
 
 public class WorkgotoFragment extends Fragment {
     private final static String TAG = "WorkgotoFragment";
@@ -45,6 +44,9 @@ public class WorkgotoFragment extends Fragment {
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
     ViewPagerFregmentAdapter viewPagerFregmentAdapter;
+
+    ArrayList<TodolistData.TodolistData_list> mList;
+    Tap2ListAdapter mAdapter = null;
 
     //shared
     String place_id = "";
@@ -133,58 +135,6 @@ public class WorkgotoFragment extends Fragment {
 
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
-
-            if(USER_INFO_AUTH.equals("0")){
-                binding.fragmentbtn1.setVisibility(View.VISIBLE);
-                binding.fragmentbtn2.setVisibility(View.VISIBLE);
-                binding.fragmentbtn3.setVisibility(View.VISIBLE);
-            }else if(USER_INFO_AUTH.equals("1")){
-                binding.fragmentbtn1.setVisibility(View.VISIBLE);
-                binding.fragmentbtn2.setVisibility(View.VISIBLE);
-                binding.fragmentbtn3.setVisibility(View.GONE);
-            }
-
-            if(SELECT_POSITION_sub == 0){
-                binding.fragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.fragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.fragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = Page1Fragment.newInstance();
-                setChildFragment(fg);
-            }else if(SELECT_POSITION_sub == 1){
-                binding.fragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.fragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.fragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = Page2Fragment.newInstance();
-                setChildFragment(fg);
-            }else if(SELECT_POSITION_sub == 2){
-                binding.fragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.fragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.fragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                fg = Page3Fragment.newInstance();
-                setChildFragment(fg);
-            }
-
-            binding.fragmentbtn1.setOnClickListener(v -> {
-                binding.fragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.fragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.fragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = Page1Fragment.newInstance();
-                setChildFragment(fg);
-            });
-            binding.fragmentbtn2.setOnClickListener(v -> {
-                binding.fragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.fragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.fragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = Page2Fragment.newInstance();
-                setChildFragment(fg);
-            });
-            binding.fragmentbtn3.setOnClickListener(v -> {
-                binding.fragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.fragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.fragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                fg = Page3Fragment.newInstance();
-                setChildFragment(fg);
-            });
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -291,13 +241,4 @@ public class WorkgotoFragment extends Fragment {
         });
     }
 
-    private void setChildFragment(Fragment child) {
-        FragmentTransaction childFt = getChildFragmentManager().beginTransaction();
-
-        if (!child.isAdded()) {
-            childFt.replace(R.id.child_fragment_container, child);
-            childFt.addToBackStack(null);
-            childFt.commit();
-        }
-    }
 }

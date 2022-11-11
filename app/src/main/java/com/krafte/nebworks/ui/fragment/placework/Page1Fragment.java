@@ -249,7 +249,7 @@ public class Page1Fragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "");
+        Call<String> call = api.getData(place_id, "","");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -284,8 +284,7 @@ public class Page1Fragment extends Fragment {
                                             jsonObject.getString("writer_id"),
                                             jsonObject.getString("writer_name"),
                                             jsonObject.getString("writer_img_path"),
-                                            jsonObject.getString("writer_department"),
-                                            jsonObject.getString("writer_position"),
+                                            jsonObject.getString("jikgup"),
                                             jsonObject.getString("view_cnt"),
                                             jsonObject.getString("comment_cnt"),
                                             jsonObject.getString("link"),
@@ -361,8 +360,7 @@ public class Page1Fragment extends Fragment {
                                             jsonObject.getString("writer_id"),
                                             jsonObject.getString("writer_name"),
                                             jsonObject.getString("writer_img_path"),
-                                            jsonObject.getString("writer_department"),
-                                            jsonObject.getString("writer_position"),
+                                            jsonObject.getString("jikgup"),
                                             jsonObject.getString("view_cnt"),
                                             jsonObject.getString("comment_cnt"),
                                             jsonObject.getString("link"),

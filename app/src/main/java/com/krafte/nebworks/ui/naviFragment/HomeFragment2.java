@@ -52,6 +52,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -63,6 +65,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+/**
+ * 2022 11 10 방창배 작성 / 근로자용 페이지
+ */
 public class HomeFragment2 extends Fragment {
     private final static String TAG = "HomeFragment2";
     private Homefragment2Binding binding;
@@ -418,6 +423,12 @@ public class HomeFragment2 extends Fragment {
 //            pm.ApprovalGo(mContext);
 //            shardpref.putInt("SELECT_POSITION",0);
 //        });
+
+        binding.itemArea.setOnClickListener(v -> {
+            shardpref.putString("USER_INFO_AUTH","1");
+            pm.PlaceList(mContext);
+        });
+
         binding.memberManagement01.setOnClickListener(v -> {
             pm.MemberManagement(mContext);
         });
@@ -687,8 +698,8 @@ public class HomeFragment2 extends Fragment {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
 //                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            dlog.i("PlaceWorkCheck jsonResponse length : " + response.body().length());
+                            dlog.i("PlaceWorkCheck jsonResponse : " + response.body());
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
@@ -701,19 +712,41 @@ public class HomeFragment2 extends Fragment {
 //                                    waiting_cnt;          // 결재 대기
 //                                    approval_cnt;         // 결재 승인
 //                                    reject_cnt;           // 결재 반려
-
+//                                    rest_cnt              // 휴무 직원 수
+//                                     absence_cnt           // 결석
                                     try {
-                                        String i_cnt = Response.getJSONObject(0).getString("i_cnt");
-                                        String o_cnt = Response.getJSONObject(0).getString("o_cnt");
-                                        String task_total_cnt = Response.getJSONObject(0).getString("task_total_cnt");
-                                        String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt"); //-- 가입할때의 게정
-                                        String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt"); //-- 사번
-                                        String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
-                                        String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
-                                        String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
-                                        String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
+                                        String i_cnt                = Response.getJSONObject(0).getString("i_cnt");
+                                        String o_cnt                = Response.getJSONObject(0).getString("o_cnt");
+                                        String task_total_cnt       = Response.getJSONObject(0).getString("task_total_cnt");
+                                        String task_complete_cnt    = Response.getJSONObject(0).getString("task_complete_cnt"); //-- 가입할때의 게정
+                                        String task_incomplete_cnt  = Response.getJSONObject(0).getString("task_incomplete_cnt"); //-- 사번
+                                        String approval_total_cnt   = Response.getJSONObject(0).getString("approval_total_cnt");
+                                        String waiting_cnt          = Response.getJSONObject(0).getString("waiting_cnt");
+                                        String approval_cnt         = Response.getJSONObject(0).getString("approval_cnt");
+                                        String reject_cnt           = Response.getJSONObject(0).getString("reject_cnt");
+                                        String rest_cnt             = Response.getJSONObject(0).getString("rest_cnt");
+                                        String absence_cnt          = Response.getJSONObject(0).getString("absence_cnt");
+                                        String sieob                = Response.getJSONObject(0).getString("sieob");
+                                        String jongeob              = Response.getJSONObject(0).getString("jongeob");
+                                        long now = System.currentTimeMillis();
+                                        Date date = new Date(now);
+                                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                                        String getTime = sdf.format(date);
+                                        String todayH = "";
+                                        String todayM = "";
+                                        List<String> todayl = new ArrayList<>();
+                                        todayl.addAll(Arrays.asList(getTime.split(":")));
+                                        todayH = todayl.get(0);
+                                        todayM = todayl.get(1);
+                                        String ampmt = "";
+                                        if(Integer.parseInt(todayH) < 12){
+                                            ampmt = "오전";
+                                        }else{
+                                            ampmt = "오후";
+                                        }
+                                        binding.ioTime.setText(ampmt + " " +todayH + "시" + " " + todayM + "분");
 
-                                        dlog.i("------UserCheck-------");
+                                        dlog.i("------PlaceWorkCheck-------");
                                         dlog.i("출근 count(퇴근한 인원은 제외) : " + i_cnt);
                                         dlog.i("퇴근 count : " + o_cnt);
                                         dlog.i("할일 전체 : " + task_total_cnt);
@@ -723,20 +756,50 @@ public class HomeFragment2 extends Fragment {
                                         dlog.i("결재 대기 : " + waiting_cnt);
                                         dlog.i("결재 승인 : " + approval_cnt);
                                         dlog.i("결재 반려 : " + reject_cnt);
+                                        dlog.i("휴무 : " + rest_cnt);
+                                        dlog.i("결석/미출근 : " + absence_cnt);
+                                        dlog.i("현재시간 : " + getTime);
+                                        List<String> sieobl = new ArrayList<>();
+                                        List<String> jongeobl = new ArrayList<>();
+
+                                        String sieobH = "";
+                                        String sieobM = "";
+                                        sieobl.addAll(Arrays.asList(sieob.split(":")));
+                                        sieobH = sieobl.get(0);
+                                        sieobM = sieobl.get(1);
+
+                                        String jongeobH = "";
+                                        String jongeobM = "";
+                                        jongeobl.addAll(Arrays.asList(jongeob.split(":")));
+                                        jongeobH = sieobl.get(0);
+                                        jongeobM = sieobl.get(1);
+
+                                        String ampm1 = "";
+                                        String ampm2 = "";
+                                        if(Integer.parseInt(sieobH) < 12){
+                                            ampm1 = "오전";
+                                        }else{
+                                            ampm1 = "오후";
+                                        }
+                                        if(Integer.parseInt(jongeobH) < 12){
+                                            ampm2 = "오전";
+                                        }else{
+                                            ampm2 = "오후";
+                                        }
+
+                                        String totaltv01 = "오늘 나의 근무시간 " + ampm1 + " " + sieobH + "시" + sieobM + "분" + " ~ " + ampm2 + " " + jongeobH + "시" + jongeobM + "분";
+                                        binding.ioMytime.setText(totaltv01);
                                         int total_cnt = 0;
                                         total_cnt = Integer.parseInt(i_cnt) + Integer.parseInt(o_cnt) + Integer.parseInt(task_total_cnt)
                                                 + Integer.parseInt(task_complete_cnt) + Integer.parseInt(task_incomplete_cnt) + Integer.parseInt(approval_total_cnt)
                                                 + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
 
-//                                        binding.noticeCnt.setText(String.valueOf(total_cnt));
-//                                        binding.stateCnt01.setText("출근  " + i_cnt);
-//                                        binding.stateCnt02.setText("퇴근  " + o_cnt);
-                                        binding.stateCnt05.setText(task_complete_cnt);
-                                        binding.stateCnt06.setText(task_incomplete_cnt);
+                                        binding.stateCnt05.setText(task_incomplete_cnt);
+                                        binding.stateCnt06.setText(task_complete_cnt);
                                         binding.stateCnt07.setText(waiting_cnt);
                                         binding.stateCnt08.setText(approval_cnt);
                                         binding.stateCnt09.setText(reject_cnt);
-                                        dlog.i("------UserCheck-------");
+                                        dlog.i("------PlaceWorkCheck-------");
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }

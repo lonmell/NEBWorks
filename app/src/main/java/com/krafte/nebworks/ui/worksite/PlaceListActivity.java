@@ -99,6 +99,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
+            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             setBtnEvent();
             LoginCheck(USER_INFO_EMAIL);
@@ -148,10 +149,11 @@ public class PlaceListActivity extends AppCompatActivity {
             onStartAuth();
         });
     }
-    private void onStartAuth(){
-        if(USER_INFO_AUTH.equals("0")){
+
+    private void onStartAuth() {
+        if (USER_INFO_AUTH.equals("0")) {
             pm.PlaceAddGo(mContext);
-        }else{
+        } else {
             StoreListBottomSheet slb = new StoreListBottomSheet();
             slb.show(getSupportFragmentManager(), "StoreListBottomSheet");
             slb.setOnClickListener01(v -> pm.PlaceSearch(mContext));
@@ -224,7 +226,7 @@ public class PlaceListActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData("", (USER_INFO_AUTH.equals("0")?"":USER_INFO_ID));
+        Call<String> call = api.getData("", (USER_INFO_AUTH.equals("0") ? "" : USER_INFO_ID));
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -238,9 +240,9 @@ public class PlaceListActivity extends AppCompatActivity {
                             try {
                                 //Array데이터를 받아올 때
                                 JSONArray Response = new JSONArray(response.body());
-                                if(USER_INFO_AUTH.equals("0")){
+                                if (USER_INFO_AUTH.equals("0")) {
                                     binding.storeCntTv.setText("관리중인 매장");
-                                }else{
+                                } else {
                                     binding.storeCntTv.setText("참여중인 매장");
                                 }
                                 if (listitemsize != Response.length()) {
@@ -259,142 +261,108 @@ public class PlaceListActivity extends AppCompatActivity {
                                         binding.noData.setVisibility(View.GONE);
                                         for (int i = 0; i < Response.length(); i++) {
                                             JSONObject jsonObject = Response.getJSONObject(i);
-                                            if(USER_INFO_AUTH.equals("0")){
-                                                if(jsonObject.getString("owner_id").equals(USER_INFO_ID)){
-                                                    store_cnt ++;
-                                                    mAdapter.addItem(new PlaceListData.PlaceListData_list(
-                                                            jsonObject.getString("id"),
-                                                            jsonObject.getString("name"),
-                                                            jsonObject.getString("owner_id"),
-                                                            jsonObject.getString("owner_name"),
-                                                            jsonObject.getString("registr_num"),
-                                                            jsonObject.getString("store_kind"),
-                                                            jsonObject.getString("address"),
-                                                            jsonObject.getString("latitude"),
-                                                            jsonObject.getString("longitude"),
-                                                            jsonObject.getString("pay_day"),
-                                                            jsonObject.getString("test_period"),
-                                                            jsonObject.getString("vacation_select"),
-                                                            jsonObject.getString("insurance"),
-                                                            jsonObject.getString("start_time"),
-                                                            jsonObject.getString("end_time"),
-                                                            jsonObject.getString("save_kind"),
-                                                            jsonObject.getString("img_path"),
-                                                            jsonObject.getString("accept_state"),
-                                                            jsonObject.getString("total_cnt"),
-                                                            jsonObject.getString("i_cnt"),
-                                                            jsonObject.getString("o_cnt"),
-                                                            jsonObject.getString("created_at")
-                                                    ));
+                                            store_cnt++;
+                                            mAdapter.addItem(new PlaceListData.PlaceListData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("name"),
+                                                    jsonObject.getString("owner_id"),
+                                                    jsonObject.getString("owner_name"),
+                                                    jsonObject.getString("registr_num"),
+                                                    jsonObject.getString("store_kind"),
+                                                    jsonObject.getString("address"),
+                                                    jsonObject.getString("latitude"),
+                                                    jsonObject.getString("longitude"),
+                                                    jsonObject.getString("pay_day"),
+                                                    jsonObject.getString("test_period"),
+                                                    jsonObject.getString("vacation_select"),
+                                                    jsonObject.getString("insurance"),
+                                                    jsonObject.getString("start_time"),
+                                                    jsonObject.getString("end_time"),
+                                                    jsonObject.getString("save_kind"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("accept_state"),
+                                                    jsonObject.getString("total_cnt"),
+                                                    jsonObject.getString("i_cnt"),
+                                                    jsonObject.getString("o_cnt"),
+                                                    jsonObject.getString("created_at")
+                                            ));
+                                        }
+                                    }
+                                    binding.storeCnt.setText(String.valueOf(store_cnt));
+
+                                    mAdapter.notifyDataSetChanged();
+                                    mAdapter.setOnItemClickListener(new WorkplaceListAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View v, int pos) {
+                                            try {
+                                                dlog.i("place_latitude : " + shardpref.getString("place_latitude", ""));
+                                                dlog.i("place_longitude : " + shardpref.getString("place_longitude", ""));
+                                                String owner_id = Response.getJSONObject(pos).getString("owner_id");
+                                                String place_name = Response.getJSONObject(pos).getString("name");
+                                                String myid = shardpref.getString("USER_INFO_ID", "0");
+                                                String place_id = Response.getJSONObject(pos).getString("id");
+                                                String save_kind = Response.getJSONObject(pos).getString("save_kind");
+                                                String accept_state = Response.getJSONObject(pos).getString("accept_state");
+                                                String place_imgpath = Response.getJSONObject(pos).getString("img_path");
+                                                dlog.i("owner_id : " + owner_id);
+                                                dlog.i("place_name : " + place_name);
+                                                dlog.i("myid : " + myid);
+                                                dlog.i("place_id : " + place_id);
+                                                dlog.i("save_kind : " + save_kind);
+                                                dlog.i("accept_state : " + accept_state);
+                                                dlog.i("place_imgpath : " + place_imgpath);
+
+                                                shardpref.putString("place_id", place_id);
+                                                shardpref.putString("place_name", place_name);
+                                                shardpref.putString("place_imgpath", place_imgpath);
+                                                if (save_kind.equals("0")) {
+                                                    //임시저장된 매장
+                                                    pm.PlaceEditGo(mContext);
+                                                } else {
+                                                    //저장된 매장
+                                                    if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
+                                                        pm.ProfileEditGo(mContext);
+                                                    } else {
+                                                        if (accept_state.equals("null")) {
+                                                            if (!owner_id.equals(USER_INFO_ID)) {
+                                                                accept_state = "1";
+                                                            } else {
+                                                                accept_state = "0";
+                                                            }
+                                                        }
+                                                        shardpref.putInt("accept_state", Integer.parseInt(accept_state));
+                                                        ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
+                                                        shardpref.putInt("SELECT_POSITION", 0);
+                                                        if (USER_INFO_AUTH.equals("0")) {
+                                                            pm.Main(mContext);
+                                                        } else {
+                                                            pm.Main2(mContext);
+                                                        }
+
+                                                    }
                                                 }
-                                            }else{
-                                                if(!jsonObject.getString("owner_id").equals(USER_INFO_ID)){
-                                                    store_cnt ++;
-                                                    mAdapter.addItem(new PlaceListData.PlaceListData_list(
-                                                            jsonObject.getString("id"),
-                                                            jsonObject.getString("name"),
-                                                            jsonObject.getString("owner_id"),
-                                                            jsonObject.getString("owner_name"),
-                                                            jsonObject.getString("registr_num"),
-                                                            jsonObject.getString("store_kind"),
-                                                            jsonObject.getString("address"),
-                                                            jsonObject.getString("latitude"),
-                                                            jsonObject.getString("longitude"),
-                                                            jsonObject.getString("pay_day"),
-                                                            jsonObject.getString("test_period"),
-                                                            jsonObject.getString("vacation_select"),
-                                                            jsonObject.getString("insurance"),
-                                                            jsonObject.getString("start_time"),
-                                                            jsonObject.getString("end_time"),
-                                                            jsonObject.getString("save_kind"),
-                                                            jsonObject.getString("img_path"),
-                                                            jsonObject.getString("accept_state"),
-                                                            jsonObject.getString("total_cnt"),
-                                                            jsonObject.getString("i_cnt"),
-                                                            jsonObject.getString("o_cnt"),
-                                                            jsonObject.getString("created_at")
-                                                    ));
-                                                }
+                                            } catch (JSONException e) {
+                                                dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                             }
                                         }
-                                        binding.storeCnt.setText(String.valueOf(store_cnt));
-
-                                        mAdapter.notifyDataSetChanged();
-                                        mAdapter.setOnItemClickListener(new WorkplaceListAdapter.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(View v, int pos) {
-                                                try {
-                                                    dlog.i("place_latitude : " + shardpref.getString("place_latitude", ""));
-                                                    dlog.i("place_longitude : " + shardpref.getString("place_longitude", ""));
-                                                    String owner_id = Response.getJSONObject(pos).getString("owner_id");
-                                                    String place_name = Response.getJSONObject(pos).getString("name");
-                                                    String myid = shardpref.getString("USER_INFO_ID", "0");
-                                                    String place_id = Response.getJSONObject(pos).getString("id");
-                                                    String save_kind = Response.getJSONObject(pos).getString("save_kind");
-                                                    String accept_state = Response.getJSONObject(pos).getString("accept_state");
-                                                    String place_imgpath = Response.getJSONObject(pos).getString("img_path");
-                                                    dlog.i("owner_id : " + owner_id);
-                                                    dlog.i("place_name : " + place_name);
-                                                    dlog.i("myid : " + myid);
-                                                    dlog.i("place_id : " + place_id);
-                                                    dlog.i("save_kind : " + save_kind);
-                                                    dlog.i("accept_state : " + accept_state);
-                                                    dlog.i("place_imgpath : " + place_imgpath);
-
-                                                    shardpref.putString("place_id",place_id);
-                                                    shardpref.putString("place_name",place_name);
-                                                    shardpref.putString("place_imgpath",place_imgpath);
-                                                    if (save_kind.equals("0")) {
-                                                        //임시저장된 매장
-                                                        pm.PlaceEditGo(mContext);
-                                                    } else {
-                                                        //저장된 매장
-                                                        if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
-                                                            pm.ProfileEditGo(mContext);
-                                                        } else {
-                                                            if(accept_state.equals("null")){
-                                                                if(!owner_id.equals(USER_INFO_ID)){
-                                                                    accept_state = "1";
-                                                                }else{
-                                                                    accept_state = "0";
-                                                                }
-                                                            }
-                                                            shardpref.putInt("accept_state",Integer.parseInt(accept_state));
-                                                            ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
-                                                            shardpref.putInt("SELECT_POSITION",0);
-                                                            if(USER_INFO_AUTH.equals("0")){
-                                                                pm.Main(mContext);
-                                                            }else{
-                                                                pm.Main2(mContext);
-                                                            }
-
-                                                        }
-                                                    }
-                                                } catch (JSONException e) {
-                                                    dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
-                                                }
-
-                                            }
-                                        });
-                                    }
+                                    });
                                 }
-                                dlog.i("SetNoticeListview Thread run! ");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            dlog.i("SetNoticeListview Thread run! ");
+                        } catch(JSONException e){
+                            e.printStackTrace();
                         }
-                    });
-                }
+                    }
+                });
             }
+        }
 
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
-
+        @SuppressLint("LongLogTag")
+        @Override
+        public void onFailure (@NonNull Call < String > call, @NonNull Throwable t){
+            dlog.e("에러1 = " + t.getMessage());
+        }
+    });
+}
 
 
     public void ConfirmUserPlacemember(String place_id, String myid, String owner_id, String place_name) {
@@ -407,7 +375,7 @@ public class PlaceListActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-        Call<String> call = api.getData(place_id,"");
+        Call<String> call = api.getData(place_id, "");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override

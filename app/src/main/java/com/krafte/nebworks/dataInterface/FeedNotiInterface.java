@@ -13,6 +13,7 @@ public interface FeedNotiInterface
     @POST("get.php")
     Call<String> getData(
             @Field("place_id") String place_id,
-            @Field("feed_id") String feed_id
+            @Field("feed_id") String feed_id,
+            @Field("sort") String sort
     );
 }

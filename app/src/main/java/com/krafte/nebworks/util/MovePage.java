@@ -32,9 +32,9 @@ public interface MovePage {
     void Join(Context context);
 
     //--ui.notify
-    void NotifyListGo(Context context);
+    void NotifyList(Context context);
 
-    void NotifyListBack(Context context);
+    void FeedList(Context context);
 
     //--ui.approval
     void ApprovalGo(Context context);

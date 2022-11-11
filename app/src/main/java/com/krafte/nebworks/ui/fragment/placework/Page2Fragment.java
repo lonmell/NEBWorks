@@ -28,7 +28,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.Tap2ListAdapter;
+import com.krafte.nebworks.adapter.Tap3ListAdapter;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.TodoReuseData;
 import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.TaskApprovalInterface;
@@ -82,6 +84,9 @@ public class Page2Fragment extends Fragment {
     //Other
     ArrayList<TodolistData.TodolistData_list> mList;
     Tap2ListAdapter mAdapter = null;
+    ArrayList<TodoReuseData.TodoReuseData_list> mList2;
+    Tap3ListAdapter mAdapter2 = null;
+
     RetrofitConnect rc = new RetrofitConnect();
     GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
@@ -95,13 +100,6 @@ public class Page2Fragment extends Fragment {
     //미처리인 업무 세기
     int state_null = 0;
 
-//    public static Page2Fragment newInstance(int number) {
-//        Page2Fragment fragment = new Page2Fragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("number", number);
-//        fragment.setArguments(bundle);
-//        return fragment;
-//    }
     public static Page2Fragment newInstance(){
         return new Page2Fragment();
     }

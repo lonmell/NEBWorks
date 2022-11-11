@@ -1,7 +1,5 @@
 package com.krafte.nebworks.adapter;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -9,17 +7,12 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.pop.CommunityOptionActivity;
@@ -93,17 +86,15 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
 
         try{
             holder.title.setText(item.getTitle());
-            holder.input_date.setText(item.getCreated_at().substring(0,10));
+            String year = item.getCreated_at().substring(0,4);
+            String month = item.getCreated_at().substring(5,7);
+            String day = item.getCreated_at().substring(8,10);
 
-            Glide.with(mContext).load(item.getWriter_img_path())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .placeholder(R.drawable.certi01)
-                    .skipMemoryCache(true)
-                    .into(holder.profile_img);
-            holder.user_name.setText("작성자 : " + item.getWriter_name() + "(" + item.getWriter_department() + " " + item.getWriter_position() + ")");
-            holder.comment_cnt.setText(item.getComment_cnt());
+            holder.date.setText(year + "년 " + month + "월 " + day + "일");
+            holder.writer_jikgup.setText(item.getJikgup());
 
             holder.list_edit_area.setOnClickListener(v -> {
+                dlog.i("list_edit_area Click!!");
                 shardpref.putString("edit_feed_id",item.getId());
                 Intent intent = new Intent(mContext, CommunityOptionActivity.class);
                 intent.putExtra("state", "EditFeed");
@@ -112,22 +103,26 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             });
 
-            if (loadlist == 0) {
-                //--아이템에 나타나기 애니메이션 줌
-                holder.item_total.setTranslationY(150);
-                holder.item_total.setAlpha(0.f);
-                holder.item_total.animate().translationY(0).alpha(1.f)
-                        .setStartDelay(delayEnterAnimation ? 20 * (position) : 0) // position 마다 시간차를 조금 주고..
-                        .setInterpolator(new DecelerateInterpolator(2.f))
-                        .setDuration(300)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                animationsLocked = true; // 진입시에만 animation 하도록 하기 위함
-                            }
-                        });
-                loadlist++;
-            }
+            holder.area_box.setOnClickListener(v -> {
+                shardpref.putString("feed_id",item.getId());
+                pm.FeedDetailGo(mContext);
+            });
+//            if (loadlist == 0) {
+//                //--아이템에 나타나기 애니메이션 줌
+//                holder.item_total.setTranslationY(150);
+//                holder.item_total.setAlpha(0.f);
+//                holder.item_total.animate().translationY(0).alpha(1.f)
+//                        .setStartDelay(delayEnterAnimation ? 20 * (position) : 0) // position 마다 시간차를 조금 주고..
+//                        .setInterpolator(new DecelerateInterpolator(2.f))
+//                        .setDuration(300)
+//                        .setListener(new AnimatorListenerAdapter() {
+//                            @Override
+//                            public void onAnimationEnd(Animator animation) {
+//                                animationsLocked = true; // 진입시에만 animation 하도록 하기 위함
+//                            }
+//                        });
+//                loadlist++;
+//            }
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }
@@ -141,29 +136,19 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        CardView item_total;
-
-        //basic_area
-        RelativeLayout basic_area;
-        TextView title, input_date;
-        ImageView profile_img;
-        TextView user_name,comment_cnt;
-        RelativeLayout list_edit_area;
+        TextView title, date, writer_jikgup;
+        TextView comment_cnt;
+        RelativeLayout list_edit_area,area_box;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
 
-            item_total = itemView.findViewById(R.id.item_total);
-
-            basic_area = itemView.findViewById(R.id.basic_area);
-            title = itemView.findViewById(R.id.title);
-            input_date = itemView.findViewById(R.id.input_date);
-
-            profile_img = itemView.findViewById(R.id.profile_img);
-            user_name = itemView.findViewById(R.id.user_name);
-            comment_cnt = itemView.findViewById(R.id.comment_cnt);
-            list_edit_area = itemView.findViewById(R.id.list_edit_area);
+            title           = itemView.findViewById(R.id.title);
+            date            = itemView.findViewById(R.id.date);
+            writer_jikgup   = itemView.findViewById(R.id.writer_jikgup);
+            list_edit_area  = itemView.findViewById(R.id.list_edit_area);
+            area_box        = itemView.findViewById(R.id.area_box);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
@@ -176,21 +161,6 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     PlaceNotiData.PlaceNotiData_list item = mData.get(pos);
-                    shardpref.putString("feed_id",item.getId());
-                    pm.FeedDetailGo(mContext);
-//                    shardpref.putString("noti_title",item.getTitle());
-//                    shardpref.putString("noti_contents",item.getContents());
-//                    shardpref.putString("noti_writer_id",item.getWriter_id());
-//                    shardpref.putString("noti_writer_name",item.getWriter_name());
-//                    shardpref.putString("noti_writer_img_path",item.getWriter_img_path());
-//                    shardpref.putString("noti_writer_department",item.getWriter_department());
-//                    shardpref.putString("noti_writer_position",item.getWriter_position());
-//                    shardpref.putString("noti_view_cnt",item.getView_cnt());
-//                    shardpref.putString("noti_comment_cnt",item.getComment_cnt());
-//                    shardpref.putString("noti_link",item.getLink());
-//                    shardpref.putString("noti_feed_img_path",item.getFeed_img_path());
-//                    shardpref.putString("noti_created_at",item.getCreated_at());
-//                    shardpref.putString("noti_updated_at",item.getUpdated_at());
 
                 }
             });
@@ -206,26 +176,5 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
         return position;
     }
 
-    String click_action = "";
-/* -- fcm완료되면 Retrofit으로 작성
-    @SuppressLint("LongLogTag")
-    private void FcmTestFunctionCall(String token_get,String title, String store_name) {
-        @SuppressLint("SetTextI18n")
-        Thread th = new Thread(() -> {
-            click_action = "EmployeeNotifyListActivity";
-            String SendTitle = "(재발송)새로운 매장 공지가 작성되었습니다.";
-            dbConnection.FcmTestFunctionResend(topic, store_name, title, token_get, click_action, "5", topic);
-            activity.runOnUiThread(() -> {
-
-            });
-        });
-        th.start();
-        try {
-            th.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-*/
 
 }
