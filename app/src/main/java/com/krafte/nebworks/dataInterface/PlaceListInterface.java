@@ -13,6 +13,7 @@ public interface PlaceListInterface
     @POST("get.php")
     Call<String> getData(
             @Field("place_id") String place_id,
-            @Field("user_id") String user_id
+            @Field("user_id") String user_id,
+            @Field("auth") String auth
     );
 }

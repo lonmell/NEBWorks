@@ -142,7 +142,7 @@
 
         <!--notify-->
         <activity android:name=".ui.notify.NotifyListActivity" />
-        <activity android:name=".ui.notify.FeedListActivity" />
+        <activity android:name=".ui.feed.FeedListActivity" />
 
         <!-- member -->
         <activity android:name=".ui.member.MemberManagement" />

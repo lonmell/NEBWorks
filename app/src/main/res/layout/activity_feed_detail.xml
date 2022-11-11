@@ -11,7 +11,7 @@
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="59dp"
         android:layout_alignParentTop="true"
         android:background="#fff">
 
@@ -27,7 +27,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:background="@drawable/back_btn"
+                android:background="@drawable/find_right_arrow"
+                android:rotation="180"
                 android:padding="20dp" />
         </LinearLayout>
 
@@ -60,12 +61,6 @@
                 tools:ignore="HardcodedText" />
         </RelativeLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/close_btn"
-            android:background="#696969" />
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -88,6 +83,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/input_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="0000-00-00"
+                        android:layout_gravity="end"
+                        android:textColor="#A9A9A9"
+                        android:textSize="13sp"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:id="@+id/feed_title"
@@ -102,18 +109,7 @@
                         android:textSize="20sp"
                         tools:ignore="HardcodedText" />
 
-                    <TextView
-                        android:id="@+id/input_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:text="0000-00-00"
-                        android:layout_gravity="end"
-                        android:textColor="#A9A9A9"
-                        android:textSize="13sp"
-                        tools:ignore="HardcodedText" />
+
 
                     <RelativeLayout
                         android:id="@+id/area_box"

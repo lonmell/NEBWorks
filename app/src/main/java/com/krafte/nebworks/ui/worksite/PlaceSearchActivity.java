@@ -66,6 +66,7 @@ public class PlaceSearchActivity  extends AppCompatActivity {
 
     //Sharedf
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,8 @@ public class PlaceSearchActivity  extends AppCompatActivity {
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_ID", "-99");
+
             gpsTracker = new GpsTracker(this);
             latitude = gpsTracker.getLatitude();
             longitude = gpsTracker.getLongitude();
@@ -162,13 +165,12 @@ public class PlaceSearchActivity  extends AppCompatActivity {
 
     public void SetWorkplaceList() {
 //        login_alert_text.setVisibility(View.VISIBLE);
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData("-99","");
+        Call<String> call = api.getData("-99","",USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"NotifyDataSetChanged", "LongLogTag", "SetTextI18n"})
             @Override

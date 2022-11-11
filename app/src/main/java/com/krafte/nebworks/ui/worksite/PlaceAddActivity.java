@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -255,17 +257,21 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
 
         //사업자번호 체크
-        binding.inputbox02.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        binding.inputbox02.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    if(!SearchRestrnum(binding.inputbox02.getText().toString())){
-                        binding.registrNumState.setText("국세청에 등록되지 않은 사업자등록번호입니다.");
-                        binding.registrNumState.setTextColor(R.color.red);
-                    }else{
-                        binding.registrNumState.setText("정상적으로 등록된 사업자 번호입니다.");
-                        binding.registrNumState.setTextColor(R.color.blue);
-                    }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    SearchRestrnum(s.toString());
                 }
             }
         });
@@ -520,7 +526,7 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
     }
 
-    private boolean SearchRestrnum(String registr_num) {
+    private void SearchRestrnum(String registr_num) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RegistrSearchInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -552,6 +558,18 @@ public class PlaceAddActivity extends AppCompatActivity {
                         dlog.i("tax_type_change_dt : " + Response.getJSONObject(0).getString("tax_type_change_dt"));
                         dlog.i("invoice_apply_dt : " + Response.getJSONObject(0).getString("invoice_apply_dt"));
 
+                        if (tax_type.equals("국세청에 등록되지 않은 사업자등록번호입니다.")) {
+                            binding.registrNumState.setText("국세청에 등록되지 않은 사업자등록번호입니다.");
+                            binding.registrNumState.setTextColor(R.color.red);
+                            registrTF = false;
+                            binding.inputbox02.setTextColor(R.color.red);
+                        } else {
+                            binding.registrNumState.setText("정상적으로 등록된 사업자 번호입니다.");
+                            binding.registrNumState.setTextColor(R.color.blue);
+                            registrTF = true;
+                            binding.inputbox02.setTextColor(R.color.blue);
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -565,12 +583,6 @@ public class PlaceAddActivity extends AppCompatActivity {
             }
 
         });
-        //Debuge
-//        if (dlog.isDebuggable(mContext)) {
-//            return true;
-//        } else {
-            return tax_type.equals("국세청에 등록되지 않은 사업자등록번호입니다.");
-//        }
     }
 
 
@@ -586,13 +598,7 @@ public class PlaceAddActivity extends AppCompatActivity {
         registr_num = binding.inputbox02.getText().toString();
         accept_state = binding.inputbox03.getText().toString();
 
-        if (SearchRestrnum(binding.inputbox02.getText().toString())) {
-            registrTF = true;
-            binding.inputbox02.setTextColor(R.color.blue);
-        } else {
-            registrTF = false;
-            binding.inputbox02.setTextColor(R.color.red);
-        }
+        SearchRestrnum(binding.inputbox02.getText().toString());
         if(boheom.size() == 0){
             boheom.add("없음");
         }
@@ -648,10 +654,9 @@ public class PlaceAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceAddInterface api = retrofit.create(PlaceAddInterface.class);
-
         Call<String> call = api.getData(placeName,USER_INFO_ID,registr_num,accept_state,placeAddress_get
                 ,String.valueOf(latitude),String.valueOf(longitube),payday,test_day,restday
-                ,(String.valueOf(boheom).replace("[","").replace("]","")),place_starttime,place_endtime,ProfileUrl,String.valueOf(i));
+                ,(String.valueOf(boheom).replace("[","").replace("]","")),place_starttime,place_endtime,ProfileUrl,String.valueOf(i),USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override

@@ -58,6 +58,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
 
     String place_id = "";
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
     String place_name = "";
     String place_owner_id = "";
 
@@ -96,6 +97,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
             place_name = shardpref.getString("place_name", "-99");
             place_owner_id = shardpref.getString("place_owner_id", "-99");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "-99");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-99");
             getPlaceId();
             wifiScan();
         } catch (Exception ignored) {
@@ -149,7 +151,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID);
+        Call<String> call = api.getData(place_id, USER_INFO_ID, USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override

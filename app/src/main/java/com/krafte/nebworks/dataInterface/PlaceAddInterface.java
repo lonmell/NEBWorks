@@ -26,6 +26,7 @@ public interface PlaceAddInterface
             @Field("start_time") String start_time,
             @Field("end_time") String end_time,
             @Field("img_path") String img_path,
-            @Field("save_kind") String save_kind
+            @Field("save_kind") String save_kind,
+            @Field("auth") String auth
     );
 }

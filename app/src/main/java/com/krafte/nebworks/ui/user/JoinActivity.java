@@ -116,7 +116,7 @@ public class JoinActivity extends AppCompatActivity {
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
         USER_INFO_PW = binding.editPw.getText().toString();
-        USER_INFO_ID = shardpref.getString("USER_INFO_EMAIL", "");
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         shardpref.putString("GET_TIME", dc.GET_TIME);
 
         dlog.i( "현재시간 : " + dc.GET_TIME);

@@ -57,6 +57,7 @@ public class PlaceEditActivity2 extends AppCompatActivity {
 
     String place_id = "";
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
     String place_name = "";
     String place_owner_id = "";
 
@@ -96,6 +97,7 @@ public class PlaceEditActivity2 extends AppCompatActivity {
             place_name = shardpref.getString("place_name", "-99");
             place_owner_id = shardpref.getString("place_owner_id", "-99");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "-99");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-99");
             getPlaceContents();
             wifiScan();
         } catch (Exception ignored) {
@@ -109,13 +111,14 @@ public class PlaceEditActivity2 extends AppCompatActivity {
         dlog.i("-----getPlaceContents-----");
         dlog.i("place_id : " + place_id);
         dlog.i("owner_id : " + USER_INFO_ID);
+        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
         dlog.i("-----getPlaceContents-----");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID);
+        Call<String> call = api.getData(place_id, USER_INFO_ID,USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -146,6 +149,8 @@ public class PlaceEditActivity2 extends AppCompatActivity {
                                 start_date = Response.getJSONObject(0).getString("start_date");
                                 SSIDName = Response.getJSONObject(0).getString("wifi_name");
 
+                                binding.updateWifi01.setVisibility(View.VISIBLE);
+                                binding.updateWifi02.setVisibility(View.VISIBLE);
                                 binding.wifiName.setText(SSIDName);
 
                                 binding.save2btn.setOnClickListener(v -> {

@@ -31,8 +31,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,7 +63,7 @@ public class PlaceListActivity extends AppCompatActivity {
     String USER_INFO_AUTH = "";
 
     //사용자 정보 체크
-    Timer timer = new Timer();
+//    Timer timer = new Timer();
     String id = "";
     String name = "";
     String email = "";
@@ -120,19 +118,7 @@ public class PlaceListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 //        GetPlaceList();
-
-        timer = new Timer();
-        TimerTask TT = new TimerTask() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void run() {
-                // 반복실행할 구문
-                runOnUiThread(() -> {
-                    GetPlaceList();
-                });
-            }
-        };
-        timer.schedule(TT, 3000, 10000); //Timer 실행
+        GetPlaceList();
 
     }
 
@@ -214,19 +200,22 @@ public class PlaceListActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
-                timer.cancel();
             }
         });
     }
 
     int store_cnt = 0;
     public void GetPlaceList() {
+        dlog.i("------GetPlaceList------");
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+        dlog.i("------GetPlaceList------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData("", (USER_INFO_AUTH.equals("0") ? "" : USER_INFO_ID));
+        Call<String> call = api.getData("", USER_INFO_ID,USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -320,9 +309,9 @@ public class PlaceListActivity extends AppCompatActivity {
                                                     pm.PlaceEditGo(mContext);
                                                 } else {
                                                     //저장된 매장
-                                                    if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
-                                                        pm.ProfileEditGo(mContext);
-                                                    } else {
+//                                                    if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
+//                                                        pm.ProfileEditGo(mContext);
+//                                                    } else {
                                                         if (accept_state.equals("null")) {
                                                             if (!owner_id.equals(USER_INFO_ID)) {
                                                                 accept_state = "1";
@@ -339,7 +328,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                                             pm.Main2(mContext);
                                                         }
 
-                                                    }
+//                                                    }
                                                 }
                                             } catch (JSONException e) {
                                                 dlog.i("GetPlaceList OnItemClickListener Exception :" + e);

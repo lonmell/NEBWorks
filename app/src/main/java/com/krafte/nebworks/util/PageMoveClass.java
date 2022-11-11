@@ -18,7 +18,7 @@ import com.krafte.nebworks.ui.member.AdddirectlyMember;
 import com.krafte.nebworks.ui.member.AuthSelectActivity;
 import com.krafte.nebworks.ui.member.InviteMemberActivity;
 import com.krafte.nebworks.ui.member.MemberManagement;
-import com.krafte.nebworks.ui.notify.FeedListActivity;
+import com.krafte.nebworks.ui.feed.FeedListActivity;
 import com.krafte.nebworks.ui.notify.NotifyListActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity2;
