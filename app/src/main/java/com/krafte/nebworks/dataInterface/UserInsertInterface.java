@@ -14,6 +14,7 @@ public interface UserInsertInterface
     Call<String> getData(
             @Field("account") String account,
             @Field("name") String name,
+            @Field("nick_name") String nick_name,
             @Field("password") String password,
             @Field("phone") String phone,
             @Field("gender") String gender,

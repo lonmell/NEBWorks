@@ -84,7 +84,7 @@ public class FeedListActivity extends AppCompatActivity {
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         place_id = shardpref.getString("place_id", "");
-
+        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
         ArrayList<String> stringCategory1 = new ArrayList<>();
         stringCategory1.add("정렬순서");
         stringCategory1.add("오름차순");
@@ -178,7 +178,9 @@ public class FeedListActivity extends AppCompatActivity {
                                         jsonObject.getString("link"),
                                         jsonObject.getString("feed_img_path"),
                                         jsonObject.getString("created_at"),
-                                        jsonObject.getString("updated_at")
+                                        jsonObject.getString("updated_at"),
+                                        jsonObject.getString("open_date"),
+                                        jsonObject.getString("close_date")
                                 ));
                             }
                             mAdapter.notifyDataSetChanged();
@@ -226,14 +228,14 @@ public class FeedListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
+        super.onBackPressed();
+        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
         shardpref.putInt("SELECT_POSITION",0);
         if(USER_INFO_AUTH.equals("0")){
             pm.Main(mContext);
         }else{
             pm.Main2(mContext);
         }
-
     }
 }
 

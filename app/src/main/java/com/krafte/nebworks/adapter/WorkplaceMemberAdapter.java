@@ -100,49 +100,58 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 holder.linear01.setVisibility(View.GONE);
                 holder.linear02.setVisibility(View.GONE);
                 holder.linear03.setVisibility(View.GONE);
+                holder.contract_state.setVisibility(View.GONE);
             }else{
+                if(item.getJikgup().equals("관리자")){
+                    holder.add_detail.setVisibility(View.VISIBLE);
+                    holder.state.setVisibility(View.GONE);
+                    holder.linear02.setVisibility(View.GONE);
+                    holder.linear03.setVisibility(View.GONE);
+                    holder.contract_state.setVisibility(View.GONE);
+                }else{
+                    if((item.getPay().equals("null") || item.getPay().isEmpty())){
+                        holder.linear02.setVisibility(View.GONE);
+                    }else{
+                        holder.pay.setText(item.getPay());
+                    }
+                    if((item.getState().equals("null") || item.getState().isEmpty())){
+                        holder.linear03.setVisibility(View.GONE);
+                    }else{
+                        String jejikState = "";
+                        if(item.getState().equals("1")){
+                            //등록,재직
+                            jejikState = "재직";
+                        }else if(item.getState().equals("2")){
+                            //휴직
+                            jejikState = "휴직";
+                        }
+                        holder.jejik.setText(jejikState);
+                    }
+
+                    if(item.getWorktime().equals("오전")) {
+                        holder.state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
+                        holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                    }else if(item.getWorktime().equals("주간")) {
+                        holder.state.setCardBackgroundColor(Color.parseColor("#44F905"));
+                        holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                    }else if(item.getWorktime().equals("야간")) {
+                        holder.state.setCardBackgroundColor(Color.parseColor("#1D1D1D"));
+                        holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                    }else if(item.getWorktime().equals("주말")) {
+                        holder.state.setCardBackgroundColor(Color.parseColor("#FF687A"));
+                        holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                    }else {
+                        holder.state.setCardBackgroundColor(Color.parseColor("#696969"));
+                        holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+                    }
+                    holder.state_tv.setText(item.getWorktime());
+                }
                 holder.add_detail.setVisibility(View.GONE);
                 if((item.getJikgup().equals("null") || item.getJikgup().isEmpty())){
                     holder.linear01.setVisibility(View.GONE);
                 }else{
                     holder.jikgup.setText(item.getJikgup());
                 }
-                if((item.getPay().equals("null") || item.getPay().isEmpty())){
-                    holder.linear02.setVisibility(View.GONE);
-                }else{
-                    holder.pay.setText(item.getPay());
-                }
-                if((item.getState().equals("null") || item.getState().isEmpty())){
-                    holder.linear03.setVisibility(View.GONE);
-                }else{
-                    String jejikState = "";
-                    if(item.getState().equals("1")){
-                        //등록,재직
-                        jejikState = "재직";
-                    }else if(item.getState().equals("2")){
-                        //휴직
-                        jejikState = "휴직";
-                    }
-                    holder.jejik.setText(jejikState);
-                }
-
-                if(item.getWorktime().equals("오전")) {
-                    holder.state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
-                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                }else if(item.getWorktime().equals("주간")) {
-                    holder.state.setCardBackgroundColor(Color.parseColor("#44F905"));
-                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                }else if(item.getWorktime().equals("야간")) {
-                    holder.state.setCardBackgroundColor(Color.parseColor("#1D1D1D"));
-                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                }else if(item.getWorktime().equals("주말")) {
-                    holder.state.setCardBackgroundColor(Color.parseColor("#FF687A"));
-                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                }else {
-                    holder.state.setCardBackgroundColor(Color.parseColor("#696969"));
-                    holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                }
-                holder.state_tv.setText(item.getWorktime());
             }
 
 

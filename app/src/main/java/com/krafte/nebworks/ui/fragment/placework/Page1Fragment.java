@@ -290,7 +290,9 @@ public class Page1Fragment extends Fragment {
                                             jsonObject.getString("link"),
                                             jsonObject.getString("feed_img_path"),
                                             jsonObject.getString("created_at"),
-                                            jsonObject.getString("updated_at")
+                                            jsonObject.getString("updated_at"),
+                                            jsonObject.getString("open_date"),
+                                            jsonObject.getString("close_date")
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();
@@ -366,7 +368,9 @@ public class Page1Fragment extends Fragment {
                                             jsonObject.getString("link"),
                                             jsonObject.getString("feed_img_path"),
                                             jsonObject.getString("created_at"),
-                                            jsonObject.getString("updated_at")
+                                            jsonObject.getString("updated_at"),
+                                            jsonObject.getString("open_date"),
+                                            jsonObject.getString("close_date")
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();

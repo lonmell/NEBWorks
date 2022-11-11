@@ -44,18 +44,10 @@ public class PageMoveClass implements MovePage {
     PreferenceHelper shardpref;
     /*Activity*/
     @Override
-    public void LoginGo(Context context) {
+    public void Login(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-
-    @Override
-    public void LoginBack(Context context) {
-        Intent intent = new Intent(context, LoginActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
@@ -361,7 +353,7 @@ public class PageMoveClass implements MovePage {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
     @Override
-    public void ProfileEditGo(Context context) {
+    public void ProfileEdit(Context context) {
         Intent intent = new Intent(context, ProfileEditActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);

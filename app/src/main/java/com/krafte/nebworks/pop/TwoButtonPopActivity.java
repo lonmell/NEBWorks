@@ -148,7 +148,7 @@ public class TwoButtonPopActivity extends Activity {
                 if (USER_LOGIN_METHOD.equals("Google")) {
                     mGoogleSignInClient.signOut()
                             .addOnCompleteListener(this, task -> {
-                                pm.LoginBack(mContext);
+                                pm.Login(mContext);
                             });
                 } else if(USER_LOGIN_METHOD.equals("Kakao")){
                     Handler handler = new Handler();
@@ -156,13 +156,13 @@ public class TwoButtonPopActivity extends Activity {
                         UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
                             @Override
                             public Unit invoke(Throwable throwable) {
-                                pm.LoginBack(mContext);
+                                pm.Login(mContext);
                                 return null;
                             }
                         });
                     }, 100); //0.5초 후 인트로 실행
                 }else{
-                    pm.LoginBack(mContext);
+                    pm.Login(mContext);
                 }
                 finish();
             }else if(flag.equals("회원탈퇴")){
@@ -253,7 +253,7 @@ public class TwoButtonPopActivity extends Activity {
                             try {
                                 if(response.body().replace("\"","").equals("success")){
                                     Toast.makeText(mContext,"회원 탈퇴가 완료되었습니다.",Toast.LENGTH_SHORT).show();
-                                    pm.LoginBack(mContext);
+                                    pm.Login(mContext);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

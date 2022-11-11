@@ -165,7 +165,6 @@ public class WorkStatusSubFragment1 extends Fragment {
                         try {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(response.body());
-
                             mList = new ArrayList<>();
                             mAdapter = new WorkTapMemberAdapter(mContext, mList, getParentFragmentManager());
                             binding.allMemberlist.setAdapter(mAdapter);

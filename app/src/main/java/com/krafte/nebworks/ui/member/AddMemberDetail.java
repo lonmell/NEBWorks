@@ -57,6 +57,7 @@ public class AddMemberDetail extends AppCompatActivity {
     String USER_INFO_NAME = "";
     String USER_INFO_PHONE = "";
     String USER_LOGIN_METHOD = "";
+    String USER_INFO_ID = "";
 
     //other
     boolean check = false;
@@ -117,6 +118,7 @@ public class AddMemberDetail extends AppCompatActivity {
 
         shardpref = new PreferenceHelper(mContext);
         place_id = shardpref.getString("place_id", "");
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
@@ -135,6 +137,7 @@ public class AddMemberDetail extends AppCompatActivity {
         mem_jikgup = shardpref.getString("mem_jikgup", "");
         mem_pay = shardpref.getString("mem_pay", "");
 
+        dlog.i("mem_phone : " + mem_phone);
         if (mem_id.equals(mem_phone)) {
             //직접추가한 직원
             input_kind = 0;
@@ -143,7 +146,6 @@ public class AddMemberDetail extends AppCompatActivity {
             input_kind = 1;
             setInputSetting();
         }
-
         setBasicInfo();
         setDetailInfo();
         setOtherInfo();
@@ -152,43 +154,59 @@ public class AddMemberDetail extends AppCompatActivity {
     }
 
     private void setInputSetting() {
-        //--초대로 추가한 회원인 직원의 경우 개인정보는 수정할 수 없도록 입력을 막는다
-        //이름
-        binding.inputbox01.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox01.setEnabled(false);
-        binding.inputbox01.setClickable(false);
-        //연락처
-        binding.inputbox02.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox02.setEnabled(false);
-        binding.inputbox02.setClickable(false);
-        //주민등록번호
-        binding.inputbox03.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox03.setEnabled(false);
-        binding.inputbox03.setClickable(false);
-        //입사날짜
-        binding.inputbox04.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox04.setEnabled(false);
-        binding.inputbox04.setClickable(false);
-        //나이
-        binding.inputbox07.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox07.setEnabled(false);
-        binding.inputbox07.setClickable(false);
-        //이메일
-        binding.inputbox08.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox08.setEnabled(false);
-        binding.inputbox08.setClickable(false);
-        //주소
-        binding.inputbox09.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox09.setEnabled(false);
-        binding.inputbox09.setClickable(false);
-        //자기소개
-        binding.inputbox10.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox10.setEnabled(false);
-        binding.inputbox10.setClickable(false);
-        //경력및학력
-        binding.inputbox11.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.inputbox11.setEnabled(false);
-        binding.inputbox11.setClickable(false);
+        if(mem_id.equals(USER_INFO_ID)){
+            //작성할 데이터가 관리자 본인일 경우 - 상세,기타데이터 입력 필요 없음
+            binding.detailInfoArea.setVisibility(View.GONE);
+            binding.otherInfoArea.setVisibility(View.GONE);
+            binding.area04.setVisibility(View.GONE);
+            //이름
+            binding.inputbox01.setEnabled(true);
+            binding.inputbox01.setClickable(true);
+            //연락처
+            binding.inputbox02.setEnabled(true);
+            binding.inputbox02.setClickable(true);
+            //주민등록번호
+            binding.inputbox03.setEnabled(true);
+            binding.inputbox03.setClickable(true);
+        }else{
+            //--초대로 추가한 회원인 직원의 경우 개인정보는 수정할 수 없도록 입력을 막는다
+            //이름
+            binding.inputbox01.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox01.setEnabled(false);
+            binding.inputbox01.setClickable(false);
+            //연락처
+            binding.inputbox02.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox02.setEnabled(false);
+            binding.inputbox02.setClickable(false);
+            //주민등록번호
+            binding.inputbox03.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox03.setEnabled(false);
+            binding.inputbox03.setClickable(false);
+            //입사날짜
+            binding.inputbox04.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox04.setEnabled(false);
+            binding.inputbox04.setClickable(false);
+            //나이
+            binding.inputbox07.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox07.setEnabled(false);
+            binding.inputbox07.setClickable(false);
+            //이메일
+            binding.inputbox08.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox08.setEnabled(false);
+            binding.inputbox08.setClickable(false);
+            //주소
+            binding.inputbox09.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox09.setEnabled(false);
+            binding.inputbox09.setClickable(false);
+            //자기소개
+            binding.inputbox10.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox10.setEnabled(false);
+            binding.inputbox10.setClickable(false);
+            //경력및학력
+            binding.inputbox11.setBackgroundResource(R.drawable.grayback_gray_round);
+            binding.inputbox11.setEnabled(false);
+            binding.inputbox11.setClickable(false);
+        }
     }
 
     private void setBasicInfo() {
@@ -240,7 +258,7 @@ public class AddMemberDetail extends AppCompatActivity {
             }
         });
 
-        binding.inputbox03.setText(mem_jumin);
+        binding.inputbox03.setText(mem_jumin.equals("null")?"":mem_jumin);
         binding.inputbox03.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -560,9 +578,17 @@ public class AddMemberDetail extends AppCompatActivity {
                     UpdateDirectMemberBasic();
                 }
             }else{
-                if(SaveCheckDetail()){
-                    AddMemberDetail();
+                if(mem_id.equals(USER_INFO_ID)){
+                    if (SaveCheck() && SaveCheckOtherInfo()) {
+                        dlog.i("addMemberBtn SaveCheck" + SaveCheck());
+                        UpdateDirectMemberBasic();
+                    }
+                }else{
+                    if(SaveCheckDetail()){
+                        AddMemberDetail();
+                    }
                 }
+
             }
         });
 
@@ -574,23 +600,7 @@ public class AddMemberDetail extends AppCompatActivity {
     private boolean SaveCheck() {
         //회원 기본정보 체크
         mem_join_date = binding.inputbox04.getText().toString();
-        if (place_id.isEmpty()) {
-            Toast.makeText(mContext, "매장 ID가 저장되어있지 않습니다, 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-            pm.PlaceList(mContext);
-            return false;
-        } else if (mem_name.isEmpty()) {
-            Toast.makeText(mContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (mem_phone.isEmpty()) {
-            Toast.makeText(mContext, "전화번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (mem_jumin.isEmpty()) {
-            Toast.makeText(mContext, "주민번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (mem_join_date.isEmpty()) {
-            Toast.makeText(mContext, "입사일자를 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
+        if(mem_id.equals(USER_INFO_ID)){
             //상세정보 체크
             dlog.i("------SaveCheck------");
             dlog.i("매장ID : " + place_id);
@@ -601,6 +611,35 @@ public class AddMemberDetail extends AppCompatActivity {
             dlog.i("입사날짜 : " + mem_join_date);
             dlog.i("------SaveCheck------");
             return true;
+        }else{
+            if (place_id.isEmpty()) {
+                Toast.makeText(mContext, "매장 ID가 저장되어있지 않습니다, 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                pm.PlaceList(mContext);
+                return false;
+            } else if (mem_name.isEmpty()) {
+                Toast.makeText(mContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (mem_phone.isEmpty()) {
+                Toast.makeText(mContext, "전화번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (mem_jumin.isEmpty()) {
+                Toast.makeText(mContext, "주민번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (mem_join_date.isEmpty()) {
+                Toast.makeText(mContext, "입사일자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                //상세정보 체크
+                dlog.i("------SaveCheck------");
+                dlog.i("매장ID : " + place_id);
+                dlog.i("이름 : " + mem_name);
+                dlog.i("전화번호 : " + mem_phone);
+                dlog.i("주민번호 : " + mem_jumin);
+                dlog.i("초대 승인상태 : " + mem_kind);
+                dlog.i("입사날짜 : " + mem_join_date);
+                dlog.i("------SaveCheck------");
+                return true;
+            }
         }
     }
     private boolean SaveCheckOtherInfo(){
@@ -645,8 +684,12 @@ public class AddMemberDetail extends AppCompatActivity {
                             dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
                             dlog.i("AddPlaceMember jsonResponse : " + response.body());
                             if (response.body().replace("\"", "").equals("success")) {
-                                AddDirectMemberOther();
-
+                                if(!mem_id.equals(USER_INFO_ID)){
+                                    AddDirectMemberOther();
+                                }else{
+                                    Toast_Nomal("관리자정보가 업데이트 되었습니다.");
+                                    pm.MemberManagement(mContext);
+                                }
                             }
                         }
                     });

@@ -136,6 +136,7 @@ public class HomeFragment extends Fragment {
             setBtnEvent();
             dlog.i("HomeFragment START!");
             place_id = shardpref.getString("place_id", "0");
+            place_owner_id = shardpref.getString("place_owner_id", "0");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
@@ -152,8 +153,10 @@ public class HomeFragment extends Fragment {
             //0-관리자 / 1- 근로자
             dlog.i("gotoplace location view USER_INFO_AUTH : " + USER_INFO_AUTH);
             //USER_INFO_AUTH 가 -1일때
-            USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
-            shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
+            if(USER_INFO_AUTH.equals("-1")){
+                USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
+                shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
+            }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -255,12 +258,6 @@ public class HomeFragment extends Fragment {
                                     place_icnt = Response.getJSONObject(0).getString("i_cnt");
                                     place_ocnt = Response.getJSONObject(0).getString("o_cnt");
                                     place_totalcnt = Response.getJSONObject(0).getString("total_cnt");
-
-                                    if (place_owner_id.equals(USER_INFO_ID)) {
-                                        USER_INFO_AUTH = "0";
-                                    } else {
-                                        USER_INFO_AUTH = "1";
-                                    }
 
                                     Glide.with(mContext).load(place_img_path)
                                             .diskCacheStrategy(DiskCacheStrategy.NONE)

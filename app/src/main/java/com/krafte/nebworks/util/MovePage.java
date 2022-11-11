@@ -7,10 +7,9 @@ public interface MovePage {
     /*Activity*/
 
     /*Activity*/
-    void LoginGo(Context context);
+    void Login(Context context);
 
     /*Activity*/
-    void LoginBack(Context context);
 
     void UserDel(Context context);
 
@@ -103,7 +102,7 @@ public interface MovePage {
 
     void ChangePW2(Context context);
 
-    void ProfileEditGo(Context context);
+    void ProfileEdit(Context context);
 
     void PlaceSearch(Context context);
 

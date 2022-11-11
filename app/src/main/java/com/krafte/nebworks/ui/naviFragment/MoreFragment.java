@@ -141,7 +141,8 @@ public class MoreFragment extends Fragment {
     public void setBtnEvent() {
         binding.settingList02Txt.setOnClickListener(v -> {
             shardpref.putString("retrun_page","MoreActivity");
-            pm.ProfileEditGo(mContext);
+            shardpref.putString("editstate","edit");
+            pm.ProfileEdit(mContext);
         });
         binding.settingList03Txt.setOnClickListener(v -> {
             pm.Push(mContext);

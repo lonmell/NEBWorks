@@ -85,7 +85,13 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
         PlaceNotiData.PlaceNotiData_list item = mData.get(position);
 
         try{
-            holder.title.setText(item.getTitle());
+            //이벤트의 경우 종료일을 지정하지 않으면 삭제할때까지 계속 보여짐
+            if(!item.getOpen_date().isEmpty()){
+                holder.title.setText("[이벤트] " + item.getTitle() );
+            }else{
+                holder.title.setText(item.getTitle());
+            }
+
             String year = item.getCreated_at().substring(0,4);
             String month = item.getCreated_at().substring(5,7);
             String day = item.getCreated_at().substring(8,10);

@@ -136,7 +136,7 @@ public class SearchAccountActivity extends AppCompatActivity {
 
     private void onBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            pm.LoginBack(mContext);
+            pm.Login(mContext);
         });
 
         binding.userName.addTextChangedListener(new TextWatcher() {

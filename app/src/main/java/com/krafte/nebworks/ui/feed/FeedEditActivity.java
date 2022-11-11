@@ -157,7 +157,9 @@ public class FeedEditActivity extends AppCompatActivity {
             place_id = shardpref.getString("place_id", "0");
             feed_id = shardpref.getString("edit_feed_id", "0");
 
-
+            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+            dlog.i("place_id : " + place_id);
+            dlog.i("feed_id : " + feed_id);
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
             UserCheck();

@@ -184,13 +184,7 @@ public class JoinActivity extends AppCompatActivity {
         binding.tv06.setOnClickListener(v -> {
             UserCheck(1, binding.inputUserEmail.getText().toString());
         });
-        binding.selectMan.setOnClickListener(v -> {
-            binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
-            binding.selectMan.setBackgroundColor(Color.parseColor("#1E90FF"));
 
-            binding.selectWoman.setBackgroundColor(Color.parseColor("#1E90FF"));
-            binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-        });
         binding.selectMan.setOnClickListener(v -> {
             USER_INFO_GENDER = "1";
             binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
@@ -471,7 +465,7 @@ public class JoinActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserInsertInterface api = retrofit.create(UserInsertInterface.class);
-        Call<String> call = api.getData(USER_INFO_EMAIL, USER_INFO_NAME, USER_INFO_PW, USER_INFO_PHONE, USER_INFO_GENDER, "", "NEB");
+        Call<String> call = api.getData(USER_INFO_EMAIL, USER_INFO_NAME, "",USER_INFO_PW, USER_INFO_PHONE, USER_INFO_GENDER, "", "NEB");
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override

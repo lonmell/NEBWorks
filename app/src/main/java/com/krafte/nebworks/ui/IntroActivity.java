@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -41,21 +42,30 @@ import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityIntroBinding;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
 import com.krafte.nebworks.ui.login.LoginActivity;
-import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.HashCode;
+import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.disconnectHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.Objects;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class IntroActivity extends AppCompatActivity {
     private static final String TAG = "IntroActivity";
@@ -70,6 +80,7 @@ public class IntroActivity extends AppCompatActivity {
     Dlog dlog = new Dlog();
     DateCurrent dc = new DateCurrent();
     Handler handler = new Handler();
+    PageMoveClass pm = new PageMoveClass();
 
     //Other 변수
     // shared 저장값
@@ -275,7 +286,6 @@ public class IntroActivity extends AppCompatActivity {
                     USER_LOGIN_METHOD = "Kakao";
                     GET_JOIN_CONFIRM = !String.valueOf(user.getId()).isEmpty();
 
-                    shardpref.putString("USER_INFO_ID", GET_KAKAO_ACCOUNT_EMAIL);
                     shardpref.putString("USER_INFO_NAME", GET_KAKAO_NAME);
                     shardpref.putString("USER_INFO_EMAIL", GET_KAKAO_ACCOUNT_EMAIL);
                     shardpref.putString("USER_INFO_BIRTH", GET_KAKAO_USER_BIRTH);
@@ -303,12 +313,8 @@ public class IntroActivity extends AppCompatActivity {
 //                    INPUT_JOIN_DATA("Kakao", GET_KAKAO_NAME, GET_KAKAO_USER_PHONE, GET_KAKAO_USER_AGENCY
 //                            , GET_KAKAO_USER_BIRTH, GET_KAKAO_USER_SEX, GET_KAKAO_USER_PW, "", GET_KAKAO_USER_JOIN_DATE
 //                            , "2", GET_KAKAO_USER_SERVICE, GET_KAKAO_ACCOUNT_EMAIL, GET_KAKAO_PROFILE_URL, "Kakao");
+                    UserCheck(GET_KAKAO_ACCOUNT_EMAIL);
 
-                    Intent intent = new Intent(mContext, PlaceListActivity.class);
-                    startActivity(intent);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-                    binding.loginAlertText.setVisibility(View.GONE);
                 }, 1000); //1초 후 인트로 실행
             }
 
@@ -329,7 +335,6 @@ public class IntroActivity extends AppCompatActivity {
         binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("!USER_LOGIN_METHOD.equals(NEB)");
 
-        shardpref.putString("USER_INFO_ID", user.getEmail());
         shardpref.putString("USER_INFO_NAME", user.getDisplayName());
         shardpref.putString("USER_INFO_EMAIL", user.getEmail());
         shardpref.putString("USER_INFO_BIRTH", "");
@@ -342,11 +347,7 @@ public class IntroActivity extends AppCompatActivity {
         shardpref.putString("USER_LOGIN_METHOD", "Google");
         shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
 
-        Intent intent = new Intent(mContext, PlaceListActivity.class);
-        startActivity(intent);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        binding.loginAlertText.setVisibility(View.GONE);
+        UserCheck(GET_KAKAO_ACCOUNT_EMAIL);
 
 //        INPUT_JOIN_DATA("Google", user.getDisplayName(), user.getPhoneNumber(), ""
 //                , "", "", "", "", ""
@@ -448,7 +449,49 @@ public class IntroActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(this::getLastVersion,100); //0.5초 후 인트로 실행
     }
+    public void UserCheck(String account) {
+        dlog.i("UserCheck account : " + account);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(account);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
+                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            try {
+                                if (!response.body().equals("[]")) {
+                                    JSONArray Response = new JSONArray(response.body());
+                                    binding.loginAlertText.setVisibility(View.GONE);
+                                    pm.AuthSelect(mContext);
+                                }else{
+                                    shardpref.putString("editstate","insert");
+                                    binding.loginAlertText.setVisibility(View.GONE);
+                                    pm.ProfileEdit(mContext);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     //-------몰입화면 설정
     @Override

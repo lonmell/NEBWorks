@@ -120,7 +120,7 @@ public class VerificationActivity extends AppCompatActivity {
 
     private void onBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            pm.LoginBack(mContext);
+            pm.Login(mContext);
         });
 
         binding.userName.addTextChangedListener(new TextWatcher() {
@@ -154,7 +154,6 @@ public class VerificationActivity extends AppCompatActivity {
 
 
         binding.getAuthResult.setOnClickListener(v -> {
-
             if (Uname.isEmpty()) {
                 Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                 intent.putExtra("data", "이름을 입력해 주세요.");

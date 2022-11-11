@@ -5,13 +5,12 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-public interface PlaceThisDataInterface
-{
+public interface ConfrimNumInterface {
     String URL = "http://krafte.net/NEBWorks/place/";
-    //http://krafte.net/NEBWorks/place/get.php?place_id=50
+
     @FormUrlEncoded
-    @POST("get.php")
+    @POST("confirm_Registrnum.php")
     Call<String> getData(
-            @Field("place_id") String place_id
+            @Field("registr_num") String registr_num
     );
 }

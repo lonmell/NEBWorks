@@ -170,7 +170,7 @@ public class PlaceSearchActivity  extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData("-99","",USER_INFO_AUTH);
+        Call<String> call = api.getData("-99","","0");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"NotifyDataSetChanged", "LongLogTag", "SetTextI18n"})
             @Override

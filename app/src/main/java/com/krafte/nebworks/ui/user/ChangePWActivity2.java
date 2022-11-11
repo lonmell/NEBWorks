@@ -67,7 +67,7 @@ public class ChangePWActivity2 extends AppCompatActivity {
 
     private void setBtnEvent(){
         binding.goLogin.setOnClickListener(v -> {
-            pm.LoginBack(mContext);
+            pm.Login(mContext);
         });
 
         binding.findPwBtn.setOnClickListener(v -> {

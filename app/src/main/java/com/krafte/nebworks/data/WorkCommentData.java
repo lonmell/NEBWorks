@@ -10,24 +10,19 @@ public class WorkCommentData {
         String write_id;
         String writer_name;
         String writer_img_path;
-        String writer_department;
-        String writer_position;
         String edit_yn;
         String delete_yn;
         String created_at;
         String updated_at;
 
         public WorkCommentData_list(String id, String feed_id, String comment, String write_id,
-                                    String writer_name, String writer_img_path, String writer_department,
-                                    String writer_position, String edit_yn, String delete_yn, String created_at, String updated_at) {
+                                    String writer_name, String writer_img_path, String edit_yn, String delete_yn, String created_at, String updated_at) {
             this.id = id;
             this.feed_id = feed_id;
             this.comment = comment;
             this.write_id = write_id;
             this.writer_name = writer_name;
             this.writer_img_path = writer_img_path;
-            this.writer_department = writer_department;
-            this.writer_position = writer_position;
             this.edit_yn = edit_yn;
             this.delete_yn = delete_yn;
             this.created_at = created_at;
@@ -80,22 +75,6 @@ public class WorkCommentData {
 
         public void setWriter_img_path(String writer_img_path) {
             this.writer_img_path = writer_img_path;
-        }
-
-        public String getWriter_department() {
-            return writer_department;
-        }
-
-        public void setWriter_department(String writer_department) {
-            this.writer_department = writer_department;
-        }
-
-        public String getWriter_position() {
-            return writer_position;
-        }
-
-        public void setWriter_position(String writer_position) {
-            this.writer_position = writer_position;
         }
 
         public String getEdit_yn() {

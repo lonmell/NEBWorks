@@ -37,7 +37,6 @@ import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.dataInterface.UserInsertInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityLoginBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -199,8 +198,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }, 1000); //0.5초 후 인트로 실행
         });
-
-
     }
 
     private void GoogleSetting() {
@@ -269,6 +266,48 @@ public class LoginActivity extends AppCompatActivity {
 
     private void LockTost() {
         Toast.makeText(mContext, "잠겨있는 기능입니다.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void UserCheck(String account) {
+        dlog.i("UserCheck account : " + account);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(account);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
+                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            try {
+                                if (!response.body().equals("[]")) {
+                                    JSONArray Response = new JSONArray(response.body());
+                                    pm.Login(mContext);
+                                }else{
+                                    shardpref.putString("editstate","insert");
+                                    pm.ProfileEdit(mContext);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 
     private void getKaKaoProfile() {
@@ -348,43 +387,9 @@ public class LoginActivity extends AppCompatActivity {
         GET_PROFILE_URL = String.valueOf(user.getPhotoUrl());
     }
 
-
-    public void INPUT_JOIN_DATA(String account, String name, String img_path, String platform) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserInsertInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        UserInsertInterface api = retrofit.create(UserInsertInterface.class);
-        Call<String> call = api.getData(account, name, "", "", "", img_path, platform);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    dlog.e("ConnectThread_UserInfo onSuccess not base64 : " + response.body().replace("\"", ""));
-                    try {
-                        if (response.body().replace("\"", "").equals("success")) {
-                            USER_LOGIN_CONFIRM = true;
-                            shardpref.putString("USER_INFO_EMAIL", account);
-                            pm.AuthSelect(mContext);
-                            binding.loginAlertText.setVisibility(View.GONE);
-                        }
-                    } catch (Exception e) {
-                        dlog.i("Exception : " + e);
-                    }
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
-
-
     public void LoginCheck(String account, String pw, String platform) {
+        shardpref.putString("USER_INFO_EMAIL",account);
+        shardpref.putString("platform",platform);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UserSelectInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -453,7 +458,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 pm.AuthSelect(mContext);
                                             }
                                         } else {
-                                            pm.AuthSelect(mContext);
+                                            UserCheck(GET_ACCOUNT_EMAIL);
                                         }
                                         binding.loginAlertText.setVisibility(View.GONE);
                                     } else {
@@ -474,7 +479,8 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(mContext, "통신연결이 불안정합니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
                                     } else {
                                         if (!platform.equals("NEB")) {
-                                            INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL, platform);
+                                            UserCheck(GET_ACCOUNT_EMAIL);
+//                                            INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL, platform);
                                         }else{
                                             shardpref.remove("USER_INFO_ID");
                                             shardpref.remove("USER_INFO_NAME");

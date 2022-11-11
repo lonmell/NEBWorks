@@ -15,8 +15,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -43,6 +41,7 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.StoreDivisionPopActivity;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.dataInterface.ConfrimNumInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.PlaceAddInterface;
 import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
@@ -189,7 +188,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             }
             if (USER_INFO_EMAIL.equals("0")) {
                 Toast.makeText(mContext, "사용자 정보를 가져오지 못했습니다.\n다시 로그인하세요.", Toast.LENGTH_SHORT).show();
-                pm.LoginBack(mContext);
+                pm.Login(mContext);
             } else {
                 UserCheck(USER_INFO_EMAIL);
             }
@@ -257,22 +256,11 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
 
         //사업자번호 체크
-        binding.inputbox02.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
-                    SearchRestrnum(s.toString());
-                }
+        binding.confirmRegistrnum.setOnClickListener(v -> {
+            if(binding.inputbox02.getText().toString().isEmpty() || binding.inputbox02.getText().toString().equals("")){
+                Toast_Nomal("사업자 번호가 입력되지 않았습니다.");
+            }else{
+                SearchRestrnum(binding.inputbox02.getText().toString());
             }
         });
 
@@ -526,6 +514,54 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
     }
 
+
+
+    public void Registrnum_Confirm(String num) {
+        dlog.i("Registrnum_Confirm num : " + num);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ConfrimNumInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ConfrimNumInterface api = retrofit.create(ConfrimNumInterface.class);
+        Call<String> call = api.getData(num);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
+                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            try {
+                                if(response.body().replace("\"","").equals("success")){
+                                    binding.registrNumState.setText("정상적으로 등록된 사업자 번호입니다.");
+                                    binding.registrNumState.setTextColor(R.color.blue);
+                                    registrTF = true;
+                                    binding.inputbox02.setTextColor(R.color.blue);
+                                }else{
+                                    binding.registrNumState.setText("중복된 사업자 번호 입니다.");
+                                    binding.registrNumState.setTextColor(R.color.red);
+                                    registrTF = false;
+                                    binding.inputbox02.setTextColor(R.color.red);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
     private void SearchRestrnum(String registr_num) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RegistrSearchInterface.URL)
@@ -564,10 +600,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                             registrTF = false;
                             binding.inputbox02.setTextColor(R.color.red);
                         } else {
-                            binding.registrNumState.setText("정상적으로 등록된 사업자 번호입니다.");
-                            binding.registrNumState.setTextColor(R.color.blue);
-                            registrTF = true;
-                            binding.inputbox02.setTextColor(R.color.blue);
+                            Registrnum_Confirm(registr_num);
                         }
 
                     } catch (JSONException e) {
@@ -640,7 +673,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             return false;
         } else if (USER_INFO_ID.equals("0")) {
             Toast.makeText(mContext, "사용자 정보를 가져올수 없습니다.", Toast.LENGTH_SHORT).show();
-            pm.LoginBack(mContext);
+            pm.Login(mContext);
             return false;
         } else {
             return true;

@@ -39,7 +39,6 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
-import com.krafte.nebworks.dataInterface.UserSaveInterface;
 import com.krafte.nebworks.databinding.ActivityCareerBinding;
 import com.krafte.nebworks.ui.fragment.career.CareerFragment1;
 import com.krafte.nebworks.ui.fragment.career.CareerFragment2;
@@ -610,50 +609,50 @@ public class CareerActivity extends AppCompatActivity {
         dlog.i("USER ID : " + USER_INFO_ID);
         dlog.i("프로필 사진 url : " + ProfileUrl);
         dlog.i("성명 : " + USER_INFO_NAME);
+        dlog.i("닉네임 : " + USER_INFO_NAME);
         dlog.i("비밀번호 : " + USER_INFO_PW);
         dlog.i("휴대폰 : " + USER_INFO_PHONE);
         dlog.i("성별 : " + USER_INFO_GENDER);
         dlog.i("------SaveUser-------");
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserSaveInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        UserSaveInterface api = retrofit.create(UserSaveInterface.class);
-        Call<String> call = api.getData(USER_INFO_ID, USER_INFO_NAME, USER_INFO_EMAIL, USER_INFO_PW, USER_INFO_PHONE, USER_INFO_GENDER, ProfileUrl);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("SaveUser jsonResponse length : " + response.body().length());
-                            dlog.i("SaveUser jsonResponse : " + response.body());
-                            try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
-                                    if(!ProfileUrl.isEmpty()){
-                                        saveBitmapAndGetURI();
-                                        shardpref.putString("USER_INFO_PROFILE",ProfileUrl);
-                                    }
-                                    Toast_Nomal("프로필 변경이 완료되었습니다.");
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(UserSaveInterface.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        UserSaveInterface api = retrofit.create(UserSaveInterface.class);
+//        Call<String> call = api.getData(USER_INFO_ID, USER_INFO_NAME, USER_INFO_NAME, USER_INFO_PW, USER_INFO_PHONE, USER_INFO_GENDER, ProfileUrl);
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    runOnUiThread(() -> {
+//                        if (response.isSuccessful() && response.body() != null) {
+////                            String jsonResponse = rc.getBase64decode(response.body());
+//                            dlog.i("SaveUser jsonResponse length : " + response.body().length());
+//                            dlog.i("SaveUser jsonResponse : " + response.body());
+//                            try {
+//                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+//                                    if(!ProfileUrl.isEmpty()){
+//                                        saveBitmapAndGetURI();
+//                                        shardpref.putString("USER_INFO_PROFILE",ProfileUrl);
+//                                    }
+//                                    Toast_Nomal("프로필 변경이 완료되었습니다.");
+//                                }
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                dlog.e("에러1 = " + t.getMessage());
+//            }
+//        });
     }
     public void Toast_Nomal(String message){
         LayoutInflater inflater = getLayoutInflater();

@@ -79,7 +79,7 @@ public class FindEmailActivity extends AppCompatActivity {
         });
 
         binding.goLogin.setOnClickListener(v -> {
-            pm.LoginBack(mContext);
+            pm.Login(mContext);
         });
 
         binding.findPwBtn.setOnClickListener(v -> {

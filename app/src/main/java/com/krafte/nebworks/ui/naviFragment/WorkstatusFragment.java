@@ -140,7 +140,6 @@ public class WorkstatusFragment extends Fragment {
 
         //UI 데이터 세팅
         try {
-
             place_id = shardpref.getString("place_id", "0");
             place_name = shardpref.getString("place_name", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
