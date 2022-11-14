@@ -9,27 +9,18 @@ import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.dataInterface.PlaceDelInterface;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 import java.text.DecimalFormat;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PlaceBottomNaviActivity extends Activity {
 
@@ -51,6 +42,7 @@ public class PlaceBottomNaviActivity extends Activity {
     String USER_INFO_AUTH = "";
     int SELECTED_POSITION = 0;
     String place_id = "";
+    String place_name = "";
     int make_kind = 0;
 
     //Other
@@ -81,6 +73,7 @@ public class PlaceBottomNaviActivity extends Activity {
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-99");
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
         place_id = shardpref.getString("place_id", "-1");
+        place_name = shardpref.getString("place_name", "-1");
         make_kind = shardpref.getInt("make_kind", 0);
 
         list_settingitem01 = findViewById(R.id.list_settingitem01);
@@ -91,9 +84,7 @@ public class PlaceBottomNaviActivity extends Activity {
 
         close_btn = findViewById(R.id.close_btn);
         setBtnEvent();
-
     }
-
 
 
     //list_settingitem01
@@ -126,58 +117,31 @@ public class PlaceBottomNaviActivity extends Activity {
             pm.PlaceEditGo(mContext);
         });
         list_settingitem02.setOnClickListener(v -> {
-            PlaceDel(place_id);
+            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+            intent.putExtra("data", "[" + place_name + "]\n" + "매장을 삭제하시겠습니까?");
+            intent.putExtra("flag", "매장삭제");
+            intent.putExtra("left_btn_txt", "취소");
+            intent.putExtra("right_btn_txt", "삭제");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            PlaceDel(place_id);
+            ClosePop();
         });
 
         close_btn.setOnClickListener(v -> {
-            finish();
-            Intent intent = new Intent();
-            intent.putExtra("result", "Close Popup");
-            setResult(RESULT_OK, intent);
-            overridePendingTransition(0, R.anim.translate_down);
+            ClosePop();
         });
     }
 
-
-    public void PlaceDel(String id) {
-        dlog.i("PlaceDel id : " + id);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceDelInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        PlaceDelInterface api = retrofit.create(PlaceDelInterface.class);
-        Call<String> call = api.getData(id);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
-                            dlog.i("TaskDel jsonResponse : " + response.body());
-                            try {
-                                if(response.body().replace("\"","").equals("success")){
-                                    Toast.makeText(mContext,"해당 매장이 삭제완료되었습니다.",Toast.LENGTH_SHORT).show();
-                                    finish();
-                                    Intent intent = new Intent();
-                                    intent.putExtra("result", "Close Popup");
-                                    setResult(RESULT_OK, intent);
-                                    overridePendingTransition(0, R.anim.translate_down);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
+    private void ClosePop(){
+        runOnUiThread(() -> {
+                finish();
+                Intent intent = new Intent();
+                intent.putExtra("result", "Close Popup");
+                setResult(RESULT_OK, intent);
+                overridePendingTransition(0, R.anim.translate_down);
         });
     }
+
 }

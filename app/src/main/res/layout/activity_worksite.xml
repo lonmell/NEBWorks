@@ -139,7 +139,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/empty_store" />
+                android:background="@drawable/ic_empty_store" />
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

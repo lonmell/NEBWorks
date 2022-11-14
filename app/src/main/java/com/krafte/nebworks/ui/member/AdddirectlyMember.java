@@ -20,7 +20,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
+import com.krafte.nebworks.dataInterface.PlaceMemberAddDirectlyInterface;
 import com.krafte.nebworks.databinding.ActivityAdddirectlyMemberBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -212,10 +212,10 @@ public class AdddirectlyMember extends AppCompatActivity {
 
     public void AddPlaceMember() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceMemberAddInterface.URL)
+                .baseUrl(PlaceMemberAddDirectlyInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        PlaceMemberAddInterface api = retrofit.create(PlaceMemberAddInterface.class);
+        PlaceMemberAddDirectlyInterface api = retrofit.create(PlaceMemberAddDirectlyInterface.class);
         Call<String> call = api.getData(place_id, "-99",name,phone,Jumin,"0",JoinDate);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})

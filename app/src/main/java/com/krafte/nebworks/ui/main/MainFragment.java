@@ -6,10 +6,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +26,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
 import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
 import com.krafte.nebworks.ui.naviFragment.CalendarFragment;
@@ -38,10 +39,20 @@ import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
 /*
 * 점주용 메인페이지 프래그먼트
 * */
@@ -52,12 +63,6 @@ public class MainFragment extends AppCompatActivity {
     private final DateCurrent dc = new DateCurrent();
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
-    //navbar.xml
-    DrawerLayout drawerLayout;
-    View drawerView;
-    ImageView close_btn;
-    LinearLayout store_info,member_info,workstate_info,pay_management_info,community_info,contract_info,mypage,help_info;
-
     //BottomNavigation
     ImageView bottom_icon01, bottom_icon02, bottom_icon03, bottom_icon04, bottom_icon05;
 
@@ -67,6 +72,8 @@ public class MainFragment extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
+    String USER_INFO_EMAIL = "";
+    String place_id = "";
     String place_name = "";
     String place_imgpath = "";
 
@@ -110,9 +117,11 @@ public class MainFragment extends AppCompatActivity {
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
+            place_id = shardpref.getString("place_id", "");
             place_name = shardpref.getString("place_name", "");
             place_imgpath = shardpref.getString("place_imgpath", "");
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
@@ -121,6 +130,7 @@ public class MainFragment extends AppCompatActivity {
             store_no = shardpref.getString("store_no", "");
             shardpref.putString("returnPage", "BusinessApprovalActivity");
 
+
             bottom_icon01 = binding.getRoot().findViewById(R.id.bottom_icon01);
             bottom_icon02 = binding.getRoot().findViewById(R.id.bottom_icon02);
             bottom_icon03 = binding.getRoot().findViewById(R.id.bottom_icon03);
@@ -128,7 +138,7 @@ public class MainFragment extends AppCompatActivity {
             bottom_icon05 = binding.getRoot().findViewById(R.id.bottom_icon05);
             drawerLayout = findViewById(R.id.drawer_layout);
             drawerView = findViewById(R.id.drawer2);
-
+            SetAllMemberList();
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("place_name : " + place_name);
 
@@ -248,41 +258,103 @@ public class MainFragment extends AppCompatActivity {
         }
     }
 
+    /*본인 정보 START*/
+    String name ="";
+    String img_path ="";
+    String getjikgup ="";
+    public void SetAllMemberList() {
+        dlog.i("-----SetAllMemberList-----");
+        dlog.i("place_id : " + place_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("-----SetAllMemberList-----");
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(AllMemberInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+            Call<String> call = api.getData(place_id,USER_INFO_ID);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Log.e("SetAllMemberList onSuccess : ", response.body());
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(response.body());
+                            name = Response.getJSONObject(0).getString("name");
+                            img_path = Response.getJSONObject(0).getString("img_path");
+                            getjikgup = Response.getJSONObject(0).getString("jikgup");
+
+                            user_name.setText(name);
+                            jikgup.setText(getjikgup);
+                            Glide.with(mContext).load(img_path)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                                    .into(user_profile);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    /*본인 정보 START*/
+    //navbar.xml
+    DrawerLayout drawerLayout;
+    View drawerView;
+    ImageView close_btn,user_profile,my_setting;
+    TextView user_name,jikgup,store_name;
+    TextView select_nav01,select_nav02;
+
     @SuppressLint("LongLogTag")
     public void setNavBarBtnEvent() {
         drawerView          = findViewById(R.id.drawer2);
         close_btn           = findViewById(R.id.close_btn);
-        store_info          = findViewById(R.id.store_info);
-        member_info         = findViewById(R.id.member_info);
-        workstate_info      = findViewById(R.id.workstate_info);
-        pay_management_info = findViewById(R.id.pay_management_info);
-        community_info      = findViewById(R.id.community_info);
-        contract_info       = findViewById(R.id.contract_info);
-        mypage              = findViewById(R.id.mypage);
-        help_info           = findViewById(R.id.help_info);
+        user_profile        = findViewById(R.id.user_profile);
+        my_setting          = findViewById(R.id.my_setting);
+        user_name           = findViewById(R.id.user_name);
+        jikgup              = findViewById(R.id.jikgup);
+        store_name          = findViewById(R.id.store_name);
+        select_nav01        = findViewById(R.id.select_nav01);
+        select_nav02        = findViewById(R.id.select_nav02);
 
-        ImageView user_profile = findViewById(R.id.user_profile);
-        TextView store_name = findViewById(R.id.store_name);
+        dlog.i("name : " + name);
+        dlog.i("img_path : " + img_path);
+        dlog.i("getjikgup : " + getjikgup);
+
+
+
         store_name.setText(place_name);
-        dlog.i("setNavBarBtnEvent place_name : " + place_name);
-        Glide.with(mContext).load(place_imgpath)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(user_profile);
 
+        select_nav01.setOnClickListener(v -> {
+            pm.PlaceList(mContext);
+        });
+        select_nav02.setOnClickListener(v -> {
+            pm.PlaceAddGo(mContext);
+        });
         close_btn.setOnClickListener(v -> {
             drawerLayout.closeDrawer(drawerView);
         });
-        member_info.setOnClickListener(v -> {
-            dlog.i("직원관리 Click!");
-            drawerLayout.closeDrawer(drawerView);
-            binding.tabLayout.getTabAt(2).select();
-        });
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
         setNavBarBtnEvent();
     }
 

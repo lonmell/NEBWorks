@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -260,7 +262,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             if(binding.inputbox02.getText().toString().isEmpty() || binding.inputbox02.getText().toString().equals("")){
                 Toast_Nomal("사업자 번호가 입력되지 않았습니다.");
             }else{
-                SearchRestrnum(binding.inputbox02.getText().toString());
+                SearchRestrnum(binding.inputbox02.getText().toString().replace("-",""));
             }
         });
 
@@ -282,7 +284,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                 boheom05TF = false;
                 boheom.add("고용보험");
                 boheom.remove("없음");
-                binding.boheom01.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom01.setBackgroundResource(R.drawable.select_full_round);
                 binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
             } else {
                 boheom01TF = false;
@@ -297,7 +299,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                 boheom05TF = false;
                 boheom.add("산재보험");
                 boheom.remove("없음");
-                binding.boheom02.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom02.setBackgroundResource(R.drawable.select_full_round);
                 binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
             } else {
                 boheom02TF = false;
@@ -312,7 +314,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                 boheom05TF = false;
                 boheom.add("국민연금");
                 boheom.remove("없음");
-                binding.boheom03.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom03.setBackgroundResource(R.drawable.select_full_round);
                 binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
             } else {
                 boheom03TF = false;
@@ -327,7 +329,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                 boheom05TF = false;
                 boheom.add("건강보험");
                 boheom.remove("없음");
-                binding.boheom04.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom04.setBackgroundResource(R.drawable.select_full_round);
                 binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
             } else {
                 boheom04TF = false;
@@ -350,14 +352,53 @@ public class PlaceAddActivity extends AppCompatActivity {
                 binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
                 binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
                 binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
-                binding.boheom05.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom05.setBackgroundResource(R.drawable.select_full_round);
             } else {
                 boheom01TF = false;
                 boheom.clear();
                 binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
+        binding.inputbox02.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(binding.inputbox02.isFocusable() && !s.toString().equals("")) {
+                    try{
+                        textlength01 = binding.inputbox02.getText().toString().length();
+                    }catch (NumberFormatException e){
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    if (textlength01 == 3 && before != 1) {
+
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString()+"-");
+                        binding.inputbox02.setSelection(binding.inputbox02.getText().length());
+
+                    }else if (textlength01 == 6 && before != 1){
+
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString()+"-");
+                        binding.inputbox02.setSelection(binding.inputbox02.getText().length());
+
+                    }else if(textlength01 == 10 && !binding.inputbox02.getText().toString().contains("-")){
+
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString().substring(0,3)+"-"+binding.inputbox02.getText().toString().substring(4,6)+"-"+binding.inputbox02.getText().toString().substring(6,10));
+                        binding.inputbox02.setSelection(binding.inputbox02.getText().length());
+
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         binding.inputbox08.setOnClickListener(v -> {
             Intent intent = new Intent(this, WorkTimePicker.class);
             intent.putExtra("timeSelect_flag", 4);
@@ -372,69 +413,33 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
     }
 
+    String resgisternum = "";
+    int textlength01 = 0;
+    int textlength02 = 0;
+    int textlength03 = 0;
     private void spinnerSetData() {
 
         /*급여 정산날짜*/
-        ArrayList<String> stringCategory1 = new ArrayList<>();
-        stringCategory1.add("급여 정산날짜");
-        stringCategory1.add("매월 1일");
-        stringCategory1.add("매월 2일");
-        stringCategory1.add("매월 3일");
-        stringCategory1.add("매월 4일");
-        stringCategory1.add("매월 5일");
-        stringCategory1.add("매월 6일");
-        stringCategory1.add("매월 7일");
-        stringCategory1.add("매월 8일");
-        stringCategory1.add("매월 9일");
-        stringCategory1.add("매월 10일");
-        stringCategory1.add("매월 11일");
-        stringCategory1.add("매월 초");
-        stringCategory1.add("매월 중");
-        stringCategory1.add("매월 말");
-
-        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory1);
-        binding.inputbox05Spinner.setAdapter(select_filter1);
-
-        binding.inputbox05Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("LongLogTag")
+        binding.inputbox05.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                binding.inputbox05.setText(stringCategory1.get(i));
-                dlog.i("i : " + stringCategory1.get(i));
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                binding.inputbox05.setText("매월 초");
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
+//      binding.inputbox05
 
         /*수습기간*/
-        ArrayList<String> stringCategory4 = new ArrayList<>();
-        stringCategory4.add("수습기간");
-        stringCategory4.add("없음");
-        stringCategory4.add("1 개월");
-        stringCategory4.add("2 개월");
-        stringCategory4.add("3 개월");
-        stringCategory4.add("4 개월");
-
-        ArrayAdapter<String> select_filter4 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory4);
-        binding.inputbox06Spinner.setAdapter(select_filter4);
-
-        binding.inputbox06Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                binding.inputbox06.setText(stringCategory4.get(i));
-                dlog.i("i : " + stringCategory4.get(i));
-            }
-
-            @Override
-
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                binding.inputbox06.setText("1 개월");
-            }
-        });
+//        binding.inputbox06
 
 
         /*휴가*/

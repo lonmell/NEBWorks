@@ -150,6 +150,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             holder.item_peoplecnt.setText(item.getTotal_cnt());
             holder.list_setting.setOnClickListener(v -> {
                 shardpref.putString("place_id", item.getId());
+                shardpref.putString("place_name", item.getName());
                 Intent intent = new Intent(mContext, PlaceBottomNaviActivity.class);
                 intent.putExtra("left_btn_txt", "닫기");
                 mContext.startActivity(intent);

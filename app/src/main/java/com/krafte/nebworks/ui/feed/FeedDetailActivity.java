@@ -34,6 +34,7 @@ import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.FeedViewcntInterface;
 import com.krafte.nebworks.databinding.ActivityFeedDetailBinding;
 import com.krafte.nebworks.pop.PhotoPopActivity;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -111,7 +112,7 @@ public class FeedDetailActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        try{
+        try {
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
@@ -133,10 +134,10 @@ public class FeedDetailActivity extends AppCompatActivity {
             imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
             shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub",0);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
             setBtnEvent();
             GETFeed();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -147,7 +148,7 @@ public class FeedDetailActivity extends AppCompatActivity {
         super.onResume();
         //UI 데이터 세팅
         try {
-            dlog.i("onResume state : " + shardpref.getString("editstate",""));
+            dlog.i("onResume state : " + shardpref.getString("editstate", ""));
             if (state.equals("EditComment")) {
                 dlog.i("----------댓글 수정의 경우----------");
                 comment_no = shardpref.getString("comment_no", "");
@@ -175,8 +176,19 @@ public class FeedDetailActivity extends AppCompatActivity {
     private void setBtnEvent() {
         binding.editGo.setOnClickListener(v -> {
             dlog.i("editGo");
-            shardpref.putString("feed_id", feed_id);
+            shardpref.putString("edit_feed_id", feed_id);
             pm.FeedEditGo(mContext);
+        });
+        binding.delGo.setOnClickListener(v -> {
+            shardpref.putString("edit_feed_id", feed_id);
+            Intent intent = new Intent(this, TwoButtonPopActivity.class);
+            intent.putExtra("data", "해당 공지사항을 삭제하시겠습니까?");
+            intent.putExtra("flag", "공지삭제2");
+            intent.putExtra("left_btn_txt", "취소");
+            intent.putExtra("right_btn_txt", "삭제");
+            startActivity(intent);
+            overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
 
         binding.addCommentTxt.addTextChangedListener(new TextWatcher() {
@@ -323,7 +335,6 @@ public class FeedDetailActivity extends AppCompatActivity {
     }
 
 
-
     String id = "";
     String title = "";
     String kind = "";
@@ -341,7 +352,6 @@ public class FeedDetailActivity extends AppCompatActivity {
     String updated_at = "";
 
 
-
     public void GETFeed() {
         dlog.i("GETFeed place_id : " + place_id);
         dlog.i("GETFeed feed_id : " + feed_id);
@@ -350,7 +360,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, feed_id,"");
+        Call<String> call = api.getData(place_id, feed_id, "");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -382,9 +392,9 @@ public class FeedDetailActivity extends AppCompatActivity {
 
                                     try {
                                         binding.feedTitle.setText(title);
-                                        if(place_owner_id.equals(writer_id)){
+                                        if (place_owner_id.equals(writer_id)) {
                                             binding.userName.setText(jikgup);
-                                        }else{
+                                        } else {
                                             binding.userName.setText(writer_name + "(" + jikgup + ")");
                                         }
 
@@ -400,7 +410,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                                 .skipMemoryCache(true)
                                                 .into(binding.profileImg);
-                                        String updated_list = updated_at.substring(0,10);
+                                        String updated_list = updated_at.substring(0, 10);
                                         List<String> updatedList = new ArrayList<>(Arrays.asList(updated_list.split("-")));
                                         dlog.i("updated_list : " + updated_list);
                                         dlog.i("updatedList : " + updatedList.get(0) + "년 " + updatedList.get(1) + "월 " + updatedList.get(2) + "일");
@@ -421,11 +431,11 @@ public class FeedDetailActivity extends AppCompatActivity {
                                                     .into(binding.notiSetimg);
                                         }
                                         SETFeedViewcnt();
-                                        place_name = shardpref.getString("place_name","-1");
+                                        place_name = shardpref.getString("place_name", "-1");
 
 
                                         StringBuilder total_watermark = new StringBuilder();
-                                        for(int a = 0; a < 20; a++){
+                                        for (int a = 0; a < 20; a++) {
                                             total_watermark.append(employee_no).append(" ");
                                             total_watermark.append(place_name).append(" ");
                                         }
@@ -449,6 +459,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                     });
                 }
             }
+
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
@@ -600,7 +611,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedConfrimInterface api = retrofit.create(FeedConfrimInterface.class);
-        Call<String> call = api.getData(feed_id,USER_INFO_ID);
+        Call<String> call = api.getData(feed_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -627,6 +638,7 @@ public class FeedDetailActivity extends AppCompatActivity {
             }
         });
     }
+
     @SuppressLint("LongLogTag")
     private void getWorkNotifyReadYn() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -634,7 +646,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedConfrimlistInterface api = retrofit.create(FeedConfrimlistInterface.class);
-        Call<String> call = api.getData(feed_id,USER_INFO_ID);
+        Call<String> call = api.getData(feed_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -693,7 +705,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
 //        super.onBackPressed();
         pm.FeedList(mContext);
     }

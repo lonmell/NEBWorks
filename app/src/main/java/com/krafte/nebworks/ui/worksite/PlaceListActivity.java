@@ -43,7 +43,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * 2022-10-05 방창배 작성
  * */
 public class PlaceListActivity extends AppCompatActivity {
-
     private ActivityWorksiteBinding binding;
     Context mContext;
 
@@ -111,15 +110,12 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        GetPlaceList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        GetPlaceList();
         GetPlaceList();
-
     }
 
     @Override
@@ -228,20 +224,19 @@ public class PlaceListActivity extends AppCompatActivity {
                             dlog.i("GetPlaceList jsonResponse : " + response.body());
                             try {
                                 //Array데이터를 받아올 때
+                                store_cnt = 0;
                                 JSONArray Response = new JSONArray(response.body());
                                 if (USER_INFO_AUTH.equals("0")) {
                                     binding.storeCntTv.setText("관리중인 매장");
                                 } else {
                                     binding.storeCntTv.setText("참여중인 매장");
                                 }
-                                if (listitemsize != Response.length()) {
                                     mList = new ArrayList<>();
                                     mAdapter = new WorkplaceListAdapter(mContext, mList);
                                     binding.placeList.setAdapter(mAdapter);
                                     binding.placeList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-                                    listitemsize = Response.length();
-
-                                    if (Response.length() == 0) {
+                                    dlog.i("SIZE : " + Response.length());
+                                    if (response.body().equals("[]")) {
                                         binding.noData.setVisibility(View.VISIBLE);
                                         dlog.i("SetNoticeListview Thread run! ");
                                         dlog.i("GET SIZE : " + Response.length());
@@ -335,7 +330,6 @@ public class PlaceListActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
-                                }
                             dlog.i("SetNoticeListview Thread run! ");
                         } catch(JSONException e){
                             e.printStackTrace();

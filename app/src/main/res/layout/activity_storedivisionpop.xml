@@ -1,284 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/loginbox_round"
     android:orientation="vertical"
     tools:context=".bottomsheet.StoreDivisionPopActivity">
 
     <RelativeLayout
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginTop="10dp">
-            <androidx.cardview.widget.CardView
-                android:layout_width="60dp"
-                android:layout_height="5dp"
+        android:layout_height="59dp"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text="매장분류"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
+
+        <RelativeLayout
+            android:id="@+id/back_btn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_centerInParent="true"
-                app:cardBackgroundColor="#dcdcdc"/>
+                android:layout_gravity="center"
+                android:background="@drawable/find_right_arrow"
+                android:padding="20dp"
+                android:rotation="180" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/inter_regular"
-        android:gravity="center"
-        android:text="매장분류"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="start|center"
+        android:layout_below="@+id/top_bar"
+        android:text="매장의 종류를\n선택해주세요"
         android:textColor="#000000"
         android:textSize="25dp" />
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/search_area"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="41dp"
-        android:layout_marginEnd="20dp"
-        android:fontFamily="@font/inter_regular"
-        android:gravity="start|center"
-        android:text="카테고리"
-        android:textColor="#000000"
-        android:textSize="16dp" />
+        android:layout_height="50dp"
+        android:layout_below="@+id/title"
+        android:layout_margin="20dp"
+        android:background="@drawable/default_input_round"
+        android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:orientation="vertical"
-        app:cardBackgroundColor="#f2f2f2"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp">
-
-        <androidx.cardview.widget.CardView
+        <RelativeLayout
+            android:id="@+id/store_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="1dp"
-            android:orientation="vertical"
-            app:cardBackgroundColor="#ffffff"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp">
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/search_category"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="11dp"
+                android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/search_btn"
+                android:background="@null"
+                android:hint="검색하기"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:singleLine="false"
+                android:textColor="#000000"
+                android:textColorHint="#696969"
+                tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/search_btn"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:padding="5dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="66dp"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <TextView
-                        android:id="@+id/select_cate01"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category01"
-                        android:textColor="#000000" />
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#f2f2f2" />
-
-                    <TextView
-                        android:id="@+id/select_cate02"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category02"
-                        android:textColor="#000000" />
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#f2f2f2" />
-
-                    <TextView
-                        android:id="@+id/select_cate03"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category03"
-                        android:textColor="#000000" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#f2f2f2" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="66dp"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <TextView
-                        android:id="@+id/select_cate04"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category04"
-                        android:textColor="#000000" />
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#f2f2f2" />
-
-                    <TextView
-                        android:id="@+id/select_cate05"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category05"
-                        android:textColor="#000000" />
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#f2f2f2" />
-
-                    <TextView
-                        android:id="@+id/select_cate06"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category06"
-                        android:textColor="#000000" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#f2f2f2" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="66dp"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <TextView
-                        android:id="@+id/select_cate07"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category07"
-                        android:textColor="#000000" />
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#f2f2f2" />
-
-                    <TextView
-                        android:id="@+id/select_cate08"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category08"
-                        android:textColor="#000000" />
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#f2f2f2" />
-
-                    <TextView
-                        android:id="@+id/select_cate09"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category09"
-                        android:textColor="#000000" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#f2f2f2" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="66dp"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <TextView
-                        android:id="@+id/select_cate10"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:text="@string/store_category10"
-                        android:textColor="#000000" />
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#f2f2f2" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:textColor="#000000" />
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#f2f2f2" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#ffffff"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:textColor="#000000" />
-                </LinearLayout>
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_search"
+                    android:fontFamily="@font/applesdgothicneo"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/category_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_area"
+        android:layout_alignParentBottom="true"/>
 
-</LinearLayout>
+</RelativeLayout>

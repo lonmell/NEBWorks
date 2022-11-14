@@ -90,7 +90,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/search"
+                    android:background="@drawable/ic_search"
                     android:fontFamily="@font/applesdgothicneo"
                     android:textColor="@color/black"
                     android:textSize="15sp"

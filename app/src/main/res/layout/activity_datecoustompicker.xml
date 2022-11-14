@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/prev_date"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:gravity="center|start">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/find_right_arrow"
+                android:rotation="-180" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/next_date"
+            android:layout_toEndOf="@+id/prev_date"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/setdate"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:drawableEnd="@drawable/down_arrow_calendar"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="   0000년 00월   "
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/next_date"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:gravity="center|end">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/find_right_arrow" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/create_calender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_area"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp" />
+
+    <TimePicker
+        android:id="@+id/time_setpicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numbersBackgroundColor="#ffffff"
+        android:numbersSelectorColor="#6395EC"
+        android:numbersTextColor="@color/black"
+        android:theme="@style/NumberPicker"
+        android:timePickerMode="spinner" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="end|center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
+            android:text="취소"
+            android:padding="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/confirm_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
+            android:text="확인"
+            android:padding="5dp"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>

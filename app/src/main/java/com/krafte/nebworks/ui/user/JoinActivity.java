@@ -87,6 +87,7 @@ public class JoinActivity extends AppCompatActivity {
     boolean Uservice03 = false;
     boolean Uservice04 = false;
     Boolean CertiSuccessTF = false;
+    int last_length = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint({"SetTextI18n"})
@@ -141,7 +142,14 @@ public class JoinActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(last_length != s.toString().length()){
+                    binding.tv06.setBackgroundColor(Color.parseColor("#6395EC"));
+                    binding.tv06.setTextColor(Color.parseColor("#000000"));
+                    binding.tv06.setClickable(true);
+                    binding.tv06.setEnabled(true);
+                }
                 USER_INFO_EMAIL = s.toString();
+                last_length = s.toString().length();
             }
         });
 
@@ -318,6 +326,12 @@ public class JoinActivity extends AppCompatActivity {
     }
 
     public boolean Join_Info_Check() {
+        allcheck = true;
+        Uservice01 = true;
+        Uservice02 = true;
+        Uservice03 = true;
+        Uservice04 = true;
+
         Log.e(TAG, "confirmEmail : " + confirmEmail);
         if (!Uservice01 || !Uservice02 || !Uservice03 || !Uservice04) {
             Toast.makeText(mContext, "필수약관에 동의해주세요", Toast.LENGTH_SHORT).show();

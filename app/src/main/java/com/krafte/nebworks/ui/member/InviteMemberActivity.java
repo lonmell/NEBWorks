@@ -225,7 +225,7 @@ public class InviteMemberActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberAddInterface api = retrofit.create(PlaceMemberAddInterface.class);
-        Call<String> call = api.getData(place_id, user_id,name,phone,Jumin,"0",JoinDate);
+        Call<String> call = api.getData(place_id, user_id,Jumin,"0",JoinDate);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

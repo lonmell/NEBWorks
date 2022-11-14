@@ -40,16 +40,17 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="date"
-                android:gravity="center"
-                android:layout_marginEnd="15dp"
                 android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/inter_regular"
-                android:textSize="16sp"
-                android:textColor="#a9a9a9"/>
+                android:gravity="center"
+                android:text="date"
+                android:textColor="#a9a9a9"
+                android:textSize="16sp" />
         </RelativeLayout>
 </androidx.cardview.widget.CardView>

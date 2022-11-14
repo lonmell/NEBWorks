@@ -1,6 +1,7 @@
 package com.krafte.nebworks.ui.feed;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +18,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,7 +40,6 @@ import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiAddInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.databinding.ActivityPlacenotiAddBinding;
-import com.krafte.nebworks.pop.DatePickerActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -58,6 +59,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -260,6 +262,13 @@ public class FeedAddActivity extends AppCompatActivity {
         }
     }
 
+    String toDay = "";
+    String Year = "";
+    String Month = "";
+    String Day = "";
+    String getDatePicker = "";
+    String getYMPicker = "";
+
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
@@ -312,6 +321,23 @@ public class FeedAddActivity extends AppCompatActivity {
             }
         });
 
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Year = String.valueOf(year);
+                Month = String.valueOf(month+1);
+                Day = String.valueOf(dayOfMonth);
+                Day = Day.length()==1?"0"+Day:Day;
+                Month = Month.length()==1?"0"+Month:Month;
+                binding.eventStarttime.setText(year +"-" + Month + "-" + Day);
+                getYMPicker = binding.eventStarttime.getText().toString().substring(0,7);
+            }
+        }, mYear, mMonth, mDay);
 
         binding.eventStarttime.setOnClickListener(v -> {
             if(binding.eventStarttime.getText().toString().isEmpty()){
@@ -319,20 +345,39 @@ public class FeedAddActivity extends AppCompatActivity {
                 binding.eventStarttime.setText(today);
             }else{
                 shardpref.putInt("timeSelect_flag", 1);
-                Intent intent = new Intent(this, DatePickerActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
+                if (binding.eventStarttime.isClickable()) {
+                    datePickerDialog.show();
+                }
+//                Intent intent = new Intent(this, DatePickerActivity.class);
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.translate_up, 0);
             }
         });
+
+        DatePickerDialog datePickerDialog2 = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Year = String.valueOf(year);
+                Month = String.valueOf(month+1);
+                Day = String.valueOf(dayOfMonth);
+                Day = Day.length()==1?"0"+Day:Day;
+                Month = Month.length()==1?"0"+Month:Month;
+                binding.eventEndttime.setText(year +"-" + Month + "-" + Day);
+                getYMPicker = binding.eventEndttime.getText().toString().substring(0,7);
+            }
+        }, mYear, mMonth, mDay);
         binding.eventEndttime.setOnClickListener(v -> {
             if(binding.eventEndttime.getText().toString().isEmpty()){
                 String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
                 binding.eventEndttime.setText(today);
             }else{
                 shardpref.putInt("timeSelect_flag", 2);
-                Intent intent = new Intent(this, DatePickerActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
+                if (binding.eventEndttime.isClickable()) {
+                    datePickerDialog2.show();
+                }
+//                Intent intent = new Intent(this, DatePickerActivity.class);
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.translate_up, 0);
             }
         });
     }

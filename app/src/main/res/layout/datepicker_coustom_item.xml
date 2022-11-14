@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/yoil_area"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:weightSum="7">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="일"
+            android:textColor="#FF0000"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="월"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="화"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="수"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="목"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="금"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="토"
+            android:textColor="#5B93FF"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="7">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/sun_round"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="60dp"
+                app:cardBackgroundColor="@color/white">
+                <TextView
+                    android:id="@+id/sun"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center"
+                    android:text="num"
+                    android:textColor="#FF0000"
+                    tools:ignore="HardcodedText" />
+            </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sun_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/mon_round"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardBackgroundColor="@color/white">
+                    <TextView
+                        android:id="@+id/mon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:text="num"
+                        android:textColor="@color/black"
+                        tools:ignore="HardcodedText" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mon_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/tue_round"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardBackgroundColor="@color/white">
+                    <TextView
+                        android:id="@+id/tue"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:text="num"
+                        android:textColor="@color/black"
+                        tools:ignore="HardcodedText" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tue_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/wed_round"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardBackgroundColor="@color/white">
+                    <TextView
+                        android:id="@+id/wed"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:text="num"
+                        android:textColor="@color/black"
+                        tools:ignore="HardcodedText" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/wed_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/thu_round"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardBackgroundColor="@color/white">
+                    <TextView
+                        android:id="@+id/thu"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:text="num"
+                        android:textColor="@color/black"
+                        tools:ignore="HardcodedText" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/thu_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/fri_round"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardBackgroundColor="@color/white">
+                    <TextView
+                        android:id="@+id/fri"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:text="num"
+                        android:textColor="@color/black"
+                        tools:ignore="HardcodedText" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fri_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/sat_round"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardBackgroundColor="@color/white">
+                    <TextView
+                        android:id="@+id/sat"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:text="num"
+                        android:textColor="#5B93FF"
+                        tools:ignore="HardcodedText" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sat_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

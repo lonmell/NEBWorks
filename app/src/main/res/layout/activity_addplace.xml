@@ -23,7 +23,7 @@
             <RelativeLayout
                 android:id="@+id/top_bar"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="59dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
@@ -40,7 +40,8 @@
                 <RelativeLayout
                     android:id="@+id/back_btn"
                     android:layout_width="45dp"
-                    android:layout_height="45dp">
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true">
 
                     <ImageView
                         android:layout_width="25dp"
@@ -66,12 +67,6 @@
                     android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CBCBCB" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -226,8 +221,8 @@
                         android:hint="'-'제외 사업자 번호"
                         android:importantForAutofill="no"
                         android:inputType="number"
-                        android:maxEms="10"
-                        android:maxLength="10"
+                        android:maxEms="12"
+                        android:maxLength="12"
                         android:paddingStart="16dp"
                         android:paddingEnd="5dp"
                         android:textColor="#696969"
@@ -405,15 +400,13 @@
                         android:background="@drawable/default_input_round"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
-                        android:hint="상세주소"
+                        android:hint="상세주소 입력"
                         android:importantForAutofill="no"
                         android:inputType="text"
-                        android:maxEms="10"
-                        android:maxLength="10"
                         android:paddingStart="16dp"
                         android:paddingEnd="5dp"
                         android:textColor="#696969"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
@@ -461,17 +454,20 @@
                     tools:ignore="HardcodedText" />
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="50dp"
                     android:layout_marginTop="5dp">
-                    <TextView
+
+                    <EditText
                         android:id="@+id/inputbox05"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_toStartOf="@+id/tv05"
+                        android:background="@drawable/default_input_round"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
-                        android:hint="급여정산일 입력"
+                        android:hint="숫자만 입력"
                         android:importantForAutofill="no"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:maxEms="10"
                         android:maxLength="10"
                         android:paddingStart="16dp"
@@ -480,14 +476,18 @@
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-
-                    <Spinner
-                        android:id="@+id/inputbox05_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/default_input_round"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                    <TextView
+                        android:id="@+id/tv05"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:text="일"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:textColor="#949494"/>
                 </RelativeLayout>
+
             </LinearLayout>
 
             <!--수습기간-->
@@ -514,15 +514,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp">
-                    <TextView
+
+                    <EditText
                         android:id="@+id/inputbox06"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_toStartOf="@+id/tv06"
+                        android:background="@drawable/default_input_round"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
-                        android:hint="수습기간 입력(ex.1개월)"
+                        android:hint="숫자만 입력"
                         android:importantForAutofill="no"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:maxEms="10"
                         android:maxLength="10"
                         android:paddingStart="16dp"
@@ -531,13 +534,16 @@
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-
-                    <Spinner
-                        android:id="@+id/inputbox06_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/default_input_round"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                    <TextView
+                        android:id="@+id/tv06"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:text="일"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:textColor="#949494"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -569,10 +575,9 @@
                         android:id="@+id/inputbox07"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_marginTop="5dp"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
-                        android:hint="휴가기간 입력(ex.월차,연차)"
+                        android:hint="휴가기간 선택(ex.월차,연차)"
                         android:importantForAutofill="no"
                         android:paddingStart="16dp"
                         android:paddingEnd="5dp"
@@ -586,6 +591,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/default_input_round"
+                        android:paddingStart="15dp"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
                 </RelativeLayout>
             </LinearLayout>

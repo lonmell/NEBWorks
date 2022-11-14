@@ -26,6 +26,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.FeedCommentDelInterface;
 import com.krafte.nebworks.dataInterface.FeedDelInterface;
+import com.krafte.nebworks.dataInterface.PlaceDelInterface;
 import com.krafte.nebworks.dataInterface.UserDelInterface;
 import com.krafte.nebworks.databinding.ActivityTwobuttonPopBinding;
 import com.krafte.nebworks.util.Dlog;
@@ -62,6 +63,7 @@ public class TwoButtonPopActivity extends Activity {
     String store_no = "";
     String USER_INFO_ID = "";
     String USER_LOGIN_METHOD = "";
+    String place_id = "";
 
     //Other
     GetResultData resultData = new GetResultData();
@@ -70,6 +72,7 @@ public class TwoButtonPopActivity extends Activity {
     String message = "";
     String topic = "";
     String click_action = "";
+
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -116,7 +119,7 @@ public class TwoButtonPopActivity extends Activity {
         store_no = shardpref.getString("store_no","0");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","");
-
+        place_id = shardpref.getString("place_id", "-1");
         if (title.equals("알림")) {
             binding.txtText.setVisibility(View.INVISIBLE);
         } else {
@@ -172,7 +175,7 @@ public class TwoButtonPopActivity extends Activity {
                 comment_no = shardpref.getString("comment_no","");
                 CommentDelete(comment_no);
                 ClosePop();
-            } else if (flag.equals("공지삭제")) {
+            } else if (flag.equals("공지삭제") || flag.equals("공지삭제2")) {
                 String feed_id = "0";
                 feed_id = shardpref.getString("edit_feed_id","");
                 FeedDelete(feed_id);
@@ -181,6 +184,8 @@ public class TwoButtonPopActivity extends Activity {
                 moveTaskToBack(true); // 태스크를 백그라운드로 이동
                 finishAndRemoveTask(); // 액티비티 종료 + 태스크 리스트에서 지우기
                 android.os.Process.killProcess(android.os.Process.myPid()); // 앱 프로세스 종료
+            } else if(flag.equals("매장삭제")){
+                PlaceDel(place_id);
             }
         });
         binding.popLeftTxt.setOnClickListener(v -> {
@@ -203,12 +208,21 @@ public class TwoButtonPopActivity extends Activity {
 
     private void ClosePop(){
         runOnUiThread(() -> {
-            finish();
-            Intent intent = new Intent();
-            intent.putExtra("result", "Close Popup");
-            setResult(RESULT_OK, intent);
-            overridePendingTransition(0, R.anim.translate_down);
-            super.onBackPressed();
+            if(flag.equals("공지삭제2")){
+                finish();
+                Intent intent = new Intent();
+                intent.putExtra("result", "Close Popup");
+                setResult(RESULT_OK, intent);
+                overridePendingTransition(0, R.anim.translate_down);
+                pm.FeedList(mContext);
+            }else{
+                finish();
+                Intent intent = new Intent();
+                intent.putExtra("result", "Close Popup");
+                setResult(RESULT_OK, intent);
+                overridePendingTransition(0, R.anim.translate_down);
+                super.onBackPressed();
+            }
         });
     }
 
@@ -344,5 +358,41 @@ public class TwoButtonPopActivity extends Activity {
             }
         });
     }
+    public void PlaceDel(String id) {
+        dlog.i("PlaceDel id : " + id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceDelInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceDelInterface api = retrofit.create(PlaceDelInterface.class);
+        Call<String> call = api.getData(id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
+                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            try {
+                                if(response.body().replace("\"","").equals("success")){
+                                    Toast.makeText(mContext,"해당 매장이 삭제완료되었습니다.",Toast.LENGTH_SHORT).show();
+                                    ClosePop();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 }

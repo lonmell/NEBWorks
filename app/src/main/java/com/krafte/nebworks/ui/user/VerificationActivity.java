@@ -40,6 +40,9 @@ import com.krafte.nebworks.util.RandomOut;
 import com.krafte.nebworks.util.RetrofitConnect;
 import com.krafte.nebworks.util.Sms_receiver;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -154,31 +157,16 @@ public class VerificationActivity extends AppCompatActivity {
 
 
         binding.getAuthResult.setOnClickListener(v -> {
-            if (Uname.isEmpty()) {
-                Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-                intent.putExtra("data", "이름을 입력해 주세요.");
-                intent.putExtra("left_btn_txt", "닫기");
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
-            } else if (UPhone.isEmpty()) {
-                Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-                intent.putExtra("data", "전화번호를 입력해주세요.");
-                intent.putExtra("left_btn_txt", "닫기");
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
-            } else {
-                binding.confirmNumCounting.setVisibility(View.VISIBLE);
-                SendConfirmMessage();
-            }
+            UserCheck(1);
         });
 
         binding.confirmPhoneBtn.setOnClickListener(view -> {
             if (binding.editConfirmNum.getText().toString().isEmpty()) {
-                Toast.makeText(this, "인증번호가 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "인증번호가 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
             } else {
                 if (Sms_receiver.receiverNum.equals(SND_NUM) && Sms_receiver.receiverNum.equals(binding.editConfirmNum.getText().toString())) {
                     CertiSuccessTF = true;
-                    Toast.makeText(this, "인증번호가 확인되었습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "인증번호가 확인되었습니다.", Toast.LENGTH_LONG).show();
                     binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#dcdcdc"));
                     binding.confirmPhoneBtn.setText("인증완료");
                     binding.confirmPhoneBtn.setTextColor(Color.parseColor("#000000"));
@@ -207,7 +195,7 @@ public class VerificationActivity extends AppCompatActivity {
                     }
                 } else if (binding.editConfirmNum.getText().toString().equals(CertiNum)) {
                     CertiSuccessTF = true;
-                    Toast.makeText(this, "인증번호가 확인되었습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "인증번호가 확인되었습니다.", Toast.LENGTH_LONG).show();
                     binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#dcdcdc"));
                     binding.confirmPhoneBtn.setText("인증완료");
                     binding.confirmPhoneBtn.setTextColor(Color.parseColor("#000000"));
@@ -236,7 +224,7 @@ public class VerificationActivity extends AppCompatActivity {
                     }
                 } else {
                     CertiSuccessTF = false;
-                    Toast.makeText(this, "유효하지 않은 인증번호 입니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "유효하지 않은 인증번호 입니다.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -349,12 +337,12 @@ public class VerificationActivity extends AppCompatActivity {
             } else if (!Uservice01 || !Uservice02 || !Uservice03 || !Uservice04) {
                 Toast.makeText(mContext, "필수약관에 동의해주세요", Toast.LENGTH_SHORT).show();
             } else {
-                UserCheck();
+                UserCheck(0);
             }
         });
     }
 
-    public void UserCheck() {
+    public void UserCheck(int i) {
         dlog.i("UserCheck name : " + Uname);
         dlog.i("UserCheck phone : " + UPhone);
         Retrofit retrofit = new Retrofit.Builder()
@@ -370,21 +358,57 @@ public class VerificationActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
+//                            String jsonResponse = response.body();
                             dlog.i("UserCheck jsonResponse length : " + response.body().length());
                             dlog.i("UserCheck jsonResponse : " + response.body());
                             if (!response.body().equals("[]")) {
-                                Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-                                intent.putExtra("data", "이미 가입한 내역이 있습니다.");
-                                intent.putExtra("left_btn_txt", "로그인하기");
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.translate_up, 0);
+                                try {
+                                    JSONArray Response = new JSONArray(response.body());
+
+                                    String id = Response.getJSONObject(0).getString("id");
+                                    String email = Response.getJSONObject(0).getString("account");
+                                    String gender = Response.getJSONObject(0).getString("gender");
+                                    String img_path = Response.getJSONObject(0).getString("img_path");
+                                    shardpref.putString("USER_INFO_ID", id);
+                                    shardpref.putString("USER_INFO_PHONE", UPhone);
+                                    shardpref.putString("USER_INFO_EMAIL", email);
+                                    shardpref.putString("USER_INFO_NAME", Uname);
+                                    shardpref.putString("USER_INFO_GENDER", gender);
+                                    shardpref.putString("USER_INFO_IMG", img_path);
+
+                                    Intent intent = new Intent(mContext, OneButtonPopActivity.class);
+                                    intent.putExtra("data", "이미 가입한 내역이 있습니다.");
+                                    intent.putExtra("left_btn_txt", "확인");
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.translate_up, 0);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             } else {
-                                dlog.i("Response 2: " + response.body().length());
-                                shardpref.putString("USER_INFO_NAME", Uname);
-                                shardpref.putString("USER_INFO_PHONE", UPhone);
-                                shardpref.putString("USER_LOGIN_METHOD", "NEB");
-                                pm.Join(mContext);
+                                if(i == 0){
+                                    dlog.i("Response 2: " + response.body().length());
+                                    shardpref.putString("USER_INFO_NAME", Uname);
+                                    shardpref.putString("USER_INFO_PHONE", UPhone);
+                                    shardpref.putString("USER_LOGIN_METHOD", "NEB");
+                                    pm.Join(mContext);
+                                }else{
+                                    if (Uname.isEmpty()) {
+                                        Intent intent = new Intent(mContext, OneButtonPopActivity.class);
+                                        intent.putExtra("data", "이름을 입력해 주세요.");
+                                        intent.putExtra("left_btn_txt", "닫기");
+                                        startActivity(intent);
+                                        overridePendingTransition(R.anim.translate_up, 0);
+                                    } else if (UPhone.isEmpty()) {
+                                        Intent intent = new Intent(mContext, OneButtonPopActivity.class);
+                                        intent.putExtra("data", "전화번호를 입력해주세요.");
+                                        intent.putExtra("left_btn_txt", "닫기");
+                                        startActivity(intent);
+                                        overridePendingTransition(R.anim.translate_up, 0);
+                                    } else {
+                                        binding.confirmNumCounting.setVisibility(View.VISIBLE);
+                                        SendConfirmMessage();
+                                    }
+                                }
                             }
                         }
                     });

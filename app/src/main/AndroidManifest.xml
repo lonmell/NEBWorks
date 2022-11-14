@@ -163,6 +163,7 @@
         <activity android:name=".ui.worksite.PlaceEditActivity" />
         <activity android:name=".ui.worksite.PlaceEditActivity2" />
         <activity android:name=".ui.worksite.PlaceSearchActivity" />
+        <activity android:name=".ui.worksite.PlaceAddCompletion" />
 
 
         <!-- Other -->
@@ -180,8 +181,9 @@
         <activity android:name=".ui.user.ChangePWActivity2" />
 
         <!-- career -->
-        <activity android:name=".ui.career.CareerActivity"
-            android:theme="@style/Theme.Kogas"/>
+        <activity
+            android:name=".ui.career.CareerActivity"
+            android:theme="@style/Theme.Kogas" />
 
         <!-- workstatus-->
         <activity android:name=".ui.workstatus.AddWorkPartActivity" />
@@ -261,6 +263,10 @@
 
         <activity
             android:name=".pop.MemberOption"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <activity
+            android:name=".pop.DateCoustomPickerActivity"
             android:theme="@android:style/Theme.Dialog" />
 
     </application>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +11,8 @@
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_alignParentTop="true"
+        android:layout_height="59dp">
 
         <LinearLayout
             android:id="@+id/back_btn"
@@ -23,10 +24,11 @@
             tools:ignore="RtlSymmetry">
 
             <ImageView
-                android:layout_width="25dp"
+                android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:background="@drawable/back_btn"
+                android:rotation="180"
+                android:background="@drawable/find_right_arrow"
                 android:padding="20dp" />
         </LinearLayout>
 
@@ -41,9 +43,12 @@
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_bar"
+        android:layout_above="@+id/bottom_btn"
+        android:layout_marginBottom="20dp"
         android:background="#fff">
 
         <LinearLayout
@@ -177,6 +182,7 @@
                 android:textColorHint="#B1B1B1"
                 android:textSize="18sp"
                 tools:ignore="HardcodedText" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -184,25 +190,27 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
                 android:background="#dcdcdc" />
+
             <TextView
                 android:id="@+id/check_validation_txt1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
-                android:visibility="gone"
-                android:textColor="@color/red"/>
+                android:textColor="@color/red"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/check_validation_txt2"
                 android:layout_width="192dp"
                 android:layout_height="wrap_content"
-                android:text="@string/check_validation_String"
-                android:textSize="12sp"
-                android:layout_marginTop="5dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
-                android:textColor="#B1B1B1"/>
+                android:text="@string/check_validation_String"
+                android:textColor="#B1B1B1"
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -211,8 +219,8 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="#dcdcdc"
-                android:visibility="gone"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="4">
 
                 <TextView
@@ -224,8 +232,8 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:text="SKT"
-                    android:textSize="16sp"
                     android:textColor="#696969"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -237,8 +245,8 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:text="KT"
-                    android:textSize="16sp"
                     android:textColor="#696969"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -250,8 +258,8 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:text="LGU+"
-                    android:textSize="16sp"
                     android:textColor="#696969"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -274,14 +282,16 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
                     android:weightSum="4">
+
                     <EditText
                         android:id="@+id/edit_confirm_num"
                         android:layout_width="wrap_content"
@@ -296,16 +306,17 @@
                         android:textColorHint="#B1B1B1"
                         android:textSize="18sp"
                         tools:ignore="HardcodedText,InefficientWeight,RtlSymmetry,TextFields" />
+
                     <TextView
                         android:id="@+id/confirm_num_counting"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
+                        android:layout_marginEnd="10dp"
                         android:fontFamily="@font/applesdgothicneo"
                         android:gravity="center"
                         android:text="00:00"
                         android:textColor="@color/black"
                         android:textSize="18sp"
-                        android:layout_marginEnd="10dp"
                         android:visibility="gone"
                         tools:ignore="HardcodedText,TextContrastCheck" />
 
@@ -336,7 +347,6 @@
                     android:textSize="18sp"
                     tools:ignore="HardcodedText,TextContrastCheck" />
             </LinearLayout>
-
 
 
             <LinearLayout
@@ -448,11 +458,12 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -460,13 +471,14 @@
                     android:textColor="#696969"
                     android:textSize="16sp"
                     tools:ignore="HardcodedText" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:text="선택"
                     android:textColor="#949494"
                     android:textSize="14sp"
-                    android:layout_marginStart="10dp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -484,8 +496,8 @@
                     android:id="@+id/select_man"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#f2f2f2"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:background="#f2f2f2">
 
                     <TextView
                         android:id="@+id/man_txt"
@@ -507,8 +519,8 @@
                     android:id="@+id/select_woman"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#f2f2f2"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:background="#f2f2f2">
 
                     <TextView
                         android:id="@+id/woman_txt"
@@ -534,6 +546,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="15dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="#F5F6F8"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="0dp"
@@ -573,6 +586,7 @@
                 android:background="#ffffff"
                 android:orientation="vertical"
                 android:padding="1dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/linear03">
 
                 <RelativeLayout
@@ -775,32 +789,32 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <!--회원가입버튼-->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="27dp"
-                android:layout_weight="2"
-                app:cardBackgroundColor="#6395EC"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <TextView
-                    android:id="@+id/join_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_bold"
-                    android:gravity="center"
-                    android:text="회원가입하기"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    tools:ignore="TextContrastCheck" />
-            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <!--회원가입버튼-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bottom_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="27dp"
+        android:layout_alignParentBottom="true"
+        app:cardBackgroundColor="#6395EC"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/join_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text="회원가입하기"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            tools:ignore="TextContrastCheck" />
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

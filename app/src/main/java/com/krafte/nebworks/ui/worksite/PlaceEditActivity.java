@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -411,7 +413,6 @@ public class PlaceEditActivity extends AppCompatActivity {
                                 longitude = Response.getJSONObject(0).getString("longitude");
 
                                 pay_day = Response.getJSONObject(0).getString("pay_day");
-                                payday = Response.getJSONObject(0).getString("pay_day");
 
                                 test_period = Response.getJSONObject(0).getString("test_period");
                                 test_day = Response.getJSONObject(0).getString("test_period");
@@ -488,81 +489,40 @@ public class PlaceEditActivity extends AppCompatActivity {
     private void spinnerSetData() {
 
         /*급여 정산날짜*/
-        ArrayList<String> stringCategory1 = new ArrayList<>();
-        stringCategory1.add("급여 정산날짜");
-        stringCategory1.add("매월 1일");
-        stringCategory1.add("매월 2일");
-        stringCategory1.add("매월 3일");
-        stringCategory1.add("매월 4일");
-        stringCategory1.add("매월 5일");
-        stringCategory1.add("매월 6일");
-        stringCategory1.add("매월 7일");
-        stringCategory1.add("매월 8일");
-        stringCategory1.add("매월 9일");
-        stringCategory1.add("매월 10일");
-        stringCategory1.add("매월 11일");
-        stringCategory1.add("매월 초");
-        stringCategory1.add("매월 중");
-        stringCategory1.add("매월 말");
-
-        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory1);
-        binding.inputbox05Spinner.setAdapter(select_filter1);
-        if (!pay_day.isEmpty()) {
-            for (int a = 0; a < stringCategory1.size(); a++) {
-                if (stringCategory1.get(a).equals(pay_day)) {
-                    binding.inputbox05.setText(stringCategory1.get(a));
-                    dlog.i("a : " + stringCategory1.get(a));
-                    binding.inputbox05Spinner.setSelection(a);
-                }
-            }
-        }
-        binding.inputbox05Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("LongLogTag")
+        binding.inputbox05.setText(pay_day);
+        binding.inputbox05.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                dlog.i("pay_day : " + pay_day);
-                binding.inputbox05.setText(stringCategory1.get(i));
-                dlog.i("i : " + stringCategory1.get(i));
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                binding.inputbox05.setText("매월 초");
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                pay_day = s.toString();
             }
         });
 
         /*수습기간*/
-        ArrayList<String> stringCategory4 = new ArrayList<>();
-        stringCategory4.add("수습기간");
-        stringCategory4.add("없음");
-        stringCategory4.add("1 개월");
-        stringCategory4.add("2 개월");
-        stringCategory4.add("3 개월");
-        stringCategory4.add("4 개월");
-
-        ArrayAdapter<String> select_filter4 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory4);
-        binding.inputbox06Spinner.setAdapter(select_filter4);
-
-        if (!test_period.isEmpty()) {
-            for (int a = 0; a < stringCategory4.size(); a++) {
-                if (stringCategory4.get(a).equals(test_period)) {
-                    binding.inputbox06.setText(stringCategory4.get(a));
-                    binding.inputbox06Spinner.setSelection(a);
-                }
-            }
-        }
-        binding.inputbox06Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("LongLogTag")
+        binding.inputbox06.setText(test_day);
+        binding.inputbox06.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                binding.inputbox06.setText(stringCategory4.get(i));
-                dlog.i("i : " + stringCategory4.get(i));
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                binding.inputbox06.setText("매월 초");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                test_day = s.toString();
             }
         });
 

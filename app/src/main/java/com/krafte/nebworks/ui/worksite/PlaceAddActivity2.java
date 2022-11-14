@@ -181,6 +181,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                                 img_path = Response.getJSONObject(0).getString("img_path").equals("null")?"":Response.getJSONObject(0).getString("img_path");
                                 start_date = Response.getJSONObject(0).getString("start_date");
 
+
                                 binding.save2btn.setOnClickListener(v -> {
                                     UpdatePlace(0);
                                 });
@@ -297,14 +298,14 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                             dlog.i("UpdatePlace jsonResponse : " + response.body());
                             try {
                                 if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
-                                    shardpref.remove("place_name");
-                                    shardpref.remove("place_owner_id");
+                                    shardpref.putString("place_id", place_id);
+                                    shardpref.putString("place_owner_id", USER_INFO_ID);
                                     if(i == 0){
                                         Toast_Nomal("임시저장 완료되었습니다.");
                                     }else{
                                         Toast_Nomal("매장 추가가 완료되었습니다.");
                                     }
-                                    pm.PlaceList(mContext);
+                                    pm.workCompletion(mContext);
                                 }else{
                                     Toast_Nomal("추가 매장을 생성하지 못했습니다. Error : " + response.body());
                                 }

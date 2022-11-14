@@ -55,12 +55,14 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
         if(lastPos != position){
             holder.wifi_icon.setBackgroundResource(R.drawable.wifi);
             holder.wifi_name.setTextColor(R.color.black);
+            holder.wifi_select_icon.setVisibility(View.INVISIBLE);
         }
         holder.wifi_name.setOnClickListener(v -> {
             dlog.i("lastPos :" + lastPos);
             dlog.i("position :" + position);
             holder.wifi_icon.setBackgroundResource(R.drawable.wifi_on);
             holder.wifi_name.setTextColor(R.color.blue);
+            holder.wifi_select_icon.setVisibility(View.VISIBLE);
             lastPos = position;
             if (mListener != null) {
                 mListener.onItemClick(v, position);
@@ -76,13 +78,14 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView wifi_name;
-        ImageView wifi_icon;
+        ImageView wifi_icon,wifi_select_icon;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
             wifi_name = itemView.findViewById(R.id.wifi_name);
             wifi_icon = itemView.findViewById(R.id.wifi_icon);
+            wifi_select_icon = itemView.findViewById(R.id.wifi_select_icon);
 
             shardpref = new PreferenceHelper(mContext);
             dlog.DlogContext(mContext);

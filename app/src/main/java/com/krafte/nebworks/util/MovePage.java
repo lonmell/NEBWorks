@@ -93,6 +93,8 @@ public interface MovePage {
 
     void workDetailBack(Context context);
 
+    void workCompletion(Context context);
+
     //--ui.user
     void SearchEmail(Context context);
 

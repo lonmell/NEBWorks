@@ -305,10 +305,10 @@
             <EditText
                 android:id="@+id/user_phone"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/default_input_round"
+                android:background="@drawable/default_gray_round"
                 android:fontFamily="@font/applesdgothicneo"
                 android:hint="'-'제외 휴대폰 번호"
                 android:importantForAutofill="no"
@@ -344,7 +344,7 @@
         <LinearLayout
             android:id="@+id/linear02"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
@@ -361,8 +361,8 @@
                 <EditText
                     android:id="@+id/edit_confirm_num"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:background="@drawable/default_input_round"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/default_gray_round"
                     android:fontFamily="@font/applesdgothicneo"
                     android:hint="인증번호 입력"
                     android:importantForAutofill="no"
