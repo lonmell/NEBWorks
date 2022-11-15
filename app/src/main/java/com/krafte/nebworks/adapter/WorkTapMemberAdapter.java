@@ -3,6 +3,7 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkStatusTapData;
+import com.krafte.nebworks.pop.WorkMemberOptionActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -46,6 +48,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
     public String USER_INFO_ID = "";
     Activity activity;
     PageMoveClass pm = new PageMoveClass();
+    int lastpos = -99;
 
 
     public interface OnItemClickListener {
@@ -84,7 +87,6 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
     @Override
     public void onBindViewHolder(@NonNull WorkTapMemberAdapter.ViewHolder holder, int position) {
         WorkStatusTapData.WorkStatusTapData_list item = mData.get(position);
-
         try {
             dlog.DlogContext(mContext);
             holder.name.setText(item.getName());
@@ -112,15 +114,19 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             holder.pay.setText(item.getYoil().isEmpty()?"":item.getYoil());
             holder.state_tv.setText(state);
 
-
-//            holder.item_total.setOnClickListener(v -> {
-//                shardpref.putString("item_user_id",item.getUser_id());
-//                shardpref.putString("item_user_name", item.getName());
-//                shardpref.putString("item_jikgup",item.getJikgup());
-//                shardpref.putString("item_state",state);
-//                shardpref.putString("item_join_date",item.getJoin_date());
-//                pm.AddWorkPart(mContext);
-//            });
+            holder.list_setting.setOnClickListener(v -> {
+                shardpref.putString("mem_id",item.getId());
+                shardpref.putString("mem_name",item.getName());
+                Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
+                intent.putExtra("place_id", place_id);
+                intent.putExtra("user_id",item.getId());
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                if (mListener != null) {
+                    mListener.onItemClick(v, position);
+                }
+            });
         } catch (Exception e) {
             dlog.i("Exception : " + e);
         }
@@ -135,7 +141,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, jikgup, pay, state_tv;
-        CardView add_detail, state;
+        CardView add_detail, state,edit_linear;
         RelativeLayout list_setting,item_total;
         LinearLayout linear01, linear02;
         ImageView user_thumnail;
@@ -154,6 +160,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             linear01      = itemView.findViewById(R.id.linear01);
             linear02      = itemView.findViewById(R.id.linear02);
             user_thumnail = itemView.findViewById(R.id.user_thumnail);
+
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");

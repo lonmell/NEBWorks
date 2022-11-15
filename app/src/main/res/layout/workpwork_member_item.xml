@@ -42,7 +42,6 @@
         android:textSize="20sp" />
 
 
-
     <RelativeLayout
         android:id="@+id/list_setting"
         android:layout_width="35dp"
