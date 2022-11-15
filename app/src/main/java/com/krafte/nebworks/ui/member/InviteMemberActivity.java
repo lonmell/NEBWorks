@@ -241,7 +241,7 @@ public class InviteMemberActivity extends AppCompatActivity {
                                 Toast_Nomal("직원 초대가 완료되었습니다[승인 대기 중]");
                                 shardpref.putInt("SELECT_POSITION", 2);
                                 shardpref.putInt("SELECT_POSITION_sub",0);
-                                pm.MemberGo(mContext);
+                                pm.MemberManagement(mContext);
                             }else{
                                 Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
                             }

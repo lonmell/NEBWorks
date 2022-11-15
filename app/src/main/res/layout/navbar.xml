@@ -283,6 +283,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/select_nav03"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -296,6 +297,7 @@
                                 tools:ignore="HardcodedText" />
 
                             <TextView
+                                android:id="@+id/select_nav04"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"

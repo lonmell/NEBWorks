@@ -67,6 +67,9 @@ public class AdddirectlyMember extends AppCompatActivity {
     String getDatePicker = "";
     String getYMPicker = "";
 
+    int textlength01 = 0;
+    int textlength02 = 0;
+
     //Parameter
     String name = "";
     String phone = "";
@@ -138,11 +141,30 @@ public class AdddirectlyMember extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(binding.inputbox02.isFocusable() && !s.toString().equals("")) {
+                    try{
+                        textlength01 = binding.inputbox02.getText().toString().length();
+                    }catch (NumberFormatException e){
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    if (textlength01 == 3 && before != 1) {
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString()+"-");
+                        binding.inputbox02.setSelection(binding.inputbox02.getText().length());
+                    }else if (textlength01 == 8 && before != 1){
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString()+"-");
+                        binding.inputbox02.setSelection(binding.inputbox02.getText().length());
+                    }else if(textlength01 == 9 && !binding.inputbox02.getText().toString().contains("-")){
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString().substring(0,3)+"-"+binding.inputbox02.getText().toString().substring(4,8)+"-"+binding.inputbox02.getText().toString().substring(9,11));
+                        binding.inputbox02.setSelection(binding.inputbox02.getText().length());
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                phone = s.toString();
+                phone = s.toString().replace("-","");
             }
         });
         binding.inputbox03.addTextChangedListener(new TextWatcher() {
@@ -152,11 +174,27 @@ public class AdddirectlyMember extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(binding.inputbox03.isFocusable() && !s.toString().equals("")) {
+                    try{
+                        textlength02 = binding.inputbox03.getText().toString().length();
+                    }catch (NumberFormatException e){
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    if (textlength02 == 6 && before != 1) {
+                        binding.inputbox03.setText(binding.inputbox03.getText().toString()+"-");
+                        binding.inputbox03.setSelection(binding.inputbox03.getText().length());
+                    }else if (textlength02 == 15 && before != 1){
+                        binding.inputbox03.setText(binding.inputbox03.getText().toString().substring(0,6)+"-"+binding.inputbox03.getText().toString().substring(7,14));
+                        binding.inputbox03.setSelection(binding.inputbox03.getText().length());
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                Jumin = s.toString();
+                Jumin = s.toString().replace("-","");
             }
         });
 
@@ -230,9 +268,7 @@ public class AdddirectlyMember extends AppCompatActivity {
                             if (response.body().replace("\"", "").equals("success")) {
                                 dlog.i("매장 멤버 추가 완료");
                                 Toast_Nomal("직원이 정상적으로 등록되었습니다.");
-                                shardpref.putInt("SELECT_POSITION", 2);
-                                shardpref.putInt("SELECT_POSITION_sub",0);
-                                pm.Main(mContext);
+                                pm.MemberManagement(mContext);
                             }
                         }
                     });

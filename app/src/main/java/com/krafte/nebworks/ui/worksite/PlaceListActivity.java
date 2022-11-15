@@ -322,7 +322,6 @@ public class PlaceListActivity extends AppCompatActivity {
                                                         } else {
                                                             pm.Main2(mContext);
                                                         }
-
 //                                                    }
                                                 }
                                             } catch (JSONException e) {

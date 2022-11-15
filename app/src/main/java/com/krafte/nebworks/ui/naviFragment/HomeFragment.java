@@ -3,7 +3,6 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.bottomsheet.MemberOption;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
@@ -27,7 +27,6 @@ import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.HomefragmentBinding;
-import com.krafte.nebworks.pop.MemberOption;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -200,13 +199,8 @@ public class HomeFragment extends Fragment {
         });
 
         binding.addMemberBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, MemberOption.class);
-            intent.putExtra("data", "직원등록");
-            intent.putExtra("btn01", "직접등록");
-            intent.putExtra("btn02", "초대메세지 발송");
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            MemberOption mo = new MemberOption();
+            mo.show(getChildFragmentManager(),"MemberOption");
         });
 
         binding.memberManagement011.setOnClickListener(v -> {

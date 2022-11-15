@@ -6,7 +6,7 @@
     android:background="#00ffffff"
     android:orientation="vertical"
     android:paddingBottom="8dp"
-    tools:context=".pop.MemberOption">
+    tools:context=".bottomsheet.MemberOption">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:layout_height="56dp"
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
-            android:text="매장에서 내보내기"
+            android:text="삭제"
             android:textColor="#FF3D00"
             android:textSize="15sp"
             android:textStyle="bold"

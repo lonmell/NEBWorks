@@ -2,15 +2,17 @@ package com.krafte.nebworks.ui.member;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -21,8 +23,10 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
+import com.krafte.nebworks.bottomsheet.MemberOption;
+import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
-import com.krafte.nebworks.pop.MemberOption;
 import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
 import com.krafte.nebworks.ui.fragment.member.MemberSubFragment1;
 import com.krafte.nebworks.ui.fragment.member.MemberSubFragment2;
@@ -33,10 +37,20 @@ import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MemberManagement extends AppCompatActivity {
     private static final String TAG = "MemberManagement";
@@ -54,6 +68,9 @@ public class MemberManagement extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
+    String place_id = "";
+    String place_owner_id = "";
+
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
     String store_no;
@@ -71,6 +88,7 @@ public class MemberManagement extends AppCompatActivity {
     String return_page = "";
 
     ApprovalFragment1 af1 = new ApprovalFragment1();
+    int total_member_cnt = 0;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
@@ -91,6 +109,8 @@ public class MemberManagement extends AppCompatActivity {
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
             shardpref = new PreferenceHelper(mContext);
+            place_id = shardpref.getString("place_id", "");
+            place_owner_id = shardpref.getString("place_owner_id", "");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
@@ -162,6 +182,7 @@ public class MemberManagement extends AppCompatActivity {
                         @Override
                         public void run() {
                             binding.tabLayout.getTabAt(SELECT_POSITION).select();
+
                         }
                     }, 100);
 
@@ -170,12 +191,17 @@ public class MemberManagement extends AppCompatActivity {
             }
 
             binding.addMemberBtn.setOnClickListener(v -> {
-                Intent intent = new Intent(mContext, MemberOption.class);
-                intent.putExtra("data", "직원등록");
-                intent.putExtra("btn01", "직접등록");
-                intent.putExtra("btn02", "초대메세지 발송");
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
+                MemberOption mo = new MemberOption();
+                mo.show(getSupportFragmentManager(),"MemberOption");
+            });
+
+            binding.changePlace.setOnClickListener(v -> {
+                PlaceListBottomSheet plb = new PlaceListBottomSheet();
+                plb.show(getSupportFragmentManager(),"PlaceListBottomSheet");
+                plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
+                    shardpref.putString("change_place_id",place_id);
+                    dlog.i("change_place_id : " + place_id);
+                });
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -185,18 +211,86 @@ public class MemberManagement extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+//        super.onBackPressed();
+        if(USER_INFO_AUTH.equals("0")){
+            pm.Main(mContext);
+        }else{
+            pm.Main2(mContext);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        dlog.i("binding.tabLayout.getSelectedTabPosition() :" + binding.tabLayout.getSelectedTabPosition());
+        SetAllMemberList(binding.tabLayout.getSelectedTabPosition());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
+
+    /*직원 전체 리스트 START*/
+    public void SetAllMemberList(int i) {
+        total_member_cnt = 0;
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(AllMemberInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+            Call<String> call = api.getData(place_id,"");
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Log.e("onSuccess : ", response.body());
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(response.body());
+                            if (Response.length() == 0) {
+                                total_member_cnt = 0;
+                                binding.tabLayout.setVisibility(View.GONE);
+                            } else {
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    if(!place_owner_id.equals(jsonObject.getString("id"))){
+                                        if(i != 0){
+                                            if (jsonObject.getString("state").equals(String.valueOf(i))) {
+                                                total_member_cnt ++;
+                                            }
+                                        }else{
+                                            total_member_cnt ++;
+                                        }
+                                    }
+                                }
+                                dlog.i("total_member_cnt ; " + total_member_cnt);
+                                if(total_member_cnt == 0){
+                                    binding.tabLayout.setVisibility(View.GONE);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    /*직원 전체 리스트 END*/
 
 //    //-------몰입화면 설정
 //    @Override

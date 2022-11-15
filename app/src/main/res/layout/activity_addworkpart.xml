@@ -64,476 +64,451 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-            <LinearLayout
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="66dp"
+                android:layout_below="@+id/close_btn"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginEnd="20dp"
+                android:padding="5dp"
+                app:cardBackgroundColor="#EFF4FD"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:background="#F5F6F8"
-                    android:orientation="horizontal"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp">
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center">
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/user_img_area"
-                        android:layout_width="85dp"
-                        android:layout_height="85dp"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        app:cardBackgroundColor="#dbdbdb"
-                        app:cardCornerRadius="60dp"
-                        app:cardElevation="0dp">
+                        android:layout_marginStart="10dp"
+                        android:layout_toStartOf="@+id/refresh_area"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/store_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="start|center"
+                            android:text="store_name"
+                            android:textColor="@color/black"
+                            android:textSize="17sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/store_name"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="start|center"
+                            android:text="현재 선택된 매장"
+                            android:textColor="#696969"
+                            android:textSize="13sp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/refresh_area"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/user_thumnail"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </androidx.cardview.widget.CardView>
+                            android:id="@+id/refresh_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_refresh_btn"
+                            android:scaleType="fitXY" />
+                    </LinearLayout>
+                </RelativeLayout>
 
-                    <LinearLayout
-                        android:id="@+id/user_info_area"
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="근무요일"
+                    android:textColor="#242627"
+                    android:textSize="16sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/yoil"
+                    android:layout_width="40dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="#f2f2f2"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:id="@+id/yoil_tv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignTop="@+id/user_img_area"
-                        android:layout_alignBottom="@+id/user_img_area"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_toStartOf="@+id/user_state_area"
-                        android:layout_toEndOf="@+id/user_img_area"
-                        android:orientation="vertical"
-                        android:weightSum="3">
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="start|center"
+                        android:paddingStart="15dp"
+                        android:text="근무요일 / 근무일 선택"
+                        android:textColor="#696969"
+                        android:textSize="16sp" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#F5F6F8" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="근무자"
+                    android:textColor="#242627"
+                    android:textSize="16sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/select_mem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="#f2f2f2"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/name"
+                            android:id="@+id/mem_name"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_gravity="start"
                             android:fontFamily="@font/inter_bold"
+                            android:gravity="start|center"
+                            android:paddingStart="15dp"
                             android:text="name"
                             android:textColor="@color/black"
-                            android:textSize="20sp" />
+                            android:textSize="14sp"
+                            android:visibility="gone" />
 
                         <TextView
-                            android:id="@+id/join_date"
-                            android:layout_width="match_parent"
+                            android:id="@+id/mem_cnt"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_gravity="start"
                             android:fontFamily="@font/inter_bold"
-                            android:text="0000.00.00"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
+                            android:gravity="start|center"
+                            android:paddingStart="15dp"
+                            android:text="총 0명 근무 중"
+                            android:textColor="@color/blue"
+                            android:textSize="14sp"
+                            android:visibility="visible" />
 
                         <TextView
-                            android:id="@+id/jikgup"
+                            android:id="@+id/mem_select"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_gravity="end"
                             android:fontFamily="@font/inter_bold"
-                            android:text="jikgup"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
+                            android:gravity="end|center"
+                            android:paddingStart="15dp"
+                            android:text="근무자를 선택하세요 >"
+                            android:textColor="#949494"
+                            android:textSize="14sp"
+                            android:visibility="visible" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/user_state_area"
-                        android:layout_width="73dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignTop="@+id/user_img_area"
-                        android:layout_alignBottom="@+id/user_img_area"
-                        android:layout_alignParentEnd="true">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="25dp"
-                            app:cardBackgroundColor="#a7a7a7"
-                            app:cardCornerRadius="20dp"
-                            app:cardElevation="0dp">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_margin="1dp"
-                                app:cardBackgroundColor="#ffffff"
-                                app:cardCornerRadius="20dp"
-                                app:cardElevation="0dp">
-
-                                <TextView
-                                    android:id="@+id/state"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/inter_regular"
-                                    android:gravity="center"
-                                    android:text="state"
-                                    android:textColor="#696969"
-                                    android:textSize="13sp" />
-                            </androidx.cardview.widget.CardView>
-                        </androidx.cardview.widget.CardView>
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/yoil01"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="#f2f2f2"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/yoil01_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center"
-                            android:text="월"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/yoil02"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="#f2f2f2"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/yoil02_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center"
-                            android:text="화"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/yoil03"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="#f2f2f2"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/yoil03_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center"
-                            android:text="수"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/yoil04"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="#f2f2f2"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/yoil04_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center"
-                            android:text="목"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/yoil05"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="#f2f2f2"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/yoil05_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center"
-                            android:text="금"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/yoil06"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="#f2f2f2"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/yoil06_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center"
-                            android:text="토"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/yoil07"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="#f2f2f2"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/yoil07_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center"
-                            android:text="일"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="20dp">
-                    <TextView
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:text="근무시작"
-                        android:textColor="@color/black"
-                        android:fontFamily="@font/inter_bold"
-                        android:textSize="20sp"
-                        android:gravity="center"/>
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="15dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardBackgroundColor="#F5F6F8"
-                        app:cardElevation="0dp">
-                        <TextView
-                            android:id="@+id/select_time01"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:textColor="#949494"
-                            android:fontFamily="@font/inter_bold"
-                            android:text="시간 선택"
-                            android:textSize="18sp"/>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="10dp">
-                    <TextView
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:text="근무종료"
-                        android:textColor="@color/black"
-                        android:fontFamily="@font/inter_bold"
-                        android:textSize="20sp"
-                        android:gravity="center"/>
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="15dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardBackgroundColor="#F5F6F8"
-                        app:cardElevation="0dp">
-                        <TextView
-                            android:id="@+id/select_time02"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:textColor="#949494"
-                            android:fontFamily="@font/inter_bold"
-                            android:text="시간 선택"
-                            android:textSize="18sp"/>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginBottom="25dp"
-                    android:background="#F5F6F8"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:id="@+id/resttv01"
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:text="휴게시간"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_toEndOf="@+id/resttv01"
-                        android:layout_toStartOf="@+id/resttv02"
-                        app:cardCornerRadius="10dp"
-                        app:cardBackgroundColor="#F5F6F8"
-                        app:cardElevation="0dp">
-                        <TextView
-                            android:id="@+id/select_time03"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:textColor="#949494"
-                            android:fontFamily="@font/inter_bold"
-                            android:text="시간 선택"
-                            android:textSize="18sp"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/resttv02"
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:text="부터"
-                        android:textColor="#949494"
-                        android:textSize="20sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:id="@+id/resttv03"
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_toEndOf="@+id/resttv03"
-                        android:layout_toStartOf="@+id/resttv04"
-                        app:cardCornerRadius="10dp"
-                        app:cardBackgroundColor="#F5F6F8"
-                        app:cardElevation="0dp">
-                        <TextView
-                            android:id="@+id/select_time04"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:textColor="#949494"
-                            android:fontFamily="@font/inter_bold"
-                            android:text="시간 선택"
-                            android:textSize="18sp"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/resttv04"
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:text="까지"
-                        android:textColor="#949494"
-                        android:textSize="20sp" />
-                </RelativeLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#F5F6F8" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="17dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="근무시작"
+                    android:textColor="#242627"
+                    android:textSize="16sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="#f2f2f2"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:id="@+id/select_time01"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="start|center"
+                        android:paddingStart="15dp"
+                        android:hint="시간 선택"
+                        android:textColorHint="#949494"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="부터"
+                    android:textColor="#949494"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="근무종료"
+                    android:textColor="#242627"
+                    android:textSize="16sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="#F5F6F8"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:id="@+id/select_time02"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="start|center"
+                        android:paddingStart="15dp"
+                        android:hint="시간 선택"
+                        android:textColorHint="#949494"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="#949494"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="까지"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:background="#F5F6F8"
+                android:orientation="horizontal" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/resttv01"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="휴게시간"
+                    android:textColor="#242627"
+                    android:textSize="16sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/resttv02"
+                    android:layout_toEndOf="@+id/resttv01"
+                    app:cardBackgroundColor="#F5F6F8"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:id="@+id/select_time03"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="start|center"
+                        android:paddingStart="15dp"
+                        android:hint="시간 선택"
+                        android:textColorHint="#949494"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/resttv02"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="부터"
+                    android:textColor="#949494"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/resttv03"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:layout_marginEnd="20dp"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/resttv04"
+                    android:layout_toEndOf="@+id/resttv03"
+                    app:cardBackgroundColor="#F5F6F8"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:id="@+id/select_time04"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="start|center"
+                        android:paddingStart="15dp"
+                        android:hint="시간 선택"
+                        android:textColorHint="#949494"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/resttv04"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="까지"
+                    android:textColor="#949494"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.cardview.widget.CardView
             android:id="@+id/save_workpart"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/blue"
-            android:layout_margin="20dp"
             android:layout_alignParentBottom="true"
-            app:cardCornerRadius="5dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="추가하기"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/inter_bold"/>
+            android:layout_margin="20dp"
+            app:cardBackgroundColor="@color/blue"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="0dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="추가하기"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
 </LinearLayout>

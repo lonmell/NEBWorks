@@ -288,22 +288,28 @@ public class AddMemberDetail extends AppCompatActivity {
 
     private void setDetailInfo() {
         binding.select01Box.setOnClickListener(v -> {
+            binding.select02Box.setBackgroundResource(R.drawable.default_gray_round);
             binding.select02.setBackgroundResource(R.drawable.select_empty_round);
             if (!select01TF) {
                 mem_state = "1";
-                binding.select01.setBackgroundResource(R.drawable.resize_service_on);
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
+                binding.select01.setBackgroundResource(R.drawable.select_full_round);
             } else {
                 mem_state = "0";
+                binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select01.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
         binding.select02Box.setOnClickListener(v -> {
             binding.select01.setBackgroundResource(R.drawable.select_empty_round);
+            binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
             if (!select02TF) {
                 mem_state = "2";
-                binding.select02.setBackgroundResource(R.drawable.resize_service_on);
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
+                binding.select02.setBackgroundResource(R.drawable.select_full_round);
             } else {
                 mem_state = "0";
+                binding.select02Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select02.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
@@ -382,19 +388,19 @@ public class AddMemberDetail extends AppCompatActivity {
         binding.worktime.setClickable(false);
         binding.worktime.setEnabled(false);
         binding.selectArea01.setOnClickListener(v -> {
-            mem_worktime = "오전";
+            mem_worktime = binding.select01tvtime.getText().toString();
             ChangeSelectTime(1);
         });
         binding.selectArea02.setOnClickListener(v -> {
-            mem_worktime = "주간";
+            mem_worktime = binding.select02tvtime.getText().toString();
             ChangeSelectTime(2);
         });
         binding.selectArea03.setOnClickListener(v -> {
-            mem_worktime = "야간";
+            mem_worktime = binding.select03tvtime.getText().toString();
             ChangeSelectTime(3);
         });
         binding.selectArea04.setOnClickListener(v -> {
-            mem_worktime = "주말";
+            mem_worktime = binding.select04tvtime.getText().toString();
             ChangeSelectTime(4);
         });
         binding.selectArea05.setOnClickListener(v -> {
@@ -547,18 +553,30 @@ public class AddMemberDetail extends AppCompatActivity {
         binding.select04time.setBackgroundResource(R.drawable.select_empty_round);
         binding.select05time.setBackgroundResource(R.drawable.select_empty_round);
         binding.worktime.setBackgroundResource(R.drawable.grayback_gray_round);
+
+        binding.selectArea01.setBackgroundResource(R.drawable.default_gray_round);
+        binding.selectArea02.setBackgroundResource(R.drawable.default_gray_round);
+        binding.selectArea03.setBackgroundResource(R.drawable.default_gray_round);
+        binding.selectArea04.setBackgroundResource(R.drawable.default_gray_round);
+        binding.selectArea05.setBackgroundResource(R.drawable.default_gray_round);
+
         binding.worktime.setClickable(false);
         binding.worktime.setEnabled(false);
         if(i == 1){
-            binding.select01time.setBackgroundResource(R.drawable.resize_service_on);
+            binding.selectArea01.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01time.setBackgroundResource(R.drawable.select_full_round);
         }else if(i == 2){
-            binding.select02time.setBackgroundResource(R.drawable.resize_service_on);
+            binding.selectArea02.setBackgroundResource(R.drawable.default_select_round);
+            binding.select02time.setBackgroundResource(R.drawable.select_full_round);
         }else if(i == 3){
-            binding.select03time.setBackgroundResource(R.drawable.resize_service_on);
+            binding.selectArea03.setBackgroundResource(R.drawable.default_select_round);
+            binding.select03time.setBackgroundResource(R.drawable.select_full_round);
         }else if(i == 4){
-            binding.select04time.setBackgroundResource(R.drawable.resize_service_on);
+            binding.selectArea04.setBackgroundResource(R.drawable.default_select_round);
+            binding.select04time.setBackgroundResource(R.drawable.select_full_round);
         }else if(i == 5){
-            binding.select05time.setBackgroundResource(R.drawable.resize_service_on);
+            binding.selectArea05.setBackgroundResource(R.drawable.default_select_round);
+            binding.select05time.setBackgroundResource(R.drawable.select_full_round);
             binding.worktime.setBackgroundResource(R.drawable.default_input_round);
             binding.worktime.setClickable(true);
             binding.worktime.setEnabled(true);
@@ -569,6 +587,27 @@ public class AddMemberDetail extends AppCompatActivity {
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
+        });
+
+        binding.addMemberTopBtn.setOnClickListener(v -> {
+            if(input_kind == 0){
+                if (SaveCheck() && SaveCheckOtherInfo()) {
+                    dlog.i("addMemberBtn SaveCheck" + SaveCheck());
+                    UpdateDirectMemberBasic();
+                }
+            }else{
+                if(mem_id.equals(USER_INFO_ID)){
+                    if (SaveCheck() && SaveCheckOtherInfo()) {
+                        dlog.i("addMemberBtn SaveCheck" + SaveCheck());
+                        UpdateDirectMemberBasic();
+                    }
+                }else{
+                    if(SaveCheckDetail()){
+                        AddMemberDetail();
+                    }
+                }
+
+            }
         });
 
         binding.addMemberBtn.setOnClickListener(v -> {
@@ -817,10 +856,12 @@ public class AddMemberDetail extends AppCompatActivity {
                                     dlog.i("GetDetailInfo task : " + task);
                                     if(state.equals("1")){
                                         mem_state = "1";
-                                        binding.select01.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.select01.setBackgroundResource(R.drawable.select_full_round);
+                                        binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
                                     }else if(state.equals("2")){
                                         mem_state = "2";
-                                        binding.select02.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.select02.setBackgroundResource(R.drawable.select_full_round);
+                                        binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
                                     }
 
                                     switch (jikgup){

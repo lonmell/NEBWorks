@@ -431,14 +431,6 @@ public class PageMoveClass implements MovePage {
 
     //--ui.member
     @Override
-    public void MemberGo(Context context) {
-        Intent intent = new Intent(context, MemberManagement.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-
-    @Override
     public void AuthSelect(Context context) {
         Intent intent = new Intent(context, AuthSelectActivity.class);
         context.startActivity(intent);

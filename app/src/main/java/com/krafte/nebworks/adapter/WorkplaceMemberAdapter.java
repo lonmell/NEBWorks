@@ -96,26 +96,30 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
             if(item.getState().equals("null")){
                 //대기중인 직원
                 holder.add_detail.setVisibility(View.VISIBLE);
-                holder.state.setVisibility(View.GONE);
-                holder.linear01.setVisibility(View.GONE);
-                holder.linear02.setVisibility(View.GONE);
+                holder.linear04.setVisibility(View.VISIBLE);
+
                 holder.linear03.setVisibility(View.GONE);
                 holder.contract_state.setVisibility(View.GONE);
+                holder.state.setVisibility(View.GONE);
             }else{
                 if(item.getJikgup().equals("관리자")){
                     holder.add_detail.setVisibility(View.VISIBLE);
                     holder.state.setVisibility(View.GONE);
                     holder.linear02.setVisibility(View.GONE);
                     holder.linear03.setVisibility(View.GONE);
+                    holder.linear04.setVisibility(View.GONE);
                     holder.contract_state.setVisibility(View.GONE);
                 }else{
                     if((item.getPay().equals("null") || item.getPay().isEmpty())){
-                        holder.linear02.setVisibility(View.GONE);
+                        holder.pay.setText("상세정보 입력 전");
+                        holder.pay.setTextColor(Color.parseColor("#a9a9a9"));
                     }else{
                         holder.pay.setText(item.getPay());
+                        holder.pay.setTextColor(Color.parseColor("#000000"));
                     }
                     if((item.getState().equals("null") || item.getState().isEmpty())){
-                        holder.linear03.setVisibility(View.GONE);
+                        holder.jejik.setText("상세정보 입력 전");
+                        holder.jejik.setTextColor(Color.parseColor("#a9a9a9"));
                     }else{
                         String jejikState = "";
                         if(item.getState().equals("1")){
@@ -126,6 +130,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                             jejikState = "휴직";
                         }
                         holder.jejik.setText(jejikState);
+                        holder.jejik.setTextColor(Color.parseColor("#000000"));
                     }
 
                     if(item.getWorktime().equals("오전")) {
@@ -221,7 +226,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
         TextView name,jikgup,pay,state_tv,jejik;
         CardView add_detail,state,contract_state;
         RelativeLayout list_setting;
-        LinearLayout linear01,linear02,linear03;
+        LinearLayout linear01,linear02,linear03,linear04;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -236,6 +241,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
             linear01        = itemView.findViewById(R.id.linear01);
             linear02        = itemView.findViewById(R.id.linear02);
             linear03        = itemView.findViewById(R.id.linear03);
+            linear04        = itemView.findViewById(R.id.linear04);
             jejik           = itemView.findViewById(R.id.jejik);
             contract_state  = itemView.findViewById(R.id.contract_state);
 

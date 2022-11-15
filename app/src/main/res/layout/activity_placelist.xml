@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/loginbox_round"
+    android:orientation="vertical"
+    tools:context=".bottomsheet.PlaceListBottomSheet">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentTop="true"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="start|center"
+        android:text="매장명"
+        android:textColor="#000000"
+        android:textSize="25dp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/place_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/add_place" />
+
+        <RelativeLayout
+            android:id="@+id/login_alert_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#4D000000"
+            android:clickable="false"
+            android:visibility="gone">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                app:cardBackgroundColor="#ffffff"
+                app:cardCornerRadius="120dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/loading_view"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    tools:ignore="ContentDescription" />
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/add_place2"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/ic_empty_store" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

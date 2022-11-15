@@ -151,6 +151,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             holder.list_setting.setOnClickListener(v -> {
                 shardpref.putString("place_id", item.getId());
                 shardpref.putString("place_name", item.getName());
+                shardpref.putString("place_owner_id", item.getOwner_id());
                 Intent intent = new Intent(mContext, PlaceBottomNaviActivity.class);
                 intent.putExtra("left_btn_txt", "닫기");
                 mContext.startActivity(intent);
@@ -204,6 +205,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     PlaceListData.PlaceListData_list item = mData.get(pos);
                     Log.i("WorkplaceListAdapter", "pos : " + pos);
                     shardpref.putString("place_id", item.getId());
+                    shardpref.putString("place_owner_id", item.getOwner_id());
                     if (mListener != null) {
                         mListener.onItemClick(view, pos);
                     }

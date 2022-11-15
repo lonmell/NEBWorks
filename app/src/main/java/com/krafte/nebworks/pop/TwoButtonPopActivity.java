@@ -8,9 +8,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +30,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.FeedCommentDelInterface;
 import com.krafte.nebworks.dataInterface.FeedDelInterface;
+import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.dataInterface.PlaceDelInterface;
 import com.krafte.nebworks.dataInterface.UserDelInterface;
 import com.krafte.nebworks.databinding.ActivityTwobuttonPopBinding;
@@ -64,6 +69,7 @@ public class TwoButtonPopActivity extends Activity {
     String USER_INFO_ID = "";
     String USER_LOGIN_METHOD = "";
     String place_id = "";
+    String mem_id = "";
 
     //Other
     GetResultData resultData = new GetResultData();
@@ -119,7 +125,10 @@ public class TwoButtonPopActivity extends Activity {
         store_no = shardpref.getString("store_no","0");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","");
+
         place_id = shardpref.getString("place_id", "-1");
+        mem_id = shardpref.getString("mem_id","");
+
         if (title.equals("알림")) {
             binding.txtText.setVisibility(View.INVISIBLE);
         } else {
@@ -186,6 +195,8 @@ public class TwoButtonPopActivity extends Activity {
                 android.os.Process.killProcess(android.os.Process.myPid()); // 앱 프로세스 종료
             } else if(flag.equals("매장삭제")){
                 PlaceDel(place_id);
+            } else if(flag.equals("직원삭제")){
+                TaskDel();
             }
         });
         binding.popLeftTxt.setOnClickListener(v -> {
@@ -266,7 +277,7 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("LoginCheck jsonResponse : " + response.body());
                             try {
                                 if(response.body().replace("\"","").equals("success")){
-                                    Toast.makeText(mContext,"회원 탈퇴가 완료되었습니다.",Toast.LENGTH_SHORT).show();
+                                    Toast_Nomal("회원 탈퇴가 완료되었습니다.");
                                     pm.Login(mContext);
                                 }
                             } catch (Exception e) {
@@ -377,7 +388,7 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("TaskDel jsonResponse : " + response.body());
                             try {
                                 if(response.body().replace("\"","").equals("success")){
-                                    Toast.makeText(mContext,"해당 매장이 삭제완료되었습니다.",Toast.LENGTH_SHORT).show();
+                                    Toast_Nomal("해당 매장이 삭제완료되었습니다.");
                                     ClosePop();
                                 }
                             } catch (Exception e) {
@@ -394,5 +405,58 @@ public class TwoButtonPopActivity extends Activity {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
+    }
+
+    public void TaskDel() {
+//        매장 멤버 삭제 (매장에서 나가기, 매장에서 내보내기)
+//        http://krafte.net/kogas/place/delete_member.php?place_id=28&user_id=24
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MemberOutPlaceInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MemberOutPlaceInterface api = retrofit.create(MemberOutPlaceInterface.class);
+        Call<String> call = api.getData(place_id, mem_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
+                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            try {
+                                if (response.body().replace("\"", "").equals("success")) {
+                                    Toast_Nomal("해당 직원의 데이터 삭제가 완료되었습니다.");
+                                    ClosePop();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void Toast_Nomal(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
+        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }

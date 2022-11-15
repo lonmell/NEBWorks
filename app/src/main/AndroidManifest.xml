@@ -46,13 +46,13 @@
         android:directBootAware="true"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:launchMode="singleInstance"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kogas"
         android:usesCleartextTraffic="true"
@@ -249,9 +249,6 @@
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
-            android:name=".pop.WorkMemberOptionActivity"
-            android:theme="@android:style/Theme.Dialog" />
-        <activity
             android:name=".pop.JoinPopActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity
@@ -262,12 +259,19 @@
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
-            android:name=".pop.MemberOption"
+            android:name=".bottomsheet.MemberOption"
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
             android:name=".pop.DateCoustomPickerActivity"
             android:theme="@android:style/Theme.Dialog" />
+
+        <activity
+            android:name=".pop.WorkMemberOptionActivity"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <activity
+            android:name=".pop.SelectMemberPop" />
 
     </application>
 

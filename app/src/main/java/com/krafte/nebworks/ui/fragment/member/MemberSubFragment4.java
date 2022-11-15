@@ -80,6 +80,8 @@ public class MemberSubFragment4 extends Fragment {
 
     //shared
     String place_id = "";
+    String change_place_id = "";
+    String place_owner_id = "";
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -97,6 +99,8 @@ public class MemberSubFragment4 extends Fragment {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             place_id = shardpref.getString("place_id", "0");
+            place_owner_id = shardpref.getString("place_owner_id", "0");
+            change_place_id = shardpref.getString("change_place_id", "0");
             shardpref.putInt("SELECT_POSITION", 0);
 
             setBtnEvent();
@@ -121,7 +125,7 @@ public class MemberSubFragment4 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SetAllMemberList();
+        SetAllMemberList(change_place_id.equals("0")?place_id:change_place_id);
     }
 
     private void setBtnEvent() {
@@ -129,7 +133,7 @@ public class MemberSubFragment4 extends Fragment {
     }
 
     /*직원 전체 리스트 START*/
-    public void SetAllMemberList() {
+    public void SetAllMemberList(String place_id) {
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(AllMemberInterface.URL)
@@ -160,7 +164,7 @@ public class MemberSubFragment4 extends Fragment {
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if (jsonObject.getString("state").equals("2")) {
+                                    if (!place_owner_id.equals(jsonObject.getString("id")) && jsonObject.getString("state").equals("2")) {
                                         dlog.i("i : Response.length() : " + i);
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),

@@ -113,8 +113,6 @@ public interface MovePage {
     void UserPlsceMapBack(Context context);
 
     //--ui.member
-    void MemberGo(Context context);
-
     void AuthSelect(Context context);
 
     void DirectAddMember(Context context);

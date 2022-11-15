@@ -50,6 +50,7 @@ public class WorkStatusSubFragment2 extends Fragment {
     String USER_INFO_ID = "";
     String USER_INFO_EMAIL = "";
 
+
     //Other
     ArrayList<WorkStatusTapData.WorkStatusTapData_list> mList;
     WorkTapMemberAdapter mAdapter = null;
@@ -84,7 +85,7 @@ public class WorkStatusSubFragment2 extends Fragment {
 
     //shared
     String place_id = "";
-
+    String place_owner_id = "";
     String toDay = "";
     Calendar cal;
     String format = "yyyy-MM-dd";
@@ -107,6 +108,7 @@ public class WorkStatusSubFragment2 extends Fragment {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             place_id = shardpref.getString("place_id", "0");
+            place_owner_id = shardpref.getString("place_owner_id", "0");
             shardpref.putInt("SELECT_POSITION", 0);
 
             setBtnEvent();
@@ -175,18 +177,21 @@ public class WorkStatusSubFragment2 extends Fragment {
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("place_id"),
-                                            jsonObject.getString("user_id"),
-                                            jsonObject.getString("name"),
-                                            jsonObject.getString("img_path"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("jikgup"),
-                                            jsonObject.getString("join_date"),
-                                            jsonObject.getString("io_date"),
-                                            jsonObject.getString("io_time")
-                                    ));
+                                    if(!place_owner_id.equals(jsonObject.getString("user_id"))){
+                                        mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("place_id"),
+                                                jsonObject.getString("user_id"),
+                                                jsonObject.getString("name"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("jikgup"),
+                                                jsonObject.getString("join_date"),
+                                                jsonObject.getString("yoil"),
+                                                jsonObject.getString("io_date"),
+                                                jsonObject.getString("io_time")
+                                        ));
+                                    }
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }

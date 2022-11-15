@@ -376,20 +376,14 @@ public class PlaceAddActivity extends AppCompatActivity {
                     }
 
                     if (textlength01 == 3 && before != 1) {
-
                         binding.inputbox02.setText(binding.inputbox02.getText().toString()+"-");
                         binding.inputbox02.setSelection(binding.inputbox02.getText().length());
-
                     }else if (textlength01 == 6 && before != 1){
-
                         binding.inputbox02.setText(binding.inputbox02.getText().toString()+"-");
                         binding.inputbox02.setSelection(binding.inputbox02.getText().length());
-
                     }else if(textlength01 == 10 && !binding.inputbox02.getText().toString().contains("-")){
-
                         binding.inputbox02.setText(binding.inputbox02.getText().toString().substring(0,3)+"-"+binding.inputbox02.getText().toString().substring(4,6)+"-"+binding.inputbox02.getText().toString().substring(6,10));
                         binding.inputbox02.setSelection(binding.inputbox02.getText().length());
-
                     }
                 }
             }

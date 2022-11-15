@@ -109,17 +109,18 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
                 holder.state_tv.setTextColor(Color.parseColor("#DD6540"));
                 holder.state.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
             }
+            holder.pay.setText(item.getYoil().isEmpty()?"":item.getYoil());
             holder.state_tv.setText(state);
 
 
-            holder.item_total.setOnClickListener(v -> {
-                shardpref.putString("item_user_id",item.getUser_id());
-                shardpref.putString("item_user_name", item.getName());
-                shardpref.putString("item_jikgup",item.getJikgup());
-                shardpref.putString("item_state",state);
-                shardpref.putString("item_join_date",item.getJoin_date());
-                pm.AddWorkPart(mContext);
-            });
+//            holder.item_total.setOnClickListener(v -> {
+//                shardpref.putString("item_user_id",item.getUser_id());
+//                shardpref.putString("item_user_name", item.getName());
+//                shardpref.putString("item_jikgup",item.getJikgup());
+//                shardpref.putString("item_state",state);
+//                shardpref.putString("item_join_date",item.getJoin_date());
+//                pm.AddWorkPart(mContext);
+//            });
         } catch (Exception e) {
             dlog.i("Exception : " + e);
         }

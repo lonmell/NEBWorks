@@ -9,7 +9,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -476,12 +480,13 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 } else {
                                     if (GET_ACCOUNT_EMAIL.isEmpty()) {
-                                        Toast.makeText(mContext, "통신연결이 불안정합니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
+                                        Toast_Nomal("통신연결이 불안정합니다. 다시 로그인해주세요.");
                                     } else {
                                         if (!platform.equals("NEB")) {
                                             UserCheck(GET_ACCOUNT_EMAIL);
 //                                            INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL, platform);
                                         }else{
+                                            Toast_Nomal("아이디 혹은 비밀번호를 확인하세요");
                                             shardpref.remove("USER_INFO_ID");
                                             shardpref.remove("USER_INFO_NAME");
                                             shardpref.remove("USER_INFO_EMAIL");
@@ -643,5 +648,19 @@ public class LoginActivity extends AppCompatActivity {
         mContext.startActivity(intent);
         ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }

@@ -318,6 +318,7 @@ public class MainFragment extends AppCompatActivity {
     ImageView close_btn,user_profile,my_setting;
     TextView user_name,jikgup,store_name;
     TextView select_nav01,select_nav02;
+    TextView select_nav03,select_nav04;
 
     @SuppressLint("LongLogTag")
     public void setNavBarBtnEvent() {
@@ -330,12 +331,12 @@ public class MainFragment extends AppCompatActivity {
         store_name          = findViewById(R.id.store_name);
         select_nav01        = findViewById(R.id.select_nav01);
         select_nav02        = findViewById(R.id.select_nav02);
+        select_nav03        = findViewById(R.id.select_nav03);
+        select_nav04        = findViewById(R.id.select_nav04);
 
         dlog.i("name : " + name);
         dlog.i("img_path : " + img_path);
         dlog.i("getjikgup : " + getjikgup);
-
-
 
         store_name.setText(place_name);
 
@@ -344,6 +345,9 @@ public class MainFragment extends AppCompatActivity {
         });
         select_nav02.setOnClickListener(v -> {
             pm.PlaceAddGo(mContext);
+        });
+        select_nav03.setOnClickListener(v -> {
+            pm.MemberManagement(mContext);
         });
         close_btn.setOnClickListener(v -> {
             drawerLayout.closeDrawer(drawerView);

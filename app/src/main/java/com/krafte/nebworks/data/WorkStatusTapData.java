@@ -10,12 +10,13 @@ public class WorkStatusTapData {
         String kind = "";
         String jikgup = "";
         String join_date = "";
+        String yoil = "";
         String io_date = "";
         String io_time = "";
 
 
         public WorkStatusTapData_list(String id, String place_id, String user_id, String name, String img_path, String kind
-                , String jikgup, String join_date, String io_date, String io_time) {
+                , String jikgup, String join_date, String yoil, String io_date, String io_time) {
             this.id = id;
             this.place_id = place_id;
             this.user_id = user_id;
@@ -24,6 +25,7 @@ public class WorkStatusTapData {
             this.kind = kind;
             this.jikgup = jikgup;
             this.join_date = join_date;
+            this.yoil = yoil;
             this.io_date = io_date;
             this.io_time = io_time;
         }
@@ -90,6 +92,14 @@ public class WorkStatusTapData {
 
         public void setJoin_date(String join_date) {
             this.join_date = join_date;
+        }
+
+        public String getYoil() {
+            return yoil;
+        }
+
+        public void setYoil(String yoil) {
+            this.yoil = yoil;
         }
 
         public String getIo_date() {

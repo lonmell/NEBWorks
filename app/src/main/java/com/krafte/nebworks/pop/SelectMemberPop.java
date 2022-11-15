@@ -1,29 +1,30 @@
-package com.krafte.nebworks.ui.fragment.member;
+package com.krafte.nebworks.pop;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.krafte.nebworks.adapter.WorkplaceMemberAdapter;
+import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.PlaceMemberSelectAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
-import com.krafte.nebworks.databinding.MembersubFragment1Binding;
+import com.krafte.nebworks.databinding.ActivitySelectmemberpopBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,120 +38,66 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class MemberSubFragment2 extends Fragment {
-    private MembersubFragment1Binding binding;
-    private final static String TAG = "Page1Fragment";
+public class SelectMemberPop extends Activity {
+    private ActivitySelectmemberpopBinding binding;
+    private static final String TAG = "SelectMemberPop";
     Context mContext;
-    Activity activity;
 
-    //sharedPreferences
+    // shared 저장값
     PreferenceHelper shardpref;
-    String USER_INFO_ID = "";
-    String USER_INFO_EMAIL = "";
-    String place_owner_id = "";
 
     //Other
-    ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mList;
-    WorkplaceMemberAdapter mAdapter = null;
-    RetrofitConnect rc = new RetrofitConnect();
-    GetResultData resultData = new GetResultData();
-    PageMoveClass pm = new PageMoveClass();
-    int listitemsize = 0;
     Dlog dlog = new Dlog();
-    int total_member_cnt = 0;
-
-    //    public static MemberSubFragment2 newInstance() {
-//        return new MemberSubFragment2();
-//    }
-    public static MemberSubFragment2 newInstance(int number) {
-        MemberSubFragment2 fragment = new MemberSubFragment2();
-        Bundle bundle = new Bundle();
-        bundle.putInt("number", number);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    /*Fragment 콜백함수*/
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof Activity)
-            activity = (Activity) context;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            int num = getArguments().getInt("number");
-            Log.i(TAG, "num : " + num);
-        }
-    }
-
-    //shared
+    PageMoveClass pm = new PageMoveClass();
+    GetResultData resultData = new GetResultData();
+    Handler mHandler;
     String place_id = "";
-    String change_place_id = "";
-    @SuppressLint("SetTextI18n")
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.membersub_fragment1, container, false);
-        binding = MembersubFragment1Binding.inflate(inflater);
-        mContext = inflater.getContext();
+    String place_owner_id = "";
 
-        shardpref = new PreferenceHelper(mContext);
+    ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mList;
+    PlaceMemberSelectAdapter mAdapter = null;
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 다이얼로그 화면이 투명해진다
+        getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        //타이틀바 없애기
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        setContentView(R.layout.activity_tap1option);
+        binding = ActivitySelectmemberpopBinding.inflate(getLayoutInflater()); // 1
+        setContentView(binding.getRoot()); // 2
+
+        mContext = this;
         dlog.DlogContext(mContext);
 
-        //Shared
-        try {
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            place_id = shardpref.getString("place_id", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            change_place_id = shardpref.getString("change_place_id", "0");
-            shardpref.putInt("SELECT_POSITION", 0);
-
-            setBtnEvent();
-        } catch (Exception e) {
-            dlog.i("onCreate Exception : " + e);
-        }
-
-        return binding.getRoot();
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onStart() {
-        super.onStart();
+        shardpref = new PreferenceHelper(mContext);
+        place_id = shardpref.getString("place_id","0");
+        place_owner_id = shardpref.getString("place_owner_id","0");
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onResume() {
+    public void onResume(){
         super.onResume();
-        SetAllMemberList(change_place_id.equals("0")?place_id:change_place_id);
-    }
-
-    private void setBtnEvent() {
-
+        SetAllMemberList();
     }
 
     /*직원 전체 리스트 START*/
-    public void SetAllMemberList(String place_id) {
+    int total_member_cnt = 0;
+    public void SetAllMemberList() {
         total_member_cnt = 0;
+        dlog.i("-----SetAllMemberList------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("-----SetAllMemberList------");
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(AllMemberInterface.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-            Call<String> call = api.getData(place_id, "");
+            Call<String> call = api.getData(place_id,"");
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -162,19 +109,19 @@ public class MemberSubFragment2 extends Fragment {
                             JSONArray Response = new JSONArray(response.body());
 
                             mList = new ArrayList<>();
-                            mAdapter = new WorkplaceMemberAdapter(mContext, mList, getParentFragmentManager());
+                            mAdapter = new PlaceMemberSelectAdapter(mContext, mList);
                             binding.allMemberlist.setAdapter(mAdapter);
                             binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
 
                             if (Response.length() == 0) {
+                                total_member_cnt = 0;
                                 binding.nodataArea.setVisibility(View.VISIBLE);
                                 binding.allMemberlist.setVisibility(View.GONE);
                             } else {
-                                binding.nodataArea.setVisibility(View.GONE);
-                                binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if (!place_owner_id.equals(jsonObject.getString("id")) && jsonObject.getString("state").equals("1")) {
+                                    if(!place_owner_id.equals(jsonObject.getString("id"))){
+                                        total_member_cnt ++;
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("name"),
@@ -191,7 +138,22 @@ public class MemberSubFragment2 extends Fragment {
                                         ));
                                     }
                                 }
+                                if(total_member_cnt == 0){
+                                    binding.nodataArea.setVisibility(View.VISIBLE);
+                                    binding.allMemberlist.setVisibility(View.GONE);
+                                }else{
+                                    binding.nodataArea.setVisibility(View.GONE);
+                                    binding.allMemberlist.setVisibility(View.VISIBLE);
+                                }
                                 mAdapter.notifyDataSetChanged();
+                                mAdapter.setOnItemClickListener(new PlaceMemberSelectAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View v, int position, String user_id, String user_name) {
+                                        shardpref.putString("item_user_id",user_id);
+                                        shardpref.putString("item_user_name",user_name);
+                                        closePop();
+                                    }
+                                });
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -213,4 +175,18 @@ public class MemberSubFragment2 extends Fragment {
         }
     }
     /*직원 전체 리스트 END*/
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        closePop();
+    }
+    private void closePop() {
+        finish();
+        Intent intent = new Intent();
+        intent.putExtra("result", "Close Popup");
+        setResult(RESULT_OK, intent);
+        overridePendingTransition(0, R.anim.translate_down);
+    }
+
 }

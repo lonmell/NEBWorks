@@ -86,6 +86,8 @@ public class MemberSubFragment1 extends Fragment {
 
     //shared
     String place_id = "";
+    String place_owner_id = "";
+    String change_place_id = "";
     int total_member_cnt = 0;
 
     @SuppressLint("SetTextI18n")
@@ -95,15 +97,15 @@ public class MemberSubFragment1 extends Fragment {
 //        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.membersub_fragment1, container, false);
         binding = MembersubFragment1Binding.inflate(inflater);
         mContext = inflater.getContext();
-
-        shardpref = new PreferenceHelper(mContext);
-        dlog.DlogContext(mContext);
-
         //Shared
         try {
+            shardpref = new PreferenceHelper(mContext);
+            dlog.DlogContext(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             place_id = shardpref.getString("place_id", "0");
+            place_owner_id = shardpref.getString("place_owner_id", "0");
+            change_place_id = shardpref.getString("change_place_id", "0");
             shardpref.putInt("SELECT_POSITION", 0);
 
             setBtnEvent();
@@ -128,7 +130,7 @@ public class MemberSubFragment1 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SetAllMemberList();
+        SetAllMemberList(change_place_id.equals("0")?place_id:change_place_id);
     }
 
     private void setBtnEvent() {
@@ -136,8 +138,12 @@ public class MemberSubFragment1 extends Fragment {
     }
 
     /*직원 전체 리스트 START*/
-    public void SetAllMemberList() {
+    public void SetAllMemberList(String place_id) {
         total_member_cnt = 0;
+        dlog.i("-----SetAllMemberList------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("place_owner_id : " + place_owner_id);
+        dlog.i("-----SetAllMemberList------");
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(AllMemberInterface.URL)
@@ -161,27 +167,36 @@ public class MemberSubFragment1 extends Fragment {
                             binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
 
                             if (Response.length() == 0) {
+                                total_member_cnt = 0;
                                 binding.nodataArea.setVisibility(View.VISIBLE);
                                 binding.allMemberlist.setVisibility(View.GONE);
                             } else {
-                                binding.nodataArea.setVisibility(View.GONE);
-                                binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("name"),
-                                            jsonObject.getString("phone"),
-                                            jsonObject.getString("gender"),
-                                            jsonObject.getString("img_path"),
-                                            jsonObject.getString("jumin"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("join_date"),
-                                            jsonObject.getString("state"),
-                                            jsonObject.getString("jikgup"),
-                                            jsonObject.getString("pay"),
-                                            jsonObject.getString("worktime")
-                                    ));
+                                    if(!place_owner_id.equals(jsonObject.getString("id"))){
+                                        total_member_cnt ++;
+                                        mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("name"),
+                                                jsonObject.getString("phone"),
+                                                jsonObject.getString("gender"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("jumin"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("join_date"),
+                                                jsonObject.getString("state"),
+                                                jsonObject.getString("jikgup"),
+                                                jsonObject.getString("pay"),
+                                                jsonObject.getString("worktime")
+                                        ));
+                                    }
+                                }
+                                if(total_member_cnt == 0){
+                                    binding.nodataArea.setVisibility(View.VISIBLE);
+                                    binding.allMemberlist.setVisibility(View.GONE);
+                                }else{
+                                    binding.nodataArea.setVisibility(View.GONE);
+                                    binding.allMemberlist.setVisibility(View.VISIBLE);
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }

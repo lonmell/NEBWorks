@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
@@ -24,13 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
-import com.krafte.nebworks.bottomsheet.WorkerListActivity;
 import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.WorkstatusCalendersetData;
 import com.krafte.nebworks.databinding.WorkstatusfragmentBinding;
-import com.krafte.nebworks.pop.MemberOption;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment1;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment2;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment3;
@@ -279,13 +276,7 @@ public class WorkstatusFragment extends Fragment {
                 }
             });
             binding.addWorktimeBtn.setOnClickListener(v -> {
-                Intent intent = new Intent(mContext, MemberOption.class);
-                intent.putExtra("data", "직원등록");
-                intent.putExtra("btn01", "직접등록");
-                intent.putExtra("btn02", "초대메세지 발송");
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pm.AddWorkPart(mContext);
             });
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -402,47 +393,46 @@ public class WorkstatusFragment extends Fragment {
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();
-                                mAdapter.setOnItemClickListener(new WorkStatusCalenderAdapter.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                                        dlog.i("data :" + data);
-                                        try{
-                                            user_id = new ArrayList<>();
-                                            user_name = new ArrayList<>();
-                                            img_path = new ArrayList<>();
-                                            jikgup = new ArrayList<>();
-                                            worktime = new ArrayList<>();
-                                            workyoil = new ArrayList<>();
-                                            for (int i = 0; i < mList2.size(); i++) {
-                                                if (data.equals(mList2.get(i).getDay().length() == 1?"0"+mList2.get(i).getDay():mList2.get(i).getDay())) {
-                                                    JSONArray Response = new JSONArray(mList2.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
-                                                    for (int i3 = 0; i3 < Response.length(); i3++) {
-                                                        JSONObject jsonObject = Response.getJSONObject(i3);
-                                                        user_id.add(jsonObject.getString("user_id"));
-                                                        user_name.add(jsonObject.getString("user_name"));
-                                                        img_path.add(jsonObject.getString("img_path"));
-                                                        jikgup.add(jsonObject.getString("jikgup"));
-                                                        worktime.add(jsonObject.getString("worktime"));
-                                                        workyoil.add(jsonObject.getString("workyoil"));
-                                                    }
-                                                }
-                                            }
-                                            shardpref.putString("task_date",WorkDay);
-                                            dlog.i("WorkDay :" + WorkDay);
-                                            shardpref.putString("worker_user_id", String.valueOf(user_id));
-                                            shardpref.putString("worker_user_name", String.valueOf(user_name));
-                                            shardpref.putString("worker_img_path", String.valueOf(img_path));
-                                            shardpref.putString("worker_jikgup", String.valueOf(jikgup));
-                                            shardpref.putString("worker_worktime", String.valueOf(worktime));
-                                            shardpref.putString("worker_workyoil", String.valueOf(workyoil));
-                                            WorkerListActivity wla = new WorkerListActivity();
-                                            wla.show(getParentFragmentManager(),"WorkerListActivity");
-                                        }catch (Exception e){
-                                            dlog.i("onItemClick Exception :" + e);
-                                        }
-
-                                    }
-                                });
+//                                mAdapter.setOnItemClickListener(new WorkStatusCalenderAdapter.OnItemClickListener() {
+//                                    @Override
+//                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+//                                        dlog.i("data :" + data);
+//                                        try{
+//                                            user_id = new ArrayList<>();
+//                                            user_name = new ArrayList<>();
+//                                            img_path = new ArrayList<>();
+//                                            jikgup = new ArrayList<>();
+//                                            worktime = new ArrayList<>();
+//                                            workyoil = new ArrayList<>();
+//                                            for (int i = 0; i < mList2.size(); i++) {
+//                                                if (data.equals(mList2.get(i).getDay().length() == 1?"0"+mList2.get(i).getDay():mList2.get(i).getDay())) {
+//                                                    JSONArray Response = new JSONArray(mList2.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
+//                                                    for (int i3 = 0; i3 < Response.length(); i3++) {
+//                                                        JSONObject jsonObject = Response.getJSONObject(i3);
+//                                                        user_id.add(jsonObject.getString("user_id"));
+//                                                        user_name.add(jsonObject.getString("user_name"));
+//                                                        img_path.add(jsonObject.getString("img_path"));
+//                                                        jikgup.add(jsonObject.getString("jikgup"));
+//                                                        worktime.add(jsonObject.getString("worktime"));
+//                                                        workyoil.add(jsonObject.getString("workyoil"));
+//                                                    }
+//                                                }
+//                                            }
+//                                            shardpref.putString("task_date",WorkDay);
+//                                            dlog.i("WorkDay :" + WorkDay);
+//                                            shardpref.putString("worker_user_id", String.valueOf(user_id));
+//                                            shardpref.putString("worker_user_name", String.valueOf(user_name));
+//                                            shardpref.putString("worker_img_path", String.valueOf(img_path));
+//                                            shardpref.putString("worker_jikgup", String.valueOf(jikgup));
+//                                            shardpref.putString("worker_worktime", String.valueOf(worktime));
+//                                            shardpref.putString("worker_workyoil", String.valueOf(workyoil));
+//                                            WorkerListActivity wla = new WorkerListActivity();
+//                                            wla.show(getParentFragmentManager(),"WorkerListActivity");
+//                                        }catch (Exception e){
+//                                            dlog.i("onItemClick Exception :" + e);
+//                                        }
+//                                    }
+//                                });
                             }
                         }catch (JSONException e){
                             dlog.i("JSONException :" + e);

@@ -90,21 +90,8 @@ public class MemberSubFragment3 extends Fragment {
 
     //shared
     String place_id = "";
-    String place_name = "";
+    String change_place_id = "";
     String place_owner_id = "";
-    String place_owner_name = "";
-    String place_management_office = "";
-    String place_address = "";
-    String place_latitude = "";
-    String place_longitude = "";
-    String place_start_time = "";
-    String place_end_time = "";
-    String place_img_path = "";
-    String place_start_date = "";
-    String place_created_at = "";
-
-    String NotiSearch = "";
-
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -122,6 +109,8 @@ public class MemberSubFragment3 extends Fragment {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             place_id = shardpref.getString("place_id", "0");
+            place_owner_id = shardpref.getString("place_owner_id", "0");
+            change_place_id = shardpref.getString("change_place_id", "0");
             shardpref.putInt("SELECT_POSITION", 0);
 
             setBtnEvent();
@@ -146,8 +135,7 @@ public class MemberSubFragment3 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SetAllMemberList();
-
+        SetAllMemberList(change_place_id.equals("0")?place_id:change_place_id);
     }
 
     private void setBtnEvent() {
@@ -155,7 +143,7 @@ public class MemberSubFragment3 extends Fragment {
     }
 
     /*직원 전체 리스트 START*/
-    public void SetAllMemberList() {
+    public void SetAllMemberList(String place_id) {
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(AllMemberInterface.URL)
@@ -189,21 +177,23 @@ public class MemberSubFragment3 extends Fragment {
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if (jsonObject.getString("state").equals("null") || jsonObject.getString("state").equals("0") ) {
-                                        mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-                                                jsonObject.getString("id"),
-                                                jsonObject.getString("name"),
-                                                jsonObject.getString("phone"),
-                                                jsonObject.getString("gender"),
-                                                jsonObject.getString("img_path"),
-                                                jsonObject.getString("jumin"),
-                                                jsonObject.getString("kind"),
-                                                jsonObject.getString("join_date"),
-                                                jsonObject.getString("state"),
-                                                jsonObject.getString("jikgup"),
-                                                jsonObject.getString("pay"),
-                                                jsonObject.getString("worktime")
-                                        ));
+                                    if(!place_owner_id.equals(jsonObject.getString("id"))){
+                                        if (jsonObject.getString("state").equals("null") || jsonObject.getString("state").equals("0") ) {
+                                            mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("name"),
+                                                    jsonObject.getString("phone"),
+                                                    jsonObject.getString("gender"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("jumin"),
+                                                    jsonObject.getString("kind"),
+                                                    jsonObject.getString("join_date"),
+                                                    jsonObject.getString("state"),
+                                                    jsonObject.getString("jikgup"),
+                                                    jsonObject.getString("pay"),
+                                                    jsonObject.getString("worktime")
+                                            ));
+                                        }
                                     }
                                 }
                                 mAdapter.notifyDataSetChanged();

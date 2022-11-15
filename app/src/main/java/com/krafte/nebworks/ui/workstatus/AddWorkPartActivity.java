@@ -1,12 +1,11 @@
 package com.krafte.nebworks.ui.workstatus;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +19,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.bottomsheet.SelectYoilActivity;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.dataInterface.WorkPartGetInterface;
 import com.krafte.nebworks.dataInterface.WorkPartSaveInterface;
 import com.krafte.nebworks.databinding.ActivityAddworkpartBinding;
+import com.krafte.nebworks.pop.SelectMemberPop;
 import com.krafte.nebworks.pop.WorkTimePicker;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,7 +44,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class AddWorkPartActivity extends AppCompatActivity {
-    private com.krafte.nebworks.databinding.ActivityAddworkpartBinding binding;
+    private ActivityAddworkpartBinding binding;
     Context mContext;
 
     //Other
@@ -68,13 +65,9 @@ public class AddWorkPartActivity extends AppCompatActivity {
     String USER_INFO_EMAIL = "";
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
-    String item_user_id = "";
-    String item_jikgup = "";
-    String item_state = "";
-    String item_join_date = "";
-    String item_user_name = "";
 
     String place_id = "";
+    String place_name = "";
     String setYoil = "";
     String sieob_get = "";
     String jong_eob_get = "";
@@ -106,18 +99,11 @@ public class AddWorkPartActivity extends AppCompatActivity {
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
 
             place_id = shardpref.getString("place_id","0");
-            item_user_id = shardpref.getString("item_user_id","0");
-            item_jikgup = shardpref.getString("item_jikgup","0");
-            item_state = shardpref.getString("item_state","0");
-            item_join_date = shardpref.getString("item_join_date","");
-            item_user_name = shardpref.getString("item_user_name","");
+            place_name = shardpref.getString("place_name","0");
 
+            binding.storeName.setText(place_name);
             setBtnEvent();
-            binding.name.setText(item_user_name);
-            binding.joinDate.setText(item_join_date);
-            binding.jikgup.setText(item_jikgup);
-            binding.state.setText("현재 " + item_state);
-            getPartTimeYoil("월");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,13 +113,31 @@ public class AddWorkPartActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        ChangeYoilBox(1);
     }
+
+    String item_user_id = "";
+    String item_user_name = "";
 
     @Override
     public void onResume(){
         super.onResume();
 
+        //부여할 사용자 가져오기
+        item_user_id = shardpref.getString("item_user_id","");
+        item_user_name = shardpref.getString("item_user_name","");
+        if(!item_user_id.isEmpty() && !item_user_name.isEmpty()){
+            binding.memName.setVisibility(View.VISIBLE);
+            binding.memCnt.setVisibility(View.GONE);
+            binding.memSelect.setVisibility(View.GONE);
+            binding.memName.setText(item_user_name);
+        }else{
+            binding.memName.setVisibility(View.GONE);
+            binding.memCnt.setVisibility(View.VISIBLE);
+            binding.memSelect.setVisibility(View.VISIBLE);
+        }
+        //부여할 사용자 가져오기
+
+        //시간 지정하기
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
         dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
@@ -240,36 +244,26 @@ public class AddWorkPartActivity extends AppCompatActivity {
     @Override
     public void onStop(){
         super.onStop();
-        shardpref.remove("item_user_id");
-        shardpref.remove("item_jikgup");
-        shardpref.remove("item_state");
-        shardpref.remove("item_join_date");
-        shardpref.remove("item_user_name");
     }
 
     private void setBtnEvent(){
-        binding.yoil01.setOnClickListener(v -> {
-            ChangeYoilBox(1);
+        binding.yoil.setOnClickListener(v -> {
+            SelectYoilActivity sya = new SelectYoilActivity();
+            sya.show(getSupportFragmentManager(),"SelectYoilActivity");
+            sya.setOnItemClickListener(new SelectYoilActivity.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, String category) {
+                    binding.yoilTv.setText(category);
+                    setYoil = category.replace("요일","");
+                }
+            });
         });
-        binding.yoil02.setOnClickListener(v -> {
-            ChangeYoilBox(2);
+        binding.selectMem.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, SelectMemberPop.class);
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
-        binding.yoil03.setOnClickListener(v -> {
-            ChangeYoilBox(3);
-        });
-        binding.yoil04.setOnClickListener(v -> {
-            ChangeYoilBox(4);
-        });
-        binding.yoil05.setOnClickListener(v -> {
-            ChangeYoilBox(5);
-        });
-        binding.yoil06.setOnClickListener(v -> {
-            ChangeYoilBox(6);
-        });
-        binding.yoil07.setOnClickListener(v -> {
-            ChangeYoilBox(7);
-        });
-
         binding.selectTime01.setOnClickListener(v -> {
             Intent intent = new Intent(this, WorkTimePicker.class);
             intent.putExtra("timeSelect_flag", 1);
@@ -296,7 +290,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
         });
         binding.saveWorkpart.setOnClickListener(v -> {
             if(SaveCheck()){
-                SaveWorkPartTime();
+                SaveWorkPartTime(item_user_id);
             }
         });
     }
@@ -350,6 +344,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         dlog.i("-----SaveCheck-----");
         dlog.i("yoil : " + setYoil);
         dlog.i("WorkStartTime : " + sieob_get);
@@ -374,83 +369,13 @@ public class AddWorkPartActivity extends AppCompatActivity {
 
     }
 
-    private void ChangeYoilBox(int i){
-        binding.yoil01.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-        binding.yoil01Tv.setTextColor(Color.parseColor("#696969"));
-        binding.yoil02.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-        binding.yoil02Tv.setTextColor(Color.parseColor("#696969"));
-        binding.yoil03.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-        binding.yoil03Tv.setTextColor(Color.parseColor("#696969"));
-        binding.yoil04.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-        binding.yoil04Tv.setTextColor(Color.parseColor("#696969"));
-        binding.yoil05.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-        binding.yoil05Tv.setTextColor(Color.parseColor("#696969"));
-        binding.yoil06.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-        binding.yoil06Tv.setTextColor(Color.parseColor("#696969"));
-        binding.yoil07.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-        binding.yoil07Tv.setTextColor(Color.parseColor("#696969"));
-        switch(i){
-            case 1 :
-                //월
-                setYoil = "월";
-                getPartTimeYoil(setYoil);
-                binding.yoil01.setCardBackgroundColor(Color.parseColor("#6395EC"));
-                binding.yoil01Tv.setTextColor(Color.parseColor("#ffffff"));
-                break;
-            case 2 :
-                //화
-                setYoil = "화";
-                getPartTimeYoil(setYoil);
-                binding.yoil02.setCardBackgroundColor(Color.parseColor("#6395EC"));
-                binding.yoil02Tv.setTextColor(Color.parseColor("#ffffff"));
-                break;
-            case 3 :
-                //수
-                setYoil = "수";
-                getPartTimeYoil(setYoil);
-                binding.yoil03.setCardBackgroundColor(Color.parseColor("#6395EC"));
-                binding.yoil03Tv.setTextColor(Color.parseColor("#ffffff"));
-                break;
-            case 4 :
-                //목
-                setYoil = "목";
-                getPartTimeYoil(setYoil);
-                binding.yoil04.setCardBackgroundColor(Color.parseColor("#6395EC"));
-                binding.yoil04Tv.setTextColor(Color.parseColor("#ffffff"));
-                break;
-            case 5 :
-                //금
-                setYoil = "금";
-                getPartTimeYoil(setYoil);
-                binding.yoil05.setCardBackgroundColor(Color.parseColor("#6395EC"));
-                binding.yoil05Tv.setTextColor(Color.parseColor("#ffffff"));
-                break;
-            case 6 :
-                //토
-                setYoil = "토";
-                getPartTimeYoil(setYoil);
-                binding.yoil06.setCardBackgroundColor(Color.parseColor("#6395EC"));
-                binding.yoil06Tv.setTextColor(Color.parseColor("#ffffff"));
-                break;
-            case 7 :
-                //일
-                setYoil = "일";
-                getPartTimeYoil(setYoil);
-                binding.yoil07.setCardBackgroundColor(Color.parseColor("#6395EC"));
-                binding.yoil07Tv.setTextColor(Color.parseColor("#ffffff"));
-                break;
-        }
-
-
-    }
-
-    public void SaveWorkPartTime() {
+    public void SaveWorkPartTime(String user_id) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkPartSaveInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkPartSaveInterface api = retrofit.create(WorkPartSaveInterface.class);
-        Call<String> call = api.getData(place_id,item_user_id,setYoil,total_work_time_get,sieob_get,jong_eob_get,break_time_get01,break_time_get02,diff_break_time_get);
+        Call<String> call = api.getData(place_id,user_id,setYoil,total_work_time_get,sieob_get,jong_eob_get,break_time_get01,break_time_get02,diff_break_time_get);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -464,6 +389,8 @@ public class AddWorkPartActivity extends AppCompatActivity {
                             try {
                                 if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
                                     Toast_Nomal("근무시간이 업데이트 되었습니다.");
+                                    shardpref.remove("item_user_id");
+                                    shardpref.remove("item_user_name");
 //                                    getPartTimeYoil(setYoil);
                                 }
                             } catch (Exception e) {
@@ -482,62 +409,6 @@ public class AddWorkPartActivity extends AppCompatActivity {
         });
     }
 
-
-    public void getPartTimeYoil(String yoil) {
-        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(WorkPartGetInterface.URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .build();
-            WorkPartGetInterface api = retrofit.create(WorkPartGetInterface.class);
-            Call<String> call = api.getData(place_id,item_user_id,yoil);
-
-            call.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    dlog.e("getPartTimeYoil");
-                    dlog.e("response 1: " + response.isSuccessful());
-                    dlog.e("response 2: " + response.body());
-                    if (response.isSuccessful() && response.body() != null) {
-                        Log.e("onSuccess : ", response.body());
-                        try {
-                            //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-                            dlog.i("Response : " + Response);
-                            if (!response.body().equals("[]")) {
-                                binding.selectTime01.setText(Response.getJSONObject(0).getString("sieob"));
-                                binding.selectTime02.setText(Response.getJSONObject(0).getString("jongeob"));
-                                binding.selectTime03.setText(Response.getJSONObject(0).getString("breaktime01"));
-                                binding.selectTime04.setText(Response.getJSONObject(0).getString("breaktime02"));
-                                total_work_time_get = Response.getJSONObject(0).getString("workhour");
-                                diff_break_time_get = Response.getJSONObject(0).getString("breaktime");
-                            }else{
-                                binding.selectTime01.setText("시간 선택");
-                                binding.selectTime02.setText("시간 선택");
-                                binding.selectTime03.setText("시간 선택");
-                                binding.selectTime04.setText("시간 선택");
-                                total_work_time_get = "";
-                                diff_break_time_get = "";
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    dlog.e("에러 = " + t.getMessage());
-                }
-            });
-        });
-        th.start();
-        try {
-            th.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void Toast_Nomal(String message){
         LayoutInflater inflater = getLayoutInflater();
