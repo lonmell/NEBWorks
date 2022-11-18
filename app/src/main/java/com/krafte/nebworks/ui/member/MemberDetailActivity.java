@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
-import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
+import com.krafte.nebworks.databinding.ActivityMemberdetailBinding;
 import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
 
 public class MemberDetailActivity extends AppCompatActivity {
     private static final String TAG = "MemberManagement";
-    private ActivityMemberManageBinding binding;
+    private ActivityMemberdetailBinding binding;
     Context mContext;
     private final DateCurrent dc = new DateCurrent();
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
@@ -65,7 +65,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_mainfragment);
-        binding = ActivityMemberManageBinding.inflate(getLayoutInflater()); // 1
+        binding = ActivityMemberdetailBinding.inflate(getLayoutInflater()); // 1
         setContentView(binding.getRoot()); // 2
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -102,29 +102,18 @@ public class MemberDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        if(USER_INFO_AUTH.equals("0")){
-            pm.Main(mContext);
-        }else{
-            pm.Main2(mContext);
-        }
+        pm.MemberManagement(mContext);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        GetMemberDetail();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
-
-    /*직원 전체 리스트 START*/
-    public void GetMemberDetail() {
-
-    }
-    /*직원 전체 리스트 END*/
 
 //    //-------몰입화면 설정
 //    @Override

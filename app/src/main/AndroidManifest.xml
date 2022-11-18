@@ -150,6 +150,11 @@
         <activity android:name=".ui.member.AdddirectlyMember" />
         <activity android:name=".ui.member.AddMemberDetail" />
         <activity android:name=".ui.member.InviteMemberActivity" />
+        <activity android:name=".ui.member.MemberDetailActivity" />
+
+        <!--paymanagement-->
+        <activity android:name=".ui.paymanagement.PayManagementActivity" />
+        <activity android:name=".ui.paymanagement.AddPaystubActivity" />
 
         <!-- state -->
         <activity android:name=".ui.worksite.WorkState2Activity" />

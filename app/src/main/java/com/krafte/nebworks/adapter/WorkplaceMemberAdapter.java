@@ -253,6 +253,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(pos);
+                    pm.MemberDetail(mContext);
                 }
             });
 

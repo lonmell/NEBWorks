@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,9 +21,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.MemberOption;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
+import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
@@ -31,6 +34,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RandomOut;
 import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
@@ -70,6 +74,7 @@ public class HomeFragment extends Fragment {
     String place_start_date = "";
     String place_created_at = "";
     String place_totalcnt = "";
+    int place_feed_cnt = 0;
 
     String place_pay_day = "";
     String place_test_period = "";
@@ -91,6 +96,7 @@ public class HomeFragment extends Fragment {
     DateCurrent dc = new DateCurrent();
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
+    RandomOut ro = new RandomOut();
 
     public static HomeFragment newInstance(int number) {
         HomeFragment fragment = new HomeFragment();
@@ -208,6 +214,56 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    public void SetAllMemberList() {
+        dlog.i("SetAllMemberList place_id : " + place_id);
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(AllMemberInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+            Call<String> call = api.getData(place_id,"");
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(response.body());
+                            dlog.i("SetAllMemberList response.body() length : " + response.body());
+
+                            if (Response.length() == 0) {
+                                //직원이 없을때
+                                dlog.i("SIZE 1 : " + Response.length());
+                                binding.addMemberArea.setVisibility(View.VISIBLE);
+                                binding.importantList.setVisibility(View.GONE);
+                            } else {
+                                //직원이 한명이라도 있을때
+                                dlog.i("SIZE 2 : " + Response.length());
+                                binding.addMemberArea.setVisibility(View.GONE);
+                                binding.importantList.setVisibility(View.VISIBLE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void getPlaceData() {
         dlog.i("PlaceCheck place_id : " + place_id);
         Retrofit retrofit = new Retrofit.Builder()
@@ -268,10 +324,12 @@ public class HomeFragment extends Fragment {
                                     dlog.i("place_owner_id : " + place_owner_id);
                                     dlog.i("USER_INFO_ID : " + USER_INFO_ID);
                                     dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+
                                     shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
 
                                     binding.title.setText(place_name);
                                     binding.memberCnt.setText(place_totalcnt);
+                                    newlyFeedOne();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -285,6 +343,51 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void newlyFeedOne() {
+        //i : 0 = 정렬없음 / 1 = 오름차순 / 2 = 내림차순
+        dlog.i("setRecyclerView place_id : " + place_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FeedNotiInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
+        Call<String> call = api.getData(place_id, "","2");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "WorkTapListFragment1 / setRecyclerView");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(response.body());
+
+                        dlog.i("place_feed_cnt : " + Response.length());
+
+                        if(Response.length() == 0){
+                            binding.limitNotitv.setText("별도의 공지사항이 없습니다.");
+                            binding.limitNotitv.setTextColor(Color.parseColor("#949494"));
+                        }else{
+                            String feedtv = Response.getJSONObject(0).getString("title");
+                            binding.limitNotitv.setText(feedtv);
+                            binding.limitNotitv.setTextColor(Color.parseColor("#000000"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
             }
         });
     }

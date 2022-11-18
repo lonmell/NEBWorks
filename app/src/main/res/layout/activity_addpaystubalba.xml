@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.paymanagement.AddPaystubActivity"
+    tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck,HardcodedText,RtlSymmetry">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+        <!--@+id/top_bar-->
+        <RelativeLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="59dp">
+
+            <ImageView
+                android:id="@+id/menu"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/find_right_arrow"
+                android:rotation="180" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/inter_regular"
+                android:text="급여작성"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f2f2f2"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="name"
+                    android:textColor="#000000"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/select_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="0월"
+                    android:textColor="@color/blue"
+                    android:textSize="25sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="기본급"
+                android:textColor="#949494"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/basic_pay_tv"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/grayback_gray_round"
+                android:enabled="false"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:paddingStart="15dp"
+                android:text="0"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="근무일수"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/total_work_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="0"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="근로시간"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/total_work_hour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="0"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="시급"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/minimum_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="0"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="#F5F6F8"
+                android:orientation="horizontal" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="성과급"
+                    android:textColor="#949494"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_expenses"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/default_input_round"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="숫자만입력"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:paddingStart="15dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#757575"
+                    android:textSize="16sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="초과근무"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/over_workhour_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="초과근무시간"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_overworkhour"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="초과근무시간입력"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:paddingStart="15dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#A6A6A6"
+                    android:textSize="16sp"
+                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="시간"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/default_input_round">
+
+                    <TextView
+                        android:id="@+id/select01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="   직접입력"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_empty_round" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/default_input_round">
+
+                    <TextView
+                        android:id="@+id/select02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="   시간입력"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_empty_round" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edit_overwork"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/default_input_round"
+                android:fontFamily="@font/inter_regular"
+                android:hint="초과근무 급여 입력"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:paddingStart="15dp"
+                android:textColor="#000000"
+                android:textColorHint="#757575"
+                android:textSize="16sp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="식대"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edit_meal_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/inter_regular"
+                android:hint="식대 입력"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:paddingStart="15dp"
+                android:textColor="#000000"
+                android:textColorHint="#757575"
+                android:textSize="16sp"
+                android:visibility="gone"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/default_input_round">
+
+                    <TextView
+                        android:id="@+id/select03"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="   포함"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_empty_round" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/default_input_round">
+
+                    <TextView
+                        android:id="@+id/select04"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="   미포함"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_empty_round" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="#F5F6F8"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="4대보험"
+                    android:textColor="#949494"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="11dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/default_input_round">
+
+                        <TextView
+                            android:id="@+id/select05"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:text="   공제"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:drawableStartCompat="@drawable/ic_empty_round" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/default_input_round">
+
+                        <TextView
+                            android:id="@+id/select06"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:text="   미공제"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:drawableStartCompat="@drawable/ic_empty_round" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:padding="5dp"
+                    android:text="  3.3% 소득세"
+                    android:textColor="#949494"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/gongje_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:padding="5dp"
+                    android:text="별도입력이 없는 경우 자동계산 그대로 발급됩니다"
+                    android:textColor="#949494"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/insurancetitle01"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="국민연금"
+                        android:textColor="#949494" />
+
+                    <EditText
+                        android:id="@+id/insurance_01"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_toStartOf="@+id/insurance_wontv01"
+                        android:layout_toEndOf="@+id/insurancetitle01"
+                        android:background="@drawable/grayback_gray_round"
+                        android:enabled="false"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:hint="자동계산시 "
+                        android:paddingStart="15dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#949494"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/insurance_wontv01"
+                        android:layout_width="14dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="end|center"
+                        android:text="원"
+                        android:textColor="#6A6A6A" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/insurancetitle02"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="건강보험"
+                        android:textColor="#949494" />
+
+                    <EditText
+                        android:id="@+id/insurance_02"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_toStartOf="@+id/insurance_wontv02"
+                        android:layout_toEndOf="@+id/insurancetitle02"
+                        android:background="@drawable/grayback_gray_round"
+                        android:enabled="false"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:hint="자동계산시 "
+                        android:paddingStart="15dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#949494"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/insurance_wontv02"
+                        android:layout_width="14dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="end|center"
+                        android:text="원"
+                        android:textColor="#6A6A6A" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/insurancetitle03"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="고용보험"
+                        android:textColor="#949494" />
+
+                    <EditText
+                        android:id="@+id/insurance_03"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_toStartOf="@+id/insurance_wontv03"
+                        android:layout_toEndOf="@+id/insurancetitle03"
+                        android:background="@drawable/grayback_gray_round"
+                        android:enabled="false"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:hint="자동계산시 "
+                        android:paddingStart="15dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#949494"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/insurance_wontv03"
+                        android:layout_width="14dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="end|center"
+                        android:text="원"
+                        android:textColor="#6A6A6A" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/insurancetitle04"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="장기요양"
+                        android:textColor="#949494" />
+
+                    <EditText
+                        android:id="@+id/insurance_04"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_toStartOf="@+id/insurance_wontv04"
+                        android:layout_toEndOf="@+id/insurancetitle04"
+                        android:background="@drawable/grayback_gray_round"
+                        android:enabled="false"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:hint="자동계산시 "
+                        android:paddingStart="15dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#949494"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/insurance_wontv04"
+                        android:layout_width="14dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="end|center"
+                        android:text="원"
+                        android:textColor="#6A6A6A" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/inter_regular"
+            android:text="기타"
+            android:textColor="#949494"
+            android:textSize="14sp" />
+
+
+        <EditText
+            android:id="@+id/employee_memo"
+            android:layout_width="match_parent"
+            android:layout_height="143dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/default_input_round"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="top|start"
+            android:hint="식대를 포함해 지급합니다."
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:padding="15dp"
+            android:textColor="#000000"
+            android:textColorHint="#A6A6A6"
+            android:textSize="16sp"
+            tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/inter_regular"
+            android:text="급여명세서는 직원의 카카오 알림톡으로\n발송됩니다."
+            android:textColor="#A6A6A6"
+            android:textSize="16sp"
+            tools:ignore="TextContrastCheck" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="#F5F6F8"
+            android:orientation="horizontal" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:text="총 급여"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/all_payment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:text="0"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/inter_bold"
+                android:text="원"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="69dp"
+            app:cardBackgroundColor="#8EB3FC"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
+
+            <TextView
+                android:id="@+id/send_paystub"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="급여명세서 발송"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

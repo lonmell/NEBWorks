@@ -18,8 +18,11 @@ import com.krafte.nebworks.ui.member.AddMemberDetail;
 import com.krafte.nebworks.ui.member.AdddirectlyMember;
 import com.krafte.nebworks.ui.member.AuthSelectActivity;
 import com.krafte.nebworks.ui.member.InviteMemberActivity;
+import com.krafte.nebworks.ui.member.MemberDetailActivity;
 import com.krafte.nebworks.ui.member.MemberManagement;
 import com.krafte.nebworks.ui.notify.NotifyListActivity;
+import com.krafte.nebworks.ui.paymanagement.AddPaystubActivity;
+import com.krafte.nebworks.ui.paymanagement.PayManagementActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity2;
 import com.krafte.nebworks.ui.user.DeleteUserActivity;
@@ -470,6 +473,14 @@ public class PageMoveClass implements MovePage {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    @Override
+    public void MemberDetail(Context context) {
+        Intent intent = new Intent(context, MemberDetailActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
     //.ui.workstatus
     @Override
     public void AddWorkPart(Context context) {
@@ -479,5 +490,21 @@ public class PageMoveClass implements MovePage {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    //.ui.paymanagement
+    @Override
+    public void PayManagement(Context context) {
+        Intent intent = new Intent(context, PayManagementActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void AddPaystubAlba(Context context) {
+        Intent intent = new Intent(context, AddPaystubActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 
 }

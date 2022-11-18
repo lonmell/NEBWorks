@@ -317,8 +317,6 @@ public class MainFragment extends AppCompatActivity {
     View drawerView;
     ImageView close_btn,user_profile,my_setting;
     TextView user_name,jikgup,store_name;
-    TextView select_nav01,select_nav02;
-    TextView select_nav03,select_nav04;
 
     @SuppressLint("LongLogTag")
     public void setNavBarBtnEvent() {
@@ -329,10 +327,7 @@ public class MainFragment extends AppCompatActivity {
         user_name           = findViewById(R.id.user_name);
         jikgup              = findViewById(R.id.jikgup);
         store_name          = findViewById(R.id.store_name);
-        select_nav01        = findViewById(R.id.select_nav01);
-        select_nav02        = findViewById(R.id.select_nav02);
-        select_nav03        = findViewById(R.id.select_nav03);
-        select_nav04        = findViewById(R.id.select_nav04);
+
 
         dlog.i("name : " + name);
         dlog.i("img_path : " + img_path);
@@ -340,15 +335,6 @@ public class MainFragment extends AppCompatActivity {
 
         store_name.setText(place_name);
 
-        select_nav01.setOnClickListener(v -> {
-            pm.PlaceList(mContext);
-        });
-        select_nav02.setOnClickListener(v -> {
-            pm.PlaceAddGo(mContext);
-        });
-        select_nav03.setOnClickListener(v -> {
-            pm.MemberManagement(mContext);
-        });
         close_btn.setOnClickListener(v -> {
             drawerLayout.closeDrawer(drawerView);
         });
@@ -389,7 +375,21 @@ public class MainFragment extends AppCompatActivity {
             dlog.i("더보기 Click!");
             binding.title.setText("더보기");
             binding.tabLayout.getTabAt(4).select();
+        } else if (view.getId() == R.id.select_nav01) {
+            pm.PlaceList(mContext);
+        } else if (view.getId() == R.id.select_nav02) {
+            pm.PlaceAddGo(mContext);
+        } else if (view.getId() == R.id.select_nav03) {
+            pm.MemberManagement(mContext);
+        } else if (view.getId() == R.id.select_nav04) {
+            shardpref.putInt("SELECT_POSITION",2);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.Main(mContext);
+        } else if (view.getId() == R.id.select_nav05) {
+            pm.PayManagement(mContext);
         }
+
+
     }
 
     private void ChangePosition(int i) {

@@ -35,7 +35,7 @@ public class WorkerListActivity extends BottomSheetDialogFragment {
 
     //XML ID
     RecyclerView worker_list;
-    TextView no_data_txt;
+    TextView no_data_txt,title;
 
     // shared 저장값
     PreferenceHelper shardpref;
@@ -69,7 +69,9 @@ public class WorkerListActivity extends BottomSheetDialogFragment {
 
             worker_list = view.findViewById(R.id.worker_list);
             no_data_txt = view.findViewById(R.id.no_data_txt);
-
+            title = view.findViewById(R.id.title);
+            title.setText("근무직원");
+            no_data_txt.setText("근무 배정된 직원이 없습니다.");
             user_id = new ArrayList<>();
             user_name = new ArrayList<>();
             img_path = new ArrayList<>();

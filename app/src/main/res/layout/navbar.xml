@@ -226,6 +226,7 @@
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
                                 android:text="전체 매장 목록"
+                                android:onClick="btnOnclick"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 tools:ignore="HardcodedText" />
@@ -240,6 +241,7 @@
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
                                 android:text="신규 매장 등록"
+                                android:onClick="btnOnclick"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 tools:ignore="HardcodedText" />
@@ -292,6 +294,7 @@
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
                                 android:text="전체 직원 목록"
+                                android:onClick="btnOnclick"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 tools:ignore="HardcodedText" />
@@ -306,6 +309,7 @@
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
                                 android:text="근무현황"
+                                android:onClick="btnOnclick"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 tools:ignore="HardcodedText" />
@@ -349,6 +353,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/select_nav05"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -356,12 +361,14 @@
                                 android:gravity="start|center"
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
+                                android:onClick="btnOnclick"
                                 android:text="전체 급여관리"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 tools:ignore="HardcodedText" />
 
                             <TextView
+                                android:id="@+id/select_nav06"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -369,6 +376,7 @@
                                 android:gravity="start|center"
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
+                                android:onClick="btnOnclick"
                                 android:text="급여 명세서 관리"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
@@ -413,12 +421,14 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/select_nav07"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
                                 android:fontFamily="@font/inter_regular"
                                 android:gravity="start|center"
                                 android:paddingStart="20dp"
+                                android:onClick="btnOnclick"
                                 android:paddingEnd="20dp"
                                 android:text="캘린더"
                                 android:textColor="@color/black"
@@ -426,12 +436,14 @@
                                 tools:ignore="HardcodedText" />
 
                             <TextView
+                                android:id="@+id/select_nav08"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
                                 android:fontFamily="@font/inter_regular"
                                 android:gravity="start|center"
                                 android:paddingStart="20dp"
+                                android:onClick="btnOnclick"
                                 android:paddingEnd="20dp"
                                 android:text="할일 추가하기"
                                 android:textColor="@color/black"
@@ -476,6 +488,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/select_nav09"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -483,12 +496,14 @@
                                 android:gravity="start|center"
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
+                                android:onClick="btnOnclick"
                                 android:text="전체 근로계약관리"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 tools:ignore="HardcodedText" />
 
                             <TextView
+                                android:id="@+id/select_nav10"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -496,6 +511,7 @@
                                 android:gravity="start|center"
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
+                                android:onClick="btnOnclick"
                                 android:text="근로계약 작성"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
@@ -540,6 +556,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/select_nav11"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -547,6 +564,7 @@
                                 android:gravity="start|center"
                                 android:paddingStart="20dp"
                                 android:paddingEnd="20dp"
+                                android:onClick="btnOnclick"
                                 android:text="고객센터"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
@@ -564,19 +582,23 @@
                     android:layout_marginEnd="20dp"
                     android:orientation="horizontal">
                         <TextView
+                            android:id="@+id/select_nav12"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="로그아웃"
                             android:textSize="16sp"
+                            android:onClick="btnOnclick"
                             android:fontFamily="@font/inter_bold"
                             android:layout_marginEnd="20dp"
                             android:gravity="center"
                             android:textColor="#949494"/>
                     <TextView
+                        android:id="@+id/select_nav13"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="탈퇴하기"
                         android:textSize="16sp"
+                        android:onClick="btnOnclick"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="center"
                         android:textColor="#949494"/>

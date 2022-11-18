@@ -123,6 +123,12 @@ public interface MovePage {
 
     void MemberManagement(Context context);
 
+    void MemberDetail(Context context);
+
     //.ui.workstatus
     void AddWorkPart(Context context);
+
+    void PayManagement(Context context);
+
+    void AddPaystubAlba(Context context);
 }
