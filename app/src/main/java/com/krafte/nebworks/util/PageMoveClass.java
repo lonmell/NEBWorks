@@ -23,6 +23,8 @@ import com.krafte.nebworks.ui.member.MemberManagement;
 import com.krafte.nebworks.ui.notify.NotifyListActivity;
 import com.krafte.nebworks.ui.paymanagement.AddPaystubActivity;
 import com.krafte.nebworks.ui.paymanagement.PayManagementActivity;
+import com.krafte.nebworks.ui.paymanagement.PaystuballActivity;
+import com.krafte.nebworks.ui.task.TaskActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity2;
 import com.krafte.nebworks.ui.user.DeleteUserActivity;
@@ -507,4 +509,20 @@ public class PageMoveClass implements MovePage {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    @Override
+    public void PaystubAll(Context context) {
+        Intent intent = new Intent(context, PaystuballActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    //.ui.task
+    @Override
+    public void TaskPage(Context context) {
+        Intent intent = new Intent(context, TaskActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 }

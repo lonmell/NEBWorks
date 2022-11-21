@@ -518,7 +518,7 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/member_management01_1"
+                        android:id="@+id/home_menu01"
                         android:layout_width="74dp"
                         android:layout_height="106dp"
                         android:layout_marginStart="5dp"
@@ -560,6 +560,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/home_menu02"
                         android:layout_width="74dp"
                         android:layout_height="106dp"
                         android:layout_marginStart="5dp"
@@ -601,6 +602,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/home_menu03"
                         android:layout_width="74dp"
                         android:layout_height="106dp"
                         android:layout_marginStart="5dp"
@@ -642,6 +644,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/home_menu04"
                         android:layout_width="74dp"
                         android:layout_height="106dp"
                         android:layout_marginStart="5dp"

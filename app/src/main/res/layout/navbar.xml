@@ -410,7 +410,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="90dp"
+                        android:layout_height="135dp"
                         app:cardBackgroundColor="#F5F6F8"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
@@ -446,6 +446,20 @@
                                 android:onClick="btnOnclick"
                                 android:paddingEnd="20dp"
                                 android:text="할일 추가하기"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                tools:ignore="HardcodedText" />
+                            <TextView
+                                android:id="@+id/select_nav09"
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:drawableEnd="@drawable/ic_page_move_arrow"
+                                android:fontFamily="@font/inter_regular"
+                                android:gravity="start|center"
+                                android:paddingStart="20dp"
+                                android:onClick="btnOnclick"
+                                android:paddingEnd="20dp"
+                                android:text="결재처리"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 tools:ignore="HardcodedText" />
@@ -488,7 +502,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/select_nav09"
+                                android:id="@+id/select_nav10"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -503,7 +517,7 @@
                                 tools:ignore="HardcodedText" />
 
                             <TextView
-                                android:id="@+id/select_nav10"
+                                android:id="@+id/select_nav11"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -556,7 +570,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/select_nav11"
+                                android:id="@+id/select_nav12"
                                 android:layout_width="match_parent"
                                 android:layout_height="45dp"
                                 android:drawableEnd="@drawable/ic_page_move_arrow"
@@ -582,7 +596,7 @@
                     android:layout_marginEnd="20dp"
                     android:orientation="horizontal">
                         <TextView
-                            android:id="@+id/select_nav12"
+                            android:id="@+id/select_nav13"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="로그아웃"
@@ -593,7 +607,7 @@
                             android:gravity="center"
                             android:textColor="#949494"/>
                     <TextView
-                        android:id="@+id/select_nav13"
+                        android:id="@+id/select_nav14"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="탈퇴하기"

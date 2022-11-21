@@ -209,8 +209,12 @@ public class HomeFragment extends Fragment {
             mo.show(getChildFragmentManager(),"MemberOption");
         });
 
-        binding.memberManagement011.setOnClickListener(v -> {
+        binding.homeMenu01.setOnClickListener(v -> {
                 pm.MemberManagement(mContext);
+        });
+
+        binding.homeMenu03.setOnClickListener(v -> {
+            pm.PayManagement(mContext);
         });
     }
 

@@ -7,6 +7,7 @@ public class PaymentData {
         String store_no;
         String user_id;
         String user_name;
+        String account;
         String jikgup;
         String basic_pay;
         String second_pay;
@@ -21,12 +22,13 @@ public class PaymentData {
         String total_workday;
         String payment;
 
-        public PaymentData_list(String store_no, String user_id, String user_name, String jikgup, String basic_pay, String second_pay, String overwork_pay
+        public PaymentData_list(String store_no, String user_id, String user_name, String account, String jikgup, String basic_pay, String second_pay, String overwork_pay
                 , String meal_allowance_yn, String store_insurance_yn, String gongjeynpay
                 , String total_payment, String meal_pay, String workday, String workhour, String total_workday, String payment) {
             this.store_no = store_no;
             this.user_id = user_id;
             this.user_name = user_name;
+            this.account = account;
             this.jikgup = jikgup;
             this.basic_pay = basic_pay;
             this.second_pay = second_pay;
@@ -64,6 +66,14 @@ public class PaymentData {
 
         public void setUser_name(String user_name) {
             this.user_name = user_name;
+        }
+
+        public String getAccount() {
+            return account;
+        }
+
+        public void setAccount(String account) {
+            this.account = account;
         }
 
         public String getJikgup() {

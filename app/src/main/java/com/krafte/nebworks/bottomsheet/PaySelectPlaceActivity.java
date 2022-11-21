@@ -144,6 +144,10 @@ public class PaySelectPlaceActivity extends BottomSheetDialogFragment {
                                 JSONArray Response = new JSONArray(response.body());
                                 mList = new ArrayList<>();
                                 mAdapter = new TwoItemStringAdapter(mContext, mList);
+                                mAdapter.addItem(new StringTwoData.StringTwoData_list(
+                                        "",
+                                        "전체매장"
+                                ));
                                 worker_list.setAdapter(mAdapter);
                                 worker_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                 dlog.i("SIZE : " + Response.length());
@@ -159,18 +163,15 @@ public class PaySelectPlaceActivity extends BottomSheetDialogFragment {
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("name")
                                         ));
-
                                     }
                                     mAdapter.setOnItemClickListener(new TwoItemStringAdapter.OnItemClickListener() {
                                         @Override
-                                        public void onItemClick(View v, int position) {
+                                        public void onItemClick(View v, int position, String item1, String item2) {
                                             if (mListener != null) {
                                                 try {
-                                                    String id = Response.getJSONObject(position).getString("id");
-                                                    String name = Response.getJSONObject(position).getString("name");
-                                                    mListener.onClick(v, id, name);
+                                                    mListener.onClick(v, item1, item2);
                                                     dismiss();
-                                                } catch (JSONException e) {
+                                                } catch (Exception e) {
                                                     e.printStackTrace();
                                                 }
                                             }

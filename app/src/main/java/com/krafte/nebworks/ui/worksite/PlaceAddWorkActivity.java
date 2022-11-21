@@ -3,20 +3,15 @@ package com.krafte.nebworks.ui.worksite;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.AssignmentMemberAdapter;
@@ -25,16 +20,13 @@ import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceMemberListData;
 import com.krafte.nebworks.data.YoilList;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
-import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.ScheduleAddInterface;
 import com.krafte.nebworks.dataInterface.TaskInputInterface;
 import com.krafte.nebworks.dataInterface.TaskUpdateInterface;
 import com.krafte.nebworks.dataInterface.TaskreuseInputInterface;
 import com.krafte.nebworks.dataInterface.TaskreuseUpInterface;
 import com.krafte.nebworks.databinding.ActivityPlaceaddworkBinding;
-import com.krafte.nebworks.pop.DatePickerActivity;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
-import com.krafte.nebworks.pop.WorkTimePicker;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -44,13 +36,10 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,6 +47,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+/*
+* 해당 매장의 할일 추가
+* */
 public class PlaceAddWorkActivity extends AppCompatActivity {
     private static final String TAG = "EmployerAddWorkActivity";
     Context mContext;
@@ -222,125 +214,9 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
 
             setBtnEvent();
-            SetAllMemberList();
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-            binding.inputWorkstartDay.setText(toDay);
-            dlog.i("------------------Data Check onCreate------------------");
-            dlog.i("tap_kind : " + tap_kind);
-            dlog.i("make_kind : " + make_kind);
-            dlog.i("searchDate : " + searchDate);
-            dlog.i("today : " + toDay);
-            dlog.i("------------------Data Check onCreate------------------");
-            if(make_kind == 1 || make_kind == 2){
-                binding.title.setText("할일 생성");
-            }else{
-                binding.title.setText("일정 생성");
-            }
 
-            //--searchDate값이 없을 때는 반복업무 영역 보이기, 있을때는 캘린더에서 해당 날짜에 추가
-            if (searchDate.isEmpty()) {
-                binding.firstSelect.setVisibility(View.VISIBLE);
-                binding.secondSelect.setVisibility(View.VISIBLE);
-                binding.linearLayout2.setVisibility(View.VISIBLE);
-            } else {
-                binding.firstSelect.setVisibility(View.GONE);
-                binding.secondSelect.setVisibility(View.GONE);
-                binding.linearLayout2.setVisibility(View.GONE);
-            }
-            //--처음에는 공통임무로 설정된채로 시작
-            if (task_no.equals("0")) {
-                user_id = "";
-            }
-            if (!task_no.equals("0")) {
-                getTaskContents();
-            }
 
-            TaskKind = String.valueOf(make_kind);
-            dlog.i("onCreate make_kind : " + make_kind);
-            if (make_kind == 1) {//할일 배정,공통 할일,개인일정
-                SelectKind = String.valueOf(make_kind);
-                if (task_no.equals("0")) {
-                    user_id = "";
-                }
-
-                shardpref.putInt("SELECT_POSITION", 1);
-                binding.linearLayout10.setVisibility(View.VISIBLE);
-                binding.memberListArea.setVisibility(View.VISIBLE);
-                binding.otherMemberArea.setVisibility(View.VISIBLE);
-            } else if (make_kind == 2) {//반복업무 생성
-                if (task_no.equals("0")) {
-                    user_id = "";
-                }
-                binding.linearLayout7.setVisibility(View.GONE);
-                binding.linearLayout10.setVisibility(View.GONE);
-                binding.memberListArea.setVisibility(View.GONE);
-                binding.otherMemberArea.setVisibility(View.GONE);
-                shardpref.putInt("SELECT_POSITION", 2);
-            } else if (make_kind == 4) {
-                binding.linearLayout4.setVisibility(View.GONE);
-                binding.linearLayout10.setVisibility(View.GONE);
-                binding.otherMemberArea.setVisibility(View.GONE);
-            } else {
-                binding.linearLayout10.setVisibility(View.VISIBLE);
-                binding.memberListArea.setVisibility(View.VISIBLE);
-                binding.otherMemberArea.setVisibility(View.VISIBLE);
-            }
-
-            java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
-            Calendar cal = Calendar.getInstance();
-            Calendar c1 = Calendar.getInstance();
-            Calendar c2 = Calendar.getInstance();
-            Calendar c3 = Calendar.getInstance();
-            Calendar c4 = Calendar.getInstance();
-            Calendar c5 = Calendar.getInstance();
-            Calendar c6 = Calendar.getInstance();
-            Calendar c7 = Calendar.getInstance();
-            dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-            c1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            c2.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-            c3.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-            c4.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-            c5.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-            c6.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-            c7.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-            toDayFromMon = formatter.format(c1.getTime());
-            toDayFromTue = formatter.format(c2.getTime());
-            toDayFromWed = formatter.format(c3.getTime());
-            toDayFromThu = formatter.format(c4.getTime());
-            toDayFromFri = formatter.format(c5.getTime());
-            toDayFromSat = formatter.format(c6.getTime());
-            toDayFromSun = formatter.format(c7.getTime());
-            dlog.i("toDayFromMon : " + toDayFromMon);
-            dlog.i("toDayFromTue : " + toDayFromTue);
-            dlog.i("toDayFromWed : " + toDayFromWed);
-            dlog.i("toDayFromThu : " + toDayFromThu);
-            dlog.i("toDayFromFri : " + toDayFromFri);
-            dlog.i("toDayFromSat : " + toDayFromSat);
-            dlog.i("toDayFromSun : " + toDayFromSun);
-
-            switch (dayOfWeek) {
-                case 1:
-                    toDayYoil = "월";
-                    break;
-                case 2:
-                    toDayYoil = "화";
-                    break;
-                case 3:
-                    toDayYoil = "수";
-                    break;
-                case 4:
-                    toDayYoil = "목";
-                    break;
-                case 5:
-                    toDayYoil = "금";
-                    break;
-                case 6:
-                    toDayYoil = "토";
-                    break;
-                case 7:
-                    toDayYoil = "일";
-                    break;
-            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -352,293 +228,10 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             super.onBackPressed();
         });
 
-        binding.inputWorkstartDay.setOnClickListener(v -> {
-            if (binding.inputWorkstartDay.getText().toString().length() == 0) {
-                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-                binding.inputWorkstartDay.setText(today);
-            } else {
-                shardpref.putInt("timeSelect_flag", 6);
-                Intent intent = new Intent(this, DatePickerActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
-            }
-        });
 
-        //--완료방법 라디오 버튼
-        binding.workaddTv01.setOnClickListener(view -> {
-            complete_kind = "1";
-            binding.workaddTv01.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.workaddTv01.setTextColor(Color.parseColor("#ffffff"));
-            binding.workaddTv02.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.workaddTv02.setTextColor(Color.parseColor("#696969"));
-//            workadd_radio01.setChecked(true);
-//            workadd_radio02.setChecked(false);
-        });
-        binding.workaddTv02.setOnClickListener(view -> {
-            complete_kind = "0";
-            binding.workaddTv01.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.workaddTv01.setTextColor(Color.parseColor("#696969"));
-            binding.workaddTv02.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.workaddTv02.setTextColor(Color.parseColor("#ffffff"));
-//            workadd_radio01.setChecked(false);
-//            workadd_radio02.setChecked(true);
-        });
-
-        //--반복설정
-        binding.repeatBtn01.setOnClickListener(view -> {
-            if (yoil01) {
-                setYoil[0] = "월";
-                yoil01 = false;
-                binding.repeatBtn01.setBackgroundColor(Color.parseColor("#1483FE"));
-                binding.repeatBtn01.setTextColor(Color.parseColor("#ffffff"));
-
-                yoil08 = true;
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#696969"));
-            } else {
-                setYoil[0] = null;
-                yoil01 = true;
-                binding.repeatBtn01.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn01.setTextColor(Color.parseColor("#696969"));
-            }
-            ChangeYoilDate();
-        });
-        binding.repeatBtn02.setOnClickListener(view -> {
-            if (yoil02) {
-                setYoil[1] = "화";
-                yoil02 = false;
-                binding.repeatBtn02.setBackgroundColor(Color.parseColor("#1483FE"));
-                binding.repeatBtn02.setTextColor(Color.parseColor("#ffffff"));
-
-                yoil08 = true;
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#696969"));
-            } else {
-                setYoil[1] = null;
-                yoil02 = true;
-                binding.repeatBtn02.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn02.setTextColor(Color.parseColor("#696969"));
-            }
-            ChangeYoilDate();
-        });
-        binding.repeatBtn03.setOnClickListener(view -> {
-            if (yoil03) {
-                setYoil[2] = "수";
-                yoil03 = false;
-                binding.repeatBtn03.setBackgroundColor(Color.parseColor("#1483FE"));
-                binding.repeatBtn03.setTextColor(Color.parseColor("#ffffff"));
-
-                yoil08 = true;
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#696969"));
-            } else {
-                setYoil[2] = null;
-                yoil03 = true;
-                binding.repeatBtn03.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn03.setTextColor(Color.parseColor("#696969"));
-            }
-            ChangeYoilDate();
-        });
-        binding.repeatBtn04.setOnClickListener(view -> {
-            if (yoil04) {
-                setYoil[3] = "목";
-                yoil04 = false;
-                binding.repeatBtn04.setBackgroundColor(Color.parseColor("#1483FE"));
-                binding.repeatBtn04.setTextColor(Color.parseColor("#ffffff"));
-
-                yoil08 = true;
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#696969"));
-            } else {
-                setYoil[3] = null;
-                yoil04 = true;
-                binding.repeatBtn04.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn04.setTextColor(Color.parseColor("#696969"));
-            }
-            ChangeYoilDate();
-        });
-        binding.repeatBtn05.setOnClickListener(view -> {
-            if (yoil05) {
-                setYoil[4] = "금";
-                yoil05 = false;
-                binding.repeatBtn05.setBackgroundColor(Color.parseColor("#1483FE"));
-                binding.repeatBtn05.setTextColor(Color.parseColor("#ffffff"));
-
-                yoil08 = true;
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#696969"));
-            } else {
-                setYoil[4] = null;
-                yoil05 = true;
-                binding.repeatBtn05.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn05.setTextColor(Color.parseColor("#696969"));
-            }
-            ChangeYoilDate();
-        });
-        binding.repeatBtn06.setOnClickListener(view -> {
-            if (yoil06) {
-                setYoil[5] = "토";
-                yoil06 = false;
-                binding.repeatBtn06.setBackgroundColor(Color.parseColor("#1483FE"));
-                binding.repeatBtn06.setTextColor(Color.parseColor("#ffffff"));
-
-                yoil08 = true;
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#696969"));
-            } else {
-                setYoil[5] = null;
-                yoil06 = true;
-                binding.repeatBtn06.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn06.setTextColor(Color.parseColor("#696969"));
-            }
-            ChangeYoilDate();
-        });
-        binding.repeatBtn07.setOnClickListener(view -> {
-            if (yoil07) {
-                setYoil[6] = "일";
-                yoil07 = false;
-                binding.repeatBtn07.setBackgroundColor(Color.parseColor("#1483FE"));
-                binding.repeatBtn07.setTextColor(Color.parseColor("#ffffff"));
-
-                yoil08 = true;
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#696969"));
-            } else {
-                setYoil[6] = null;
-                yoil07 = true;
-                binding.repeatBtn07.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn07.setTextColor(Color.parseColor("#696969"));
-            }
-            ChangeYoilDate();
-        });
-
-        binding.repeatBtn08.setOnClickListener(view -> {
-            getYoil.clear();
-
-            binding.repeatBtn01.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.repeatBtn01.setTextColor(Color.parseColor("#696969"));
-            binding.repeatBtn02.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.repeatBtn02.setTextColor(Color.parseColor("#696969"));
-            binding.repeatBtn03.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.repeatBtn03.setTextColor(Color.parseColor("#696969"));
-            binding.repeatBtn04.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.repeatBtn04.setTextColor(Color.parseColor("#696969"));
-            binding.repeatBtn05.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.repeatBtn05.setTextColor(Color.parseColor("#696969"));
-            binding.repeatBtn06.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.repeatBtn06.setTextColor(Color.parseColor("#696969"));
-            binding.repeatBtn07.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.repeatBtn07.setTextColor(Color.parseColor("#696969"));
-            if (yoil08) {
-                yoil01 = true;
-                yoil02 = true;
-                yoil03 = true;
-                yoil04 = true;
-                yoil05 = true;
-                yoil06 = true;
-                yoil07 = true;
-                yoil08 = false;
-                setYoil[0] = "월";
-                setYoil[1] = "화";
-                setYoil[2] = "수";
-                setYoil[3] = "목";
-                setYoil[4] = "금";
-                setYoil[5] = "토";
-                setYoil[6] = "일";
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#1483FE"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#ffffff"));
-            } else {
-                yoil01 = false;
-                yoil02 = false;
-                yoil03 = false;
-                yoil04 = false;
-                yoil05 = false;
-                yoil06 = false;
-                yoil07 = false;
-                yoil08 = true;
-                setYoil[0] = null;
-                setYoil[1] = null;
-                setYoil[2] = null;
-                setYoil[3] = null;
-                setYoil[4] = null;
-                setYoil[5] = null;
-                setYoil[6] = null;
-                binding.repeatBtn08.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.repeatBtn08.setTextColor(Color.parseColor("#696969"));
-            }
-            ChangeYoilDate();
-        });
-        //--반복설정
-
-
-        binding.inputEmployeeStarttime.setOnClickListener(view -> {
-            Intent intent = new Intent(this, WorkTimePicker.class);
-            intent.putExtra("timeSelect_flag", 4);
-            startActivity(intent);
-            overridePendingTransition(R.anim.translate_up, 0);
-        });
-        binding.inputEmployeeTime.setOnClickListener(view -> {
-            Intent intent = new Intent(this, WorkTimePicker.class);
-            intent.putExtra("timeSelect_flag", 5);
-            startActivity(intent);
-            overridePendingTransition(R.anim.translate_up, 0);
-        });
-
-        binding.workSave.setOnClickListener(view -> {
-            if (mListener != null) {
-                mListener.onClick();
-                dlog.i("binding.workSave click");
-            }
-
-            if (make_kind == 0 || make_kind == 1 || make_kind == 4) {//할일 배정,공통 할일,공개일정
-                if (SaveCheck()) {
-                    SaveAddWork();
-                }
-            } else if (make_kind == 2) {//반복업무 생성
-                if (SaveCheck2()) {
-                    SaveAddWork2();
-                }
-            }
-
-        });
-        binding.cancel.setOnClickListener(v -> {
-            //데이터 전달하기
-            //액티비티(팝업) 닫기
-            finish();
-            Intent intent = new Intent();
-            intent.putExtra("result", "Close Popup");
-            setResult(RESULT_OK, intent);
-            overridePendingTransition(0, R.anim.translate_down);
-        });
 
     }
 
-    private void ChangeYoilDate() {
-        getYoil.clear();
-        for (String str : setYoil) {
-            if (str != null) {
-                getYoil.add(str);
-            }
-        }
-        dlog.i("getYoil : " + getYoil.get(0));
-        if (!getYoil.get(0).equals(toDayYoil)) {
-            if (getYoil.get(0).equals("월")) {
-                binding.inputWorkstartDay.setText(toDayFromMon);
-            } else if (getYoil.get(0).equals("화")) {
-                binding.inputWorkstartDay.setText(toDayFromTue);
-            } else if (getYoil.get(0).equals("수")) {
-                binding.inputWorkstartDay.setText(toDayFromWed);
-            } else if (getYoil.get(0).equals("목")) {
-                binding.inputWorkstartDay.setText(toDayFromThu);
-            } else if (getYoil.get(0).equals("금")) {
-                binding.inputWorkstartDay.setText(toDayFromFri);
-            } else if (getYoil.get(0).equals("토")) {
-                binding.inputWorkstartDay.setText(toDayFromSat);
-            } else if (getYoil.get(0).equals("일")) {
-                binding.inputWorkstartDay.setText(toDayFromSun);
-            }
-        }
-    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -662,187 +255,10 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
         dlog.i("timeSelect_flag : " + timeSelect_flag);
         dlog.i("------------------Data Check onResume------------------");
 
-        final String GetTime = (String.valueOf(hourOfDay).length() == 1 ? "0" + hourOfDay : String.valueOf(hourOfDay))
-                + ":" +
-                (String.valueOf(minute).length() == 1 ? "0" + minute : String.valueOf(minute));
-        if (timeSelect_flag == 4) {
-//            start_time = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-            start_time = GetTime;
-            shardpref.remove("timeSelect_flag");
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
-            binding.inputEmployeeStarttime.setText(GetTime);
-            binding.inputWorktitle.clearFocus();
-            binding.inputWorkcontents.clearFocus();
-        } else if (timeSelect_flag == 5) {
-//            end_time = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-            end_time = GetTime;
-            shardpref.remove("timeSelect_flag");
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
-            binding.inputEmployeeTime.setText(GetTime);
-            binding.inputWorktitle.clearFocus();
-            binding.inputWorkcontents.clearFocus();
-        } else if (timeSelect_flag == 6) {
-            //-- DatePickerActivity에서 받아오는 값
-            String getDatePicker = shardpref.getString("vDateGetDate", "");
-            binding.inputWorkstartDay.setText(getDatePicker);
-            binding.inputWorktitle.clearFocus();
-            binding.inputWorkcontents.clearFocus();
-            shardpref.remove("vDateGetDate");
-            shardpref.remove("timeSelect_flag");
-        }
-
 
     }
 
-    public void SetAllMemberList() {
-        total_member_cnt = 0;
 
-        dlog.i("SetAllMemberList place_id : " + place_id);
-        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(AllMemberInterface.URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .build();
-            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-            Call<String> call = api.getData(place_id,"");
-            call.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        try {
-                            //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-                            dlog.i("SetAllMemberList response.body() length : " + response.body());
-                            if (Response.length() == 0) {
-                                binding.noMember.setVisibility(View.VISIBLE);
-                                binding.recyclerView2.setVisibility(View.INVISIBLE);
-                                binding.recyclerView2.setVisibility(View.GONE);
-                            } else {
-                                binding.noMember.setVisibility(View.INVISIBLE);
-                                binding.recyclerView2.setVisibility(View.VISIBLE);
-                                total_member_cnt = Response.length();
-                                mList = new ArrayList<>();
-                                mAdapter = new AssignmentMemberAdapter(mContext, mList);
-                                binding.recyclerView2.setHasFixedSize(true);
-                                binding.recyclerView2.setAdapter(mAdapter);
-                                binding.recyclerView2.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-                                RecyclerView.ItemAnimator animator = binding.recyclerView2.getItemAnimator();
-                                if (animator instanceof SimpleItemAnimator) {
-                                    ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
-                                }
-                                for (int i = 0; i < Response.length(); i++) {
-                                    JSONObject jsonObject = Response.getJSONObject(i);
-                                    //정직원만
-                                    if(jsonObject.getString("kind").equals("0")){
-                                        a++;
-                                        inmember.add(jsonObject.getString("id"));
-                                        mAdapter.addItem(new PlaceMemberListData.PlaceMemberListData_list(
-                                                jsonObject.getString("id"),
-                                                jsonObject.getString("name"),
-                                                jsonObject.getString("phone"),
-                                                jsonObject.getString("gender"),
-                                                jsonObject.getString("img_path"),
-                                                jsonObject.getString("jumin"),
-                                                jsonObject.getString("join_date"),
-                                                jsonObject.getString("state"),
-                                                jsonObject.getString("jikgup"),
-                                                jsonObject.getString("pay")
-                                        ));
-                                    }
-
-                                }
-                                mAdapter.notifyDataSetChanged();
-                                mAdapter.setOnItemClickListener((v, position, memberArray) -> {
-                                    try {
-                                        dlog.i("Select Member id :" + Response.getJSONObject(position).getString("id"));
-                                        user_id = Response.getJSONObject(position).getString("id");
-                                        EmployeeSelect = 1;
-//                                        dlog.i("memberArray :" + memberArray);
-//                                        Ac_memberArray = memberArray.stream().distinct().collect(Collectors.toList());
-                                        Ac_memberArray = memberArray.stream().distinct().collect(Collectors.toList());
-                                        dlog.i("Ac_memberArray :" + Ac_memberArray);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                });
-
-                                binding.recyclerView3.setVisibility(View.VISIBLE);
-                                mList2 = new ArrayList<>();
-                                mAdapter2 = new AssignmentMemberAdapter2(mContext, mList2);
-                                binding.recyclerView3.setHasFixedSize(true);
-                                binding.recyclerView3.setAdapter(mAdapter2);
-                                binding.recyclerView3.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-                                RecyclerView.ItemAnimator animator2 = binding.recyclerView3.getItemAnimator();
-                                if (animator2 instanceof SimpleItemAnimator) {
-                                    ((SimpleItemAnimator) animator2).setSupportsChangeAnimations(false);
-                                }
-                                for (int i = 0; i < Response.length(); i++) {
-                                    JSONObject jsonObject = Response.getJSONObject(i);
-                                    //외부협력업체 직원
-                                    if(jsonObject.getString("kind").equals("1")){
-                                        b++;
-                                        othermember.add(jsonObject.getString("id"));
-                                        mAdapter2.addItem(new PlaceMemberListData.PlaceMemberListData_list(
-                                                jsonObject.getString("id"),
-                                                jsonObject.getString("name"),
-                                                jsonObject.getString("phone"),
-                                                jsonObject.getString("gender"),
-                                                jsonObject.getString("img_path"),
-                                                jsonObject.getString("jumin"),
-                                                jsonObject.getString("join_date"),
-                                                jsonObject.getString("state"),
-                                                jsonObject.getString("jikgup"),
-                                                jsonObject.getString("pay")
-                                        ));
-                                    }
-
-                                }
-                                mAdapter2.notifyDataSetChanged();
-                                mAdapter2.setOnItemClickListener((v, position, memberArray) -> {
-                                    try {
-                                        dlog.i("Select Member id :" + Response.getJSONObject(position).getString("id"));
-                                        user_id = Response.getJSONObject(position).getString("id");
-                                        EmployeeSelect = 1;
-                                        Ac_memberArray2 = memberArray.stream().distinct().collect(Collectors.toList());
-                                        dlog.i("Ac_memberArray2 :" + Ac_memberArray2);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                });
-                                inmember.addAll(othermember);
-                                dlog.i("총 직원 배열 : " + inmember);
-                                dlog.i("정직원 수 : " + a + "/ 협력업체 직원 수 : " + b);
-                                if(a == 0){
-                                    binding.linearLayout10.setVisibility(View.GONE);
-                                    binding.memberListArea.setVisibility(View.GONE);
-                                }
-                                if(b == 0){
-                                    binding.otherMemberArea.setVisibility(View.GONE);
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    dlog.e("에러 = " + t.getMessage());
-                }
-            });
-        });
-        th.start();
-        try {
-            th.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void getTaskContents() {
 
@@ -882,87 +298,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
         binding.inputWorktitle.setText(WorkTitle);
         binding.inputWorkcontents.setText(WorkContents);
 
-        if (TaskKind.equals("1")) {
-            complete_kind = "1";
-            binding.workaddTv01.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.workaddTv01.setTextColor(Color.parseColor("#ffffff"));
-            binding.workaddTv02.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.workaddTv02.setTextColor(Color.parseColor("#696969"));
-        } else {
-            complete_kind = "0";
-            binding.workaddTv01.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.workaddTv01.setTextColor(Color.parseColor("#696969"));
-            binding.workaddTv02.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.workaddTv02.setTextColor(Color.parseColor("#ffffff"));
-        }
-
-        binding.inputWorkstartDay.setText(WorkDay);
-        if (!start_time.isEmpty()) {
-            String ampm = "";
-            if (Integer.parseInt(start_time.substring(0, 2)) <= 12) {
-                ampm = " AM";
-                SelectEndTime = 1;
-            } else {
-                ampm = " PM";
-                SelectEndTime = 2;
-            }
-            binding.inputEmployeeStarttime.setText(start_time + " " + ampm);
-        }
-        if (!end_time.isEmpty()) {
-            String ampm = "";
-            if (Integer.parseInt(end_time.substring(0, 2)) <= 12) {
-                ampm = " AM";
-                SelectEndTime = 1;
-            } else {
-                ampm = " PM";
-                SelectEndTime = 2;
-            }
-            binding.inputEmployeeTime.setText(end_time + " " + ampm);
-        }
-
-
-        if (!Mon.equals("0")) {
-            yoil01 = false;
-            setYoil[0] = "월";
-            binding.repeatBtn01.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.repeatBtn01.setTextColor(Color.parseColor("#ffffff"));
-        }
-        if (!Tue.equals("0")) {
-            yoil02 = false;
-            setYoil[1] = "화";
-            binding.repeatBtn02.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.repeatBtn02.setTextColor(Color.parseColor("#ffffff"));
-        }
-        if (!Wed.equals("0")) {
-            yoil03 = false;
-            setYoil[2] = "수";
-            binding.repeatBtn03.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.repeatBtn03.setTextColor(Color.parseColor("#ffffff"));
-        }
-        if (!Thu.equals("0")) {
-            yoil04 = false;
-            setYoil[3] = "목";
-            binding.repeatBtn04.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.repeatBtn04.setTextColor(Color.parseColor("#ffffff"));
-        }
-        if (!Fri.equals("0")) {
-            yoil05 = false;
-            setYoil[4] = "금";
-            binding.repeatBtn05.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.repeatBtn05.setTextColor(Color.parseColor("#ffffff"));
-        }
-        if (!Sat.equals("0")) {
-            yoil06 = false;
-            setYoil[5] = "토";
-            binding.repeatBtn06.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.repeatBtn06.setTextColor(Color.parseColor("#ffffff"));
-        }
-        if (!Sun.equals("0")) {
-            yoil07 = false;
-            setYoil[6] = "일";
-            binding.repeatBtn07.setBackgroundColor(Color.parseColor("#1483FE"));
-            binding.repeatBtn07.setTextColor(Color.parseColor("#ffffff"));
-        }
     }
 
 
@@ -1403,7 +738,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     private boolean SaveCheck() {
         WorkContents = binding.inputWorkcontents.getText().toString();
         WorkTitle = binding.inputWorktitle.getText().toString();
-        WorkDay = binding.inputWorkstartDay.getText().toString();
 
         TaskKind = String.valueOf(make_kind);
         String users = shardpref.getString("users", "0");
@@ -1496,7 +830,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     private boolean SaveCheck2() {
         WorkContents = binding.inputWorkcontents.getText().toString();
         WorkTitle = binding.inputWorktitle.getText().toString();
-        WorkDay = binding.inputWorkstartDay.getText().toString();
         TaskKind = String.valueOf(make_kind);
 
 

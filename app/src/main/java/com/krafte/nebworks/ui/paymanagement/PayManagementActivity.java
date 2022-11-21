@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.paymanagement;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
@@ -49,7 +50,7 @@ public class PayManagementActivity extends AppCompatActivity {
     private ActivityPaymanagementBinding binding;
     Context mContext;
 
-    ArrayList<PaymentData.PaymentData_list> mList;
+    ArrayList<PaymentData.PaymentData_list> mList = new ArrayList<>();
     PaymentMemberAdapter mAdapter = null;
     RetrofitConnect rc = new RetrofitConnect();
     PageMoveClass pm = new PageMoveClass();
@@ -79,8 +80,7 @@ public class PayManagementActivity extends AppCompatActivity {
     Drawable icon_off;
     Drawable icon_on;
     int paging_position = 0;
-    String return_page = "";
-
+    String Tap = "0";
     ApprovalFragment1 af1 = new ApprovalFragment1();
     int total_member_cnt = 0;
 
@@ -112,26 +112,58 @@ public class PayManagementActivity extends AppCompatActivity {
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-            return_page = shardpref.getString("return_page", "");
+            Tap = shardpref.getString("Tap", "0");
 
+            binding.backBtn.setOnClickListener(v -> {
+                shardpref.putInt("SELECT_POSITION", 0);
+                shardpref.putInt("SELECT_POSITION_sub", 0);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.Main(mContext);
+                }else{
+                    pm.Main2(mContext);
+                }
+            });
+            if(Tap.equals("0")){
+                binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
+            }else{
+                binding.line01.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
+            }
             binding.select01.setOnClickListener(v -> {
-                binding.line01.setBackgroundColor(R.color.blue);
-                binding.line02.setBackgroundColor(R.color.white);
+                binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
+                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), "0");
             });
             binding.select02.setOnClickListener(v -> {
-                binding.line01.setBackgroundColor(R.color.white);
-                binding.line02.setBackgroundColor(R.color.blue);
+                binding.line01.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
+                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), "1");
             });
             binding.changePlace.setOnClickListener(v -> {
                 PaySelectPlaceActivity psp = new PaySelectPlaceActivity();
                 psp.show(getSupportFragmentManager(), "PaySelectPlaceActivity");
                 psp.setOnClickListener(new PaySelectPlaceActivity.OnClickListener() {
                     @Override
-                    public void onClick(View v, String place_id, String place_name) {
-                        change_place_id = place_id;
-                        change_place_name = place_name;
-                        binding.changePlaceTv.setText(place_name);
-                        shardpref.putString("change_place_id", place_id);
+                    public void onClick(View v, String getplace_id, String getplace_name) {
+                        change_place_id = getplace_id;
+                        change_place_name = getplace_name;
+                        dlog.i("change_place_id : " + getplace_id);
+                        dlog.i("change_place_name : " + getplace_name);
+                        if(getplace_name.equals("전체매장")){
+                            binding.changePlaceTv.setText("전체매장");
+                            change_place_id = "";
+                            change_place_name = "";
+                            shardpref.putString("change_place_id", place_id);
+                            shardpref.putString("change_place_name", "");
+                        }else{
+                            binding.changePlaceTv.setText(getplace_name);
+                            shardpref.putString("change_place_id", getplace_id);
+                            shardpref.putString("change_place_name", getplace_name);
+                        }
+                        dlog.i("change_place_id : " + change_place_id);
+                        dlog.i("change_place_name : " + change_place_name);
+                        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
                     }
                 });
             });
@@ -144,7 +176,18 @@ public class PayManagementActivity extends AppCompatActivity {
                     public void onClick(View v, String user_id, String user_name) {
                         change_member_id = user_id;
                         change_member_name = user_name;
-                        binding.changeMemberTv.setText(user_name);
+                        if(user_name.equals("전체직원")){
+                            binding.changeMemberTv.setText("전체직원");
+                            change_place_id = "";
+                            change_place_name = "";
+                        }else{
+                            binding.changeMemberTv.setText(user_name);
+                        }
+                        dlog.i("change_member_id : " + user_id);
+                        dlog.i("change_member_name : " + user_name);
+                        shardpref.putString("change_member_id", user_id);
+                        shardpref.putString("change_member_name", user_name);
+                        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
                     }
                 });
             });
@@ -179,7 +222,7 @@ public class PayManagementActivity extends AppCompatActivity {
         Year = toDay.substring(0, 4);
         Month = toDay.substring(5, 7);
         binding.setdate.setText(Year + "-" + Month);
-        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString());
+        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
 
         binding.prevDate.setOnClickListener(v -> {
             cal.add(Calendar.DATE, -1);
@@ -196,7 +239,7 @@ public class PayManagementActivity extends AppCompatActivity {
                 bYear = gYear;
                 bMonth = gMonth;
             }
-            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString());
+            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
         });
         binding.nextDate.setOnClickListener(v -> {
             cal.add(Calendar.DATE, +1);
@@ -212,7 +255,7 @@ public class PayManagementActivity extends AppCompatActivity {
                 bYear = gYear;
                 bMonth = gMonth;
             }
-            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString());
+            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
         });
 
         Calendar c = Calendar.getInstance();
@@ -230,7 +273,7 @@ public class PayManagementActivity extends AppCompatActivity {
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 binding.setdate.setText(year + "-" + Month);
                 getYMPicker = binding.setdate.getText().toString().substring(0, 7);
-                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString());
+                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
             }
         }, mYear, mMonth, mDay);
 
@@ -256,24 +299,37 @@ public class PayManagementActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, shardpref.getString("FtoDay", ""));
-        GetInsurancePercent();
+        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id,  binding.setdate.getText().toString(), Tap);
+    }
+    @Override
+    public void onStop(){
+        super.onStop();
+        shardpref.remove("Tap");
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("Tap");
+    }
     // 직원 급여 명세서 리스트
-    public void WritePaymentList(String place_id, String SelectId, String GET_DATE) {
+    public void WritePaymentList(String place_id, String SelectId, String GET_DATE,String tap) {
+        GetInsurancePercent();
         dlog.i("------------PaymentFragment2 List------------");
         dlog.i("place_id : " + place_id);
         dlog.i("GET_DATE : " + GET_DATE);
         dlog.i("SelectId : " + SelectId);
+        dlog.i("tap : " + tap);
         dlog.i("------------PaymentFragment2 List------------");
-        rc.paymentData_lists.clear();
+        mList.clear();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(paymanaInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         paymanaInterface api = retrofit.create(paymanaInterface.class);
         Call<String> call = api.getData("1", place_id, GET_DATE, SelectId, "", "", "", "", "", "", "", "", "", "");
+        String url = "http://krafte.net/NEBWorks/pay/paymanager.php?flag=1&place_id="+place_id+"&GET_DATE="+GET_DATE+"&user_id="+SelectId+"&basic_pay=&second_pay=&overwork_hour=&overwork_pay=&meal_allowance_yn=&meal_pay=&store_insurance_yn=&other_memo=&all_payment=&selectym=";
+        dlog.i("url : " + url);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -288,7 +344,7 @@ public class PayManagementActivity extends AppCompatActivity {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
                         mList = new ArrayList<>();
-                        mAdapter = new PaymentMemberAdapter(mContext, mList, GET_DATE, insurance01p, insurance02p, insurance03p, insurance04p, "1");
+                        mAdapter = new PaymentMemberAdapter(mContext, mList, GET_DATE, insurance01p, insurance02p, insurance03p, insurance04p, tap);
                         binding.allMemberlist.setAdapter(mAdapter);
                         binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
 
@@ -303,6 +359,7 @@ public class PayManagementActivity extends AppCompatActivity {
                                         jsonObject.getString("place_id"),
                                         jsonObject.getString("user_id"),
                                         jsonObject.getString("user_name"),
+                                        jsonObject.getString("account"),
                                         jsonObject.getString("jikgup"),
                                         jsonObject.getString("basic_pay"),
                                         jsonObject.getString("second_pay"),
@@ -321,14 +378,13 @@ public class PayManagementActivity extends AppCompatActivity {
                             mAdapter.notifyDataSetChanged();
                             mAdapter.setOnItemClickListener((v, position) -> {
                                 try {
-
                                     shardpref.putString("select_month", binding.setdate.getText().toString().trim());
                                     shardpref.putString("select_user_id", Response.getJSONObject(position).getString("user_id"));
                                     shardpref.putString("select_place_id", Response.getJSONObject(position).getString("place_id"));
                                     shardpref.putString("select_user_name", Response.getJSONObject(position).getString("user_name"));
                                     shardpref.putString("select_total_payment", Response.getJSONObject(position).getString("total_pay"));
                                     shardpref.putString("select_workday", Response.getJSONObject(position).getString("workday"));
-                                    shardpref.putString("select_total_workhour", Response.getJSONObject(position).getString("total_workday"));
+                                    shardpref.putString("select_total_workhour", Response.getJSONObject(position).getString("workhour"));
                                     shardpref.putString("select_payment", Response.getJSONObject(position).getString("payment"));
                                     shardpref.putString("select_GET_DATE", GET_DATE);
 
@@ -410,11 +466,6 @@ public class PayManagementActivity extends AppCompatActivity {
                 Log.e(TAG, "에러2 = " + t.getMessage());
             }
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
 }

@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -15,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
+import com.krafte.nebworks.databinding.ActivityPaystuballBinding;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -35,15 +35,10 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PaystuballActivity extends AppCompatActivity {
     private static final String TAG = "PaystuballActivity";
+    private ActivityPaystuballBinding binding;
     Context mContext;
 
     private final DateCurrent dc = new DateCurrent();
-
-    //XML ID
-    TextView store_name;
-    TextView jigup_pay,input_date,jigup_total;
-    TextView paydata01,paydata02,paydata03,paydata04,paydata05,paydata06,paydata07,paydata08,paydata09,paydata10,paydata11,paydata12;
-    TextView gongje_total;
 
     // shared 저장값
     PreferenceHelper shardpref;
@@ -53,7 +48,7 @@ public class PaystuballActivity extends AppCompatActivity {
     String store_no;
 
     String stub_store_name = "";
-    String stub_store_no = "";
+    String stub_place_id = "";
     String stub_user_id = "";
     String stub_user_name = "";
     String stub_jikgup = "";
@@ -69,6 +64,7 @@ public class PaystuballActivity extends AppCompatActivity {
     String stub_payment = "";
     String stub_selectdate = "";
     String stub_meal_pay = "";
+    String select_month = "";
 
     float insurance01p = 0;//국민연금 퍼센트
     float insurance02p = 0;//건강보험 퍼센트
@@ -112,7 +108,10 @@ public class PaystuballActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_paystuball);
+//        setContentView(R.layout.activity_paystuball);
+        binding = ActivityPaystuballBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -130,8 +129,9 @@ public class PaystuballActivity extends AppCompatActivity {
         store_no = shardpref.getString("store_no", "");
 
         //-------------------
+        select_month = shardpref.getString("select_month","");
         stub_store_name = shardpref.getString("store_name","");
-        stub_store_no = shardpref.getString("stub_store_no","0");
+        stub_place_id = shardpref.getString("stub_place_id","0");
         stub_user_id = shardpref.getString("stub_user_id","0");
         stub_user_name = shardpref.getString("stub_user_name","0");
         stub_jikgup = shardpref.getString("stub_jikgup","0");
@@ -148,45 +148,15 @@ public class PaystuballActivity extends AppCompatActivity {
         stub_selectdate = shardpref.getString("stub_selectdate","0000.00");
         stub_meal_pay = shardpref.getString("stub_meal_pay","0");
 
-        setContentsLayout();
-        setBtnEvent();
-
+        binding.selectMonth.setText(select_month + "월");
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        DataCheck();
         GetInsurancePercent();
     }
-
-    private void setContentsLayout() {
-        store_name = findViewById(R.id.store_name);
-        jigup_pay = findViewById(R.id.jigup_pay);
-        input_date = findViewById(R.id.input_date);
-        jigup_total = findViewById(R.id.jigup_total);
-        paydata01 = findViewById(R.id.paydata01);
-        paydata02 = findViewById(R.id.paydata02);
-        paydata03 = findViewById(R.id.paydata03);
-        paydata04 = findViewById(R.id.paydata04);
-        paydata05 = findViewById(R.id.paydata05);
-        paydata06 = findViewById(R.id.paydata06);
-        paydata07 = findViewById(R.id.paydata07);
-        paydata08 = findViewById(R.id.paydata08);
-        paydata09 = findViewById(R.id.paydata09);
-        paydata10 = findViewById(R.id.paydata10);
-        paydata11 = findViewById(R.id.paydata11);
-        paydata12 = findViewById(R.id.paydata12);
-        gongje_total = findViewById(R.id.gongje_total);
-    }
-
-    private void setBtnEvent() {
-//        menu.setOnClickListener(v -> {
-//            pm.PayManager(mContext);
-//        });
-
-
-    }
-
 
     private void DataCheck(){
         dlog.i("----------------AddPaystubActivityAlba DataCheck----------------");
@@ -207,7 +177,6 @@ public class PaystuballActivity extends AppCompatActivity {
         dlog.i("insurance_02(건강보험) : " + AllPayment * (insurance02p/100));
         dlog.i("insurance_03(고용보험) : " + AllPayment * (insurance03p/100));
         dlog.i("insurance_04(장기요양보험) : " + AllPayment * (insurance04p/100));
-
         dlog.i("----------------AddPaystubActivityAlba DataCheck----------------");
         getFCMToken();
         getEmployeroken(stub_user_id);
@@ -327,21 +296,12 @@ public class PaystuballActivity extends AppCompatActivity {
                             String total_payment = myFormatter.format(Integer.parseInt(stub_total_payment));
                             String gongjeynpay = myFormatter.format(Integer.parseInt(stub_gongjeynpay));
 
-                            store_name.setText(stub_store_name);
-                            jigup_pay.setText(gongjeynpay);
-                            input_date.setText(stub_selectdate);
-                            jigup_total.setText(GetJigupPay_tv);
-                            paydata01.setText(BasicPay);
+                            binding.name.setText(stub_user_name);
+                            binding.paydata01.setText(BasicPay + "원");
 
-                            if(stub_jikgup.equals("알바")){
-                                paydata02.setText("0원");
-                                paydata04.setText(SecondPay);
-                            }else{
-                                paydata02.setText(SecondPay);
-                                paydata04.setText("0원");
-                            }
-                            paydata03.setText(MealPay);
-                            paydata05.setText(OverWorkPay);
+                            binding.paydata02.setText(SecondPay + "원");
+                            binding.paydata03.setText(MealPay + "원");
+                            binding.paydata05.setText(OverWorkPay + "원");
 
                             AllPayment = Integer.parseInt(stub_total_payment) + Integer.parseInt(stub_second_pay) + Integer.parseInt(stub_overwork_pay) + Integer.parseInt(stub_meal_pay);
                             insurance1 = myFormatter.format(Math.round((AllPayment * insurance01p)/100));
@@ -368,14 +328,13 @@ public class PaystuballActivity extends AppCompatActivity {
                             dlog.i("---------공제내역---------");
 
 
-                            gongje_total.setText(String.valueOf(myFormatter.format(GetAllGongJe)));
-                            paydata06.setText(insurance1);
-                            paydata07.setText(insurance2);
-                            paydata08.setText(insurance3);
-                            paydata09.setText(insurance4);
-                            paydata10.setText(stub_workday + "일");
-                            paydata11.setText(stub_total_workhour + "시간");
-                            paydata12.setText(myFormatter.format(Integer.parseInt(stub_gongjeynpay)) + " 원");
+                            binding.paydata06.setText(insurance1 + "원");
+                            binding.paydata07.setText(insurance2 + "원");
+                            binding.paydata08.setText(insurance3 + "원");
+                            binding.paydata09.setText(insurance4 + "원");
+                            binding.paydata10.setText(stub_workday + "일");
+                            binding.paydata11.setText(stub_total_workhour + "시간");
+                            binding.paydata12.setText(myFormatter.format(Integer.parseInt(stub_gongjeynpay)) + " 원");
 
                         } catch (JSONException e) {
                             e.printStackTrace();

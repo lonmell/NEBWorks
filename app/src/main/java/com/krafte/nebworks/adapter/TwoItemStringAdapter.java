@@ -36,7 +36,7 @@ public class TwoItemStringAdapter extends RecyclerView.Adapter<TwoItemStringAdap
     Dlog dlog = new Dlog();
 
     public interface OnItemClickListener {
-        void onItemClick(View v, int position);
+        void onItemClick(View v, int position, String item1, String item2);
     }
 
     private TwoItemStringAdapter.OnItemClickListener mListener = null;
@@ -100,8 +100,12 @@ public class TwoItemStringAdapter extends RecyclerView.Adapter<TwoItemStringAdap
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
+                    StringTwoData.StringTwoData_list item = mData.get(pos);
                     if (mListener != null) {
-                        mListener.onItemClick(view,pos);
+                        dlog.i("pos : " + pos);
+                        dlog.i("getItem : " + item.getItem());
+                        dlog.i("getItem2 : " + item.getItem2());
+                        mListener.onItemClick(view,pos,item.getItem(),item.getItem2());
                     }
                 }
             });

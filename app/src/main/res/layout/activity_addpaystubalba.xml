@@ -36,6 +36,7 @@
                 android:text="급여작성"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -237,46 +238,6 @@
                     android:textColor="#000000"
                     android:textSize="16sp" />
 
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/over_workhour_area"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
-                    android:text="초과근무시간"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/edit_overworkhour"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
-                    android:hint="초과근무시간입력"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:paddingStart="15dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#A6A6A6"
-                    android:textSize="16sp"
-                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
-                    android:text="시간"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -289,6 +250,7 @@
                 android:weightSum="2">
 
                 <RelativeLayout
+                    android:id="@+id/select01_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
@@ -312,6 +274,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/select02_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
@@ -332,10 +295,46 @@
                         android:textSize="16sp"
                         app:drawableStartCompat="@drawable/ic_empty_round" />
                 </RelativeLayout>
-
-
             </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/over_workhour_area"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                android:background="@drawable/default_input_round"
+                android:visibility="gone">
 
+                <EditText
+                    android:id="@+id/edit_overworkhour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:background="@color/white"
+                    android:hint="숫자만 입력"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:paddingStart="15dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#A6A6A6"
+                    android:layout_toStartOf="@+id/input_overhour_tv"
+                    android:layout_alignParentStart="true"
+                    android:textSize="16sp"
+                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+                <TextView
+                    android:id="@+id/input_overhour_tv"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_regular"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center"
+                    android:text="시간"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </RelativeLayout>
             <EditText
                 android:id="@+id/edit_overwork"
                 android:layout_width="match_parent"
@@ -352,6 +351,7 @@
                 android:textColor="#000000"
                 android:textColorHint="#757575"
                 android:textSize="16sp"
+                android:visibility="gone"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
@@ -365,22 +365,6 @@
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/edit_meal_pay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_regular"
-                android:hint="식대 입력"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:paddingStart="15dp"
-                android:textColor="#000000"
-                android:textColorHint="#757575"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:ignore="TouchTargetSizeCheck" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -391,6 +375,7 @@
                 android:weightSum="2">
 
                 <RelativeLayout
+                    android:id="@+id/select03_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
@@ -413,6 +398,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/select04_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
@@ -434,7 +420,24 @@
                         app:drawableStartCompat="@drawable/ic_empty_round" />
                 </RelativeLayout>
             </LinearLayout>
-
+            <EditText
+                android:id="@+id/edit_meal_pay"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/inter_regular"
+                android:background="@drawable/default_input_round"
+                android:hint="식대 입력"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:paddingStart="15dp"
+                android:textColor="#000000"
+                android:textColorHint="#757575"
+                android:textSize="16sp"
+                android:visibility="gone"
+                tools:ignore="TouchTargetSizeCheck" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
@@ -467,6 +470,7 @@
                     android:orientation="horizontal">
 
                     <RelativeLayout
+                        android:id="@+id/select05_box"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="10dp"

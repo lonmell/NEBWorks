@@ -60,6 +60,7 @@
                 android:orientation="vertical"
                 android:weightSum="2">
                     <TextView
+                        android:id="@+id/selecttv01"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -69,6 +70,7 @@
                         android:fontFamily="@font/inter_bold"
                         android:textColor="@color/black"/>
                 <TextView
+                    android:id="@+id/selecttv01_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -104,6 +106,7 @@
             android:orientation="vertical"
             android:weightSum="2">
             <TextView
+                android:id="@+id/selecttv02"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -113,6 +116,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:textColor="@color/black"/>
             <TextView
+                android:id="@+id/selecttv02_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

@@ -120,14 +120,15 @@ public class AddPaystubActivity extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
 
-        icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
-        icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+        icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_empty_round);
+        icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_full_round);
 
         shardpref = new PreferenceHelper(mContext);
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         //-------------------
+
         select_month = shardpref.getString("select_month","");
         select_user_id = shardpref.getString("select_user_id","");
         select_place_id = shardpref.getString("select_place_id","");
@@ -145,18 +146,36 @@ public class AddPaystubActivity extends AppCompatActivity {
 
         binding.name.setText(select_user_name);
         binding.selectMonth.setText(select_month.substring(5,7) + "월");
-        binding.basicPayTv.setText(select_total_payment);
         binding.totalWorkDay.setText(select_workday);
         binding.totalWorkHour.setText(select_total_workhour);
-        binding.minimumPay.setText(select_payment);
+        binding.minimumPay.setText("9,160");
 
         DecimalFormat myFormatter = new DecimalFormat("###,###");
-        String pay = myFormatter.format(Integer.parseInt(select_total_payment));
+        String basic_paytv = myFormatter.format(Integer.parseInt(select_total_payment));
+        binding.basicPayTv.setText(basic_paytv);
+//        String pay = myFormatter.format(Integer.parseInt(select_total_payment));
+
+        AllPayment = Integer.parseInt(select_total_payment);
+        insurance1 = myFormatter.format(Math.round((AllPayment * insurance01p)/100));
+        insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
+        insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
+        insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+        binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
+        binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
+        binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
+        binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
+
+        AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
+                + Integer.parseInt(insurance2.replace(",",""))
+                + Integer.parseInt(insurance3.replace(",",""))
+                + Integer.parseInt(insurance4.replace(",","")));
+
+        String pay = myFormatter.format(AllPayment);
+        binding.allPayment.setText(pay);
 
         binding.editExpenses.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -174,16 +193,16 @@ public class AddPaystubActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(s.toString()) && !s.toString().equals("")){
                     AllPayment = Integer.parseInt(select_total_payment) + Integer.parseInt(get_edit_expenses.replace(",","").equals("")?"0":get_edit_expenses.replace(",",""))
                             + Integer.parseInt(get_edit_overwork.replace(",","").equals("")?"0":get_edit_overwork.replace(",",""));
-
+                    dlog.i("AllPayment : " + AllPayment);
 
                     insurance1 = myFormatter.format(Math.round((AllPayment * insurance01p)/100));
                     insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
                     insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
                     insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
-                    binding.insurance01.setText(insurance1);//국민연금
-                    binding.insurance02.setText(insurance2);//건강보험
-                    binding.insurance03.setText(insurance3);//고용보험
-                    binding.insurance04.setText(insurance4);//장기요양보험료
+                    binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
+                    binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
+                    binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
+                    binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
 
                     DecimalFormat myFormatter = new DecimalFormat("###,###");
                     AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
@@ -194,13 +213,58 @@ public class AddPaystubActivity extends AppCompatActivity {
                     String pay = myFormatter.format(AllPayment);
                     binding.allPayment.setText(pay);
                 }
-
             }
         });
-        binding.editOverwork.addTextChangedListener(new TextWatcher() {
+
+        binding.editOverworkhour.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!TextUtils.isEmpty(s.toString())) {
+                    get_edit_overworkhour = binding.editOverworkhour.getText().toString();
+                    DecimalFormat myFormatter = new DecimalFormat("###,###");
+                    String overwork = binding.editOverworkhour.getText().toString().isEmpty() ? "0" : binding.editOverworkhour.getText().toString();
+                    String pay = myFormatter.format(Integer.parseInt(overwork) * (9160 * 1.5));
+                    get_edit_overwork = pay;
+                    binding.editOverwork.setText(get_edit_overwork);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!TextUtils.isEmpty(s.toString()) && !s.toString().equals("")){
+                    AllPayment = Integer.parseInt(select_total_payment) + Integer.parseInt(get_edit_expenses.replace(",","").equals("")?"0":get_edit_expenses.replace(",",""))
+                            + Integer.parseInt(get_edit_overwork.replace(",","").equals("")?"0":get_edit_overwork.replace(",",""));
+
+
+                    insurance1 = myFormatter.format(Math.round((AllPayment * insurance01p)/100));
+                    insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
+                    insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
+                    insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+                    binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
+                    binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
+                    binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
+                    binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
+
+                    DecimalFormat myFormatter = new DecimalFormat("###,###");
+                    AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
+                            + Integer.parseInt(insurance2.replace(",",""))
+                            + Integer.parseInt(insurance3.replace(",",""))
+                            + Integer.parseInt(insurance4.replace(",","")));
+
+                    String pay = myFormatter.format(AllPayment);
+                    binding.allPayment.setText(pay);
+                }
+            }
+        });
+
+        binding.editOverwork.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
@@ -224,10 +288,10 @@ public class AddPaystubActivity extends AppCompatActivity {
                     insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
                     insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
                     insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
-                    binding.insurance01.setText(insurance1);//국민연금
-                    binding.insurance02.setText(insurance2);//건강보험
-                    binding.insurance03.setText(insurance3);//고용보험
-                    binding.insurance04.setText(insurance4);//장기요양보험료
+                    binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
+                    binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
+                    binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
+                    binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
 
                     DecimalFormat myFormatter = new DecimalFormat("###,###");
                     AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
@@ -240,49 +304,7 @@ public class AddPaystubActivity extends AppCompatActivity {
                 }
             }
         });
-        binding.editOverworkhour.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                get_edit_overworkhour = binding.editOverworkhour.getText().toString();
-                DecimalFormat myFormatter = new DecimalFormat("###,###");
-                String overwork = binding.editOverworkhour.getText().toString();
-                String pay = myFormatter.format((long) Integer.parseInt(overwork.equals("")?"0":overwork.replace(",","")) * (9160 * 1.5));
-                binding.editOverworkhour.setText(pay);
-                get_edit_overwork = pay;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(!TextUtils.isEmpty(s.toString()) && !s.toString().equals("")){
-                    AllPayment = Integer.parseInt(select_total_payment) + Integer.parseInt(get_edit_expenses.replace(",","").equals("")?"0":get_edit_expenses.replace(",",""))
-                            + Integer.parseInt(get_edit_overwork.replace(",","").equals("")?"0":get_edit_overwork.replace(",",""));
-
-
-                    insurance1 = myFormatter.format(Math.round((AllPayment * insurance01p)/100));
-                    insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
-                    insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
-                    insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
-                    binding.insurance01.setText(insurance1);//국민연금
-                    binding.insurance02.setText(insurance2);//건강보험
-                    binding.insurance03.setText(insurance3);//고용보험
-                    binding.insurance04.setText(insurance4);//장기요양보험료
-
-                    DecimalFormat myFormatter = new DecimalFormat("###,###");
-                    AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
-                            + Integer.parseInt(insurance2.replace(",",""))
-                            + Integer.parseInt(insurance3.replace(",",""))
-                            + Integer.parseInt(insurance4.replace(",","")));
-
-                    String pay = myFormatter.format(AllPayment);
-                    binding.allPayment.setText(pay);
-                }
-            }
-        });
         binding.employeeMemo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -329,10 +351,10 @@ public class AddPaystubActivity extends AppCompatActivity {
                     insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
                     insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
                     insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
-                    binding.insurance01.setText(insurance1);//국민연금
-                    binding.insurance02.setText(insurance2);//건강보험
-                    binding.insurance03.setText(insurance3);//고용보험
-                    binding.insurance04.setText(insurance4);//장기요양보험료
+                    binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
+                    binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
+                    binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
+                    binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
 
                     AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                             + Integer.parseInt(insurance2.replace(",",""))
@@ -364,6 +386,7 @@ public class AddPaystubActivity extends AppCompatActivity {
             binding.editOverworkhour.setEnabled(false);
             binding.editOverwork.setText("0");
             binding.overWorkhourArea.setVisibility(View.GONE);
+            binding.editOverwork.setVisibility(View.VISIBLE);
             binding.select01.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             binding.select02.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
         });
@@ -375,6 +398,7 @@ public class AddPaystubActivity extends AppCompatActivity {
             binding.editOverworkhour.setEnabled(true);
             binding.editOverwork.setText("0");
             binding.overWorkhourArea.setVisibility(View.VISIBLE);
+            binding.editOverwork.setVisibility(View.VISIBLE);
             binding.select01.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
             binding.select02.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
         });
@@ -382,23 +406,23 @@ public class AddPaystubActivity extends AppCompatActivity {
         //식대 true - 포함 / false - 미포함
         binding.select03.setOnClickListener(v -> {
             select0304 = "포함";
-            binding.editMealPay.setVisibility(View.GONE);
+            binding.editMealPay.setVisibility(View.VISIBLE);
             binding.select03.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             binding.select04.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
-            get_edit_mealpay = "0";
-            binding.editMealPay.setText("0");
+
             AllPayment = Integer.parseInt(select_total_payment) + Integer.parseInt(get_edit_expenses.replace(",","").equals("")?"0":get_edit_expenses.replace(",",""))
-                    + Integer.parseInt(get_edit_overwork.replace(",","").equals("")?"0":get_edit_overwork.replace(",",""));
+                    + Integer.parseInt(get_edit_overwork.replace(",","").equals("")?"0":get_edit_overwork.replace(",",""))
+                    + Integer.parseInt(get_edit_mealpay.replace(",","").equals("")?"0":get_edit_mealpay.replace(",",""));
 
             DecimalFormat myFormatter = new DecimalFormat("###,###");
             insurance1 = myFormatter.format(Math.round((AllPayment * insurance01p)/100));
             insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
             insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
             insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
-            binding.insurance01.setText(insurance1);//국민연금
-            binding.insurance02.setText(insurance2);//건강보험
-            binding.insurance03.setText(insurance3);//고용보험
-            binding.insurance04.setText(insurance4);//장기요양보험료
+            binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
+            binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
+            binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
+            binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
 
             AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                     + Integer.parseInt(insurance2.replace(",",""))
@@ -410,7 +434,9 @@ public class AddPaystubActivity extends AppCompatActivity {
         });
         binding.select04.setOnClickListener(v -> {
             select0304 = "미포함";
-            binding.editMealPay.setVisibility(View.VISIBLE);
+            binding.editMealPay.setText("0");
+            get_edit_mealpay = "0";
+            binding.editMealPay.setVisibility(View.GONE);
             binding.select03.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
             binding.select04.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             AllPayment = AllPayment + Integer.parseInt(get_edit_mealpay);
@@ -628,7 +654,26 @@ public class AddPaystubActivity extends AppCompatActivity {
                             insurance03p = Float.parseFloat(Response.getJSONObject(0).getString("insurance03"));//고용보험 퍼센트
                             insurance04p = Float.parseFloat(Response.getJSONObject(0).getString("insurance04"));//장기요양보험료 퍼센트
 
+                            DecimalFormat myFormatter = new DecimalFormat("###,###");
+//        String pay = myFormatter.format(Integer.parseInt(select_total_payment));
 
+                            AllPayment = Integer.parseInt(select_total_payment);
+                            insurance1 = myFormatter.format(Math.round((AllPayment * insurance01p)/100));
+                            insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
+                            insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
+                            insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+                            binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
+                            binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
+                            binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
+                            binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
+
+                            AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
+                                    + Integer.parseInt(insurance2.replace(",",""))
+                                    + Integer.parseInt(insurance3.replace(",",""))
+                                    + Integer.parseInt(insurance4.replace(",","")));
+
+                            String pay = myFormatter.format(AllPayment);
+                            binding.allPayment.setText(pay);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

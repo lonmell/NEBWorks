@@ -8,7 +8,7 @@
     android:background="#00ff0000"
     android:orientation="vertical"
     android:theme="@style/Theme.Kogas"
-    tools:context=".ui.career.CareerActivity"
+    tools:context=".ui.member.MemberDetailActivity"
     tools:ignore="HardcodedText,UsingOnClickInXml">
 
     <LinearLayout
@@ -230,7 +230,7 @@
                                                             android:layout_weight="1"
                                                             android:fontFamily="@font/inter_bold"
                                                             android:gravity="center|bottom"
-                                                            android:text="10"
+                                                            android:text="0"
                                                             android:textColor="@color/black" />
 
                                                         <TextView
@@ -240,7 +240,7 @@
                                                             android:layout_weight="1"
                                                             android:fontFamily="@font/inter_bold"
                                                             android:gravity="center|bottom"
-                                                            android:text="1"
+                                                            android:text="0"
                                                             android:textColor="@color/red" />
 
                                                         <LinearLayout
@@ -255,7 +255,7 @@
                                                             android:layout_weight="1"
                                                             android:fontFamily="@font/inter_bold"
                                                             android:gravity="center|bottom"
-                                                            android:text="2"
+                                                            android:text="0"
                                                             android:textColor="#dbdbdb" />
 
                                                         <TextView
@@ -265,7 +265,7 @@
                                                             android:layout_weight="1"
                                                             android:fontFamily="@font/inter_bold"
                                                             android:gravity="center|bottom"
-                                                            android:text="1"
+                                                            android:text="0"
                                                             android:textColor="#dbdbdb" />
                                                     </LinearLayout>
                                                 </LinearLayout>
@@ -276,7 +276,6 @@
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="8dp"
-                                            android:layout_marginTop="25dp"
                                             android:background="#F5F6F8" />
 
                                         <RelativeLayout
@@ -352,10 +351,31 @@
                                             </androidx.cardview.widget.CardView>
                                         </RelativeLayout>
 
-                                        <androidx.recyclerview.widget.RecyclerView
-                                            android:id="@+id/inout_list"
+                                        <RelativeLayout
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent" />
+                                            android:layout_height="match_parent">
+
+                                            <androidx.recyclerview.widget.RecyclerView
+                                                android:id="@+id/inout_list"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent" />
+
+                                            <TextView
+                                                android:id="@+id/no_data_txt"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignStart="@+id/inout_list"
+                                                android:layout_alignTop="@+id/inout_list"
+                                                android:layout_alignEnd="@+id/inout_list"
+                                                android:layout_alignBottom="@+id/inout_list"
+                                                android:background="#ffffff"
+                                                android:gravity="center"
+                                                android:text="출퇴근 데이터가 없습니다."
+                                                android:textColor="#696969"
+                                                android:textSize="16sp"
+                                                android:visibility="gone"/>
+                                        </RelativeLayout>
+
                                     </LinearLayout>
                                 </androidx.core.widget.NestedScrollView>
 
@@ -454,16 +474,15 @@
 
                                 <TextView
                                     android:id="@+id/name"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
-                                    android:layout_gravity="center"
                                     android:layout_toStartOf="@+id/work_state_area"
                                     android:fontFamily="@font/inter_bold"
-                                    android:gravity="center"
-                                    android:text=""
+                                    android:gravity="start|center"
+                                    android:text="name"
                                     android:textColor="#000000"
-                                    android:textSize="25sp"
+                                    android:textSize="20sp"
                                     android:textStyle="bold"
                                     tools:ignore="HardcodedText" />
 
@@ -475,28 +494,26 @@
                                     android:layout_below="@+id/name"
                                     android:layout_alignStart="@+id/name"
                                     android:layout_alignEnd="@+id/name"
-                                    android:layout_gravity="center"
-                                    android:fontFamily="@font/inter_bold"
-                                    android:gravity="center"
-                                    android:text=""
+                                    android:fontFamily="@font/inter_regular"
+                                    android:gravity="start|center"
+                                    android:text="store_name"
                                     android:textColor="@color/black"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textStyle="bold"
                                     tools:ignore="HardcodedText" />
 
                                 <TextView
                                     android:id="@+id/join_datetv"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_alignStart="@+id/name"
                                     android:layout_alignEnd="@+id/name"
                                     android:layout_alignParentBottom="true"
-                                    android:layout_gravity="center"
-                                    android:fontFamily="@font/inter_bold"
-                                    android:gravity="center"
-                                    android:text=""
+                                    android:fontFamily="@font/inter_regular"
+                                    android:gravity="start|center"
+                                    android:text="0000.00.00"
                                     android:textColor="@color/black"
-                                    android:textSize="16sp"
+                                    android:textSize="13sp"
                                     android:textStyle="bold"
                                     tools:ignore="HardcodedText" />
 
@@ -679,6 +696,7 @@
                                                 android:textSize="15sp" />
 
                                             <TextView
+                                                android:id="@+id/user_phone"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_weight="1"

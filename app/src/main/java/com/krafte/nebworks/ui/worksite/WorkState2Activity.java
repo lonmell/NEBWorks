@@ -49,7 +49,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class WorkState2Activity extends AppCompatActivity {
-
     private final static String TAG = "EmployerWorkGotoList";
     Context mContext;
 

@@ -147,6 +147,10 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
                                 worker_list.setVisibility(View.VISIBLE);
                                 mList = new ArrayList<>();
                                 mAdapter = new TwoItemStringAdapter(mContext, mList);
+                                mAdapter.addItem(new StringTwoData.StringTwoData_list(
+                                        "",
+                                        "전체직원"
+                                ));
                                 worker_list.setHasFixedSize(true);
                                 worker_list.setAdapter(mAdapter);
                                 worker_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
@@ -157,7 +161,7 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     //정직원만
-                                    if(jsonObject.getString("kind").equals("0")){
+                                    if (!jsonObject.getString("kind").equals("0")) {
                                         mAdapter.addItem(new StringTwoData.StringTwoData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("name")
@@ -167,14 +171,12 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.setOnItemClickListener(new TwoItemStringAdapter.OnItemClickListener() {
                                     @Override
-                                    public void onItemClick(View v, int position) {
+                                    public void onItemClick(View v, int position, String item1, String item2) {
                                         if (mListener != null) {
                                             try {
-                                                String id = Response.getJSONObject(position).getString("id");
-                                                String name = Response.getJSONObject(position).getString("name");
-                                                mListener.onClick(v, id, name);
+                                                mListener.onClick(v, item1, item2);
                                                 dismiss();
-                                            } catch (JSONException e) {
+                                            } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
                                         }

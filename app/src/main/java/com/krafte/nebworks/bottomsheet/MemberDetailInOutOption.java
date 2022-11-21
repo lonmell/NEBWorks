@@ -1,4 +1,4 @@
-package com.krafte.nebworks.pop;
+package com.krafte.nebworks.bottomsheet;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,14 +14,12 @@ import androidx.annotation.RequiresApi;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.databinding.ActivityPlacelistOptionBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
-/*
- * 2022-10-07 방창배 작성
- * */
-public class PlaceNotiOptionActivity extends Activity {
+public class MemberDetailInOutOption extends Activity {
     private ActivityPlacelistOptionBinding binding;
     private static final String TAG = "PlaceNotiOptionActivity";
     Context mContext;
@@ -56,21 +54,12 @@ public class PlaceNotiOptionActivity extends Activity {
         storenoti_no = shardpref.getString("storenoti_no","0");
 
 
-        binding.storeEdit.setText("공지 수정");
+        binding.storeEdit.setText("수정");
         binding.storeEdit.setOnClickListener(v -> {
-//            Intent intent = new Intent(mContext, StoreNotiEditActivity.class);
-//            intent.putExtra("no", shardpref.getString("storenoti_no",""));
-//            intent.putExtra("title", shardpref.getString("storenoti_title",""));
-//            intent.putExtra("contents", shardpref.getString("storenoti_contents",""));
-//            intent.putExtra("imgpath", shardpref.getString("storenoti_imgpath",""));
-//            intent.putExtra("open_date", shardpref.getString("storenoti_open_date",""));
-//            intent.putExtra("close_date", shardpref.getString("storenoti_close_date",""));
-//            mContext.startActivity(intent);
-//            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         });
 
-        binding.storeDelete.setText("공지 삭제");
+        binding.storeDelete.setText("삭제");
         binding.storeDelete.setOnClickListener(v -> {
             finish();
             Intent intent = new Intent(this, TwoButtonPopActivity.class);

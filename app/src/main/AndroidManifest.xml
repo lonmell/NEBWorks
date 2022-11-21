@@ -155,7 +155,10 @@
         <!--paymanagement-->
         <activity android:name=".ui.paymanagement.PayManagementActivity" />
         <activity android:name=".ui.paymanagement.AddPaystubActivity" />
+        <activity android:name=".ui.paymanagement.PaystuballActivity" />
 
+        <!--task-->
+        <activity android:name=".ui.task.TaskActivity" />
         <!-- state -->
         <activity android:name=".ui.worksite.WorkState2Activity" />
 
