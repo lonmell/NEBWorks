@@ -230,7 +230,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/select_"
+                android:id="@+id/select_repeat_btn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"

@@ -73,7 +73,8 @@ public class SelectTaskDatePop extends Activity {
     String getDay = "";
     String getYoil = "";
     String USER_INFO_ID = "";
-
+    String SET_TASK_TIME_VALUE = "";
+    
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     @Override
@@ -91,6 +92,18 @@ public class SelectTaskDatePop extends Activity {
 
         shardpref = new PreferenceHelper(mContext);
         USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
+        //0 - 시작시간 / 1 - 마감시간
+        SET_TASK_TIME_VALUE = shardpref.getString("SET_TASK_TIME_VALUE","0");
+
+        if(SET_TASK_TIME_VALUE.equals("0")){
+            binding.title.setText("시작 일시 선택");
+            binding.title2.setText("시작 날짜 선택");
+            binding.title3.setText("시작 시간 입력");
+        }else{
+            binding.title.setText("마감 일시 선택");
+            binding.title2.setText("마감 날짜 선택");
+            binding.title3.setText("마감 시간 입력");
+        }
 
         binding.backBtn.setOnClickListener(v -> {
             closePop();
@@ -164,6 +177,41 @@ public class SelectTaskDatePop extends Activity {
                 datePickerDialog.show();
             }
         });
+
+        binding.selectTimetv.setOnClickListener(v -> {
+            Intent intent = new Intent(this, WorkTimePicker.class);
+            intent.putExtra("timeSelect_flag", 1);
+            startActivity(intent);
+            overridePendingTransition(R.anim.translate_up, 0);
+        });
+
+        binding.savetimeBtn.setOnClickListener(v -> {
+            closePop();
+        });
+    }
+
+    String Time01 = "-99";
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
+        String hour = String.valueOf(shardpref.getInt("Hour",0));
+        String min = String.valueOf(shardpref.getInt("Min",0));
+        String GetTime = hour + ":" + min;
+        dlog.i("------------------Data Check onResume------------------");
+        dlog.i("timeSelect_flag : " + timeSelect_flag);
+        dlog.i("GetTime : " + GetTime);
+        dlog.i("------------------Data Check onResume------------------");
+
+        if (timeSelect_flag == 1) {
+            Time01 = GetTime;
+            shardpref.remove("Hour");
+            shardpref.remove("Min");
+            shardpref.remove("timeSelect_flag");
+            shardpref.putString("input_pop_time",GetTime);
+            binding.selectTimetv.setText(GetTime);
+        }
     }
 
     private void closePop() {

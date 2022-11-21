@@ -27,15 +27,16 @@
                 android:background="@drawable/find_right_arrow"
                 android:rotation="180"
                 tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="시작 일시 선택"
-                android:textSize="16sp"
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/inter_bold"
-                android:textColor="@color/black"/>
+                android:text="시작 일시 선택"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
         </RelativeLayout>
         <TextView
             android:id="@+id/title2"
@@ -59,9 +60,10 @@
                 android:id="@+id/select_datetv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="날짜를 선택해주세요"
+                android:hint="날짜를 선택해주세요"
                 android:fontFamily="@font/inter_bold"
-                android:textColor="#949494"
+                android:textColorHint="#949494"
+                android:textColor="@color/black"
                 android:gravity="center|start"
                 android:layout_marginStart="20dp"/>
         </LinearLayout>
@@ -151,10 +153,11 @@
                 android:id="@+id/select_timetv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="시간을 선택해주세요"
+                android:hint="시간을 선택해주세요"
                 android:fontFamily="@font/inter_bold"
-                android:textColor="#949494"
+                android:textColorHint="#949494"
                 android:gravity="center|start"
+                android:textColor="@color/black"
                 android:layout_marginStart="20dp"/>
         </LinearLayout>
         <LinearLayout

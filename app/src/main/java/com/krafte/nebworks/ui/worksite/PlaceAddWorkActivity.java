@@ -29,6 +29,7 @@ import com.krafte.nebworks.dataInterface.TaskreuseInputInterface;
 import com.krafte.nebworks.dataInterface.TaskreuseUpInterface;
 import com.krafte.nebworks.databinding.ActivityPlaceaddworkBinding;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
+import com.krafte.nebworks.pop.RepeatSetPop;
 import com.krafte.nebworks.pop.SelectTaskDatePop;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
@@ -241,13 +242,34 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
 
         binding.eventStarttime.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, SelectTaskDatePop.class);
+            shardpref.putString("SET_TASK_TIME_VALUE","0");
             mContext.startActivity(intent);
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
 
+        binding.eventEndttime.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, SelectTaskDatePop.class);
+            shardpref.putString("SET_TASK_TIME_VALUE","1");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        });
+
+        binding.selectRepeatBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, RepeatSetPop.class);
+            shardpref.putString("SET_TASK_TIME_VALUE","3");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        });
     }
 
+    String picker_year = "";
+    String picker_month = "";
+    String picker_day = "";
+    String input_pop_time = "";
+    String SET_TASK_TIME_VALUE = "";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -257,6 +279,8 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
         String thumnail_url = shardpref.getString("thumnail_url", "");
         String name = shardpref.getString("name", "");
         String writer_id = shardpref.getString("writer_id", "");
+        SET_TASK_TIME_VALUE = shardpref.getString("SET_TASK_TIME_VALUE", "");
+
         int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
         int hourOfDay = shardpref.getInt("Hour", 0);
         int minute = shardpref.getInt("Min", 0);
@@ -270,11 +294,27 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
         dlog.i("Min : " + shardpref.getInt("Min", 0));
         dlog.i("timeSelect_flag : " + timeSelect_flag);
         dlog.i("------------------Data Check onResume------------------");
-
-
+        picker_year = shardpref.getString("picker_year", "00");
+        picker_month = shardpref.getString("picker_month", "00");
+        picker_day = shardpref.getString("picker_day", "00");
+        input_pop_time = shardpref.getString("input_pop_time","00:00");
+        if(SET_TASK_TIME_VALUE.equals("0")){
+            binding.eventStarttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
+        }else{
+            binding.eventEndttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
+        }
     }
 
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("picker_year");
+        shardpref.remove("picker_month");
+        shardpref.remove("picker_day");
+        shardpref.remove("input_pop_time");
+        shardpref.remove("SET_TASK_TIME_VALUE");
+    }
 
     private void getTaskContents() {
 

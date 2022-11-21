@@ -284,6 +284,9 @@
         <activity
             android:name=".pop.SelectTaskDatePop" />
 
+        <activity
+            android:name=".pop.RepeatSetPop" />
+
     </application>
 
 </manifest>
