@@ -281,6 +281,9 @@
         <activity
             android:name=".pop.SelectMemberPop" />
 
+        <activity
+            android:name=".pop.SelectTaskDatePop" />
+
     </application>
 
 </manifest>

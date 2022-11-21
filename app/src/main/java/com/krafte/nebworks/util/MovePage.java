@@ -133,7 +133,4 @@ public interface MovePage {
     void AddPaystubAlba(Context context);
 
     void PaystubAll(Context context);
-
-    //.ui.task
-    void TaskPage(Context context);
 }

@@ -60,12 +60,13 @@ public class TaskAddOption extends BottomSheetDialogFragment {
 
     //확인 버튼 클릭
     private void setBtnEvent() {
+        //할일추가
         binding.directlyAdd.setOnClickListener(v -> {
-            pm.DirectAddMember(mContext);
+            pm.addWorkGo(mContext);
             ClosePop();
         });
+        //자주하는 업무 추가
         binding.invateAdd.setOnClickListener(v -> {
-            pm.InviteMember(mContext);
             ClosePop();
         });
         binding.cancel.setOnClickListener(v -> {

@@ -392,9 +392,10 @@ public class MainFragment extends AppCompatActivity {
             shardpref.putString("Tap","1");
             pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav07) {
-            pm.TaskPage(mContext);
+            shardpref.putInt("SELECT_POSITION",1);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.Main(mContext);
         }
-
 
     }
 

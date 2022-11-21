@@ -1,6 +1,7 @@
 package com.krafte.nebworks.ui.worksite;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.AssignmentMemberAdapter;
 import com.krafte.nebworks.adapter.AssignmentMemberAdapter2;
+import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceMemberListData;
 import com.krafte.nebworks.data.YoilList;
@@ -27,6 +29,7 @@ import com.krafte.nebworks.dataInterface.TaskreuseInputInterface;
 import com.krafte.nebworks.dataInterface.TaskreuseUpInterface;
 import com.krafte.nebworks.databinding.ActivityPlaceaddworkBinding;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
+import com.krafte.nebworks.pop.SelectTaskDatePop;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -60,7 +63,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     boolean channelId1 = false;
     boolean channelId2 = false;
     boolean EmployeeChannelId1 = false;
-    String USER_INFO_ID;
 
     //shared 
     String place_id = "";
@@ -77,6 +79,8 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     String place_start_date = "";
     String place_created_at = "";
     String task_no = "";
+    String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
 
     //Other
     AssignmentMemberAdapter mAdapter;
@@ -144,15 +148,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
 
     /*--------------------*/
     String toDay = "";
-    String toDayYoil = "";
-    int dayOfWeek = 0;
-    String toDayFromMon = "";
-    String toDayFromTue = "";
-    String toDayFromWed = "";
-    String toDayFromThu = "";
-    String toDayFromFri = "";
-    String toDayFromSat = "";
-    String toDayFromSun = "";
     String return_page = "";
     List<YoilList> Yoils = new ArrayList<>();
     List<String> getYoil = new ArrayList<>();
@@ -197,7 +192,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             return_page = shardpref.getString("return_page","0");
             make_kind = shardpref.getInt("make_kind", 0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub",1);
 
@@ -216,19 +211,40 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             setBtnEvent();
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
 
-
+            binding.storeName.setText(place_name);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
+    String change_place_id = "";
+    String change_place_name = "";
+    String change_place_owner_id = "";
 
     private void setBtnEvent() {
-        binding.closeBtn.setOnClickListener(v -> {
-            super.onBackPressed();
+        binding.placeChangeArea.setOnClickListener(v -> {
+            PlaceListBottomSheet plb = new PlaceListBottomSheet();
+            plb.show(getSupportFragmentManager(),"PlaceListBottomSheet");
+            plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
+                change_place_id = place_id;
+                change_place_name = place_name;
+                change_place_owner_id = place_owner_id;
+                shardpref.putString("change_place_id",place_id);
+                shardpref.putString("change_place_name",place_name);
+                shardpref.putString("change_place_owner_id",place_owner_id);
+                dlog.i("change_place_id : " + place_id);
+                dlog.i("change_place_name : " + place_name);
+                dlog.i("change_place_owner_id : " + place_owner_id);
+                binding.storeName.setText(place_name);
+            });
         });
 
-
+        binding.eventStarttime.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, SelectTaskDatePop.class);
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        });
 
     }
 
@@ -960,6 +976,13 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        pm.PlaceWorkBack(mContext);
+        shardpref.putInt("SELECT_POSITION",1);
+        shardpref.putInt("SELECT_POSITION_sub", 0);
+        if(USER_INFO_AUTH.equals("0")){
+            pm.Main(mContext);
+        }else{
+            pm.Main2(mContext);
+        }
+
     }
 }
