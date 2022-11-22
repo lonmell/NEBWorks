@@ -460,6 +460,8 @@ public class LoginActivity extends AppCompatActivity {
                                         if (platform.equals("NEB")) {
                                             if (getaccount.equals(account) && decodePw.equals(pw)) {
                                                 pm.AuthSelect(mContext);
+                                            }else{
+                                                Toast_Nomal("이메일 혹은 비밀번호를 확인해주세요.");
                                             }
                                         } else {
                                             UserCheck(GET_ACCOUNT_EMAIL);

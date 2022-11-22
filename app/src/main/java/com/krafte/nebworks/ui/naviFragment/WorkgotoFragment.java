@@ -203,6 +203,17 @@ public class WorkgotoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        shardpref.remove("picker_year");
+        shardpref.remove("picker_month");
+        shardpref.remove("picker_day");
+        shardpref.remove("input_pop_time");
+        shardpref.remove("SET_TASK_TIME_VALUE");
+        shardpref.remove("yoillist");
+        shardpref.remove("overdate");
+        shardpref.remove("item_user_id");
+        shardpref.remove("item_user_name");
+        shardpref.remove("item_user_img");
+        shardpref.remove("item_user_position");
         setAddBtnSetting();
     }
 

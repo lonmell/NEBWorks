@@ -952,9 +952,9 @@ public class PublicWorkAddActivity  extends AppCompatActivity {
                             + "&users=" + user_id);
                     //--반복 요일
                     dlog.i("------------------SaveAddWork------------------");
-                    Call<String> call = api.getData(place_id, USER_INFO_ID, String.valueOf(shardpref.getInt("make_kind", 0)), WorkTitle, WorkContents, complete_kind
+                    Call<String> call = api.getData(place_id, USER_INFO_ID, WorkTitle, WorkContents, complete_kind
                             , WorkDay, start_time, end_time
-                            , Sun, Mon, Tue, Wed, Thu, Fri, Sat
+                            , Sun, Mon, Tue, Wed, Thu, Fri, Sat, ""
                             , user_id);
                     call.enqueue(new Callback<String>() {
                         @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})

@@ -61,6 +61,8 @@ public class WorkCalenderEmptyAdapter extends RecyclerView.Adapter<WorkCalenderE
     String str = "";
 
     String before_num = "0";
+    String SET_TASK_TIME_VALUE = "";
+    String picker_day = "";
 
     public WorkCalenderEmptyAdapter(Context context, ArrayList<WorkCalenderData.WorkCalenderData_list> data) {
         this.mData = data;
@@ -111,59 +113,73 @@ public class WorkCalenderEmptyAdapter extends RecyclerView.Adapter<WorkCalenderE
             // --토요일
             holder.sat.setText(item.getSat().equals("null") ? "" : item.getSat());
 
-            if(!before_num.isEmpty()){
-                holder.sun_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getSun()) ? "#E0EAFB" : "#ffffff"));
-                holder.mon_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getMon()) ? "#E0EAFB" : "#ffffff"));
-                holder.tue_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getTue()) ? "#E0EAFB" : "#ffffff"));
-                holder.wed_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getWed()) ? "#E0EAFB" : "#ffffff"));
-                holder.thu_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getThu()) ? "#E0EAFB" : "#ffffff"));
-                holder.fri_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getFri()) ? "#E0EAFB" : "#ffffff"));
-                holder.sat_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getSat()) ? "#E0EAFB" : "#ffffff"));
-            }
-            //--기본세팅  END
-            holder.sun_box.setOnClickListener(v -> {
-                before_num = item.getSun();
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getSun(), "일", item.getYm() + "-" + item.getSun());
-                }
-            });
 
-            holder.mon_box.setOnClickListener(v -> {
-                before_num = item.getMon();
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getMon(), "월", item.getYm() + "-" + item.getMon());
+            //--기본세팅  END
+            if(SET_TASK_TIME_VALUE.equals("0")){
+                if(!before_num.isEmpty()){
+                    holder.sun_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getSun()) ? "#E0EAFB" : "#ffffff"));
+                    holder.mon_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getMon()) ? "#E0EAFB" : "#ffffff"));
+                    holder.tue_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getTue()) ? "#E0EAFB" : "#ffffff"));
+                    holder.wed_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getWed()) ? "#E0EAFB" : "#ffffff"));
+                    holder.thu_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getThu()) ? "#E0EAFB" : "#ffffff"));
+                    holder.fri_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getFri()) ? "#E0EAFB" : "#ffffff"));
+                    holder.sat_box.setBackgroundColor(Color.parseColor(before_num.equals(item.getSat()) ? "#E0EAFB" : "#ffffff"));
                 }
-            });
-            holder.tue_box.setOnClickListener(v -> {
-                before_num = item.getTue();
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getTue(), "화", item.getYm() + "-" + item.getTue());
+                holder.sun_box.setOnClickListener(v -> {
+                    before_num = item.getSun();
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position, item.getSun(), "일", item.getYm() + "-" + item.getSun());
+                    }
+                });
+
+                holder.mon_box.setOnClickListener(v -> {
+                    before_num = item.getMon();
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position, item.getMon(), "월", item.getYm() + "-" + item.getMon());
+                    }
+                });
+                holder.tue_box.setOnClickListener(v -> {
+                    before_num = item.getTue();
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position, item.getTue(), "화", item.getYm() + "-" + item.getTue());
+                    }
+                });
+                holder.wed_box.setOnClickListener(v -> {
+                    before_num = item.getWed();
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position, item.getWed(), "수", item.getYm() + "-" + item.getWed());
+                    }
+                });
+                holder.thu_box.setOnClickListener(v -> {
+                    before_num = item.getThu();
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position, item.getThu(), "목", item.getYm() + "-" + item.getThu());
+                    }
+                });
+                holder.fri_box.setOnClickListener(v -> {
+                    before_num = item.getFri();
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position, item.getFri(), "금", item.getYm() + "-" + item.getFri());
+                    }
+                });
+                holder.sat_box.setOnClickListener(v -> {
+                    before_num = item.getSat();
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position, item.getSat(), "토", item.getYm() + "-" + item.getSat());
+                    }
+                });
+            }else{
+                if(!picker_day.isEmpty()){
+                    holder.sun_box.setBackgroundColor(Color.parseColor(picker_day.equals(item.getSun()) ? "#E0EAFB" : "#ffffff"));
+                    holder.mon_box.setBackgroundColor(Color.parseColor(picker_day.equals(item.getMon()) ? "#E0EAFB" : "#ffffff"));
+                    holder.tue_box.setBackgroundColor(Color.parseColor(picker_day.equals(item.getTue()) ? "#E0EAFB" : "#ffffff"));
+                    holder.wed_box.setBackgroundColor(Color.parseColor(picker_day.equals(item.getWed()) ? "#E0EAFB" : "#ffffff"));
+                    holder.thu_box.setBackgroundColor(Color.parseColor(picker_day.equals(item.getThu()) ? "#E0EAFB" : "#ffffff"));
+                    holder.fri_box.setBackgroundColor(Color.parseColor(picker_day.equals(item.getFri()) ? "#E0EAFB" : "#ffffff"));
+                    holder.sat_box.setBackgroundColor(Color.parseColor(picker_day.equals(item.getSat()) ? "#E0EAFB" : "#ffffff"));
                 }
-            });
-            holder.wed_box.setOnClickListener(v -> {
-                before_num = item.getWed();
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getWed(), "수", item.getYm() + "-" + item.getWed());
-                }
-            });
-            holder.thu_box.setOnClickListener(v -> {
-                before_num = item.getThu();
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getThu(), "목", item.getYm() + "-" + item.getThu());
-                }
-            });
-            holder.fri_box.setOnClickListener(v -> {
-                before_num = item.getFri();
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getFri(), "금", item.getYm() + "-" + item.getFri());
-                }
-            });
-            holder.sat_box.setOnClickListener(v -> {
-                before_num = item.getSat();
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getSat(), "토", item.getYm() + "-" + item.getSat());
-                }
-            });
+            }
+
         } catch (Exception e) {
             dlog.i("Exception onBindViewHolder :" + e);
         }
@@ -216,7 +232,11 @@ public class WorkCalenderEmptyAdapter extends RecyclerView.Adapter<WorkCalenderE
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             store_no = shardpref.getString("store_no", "");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            SET_TASK_TIME_VALUE = shardpref.getString("SET_TASK_TIME_VALUE", "");
+            picker_day = shardpref.getString("picker_day", "");
 
+            dlog.i("SET_TASK_TIME_VALUE : " + SET_TASK_TIME_VALUE);
+            dlog.i("picker_day : " + picker_day);
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();

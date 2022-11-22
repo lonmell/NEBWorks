@@ -12,6 +12,8 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/default_gray_noround.xml" value="0.338" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/default_gray_round.xml" value="0.304" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/default_input_round.xml" value="0.339" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/default_select_blue_round.xml" value="0.3555" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/default_select_round.xml" value="0.3555" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/dropdown_item_list.xml" value="0.305" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/grayback_gray_round.xml" value="0.2305" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/home_on_resize.xml" value="0.3225" />
@@ -58,6 +60,8 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_mainfragment.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_member_manage.xml" value="0.2482905982905983" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_memberdetail.xml" value="0.33" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_memberlist_bottomsheet.xml" value="0.24145299145299146" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_memberlist_pop.xml" value="0.2423076923076923" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_memberoption.xml" value="0.2" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_onebutton_pop.xml" value="0.2594017094017094" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_paymanagement.xml" value="0.33" />
@@ -65,11 +69,12 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_place_invite_pop.xml" value="0.2482905982905983" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_place_search.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placeadd_completion.xml" value="0.33" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placeaddwork.xml" value="0.22" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placeaddwork.xml" value="0.2" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placelist.xml" value="0.2423076923076923" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placelist_option.xml" value="0.2423076923076923" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placenoti_add.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_profileedit.xml" value="0.22" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_repeatsetpop.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_searchemail.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_selectlist.xml" value="0.24743589743589745" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_selectyoil.xml" value="0.26282051282051283" />
@@ -102,6 +107,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/list_string_item.xml" value="0.24188034188034188" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/memberfragment.xml" value="0.2623931623931624" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/memberinout_item.xml" value="0.33" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/memberlist_popitem.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/membersub_fragment1.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/morefragment.xml" value="0.67" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/navbar.xml" value="0.33" />
@@ -131,34 +137,22 @@
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/drawable/grayback_gray_round.xml" value="0.1995" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_adddirectly_member.xml" value="0.15384615384615385" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_addmember_detail.xml" value="0.5" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_addpaystubalba.xml" value="0.22" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_addplace.xml" value="0.15042735042735042" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_addworkpart.xml" value="0.25" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_bottom_memberoption.xml" value="0.25" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_datecoustompicker.xml" value="0.15042735042735042" />
+        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_bottom_memberoption.xml" value="0.5" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_mainfragment.xml" value="0.15726495726495726" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_member_manage.xml" value="0.22" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_memberoption.xml" value="0.15726495726495726" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_placeaddwork.xml" value="0.18" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_placelist.xml" value="0.1564102564102564" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_placenoti_add.xml" value="0.3004273504273504" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_placework_detail.xml" value="0.3004273504273504" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_repeatsetpop.xml" value="0.33" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_selectmemberpop.xml" value="0.33" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_selecttask_date.xml" value="0.2" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_selectyoil.xml" value="0.22" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_storedivisionpop.xml" value="0.15726495726495726" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_storelist_menu.xml" value="0.15726495726495726" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_task.xml" value="0.3004273504273504" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_workerlist_menu.xml" value="0.33" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_worksite.xml" value="0.15726495726495726" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/assignment_member_item.xml" value="0.15384615384615385" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/datepicker_coustom_item.xml" value="0.25" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/membersub_fragment1.xml" value="0.15726495726495726" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/navbar.xml" value="0.33" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/work_calender_item.xml" value="0.25" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/work_calenderempty_item.xml" value="0.33" />
-        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/workgotofragment.xml" value="0.3004273504273504" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/workplace_member_item.xml" value="0.5" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/workpwork_member_item.xml" value="0.3004273504273504" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/workstatusfragment.xml" value="0.15384615384615385" />

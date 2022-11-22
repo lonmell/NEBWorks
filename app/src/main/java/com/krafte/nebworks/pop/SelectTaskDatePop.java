@@ -74,7 +74,6 @@ public class SelectTaskDatePop extends Activity {
     String getYoil = "";
     String USER_INFO_ID = "";
     String SET_TASK_TIME_VALUE = "";
-    
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     @Override
@@ -191,26 +190,32 @@ public class SelectTaskDatePop extends Activity {
     }
 
     String Time01 = "-99";
+    String Time02 = "-99";
 
     @Override
     public void onResume(){
         super.onResume();
+        //반복요일 세팅
         int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-        String hour = String.valueOf(shardpref.getInt("Hour",0));
-        String min = String.valueOf(shardpref.getInt("Min",0));
-        String GetTime = hour + ":" + min;
+        int hourOfDay = shardpref.getInt("Hour", 0);
+        int minute = shardpref.getInt("Min", 0);
+        String GetTime = "";
         dlog.i("------------------Data Check onResume------------------");
         dlog.i("timeSelect_flag : " + timeSelect_flag);
         dlog.i("GetTime : " + GetTime);
         dlog.i("------------------Data Check onResume------------------");
 
         if (timeSelect_flag == 1) {
-            Time01 = GetTime;
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
+            Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+            Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
             shardpref.remove("timeSelect_flag");
+            shardpref.remove("hourOfDay");
+            shardpref.remove("minute");
+            GetTime = Time01 + ":" + Time02;
             shardpref.putString("input_pop_time",GetTime);
-            binding.selectTimetv.setText(GetTime);
+            if (hourOfDay != 0) {
+                binding.selectTimetv.setText(GetTime);
+            }
         }
     }
 
@@ -302,11 +307,4 @@ public class SelectTaskDatePop extends Activity {
             }
         });
     }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        closePop();
-    }
-
 }

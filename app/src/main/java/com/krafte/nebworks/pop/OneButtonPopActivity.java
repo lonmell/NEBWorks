@@ -21,7 +21,7 @@ import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.JoinActivity;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 
-public class OneButtonPopActivity  extends Activity {
+public class OneButtonPopActivity extends Activity {
     private ActivityOnebuttonPopBinding binding;
     private static final String TAG = "OneButtonPopActivity";
     Context mContext;

@@ -72,13 +72,13 @@
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:background="@drawable/default_gray_round">
+                android:background="@drawable/default_select_round">
 
                 <ImageView
                     android:id="@+id/select01_round"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_empty_round"
+                    android:background="@drawable/ic_full_round"
                     android:layout_gravity="center"
                     android:layout_marginStart="15dp"/>
                 <TextView
@@ -126,7 +126,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="반복여부"
+            android:text="반복선택"
             android:textSize="14sp"
             android:fontFamily="@font/inter_bold"
             android:textColor="#949494"
@@ -140,12 +140,12 @@
             android:layout_marginEnd="20dp"
             android:layout_marginTop="13dp"
             android:orientation="horizontal"
-            android:background="@drawable/default_gray_round">
+            android:background="@drawable/default_select_round">
             <ImageView
                 android:id="@+id/select03_round"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_empty_round"
+                android:background="@drawable/ic_full_round"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"/>
             <TextView
@@ -217,14 +217,17 @@
                 android:textSize="16sp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/yoil_area"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:weightSum="7"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/mon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -235,6 +238,7 @@
                 android:gravity="center"
                 android:background="@drawable/grayback_gray_round"/>
             <TextView
+                android:id="@+id/tue"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -245,6 +249,7 @@
                 android:gravity="center"
                 android:background="@drawable/grayback_gray_round"/>
             <TextView
+                android:id="@+id/wed"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -255,6 +260,7 @@
                 android:gravity="center"
                 android:background="@drawable/grayback_gray_round"/>
             <TextView
+                android:id="@+id/thu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -265,6 +271,7 @@
                 android:gravity="center"
                 android:background="@drawable/grayback_gray_round"/>
             <TextView
+                android:id="@+id/fri"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -275,6 +282,7 @@
                 android:gravity="center"
                 android:background="@drawable/grayback_gray_round"/>
             <TextView
+                android:id="@+id/sat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -285,6 +293,7 @@
                 android:gravity="center"
                 android:background="@drawable/grayback_gray_round"/>
             <TextView
+                android:id="@+id/sun"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -349,7 +358,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/event_starttime"
+                        android:id="@+id/autoadd_overdate"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_centerVertical="true"
@@ -376,7 +385,7 @@
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
         <LinearLayout
-            android:id="@+id/bottom_btn_box"
+            android:id="@+id/work_save"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
@@ -388,7 +397,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/work_save"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

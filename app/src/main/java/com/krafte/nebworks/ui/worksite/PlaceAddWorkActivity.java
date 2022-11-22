@@ -4,22 +4,28 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.AssignmentMemberAdapter;
 import com.krafte.nebworks.adapter.AssignmentMemberAdapter2;
+import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceMemberListData;
+import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.data.YoilList;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.ScheduleAddInterface;
@@ -28,9 +34,11 @@ import com.krafte.nebworks.dataInterface.TaskUpdateInterface;
 import com.krafte.nebworks.dataInterface.TaskreuseInputInterface;
 import com.krafte.nebworks.dataInterface.TaskreuseUpInterface;
 import com.krafte.nebworks.databinding.ActivityPlaceaddworkBinding;
+import com.krafte.nebworks.pop.MemberListPop;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
 import com.krafte.nebworks.pop.RepeatSetPop;
 import com.krafte.nebworks.pop.SelectTaskDatePop;
+import com.krafte.nebworks.pop.WorkTimePicker;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -90,6 +98,9 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     AssignmentMemberAdapter2 mAdapter2;
     ArrayList<PlaceMemberListData.PlaceMemberListData_list> mList2 = new ArrayList<>();
 
+    ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mem_mList;
+    MemberListPopAdapter mem_mAdapter;
+
     //    DBConnection dbConnection = new DBConnection();
     DateCurrent dc = new DateCurrent();
     ArrayList<String> SetMemberList;
@@ -144,7 +155,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
 
     /*-------------------*/
     boolean yoil01 = true, yoil02 = true, yoil03 = true, yoil04 = true, yoil05 = true, yoil06 = true, yoil07 = true, yoil08 = true;
-    String Sun = "", Mon = "", Tue = "", Wed = "", Thu = "", Fri = "", Sat = "";
+    String Sun = "0", Mon = "0", Tue = "0", Wed = "0", Thu = "0", Fri = "0", Sat = "0";
     /*-------------------*/
 
     /*--------------------*/
@@ -153,6 +164,8 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     List<YoilList> Yoils = new ArrayList<>();
     List<String> getYoil = new ArrayList<>();
     String[] setYoil = new String[7];
+
+    boolean NeedReportTF = false;
 
     int a = 0;//정직원 수
     int b = 0;//협력업체 직원 수
@@ -241,19 +254,35 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
         });
 
         binding.eventStarttime.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, SelectTaskDatePop.class);
-            shardpref.putString("SET_TASK_TIME_VALUE","0");
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if(RepeatCheck){
+                Intent intent = new Intent(mContext, WorkTimePicker.class);
+                intent.putExtra("timeSelect_flag", 2);
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }else{
+                Intent intent = new Intent(mContext, SelectTaskDatePop.class);
+                shardpref.putString("SET_TASK_TIME_VALUE","0");
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }
         });
 
         binding.eventEndttime.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, SelectTaskDatePop.class);
-            shardpref.putString("SET_TASK_TIME_VALUE","1");
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if(RepeatCheck){
+                Intent intent = new Intent(mContext, WorkTimePicker.class);
+                intent.putExtra("timeSelect_flag", 3);
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }else{
+                Intent intent = new Intent(mContext, SelectTaskDatePop.class);
+                shardpref.putString("SET_TASK_TIME_VALUE","1");
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }
         });
 
         binding.selectRepeatBtn.setOnClickListener(v -> {
@@ -263,45 +292,229 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
+
+        binding.emptySelectMember.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, MemberListPop.class);
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        });
+
+        binding.needReport.setOnClickListener(v -> {
+            if(!NeedReportTF){
+                NeedReportTF = true;
+                binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_on);
+                binding.needReport.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
+                binding.reportVisible.setVisibility(View.VISIBLE);
+                TaskKind = "1";
+                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.select01.setTextColor(Color.parseColor("#ffffff"));
+            }else{
+                NeedReportTF = false;
+                binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
+                binding.needReport.setBackgroundColor(Color.parseColor("#F5F6F8"));
+                binding.reportTv.setTextColor(Color.parseColor("#000000"));
+                binding.reportVisible.setVisibility(View.GONE);
+            }
+        });
+
+        binding.select01Box.setOnClickListener(v -> {
+            TaskKind = "1";
+            binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select01.setTextColor(Color.parseColor("#ffffff"));
+            binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+            binding.select02.setTextColor(Color.parseColor("#000000"));
+        });
+        binding.select02Box.setOnClickListener(v -> {
+            TaskKind = "0";
+            binding.select01Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+            binding.select01.setTextColor(Color.parseColor("#000000"));
+            binding.select02Box.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select02.setTextColor(Color.parseColor("#ffffff"));
+        });
+        binding.bottomBtnBox.setOnClickListener(v -> {
+            SaveAddWork();
+        });
     }
 
     String picker_year = "";
     String picker_month = "";
     String picker_day = "";
     String input_pop_time = "";
+
     String SET_TASK_TIME_VALUE = "";
+    List<String> yoillist = new ArrayList<>();
+    String overdate = "";
+    boolean RepeatCheck = false;
+    String Time01 = "-99";
+    String Time02 = "-99";
+
+    List<String> item_user_id;
+    List<String> item_user_name;
+    List<String> item_user_img;
+    List<String> item_user_jikgup;
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
         super.onResume();
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        String thumnail_url = shardpref.getString("thumnail_url", "");
-        String name = shardpref.getString("name", "");
-        String writer_id = shardpref.getString("writer_id", "");
-        SET_TASK_TIME_VALUE = shardpref.getString("SET_TASK_TIME_VALUE", "");
+        try{
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            String thumnail_url = shardpref.getString("thumnail_url", "");
+            String name = shardpref.getString("name", "");
+            String writer_id = shardpref.getString("writer_id", "");
+            SET_TASK_TIME_VALUE = shardpref.getString("SET_TASK_TIME_VALUE", "-1");
 
-        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-        int hourOfDay = shardpref.getInt("Hour", 0);
-        int minute = shardpref.getInt("Min", 0);
+            //반복요일 세팅
+            String yoillist_String = "";
+            yoillist.clear();
+            yoillist_String = shardpref.getString("yoillist","");
+            overdate = shardpref.getString("overdate","");
+            yoillist.addAll(Arrays.asList(yoillist_String.split(",")));
 
-        dlog.i("------------------Data Check onResume------------------");
-        dlog.i("thumnail_url : " + thumnail_url);
-        dlog.i("name : " + name);
-        dlog.i("writer_id : " + writer_id);
-        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
-        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
-        dlog.i("Min : " + shardpref.getInt("Min", 0));
-        dlog.i("timeSelect_flag : " + timeSelect_flag);
-        dlog.i("------------------Data Check onResume------------------");
-        picker_year = shardpref.getString("picker_year", "00");
-        picker_month = shardpref.getString("picker_month", "00");
-        picker_day = shardpref.getString("picker_day", "00");
-        input_pop_time = shardpref.getString("input_pop_time","00:00");
-        if(SET_TASK_TIME_VALUE.equals("0")){
-            binding.eventStarttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
-        }else{
-            binding.eventEndttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
+            picker_year = shardpref.getString("picker_year", "00");
+            picker_month = shardpref.getString("picker_month", "00");
+            picker_day = shardpref.getString("picker_day", "00");
+            input_pop_time = shardpref.getString("input_pop_time","");
+
+            if(!String.valueOf(yoillist).equals("[]")){
+                RepeatCheck = true;
+                binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
+                binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
+
+                binding.startCalendar.setBackgroundResource(R.drawable.ic_time);
+                binding.endCalendar.setBackgroundResource(R.drawable.ic_time);
+                binding.eventStarttime.setHint("시간을 선택해주세요");
+                binding.eventEndttime.setHint("시간을 선택해주세요");
+
+                //반복요일 세팅
+                int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
+                int hourOfDay = shardpref.getInt("Hour", 0);
+                int minute = shardpref.getInt("Min", 0);
+
+                dlog.i("------------------Data Check onResume------------------");
+                dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
+                dlog.i("Hour : " + shardpref.getInt("Hour", 0));
+                dlog.i("Min : " + shardpref.getInt("Min", 0));
+                dlog.i("timeSelect_flag : " + timeSelect_flag);
+                dlog.i("------------------Data Check onResume------------------");
+
+
+                if (timeSelect_flag == 2) {
+                    Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+                    Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+                    shardpref.remove("timeSelect_flag");
+                    shardpref.remove("Hour");
+                    shardpref.remove("Min");
+                    if (hourOfDay != 0) {
+                        binding.eventStarttime.setText(Time01 + ":" + Time02);
+                        imm.hideSoftInputFromWindow(binding.inputWorktitle.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(binding.inputWorkcontents.getWindowToken(), 0);
+                    }
+                } else if (timeSelect_flag == 3) {
+                    Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+                    Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+                    shardpref.remove("timeSelect_flag");
+                    shardpref.remove("Hour");
+                    shardpref.remove("Min");
+                    if (hourOfDay != 0) {
+                        binding.eventEndttime.setText(Time01 + ":" + Time02);
+                        imm.hideSoftInputFromWindow(binding.inputWorktitle.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(binding.inputWorkcontents.getWindowToken(), 0);
+                    }
+                }
+            }else{
+
+                dlog.i("input_pop_time : " + input_pop_time);
+                dlog.i("SET_TASK_TIME_VALUE : " + SET_TASK_TIME_VALUE);
+                RepeatCheck = false;
+                binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
+                binding.startCalendar.setBackgroundResource(R.drawable.calendar_resize);
+                binding.endCalendar.setBackgroundResource(R.drawable.calendar_resize);
+                binding.eventStarttime.setHint("날짜를 선택해주세요");
+                binding.eventEndttime.setHint("날짜를 선택해주세요");
+
+                if(SET_TASK_TIME_VALUE.equals("0")){
+                    binding.eventStarttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
+                }else if(SET_TASK_TIME_VALUE.equals("1")){
+                    binding.eventEndttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
+                }
+            }
+
+            //추가된 직원
+            item_user_id = new ArrayList<>();
+            item_user_name = new ArrayList<>();
+            item_user_img = new ArrayList<>();
+            item_user_jikgup = new ArrayList<>();
+
+            String getuser_id = shardpref.getString("item_user_id","");
+            String getuser_name = shardpref.getString("item_user_name","");
+            String getuser_img = shardpref.getString("item_user_img","");
+            String getuser_position = shardpref.getString("item_user_position","");
+            item_user_id.clear();
+            item_user_name.clear();
+            item_user_img.clear();
+            item_user_jikgup.clear();
+
+            if(!getuser_id.isEmpty()){
+                item_user_id.addAll(Arrays.asList(getuser_id.split(",")));
+            }
+            if(!getuser_name.isEmpty()){
+                item_user_name.addAll(Arrays.asList(getuser_name.split(",")));
+            }
+            if(!getuser_img.isEmpty()){
+                item_user_img.addAll(Arrays.asList(getuser_img.split(",")));
+            }
+            if(!getuser_position.isEmpty()){
+                item_user_jikgup.addAll(Arrays.asList(getuser_position.split(",")));
+            }
+            dlog.i("getuser_id : " + getuser_id);
+            dlog.i("getuser_name : " + getuser_name);
+            dlog.i("getuser_img : " + getuser_img);
+            dlog.i("getuser_position : " + getuser_position);
+            dlog.i("item_user_id.size() : " + item_user_id.size());
+            dlog.i("item_user_name.size() : " + item_user_name.size());
+            dlog.i("item_user_img.size() : " + item_user_img.size());
+            dlog.i("item_user_jikgup.size() : " + item_user_jikgup.size());
+
+            mem_mList = new ArrayList<>();
+            mem_mAdapter = new MemberListPopAdapter(mContext, mem_mList,1);
+            binding.selectMemberList.setAdapter(mem_mAdapter);
+            binding.selectMemberList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+
+            if (getuser_id.isEmpty()) {
+                dlog.i("getuser_id : " + getuser_id);
+                dlog.i("getuser_name : " + getuser_name);
+                dlog.i("getuser_img : " + getuser_img);
+                dlog.i("getuser_position : " + getuser_position);
+            } else {
+                for (int i = 0; i < item_user_id.size(); i++) {
+                    dlog.i("item_user_id : " + item_user_id.get(i));
+                    dlog.i("item_user_name : " + item_user_name.get(i));
+                    dlog.i("item_user_img : " + item_user_img.get(i));
+                    dlog.i("item_user_jikgup : " + item_user_jikgup.get(i));
+                    mem_mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                            item_user_id.get(i).trim(),
+                            item_user_name.get(i).trim(),
+                            "",
+                            "",
+                            item_user_img.get(i).trim(),
+                            "",
+                            "",
+                            "",
+                            "",
+                            item_user_jikgup.get(i).trim(),
+                            "",
+                            ""
+                    ));
+                }
+                mem_mAdapter.notifyDataSetChanged();
+            }
+            //추가된 직원
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -309,11 +522,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        shardpref.remove("picker_year");
-        shardpref.remove("picker_month");
-        shardpref.remove("picker_day");
-        shardpref.remove("input_pop_time");
-        shardpref.remove("SET_TASK_TIME_VALUE");
     }
 
     private void getTaskContents() {
@@ -369,49 +577,44 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
 
     //업무 저장(추가)
     private void SaveAddWork() {
-
-        /*
-         * 일요일 1
-         * 월요일 2
-         * 화요일 3
-         * 수요일 4
-         * 목요일 5
-         * 금요일 6
-         * 토요일 7
-         * */
-        if (yoil08) {
-            //매일 버튼 선택 아닐때
-            Sun = yoil07 ? "0" : "1";
-            Mon = yoil01 ? "0" : "1";
-            Tue = yoil02 ? "0" : "1";
-            Wed = yoil03 ? "0" : "1";
-            Thu = yoil04 ? "0" : "1";
-            Fri = yoil05 ? "0" : "1";
-            Sat = yoil06 ? "0" : "1";
-        } else {
-            //매일 버튼이 선택됬을때
-            Sun = "1";
-            Mon = "1";
-            Tue = "1";
-            Wed = "1";
-            Thu = "1";
-            Fri = "1";
-            Sat = "1";
+        String getYoil = shardpref.getString("yoillist","").replace(" ","");
+        dlog.i("yoillist : " + yoillist);
+        for(String str : getYoil.split(",")){
+            if(str.trim().equals("일")){
+                Sun = "1";
+            }else if(str.trim().equals("월")){
+                Mon = "1";
+            }else if(str.trim().equals("화")){
+                Tue = "1";
+            }else if(str.trim().equals("수")){
+                Wed = "1";
+            }else if(str.trim().equals("목")){
+                Thu = "1";
+            }else if(str.trim().equals("금")){
+                Fri = "1";
+            }else if(str.trim().equals("토")){
+                Sat = "1";
+            }
         }
-
         if (searchDate.isEmpty()) {
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
         } else {
             toDay = searchDate;
         }
+        WorkTitle = binding.inputWorktitle.getText().toString();
+        WorkContents = binding.inputWorkcontents.getText().toString();
+        start_time = binding.eventStarttime.getText().toString();
+        end_time = binding.eventEndttime.getText().toString();
+        user_id = String.valueOf(item_user_id).replace("[","").replace("]","").replace(" ","").trim();
         dlog.i("------------------SaveAddWork------------------");
+        dlog.i("task_no : " + task_no);
         dlog.i("place_id : " + place_id);
         dlog.i("writer_id : " + USER_INFO_ID);
         dlog.i("kind : " + make_kind);
         dlog.i("title : " + WorkTitle);
         dlog.i("contents : " + WorkContents);
         dlog.i("complete_kind : " + String.valueOf(TaskKind));
-        dlog.i("task_date : " + WorkDay);
+        dlog.i("task_date : " + toDay);
         dlog.i("start_time : " + start_time);
         dlog.i("end_time : " + end_time);
         dlog.i("sun : " + Sun);
@@ -422,6 +625,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
         dlog.i("fri : " + Fri);
         dlog.i("sat : " + Sat);
         dlog.i("users : " + user_id);
+        dlog.i("overdate : " + overdate);
         if(make_kind == 1){
             if (task_no.equals("0")) {
                 @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
@@ -431,13 +635,12 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                                 .addConverterFactory(ScalarsConverterFactory.create())
                                 .build();
                         TaskInputInterface api = retrofit.create(TaskInputInterface.class);
-
                         //--반복 요일
-                        dlog.i("------------------SaveAddWork------------------");
-                        Call<String> call = api.getData(place_id, USER_INFO_ID, String.valueOf(make_kind), WorkTitle, WorkContents, complete_kind
-                                , WorkDay, start_time, end_time
-                                , Sun, Mon, Tue, Wed, Thu, Fri, Sat
-                                , user_id);
+                        dlog.i("------------------SaveAddWork12------------------");
+                        Call<String> call = api.getData(place_id, USER_INFO_ID, WorkTitle, WorkContents, TaskKind
+                                , toDay, start_time, end_time
+                                , Sun, Mon, Tue, Wed, Thu, Fri, Sat,overdate
+                                , String.valueOf(item_user_id).replace("[","").replace("]","").trim());
                         call.enqueue(new Callback<String>() {
                             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
                             @Override
@@ -457,7 +660,12 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                                             if(return_page.equals("TaskCalenderActivity")){
                                                 pm.CalenderBack(mContext);
                                             }else{
-                                                pm.PlaceWorkBack(mContext);
+                                                shardpref.putInt("SELECT_POSITION",1);
+                                                if(USER_INFO_AUTH.equals("0")){
+                                                    pm.Main(mContext);
+                                                }else{
+                                                    pm.Main2(mContext);
+                                                }
                                             }
 
                                             click_action = "PlaceWorkFragment";
@@ -503,7 +711,7 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                         TaskUpdateInterface api = retrofit.create(TaskUpdateInterface.class);
 
                         //--반복 요일
-                        dlog.i("------------------SaveAddWork------------------");
+                        dlog.i("------------------SaveAddWork22------------------");
                         Call<String> call = api.getData(task_no, place_id, USER_INFO_ID, "0", WorkTitle, WorkContents, complete_kind
                                 , WorkDay, start_time, end_time
                                 , Sun, Mon, Tue, Wed, Thu, Fri, Sat

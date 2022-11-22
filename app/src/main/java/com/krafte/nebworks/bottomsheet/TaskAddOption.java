@@ -63,6 +63,7 @@ public class TaskAddOption extends BottomSheetDialogFragment {
         //할일추가
         binding.directlyAdd.setOnClickListener(v -> {
             pm.addWorkGo(mContext);
+            shardpref.putInt("make_kind",1);
             ClosePop();
         });
         //자주하는 업무 추가

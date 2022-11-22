@@ -287,6 +287,9 @@
         <activity
             android:name=".pop.RepeatSetPop" />
 
+        <activity
+            android:name=".pop.MemberListPop" />
+
     </application>
 
 </manifest>
