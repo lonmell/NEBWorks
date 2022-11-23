@@ -17,7 +17,6 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/dropdown_item_list.xml" value="0.305" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/grayback_gray_round.xml" value="0.2305" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/home_on_resize.xml" value="0.3225" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/ic_empty_store.xml" value="0.299" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.3225" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/login_btn_round.xml" value="0.228" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/drawable/member_call_round.xml" value="0.304" />
@@ -70,7 +69,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_place_invite_pop.xml" value="0.2482905982905983" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_place_search.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placeadd_completion.xml" value="0.33" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placeaddwork.xml" value="0.22" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placeaddwork.xml" value="0.2" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placelist.xml" value="0.2423076923076923" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placelist_option.xml" value="0.2423076923076923" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placenoti_add.xml" value="0.33" />
@@ -91,7 +90,6 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_workerlist_menu.xml" value="0.24145299145299146" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_worksite.xml" value="0.2" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_workstatus.xml" value="0.24145299145299146" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/adapter_member_item.xml" value="0.67" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/addbtn.xml" value="0.5" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/assignment_member_item.xml" value="0.5" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/bottom_navigation.xml" value="0.33" />
@@ -117,7 +115,6 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/paymenager_item1.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/store_search_item.xml" value="0.4534188034188034" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/storenoti_listitem.xml" value="0.33" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/tap2listitem.xml" value="0.5" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/task_listitem.xml" value="0.2611111111111111" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/task_listitem2.xml" value="0.67" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/test.xml" value="0.25854700854700857" />
@@ -146,7 +143,9 @@
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_mainfragment.xml" value="0.15726495726495726" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_member_manage.xml" value="0.22" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_memberoption.xml" value="0.15726495726495726" />
+        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_placeaddwork.xml" value="0.21965579710144928" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_placelist.xml" value="0.1564102564102564" />
+        <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_repeatsetpop.xml" value="0.21965579710144928" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_selectmemberpop.xml" value="0.33" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_selectyoil.xml" value="0.22" />
         <entry key="..\:/Users/hamel/AndroidStudio Project/NEBWorks/app/src/main/res/layout/activity_storedivisionpop.xml" value="0.15726495726495726" />

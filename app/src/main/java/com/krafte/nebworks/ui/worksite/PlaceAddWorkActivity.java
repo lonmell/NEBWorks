@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -19,20 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.adapter.AssignmentMemberAdapter;
-import com.krafte.nebworks.adapter.AssignmentMemberAdapter2;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
-import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.data.PlaceMemberListData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
-import com.krafte.nebworks.data.YoilList;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.ScheduleAddInterface;
 import com.krafte.nebworks.dataInterface.TaskInputInterface;
 import com.krafte.nebworks.dataInterface.TaskUpdateInterface;
-import com.krafte.nebworks.dataInterface.TaskreuseInputInterface;
-import com.krafte.nebworks.dataInterface.TaskreuseUpInterface;
 import com.krafte.nebworks.databinding.ActivityPlaceaddworkBinding;
 import com.krafte.nebworks.pop.MemberListPop;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
@@ -44,7 +36,6 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,27 +82,14 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
 
-    //Other
-    AssignmentMemberAdapter mAdapter;
-    ArrayList<PlaceMemberListData.PlaceMemberListData_list> mList = new ArrayList<>();
-
-    AssignmentMemberAdapter2 mAdapter2;
-    ArrayList<PlaceMemberListData.PlaceMemberListData_list> mList2 = new ArrayList<>();
-
     ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mem_mList;
     MemberListPopAdapter mem_mAdapter;
 
-    //    DBConnection dbConnection = new DBConnection();
     DateCurrent dc = new DateCurrent();
-    ArrayList<String> SetMemberList;
-    RetrofitConnect rc = new RetrofitConnect();
-    GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     int total_member_cnt;
     int assignment_kind;
-    int EmployeeSelect = -99;
-    String Employee_id = "";
     String user_id = "";
     String usersn = "";
     String usersimg = "";
@@ -123,7 +101,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     int make_kind = 0;
 
     //반복설정
-    int WorkAddSecondNum = 0;
     String[] WorkAddSecond;
 
 
@@ -133,47 +110,26 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
     String complete_kind = "";
 
     //시작시간
-    int SelectStartTime = 1;
     String start_time = "-99";
-    String StartTime02 = "-99";
 
     //마감시간
-    int SelectEndTime = 1;
     String end_time = "-99";
     String EndTime02 = "-99";
 
     String message = "업무가 배정되었습니다.";
-    String topic = "";
-
-    Handler mHandler;
-    String sendTopic = "";
-    String sendToken = "";
-    String tap_kind = "";
-
     Drawable icon_on, icon_off;
-    String SelectKind = "0";
     String searchDate = "";
-    List<String> Ac_memberArray = new ArrayList<>();
-    List<String> Ac_memberArray2 = new ArrayList<>();
 
-    /*-------------------*/
-    boolean yoil01 = true, yoil02 = true, yoil03 = true, yoil04 = true, yoil05 = true, yoil06 = true, yoil07 = true, yoil08 = true;
     String Sun = "0", Mon = "0", Tue = "0", Wed = "0", Thu = "0", Fri = "0", Sat = "0";
-    /*-------------------*/
-
-    /*--------------------*/
     String toDay = "";
     String return_page = "";
-    List<YoilList> Yoils = new ArrayList<>();
     List<String> getYoil = new ArrayList<>();
-    String[] setYoil = new String[7];
 
     boolean NeedReportTF = false;
 
     int a = 0;
     List<String> inmember = new ArrayList<>();
 
-    /*--------------------*/
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat", "LongLogTag"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -337,7 +293,9 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             binding.select02.setTextColor(Color.parseColor("#ffffff"));
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
-            SaveAddWork();
+            if(SaveCheck()){
+                SaveAddWork();
+            }
         });
     }
 
@@ -712,7 +670,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
         dlog.i("-----getTaskContents END-----");
     }
 
-
     public interface OnClickListener {
         void onClick();
     }
@@ -984,198 +941,12 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
 
     }
 
-    private void SaveAddWork2() {
-
-        /*
-         * 일요일 1
-         * 월요일 2
-         * 화요일 3
-         * 수요일 4
-         * 목요일 5
-         * 금요일 6
-         * 토요일 7
-         * */
-        if (searchDate.isEmpty()) {
-            toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-        } else {
-            toDay = searchDate;
-        }
-        dlog.i("------------------SaveAddWork------------------");
-        dlog.i("place_id : " + place_id);
-        dlog.i("writer_id : " + USER_INFO_ID);
-        dlog.i("kind : 0");
-        dlog.i("title : " + WorkTitle);
-        dlog.i("contents : " + WorkContents);
-        dlog.i("complete_kind : " + complete_kind);
-        dlog.i("task_date : " + WorkDay);
-        dlog.i("start_time : " + start_time);
-        dlog.i("end_time : " + end_time);
-        dlog.i("sun : " + Sun);
-        dlog.i("mon : " + Mon);
-        dlog.i("tue : " + Tue);
-        dlog.i("wed : " + Wed);
-        dlog.i("thu : " + Thu);
-        dlog.i("fri : " + Fri);
-        dlog.i("sat : " + Sat);
-        dlog.i("users : " + user_id);
-        if (task_no.equals("0")) {
-            @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
-                runOnUiThread(() -> {
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(TaskreuseInputInterface.URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .build();
-                    TaskreuseInputInterface api = retrofit.create(TaskreuseInputInterface.class);
-
-                    Call<String> call = api.getData(place_id, USER_INFO_ID, WorkTitle, WorkContents, complete_kind
-                            , start_time, end_time
-                            , Sun, Mon, Tue, Wed, Thu, Fri, Sat
-                    );
-                    call.enqueue(new Callback<String>() {
-                        @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-                        @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                            //반복되는 요일을 일시 초기화 해준다
-                            dlog.e("SaveAddWork2 function START");
-                            dlog.e("response 1: " + response.isSuccessful());
-                            dlog.e("response 2: " + response.body());
-                            if (response.isSuccessful() && response.body() != null) {
-                                String jsonResponse = response.body();
-                                if (jsonResponse.replace("\"", "").equals("success") || response.body().replace("\"", "").equals("success")) {
-                                    dlog.i("assignment_kind : " + assignment_kind);
-                                    dlog.i("SelectEmployeeid : " + user_id);
-
-                                    pm.PlaceWorkBack(mContext);
-                                    click_action = "PlaceWorkFragment";
-                                    dlog.i("EmployeeChannelId1 : " + EmployeeChannelId1);
-
-                                } else if (jsonResponse.replace("\"", "").equals("fail") || response.body().replace("\"", "").equals("fail")) {
-                                    Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(mContext, "서버입력 오류! 데이터를 입력할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-
-                        @SuppressLint("LongLogTag")
-                        @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                            dlog.e("에러 = " + t.getMessage());
-                        }
-                    });
-                });
-            });
-            th.start();
-            try {
-                th.join();
-//            getFCMToken();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
-                runOnUiThread(() -> {
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(TaskreuseUpInterface.URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .build();
-                    TaskreuseUpInterface api = retrofit.create(TaskreuseUpInterface.class);
-                    Call<String> call = api.getData(task_no, USER_INFO_ID, WorkTitle, WorkContents, complete_kind
-                            , start_time, end_time
-                            , Sun, Mon, Tue, Wed, Thu, Fri, Sat
-                    );
-                    call.enqueue(new Callback<String>() {
-                        @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-                        @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                            //반복되는 요일을 일시 초기화 해준다
-                            dlog.e("SaveAddWork22 function START");
-                            dlog.e("response 1: " + response.isSuccessful());
-                            dlog.e("response 2: " + response.body());
-                            if (response.isSuccessful() && response.body() != null) {
-                                String jsonResponse = response.body();
-                                if (jsonResponse.replace("\"", "").equals("success") || response.body().replace("\"", "").equals("success")) {
-                                    dlog.i("assignment_kind : " + assignment_kind);
-                                    dlog.i("SelectEmployeeid : " + user_id);
-
-                                    if(!user_id.isEmpty()){
-                                        SendUserCheck(1);
-                                    }
-                                    pm.PlaceWorkBack(mContext);
-                                    click_action = "PlaceWorkFragment";
-                                    dlog.i("EmployeeChannelId1 : " + EmployeeChannelId1);
-//                                            getEmployeeoken(SelectEmployeeid);
-//                                            FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
-//                                                dlog.i( "token : " + token);
-//                                                FcmTestFunctionCall();
-//                                            });
-                                } else if (jsonResponse.replace("\"", "").equals("fail") || response.body().replace("\"", "").equals("fail")) {
-                                    Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(mContext, "서버입력 오류! 데이터를 입력할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-
-                        @SuppressLint("LongLogTag")
-                        @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                            dlog.e("에러 = " + t.getMessage());
-                        }
-                    });
-                });
-            });
-            th.start();
-            try {
-                th.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private boolean SaveCheck() {
         WorkContents = binding.inputWorkcontents.getText().toString();
         WorkTitle = binding.inputWorktitle.getText().toString();
-
         TaskKind = String.valueOf(make_kind);
-        String users = shardpref.getString("users", "0");
-        String users2 = shardpref.getString("users2", "0");
-        if (Ac_memberArray.size() == 0) {
-            Ac_memberArray.addAll(Arrays.asList(users.split(", ")));
-        }
-        if (Ac_memberArray2.size() == 0) {
-            Ac_memberArray2.addAll(Arrays.asList(users2.split(", ")));
-        }
-        Ac_memberArray.remove("0");
-        Ac_memberArray2.remove("0");
 
-        Ac_memberArray.addAll(Ac_memberArray2);
-
-        if(Ac_memberArray.size() != 0 && Ac_memberArray2.size() != 0){
-            user_id = Ac_memberArray.toString().replace(" ", "").replace("[", "").replace("]", "").trim();
-            total_member_cnt = Ac_memberArray.size() + Ac_memberArray2.size();
-        }else{
-            List<String> user_cnt = new ArrayList<>(Arrays.asList(user_id.split(",")));
-            dlog.i("user_id : " + user_id);
-            dlog.i("user_cnt.size() : " + user_cnt.size());
-            total_member_cnt = user_cnt.size();
-        }
-
-        dlog.i("EmployeeSelect : " + EmployeeSelect);
-        dlog.i("SelectKind : " + SelectKind);
-        if (EmployeeSelect == -99 && SelectKind.equals("1")) {
-            if (total_member_cnt == 0) {
-                Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-                intent.putExtra("data", "등록된 직원이 없습니다. 직원을 추가 후 이용해 주세요.");
-                intent.putExtra("left_btn_txt", "닫기");
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
-            } else {
-                Toast.makeText(this, "업무를 배정할 직원을 선택해주세요.", Toast.LENGTH_SHORT).show();
-            }
-            return false;
-        } else if (WorkTitle.equals("")) {
+        if (WorkTitle.equals("")) {
             dlog.i("WorkTitle");
             Toast.makeText(this, "할일을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
@@ -1183,10 +954,10 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
             dlog.i("WorkContents");
             Toast.makeText(this, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (complete_kind.isEmpty() && make_kind == 1) {
+        } else if (TaskKind.isEmpty() && make_kind == 1) {
             Toast.makeText(this, "완료방법을 선택해주세요.", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (complete_kind.isEmpty() && make_kind == 4) {
+        } else if (TaskKind.isEmpty() && make_kind == 4) {
             return true;
         } else if (WorkDay.isEmpty()) {
             Toast.makeText(this, "업무날짜를 입력해주세요.", Toast.LENGTH_SHORT).show();
@@ -1214,47 +985,6 @@ public class PlaceAddWorkActivity extends AppCompatActivity {
                 }
                 return false;
             }
-        } else {
-            dlog.i("제목2 : " + WorkTitle);
-            dlog.i("내용 : " + WorkContents);
-            dlog.i("완료방법2 : " + complete_kind);
-            dlog.i("마감시간2 : " + end_time + ":" + EndTime02);
-            dlog.i("반복 : " + getYoil.toString().replace("[", "").replace("]", ""));
-            dlog.i("작업날짜 : " + WorkDay);
-            dlog.i("선택된 직원 : " + user_id);
-            return true;
-        }
-    }
-
-    private boolean SaveCheck2() {
-        WorkContents = binding.inputWorkcontents.getText().toString();
-        WorkTitle = binding.inputWorktitle.getText().toString();
-        TaskKind = String.valueOf(make_kind);
-
-
-        if (WorkTitle.equals("")) {
-            dlog.i("WorkTitle");
-            Toast.makeText(this, "할일을 입력해주세요", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (WorkContents.isEmpty()) {
-            dlog.i("WorkContents");
-            Toast.makeText(this, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (complete_kind.isEmpty()) {
-            dlog.i("WorkAddFirst");
-            Toast.makeText(this, "완료방법을 선택해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (WorkDay.isEmpty()) {
-            Toast.makeText(this, "업무날짜를 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (start_time.equals("-99")) {
-            dlog.i("StarTime");
-            Toast.makeText(this, "시작시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (end_time.equals("-99")) {
-            dlog.i("StarTime");
-            Toast.makeText(this, "마감시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
         } else {
             dlog.i("제목2 : " + WorkTitle);
             dlog.i("내용 : " + WorkContents);

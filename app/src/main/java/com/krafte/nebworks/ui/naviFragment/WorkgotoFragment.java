@@ -48,9 +48,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -117,11 +119,9 @@ public class WorkgotoFragment extends Fragment {
     String Month = "";
     String Day = "";
     String getYMPicker = "";
-    String gYear = "";
-    String gMonth = "";
-    String gDay = "";
     String bYear = "";
     String bMonth = "";
+    String bDay = "";
 
     String change_place_id = "";
     String change_place_name = "";
@@ -244,41 +244,61 @@ public class WorkgotoFragment extends Fragment {
         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
 
         binding.prevDate.setOnClickListener(v -> {
-            cal.add(Calendar.DATE, -1);
-            toDay = sdf.format(cal.getTime());
-            shardpref.putString("FtoDay",toDay);
-            gYear = toDay.substring(0,4);
-            gMonth = toDay.substring(5,7);
-            gDay = toDay.substring(8,10);
-            binding.setdate.setText(gYear + "년 " + gMonth + "월 " + gDay + "일");
-            if(!gYear.equals(gYear) || !bMonth.equals(gMonth)){
-                dlog.i("gYear : " + gYear);
-                dlog.i("bYear : " + bYear);
-                dlog.i("gMonth : " + gMonth);
-                dlog.i("bMonth : " + bMonth);
-                bYear = gYear;
-                bMonth = gMonth;
-                SetCalenderData();
-                setRecyclerView();
+            try {
+                String getDate = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
+                // 문자열 -> Date
+                Date date = sdf.parse(getDate);
+                dlog.i("Calendar.DATE : " + sdf.format(date));
+                cal.add(Calendar.DATE, -1);
+                toDay = sdf.format(cal.getTime());
+                Year = toDay.substring(0,4);
+                Month = toDay.substring(5,7);
+                Day = toDay.substring(8,10);
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                if(!Year.equals(bYear) || !Month.equals(bMonth) || !Day.equals(bDay)){
+                    dlog.i("Year : " + Year);
+                    dlog.i("bYear : " + bYear);
+                    dlog.i("Month : " + Month);
+                    dlog.i("bMonth : " + bMonth);
+                    dlog.i("Day : " + Day);
+                    dlog.i("bDay : " + bDay);
+                    bYear = Year;
+                    bMonth = Month;
+                    bDay = Day;
+                    SetCalenderData();
+                    setRecyclerView();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         });
         binding.nextDate.setOnClickListener(v -> {
-            cal.add(Calendar.DATE, +1);
-            toDay = sdf.format(cal.getTime());
-            shardpref.putString("FtoDay",toDay);
-            gYear = toDay.substring(0,4);
-            gMonth = toDay.substring(5,7);
-            gDay = toDay.substring(8,10);
-            binding.setdate.setText(gYear + "년 " + gMonth + "월 " + gDay + "일");
-            if(!gYear.equals(gYear) || !bMonth.equals(gMonth)){
-                dlog.i("gYear : " + gYear);
-                dlog.i("bYear : " + bYear);
-                dlog.i("gMonth : " + gMonth);
-                dlog.i("bMonth : " + bMonth);
-                bYear = gYear;
-                bMonth = gMonth;
-                SetCalenderData();
-                setRecyclerView();
+            try {
+                String getDate = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
+                // 문자열 -> Date
+                Date date = sdf.parse(getDate);
+                dlog.i("Calendar.DATE : " + sdf.format(date));
+                cal.add(Calendar.DATE, +1);
+                toDay = sdf.format(cal.getTime());
+                Year = toDay.substring(0,4);
+                Month = toDay.substring(5,7);
+                Day = toDay.substring(8,10);
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                if(!Year.equals(bYear) || !Month.equals(bMonth) || !Day.equals(bDay)){
+                    dlog.i("Year : " + Year);
+                    dlog.i("bYear : " + bYear);
+                    dlog.i("Month : " + Month);
+                    dlog.i("bMonth : " + bMonth);
+                    dlog.i("Day : " + Day);
+                    dlog.i("bDay : " + bDay);
+                    bYear = Year;
+                    bMonth = Month;
+                    bDay = Day;
+                    SetCalenderData();
+                    setRecyclerView();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         });
 
@@ -379,7 +399,7 @@ public class WorkgotoFragment extends Fragment {
     }
 
     private void SetCalenderData(){
-        getYMPicker = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","").substring(0,7);
+        getYMPicker = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
         mList2.clear();
         dlog.i("------SetCalenderData------");
         dlog.i("place_id : " + change_place_id);
