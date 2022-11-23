@@ -70,12 +70,12 @@ public class MemberListPopAdapter extends RecyclerView.Adapter<MemberListPopAdap
         WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(position);
         try{
             dlog.i("mData : " + mData.size());
-            Glide.with(mContext).load(item.getImg_path())
+            Glide.with(mContext).load(item.getImg_path().replace("[", "").replace("]", ""))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(holder.profile_img);
             holder.name.setText(item.getName());
-            holder.jikgup.setText(item.getJikgup().equals("null")?"미정":item.getJikgup());
+            holder.jikgup.setText(item.getJikgup().equals("null")?"미정":item.getJikgup().replace("[", "").replace("]", ""));
             if(kind == 0){
                 if(!getuser_id.isEmpty()){
                     if(getuser_id.contains(item.getId())){

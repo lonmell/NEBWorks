@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -80,21 +81,48 @@ public class AdaperInMemberAdapter extends RecyclerView.Adapter<AdaperInMemberAd
     @Override
     public void onBindViewHolder(@NonNull AdaperInMemberAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         try{
+            UsersData.UsersData_list item = mData.get(position);
+            if (mData.size() == 1){
+                Glide.with(mContext).load(mData.get(0).getImg_path())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.workimg1);
+                holder.workimg_url02.setVisibility(View.GONE);
+                holder.workimg_url03.setVisibility(View.GONE);
+                holder.workimg_url04.setVisibility(View.GONE);
+            }else if (mData.size() == 2){
+                Glide.with(mContext).load(mData.get(0).getImg_path())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.workimg1);
+                Glide.with(mContext).load(mData.get(1).getImg_path())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.workimg2);
+                holder.workimg_url03.setVisibility(View.GONE);
+                holder.workimg_url04.setVisibility(View.GONE);
+            }else if (mData.size() == 3){
+                Glide.with(mContext).load(mData.get(0).getImg_path())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.workimg1);
+                Glide.with(mContext).load(mData.get(1).getImg_path())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.workimg2);
+                Glide.with(mContext).load(mData.get(2).getImg_path())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.workimg3);
+                holder.workimg_url04.setVisibility(View.GONE);
+            }else if (mData.size() > 3){
+                int Cnt = mData.size() - 3;
+                holder.other_cnt.setText("+" + Cnt);
+            }
 
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }
-        UsersData.UsersData_list item = mData.get(position);
-        Glide.with(mContext).load(item.getImg_path())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(holder.workimg);
-        if(item.getUser_name().equals("null")){
-            holder.work_name.setText("퇴사한 사원");
-        }else{
-            holder.work_name.setText(item.getUser_name());
-        }
-
     } // getItemCount : 전체 데이터의 개수를 리턴
 
     @Override
@@ -103,16 +131,22 @@ public class AdaperInMemberAdapter extends RecyclerView.Adapter<AdaperInMemberAd
     } // 아이템 뷰를 저장하는 뷰홀더 클래스
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView workimg;
-        TextView work_name;
+        CardView workimg_url01,workimg_url02,workimg_url03,workimg_url04;
+        ImageView workimg1,workimg2,workimg3;
+        TextView other_cnt;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            workimg = itemView.findViewById(R.id.workimg);
+            workimg_url01 = itemView.findViewById(R.id.workimg_url01);
+            workimg_url02 = itemView.findViewById(R.id.workimg_url02);
+            workimg_url03 = itemView.findViewById(R.id.workimg_url03);
+            workimg_url04 = itemView.findViewById(R.id.workimg_url04);
 
-            work_name = itemView.findViewById(R.id.work_name);
+            workimg1      = itemView.findViewById(R.id.workimg1);
+            workimg2      = itemView.findViewById(R.id.workimg2);
+            workimg3      = itemView.findViewById(R.id.workimg3);
+            other_cnt     = itemView.findViewById(R.id.other_cnt);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

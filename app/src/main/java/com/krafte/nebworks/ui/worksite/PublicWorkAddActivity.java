@@ -1031,7 +1031,7 @@ public class PublicWorkAddActivity  extends AppCompatActivity {
                     dlog.i("------------------SaveAddWork------------------");
                     Call<String> call = api.getData(task_no, place_id, USER_INFO_ID, "0", WorkTitle, WorkContents, complete_kind
                             , WorkDay, start_time, end_time
-                            , Sun, Mon, Tue, Wed, Thu, Fri, Sat
+                            , Sun, Mon, Tue, Wed, Thu, Fri, Sat,""
                             , user_id);
                     call.enqueue(new Callback<String>() {
                         @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})

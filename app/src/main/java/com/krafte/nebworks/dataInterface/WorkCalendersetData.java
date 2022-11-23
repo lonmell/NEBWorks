@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 public interface WorkCalendersetData
 {
     String URL = "http://krafte.net/NEBWorks/task/";
-    //http://krafte.net/NEBWorks/task/get_calendar.php?place_id=76&user_id=140&selected_date=2022-10
+    //http://krafte.net/NEBWorks/task/get_calendar.php?place_id=70&user_id=470&selected_date=2022-11-23
     @FormUrlEncoded
     @POST("get_calendar.php")
     Call<String> getData(

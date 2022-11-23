@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="50dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
@@ -12,9 +12,9 @@
         android:layout_centerInParent="true">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/workimg_url"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:id="@+id/workimg_url01"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
             android:layout_marginTop="5dp"
             app:cardBackgroundColor="#EDEDED"
             app:cardCornerRadius="60dp"
@@ -31,13 +31,93 @@
                     android:background="@drawable/white_plus" />
 
                 <ImageView
-                    android:id="@+id/workimg"
+                    android:id="@+id/workimg1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/workimg_url02"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="32dp"
+            app:cardBackgroundColor="#EDEDED"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/white_plus" />
+
+                <ImageView
+                    android:id="@+id/workimg2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/workimg_url03"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="64dp"
+            app:cardBackgroundColor="#EDEDED"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/white_plus" />
+
+                <ImageView
+                    android:id="@+id/workimg3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/workimg_url04"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="96dp"
+            app:cardBackgroundColor="@color/black"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/other_cnt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="+0"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/work_name"
             android:layout_width="wrap_content"
@@ -47,9 +127,10 @@
             android:layout_alignEnd="@+id/workimg_url"
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
-            android:singleLine="true"
             android:scaleType="fitXY"
+            android:singleLine="true"
             android:text="name"
+            android:visibility="gone"
             android:textColor="#696969"
             android:textSize="12sp" />
     </RelativeLayout>

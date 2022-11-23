@@ -24,15 +24,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.Tap2ListAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
-import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
+import com.krafte.nebworks.adapter.WorkCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectMemberActivity;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.bottomsheet.TaskAddOption;
-import com.krafte.nebworks.data.CalendarSetStatusData;
+import com.krafte.nebworks.bottomsheet.WorkgotoBottomSheet;
+import com.krafte.nebworks.data.CalendarSetData;
+import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.data.WorkCalenderData;
+import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
-import com.krafte.nebworks.dataInterface.WorkstatusCalendersetData;
+import com.krafte.nebworks.dataInterface.WorkCalendersetData;
 import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -70,10 +74,14 @@ public class WorkgotoFragment extends Fragment {
     RetrofitConnect rc = new RetrofitConnect();
     ViewPagerFregmentAdapter viewPagerFregmentAdapter;
 
-    WorkStatusCalenderAdapter mAdapter;
+    WorkCalenderAdapter mAdapter;
     ArrayList<WorkCalenderData.WorkCalenderData_list> mList;
     //Task all data
-    ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList2 = new ArrayList<>();
+    ArrayList<CalendarSetData.CalendarSetData_list> mList2 = new ArrayList<>();
+
+
+    ArrayList<TodolistData.TodolistData_list> Todo_mList = new ArrayList<>();
+    Tap2ListAdapter Todo_mAdapter = null;
 
     //shared
     String place_id = "";
@@ -91,6 +99,7 @@ public class WorkgotoFragment extends Fragment {
     String place_created_at = "";
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
+    String USER_INFO_NAME = "";
 
     String return_page = "";
     int SELECT_POSITION = 0;
@@ -110,6 +119,7 @@ public class WorkgotoFragment extends Fragment {
     String getYMPicker = "";
     String gYear = "";
     String gMonth = "";
+    String gDay = "";
     String bYear = "";
     String bMonth = "";
 
@@ -175,11 +185,11 @@ public class WorkgotoFragment extends Fragment {
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub",0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1"); //0-관리자 / 1- 근로자
+            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
             return_page = shardpref.getString("return_page","");
             setBtnEvent();
-
-
-
+            change_place_id = place_id;
+            change_member_id = USER_INFO_ID;
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
         } catch (Exception e) {
@@ -203,18 +213,24 @@ public class WorkgotoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        shardpref.remove("picker_year");
-        shardpref.remove("picker_month");
-        shardpref.remove("picker_day");
-        shardpref.remove("input_pop_time");
-        shardpref.remove("SET_TASK_TIME_VALUE");
-        shardpref.remove("yoillist");
-        shardpref.remove("overdate");
-        shardpref.remove("item_user_id");
-        shardpref.remove("item_user_name");
-        shardpref.remove("item_user_img");
-        shardpref.remove("item_user_position");
-        setAddBtnSetting();
+        try{
+            shardpref.remove("task_no");
+            shardpref.remove("picker_year");
+            shardpref.remove("picker_month");
+            shardpref.remove("picker_day");
+            shardpref.remove("input_pop_time");
+            shardpref.remove("SET_TASK_TIME_VALUE");
+            shardpref.remove("yoillist");
+            shardpref.remove("overdate");
+            shardpref.remove("item_user_id");
+            shardpref.remove("item_user_name");
+            shardpref.remove("item_user_img");
+            shardpref.remove("item_user_position");
+            setRecyclerView();
+            setAddBtnSetting();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void setBtnEvent() {
@@ -224,7 +240,8 @@ public class WorkgotoFragment extends Fragment {
         binding.setdate.setText(toDay);
         Year = toDay.substring(0, 4);
         Month = toDay.substring(5, 7);
-        binding.setdate.setText(Year + "년 " + Month + "월");
+        Day = toDay.substring(8,10);
+        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
 
         binding.prevDate.setOnClickListener(v -> {
             cal.add(Calendar.DATE, -1);
@@ -232,7 +249,8 @@ public class WorkgotoFragment extends Fragment {
             shardpref.putString("FtoDay",toDay);
             gYear = toDay.substring(0,4);
             gMonth = toDay.substring(5,7);
-            binding.setdate.setText("   " + gYear + "년 " + gMonth + "월   ");
+            gDay = toDay.substring(8,10);
+            binding.setdate.setText(gYear + "년 " + gMonth + "월 " + gDay + "일");
             if(!gYear.equals(gYear) || !bMonth.equals(gMonth)){
                 dlog.i("gYear : " + gYear);
                 dlog.i("bYear : " + bYear);
@@ -240,7 +258,8 @@ public class WorkgotoFragment extends Fragment {
                 dlog.i("bMonth : " + bMonth);
                 bYear = gYear;
                 bMonth = gMonth;
-                SetCalenderData(gYear,gMonth);
+                SetCalenderData();
+                setRecyclerView();
             }
         });
         binding.nextDate.setOnClickListener(v -> {
@@ -249,7 +268,8 @@ public class WorkgotoFragment extends Fragment {
             shardpref.putString("FtoDay",toDay);
             gYear = toDay.substring(0,4);
             gMonth = toDay.substring(5,7);
-            binding.setdate.setText("   " + gYear + "년 " + gMonth + "월   ");
+            gDay = toDay.substring(8,10);
+            binding.setdate.setText(gYear + "년 " + gMonth + "월 " + gDay + "일");
             if(!gYear.equals(gYear) || !bMonth.equals(gMonth)){
                 dlog.i("gYear : " + gYear);
                 dlog.i("bYear : " + bYear);
@@ -257,7 +277,8 @@ public class WorkgotoFragment extends Fragment {
                 dlog.i("bMonth : " + bMonth);
                 bYear = gYear;
                 bMonth = gMonth;
-                SetCalenderData(gYear,gMonth);
+                SetCalenderData();
+                setRecyclerView();
             }
         });
 
@@ -274,9 +295,10 @@ public class WorkgotoFragment extends Fragment {
                 Day = String.valueOf(dayOfMonth);
                 Day = Day.length()==1?"0"+Day:Day;
                 Month = Month.length()==1?"0"+Month:Month;
-                binding.setdate.setText("   " + Year + "년 " + Month + "월   ");
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 getYMPicker = binding.setdate.getText().toString().substring(0,7);
-                SetCalenderData(gYear,gMonth);
+                SetCalenderData();
+                setRecyclerView();
             }
         }, mYear, mMonth, mDay);
 
@@ -297,10 +319,10 @@ public class WorkgotoFragment extends Fragment {
                     dlog.i("change_place_name : " + getplace_name);
                     if (getplace_name.equals("전체매장")) {
                         binding.changePlaceTv.setText("전체매장");
-                        change_place_id = "";
-                        change_place_name = "";
+                        change_place_id = place_id;
+                        change_place_name = USER_INFO_ID;
                         shardpref.putString("change_place_id", place_id);
-                        shardpref.putString("change_place_name", "");
+                        shardpref.putString("change_place_name", USER_INFO_ID);
                     } else {
                         binding.changePlaceTv.setText(getplace_name);
                         shardpref.putString("change_place_id", getplace_id);
@@ -308,7 +330,8 @@ public class WorkgotoFragment extends Fragment {
                     }
                     dlog.i("change_place_id : " + change_place_id);
                     dlog.i("change_place_name : " + change_place_name);
-//                        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString());
+                    SetCalenderData();
+                    setRecyclerView();
                 }
             });
         });
@@ -323,16 +346,19 @@ public class WorkgotoFragment extends Fragment {
                     change_member_name = user_name;
                     if (user_name.equals("전체직원")) {
                         binding.changeMemberTv.setText("전체직원");
-                        change_place_id = "";
-                        change_place_name = "";
+                        change_member_id = USER_INFO_ID;
+                        change_member_name = USER_INFO_NAME;
+                        shardpref.putString("change_member_id", place_id);
+                        shardpref.putString("change_member_name", USER_INFO_ID);
                     } else {
                         binding.changeMemberTv.setText(user_name);
+                        shardpref.putString("change_member_id", user_id);
+                        shardpref.putString("change_member_name", user_name);
                     }
                     dlog.i("change_member_id : " + user_id);
                     dlog.i("change_member_name : " + user_name);
-                    shardpref.putString("change_member_id", user_id);
-                    shardpref.putString("change_member_name", user_name);
-//                        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString());
+                    SetCalenderData();
+                    setRecyclerView();
                 }
             });
         });
@@ -342,28 +368,30 @@ public class WorkgotoFragment extends Fragment {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
-                SetCalenderData(gYear,gMonth);
+                SetCalenderData();
             }else{
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+                setRecyclerView();
             }
         });
     }
 
-    private void SetCalenderData(String Year,String Month){
+    private void SetCalenderData(){
+        getYMPicker = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","").substring(0,7);
         mList2.clear();
         dlog.i("------SetCalenderData------");
-        dlog.i("place_id :" + place_id);
-        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
-        dlog.i("getYMPicker :" + getYMPicker);
+        dlog.i("place_id : " + change_place_id);
+        dlog.i("USER_INFO_ID : " + change_member_id);
+        dlog.i("select_date : " + getYMPicker);
         dlog.i("------SetCalenderData------");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WorkstatusCalendersetData.URL)
+                .baseUrl(WorkCalendersetData.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        WorkstatusCalendersetData api = retrofit.create(WorkstatusCalendersetData.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, Year,Month);
+        WorkCalendersetData api = retrofit.create(WorkCalendersetData.class);
+        Call<String> call2 = api.getData(change_place_id, change_member_id, getYMPicker);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -383,10 +411,10 @@ public class WorkgotoFragment extends Fragment {
                             } else {
                                 for (int i = 0; i < Response2.length(); i++) {
                                     JSONObject jsonObject = Response2.getJSONObject(i);
-                                    mList2.add(new CalendarSetStatusData.CalendarSetStatusData_list(
+                                    mList2.add(new CalendarSetData.CalendarSetData_list(
                                             jsonObject.getString("day"),
                                             jsonObject.getString("week"),
-                                            Collections.singletonList(jsonObject.getString("users"))
+                                            Collections.singletonList(jsonObject.getString("task"))
                                     ));
                                 }
                                 GetCalenderList(Year, Month, mList2);
@@ -407,13 +435,11 @@ public class WorkgotoFragment extends Fragment {
         });
     }
 
-    ArrayList<String> user_id = new ArrayList<>();
-    ArrayList<String> user_name = new ArrayList<>();
-    ArrayList<String> img_path = new ArrayList<>();
-    ArrayList<String> jikgup = new ArrayList<>();
-    ArrayList<String> worktime = new ArrayList<>();
-    ArrayList<String> workyoil = new ArrayList<>();
-    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList2) {
+    ArrayList<String> kind = new ArrayList<>();
+    ArrayList<String> title = new ArrayList<>();
+    ArrayList<String> write_name = new ArrayList<>();
+    ArrayList<String> end = new ArrayList<>();
+    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetData.CalendarSetData_list> mList2) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalenderInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -437,7 +463,7 @@ public class WorkgotoFragment extends Fragment {
                             String select_date = Year + "-" + Month;
                             JSONArray Response = new JSONArray(response.body());
                             mList = new ArrayList<>();
-                            mAdapter = new WorkStatusCalenderAdapter(mContext, mList, mList2, place_id, USER_INFO_ID, select_date);
+                            mAdapter = new WorkCalenderAdapter(mContext, mList, mList2, place_id, USER_INFO_ID, select_date);
                             binding.createCalender.setAdapter(mAdapter);
                             binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                             dlog.i("SetNoticeListview Thread run! ");
@@ -459,6 +485,51 @@ public class WorkgotoFragment extends Fragment {
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();
+                                mAdapter.setOnItemClickListener(new WorkCalenderAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                                        dlog.i("data :" + data);
+                                        try{
+                                            kind = new ArrayList<>();
+                                            title = new ArrayList<>();
+                                            for (int i = 0; i < mList2.size(); i++) {
+                                                if (data.equals(mList2.get(i).getDay().length() == 1?"0"+mList2.get(i).getDay():mList2.get(i).getDay())) {
+                                                    JSONArray Response = new JSONArray(mList2.get(i).getTask().toString().replace("[[", "[").replace("]]", "]"));
+                                                    for (int i3 = 0; i3 < Response.length(); i3++) {
+                                                        JSONObject jsonObject = Response.getJSONObject(i3);
+                                                        kind.add(jsonObject.getString("kind"));
+                                                        title.add(jsonObject.getString("title"));
+                                                    }
+                                                }
+                                            }
+                                            shardpref.putString("task_date",WorkDay);
+                                            dlog.i("WorkDay :" + WorkDay);
+
+                                            shardpref.putString("change_place_id", change_place_id.isEmpty()?place_id:change_place_id);
+                                            shardpref.putString("change_member_id", change_member_id.isEmpty()?USER_INFO_ID:change_member_id);
+//                                            Intent intent = new Intent(mContext, TaskListPopActivity.class);
+//                                            intent.putStringArrayListExtra("kind", kind);
+//                                            intent.putStringArrayListExtra("title", title);
+//                                            intent.putExtra("date", data);
+//                                            intent.putExtra("yoil", yoil);
+//                                            intent.putExtra("write_name","");
+//                                            startActivity(intent);
+//                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                            WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
+                                            wgb.show(getChildFragmentManager(),"WorkgotoBottomSheet");
+                                        }catch (Exception e){
+                                            dlog.i("onItemClick Exception :" + e);
+                                        }
+
+                                    }
+                                });
+//                                if (USER_INFO_AUTH.equals("0")) {
+//                                    //관리자일때
+//                                    binding.addWorkBtn.setVisibility(View.VISIBLE);
+//                                } else {
+//                                    //근로자일때때
+//                                    binding.addWorkBtn.setVisibility(View.GONE);
+//                                }
                             }
                         }catch (JSONException e){
                             dlog.i("JSONException :" + e);
@@ -472,6 +543,129 @@ public class WorkgotoFragment extends Fragment {
             @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러2 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    int listitemsize = 0;
+    String totalSendCheck = "";
+    String totalSendUser = "";
+    boolean AllCheck = false;
+    //미처리인 업무 세기
+    int state_null = 0;
+    String writer_id = "";
+
+    public void setRecyclerView() {
+        String select_date = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
+        dlog.i("setTodoWList place_id : " + change_place_id);
+        dlog.i("setTodoWList USER_INFO_ID : " + change_member_id);
+        dlog.i("setTodoWList select_date : " + select_date);
+        Todo_mList.clear();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaskSelectWInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaskSelectWInterface api = retrofit.create(TaskSelectWInterface.class);
+        Call<String> call = api.getData(change_place_id, change_member_id, select_date);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "WorkTapListFragment2 / setRecyclerView");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                dlog.e("response 2: " + rc.getBase64decode(response.body()));
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
+                        Todo_mList = new ArrayList<>();
+                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getParentFragmentManager(), AllCheck);
+                        binding.taskList.setAdapter(Todo_mAdapter);
+                        binding.taskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                        Log.i(TAG, "SetNoticeListview Thread run! ");
+                        Log.i(TAG, "GET SIZE : " + Response.length());
+                        if (Response.length() == 0) {
+                            binding.nodataArea.setVisibility(View.VISIBLE);
+                            binding.line01.setVisibility(View.INVISIBLE);
+                            Log.i(TAG, "SetNoticeListview Thread run! ");
+                            Log.i(TAG, "GET SIZE : " + Response.length());
+//                            check_cnt.setText("0건");
+//                            all_checkbox.setClickable(false);
+//                            all_checkbox.setEnabled(false);
+//                            all_checkbox.setBackgroundResource(R.drawable.checkbox_off);
+                        } else {
+                            binding.line01.setVisibility(View.VISIBLE);
+                            binding.nodataArea.setVisibility(View.GONE);
+                            for (int i = 0; i < Response.length(); i++) {
+                                JSONObject jsonObject = Response.getJSONObject(i);
+                                if(!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")){
+                                    Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
+                                            jsonObject.getString("id"),
+                                            jsonObject.getString("writer_id"),
+                                            jsonObject.getString("kind"),
+                                            jsonObject.getString("title"),
+                                            jsonObject.getString("contents"),
+                                            jsonObject.getString("complete_kind"),
+                                            Collections.singletonList(jsonObject.getString("users")),
+                                            jsonObject.getString("task_date"),
+                                            jsonObject.getString("start_time"),
+                                            jsonObject.getString("end_time"),
+                                            jsonObject.getString("sun"),
+                                            jsonObject.getString("mon"),
+                                            jsonObject.getString("tue"),
+                                            jsonObject.getString("wed"),
+                                            jsonObject.getString("thu"),
+                                            jsonObject.getString("fri"),
+                                            jsonObject.getString("sat"),
+                                            jsonObject.getString("img_path"),
+                                            jsonObject.getString("complete_yn"),
+                                            jsonObject.getString("incomplete_reason"),
+                                            jsonObject.getString("approval_state"),
+                                            jsonObject.getString("task_overdate")
+                                    ));
+                                }
+                            }
+                            for (int a = 0; a < Response.length(); a++) {
+                                dlog.i("approval_state 1 : " + Response.getJSONObject(a).getString("approval_state"));
+                                if (Response.getJSONObject(a).getString("approval_state").equals("3")
+                                        || Response.getJSONObject(a).getString("approval_state").equals("null")) {
+                                    if(!Response.getJSONObject(a).getString("id").isEmpty() || !Response.getJSONObject(a).getString("id").equals("null")){
+                                        state_null++;
+                                    }
+                                }
+                            }
+
+//                            check_cnt.setText(state_null + "건");
+
+                            dlog.i("state_null : " + state_null);
+//                            work_cnt.setText(String.valueOf(state_null));
+                            Todo_mAdapter.setOnItemClickListener((v, position, Tcnt, Fcnt) -> {
+                                try {
+                                    writer_id = Response.getJSONObject(position).getString("writer_id");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+//                                check_cnt.setText(Tcnt + "건");
+//                                if (Tcnt == mList.size() && Fcnt == 0) {
+//                                    all_checkbox.setBackgroundResource(R.drawable.checkbox_on);
+//                                } else {
+//                                    all_checkbox.setBackgroundResource(R.drawable.checkbox_off);
+//                                }
+                            });
+                            Todo_mAdapter.notifyDataSetChanged();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
             }
         });
     }

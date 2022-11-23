@@ -427,7 +427,8 @@ public class Page2Fragment extends Fragment {
                                             jsonObject.getString("img_path"),
                                             jsonObject.getString("complete_yn"),
                                             jsonObject.getString("incomplete_reason"),
-                                            jsonObject.getString("approval_state")
+                                            jsonObject.getString("approval_state"),
+                                            jsonObject.getString("task_overdate")
                                     ));
                                 }
                             }
@@ -534,7 +535,8 @@ public class Page2Fragment extends Fragment {
                                             jsonObject.getString("img_path"),
                                             jsonObject.getString("complete_yn"),
                                             jsonObject.getString("incomplete_reason"),
-                                            jsonObject.getString("approval_state")
+                                            jsonObject.getString("approval_state"),
+                                            jsonObject.getString("task_overdate")
                                     ));
                                 }
                             }

@@ -135,7 +135,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                         mAdapter1 = new TasklistAdapter(mContext, caltaskdata1);
                         holder.sunlist.setAdapter(mAdapter1);
                         holder.sunlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                        for (int i3 = 0; i3 < Response.length(); i3++) {
+                        for (int i3 = 0; i3 < 4; i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter1.addItem(new CalendarTaskData.CalendarTaskData_list(
                                     jsonObject.getString("id"),
@@ -162,7 +162,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                             mAdapter2 = new TasklistAdapter(mContext, caltaskdata2);
                             holder.monlist.setAdapter(mAdapter2);
                             holder.monlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                            for (int i3 = 0; i3 < Response.length(); i3++) {
+                            for (int i3 = 0; i3 < 4; i3++) {
                                 JSONObject jsonObject = Response.getJSONObject(i3);
                                 mAdapter2.addItem(new CalendarTaskData.CalendarTaskData_list(
                                         jsonObject.getString("id"),
@@ -190,7 +190,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                         mAdapter3 = new TasklistAdapter(mContext, caltaskdata3);
                         holder.tuelist.setAdapter(mAdapter3);
                         holder.tuelist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                        for (int i3 = 0; i3 < Response.length(); i3++) {
+                        for (int i3 = 0; i3 < 4; i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter3.addItem(new CalendarTaskData.CalendarTaskData_list(
                                     jsonObject.getString("id"),
@@ -217,7 +217,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                         mAdapter4 = new TasklistAdapter(mContext, caltaskdata4);
                         holder.wedlist.setAdapter(mAdapter4);
                         holder.wedlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                        for (int i3 = 0; i3 < Response.length(); i3++) {
+                        for (int i3 = 0; i3 < 4; i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter4.addItem(new CalendarTaskData.CalendarTaskData_list(
                                     jsonObject.getString("id"),
@@ -244,7 +244,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                         mAdapter5 = new TasklistAdapter(mContext, caltaskdata5);
                         holder.thulist.setAdapter(mAdapter5);
                         holder.thulist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                        for (int i3 = 0; i3 < Response.length(); i3++) {
+                        for (int i3 = 0; i3 < 4; i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter5.addItem(new CalendarTaskData.CalendarTaskData_list(
                                     jsonObject.getString("id"),
@@ -271,7 +271,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                         mAdapter6 = new TasklistAdapter(mContext, caltaskdata6);
                         holder.frilist.setAdapter(mAdapter6);
                         holder.frilist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                        for (int i3 = 0; i3 < Response.length(); i3++) {
+                        for (int i3 = 0; i3 < 4; i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter6.addItem(new CalendarTaskData.CalendarTaskData_list(
                                     jsonObject.getString("id"),
@@ -298,7 +298,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                         mAdapter7 = new TasklistAdapter(mContext, caltaskdata7);
                         holder.satlist.setAdapter(mAdapter7);
                         holder.satlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                        for (int i3 = 0; i3 < Response.length(); i3++) {
+                        for (int i3 = 0; i3 < 4; i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter7.addItem(new CalendarTaskData.CalendarTaskData_list(
                                     jsonObject.getString("id"),

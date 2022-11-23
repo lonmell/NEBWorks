@@ -1,209 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_total"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:orientation="vertical"
-    app:cardBackgroundColor="#d9d9d9"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="0dp">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        android:orientation="vertical"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp">
+        android:layout_height="match_parent"
+        android:layout_margin="15dp">
 
         <RelativeLayout
-            android:id="@+id/area01"
             android:layout_width="match_parent"
-            android:layout_height="105dp"
-            android:background="#ffffff">
-            <RelativeLayout
-                android:id="@+id/no_img_icon_area"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/work_title"
-                android:layout_marginStart="10dp"
-                android:layout_alignBottom="@+id/work_title">
-                <ImageView
-                    android:id="@+id/no_img_icon"
-                    android:layout_width="19dp"
-                    android:layout_height="16dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/emptyimg"
-                    android:visibility="visible" />
-            </RelativeLayout>
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/work_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="-2dp"
+                android:layout_alignTop="@+id/list_setting"
+                android:layout_alignBottom="@+id/list_setting"
+                android:layout_alignParentStart="true"
                 android:layout_toStartOf="@+id/list_setting"
-                android:layout_toEndOf="@+id/no_img_icon_area"
                 android:fontFamily="@font/inter_bold"
-                android:gravity="start|top"
+                android:gravity="start|center"
                 android:singleLine="true"
                 android:text="제목"
-                android:textColor="#696969"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
-            <RelativeLayout
-                android:id="@+id/workmember_img"
-                android:layout_width="wrap_content"
-                android:layout_height="70dp"
-                android:layout_below="@+id/work_title"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@+id/work_date_info"
-                android:orientation="horizontal">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/member_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_toStartOf="@+id/plus_add_membercnt" />
-
-                <TextView
-                    android:id="@+id/plus_add_membercnt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/inter_bold"
-                    android:gravity="center"
-                    android:scaleType="fitXY"
-                    android:text="+0"
-                    android:textColor="#1483FE"
-                    android:textSize="14sp" />
-            </RelativeLayout>
-
             <LinearLayout
                 android:id="@+id/work_date_info"
                 android:layout_width="wrap_content"
-                android:layout_height="70dp"
-                android:layout_alignBottom="@+id/workmember_img"
-                android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@+id/check_area"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/work_title"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/work_yoil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/work_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:fontFamily="@font/inter_regular"
-                    android:gravity="end"
+                    android:gravity="start|center"
                     android:singleLine="true"
-                    android:text=""
+                    android:text="0000.00.00 | 00:00 시작"
                     android:textColor="#696969"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
 
                 <TextView
-                    android:id="@+id/work_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/work_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:fontFamily="@font/inter_regular"
-                    android:gravity="end"
+                    android:gravity="end|center"
                     android:singleLine="true"
-                    android:text="마감시간 : 00:00 AM"
+                    android:text="0000.00.00 | 00:00 마감"
                     android:textColor="#696969"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
 
                 <TextView
-                    android:id="@+id/work_confirm"
-                    android:layout_width="match_parent"
+                    android:id="@+id/member_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/member_img_array"
+                    android:layout_alignParentEnd="true"
                     android:fontFamily="@font/inter_regular"
-                    android:gravity="end"
-                    android:text=""
-                    android:textColor="#1483FE"
+                    android:text="000/000/000 외 3명"
+                    android:textColor="#696969"
+                    android:textSize="13sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/member_img_array"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/work_title"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/work_date_info"
+                android:layout_alignTop="@+id/work_date_info"
+                android:layout_alignBottom="@+id/work_date_info"
+                android:gravity="center"
+                android:orientation="vertical">
+                <!--                    <androidx.recyclerview.widget.RecyclerView-->
+                <!--                        android:id="@+id/member_list"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:layout_alignParentStart="true"-->
+                <!--                        android:layout_marginStart="10dp"-->
+                <!--                        android:layout_toStartOf="@+id/plus_add_membercnt" />-->
+                <RelativeLayout
+                    android:id="@+id/join_member_arae"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:gravity="center|end">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/workimg_url01"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginTop="5dp"
+                        app:cardBackgroundColor="#EDEDED"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/white_plus" />
+
+                            <ImageView
+                                android:id="@+id/workimg1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/workimg_url02"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="5dp"
+                        app:cardBackgroundColor="#EDEDED"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/white_plus" />
+
+                            <ImageView
+                                android:id="@+id/workimg2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/workimg_url03"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="5dp"
+                        app:cardBackgroundColor="#EDEDED"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/white_plus" />
+
+                            <ImageView
+                                android:id="@+id/workimg3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/workimg_url04"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_marginStart="96dp"
+                        android:layout_marginTop="5dp"
+                        app:cardBackgroundColor="@color/black"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/other_cnt"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/inter_bold"
+                                android:gravity="center"
+                                android:text="+0"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/work_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/workimg_url"
+                        android:layout_alignStart="@+id/workimg_url"
+                        android:layout_alignEnd="@+id/workimg_url"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:scaleType="fitXY"
+                        android:singleLine="true"
+                        android:text="name"
+                        android:textColor="#696969"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/list_setting"
-                android:layout_width="45dp"
+                android:layout_width="35dp"
                 android:layout_height="30dp"
-                android:layout_alignTop="@+id/work_title"
-                android:layout_alignBottom="@+id/work_title"
-                android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@+id/check_area">
+                android:layout_alignTop="@+id/name"
+                android:layout_alignParentEnd="true">
 
                 <ImageView
                     android:layout_width="3dp"
                     android:layout_height="15dp"
-                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
                     android:background="@drawable/list_setting" />
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/check_area"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true">
-
-                <RelativeLayout
-                    android:id="@+id/check_box"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:background="@drawable/checkbox_round">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_centerInParent="true"
-                        app:cardBackgroundColor="#ffffff"
-                        app:cardCornerRadius="2dp">
-
-                        <ImageView
-                            android:id="@+id/checkarea"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_centerInParent="true"
-                            android:background="@drawable/checkbox_off" />
-
-                    </androidx.cardview.widget.CardView>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:id="@+id/check_dismiss"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:background="#828282"
-                    android:layout_gravity="end">
-
-                    <TextView
-                        android:id="@+id/dismiss_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:textColor="#ffffff"
-                        android:gravity="center"
-                        android:textSize="11sp"
-                        android:text="@string/approval_tv02" />
-                </RelativeLayout>
-
-            </RelativeLayout>
         </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-
-
-</androidx.cardview.widget.CardView>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DBDBDB"/>
+</LinearLayout>
 

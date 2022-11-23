@@ -9,15 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.data.UsersData;
@@ -53,10 +55,14 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
     String USER_INFO_ID = "";
     String AMPM = "";
     List<String> user_id = new ArrayList<>();
+    List<String> user_name = new ArrayList<>();
+    List<String> user_img_path = new ArrayList<>();
+    List<String> user_img_jikgup = new ArrayList<>();
     boolean[] checkareatf;
     List<String> checkworkno = new ArrayList<>();
     boolean allcheck;
-
+    String startTime = "";
+    String endTime = "";
 
     private boolean animationsLocked = false;
     private boolean delayEnterAnimation = true;
@@ -99,6 +105,9 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
         try {
             shardpref = new PreferenceHelper(mContext);
             user_id.clear();
+            user_name.clear();
+            user_img_path.clear();
+            user_img_jikgup.clear();
         /*
         getTask_kind
         1 = 일반업무
@@ -127,205 +136,161 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
         1 = 인증사진
         2 = 체크
         */
-            if (item.getWriter_id().equals(USER_INFO_ID)) {
-                holder.list_setting.setVisibility(View.VISIBLE);
-            } else {
-                holder.list_setting.setVisibility(View.GONE);
-            }
-
-            if (item.getComplete_kind().equals("0")) {
-                holder.no_img_icon.setVisibility(View.GONE);
-            } else {
-                holder.no_img_icon.setVisibility(View.VISIBLE);
-            }
-
-            holder.check_box.setOnClickListener(v -> {
-                if (!checkareatf[position]) {
-                    checkworkno.add(item.getId());
-                    checkareatf[position] = true;
-                    holder.checkarea.setBackgroundResource(R.drawable.checkbox_on);
-                } else {
-                    checkworkno.remove(item.getId());
-                    checkareatf[position] = false;
-                    holder.checkarea.setBackgroundResource(R.drawable.checkbox_off);
-                }
-//            shardpref.putInt("checkcnt", checkworkno.length);
-                shardpref.putString("checkworkno", String.valueOf(checkworkno));
-
-                int Tcnt = 0;
-                int Fcnt = 0;
-
-                for (int a = 0; a < mData.size(); a++) {
-                    if (checkareatf[a]) {
-                        ++Tcnt;
-                    }
-                    if (!checkareatf[a]) {
-                        ++Fcnt;
-                    }
-                }
-                Log.i(TAG, "Tcnt : " + Tcnt + " / Fcnt : " + Fcnt);
-                if (mListener != null) {
-                    mListener.onItemClick(v, position, Tcnt, Fcnt);
-                }
-            });
-
-            if (item.getSun().equals("1")) {
-                yoil[0] = "일";
-            } else {
-                yoil[0] = "";
-            }
-            if (item.getMon().equals("1")) {
-                yoil[1] = "월";
-            } else {
-                yoil[1] = "";
-            }
-            if (item.getTue().equals("1")) {
-                yoil[2] = "화";
-            } else {
-                yoil[2] = "";
-            }
-            if (item.getWed().equals("1")) {
-                yoil[3] = "수";
-            } else {
-                yoil[3] = "";
-            }
-            if (item.getThu().equals("1")) {
-                yoil[4] = "목";
-            } else {
-                yoil[4] = "";
-            }
-            if (item.getFri().equals("1")) {
-                yoil[5] = "금";
-            } else {
-                yoil[5] = "";
-            }
-            if (item.getSat().equals("1")) {
-                yoil[6] = "토";
-            } else {
-                yoil[6] = "";
-            }
-            int cnt = 0;
-            dlog.i("yoil size 배열길이 : " + yoil.length);
-            for (int i = 0; i < yoil.length; i++) {
-                if (!yoil[i].isEmpty()) {
-                    cnt++;
-                    dlog.i("yoil[i] : " + yoil[i]);
-                    setYoil += yoil[i] + (i < 6 ? "," : "");
-                }
-            }
-            dlog.i("cnt : " + cnt);
-            dlog.i("setYoil12 : " + setYoil.replace(",", " ").trim().replace(" ", ","));
-            holder.work_yoil.setText(setYoil.replace(",", " ").trim().replace(" ", ","));
-            setYoil = "";
-
-
             try {
+                if (item.getWriter_id().equals(USER_INFO_ID)) {
+                    holder.list_setting.setVisibility(View.VISIBLE);
+                } else {
+                    holder.list_setting.setVisibility(View.GONE);
+                }
+
                 JSONArray Response = new JSONArray(item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
                 dlog.i("users : " + item.getUsers());
                 dlog.i("users Response : " + Response.length());
-
-                mList = new ArrayList<>();
-                mAdapter = new AdaperInMemberAdapter(mContext, mList);
-                holder.member_list.setAdapter(mAdapter);
-                holder.member_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                List<String> join_member = new ArrayList<>();
+//                mList = new ArrayList<>();
+//                mAdapter = new AdaperInMemberAdapter(mContext, mList);
+//                holder.member_list.setAdapter(mAdapter);
+//                holder.member_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
                 if (Response.length() == 0) {
-                    Log.i(TAG, "GET SIZE : " + Response.length());
+                    Log.i(TAG, "GET SIZE 1: " + Response.length());
                 } else {
-                    if (Response.length() > 3) {
-                        for (int i = 0; i < 3; i++) {
-                            JSONObject jsonObject = Response.getJSONObject(i);
-                            mAdapter.addItem(new UsersData.UsersData_list(
-                                    jsonObject.getString("user_id"),
-                                    jsonObject.getString("user_name"),
-                                    jsonObject.getString("img_path")
-                            ));
-                        }
+                    Log.i(TAG, "GET SIZE 2: " + Response.length());
+                    for (int i = 0; i < Response.length(); i++) {
+                        JSONObject jsonObject = Response.getJSONObject(i);
+                        join_member.add(jsonObject.getString("user_name"));
+                    }
+                    if (Response.length() == 1) {
+                        Glide.with(mContext).load(Response.getJSONObject(0).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg1);
+                        holder.workimg_url02.setVisibility(View.GONE);
+                        holder.workimg_url03.setVisibility(View.GONE);
+                        holder.workimg_url04.setVisibility(View.GONE);
+                    } else if (Response.length() == 2) {
+                        Glide.with(mContext).load(Response.getJSONObject(0).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg1);
+                        Glide.with(mContext).load(Response.getJSONObject(1).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg2);
+                        holder.workimg_url03.setVisibility(View.GONE);
+                        holder.workimg_url04.setVisibility(View.GONE);
+                    } else if (Response.length() == 3) {
+                        Glide.with(mContext).load(Response.getJSONObject(0).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg1);
+                        Glide.with(mContext).load(Response.getJSONObject(1).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg2);
+                        Glide.with(mContext).load(Response.getJSONObject(2).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg3);
+                        holder.workimg_url04.setVisibility(View.GONE);
+                    } else if (Response.length() > 3) {
+                        Glide.with(mContext).load(Response.getJSONObject(0).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg1);
+                        Glide.with(mContext).load(Response.getJSONObject(1).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg2);
+                        Glide.with(mContext).load(Response.getJSONObject(2).getString("img_path"))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .placeholder(R.drawable.certi01)
+                                .into(holder.workimg3);
+                        int Cnt = Response.length() - 3;
+                        holder.other_cnt.setText("+" + Cnt);
+                    }
+                    String join_membertv = String.valueOf(join_member).replace(",", "/").replace("[", "").replace("]", "");
+                    dlog.i("join_member.size() : " + join_member.size());
+                    if (join_member.size() > 3) {
+                        int Cnt2 = join_member.size() - 3;
+                        holder.member_name.setText(join_member.get(0) + "/" + join_member.get(1) + "/" + join_member.get(2) + " " + "외" + Cnt2);
                     } else {
-                        for (int i = 0; i < Response.length(); i++) {
-                            JSONObject jsonObject = Response.getJSONObject(i);
-                            mAdapter.addItem(new UsersData.UsersData_list(
-                                    jsonObject.getString("user_id"),
-                                    jsonObject.getString("user_name"),
-                                    jsonObject.getString("img_path")
-                            ));
-                        }
+                        holder.member_name.setText(join_membertv);
                     }
                     user_id.removeAll(user_id);
+                    user_name.removeAll(user_name);
+                    user_img_path.removeAll(user_img_path);
+                    user_img_jikgup.removeAll(user_img_jikgup);
                     for (int i = 0; i < Response.length(); i++) {
                         JSONObject jsonObject = Response.getJSONObject(i);
                         if (!jsonObject.getString("user_name").equals("null")) {
                             user_id.add(jsonObject.getString("user_id"));
+                            user_name.add(jsonObject.getString("user_name"));
+                            user_img_path.add(jsonObject.getString("img_path"));
+                            user_img_jikgup.add(jsonObject.getString("jikgup"));
                         }
                     }
+                }
 
-                    if (user_id.contains(USER_INFO_ID)) {
-                        if (item.getApproval_state().equals("3") || item.getApproval_state().equals("2")) {
-                            holder.check_box.setVisibility(View.VISIBLE);
-                            holder.check_dismiss.setVisibility(View.GONE);
-                        } else {
-                            holder.check_box.setVisibility(View.GONE);
-                            holder.check_dismiss.setVisibility(View.VISIBLE);
-                            if (item.getApproval_state().equals("1")) {
-                                holder.dismiss_tv.setText(R.string.approval_tv02);
-                            } else if (item.getApproval_state().equals("0")) {
-                                holder.dismiss_tv.setText(R.string.approval_tv01);
-                            }
-                        }
-                    } else {
-                        if (item.getApproval_state().equals("3") || item.getApproval_state().equals("2")) {
-                            holder.check_box.setVisibility(View.VISIBLE);
-                            holder.check_dismiss.setVisibility(View.GONE);
-                        } else {
-                            holder.check_box.setVisibility(View.GONE);
-                            holder.check_dismiss.setVisibility(View.VISIBLE);
-                            if (item.getApproval_state().equals("1")) {
-                                holder.dismiss_tv.setText(R.string.approval_tv02);
-                            } else if (item.getApproval_state().equals("0")) {
-                                holder.dismiss_tv.setText(R.string.approval_tv01);
-                            }
-                        }
-                    }
 
-                    if (Response.length() > 3) {
-                        int MemberCnt = Response.length() - 3;
-                        holder.plus_add_membercnt.setText("+" + MemberCnt);
-                    } else {
-                        holder.plus_add_membercnt.setVisibility(View.GONE);
-                    }
-                    mAdapter.notifyDataSetChanged();
+                dlog.i("work_title : " + item.getTitle());
+                dlog.i("item.getStart_time() : " + item.getStart_time());
+                dlog.i("item.getEnd_time() : " + item.getEnd_time());
+                holder.work_title.setText(item.getTitle());
+                if (item.getStart_time().length() > 5) {
+                    String date = item.getStart_time().substring(0, 10);
+                    String time = item.getStart_time().substring(11, 16);
+                    holder.work_start_time.setText(date.replace("-", ".") + " | " + time + " 시작");
+                } else {
+                    holder.work_start_time.setText(item.getStart_time() + " 시작");
+                }
+
+                if (item.getEnd_time().length() > 5) {
+                    String date = item.getEnd_time().substring(0, 10);
+                    String time = item.getEnd_time().substring(11, 16);
+                    holder.work_end_time.setText(date.replace("-", ".") + " | " + time + " 마감");
+                } else {
+                    holder.work_end_time.setText(item.getEnd_time() + " 마감");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            holder.work_title.setText(item.getTitle());
 
-            int subHourEnd = Integer.parseInt(item.getEnd_time().substring(0, 2));
+//            if(item.getStart_time().length() > 3){
+//
+//            }else{
+//
+//            }
 
-            if (subHourEnd < 12) {
-                AMPM = "AM";
-            } else {
-                AMPM = "PM";
-            }
-            holder.work_date.setText("마감시간 : " + item.getEnd_time() + " " + AMPM);
-
-            if (item.getApproval_state().equals("3")) {
-                if(item.getComplete_yn().equals("n")){
-                    holder.work_confirm.setText("미완료");
-                }
-                holder.work_confirm.setVisibility(View.VISIBLE);
-            } else {
-                if (item.getApproval_state().equals("2")) {
-                    //반려
-                } else if (item.getApproval_state().equals("1")) {
-                    //승인
-                } else if (item.getApproval_state().equals("0")) {
-                    //결재대기중
-                }
-                if(item.getComplete_yn().equals("n")){
-                    holder.work_confirm.setText("미완료");
-                }
-                holder.work_confirm.setVisibility(View.GONE);
-            }
+//            String startTime = item.getStart_time().substring(0,4) + "." + item.getStart_time().substring(5,7) + "." +
+//            holder.work_end_time.setText(item.getStart_time() + " 시작");
+//
+//            if (item.getApproval_state().equals("3")) {
+//                if(item.getComplete_yn().equals("n")){
+//                    holder.work_confirm.setText("미완료");
+//                }
+//                holder.work_confirm.setVisibility(View.VISIBLE);
+//            } else {
+//                if (item.getApproval_state().equals("2")) {
+//                    //반려
+//                } else if (item.getApproval_state().equals("1")) {
+//                    //승인
+//                } else if (item.getApproval_state().equals("0")) {
+//                    //결재대기중
+//                }
+//                if(item.getComplete_yn().equals("n")){
+//                    holder.work_confirm.setText("미완료");
+//                }
+//                holder.work_confirm.setVisibility(View.GONE);
+//            }
 
             holder.list_setting.setOnClickListener(v -> {
                 shardpref.putString("task_no", item.getId());
@@ -335,6 +300,9 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 shardpref.putString("contents", item.getContents());
                 shardpref.putString("complete_kind", item.getComplete_kind());               // 0:체크, 1:사진
                 shardpref.putString("users", user_id.toString());
+                shardpref.putString("usersn", user_name.toString());
+                shardpref.putString("usersimg", user_img_path.toString());
+                shardpref.putString("usersjikgup", user_img_jikgup.toString());
                 shardpref.putString("task_date", item.getTask_date());
                 shardpref.putString("start_time", item.getStart_time());
                 shardpref.putString("end_time", item.getEnd_time());
@@ -347,8 +315,9 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 shardpref.putString("sat", item.getSat());
                 shardpref.putString("img_path", item.getImg_path());
                 shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
-                shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // n: 미완료 사요
-                shardpref.putString("approval_state", item.getApproval_state()); // n: 미완료 사요
+                shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // 미완료 사유
+                shardpref.putString("approval_state", item.getApproval_state()); // 결재상태
+                shardpref.putString("overdate", item.getTask_overdate()); // 업무종료날짜
                 shardpref.putInt("make_kind", Integer.parseInt(item.getKind()));
                 Intent intent = new Intent(mContext, Tap2OptionActivity.class);
                 intent.putExtra("left_btn_txt", "닫기");
@@ -356,34 +325,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             });
-//
-//        holder.item_total.setOnClickListener(v -> {
-//            Intent intent = new Intent(mContext, WorkAssigmentContentsPop.class);
-//            intent.putExtra("data", item.getTask_contents());
-//            intent.putExtra("task_no", item.getTask_no());
-//            intent.putExtra("flag", "tap2");
-//            intent.putExtra("name", item.getTask_conduct_name());
-//            intent.putExtra("profileimg", item.getUser_thumnail_url());
-//            mContext.startActivity(intent);
-//            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        });
-//
-//        holder.work_name.setText(item.getTask_conduct_name());
-
-            //--아이템에 나타나기 애니메이션 줌
-//        holder.item_total.setTranslationY(150);
-//        holder.item_total.setAlpha(0.f);
-//        holder.item_total.animate().translationY(0).alpha(1.f)
-//                .setStartDelay(delayEnterAnimation ? 20 * (position) : 0) // position 마다 시간차를 조금 주고..
-//                .setInterpolator(new DecelerateInterpolator(2.f))
-//                .setDuration(300)
-//                .setListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        animationsLocked = true; // 진입시에만 animation 하도록 하기 위함
-//                    }
-//                });
         } catch (Exception e) {
             dlog.i("Exception : " + e);
         }
@@ -396,31 +337,38 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView work_title, work_date, work_confirm, work_yoil;
-        RelativeLayout list_setting, check_box, check_dismiss;
-        CardView visiable_area;
+        LinearLayout item_total, member_img_array;
+        TextView work_title, work_start_time, work_end_time, member_name;
         RecyclerView member_list;
-        TextView plus_add_membercnt, dismiss_tv;
-        CardView item_total;
-        ImageView checkarea, no_img_icon;
+        RelativeLayout list_setting;
 
+        CardView workimg_url01, workimg_url02, workimg_url03, workimg_url04;
+        ImageView workimg1, workimg2, workimg3;
+        TextView other_cnt;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            work_title = itemView.findViewById(R.id.work_title);
-            work_date = itemView.findViewById(R.id.work_date);
-            list_setting = itemView.findViewById(R.id.list_setting);
             item_total = itemView.findViewById(R.id.item_total);
-            work_confirm = itemView.findViewById(R.id.work_confirm);
-            work_yoil = itemView.findViewById(R.id.work_yoil);
+            member_img_array = itemView.findViewById(R.id.member_img_array);
+
+            work_title = itemView.findViewById(R.id.work_title);
+            work_start_time = itemView.findViewById(R.id.work_start_time);
+            work_end_time = itemView.findViewById(R.id.work_end_time);
+            member_name = itemView.findViewById(R.id.member_name);
+
             member_list = itemView.findViewById(R.id.member_list);
-            plus_add_membercnt = itemView.findViewById(R.id.plus_add_membercnt);
-            check_box = itemView.findViewById(R.id.check_box);
-            checkarea = itemView.findViewById(R.id.checkarea);
-            no_img_icon = itemView.findViewById(R.id.no_img_icon);
-            check_dismiss = itemView.findViewById(R.id.check_dismiss);
-            dismiss_tv = itemView.findViewById(R.id.dismiss_tv);
+            list_setting = itemView.findViewById(R.id.list_setting);
+
+            workimg_url01 = itemView.findViewById(R.id.workimg_url01);
+            workimg_url02 = itemView.findViewById(R.id.workimg_url02);
+            workimg_url03 = itemView.findViewById(R.id.workimg_url03);
+            workimg_url04 = itemView.findViewById(R.id.workimg_url04);
+
+            workimg1 = itemView.findViewById(R.id.workimg1);
+            workimg2 = itemView.findViewById(R.id.workimg2);
+            workimg3 = itemView.findViewById(R.id.workimg3);
+            other_cnt = itemView.findViewById(R.id.other_cnt);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
@@ -452,42 +400,42 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             checkareatf = new boolean[mData.size()];
 
             Log.i(TAG, "allcheck : " + allcheck);
-            if (allcheck) {
-                checkarea.setBackgroundResource(R.drawable.checkbox_on);
-                Log.i(TAG, "mData.size() : " + mData.size());
-                for (int i = 0; i < mData.size(); i++) {
-                    try {
-                        JSONArray Response = new JSONArray(mData.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
-                        dlog.i("users : " + mData.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
-                        dlog.i("users Response : " + Response.length());
-                        if (Response.length() == 0) {
-                            Log.i(TAG, "GET SIZE : " + Response.length());
-                        } else {
-                            user_id.removeAll(user_id);
-                            for (int a = 0; a < Response.length(); a++) {
-                                JSONObject jsonObject = Response.getJSONObject(a);
-                                user_id.add(jsonObject.getString("user_id"));
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if(!mData.get(i).getApproval_state().equals("0") || !mData.get(i).getApproval_state().equals("1") || !user_id.contains(USER_INFO_ID)){
-                        checkareatf[i] = true;
-                        checkworkno.add(mData.get(i).getId());
-                    }
-                }
-                Log.i(TAG, "checkworkno : " + checkworkno);
-                shardpref.putString("checkworkno", String.valueOf(checkworkno));
-            } else {
-                checkarea.setBackgroundResource(R.drawable.checkbox_off);
-                Log.i(TAG, "mData.size() : " + mData.size());
-                for (int i = 0; i < mData.size(); i++) {
-                        checkareatf[i] = false;
-                        checkworkno.removeAll(mData.get(i).getUsers());
-                }
-                Log.i(TAG, "checkworkno : " + checkworkno);
-            }
+//            if (allcheck) {
+//                checkarea.setBackgroundResource(R.drawable.checkbox_on);
+//                Log.i(TAG, "mData.size() : " + mData.size());
+//                for (int i = 0; i < mData.size(); i++) {
+//                    try {
+//                        JSONArray Response = new JSONArray(mData.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
+//                        dlog.i("users : " + mData.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
+//                        dlog.i("users Response : " + Response.length());
+//                        if (Response.length() == 0) {
+//                            Log.i(TAG, "GET SIZE : " + Response.length());
+//                        } else {
+//                            user_id.removeAll(user_id);
+//                            for (int a = 0; a < Response.length(); a++) {
+//                                JSONObject jsonObject = Response.getJSONObject(a);
+//                                user_id.add(jsonObject.getString("user_id"));
+//                            }
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    if(!mData.get(i).getApproval_state().equals("0") || !mData.get(i).getApproval_state().equals("1") || !user_id.contains(USER_INFO_ID)){
+//                        checkareatf[i] = true;
+//                        checkworkno.add(mData.get(i).getId());
+//                    }
+//                }
+//                Log.i(TAG, "checkworkno : " + checkworkno);
+//                shardpref.putString("checkworkno", String.valueOf(checkworkno));
+//            } else {
+//                checkarea.setBackgroundResource(R.drawable.checkbox_off);
+//                Log.i(TAG, "mData.size() : " + mData.size());
+//                for (int i = 0; i < mData.size(); i++) {
+//                        checkareatf[i] = false;
+//                        checkworkno.removeAll(mData.get(i).getUsers());
+//                }
+//                Log.i(TAG, "checkworkno : " + checkworkno);
+//            }
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();

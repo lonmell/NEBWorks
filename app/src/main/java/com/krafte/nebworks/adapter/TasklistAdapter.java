@@ -63,26 +63,57 @@ public class TasklistAdapter extends RecyclerView.Adapter<TasklistAdapter.ViewHo
 //        dlog.i("mData title :" + item.getTitle());
 //        dlog.i("mData contents :" + item.getContents());
         try{
-            dlog.i("mData getKind 0:" + mData.get(0).getKind());
-            holder.task_tv1.setText(mData.get(0).getTitle());
-            holder.task_tv1.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#1483FE":"#FF0000"));
-
-            dlog.i("mData getKind 1:" + mData.get(1).getKind());
-            holder.task_tv2.setText(mData.get(1).getTitle());
-            holder.task_tv2.setTextColor(Color.parseColor(mData.get(1).getKind().equals("0")?"#1483FE":"#FF0000"));
-
-            dlog.i("mData getKind 2:" + mData.get(2).getKind());
-            holder.task_tv3.setText(mData.get(2).getTitle());
-            holder.task_tv3.setTextColor(Color.parseColor(mData.get(2).getKind().equals("0")?"#1483FE":"#FF0000"));
-
-            dlog.i("mData getKind 3:" + mData.get(3).getKind());
-            holder.task_tv4.setText(mData.get(3).getTitle());
-            holder.task_tv4.setTextColor(Color.parseColor(mData.get(3).getKind().equals("0")?"#1483FE":"#FF0000"));
-
-            dlog.i("mData getKind 4:" + mData.get(4).getKind());
-            holder.task_tv5.setText(mData.get(4).getTitle());
-            holder.task_tv5.setTextColor(Color.parseColor(mData.get(4).getKind().equals("0")?"#1483FE":"#FF0000"));
-
+            if(mData.size() == 1){
+                holder.task_tv1.setText(mData.get(0).getTitle());
+                holder.task_tv1.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv1.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+            }else if(mData.size() == 2){
+                holder.task_tv1.setText(mData.get(0).getTitle());
+                holder.task_tv2.setText(mData.get(1).getTitle());
+                holder.task_tv1.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv1.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv2.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv2.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+            }else if(mData.size() == 3){
+                holder.task_tv1.setText(mData.get(0).getTitle());
+                holder.task_tv2.setText(mData.get(1).getTitle());
+                holder.task_tv3.setText(mData.get(2).getTitle());
+                holder.task_tv1.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv1.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv2.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv2.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv3.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv3.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+            }else if(mData.size() == 4){
+                holder.task_tv1.setText(mData.get(0).getTitle());
+                holder.task_tv2.setText(mData.get(1).getTitle());
+                holder.task_tv3.setText(mData.get(2).getTitle());
+                holder.task_tv4.setText(mData.get(3).getTitle());
+                holder.task_tv1.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv1.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv2.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv2.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv3.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv3.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv4.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv4.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+            }else if(mData.size() == 5){
+                holder.task_tv1.setText(mData.get(0).getTitle());
+                holder.task_tv2.setText(mData.get(1).getTitle());
+                holder.task_tv3.setText(mData.get(2).getTitle());
+                holder.task_tv4.setText(mData.get(3).getTitle());
+                holder.task_tv5.setText(mData.get(4).getTitle());
+                holder.task_tv1.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv1.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv2.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv2.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv3.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv3.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv4.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv4.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+                holder.task_tv5.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
+                holder.task_tv5.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));
+            }
         }catch (Exception e){
             dlog.i("Exception :" + e);
         }
