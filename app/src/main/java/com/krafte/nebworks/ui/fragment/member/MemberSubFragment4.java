@@ -36,7 +36,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MemberSubFragment4 extends Fragment {
     private MembersubFragment1Binding binding;
-    private final static String TAG = "Page1Fragment";
+    private final static String TAG = "MemberSubFragment4";
     Context mContext;
     Activity activity;
 

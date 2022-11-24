@@ -423,7 +423,9 @@ public class HomeFragment2 extends Fragment {
 //            pm.ApprovalGo(mContext);
 //            shardpref.putInt("SELECT_POSITION",0);
 //        });
-
+        binding.approvalGo.setOnClickListener(v -> {
+            pm.Approval(mContext);
+        });
         binding.itemArea.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH","1");
             pm.PlaceList(mContext);

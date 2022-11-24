@@ -69,7 +69,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-
+//--결재페이지에서 쓸것
 public class PlaceWorkDetailActivity extends AppCompatActivity {
     private final static String TAG = "PlaceWorkDetailActivity";
     private ActivityPlaceworkDetailBinding binding;
@@ -91,8 +91,8 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
     Drawable icon_off;
     Drawable icon_on;
     GetResultData resultData = new GetResultData();
-    String fileName = "";
 
+    String fileName = "";
     private Bitmap saveBitmap;
     String ImgfileMaker = "";
     File file;
@@ -424,7 +424,6 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             }
 
             //작성자, 작업자 구분
-
             binding.success01Txt.setOnClickListener(v -> {
                 task_check = "1";
                 complete_yn = "y";

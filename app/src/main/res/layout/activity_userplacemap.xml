@@ -17,7 +17,7 @@
         <RelativeLayout
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="59dp"
             android:layout_alignParentTop="true">
 
 

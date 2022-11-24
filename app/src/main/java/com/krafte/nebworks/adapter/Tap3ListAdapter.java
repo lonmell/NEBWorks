@@ -10,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,14 +22,16 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.TodoReuseData;
 import com.krafte.nebworks.data.UsersData;
 import com.krafte.nebworks.pop.Tap3OptionActivity;
-import com.krafte.nebworks.pop.WorkAssigmentContentsPop;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Tap3ListAdapter extends RecyclerView.Adapter<Tap3ListAdapter.ViewHolder> {
     private static final String TAG = "Tap3ListAdapter";
@@ -88,15 +90,33 @@ public class Tap3ListAdapter extends RecyclerView.Adapter<Tap3ListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         TodoReuseData.TodoReuseData_list item = mData.get(position);
-
+        SimpleDateFormat f = new SimpleDateFormat("HH:mm", Locale.KOREA);
         try{
-            shardpref = new PreferenceHelper(mContext);
-
+            String diff_time_get = "";
             holder.work_title.setText(item.getTitle());
-            holder.work_date.setText("마감시간 : " + item.getEnd_time());
-            holder.work_kind.setText(item.getComplete_kind().equals("0")?"체크":"매장사진");
+            dlog.i("휴게시간 계산");
+            //휴게시간 계산
+            Date d3 = f.parse(item.getEnd_time());
+            Date d4 = f.parse(item.getStart_time());
 
-            holder.list_setting.setOnClickListener(v -> {
+            long diff2 = d3.getTime() - d4.getTime();
+            dlog.i("diff : " + diff2);
+            long min2 = diff2 / 60000;
+
+            long getH2 = min2 / 60;
+            long getM2 = min2 % 60;
+            if (getM2 != 0) {
+                diff_time_get = getH2 + "시간 " + getM2 + "분";
+            } else if (getH2 == 0) {
+                diff_time_get = getM2 + "분";
+            } else {
+                diff_time_get = getH2 + "시간";
+            }
+
+            holder.diff_time.setText(diff_time_get);
+            holder.task_kind_state.setText(item.getComplete_kind().equals("0")?"체크":"인증사진");
+
+           holder.list_setting.setOnClickListener(v -> {
                 shardpref.putString("task_no",item.getId());
                 shardpref.putString("writer_id" ,item.getWriter_id());
                 shardpref.putString("title" ,item.getTitle());
@@ -117,16 +137,34 @@ public class Tap3ListAdapter extends RecyclerView.Adapter<Tap3ListAdapter.ViewHo
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             });
 
-            holder.item_total.setOnClickListener(v -> {
-                Intent intent = new Intent(mContext, WorkAssigmentContentsPop.class);
-                intent.putExtra("data", item.getContents());
-                intent.putExtra("task_no",item.getId());
-                intent.putExtra("title",item.getTitle());
-                intent.putExtra("flag", "tap3");
-                intent.putExtra("name", "");
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            holder.item_total.setOnClickListener(v -> {
+//                Intent intent = new Intent(mContext, WorkAssigmentContentsPop.class);
+//                intent.putExtra("data", item.getContents());
+//                intent.putExtra("task_no",item.getId());
+//                intent.putExtra("title",item.getTitle());
+//                intent.putExtra("flag", "tap3");
+//                intent.putExtra("name", "");
+//                mContext.startActivity(intent);
+//                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            });
+            holder.addtask_btn.setOnClickListener(v -> {
+                shardpref.putString("writer_id" ,item.getWriter_id());
+                shardpref.putString("title" ,item.getTitle());
+                shardpref.putString("contents" ,item.getContents());
+                shardpref.putString("complete_kind" ,item.getComplete_kind());
+                shardpref.putString("start_time" ,item.getStart_time());
+                shardpref.putString("end_time" ,item.getEnd_time());
+                shardpref.putString("sun" ,item.getSun());
+                shardpref.putString("mon" ,item.getMon());
+                shardpref.putString("tue" ,item.getTue());
+                shardpref.putString("wed" ,item.getWed());
+                shardpref.putString("thu" ,item.getThu());
+                shardpref.putString("fri" ,item.getFri());
+                shardpref.putString("sat" ,item.getSat());
+                shardpref.putString("return_page","task_reuse");
+                shardpref.putInt("make_kind",1);
+                pm.addWorkGo(mContext);
             });
 
             //--아이템에 나타나기 애니메이션 줌
@@ -155,25 +193,28 @@ public class Tap3ListAdapter extends RecyclerView.Adapter<Tap3ListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView work_title, work_date;
-        RelativeLayout list_setting;
-        CardView item_total;
-        TextView work_kind;
+        RelativeLayout list_setting,addtask_btn;
+        LinearLayout item_total;
+        TextView diff_time,task_kind_state;
 
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            work_title = itemView.findViewById(R.id.work_title);
-            work_date = itemView.findViewById(R.id.work_date);
-            list_setting = itemView.findViewById(R.id.list_setting);
-            item_total = itemView.findViewById(R.id.item_total);
-            work_kind = itemView.findViewById(R.id.work_kind);
+            work_title      = itemView.findViewById(R.id.work_title);
+            work_date       = itemView.findViewById(R.id.work_date);
+            list_setting    = itemView.findViewById(R.id.list_setting);
+            item_total      = itemView.findViewById(R.id.item_total);
+            diff_time       = itemView.findViewById(R.id.diff_time);
+            task_kind_state = itemView.findViewById(R.id.task_kind_state);
+            addtask_btn     = itemView.findViewById(R.id.addtask_btn);
 
+            dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
 
-            dlog.DlogContext(mContext);
+
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();

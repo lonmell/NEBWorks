@@ -1,5 +1,7 @@
 package com.krafte.nebworks.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -60,7 +63,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
     List<String> user_img_jikgup = new ArrayList<>();
     boolean[] checkareatf;
     List<String> checkworkno = new ArrayList<>();
-    boolean allcheck;
+    int kind = 0;
     String startTime = "";
     String endTime = "";
 
@@ -77,10 +80,10 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
         this.mListener = listener;
     }
 
-    public Tap2ListAdapter(Context context, ArrayList<TodolistData.TodolistData_list> data, FragmentManager fragmentManager, boolean allcheck) {
+    public Tap2ListAdapter(Context context, ArrayList<TodolistData.TodolistData_list> data, FragmentManager fragmentManager, int kind) {//kind : 조회위치 [ 1 = 할일탭 / 2 = 캘린더>날짜선택>BottomSheet ]
         this.mData = data;
         this.mContext = context;
-        this.allcheck = allcheck;
+        this.kind = kind;
         this.fragmentManager = fragmentManager;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
@@ -293,38 +296,53 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
 //            }
 
             holder.list_setting.setOnClickListener(v -> {
-                shardpref.putString("task_no", item.getId());
-                shardpref.putString("writer_id", item.getWriter_id());
-                shardpref.putString("kind", item.getKind());            // 0:할일, 1:일정
-                shardpref.putString("title", item.getTitle());
-                shardpref.putString("contents", item.getContents());
-                shardpref.putString("complete_kind", item.getComplete_kind());               // 0:체크, 1:사진
-                shardpref.putString("users", user_id.toString());
-                shardpref.putString("usersn", user_name.toString());
-                shardpref.putString("usersimg", user_img_path.toString());
-                shardpref.putString("usersjikgup", user_img_jikgup.toString());
-                shardpref.putString("task_date", item.getTask_date());
-                shardpref.putString("start_time", item.getStart_time());
-                shardpref.putString("end_time", item.getEnd_time());
-                shardpref.putString("sun", item.getSun());
-                shardpref.putString("mon", item.getMon());
-                shardpref.putString("tue", item.getTue());
-                shardpref.putString("wed", item.getWed());
-                shardpref.putString("thu", item.getThu());
-                shardpref.putString("fri", item.getFri());
-                shardpref.putString("sat", item.getSat());
-                shardpref.putString("img_path", item.getImg_path());
-                shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
-                shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // 미완료 사유
-                shardpref.putString("approval_state", item.getApproval_state()); // 결재상태
-                shardpref.putString("overdate", item.getTask_overdate()); // 업무종료날짜
-                shardpref.putInt("make_kind", Integer.parseInt(item.getKind()));
-                Intent intent = new Intent(mContext, Tap2OptionActivity.class);
-                intent.putExtra("left_btn_txt", "닫기");
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                if(kind == 1){
+                    shardpref.putString("task_no", item.getId());
+                    shardpref.putString("writer_id", item.getWriter_id());
+                    shardpref.putString("kind", item.getKind());            // 0:할일, 1:일정
+                    shardpref.putString("title", item.getTitle());
+                    shardpref.putString("contents", item.getContents());
+                    shardpref.putString("complete_kind", item.getComplete_kind());               // 0:체크, 1:사진
+                    shardpref.putString("users", user_id.toString());
+                    shardpref.putString("usersn", user_name.toString());
+                    shardpref.putString("usersimg", user_img_path.toString());
+                    shardpref.putString("usersjikgup", user_img_jikgup.toString());
+                    shardpref.putString("task_date", item.getTask_date());
+                    shardpref.putString("start_time", item.getStart_time());
+                    shardpref.putString("end_time", item.getEnd_time());
+                    shardpref.putString("sun", item.getSun());
+                    shardpref.putString("mon", item.getMon());
+                    shardpref.putString("tue", item.getTue());
+                    shardpref.putString("wed", item.getWed());
+                    shardpref.putString("thu", item.getThu());
+                    shardpref.putString("fri", item.getFri());
+                    shardpref.putString("sat", item.getSat());
+                    shardpref.putString("img_path", item.getImg_path());
+                    shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
+                    shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // 미완료 사유
+                    shardpref.putString("approval_state", item.getApproval_state()); // 결재상태
+                    shardpref.putString("overdate", item.getTask_overdate()); // 업무종료날짜
+                    shardpref.putInt("make_kind", Integer.parseInt(item.getKind()));
+                    Intent intent = new Intent(mContext, Tap2OptionActivity.class);
+                    intent.putExtra("left_btn_txt", "닫기");
+                    mContext.startActivity(intent);
+                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                }
             });
+            //--아이템에 나타나기 애니메이션 줌
+            holder.item_total.setTranslationY(150);
+            holder.item_total.setAlpha(0.f);
+            holder.item_total.animate().translationY(0).alpha(1.f)
+                    .setStartDelay(delayEnterAnimation ? 20 * (position) : 0) // position 마다 시간차를 조금 주고..
+                    .setInterpolator(new DecelerateInterpolator(2.f))
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            animationsLocked = true; // 진입시에만 animation 하도록 하기 위함
+                        }
+                    });
         } catch (Exception e) {
             dlog.i("Exception : " + e);
         }
@@ -399,7 +417,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             dlog.DlogContext(mContext);
             checkareatf = new boolean[mData.size()];
 
-            Log.i(TAG, "allcheck : " + allcheck);
 //            if (allcheck) {
 //                checkarea.setBackgroundResource(R.drawable.checkbox_on);
 //                Log.i(TAG, "mData.size() : " + mData.size());
@@ -449,18 +466,30 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                             Log.i(TAG, "GET SIZE : " + Response.length());
                         } else {
                             user_id.removeAll(user_id);
+                            user_name.removeAll(user_name);
+                            user_img_path.removeAll(user_img_path);
+                            user_img_jikgup.removeAll(user_img_jikgup);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
-                                user_id.add(jsonObject.getString("user_id"));
+                                if (!jsonObject.getString("user_name").equals("null")) {
+                                    user_id.add(jsonObject.getString("user_id"));
+                                    user_name.add(jsonObject.getString("user_name"));
+                                    user_img_path.add(jsonObject.getString("img_path"));
+                                    user_img_jikgup.add(jsonObject.getString("jikgup"));
+                                }
                             }
                         }
+//                        item.getApproval_state()
                         shardpref.putString("task_no", item.getId());
                         shardpref.putString("writer_id", item.getWriter_id());
-                        shardpref.putString("kind", item.getKind());            // 0:할일, 1:일정
+                        shardpref.putString("kind", item.getKind());
                         shardpref.putString("title", item.getTitle());
                         shardpref.putString("contents", item.getContents());
-                        shardpref.putString("complete_kind", item.getComplete_kind());               // 0:체크, 1:사진
+                        shardpref.putString("complete_kind", item.getComplete_kind());
                         shardpref.putString("users", user_id.toString());
+                        shardpref.putString("usersn", user_name.toString());
+                        shardpref.putString("usersimg", user_img_path.toString());
+                        shardpref.putString("usersjikgup", user_img_jikgup.toString());
                         shardpref.putString("task_date", item.getTask_date());
                         shardpref.putString("start_time", item.getStart_time());
                         shardpref.putString("end_time", item.getEnd_time());
@@ -474,12 +503,13 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                         shardpref.putString("img_path", item.getImg_path());
                         shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
                         shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // n: 미완료 사요
-                        shardpref.putInt("make_kind", Integer.parseInt(item.getKind()));
+                        shardpref.putString("approval_state", item.getApproval_state());// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
                         dlog.i("users : " + user_id.toString());
+                        dlog.i("usersn : " + user_name.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    pm.workDetailGo(mContext);
+                    pm.TaskDetail(mContext);
                 }
             });
         }

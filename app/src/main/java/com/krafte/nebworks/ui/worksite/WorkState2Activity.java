@@ -237,17 +237,17 @@ public class WorkState2Activity extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION_sub",1);
         });
         approval1_go.setOnClickListener(v -> {
-            pm.ApprovalGo(mContext);
+            pm.Approval(mContext);
             shardpref.putString("return_page","WorkState2Activity");
             shardpref.putInt("SELECT_POSITION",0);
         });
         approval2_go.setOnClickListener(v -> {
-            pm.ApprovalGo(mContext);
+            pm.Approval(mContext);
             shardpref.putString("return_page","WorkState2Activity");
             shardpref.putInt("SELECT_POSITION",1);
         });
         approval3_go.setOnClickListener(v -> {
-            pm.ApprovalGo(mContext);
+            pm.Approval(mContext);
             shardpref.putString("return_page","WorkState2Activity");
             shardpref.putInt("SELECT_POSITION",2);
         });

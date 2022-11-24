@@ -391,10 +391,14 @@ public class MainFragment extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav06) {
             shardpref.putString("Tap","1");
             pm.PayManagement(mContext);
-        } else if (view.getId() == R.id.select_nav07) {
+        } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
             shardpref.putInt("SELECT_POSITION",1);
             shardpref.putInt("SELECT_POSITION_sub", 0);
             pm.Main(mContext);
+        } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
+            pm.addWorkGo(mContext);
+        }  else if (view.getId() == R.id.select_nav09) {
+            pm.Approval(mContext);
         }
 
     }

@@ -5,26 +5,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.dataInterface.TaskDelInterface;
 import com.krafte.nebworks.dataInterface.TaskreuseDelInterface;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-
-import java.text.DecimalFormat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,8 +69,8 @@ public class Tap3OptionActivity extends Activity {
         list_settingitem01 = findViewById(R.id.list_settingitem01);
         list_settingitem02 = findViewById(R.id.list_settingitem02);
 
-        list_settingitem01.setText("즐겨찾기 수정");
-        list_settingitem02.setText("즐겨찾기 삭제");
+        list_settingitem01.setText("업무 수정");
+        list_settingitem02.setText("업무 삭제");
         close_btn = findViewById(R.id.close_btn);
         setBtnEvent();
 
@@ -92,7 +84,7 @@ public class Tap3OptionActivity extends Activity {
             setResult(RESULT_OK, intent);
             overridePendingTransition(0, R.anim.translate_down);
             shardpref.putInt("make_kind", 2);
-            pm.addWorkGo(mContext);
+            pm.TaskReuesAdd(mContext);
         });
         list_settingitem02.setOnClickListener(v -> {
             TaskDel(TaskNo);

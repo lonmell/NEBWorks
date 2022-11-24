@@ -24,6 +24,7 @@ import com.krafte.nebworks.databinding.ActivityPlacelistBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,6 +60,7 @@ public class WorkgotoBottomSheet extends BottomSheetDialogFragment {
     PageMoveClass pm = new PageMoveClass();
     ArrayList<TodolistData.TodolistData_list> Todo_mList = new ArrayList<>();
     Tap2ListAdapter Todo_mAdapter = null;
+    RetrofitConnect rc = new RetrofitConnect();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -125,14 +127,14 @@ public class WorkgotoBottomSheet extends BottomSheetDialogFragment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 Log.e(TAG, "WorkTapListFragment2 / setRecyclerView");
                 Log.e(TAG, "response 1: " + response.isSuccessful());
-                Log.e(TAG, "response 2: " + response.body());
+                dlog.e("response 2: " + rc.getBase64decode(response.body()));
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + rc.getBase64decode(response.body()));
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
                         Todo_mList = new ArrayList<>();
-                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getParentFragmentManager(), false);
+                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getParentFragmentManager(), 2);
                         binding.placeList.setAdapter(Todo_mAdapter);
                         binding.placeList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         Log.i(TAG, "SetNoticeListview Thread run! ");

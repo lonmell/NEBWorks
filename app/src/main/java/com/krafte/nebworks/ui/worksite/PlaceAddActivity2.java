@@ -43,6 +43,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+/*
+ * 2022-10-05 방창배 작성 - 매장출입에 필요한 와이파이 등록
+ * */
 public class PlaceAddActivity2 extends AppCompatActivity {
     private ActivityAddplace2Binding binding;
     Context mContext;

@@ -157,8 +157,6 @@
         <activity android:name=".ui.paymanagement.AddPaystubActivity" />
         <activity android:name=".ui.paymanagement.PaystuballActivity" />
 
-        <!--task-->
-        <activity android:name=".ui.task.TaskActivity" />
         <!-- state -->
         <activity android:name=".ui.worksite.WorkState2Activity" />
 
@@ -166,14 +164,16 @@
         <activity android:name=".ui.worksite.PlaceListActivity" />
         <activity android:name=".ui.worksite.PlaceAddActivity" />
         <activity android:name=".ui.worksite.PlaceAddActivity2" />
-        <activity android:name=".ui.worksite.PlaceAddWorkActivity" />
+        <activity android:name=".ui.worksite.TaskAddWorkActivity" />
         <activity android:name=".ui.worksite.PlaceWorkDetailActivity" />
         <activity android:name=".ui.worksite.PlaceEditActivity" />
         <activity android:name=".ui.worksite.PlaceEditActivity2" />
         <activity android:name=".ui.worksite.PlaceSearchActivity" />
         <activity android:name=".ui.worksite.PlaceAddCompletion" />
-
-
+        <activity android:name=".ui.worksite.TaskReuseActivity" />
+        <activity android:name=".ui.worksite.TaskReuesAddActivity" />
+        <activity android:name=".ui.worksite.TaskDetailActivity" />
+        <activity android:name=".ui.worksite.TaskReportActivity" />
         <!-- Other -->
         <activity android:name=".ui.PinSelectLocationActivity" />
 

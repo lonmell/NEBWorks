@@ -459,6 +459,10 @@ public class LoginActivity extends AppCompatActivity {
                                         dlog.i("LoginCheck pw : " + pw);
                                         if (platform.equals("NEB")) {
                                             if (getaccount.equals(account) && decodePw.equals(pw)) {
+//                                                shardpref.putString("USER_INFO_AUTH", "0");
+//                                                shardpref.putInt("SELECT_POSITION", 0);
+//                                                shardpref.putInt("SELECT_POSITION_sub", 0);
+//                                                pm.PlaceList(mContext);
                                                 pm.AuthSelect(mContext);
                                             }else{
                                                 Toast_Nomal("이메일 혹은 비밀번호를 확인해주세요.");

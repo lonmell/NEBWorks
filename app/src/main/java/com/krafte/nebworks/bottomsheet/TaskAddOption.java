@@ -54,7 +54,7 @@ public class TaskAddOption extends BottomSheetDialogFragment {
         binding.selecttv021.setText("저장된 자주하는 업무를 불러옵니다.");
         setBtnEvent();
         Log.i(TAG, "data : " + data);
-
+        shardpref.remove("make_kind");
         return binding.getRoot();
     }
 
@@ -68,6 +68,7 @@ public class TaskAddOption extends BottomSheetDialogFragment {
         });
         //자주하는 업무 추가
         binding.invateAdd.setOnClickListener(v -> {
+            pm.TaskReuse(mContext);
             ClosePop();
         });
         binding.cancel.setOnClickListener(v -> {

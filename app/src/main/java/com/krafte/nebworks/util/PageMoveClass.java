@@ -36,12 +36,16 @@ import com.krafte.nebworks.ui.user.VerificationActivity;
 import com.krafte.nebworks.ui.worksite.PlaceAddActivity;
 import com.krafte.nebworks.ui.worksite.PlaceAddActivity2;
 import com.krafte.nebworks.ui.worksite.PlaceAddCompletion;
-import com.krafte.nebworks.ui.worksite.PlaceAddWorkActivity;
 import com.krafte.nebworks.ui.worksite.PlaceEditActivity;
 import com.krafte.nebworks.ui.worksite.PlaceEditActivity2;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.ui.worksite.PlaceSearchActivity;
 import com.krafte.nebworks.ui.worksite.PlaceWorkDetailActivity;
+import com.krafte.nebworks.ui.worksite.TaskAddWorkActivity;
+import com.krafte.nebworks.ui.worksite.TaskDetailActivity;
+import com.krafte.nebworks.ui.worksite.TaskReportActivity;
+import com.krafte.nebworks.ui.worksite.TaskReuesAddActivity;
+import com.krafte.nebworks.ui.worksite.TaskReuseActivity;
 import com.krafte.nebworks.ui.worksite.WorkState2Activity;
 import com.krafte.nebworks.ui.workstatus.AddWorkPartActivity;
 
@@ -117,17 +121,10 @@ public class PageMoveClass implements MovePage {
 
     //--ui.approval
     @Override
-    public void ApprovalGo(Context context) {
+    public void Approval(Context context) {
         Intent intent = new Intent(context, TaskApprovalFragment.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-    @Override
-    public void ApprovalBack(Context context) {
-        Intent intent = new Intent(context, TaskApprovalFragment.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
@@ -281,16 +278,18 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
     @Override
     public void addWorkGo(Context context) {
-        Intent intent = new Intent(context, PlaceAddWorkActivity.class);
+        Intent intent = new Intent(context, TaskAddWorkActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
     @Override
     public void addWorkGoBack(Context context) {
-        Intent intent = new Intent(context, PlaceAddWorkActivity.class);
+        Intent intent = new Intent(context, TaskAddWorkActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -303,6 +302,7 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
     @Override
     public void addNotiBack(Context context) {
         Intent intent = new Intent(context, FeedAddActivity.class);
@@ -329,6 +329,38 @@ public class PageMoveClass implements MovePage {
     @Override
     public void workCompletion(Context context) {
         Intent intent = new Intent(context, PlaceAddCompletion.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void TaskReuse(Context context) {
+        Intent intent = new Intent(context, TaskReuseActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void TaskReuesAdd(Context context) {
+        Intent intent = new Intent(context, TaskReuesAddActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void TaskDetail(Context context) {
+        Intent intent = new Intent(context, TaskDetailActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void TaskReport(Context context) {
+        Intent intent = new Intent(context, TaskReportActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -87,7 +87,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 /*
- * 2022-10-05 방창배 작성
+ * 2022-10-05 방창배 작성 - 매장 기본정보,상세정보 생성
  * */
 public class PlaceAddActivity extends AppCompatActivity {
     private ActivityAddplaceBinding binding;
@@ -713,7 +713,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
 //                                    pm.PlaceList(mContext);
                                 }else if(!response.body().equals("[]") && response.body().replace("\"", "").equals("duplicate")){
-                                    Toast_Nomal("중복되는 데이터가 있습니다.");
+                                    Toast_Nomal("현재 계정에서 동일한 이름의 매장이 이미 존재합니다.");
                                 }else{
                                     Toast_Nomal("추가 매장을 생성하지 못했습니다.");
                                 }

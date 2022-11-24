@@ -419,7 +419,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
         });
 
         binding.menu.setOnClickListener(v -> {
-            pm.ApprovalBack(mContext);
+            pm.Approval(mContext);
         });
     }
 
@@ -487,7 +487,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
                         }
 
                         Log.i(TAG, "complete_kind : " + complete_kind);
-                        pm.ApprovalBack(mContext);
+                        pm.Approval(mContext);
                     } else {
                         Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
                     }

@@ -36,9 +36,7 @@ public interface MovePage {
     void FeedList(Context context);
 
     //--ui.approval
-    void ApprovalGo(Context context);
-
-    void ApprovalBack(Context context);
+    void Approval(Context context);
 
     void ApprovalDetailGo(Context context);
 
@@ -94,6 +92,14 @@ public interface MovePage {
     void workDetailBack(Context context);
 
     void workCompletion(Context context);
+
+    void TaskReuse(Context context);
+
+    void TaskReuesAdd(Context context);
+
+    void TaskDetail(Context context);
+
+    void TaskReport(Context context);
 
     //--ui.user
     void SearchEmail(Context context);

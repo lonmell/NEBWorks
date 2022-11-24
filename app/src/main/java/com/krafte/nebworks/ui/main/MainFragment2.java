@@ -8,12 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -75,15 +72,16 @@ public class MainFragment2 extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
-    int accept_state = 0;
-    int SELECT_POSITION = 0;
-    int SELECT_POSITION_sub = 0;
-    String place_id;
-    boolean wifi_certi_flag = false;
-    boolean gps_certi_flag = false;
-
+    String USER_INFO_EMAIL = "";
+    String place_id = "";
     String place_name = "";
     String place_imgpath = "";
+
+    int SELECT_POSITION = 0;
+    int SELECT_POSITION_sub = 0;
+    String store_no;
+    boolean wifi_certi_flag = false;
+    boolean gps_certi_flag = false;
 
     //Other
     /*라디오 버튼들 boolean*/
@@ -119,17 +117,18 @@ public class MainFragment2 extends AppCompatActivity {
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
+            place_id = shardpref.getString("place_id", "");
+            place_name = shardpref.getString("place_name", "");
+            place_imgpath = shardpref.getString("place_imgpath", "");
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
             return_page = shardpref.getString("return_page", "");
-            place_id = shardpref.getString("place_id", "");
-            accept_state = shardpref.getInt("accept_state",-99);
+            store_no = shardpref.getString("store_no", "");
             shardpref.putString("returnPage", "BusinessApprovalActivity");
-            place_name = shardpref.getString("place_name", "");
-            place_imgpath = shardpref.getString("place_imgpath", "");
 
 
             bottom_icon01 = binding.getRoot().findViewById(R.id.bottom_icon01);
@@ -137,14 +136,23 @@ public class MainFragment2 extends AppCompatActivity {
             bottom_icon03 = binding.getRoot().findViewById(R.id.bottom_icon03);
             bottom_icon04 = binding.getRoot().findViewById(R.id.bottom_icon04);
             bottom_icon05 = binding.getRoot().findViewById(R.id.bottom_icon05);
-
+            drawerLayout = findViewById(R.id.drawer_layout);
+            drawerView = findViewById(R.id.drawer2);
+            SetAllMemberList();
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+            dlog.i("place_name : " + place_name);
 
+            if(USER_INFO_AUTH.equals("0")){
+                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03);
+            }else{
+                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1);
+            }
 
             final List<String> tabElement;
-            tabElement = Arrays.asList("홈", "할일", "캘린더", "근무현황", "더보기");
+            tabElement = Arrays.asList("홈", "급여관리", "캘린더", "커뮤니티", "더보기");
             ArrayList<Fragment> fragments = new ArrayList<>();
-            //근로자일때
+
+            //점주일때
             fragments.add(HomeFragment2.newInstance(0));
             fragments.add(WorkgotoFragment.newInstance(1));
             fragments.add(WorkstatusFragment.newInstance(2));
@@ -210,8 +218,9 @@ public class MainFragment2 extends AppCompatActivity {
                 binding.viewPager.setCurrentItem(SELECT_POSITION);
             }
 
-            binding.drawerLayout.addDrawerListener(listener);
-            binding.drawerLayout.setOnTouchListener((v, event) -> true);
+            drawerLayout.addDrawerListener(listener);
+            drawerView.setOnTouchListener((v, event) -> false);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -239,6 +248,15 @@ public class MainFragment2 extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        if (paging_position == 0) {
+            pm.PlaceList(mContext);
+        } else {
+            binding.tabLayout.getTabAt(0).select();
+        }
+    }
 
     /*본인 정보 START*/
     String name ="";
@@ -260,7 +278,7 @@ public class MainFragment2 extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.e("onSuccess : ", response.body());
+                        Log.e("SetAllMemberList onSuccess : ", response.body());
                         try {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(response.body());
@@ -268,6 +286,12 @@ public class MainFragment2 extends AppCompatActivity {
                             img_path = Response.getJSONObject(0).getString("img_path");
                             getjikgup = Response.getJSONObject(0).getString("jikgup");
 
+                            user_name.setText(name);
+                            jikgup.setText(getjikgup);
+                            Glide.with(mContext).load(img_path)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                                    .into(user_profile);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -293,7 +317,6 @@ public class MainFragment2 extends AppCompatActivity {
     View drawerView;
     ImageView close_btn,user_profile,my_setting;
     TextView user_name,jikgup,store_name;
-    TextView select_nav01,select_nav02;
 
     @SuppressLint("LongLogTag")
     public void setNavBarBtnEvent() {
@@ -304,42 +327,18 @@ public class MainFragment2 extends AppCompatActivity {
         user_name           = findViewById(R.id.user_name);
         jikgup              = findViewById(R.id.jikgup);
         store_name          = findViewById(R.id.store_name);
-        select_nav01        = findViewById(R.id.select_nav01);
-        select_nav02        = findViewById(R.id.select_nav02);
-        SetAllMemberList();
+
+
         dlog.i("name : " + name);
         dlog.i("img_path : " + img_path);
         dlog.i("getjikgup : " + getjikgup);
 
-        user_name.setText(name);
-        jikgup.setText(getjikgup);
-        Glide.with(mContext).load(img_path)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(user_profile);
-
         store_name.setText(place_name);
 
-        select_nav01.setOnClickListener(v -> {
-            pm.PlaceList(mContext);
-        });
-        select_nav02.setOnClickListener(v -> {
-            pm.PlaceAddGo(mContext);
-        });
         close_btn.setOnClickListener(v -> {
             drawerLayout.closeDrawer(drawerView);
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
-        if (paging_position == 0) {
-            pm.PlaceList(mContext);
-        } else {
-            binding.tabLayout.getTabAt(0).select();
-        }
     }
 
     @Override
@@ -356,28 +355,62 @@ public class MainFragment2 extends AppCompatActivity {
             pm.PlaceList(mContext);
         } else if (view.getId() == R.id.bottom_navigation01) {
             dlog.i("메인 Click!");
+            binding.title.setText("");
             binding.tabLayout.getTabAt(0).select();
         } else if (view.getId() == R.id.bottom_navigation02) {
             dlog.i("할일 Click!");
+            binding.title.setText("");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 0);
         } else if (view.getId() == R.id.bottom_navigation03) {
-            dlog.i("직원관리 Click!");
+            dlog.i("근무현황 Click!");
+            binding.title.setText("근무현황");
             binding.tabLayout.getTabAt(2).select();
         } else if (view.getId() == R.id.bottom_navigation04) {
             dlog.i("커뮤니티 Click!");
+            binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
         } else if (view.getId() == R.id.bottom_navigation05) {
             dlog.i("더보기 Click!");
+            binding.title.setText("더보기");
             binding.tabLayout.getTabAt(4).select();
+        } else if (view.getId() == R.id.select_nav01) {
+            pm.PlaceList(mContext);
+        } else if (view.getId() == R.id.select_nav02) {
+            pm.PlaceAddGo(mContext);
+        } else if (view.getId() == R.id.select_nav03) {
+            pm.MemberManagement(mContext);
+        } else if (view.getId() == R.id.select_nav04) {
+            shardpref.putInt("SELECT_POSITION",2);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.Main(mContext);
+        } else if (view.getId() == R.id.select_nav05) {
+            shardpref.putString("Tap","0");
+            pm.PayManagement(mContext);
+        } else if (view.getId() == R.id.select_nav06) {
+            shardpref.putString("Tap","1");
+            pm.PayManagement(mContext);
+        } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
+            shardpref.putInt("SELECT_POSITION",1);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.Main(mContext);
+        } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
+            pm.addWorkGo(mContext);
+        }  else if (view.getId() == R.id.select_nav09) {
+            pm.Approval(mContext);
         }
+
     }
 
     private void ChangePosition(int i) {
         bottom_icon01.setBackgroundResource(R.drawable.bottom_icon01);
         bottom_icon02.setBackgroundResource(R.drawable.bottom_icon02);
-        bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03);
+        if(USER_INFO_AUTH.equals("0")){
+            bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03);
+        }else{
+            bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1);
+        }
         bottom_icon04.setBackgroundResource(R.drawable.bottom_icon04);
         bottom_icon05.setBackgroundResource(R.drawable.bottom_icon05);
 
@@ -386,7 +419,11 @@ public class MainFragment2 extends AppCompatActivity {
         } else if (i == 1) {
             bottom_icon02.setBackgroundResource(R.drawable.bottom_icon02_on);
         } else if (i == 2) {
-            bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_on);
+            if(USER_INFO_AUTH.equals("0")){
+                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_on);
+            }else{
+                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1_on);
+            }
         } else if (i == 3) {
             bottom_icon04.setBackgroundResource(R.drawable.bottom_icon04_on);
         } else if (i == 4) {
@@ -397,20 +434,6 @@ public class MainFragment2 extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    public void Toast_Nomal(String message){
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
-        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
-        toast_textview.setText(String.valueOf(message));
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
-        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
-        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
-        toast.setView(layout);
-        toast.show();
     }
 
 //    //-------몰입화면 설정

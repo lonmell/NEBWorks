@@ -471,6 +471,10 @@ public class IntroActivity extends AppCompatActivity {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
                                     binding.loginAlertText.setVisibility(View.GONE);
+//                                    shardpref.putString("USER_INFO_AUTH", "0");
+//                                    shardpref.putInt("SELECT_POSITION", 0);
+//                                    shardpref.putInt("SELECT_POSITION_sub", 0);
+//                                    pm.PlaceList(mContext);
                                     pm.AuthSelect(mContext);
                                 }else{
                                     shardpref.putString("editstate","insert");

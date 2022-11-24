@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_total"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:layout_marginStart="5dp"
-    android:layout_marginEnd="5dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="10dp"
     android:orientation="vertical"
-    app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="0dp"
-    app:cardElevation="0dp">
+    android:background="@drawable/default_gray_round">
 
     <RelativeLayout
         android:id="@+id/area01"
@@ -21,61 +20,96 @@
             android:id="@+id/work_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             android:fontFamily="@font/inter_bold"
             android:gravity="start|top"
             android:singleLine="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
             android:text="제목"
-            android:textColor="#696969"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText,RtlSymmetry" />
 
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/work_date_info"
             android:layout_width="match_parent"
             android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/work_title"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="5dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/work_date"
-                android:layout_width="match_parent"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_toStartOf="@+id/work_kind"
                 android:fontFamily="@font/inter_regular"
                 android:gravity="start|center"
                 android:singleLine="true"
-                android:text="마감시간 : 00:00 AM"
+                android:text="소요시간"
                 android:textColor="#696969"
                 android:textSize="13sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
-                android:id="@+id/work_kind"
-                android:layout_width="100dp"
+                android:id="@+id/diff_time"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
                 android:fontFamily="@font/inter_regular"
                 android:gravity="start|center"
                 android:singleLine="true"
-                android:text="매장사진"
-                android:textColor="#1483FE"
+                android:text="0시간"
+                android:textColor="#949494"
                 android:textSize="13sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
-        </RelativeLayout>
+        </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/task_kind_area"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/work_date_info"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:singleLine="true"
+                android:text="보고"
+                android:textColor="#696969"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/task_kind_state"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:singleLine="true"
+                android:text="인증사진"
+                android:textColor="#949494"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/list_setting"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_alignTop="@+id/work_title"
-            android:layout_alignBottom="@+id/work_title"
             android:layout_alignParentEnd="true">
 
             <ImageView
@@ -85,12 +119,25 @@
                 android:background="@drawable/list_setting" />
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/addtask_btn"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="#f2f2f2"/>
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/task_kind_area"
+            android:background="#EFF4FD">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="할일에 추가하기"
+                android:textColor="#6395EC"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+        </RelativeLayout>
     </RelativeLayout>
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>
 

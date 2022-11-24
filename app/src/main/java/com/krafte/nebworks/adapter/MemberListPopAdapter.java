@@ -158,10 +158,10 @@ public class MemberListPopAdapter extends RecyclerView.Adapter<MemberListPopAdap
             item_user_img.clear();
             item_user_position.clear();
 
-            getuser_id = shardpref.getString("item_user_id","").trim();
-            getuser_name = shardpref.getString("item_user_name","").trim();
-            getuser_img = shardpref.getString("item_user_img","").trim();
-            getuser_position = shardpref.getString("item_user_position","").trim();
+            getuser_id = shardpref.getString("item_user_id","").replace("[","").replace("]","").replace(" ","").trim();
+            getuser_name = shardpref.getString("item_user_name","").replace("[","").replace("]","").replace(" ","").trim();
+            getuser_img = shardpref.getString("item_user_img","").replace("[","").replace("]","").replace(" ","").trim();
+            getuser_position = shardpref.getString("item_user_position","").replace("[","").replace("]","").replace(" ","").trim();
 
             if(!getuser_id.isEmpty()){
                 item_user_id.addAll(Arrays.asList(getuser_id.split(",")));

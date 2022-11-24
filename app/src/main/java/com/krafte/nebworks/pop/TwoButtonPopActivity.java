@@ -197,6 +197,8 @@ public class TwoButtonPopActivity extends Activity {
                 PlaceDel(place_id);
             } else if(flag.equals("직원삭제")){
                 TaskDel();
+            } else if(flag.equals("그룹신청")){
+                Toast_Nomal("개발중....");
             }
         });
         binding.popLeftTxt.setOnClickListener(v -> {

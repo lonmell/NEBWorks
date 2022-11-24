@@ -687,6 +687,10 @@ public class ProfileEditActivity extends AppCompatActivity {
                             shardpref.putBoolean("USER_LOGIN_CONFIRM",true);
                             shardpref.putString("USER_INFO_EMAIL", USER_INFO_EMAIL);
                             shardpref.remove("editstate");
+//                            shardpref.putString("USER_INFO_AUTH", "0");
+//                            shardpref.putInt("SELECT_POSITION", 0);
+//                            shardpref.putInt("SELECT_POSITION_sub", 0);
+//                            pm.PlaceList(mContext);
                             pm.AuthSelect(mContext);
                             binding.loginAlertText.setVisibility(View.GONE);
                         }

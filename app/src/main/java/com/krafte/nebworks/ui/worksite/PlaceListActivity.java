@@ -459,6 +459,14 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+//        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+//        intent.putExtra("data", "로그아웃하시겠습니까?");
+//        intent.putExtra("flag", "로그아웃");
+//        intent.putExtra("left_btn_txt", "닫기");
+//        intent.putExtra("right_btn_txt", "로그아웃");
+//        mContext.startActivity(intent);
+//        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         pm.AuthSelect(mContext);
     }
 }
