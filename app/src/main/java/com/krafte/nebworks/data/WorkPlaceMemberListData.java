@@ -5,6 +5,8 @@ public class WorkPlaceMemberListData {
 
     public static class WorkPlaceMemberListData_list{
         String id;
+        String place_name;
+        String account;
         String name;
         String phone;
         String gender;
@@ -18,9 +20,11 @@ public class WorkPlaceMemberListData {
         String worktime;
 
 
-        public WorkPlaceMemberListData_list( String id, String name, String phone,
+        public WorkPlaceMemberListData_list( String id, String place_name, String account, String name, String phone,
                   String gender, String img_path, String jumin, String kind, String join_date, String state, String jikgup, String pay, String worktime){
             this.id = id;
+            this.place_name = place_name;
+            this.account = account;
             this.name = name;
             this.phone = phone;
             this.gender = gender;
@@ -40,6 +44,22 @@ public class WorkPlaceMemberListData {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public String getPlace_name() {
+            return place_name;
+        }
+
+        public void setPlace_name(String place_name) {
+            this.place_name = place_name;
+        }
+
+        public String getAccount() {
+            return account;
+        }
+
+        public void setAccount(String account) {
+            this.account = account;
         }
 
         public String getName() {

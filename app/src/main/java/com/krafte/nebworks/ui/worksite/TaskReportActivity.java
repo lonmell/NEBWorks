@@ -36,8 +36,10 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
+import com.krafte.nebworks.dataInterface.TaskApprovalInterface;
 import com.krafte.nebworks.dataInterface.TaskSaveInterface;
 import com.krafte.nebworks.databinding.ActivityTaskReportBinding;
+import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -240,7 +242,6 @@ public class TaskReportActivity extends AppCompatActivity {
         dlog.i("getTaskContents end_time : " + end_time);
         dlog.i("getTaskContents approval_state : " + approval_state);// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
 
-        binding.contents.setText(WorkContents);
         if(end_time.length() >= 10){
             //반복x ( 0000.00.00 00:00 )
             binding.writeTime.setText(end_time.substring(11,16));
@@ -262,16 +263,54 @@ public class TaskReportActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void setBtnEvent() {
-        binding.bottomBtn.setOnClickListener(v -> {
-            Toast_Nomal("업무보고");
-        });
 
+    DateCurrent dc = new DateCurrent();
+    String complete_yn = "y";
+
+    private void setBtnEvent() {
+//        binding.bottomBtn.setOnClickListener(v -> {
+//            Toast_Nomal("업무보고");
+//        });
+        binding.bottomBtn.setOnClickListener(v -> {
+            String task_id = task_no;
+            String task_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+            String reject_reason = binding.contents.getText().toString();
+            //0:체크 1:사진
+            if (TaskKind.equals("0")) {
+                setSaveTask(task_id, task_date, ProfileUrl, complete_yn, reject_reason);
+            } else {
+                if (ProfileUrl != null) {
+                    setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
+                } else {
+                    if (!reject_reason.isEmpty()) {
+                        setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
+                    } else {
+                        Toast.makeText(mContext, "매장 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+        });
         binding.taskKind01.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent, GALLEY_CODE);
+        });
+
+        binding.select01Box.setOnClickListener(v -> {
+            complete_yn = "y";
+            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round);
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select02Round.setBackgroundResource(R.drawable.ic_empty_round);
+            binding.select02Box.setBackgroundResource(R.drawable.default_gray_round);
+        });
+        binding.select02Box.setOnClickListener(v -> {
+            complete_yn = "n";
+            binding.select01Round.setBackgroundResource(R.drawable.ic_empty_round);
+            binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
+            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
         });
     }
 
@@ -307,9 +346,7 @@ public class TaskReportActivity extends AppCompatActivity {
                                     if (!ProfileUrl.isEmpty() && saveBitmap != null) {
                                         saveBitmapAndGetURI();
                                     }
-                                    shardpref.putInt("SELECT_POSITION",1);
-                                    shardpref.putInt("SELECT_POSITION_sub", 1);
-                                    pm.PlaceWorkBack(mContext);
+                                    setUpdateWorktodo(task_id);
 //                                    //근로자일때 -- 저장할때는 알림 필요없음
 //                                    topic = task_id;
 //                                    message = "업무 결제요청이 도착하였습니다";
@@ -372,6 +409,44 @@ public class TaskReportActivity extends AppCompatActivity {
 
     }
 
+    private void setUpdateWorktodo(String task_id) {
+        dlog.i("setUpdateWorktodo user_id : " + task_id);
+        String task_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaskApprovalInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaskApprovalInterface api = retrofit.create(TaskApprovalInterface.class);
+        Call<String> call = api.getData(place_id, task_id, task_date, USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("setUpdateWorktodo jsonResponse length : " + response.body().length());
+                            dlog.i("setUpdateWorktodo jsonResponse : " + response.body());
+//                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
+                            if (response.body().replace("\"", "").equals("success")) {
+                                Toast_Nomal("결재 요청이 완료되었습니다.");
+                                shardpref.putInt("SELECT_POSITION",1);
+                                shardpref.putInt("SELECT_POSITION_sub", 0);
+                                pm.PlaceWorkBack(mContext);
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
     //절대경로를 구한다.
     private String getRealPathFromUri(Uri uri) {
         String[] proj = {MediaStore.Images.Media.DATA};

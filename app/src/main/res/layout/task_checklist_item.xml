@@ -1,197 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_total"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#fff"
-    android:orientation="vertical">
-
-
+    android:layout_height="158dp"
+    android:layout_margin="15dp"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="5dp"
+    app:cardBackgroundColor="#DBDBDB">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="77dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="#f2f2f2"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="0dp">
+        android:layout_height="match_parent"
+        android:layout_margin="1dp"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="@color/white">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <androidx.cardview.widget.CardView
-                android:id="@+id/area01"
-                android:layout_width="match_parent"
+
+            <LinearLayout
+                android:id="@+id/state_line"
+                android:layout_width="10dp"
                 android:layout_height="match_parent"
-                android:layout_margin="1dp"
+                android:layout_alignParentStart="true"
+                android:background="@color/blue" />
+
+            <LinearLayout
+                android:id="@+id/state_area"
+                android:layout_width="60dp"
+                android:layout_height="27dp"
                 android:layout_gravity="center"
-                app:cardBackgroundColor="#ffffff"
+                android:layout_marginStart="5dp"
                 android:layout_toStartOf="@+id/list_setting"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal">
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/workimg_url"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="5dp"
-                        app:cardBackgroundColor="#EDEDED"
-                        app:cardCornerRadius="60dp"
-                        app:cardElevation="0dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_centerInParent="true"
-                                android:background="@drawable/white_plus" />
-
-                            <ImageView
-                                android:id="@+id/workimg"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="fitXY" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <LinearLayout
-                        android:id="@+id/titlearea"
+                android:background="@drawable/default_right_blue_round">
+                    <TextView
+                        android:id="@+id/state_tv"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_alignTop="@+id/workimg_url"
-                        android:layout_toStartOf="@+id/check_work_txt"
-                        android:layout_toEndOf="@+id/workimg_url"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/imgwork"
-                            android:layout_width="19dp"
-                            android:layout_height="16dp"
-                            android:layout_gravity="center"
-                            android:background="@drawable/emptyimg"
-                            android:layout_marginEnd="10dp"
-                            android:scaleType="fitXY" />
-
-                        <TextView
-                            android:id="@+id/work_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/inter_regular"
-                            android:gravity="start|center"
-                            android:singleLine="true"
-                            android:text=" 제목"
-                            android:textColor="@color/black"
-                            android:textSize="15sp"
-                            tools:ignore="HardcodedText,RtlSymmetry" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/worknanager_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/titlearea"
-                        android:layout_alignStart="@+id/titlearea"
-                        android:layout_marginEnd="10dp"
-                        android:layout_toEndOf="@+id/workimg_url"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:text="name | position"
-                        android:textColor="#000000"
+                        android:layout_height="match_parent"
+                        android:text="STATE"
+                        android:textColor="@color/white"
                         android:textSize="12sp"
-                        tools:ignore="HardcodedText,RtlSymmetry" />
-
-                    <TextView
-                        android:id="@+id/work_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/worknanager_info"
-                        android:layout_alignStart="@+id/titlearea"
-                        android:layout_marginEnd="10dp"
-                        android:layout_toEndOf="@+id/workimg_url"
                         android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:text="00:00 AM"
-                        android:textColor="#A9A9A9"
-                        android:textSize="12sp"
-                        tools:ignore="HardcodedText,RtlSymmetry" />
+                        android:gravity="center"/>
 
-                    <TextView
-                        android:id="@+id/check_work_txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/titlearea"
-                        android:layout_alignBottom="@+id/titlearea"
-                        android:layout_marginEnd="40dp"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:text="대기"
-                        android:textColor="#6395EC"
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/check_state"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/check_work_txt"
-                        android:layout_alignEnd="@+id/check_work_txt"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="center"
-                        android:scaleType="center"
-                        android:text="미완료"
-                        android:textColor="#FF3636"
-                        android:textSize="13sp"
-                        tools:ignore="HardcodedText" />
-
-                </RelativeLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/workimg_url"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/state_area"
+                android:layout_toEndOf="@+id/state_line"
+                android:layout_marginTop="13dp"
+                android:layout_marginStart="6dp"
+                app:cardBackgroundColor="#EDEDED"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="0dp">
+                    <ImageView
+                        android:id="@+id/workimg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY" />
             </androidx.cardview.widget.CardView>
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true">
-                <RelativeLayout
-                    android:id="@+id/list_setting"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:background="#3A368A">
+                android:layout_below="@+id/workimg_url"
+                android:layout_alignStart="@+id/workimg_url"
+                android:layout_alignEnd="@+id/workimg_url"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/kind"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@drawable/ic_taskkind01"
+                    android:scaleType="fitXY" />
+            </LinearLayout>
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_centerInParent="true"
-                        app:cardBackgroundColor="#ffffff"
-                        app:cardCornerRadius="2dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/state_area"
+                android:layout_toStartOf="@+id/btn_area"
+                android:layout_toEndOf="@+id/workimg_url"
+                android:gravity="start"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:weightSum="3">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/inter_bold"/>
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:background="@drawable/find_right_arrow"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="보고자"
+                        android:textColor="#949494"
+                        android:textSize="13sp"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/inter_bold"/>
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:textSize="13sp"
+                        android:textColor="#949494"
+                        android:text="홍길동"
+                        android:fontFamily="@font/inter_regular"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/work_date_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/work_start_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:singleLine="true"
+                        android:text="0000.00.00 | 00:00 시작"
+                        android:textColor="#696969"
+                        android:textSize="13sp"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
+
+                    <TextView
+                        android:id="@+id/work_end_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:singleLine="true"
+                        android:text="0000.00.00 | 00:00 마감"
+                        android:textColor="#696969"
+                        android:layout_marginTop="5dp"
+                        android:textSize="13sp"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
+
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/btn_area"
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:orientation="vertical"
+                android:layout_marginEnd="17dp"
+                android:weightSum="2">
+                    <RelativeLayout
+                        android:id="@+id/accept_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
                         <ImageView
-                            android:id="@+id/checkarea"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:background="@drawable/checkbox_off" />
-
-                    </androidx.cardview.widget.CardView>
+                            android:background="@drawable/ic_accept_btn"
+                            android:scaleType="fitXY" />
+                    </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/reject_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_reject_btn"
+                        android:layout_centerInParent="true"
+                        android:scaleType="fitXY" />
                 </RelativeLayout>
-            </RelativeLayout>
-
+            </LinearLayout>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

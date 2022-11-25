@@ -177,6 +177,8 @@ public class MemberSubFragment2 extends Fragment {
                                     if (!place_owner_id.equals(jsonObject.getString("id")) && jsonObject.getString("state").equals("1")) {
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
+                                                jsonObject.getString("place_name"),
+                                                jsonObject.getString("account"),
                                                 jsonObject.getString("name"),
                                                 jsonObject.getString("phone"),
                                                 jsonObject.getString("gender"),

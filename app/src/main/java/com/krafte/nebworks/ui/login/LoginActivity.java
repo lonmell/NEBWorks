@@ -293,10 +293,11 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
-                                    pm.Login(mContext);
+                                    pm.AuthSelect(mContext);
                                 }else{
-                                    shardpref.putString("editstate","insert");
-                                    pm.ProfileEdit(mContext);
+//                                    shardpref.putString("editstate","insert");
+//                                    pm.ProfileEdit(mContext);
+                                    Toast_Nomal("계정을 찾을수 없습니다.");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

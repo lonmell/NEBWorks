@@ -20,7 +20,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.WorkTapMemberAdapter;
 import com.krafte.nebworks.bottomsheet.MemberOption;
+import com.krafte.nebworks.data.WorkStatusTapData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -39,6 +41,8 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,6 +101,9 @@ public class HomeFragment extends Fragment {
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
     RandomOut ro = new RandomOut();
+
+    ArrayList<WorkStatusTapData.WorkStatusTapData_list> mList;
+    WorkTapMemberAdapter mAdapter = null;
 
     public static HomeFragment newInstance(int number) {
         HomeFragment fragment = new HomeFragment();
@@ -158,7 +165,7 @@ public class HomeFragment extends Fragment {
             //0-관리자 / 1- 근로자
             dlog.i("gotoplace location view USER_INFO_AUTH : " + USER_INFO_AUTH);
             //USER_INFO_AUTH 가 -1일때
-            if(USER_INFO_AUTH.equals("-1")){
+            if (USER_INFO_AUTH.equals("-1")) {
                 USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
                 shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
             }
@@ -187,6 +194,7 @@ public class HomeFragment extends Fragment {
         UserCheck(USER_INFO_EMAIL);
         getPlaceData();
         PlaceWorkCheck(place_id);
+        SetAllMemberList();
     }
 
     public void setBtnEvent() {
@@ -195,24 +203,26 @@ public class HomeFragment extends Fragment {
         });
 
         binding.itemArea.setOnClickListener(v -> {
-            shardpref.putString("USER_INFO_AUTH","0");
+            shardpref.putString("USER_INFO_AUTH", "0");
             pm.PlaceList(mContext);
         });
 
         binding.allMemberGo.setOnClickListener(v -> {
-            shardpref.putInt("SELECT_POSITION", 2);
-            pm.Main(mContext);
+            shardpref.putInt("SELECT_POSITION", 1);
+            pm.MemberManagement(mContext);
         });
 
         binding.addMemberBtn.setOnClickListener(v -> {
             MemberOption mo = new MemberOption();
-            mo.show(getChildFragmentManager(),"MemberOption");
+            mo.show(getChildFragmentManager(), "MemberOption");
         });
 
         binding.homeMenu01.setOnClickListener(v -> {
-                pm.MemberManagement(mContext);
+            pm.MemberManagement(mContext);
         });
-
+        binding.homeMenu02.setOnClickListener(v -> {
+            pm.Approval(mContext);
+        });
         binding.homeMenu03.setOnClickListener(v -> {
             pm.PayManagement(mContext);
         });
@@ -226,7 +236,7 @@ public class HomeFragment extends Fragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-            Call<String> call = api.getData(place_id,"");
+            Call<String> call = api.getData(place_id, "");
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -247,6 +257,7 @@ public class HomeFragment extends Fragment {
                                 dlog.i("SIZE 2 : " + Response.length());
                                 binding.addMemberArea.setVisibility(View.GONE);
                                 binding.importantList.setVisibility(View.VISIBLE);
+                                //-- 직원 총 급여 표시할것
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -359,7 +370,7 @@ public class HomeFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "","2");
+        Call<String> call = api.getData(place_id, "", "2");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -374,10 +385,10 @@ public class HomeFragment extends Fragment {
 
                         dlog.i("place_feed_cnt : " + Response.length());
 
-                        if(Response.length() == 0){
+                        if (Response.length() == 0) {
                             binding.limitNotitv.setText("별도의 공지사항이 없습니다.");
                             binding.limitNotitv.setTextColor(Color.parseColor("#949494"));
-                        }else{
+                        } else {
                             String feedtv = Response.getJSONObject(0).getString("title");
                             binding.limitNotitv.setText(feedtv);
                             binding.limitNotitv.setTextColor(Color.parseColor("#000000"));

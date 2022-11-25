@@ -1,29 +1,28 @@
 package com.krafte.nebworks.ui.approval;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.dataInterface.ApprovalUpdateInterface;
+import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.TaskSelectMInterface;
 import com.krafte.nebworks.databinding.ActivityTaskapprovalDetailBinding;
-import com.krafte.nebworks.pop.PhotoPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -37,6 +36,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -68,6 +69,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
     String title = "";
     String contents = "";
     String complete_kind = "";
+    String start_time = "";
     String end_time = "0";
     String complete_time = "0";
     String task_img_path = "";
@@ -79,6 +81,11 @@ public class TaskApprovalDetail extends AppCompatActivity {
     String approval_date = "";
     String place_owner_id = "";
     String place_name = "";
+
+    String users = "";
+    String usersn = "";
+    String usersimg = "";
+    String usersjikgup = "";
 
     //Other
     Drawable icon_off;
@@ -100,6 +107,17 @@ public class TaskApprovalDetail extends AppCompatActivity {
      * 3 = 월간
      * 4 = 하루
      * */
+    Calendar cal;
+    String format = "yyyy-MM-dd";
+    android.icu.text.SimpleDateFormat sdf = new android.icu.text.SimpleDateFormat(format);
+    String toDay = "";
+
+    List<String> item_user_id;
+    List<String> item_user_name;
+    List<String> item_user_img;
+    List<String> item_user_jikgup;
+    ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mem_mList;
+    MemberListPopAdapter mem_mAdapter;
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
@@ -134,6 +152,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
         title = shardpref.getString("title",  "");
         contents = shardpref.getString("contents",  "");
         complete_kind = shardpref.getString("complete_kind", "");
+        start_time = shardpref.getString("start_time",  "");
         end_time = shardpref.getString("end_time",  "");
         complete_time = shardpref.getString("complete_time", "");
         task_img_path = shardpref.getString("task_img_path", "0");
@@ -143,6 +162,10 @@ public class TaskApprovalDetail extends AppCompatActivity {
         task_date = shardpref.getString("task_date",  "");
         request_date = shardpref.getString("request_date", "");
         approval_date = shardpref.getString("approval_date",  "");
+        users = shardpref.getString("users", "0");
+        usersn = shardpref.getString("usersn", "0");
+        usersimg = shardpref.getString("usersimg", "0");
+        usersjikgup = shardpref.getString("usersjikgup", "0");
 
         fileName = USER_INFO_ID;
         dateFormat = new SimpleDateFormat("HH:mm:ss", getResources().getConfiguration().locale);
@@ -152,25 +175,28 @@ public class TaskApprovalDetail extends AppCompatActivity {
         int setToday = Integer.parseInt(getTime.substring(0, 2));
 
         try {
-            Log.i(TAG, "-------------------------TaskApprovalDetail-------------------------");
-            Log.i(TAG, "task_no : " + id);
-            Log.i(TAG, "GET_TIME : " + getTime.substring(0, 2));
-            Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
-            Log.i(TAG, "업무내용 : " + contents);
-            Log.i(TAG, "업무종류 : " + (complete_kind.equals("0")?"체크":"매장사진"));
-            Log.i(TAG, "state : " + state);
-            Log.i(TAG, "요청 업무 번호 : " + request_task_no);
-            Log.i(TAG, "task_input_id : " + requester_name);
-            Log.i(TAG, "task_success_method : " + complete_kind);
-            Log.i(TAG, "task_check : " + complete_yn);
-            Log.i(TAG, "task_notsuccess_txt : " + incomplete_reason);
-            Log.i(TAG, "task_title : " + title);
-            Log.i(TAG, "task_img_path : " + task_img_path);
-            Log.i(TAG, "reject_reason : " + reject_reason);
+            dlog.i( "-------------------------TaskApprovalDetail-------------------------");
+            dlog.i("task_no : " + id);
+            dlog.i("GET_TIME : " + getTime.substring(0, 2));
+            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+            dlog.i("업무내용 : " + contents);
+            dlog.i("업무종류 : " + (complete_kind.equals("0")?"체크":"매장사진"));
+            dlog.i("state : " + state);
+            dlog.i("요청 업무 번호 : " + request_task_no);
+            dlog.i("task_input_id : " + requester_name);
+            dlog.i("task_success_method : " + complete_kind);
+            dlog.i("task_check : " + complete_yn);
+            dlog.i("task_notsuccess_txt : " + incomplete_reason);
+            dlog.i("task_title : " + title);
+            dlog.i("task_img_path : " + task_img_path);
+            dlog.i("reject_reason : " + reject_reason);
             String success_time = request_date;
-            Log.i(TAG, "request_date : " + request_date);
+            dlog.i("request_date : " + request_date);
+            dlog.i("users : " + users);
+            dlog.i("usersn : " + usersn);
+            dlog.i("usersimg : " + usersimg);
             setTodoData(request_date,id);
-            Log.i(TAG, "----------------------------------------------------------------------");
+            dlog.i( "----------------------------------------------------------------------");
 
             /**
              * task_kind
@@ -209,218 +235,136 @@ public class TaskApprovalDetail extends AppCompatActivity {
              * task_notsuccess_txt
              *
              */
+
             try {
-                Glide.with(mContext).load(requester_img_path)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(binding.workimg);
-
-                binding.selectEmployeeDate.setText(request_date);
-                binding.selectEmployeeTxt.setText(requester_name);
-
                 binding.inputWorktitle.setText(title);
-                binding.workContentSet.setText(contents);
+                binding.inputWorkcontents.setText(contents);
+                binding.taskKind.setText(complete_kind.equals("0")?"체크":"인증사진");
 
-                binding.endtimeTxt.setText(end_time + " " + (Integer.parseInt(end_time.substring(0,2)) > 12 ? "AM" : "PM"));
-                binding.endtimeTxt2.setText(complete_time + " " + (Integer.parseInt(complete_time.substring(0, 2)) > 12 ? "AM" : "PM"));
+                cal = Calendar.getInstance();
+                toDay = sdf.format(cal.getTime()).replace("-",".");
+                dlog.i("오늘 :" + toDay);
+                shardpref.putString("FtoDay",toDay);
+
+                if (start_time.length() > 5) {
+                    String sdate = start_time.substring(0, 10);
+                    String stime = start_time.substring(11, 16);
+                    binding.startTime.setText(sdate.replace("-", ".") + " | " + stime + " 시작");
+                } else {
+                    binding.startTime.setText(toDay + " | " + start_time + " 시작");
+                }
+
+                if (end_time.length() > 5) {
+                    String edate = end_time.substring(0, 10);
+                    String etime = end_time.substring(11, 16);
+                    binding.endTime.setText(edate.replace("-", ".") + " | " + etime + " 마감");
+                } else {
+                    binding.endTime.setText(toDay + " | " + end_time + " 마감");
+                }
+                item_user_id = new ArrayList<>();
+                item_user_name = new ArrayList<>();
+                item_user_img = new ArrayList<>();
+                item_user_jikgup = new ArrayList<>();
+
+                item_user_id.addAll(Arrays.asList(users.replace("[", "").replace("]", "").split(",")));
+                item_user_name.addAll(Arrays.asList(usersn.replace("[", "").replace("]", "").split(",")));
+                item_user_img.addAll(Arrays.asList(usersimg.replace("[", "").replace("]", "").split(",")));
+                item_user_jikgup.addAll(Arrays.asList(usersjikgup.replace("[", "").replace("]", "").split(",")));
+
+                dlog.i("item_user_id : " + item_user_id);
+                dlog.i("item_user_name : " + item_user_name);
+                dlog.i("item_user_img : " + item_user_img);
+                dlog.i("item_user_jikgup : " + item_user_jikgup);
+
+                mem_mList = new ArrayList<>();
+                mem_mAdapter = new MemberListPopAdapter(mContext, mem_mList, 1);
+                binding.selectMemberList.setAdapter(mem_mAdapter);
+                binding.selectMemberList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+
+                if (users.isEmpty() || users.equals("0")) {
+                    dlog.i("getTaskContents getuser_id : " + item_user_id);
+                    dlog.i("getTaskContents getuser_name : " + item_user_name);
+                    dlog.i("getTaskContents getuser_img : " + item_user_img);
+                    item_user_id.clear();
+                    item_user_name.clear();
+                    item_user_img.clear();
+                    item_user_jikgup.clear();
+                } else {
+                    dlog.i("getTaskContents item_user_id.size() : " + item_user_id.size());
+                    for (int i = 0; i < item_user_id.size(); i++) {
+                        dlog.i("getTaskContents item_user_id : " + item_user_id.get(i));
+                        dlog.i("getTaskContents item_user_name : " + item_user_name.get(i));
+                        dlog.i("getTaskContents item_user_img : " + item_user_img.get(i));
+                        dlog.i("getTaskContents item_user_jikgup : " + item_user_jikgup.get(i));
+                        mem_mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                item_user_id.get(i).trim(),
+                                "",
+                                "",
+                                item_user_name.get(i).trim(),
+                                "",
+                                "",
+                                item_user_img.get(i).trim(),
+                                "",
+                                "",
+                                "",
+                                "",
+                                item_user_jikgup.get(i).trim(),
+                                "",
+                                ""
+                        ));
+                    }
+                    mem_mAdapter.notifyDataSetChanged();
+                }
+
+                binding.reportTime.setText(complete_time);
+                if (!complete_kind.isEmpty()) {
+                    if (complete_kind.equals("0")) {
+                        binding.taskKind00.setVisibility(View.VISIBLE);
+                        binding.taskKind01.setVisibility(View.GONE);
+
+                        binding.taskKind00.setTextColor(Color.parseColor(complete_yn.equals("y")?"#6395EC":"#FF0000"));
+                        binding.taskKind00.setText(complete_yn.equals("y")?"완료":"미완료");
+                    } else if (complete_kind.equals("1")) {
+                        binding.taskKind00.setVisibility(View.GONE);
+                        binding.taskKind01.setVisibility(View.VISIBLE);
+
+                        Glide.with(mContext).load(task_img_path)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .into(binding.taskKind01);
+                    }
+                }
+                if(!incomplete_reason.equals("null")){
+                    binding.incompleteArea.setVisibility(View.VISIBLE);
+                    binding.incompleteTitle.setText(incomplete_reason);
+                }
+                //--approval_state -- // 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
+                if(state.equals("0") ||state.equals("1") || state.equals("3")){
+                    binding.approvalState.setTextColor(Color.parseColor("#6395EC"));
+                    if(state.equals("0")){
+                        binding.approvalState.setText("결재대기중");
+                    }else if(state.equals("1")){
+                        binding.approvalState.setText("승인");
+                    }
+                    binding.rejectArea.setVisibility(View.GONE);
+                }else{
+                    binding.rejectArea.setVisibility(View.VISIBLE);
+                    binding.rejectTv.setText(reject_reason);
+                    binding.approvalState.setTextColor(Color.parseColor("#FF0000"));
+                    binding.approvalState.setText("반려");
+                }
             } catch (Exception e) {
-                Log.i(TAG, "Exception : " + e);
-            }
-            if (complete_kind.equals("1")) {
-                binding.successCheckArea.setVisibility(View.GONE);
-                binding.uploadSuccessImg.setVisibility(View.VISIBLE);
-                binding.loCanvas.setVisibility(View.VISIBLE);
-                binding.workadd01Txt.setTextColor(Color.parseColor("#1483FE"));
-                binding.workadd02Txt.setTextColor(Color.parseColor("#696969"));
-                binding.workadd02Txt.setVisibility(View.GONE);
-            } else if (complete_kind.equals("0")) {
-                binding.successCheckArea.setVisibility(View.VISIBLE);
-                binding.uploadSuccessImg.setVisibility(View.GONE);
-                binding.loCanvas.setVisibility(View.GONE);
-                binding.incompleteInput.setText(incomplete_reason.equals("null") ? "" : incomplete_reason);
-                binding.incompleteInput.setEnabled(false);
-                binding.incompleteInput.setClickable(false);
-                binding.workadd01Txt.setTextColor(Color.parseColor("#696969"));
-                binding.workadd02Txt.setTextColor(Color.parseColor("#1483FE"));
-                binding.workadd01Txt.setVisibility(View.GONE);
-            }
-
-            Glide.with(mContext).load(task_img_path)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.loCanvas);
-
-            binding.inrejectInput.setText(reject_reason.equals("null")?"":reject_reason);
-            dlog.i("reject_reason : " + reject_reason);
-            dlog.i("task_img_path : " + task_img_path);
-            if(!task_img_path.equals("0")){
-                binding.loCanvas.setOnClickListener(v -> {
-                    Intent intent = new Intent(this, PhotoPopActivity.class);
-                    intent.putExtra("data", task_img_path);
-                    mContext.startActivity(intent);
-                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                });
-            }
-
-            //-- 결재대기/승인/반려 중일때.
-            Log.i(TAG, "결재대기/승인/반려 중일때 state : " + state);
-            if (state.equals("0") || state.equals("") || state.isEmpty()) {
-                binding.apploveState.setText("처리 중");
-                if (complete_kind.equals("1")) {
-                    binding.successCheckArea.setVisibility(View.GONE);
-                    binding.uploadSuccessImg.setVisibility(View.VISIBLE);
-                    binding.loCanvas.setVisibility(View.VISIBLE);
-                } else {
-                    binding.success01Txt.setClickable(false);
-                    binding.success01Txt.setEnabled(false);
-                    binding.success02Txt.setEnabled(false);
-                    binding.success02Txt.setClickable(false);
-                    binding.incompleteInput.setEnabled(false);
-                    if (complete_yn.equals("y")) {
-                        binding.incompleteInput.setBackgroundColor(Color.parseColor("#dcdcdc"));
-                        binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success01Txt.setTextColor(Color.parseColor("#1483FE"));
-                        binding.success02Txt.setVisibility(View.GONE);
-                        binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success02Txt.setTextColor(Color.parseColor("#696969"));
-                    } else {
-                        binding.incompleteInput.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                        binding.success01Txt.setVisibility(View.GONE);
-                        binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success01Txt.setTextColor(Color.parseColor("#696969"));
-                        binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success02Txt.setTextColor(Color.parseColor("#1483FE"));
-                    }
-//                binding.workSaveAccept.setVisibility(View.GONE);
-//                binding.uploadSuccessImg.setVisibility(View.GONE);
-//                binding.loCanvas.setVisibility(View.GONE);
-                }
-                binding.bottomBtnBox.setVisibility(View.VISIBLE);
-                binding.bottomBtntv01.setText("반려");
-                binding.bottomBtntv02.setText("승인");
-            } else if (state.equals("1")) {
-                if (complete_kind.equals("1")) {
-//                binding.workSaveAccept.setVisibility(View.GONE);
-                    binding.apploveState.setText("승인");
-                    binding.successCheckArea.setVisibility(View.GONE);
-                    binding.uploadSuccessImg.setVisibility(View.VISIBLE);
-                    binding.loCanvas.setVisibility(View.VISIBLE);
-                } else {
-                    binding.success01Txt.setClickable(false);
-                    binding.success01Txt.setEnabled(false);
-                    binding.success02Txt.setEnabled(false);
-                    binding.success02Txt.setClickable(false);
-                    binding.incompleteInput.setEnabled(false);
-                    if (complete_yn.equals("y")) {
-                        binding.incompleteInput.setBackgroundColor(Color.parseColor("#dcdcdc"));
-                        binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success01Txt.setTextColor(Color.parseColor("#1483FE"));
-                        binding.success02Txt.setVisibility(View.GONE);
-                        binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success02Txt.setTextColor(Color.parseColor("#696969"));
-                    } else {
-                        binding.incompleteInput.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                        binding.success01Txt.setVisibility(View.GONE);
-                        binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success01Txt.setTextColor(Color.parseColor("#696969"));
-                        binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success02Txt.setTextColor(Color.parseColor("#1483FE"));
-                    }
-                    binding.apploveState.setText("승인");
-                }
-                binding.bottomBtnBox.setVisibility(View.VISIBLE);
-                binding.bottomBtntv01.setText("승인취소");
-                binding.bottomBtntv02.setText("반려");
-            } else if (state.equals("2")) {
-                if (complete_kind.equals("1")) {
-                    binding.successCheckArea.setVisibility(View.GONE);
-                    binding.apploveState.setText("반려");
-                    binding.uploadSuccessImg.setVisibility(View.VISIBLE);
-                    binding.loCanvas.setVisibility(View.VISIBLE);
-                } else {
-                    binding.success01Txt.setClickable(false);
-                    binding.success01Txt.setEnabled(false);
-                    binding.success02Txt.setEnabled(false);
-                    binding.success02Txt.setClickable(false);
-                    binding.incompleteInput.setEnabled(false);
-                    if (complete_yn.equals("1")) {
-                        binding.incompleteInput.setBackgroundColor(Color.parseColor("#dcdcdc"));
-                        binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success01Txt.setTextColor(Color.parseColor("#1483FE"));
-                        binding.success02Txt.setVisibility(View.GONE);
-                        binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success02Txt.setTextColor(Color.parseColor("#696969"));
-                    } else {
-                        binding.incompleteInput.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                        binding.success01Txt.setVisibility(View.GONE);
-                        binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success01Txt.setTextColor(Color.parseColor("#696969"));
-                        binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        binding.success02Txt.setTextColor(Color.parseColor("#1483FE"));
-                    }
-                    binding.apploveState.setText("반려");
-                }
-                binding.bottomBtnBox.setVisibility(View.VISIBLE);
-                binding.bottomBtntv01.setText("반려취소");
-                binding.bottomBtntv02.setText("승인");
-            }
-
-            if(USER_INFO_AUTH.equals("1")){
-                binding.bottomBtnBox.setVisibility(View.GONE);
-                binding.bottomBtntv01.setClickable(false);
-                binding.bottomBtntv02.setClickable(false);
+                dlog.i( "Exception : " + e);
             }
         } catch (Exception e) {
-            Log.i(TAG, "Exception E" + e);
+            dlog.i( "Exception E" + e);
         }
 
 
     }
 
     private void setBtnEvent() {
-        if (!complete_yn.isEmpty()) {
-            binding.incompleteInput.setEnabled(false);
-            if (complete_yn.equals("1")) {
-                binding.incompleteInput.setBackgroundColor(Color.parseColor("#dcdcdc"));
-                binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-                binding.success01Txt.setTextColor(Color.parseColor("#1483FE"));
-                binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                binding.success02Txt.setTextColor(Color.parseColor("#696969"));
-            } else {
-                binding.incompleteInput.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                binding.success01Txt.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                binding.success01Txt.setTextColor(Color.parseColor("#696969"));
-                binding.success02Txt.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-                binding.success02Txt.setTextColor(Color.parseColor("#1483FE"));
-            }
-        }
 
-        if (state.equals("1")) {
-            binding.workSaveAccept.setEnabled(false);
-        } else if (state.equals("3") || state.isEmpty() || state.equals("0")) {
-            binding.workSaveAccept.setEnabled(true);
-        }
-
-        binding.workSaveAccept.setOnClickListener(v -> {
-            if (state.equals("0")) {
-                setUpdateWorktodo("2");
-            } else {
-                setUpdateWorktodo("0");
-            }
-        });
-
-        binding.workDelete.setOnClickListener(v -> {
-            if (state.equals("2") || state.equals("0")) {
-                setUpdateWorktodo("1");
-            } else {
-                setUpdateWorktodo("2");
-            }
-        });
-
-        binding.menu.setOnClickListener(v -> {
-            pm.Approval(mContext);
-        });
     }
 
     @Override
@@ -444,6 +388,10 @@ public class TaskApprovalDetail extends AppCompatActivity {
         shardpref.remove("task_date");
         shardpref.remove("request_date");
         shardpref.remove("approval_date");
+        shardpref.remove("users");
+        shardpref.remove("usersn");
+        shardpref.remove("usersimg");
+        shardpref.remove("usersjikgup");
     }
 
     @Override
@@ -458,47 +406,47 @@ public class TaskApprovalDetail extends AppCompatActivity {
         dlog.i("requester_id : " + requester_id);
         dlog.i("kind : " + kind);
         dlog.i("incomplete_reason : " + incomplete_reason);
-        dlog.i("inrejectInput : " + binding.inrejectInput.getText().toString());
+//        dlog.i("inrejectInput : " + binding.inrejectInput.getText().toString());
         dlog.i("-----setUpdateWorktodo-----");
 
-        incomplete_reason = binding.incompleteInput.getText().toString();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApprovalUpdateInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        ApprovalUpdateInterface api = retrofit.create(ApprovalUpdateInterface.class);
-        Call<String> call = api.getData(id,USER_INFO_ID,kind,binding.inrejectInput.getText().toString());
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.e(TAG, "setUpdateWorktodo function START");
-                Log.e(TAG, "response 1: " + response.isSuccessful());
-                Log.e(TAG, "response 2: " + response.body());
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.i(TAG, "resultData : " + resultData.getRESULT());
-                    if (response.body().replace("\"", "").equals("success")) {
-                        for(int a = 0; a < user_id.size(); a++){
-                            if(place_owner_id.equals(user_id.get(a))){
-                                getManagerToken(user_id.get(a), "0", place_id, place_name,state);
-                            }else{
-                                getManagerToken(user_id.get(a), "1", place_id, place_name,state);
-                            }
-                        }
-
-                        Log.i(TAG, "complete_kind : " + complete_kind);
-                        pm.Approval(mContext);
-                    } else {
-                        Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러 = " + t.getMessage());
-            }
-        });
+//        incomplete_reason = binding.incompleteInput.getText().toString();
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(ApprovalUpdateInterface.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        ApprovalUpdateInterface api = retrofit.create(ApprovalUpdateInterface.class);
+//        Call<String> call = api.getData(id,USER_INFO_ID,kind,binding.inrejectInput.getText().toString());
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                Log.e(TAG, "setUpdateWorktodo function START");
+//                Log.e(TAG, "response 1: " + response.isSuccessful());
+//                Log.e(TAG, "response 2: " + response.body());
+//                if (response.isSuccessful() && response.body() != null) {
+//                    dlog.i( "resultData : " + resultData.getRESULT());
+//                    if (response.body().replace("\"", "").equals("success")) {
+//                        for(int a = 0; a < user_id.size(); a++){
+//                            if(place_owner_id.equals(user_id.get(a))){
+//                                getManagerToken(user_id.get(a), "0", place_id, place_name,state);
+//                            }else{
+//                                getManagerToken(user_id.get(a), "1", place_id, place_name,state);
+//                            }
+//                        }
+//
+//                        dlog.i( "complete_kind : " + complete_kind);
+//                        pm.Approval(mContext);
+//                    } else {
+//                        Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e(TAG, "에러 = " + t.getMessage());
+//            }
+//        });
     }
 
     List<String> inmember = new ArrayList<>();
@@ -518,16 +466,16 @@ public class TaskApprovalDetail extends AppCompatActivity {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 Log.e(TAG, "WorkTapListFragment1 / setRecyclerView");
                 Log.e(TAG, "response 1: " + response.isSuccessful());
-                Log.e(TAG, "response 2: " + response.body());
+                Log.e(TAG, "response 2: " + rc.getBase64decode(response.body()));
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + rc.getBase64decode(response.body()));
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
-                        Log.i(TAG, "GET SIZE : " + Response.length());
+                        JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
+                        dlog.i( "GET SIZE : " + Response.length());
                         if (Response.length() == 0) {
-                            Log.i(TAG, "SetNoticeListview Thread run! ");
-                            Log.i(TAG, "GET SIZE : " + Response.length());
+                            dlog.i( "SetNoticeListview Thread run! ");
+                            dlog.i( "GET SIZE : " + Response.length());
                         } else {
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);

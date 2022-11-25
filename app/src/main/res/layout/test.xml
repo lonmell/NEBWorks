@@ -1,170 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_total"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:orientation="vertical"
-    app:cardBackgroundColor="#d9d9d9"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="0dp">
+    android:background="#fff"
+    android:orientation="vertical">
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        android:orientation="vertical"
-        app:cardCornerRadius="8dp"
+        android:layout_height="77dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="5dp"
+        app:cardBackgroundColor="#f2f2f2"
+        app:cardCornerRadius="10dp"
         app:cardElevation="0dp">
-
         <RelativeLayout
-            android:id="@+id/area01"
             android:layout_width="match_parent"
-            android:layout_height="105dp"
-            android:background="#ffffff">
-            <RelativeLayout
-                android:id="@+id/no_img_icon_area"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/work_title"
-                android:layout_marginStart="10dp"
-                android:layout_alignBottom="@+id/work_title">
-                <ImageView
-                    android:id="@+id/no_img_icon"
-                    android:layout_width="19dp"
-                    android:layout_height="16dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/emptyimg"
-                    android:visibility="visible" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/work_title"
+            android:layout_height="match_parent">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/area01"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="-2dp"
-                android:layout_toStartOf="@+id/list_setting"
-                android:layout_toEndOf="@+id/no_img_icon_area"
-                android:fontFamily="@font/inter_bold"
-                android:gravity="start|top"
-                android:singleLine="true"
-                android:text="제목"
-                android:textColor="#696969"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-
-            <RelativeLayout
-                android:id="@+id/workmember_img"
-                android:layout_width="wrap_content"
-                android:layout_height="70dp"
-                android:layout_below="@+id/work_title"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@+id/work_date_info"
-                android:orientation="horizontal">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/member_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_toStartOf="@+id/plus_add_membercnt" />
-
-                <TextView
-                    android:id="@+id/plus_add_membercnt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/inter_bold"
-                    android:gravity="center"
-                    android:scaleType="fitXY"
-                    android:text="+0"
-                    android:textColor="#1483FE"
-                    android:textSize="14sp" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/work_date_info"
-                android:layout_width="wrap_content"
-                android:layout_height="70dp"
-                android:layout_alignBottom="@+id/workmember_img"
-                android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@+id/check_area"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/work_yoil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#696969"
-                    android:textSize="13sp"
-                    tools:ignore="HardcodedText,RtlSymmetry" />
-
-                <TextView
-                    android:id="@+id/work_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:text="마감시간 : 00:00 AM"
-                    android:textColor="#696969"
-                    android:textSize="13sp"
-                    tools:ignore="HardcodedText,RtlSymmetry" />
-
-                <TextView
-                    android:id="@+id/work_confirm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="end"
-                    android:text=""
-                    android:textColor="#1483FE"
-                    tools:ignore="HardcodedText,RtlSymmetry" />
-            </LinearLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/list_setting"
-                android:layout_width="45dp"
-                android:layout_height="30dp"
-                android:layout_alignTop="@+id/work_title"
-                android:layout_alignBottom="@+id/work_title"
-                android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@+id/check_area">
-
-                <ImageView
-                    android:layout_width="3dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentEnd="true"
-                    android:background="@drawable/list_setting" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/check_area"
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true">
+                android:layout_margin="1dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="#ffffff"
+                android:layout_toStartOf="@+id/list_setting"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp">
 
                 <RelativeLayout
-                    android:id="@+id/check_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/workimg_url"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        app:cardBackgroundColor="#EDEDED"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/white_plus" />
+
+                            <ImageView
+                                android:id="@+id/workimg"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:id="@+id/titlearea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_alignTop="@+id/workimg_url"
+                        android:layout_toStartOf="@+id/check_work_txt"
+                        android:layout_toEndOf="@+id/workimg_url"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imgwork"
+                            android:layout_width="19dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/emptyimg"
+                            android:layout_marginEnd="10dp"
+                            android:scaleType="fitXY" />
+
+                        <TextView
+                            android:id="@+id/work_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:singleLine="true"
+                            android:text=" 제목"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            tools:ignore="HardcodedText,RtlSymmetry" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/worknanager_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/titlearea"
+                        android:layout_alignStart="@+id/titlearea"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toEndOf="@+id/workimg_url"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="name | position"
+                        android:textColor="#000000"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
+
+                    <TextView
+                        android:id="@+id/work_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/worknanager_info"
+                        android:layout_alignStart="@+id/titlearea"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toEndOf="@+id/workimg_url"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="00:00 AM"
+                        android:textColor="#A9A9A9"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
+
+                    <TextView
+                        android:id="@+id/check_work_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/titlearea"
+                        android:layout_alignBottom="@+id/titlearea"
+                        android:layout_marginEnd="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="center"
+                        android:text="대기"
+                        android:textColor="#6395EC"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/check_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/check_work_txt"
+                        android:layout_alignEnd="@+id/check_work_txt"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="center"
+                        android:scaleType="center"
+                        android:text="미완료"
+                        android:textColor="#FF3636"
+                        android:textSize="13sp"
+                        tools:ignore="HardcodedText" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+                <RelativeLayout
+                    android:id="@+id/list_setting"
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
-                    android:background="@drawable/checkbox_round">
+                    android:background="#3A368A">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="18dp"
@@ -182,28 +190,8 @@
 
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
-                <RelativeLayout
-                    android:id="@+id/check_dismiss"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:background="#828282"
-                    android:layout_gravity="end">
-
-                    <TextView
-                        android:id="@+id/dismiss_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:textColor="#ffffff"
-                        android:gravity="center"
-                        android:textSize="11sp"
-                        android:text="@string/approval_tv02" />
-                </RelativeLayout>
-
             </RelativeLayout>
+
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
-
-
-</androidx.cardview.widget.CardView>
-
+</LinearLayout>

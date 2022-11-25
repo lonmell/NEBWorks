@@ -124,6 +124,8 @@ public class SelectMemberPop extends Activity {
                                         total_member_cnt ++;
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
+                                                jsonObject.getString("place_name"),
+                                                jsonObject.getString("account"),
                                                 jsonObject.getString("name"),
                                                 jsonObject.getString("phone"),
                                                 jsonObject.getString("gender"),

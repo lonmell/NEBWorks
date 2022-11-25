@@ -168,6 +168,8 @@ public class MemberSubFragment4 extends Fragment {
                                         dlog.i("i : Response.length() : " + i);
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
+                                                jsonObject.getString("place_name"),
+                                                jsonObject.getString("account"),
                                                 jsonObject.getString("name"),
                                                 jsonObject.getString("phone"),
                                                 jsonObject.getString("gender"),

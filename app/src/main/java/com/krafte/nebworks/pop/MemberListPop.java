@@ -126,6 +126,8 @@ public class MemberListPop extends Activity {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                             jsonObject.getString("id"),
+                                            jsonObject.getString("place_name"),
+                                            jsonObject.getString("account"),
                                             jsonObject.getString("name"),
                                             jsonObject.getString("phone"),
                                             jsonObject.getString("gender"),

@@ -44,6 +44,7 @@ import com.krafte.nebworks.ui.worksite.PlaceWorkDetailActivity;
 import com.krafte.nebworks.ui.worksite.TaskAddWorkActivity;
 import com.krafte.nebworks.ui.worksite.TaskDetailActivity;
 import com.krafte.nebworks.ui.worksite.TaskReportActivity;
+import com.krafte.nebworks.ui.worksite.TaskReportDetailActivity;
 import com.krafte.nebworks.ui.worksite.TaskReuesAddActivity;
 import com.krafte.nebworks.ui.worksite.TaskReuseActivity;
 import com.krafte.nebworks.ui.worksite.WorkState2Activity;
@@ -361,6 +362,13 @@ public class PageMoveClass implements MovePage {
     @Override
     public void TaskReport(Context context) {
         Intent intent = new Intent(context, TaskReportActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void TaskReportDetail(Context context) {
+        Intent intent = new Intent(context, TaskReportDetailActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

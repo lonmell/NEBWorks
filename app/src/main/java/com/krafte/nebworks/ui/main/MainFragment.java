@@ -28,7 +28,6 @@ import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
-import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
 import com.krafte.nebworks.ui.naviFragment.CalendarFragment;
 import com.krafte.nebworks.ui.naviFragment.HomeFragment;
 import com.krafte.nebworks.ui.naviFragment.MoreFragment;
@@ -93,8 +92,6 @@ public class MainFragment extends AppCompatActivity {
     Dlog dlog = new Dlog();
     String return_page = "";
 
-
-    ApprovalFragment1 af1 = new ApprovalFragment1();
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override

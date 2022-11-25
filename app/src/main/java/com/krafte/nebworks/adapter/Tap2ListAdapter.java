@@ -322,6 +322,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // 미완료 사유
                     shardpref.putString("approval_state", item.getApproval_state()); // 결재상태
                     shardpref.putString("overdate", item.getTask_overdate()); // 업무종료날짜
+                    shardpref.putString("reject_reason", item.getReject_reason());
                     shardpref.putInt("make_kind", Integer.parseInt(item.getKind()));
                     Intent intent = new Intent(mContext, Tap2OptionActivity.class);
                     intent.putExtra("left_btn_txt", "닫기");
@@ -413,7 +414,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             shardpref.remove("complete_yn");
             shardpref.remove("incomplete_reason");
             shardpref.remove("make_kind");
-
+            shardpref.remove("reject_reason");
             dlog.DlogContext(mContext);
             checkareatf = new boolean[mData.size()];
 
@@ -504,6 +505,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                         shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
                         shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // n: 미완료 사요
                         shardpref.putString("approval_state", item.getApproval_state());// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
+                        shardpref.putString("reject_reason", item.getReject_reason());
                         dlog.i("users : " + user_id.toString());
                         dlog.i("usersn : " + user_name.toString());
                     } catch (JSONException e) {

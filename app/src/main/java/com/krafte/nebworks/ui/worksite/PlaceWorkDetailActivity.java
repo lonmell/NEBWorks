@@ -15,7 +15,11 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +39,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
+import com.krafte.nebworks.dataInterface.TaskApprovalInterface;
 import com.krafte.nebworks.dataInterface.TaskSaveInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityPlaceworkDetailBinding;
@@ -107,6 +112,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
 
     String task_no = "";
     String user_id = "";
+    String place_id = "";
     String place_name = "";
     String WorkTitle = "";
     String WorkContents = "";
@@ -156,6 +162,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
 
         shardpref = new PreferenceHelper(mContext);
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        place_id = shardpref.getString("place_id", "0");
         place_name = shardpref.getString("place_name", "0");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
@@ -501,7 +508,6 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             String task_id = task_no;
             String task_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
             String reject_reason = binding.incompleteInput.getText().toString();
-
             //0:체크 1:사진
             if (complete_kind.equals("0")) {
                 setSaveTask(task_id, task_date, ProfileUrl, complete_yn, reject_reason);
@@ -581,9 +587,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                                     if (!ProfileUrl.isEmpty() && saveBitmap != null) {
                                         saveBitmapAndGetURI();
                                     }
-                                    shardpref.putInt("SELECT_POSITION",1);
-                                    shardpref.putInt("SELECT_POSITION_sub", 1);
-                                    pm.PlaceWorkBack(mContext);
+                                    setUpdateWorktodo(task_id);
 //                                    //근로자일때 -- 저장할때는 알림 필요없음
 //                                    topic = task_id;
 //                                    message = "업무 결제요청이 도착하였습니다";
@@ -595,6 +599,44 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                                     Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
                                 }
                             });
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+    private void setUpdateWorktodo(String task_id) {
+        dlog.i("setUpdateWorktodo user_id : " + task_id);
+        String task_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaskApprovalInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaskApprovalInterface api = retrofit.create(TaskApprovalInterface.class);
+        Call<String> call = api.getData(place_id, task_id, task_date, USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("setUpdateWorktodo jsonResponse length : " + response.body().length());
+                            dlog.i("setUpdateWorktodo jsonResponse : " + response.body());
+//                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
+                            if (response.body().replace("\"", "").equals("success")) {
+                                Toast_Nomal("결재 요청이 완료되었습니다.");
+                                shardpref.putInt("SELECT_POSITION",1);
+                                shardpref.putInt("SELECT_POSITION_sub", 1);
+                                pm.PlaceWorkBack(mContext);
+                            }
                         }
                     });
                 }
@@ -928,6 +970,20 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             }
         });
         return ImgfileMaker;
+    }
+
+    public void Toast_Nomal(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
+        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 
     @Override

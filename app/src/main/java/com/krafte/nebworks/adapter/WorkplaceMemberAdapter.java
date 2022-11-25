@@ -252,7 +252,15 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
+//                    stub_place_id = shardpref.getString("stub_place_id", "0");
+//                    stub_user_id = shardpref.getString("stub_user_id", "0");
+//                    stub_user_account = shardpref.getString("stub_user_account", "");
+//                    change_place_name = shardpref.getString("change_place_name", "");
                     WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(pos);
+                    shardpref.putString("stub_place_id",place_id);
+                    shardpref.putString("stub_user_id",item.getId());
+                    shardpref.putString("stub_user_account",item.getAccount());
+                    shardpref.putString("change_place_name",item.getPlace_name());
                     pm.MemberDetail(mContext);
                 }
             });

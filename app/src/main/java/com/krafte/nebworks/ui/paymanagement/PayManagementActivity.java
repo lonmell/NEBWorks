@@ -26,7 +26,6 @@ import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.data.PaymentData;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.ActivityPaymanagementBinding;
-import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -81,7 +80,6 @@ public class PayManagementActivity extends AppCompatActivity {
     Drawable icon_on;
     int paging_position = 0;
     String Tap = "0";
-    ApprovalFragment1 af1 = new ApprovalFragment1();
     int total_member_cnt = 0;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})

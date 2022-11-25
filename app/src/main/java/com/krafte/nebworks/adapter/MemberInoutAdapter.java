@@ -58,7 +58,14 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
                 holder.first_pos.setVisibility(View.GONE);
             }
             holder.date.setText(month + "월 " + item.getDay() + "일");
-            holder.time.setText(item.getWorking_time().substring(0,2) + "시간" + item.getWorking_time().substring(3,5) + " 분");
+            if(item.getWorking_time().length() <= 4) {
+                //뒤에 분이 없을때
+                holder.time.setText(item.getWorking_time().substring(0,2) + "시간");
+            }else if(item.getWorking_time().length() > 4){
+                //뒤에 분이 있을때
+                holder.time.setText(item.getWorking_time().substring(0,2) + "시간" + item.getWorking_time().substring(3,5) + " 분");
+            }
+
             holder.in_time.setText(item.getIn_time().substring(0,5));
             holder.out_time.setText(item.getOut_time().substring(0,5));
         }catch (Exception e){

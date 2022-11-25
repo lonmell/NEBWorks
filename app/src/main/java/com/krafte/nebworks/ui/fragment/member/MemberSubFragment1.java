@@ -40,6 +40,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class MemberSubFragment1 extends Fragment {
     private MembersubFragment1Binding binding;
     private final static String TAG = "MemberSubFragment1";
+
     Context mContext;
     Activity activity;
 
@@ -109,6 +110,7 @@ public class MemberSubFragment1 extends Fragment {
             shardpref.putInt("SELECT_POSITION", 0);
 
             setBtnEvent();
+
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -177,6 +179,8 @@ public class MemberSubFragment1 extends Fragment {
                                         total_member_cnt ++;
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
+                                                jsonObject.getString("place_name"),
+                                                jsonObject.getString("account"),
                                                 jsonObject.getString("name"),
                                                 jsonObject.getString("phone"),
                                                 jsonObject.getString("gender"),

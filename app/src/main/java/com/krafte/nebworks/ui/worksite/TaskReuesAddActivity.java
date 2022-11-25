@@ -351,24 +351,24 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         binding.eventStarttime.setText(start_time);
         binding.eventEndttime.setText(end_time);
 
-        if(!TaskKind.isEmpty()){
+        if (!TaskKind.isEmpty()) {
             dlog.i("if(!TaskKind) : " + TaskKind);
             NeedReportTF = true;
             binding.needReport.setBackgroundColor(Color.parseColor("#6395EC"));
             binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
             binding.reportVisible.setVisibility(View.VISIBLE);
-            if(TaskKind.equals("0")){
+            if (TaskKind.equals("0")) {
                 TaskKind = "0";
-                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.select01.setTextColor(Color.parseColor("#ffffff"));
-                binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
-                binding.select02.setTextColor(Color.parseColor("#000000"));
-            }else if(TaskKind.equals("1")){
-                TaskKind = "1";
                 binding.select01Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
                 binding.select01.setTextColor(Color.parseColor("#000000"));
                 binding.select02Box.setBackgroundColor(Color.parseColor("#6395EC"));
                 binding.select02.setTextColor(Color.parseColor("#ffffff"));
+            } else if (TaskKind.equals("1")) {
+                TaskKind = "1";
+                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.select01.setTextColor(Color.parseColor("#ffffff"));
+                binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+                binding.select02.setTextColor(Color.parseColor("#000000"));
             }
         }
         dlog.i("-----getTaskContents END-----");

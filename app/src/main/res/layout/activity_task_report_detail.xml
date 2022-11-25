@@ -223,7 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
-                    android:text="업무 보고"
+                    android:text="업무지시 보고"
                     android:textColor="@color/black"
                     android:textSize="25sp"
                     android:textStyle="bold"
@@ -279,7 +279,6 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <!-- 업무 보고 방식 영역 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -307,6 +306,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- 업무 보고 방식 영역 -->
             <ImageView
                 android:id="@+id/task_kind_01"
                 android:layout_width="95dp"

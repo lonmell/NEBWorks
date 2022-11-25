@@ -65,6 +65,9 @@ public class MemberDetailActivity extends AppCompatActivity {
     String stub_user_account = "";
     String change_place_name = "";
 
+    //직원관리페이지에서 넘어왔을때
+    String mem_id = "";
+
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
     String store_no;
@@ -233,6 +236,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
         SetAllMemberList(stub_place_id,stub_user_id);
     }
 
@@ -276,8 +280,8 @@ public class MemberDetailActivity extends AppCompatActivity {
                             }else if(inoutstate.equals("1")){
                                 binding.workState.setText("퇴근");
                             }
-                            binding.workPay.setText(Response.getJSONObject(0).getString("pay"));
-                            binding.userPhone.setText(Response.getJSONObject(0).getString("phone"));
+                            binding.workPay.setText(Response.getJSONObject(0).getString("pay").equals("null")?"미정":Response.getJSONObject(0).getString("pay"));
+                            binding.userPhone.setText(Response.getJSONObject(0).getString("phone").equals("null")?"미입력":Response.getJSONObject(0).getString("phone"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

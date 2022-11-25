@@ -292,6 +292,8 @@ public class TaskDetailActivity extends AppCompatActivity {
                 dlog.i("getTaskContents item_user_jikgup : " + item_user_jikgup.get(i));
                 mem_mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                         item_user_id.get(i).trim(),
+                        "",
+                        "",
                         item_user_name.get(i).trim(),
                         "",
                         "",
@@ -307,8 +309,6 @@ public class TaskDetailActivity extends AppCompatActivity {
             }
             mem_mAdapter.notifyDataSetChanged();
         }
-
-
         dlog.i("-----getTaskContents END-----");
     }
 
@@ -321,17 +321,18 @@ public class TaskDetailActivity extends AppCompatActivity {
         binding.acceptTv.setOnClickListener(v -> {
             if(approval_state.equals("3")){
                 if(USER_INFO_AUTH.equals("0")){//0-관리자 / 1- 근로자
+                    shardpref.putInt("make_kind",1);
+                    shardpref.putInt("SELECT_POSITION", 1);
+                    shardpref.putInt("SELECT_POSITION_sub", 0);
                     pm.addWorkGo(mContext);
                 }else{
                     pm.TaskReport(mContext);
                 }
             }else{
-                Toast_Nomal("보고 확인하기 페이지로 가기");
+                pm.TaskReportDetail(mContext);
             }
         });
     }
-
-
 
     public void Toast_Nomal(String message){
         LayoutInflater inflater = getLayoutInflater();

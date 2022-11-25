@@ -164,8 +164,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             make_kind = shardpref.getInt("make_kind", 0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
-            shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub", 1);
 
             //캘린더에서 넘어온 경우 - 선택한 날짜를 가져옴
             searchDate = shardpref.getString("searchDate", "");
@@ -185,7 +183,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
             setBtnEvent();
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-
+            WorkDay = toDay;
             binding.storeName.setText(place_name);
         } catch (Exception e) {
             e.printStackTrace();
@@ -401,6 +399,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(binding.inputWorktitle.getWindowToken(), 0);
                     imm.hideSoftInputFromWindow(binding.inputWorkcontents.getWindowToken(), 0);
                 }
+
             } else {
                 dlog.i("input_pop_time : " + input_pop_time);
                 dlog.i("SET_TASK_TIME_VALUE : " + SET_TASK_TIME_VALUE);
@@ -489,6 +488,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                     if(!item_user_id.get(i).equals("0")){
                         mem_mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                 item_user_id.get(i).trim(),
+                                "",
+                                "",
                                 item_user_name.get(i).trim(),
                                 "",
                                 "",
@@ -513,6 +514,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 a++;
                 getTaskContents();
             }
+            binding.inputWorktitle.clearFocus();
+            binding.inputWorkcontents.clearFocus();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -676,6 +680,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 dlog.i("getTaskContents item_user_jikgup : " + item_user_jikgup.get(i));
                 mem_mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                         item_user_id.get(i).trim(),
+                        "",
+                        "",
                         item_user_name.get(i).trim(),
                         "",
                         "",
@@ -700,16 +706,16 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             binding.reportVisible.setVisibility(View.VISIBLE);
             if (TaskKind.equals("0")) {
                 TaskKind = "0";
-                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.select01.setTextColor(Color.parseColor("#ffffff"));
-                binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
-                binding.select02.setTextColor(Color.parseColor("#000000"));
-            } else if (TaskKind.equals("1")) {
-                TaskKind = "1";
                 binding.select01Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
                 binding.select01.setTextColor(Color.parseColor("#000000"));
                 binding.select02Box.setBackgroundColor(Color.parseColor("#6395EC"));
                 binding.select02.setTextColor(Color.parseColor("#ffffff"));
+            } else if (TaskKind.equals("1")) {
+                TaskKind = "1";
+                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.select01.setTextColor(Color.parseColor("#ffffff"));
+                binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+                binding.select02.setTextColor(Color.parseColor("#000000"));
             }
         }
         dlog.i("-----getTaskContents END-----");
@@ -727,44 +733,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
     //업무 저장(추가)
     private void SaveAddWork() {
-        String getYoil = shardpref.getString("yoillist", "").replace("  ", "").replace("[", "").replace("]", "");
-        dlog.i("yoillist : " + yoillist);
-        Sun = "0";
-        Mon = "0";
-        Tue = "0";
-        Wed = "0";
-        Thu = "0";
-        Fri = "0";
-        Sat = "0";//한번 초기화
-        for (String str : getYoil.split(",")) {
-            if (str.trim().equals("일")) {
-                Sun = "1";
-            } else if (str.trim().equals("월")) {
-                Mon = "1";
-            } else if (str.trim().equals("화")) {
-                Tue = "1";
-            } else if (str.trim().equals("수")) {
-                Wed = "1";
-            } else if (str.trim().equals("목")) {
-                Thu = "1";
-            } else if (str.trim().equals("금")) {
-                Fri = "1";
-            } else if (str.trim().equals("토")) {
-                Sat = "1";
-            }
-        }
-        if (searchDate.isEmpty()) {
-            toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-        } else {
-            toDay = searchDate;
-        }
-        WorkTitle = binding.inputWorktitle.getText().toString();
-        WorkContents = binding.inputWorkcontents.getText().toString();
-        start_time = binding.eventStarttime.getText().toString();
-        end_time = binding.eventEndttime.getText().toString();
-        user_id = String.valueOf(item_user_id).replace("[", "").replace("]", "").replace(" ", "").trim();
-        overdate = overdate.replace("년 ", "-").replace("월 ", "-").replace("일", "").trim();
         dlog.i("------------------SaveAddWork------------------");
+        dlog.i("make_kind : " + make_kind);
         dlog.i("task_no : " + task_no);
         dlog.i("place_id : " + place_id);
         dlog.i("writer_id : " + USER_INFO_ID);
@@ -819,6 +789,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                                 pm.CalenderBack(mContext);
                                             } else {
                                                 shardpref.putInt("SELECT_POSITION", 1);
+                                                shardpref.putInt("SELECT_POSITION_sub", 0);
                                                 if (USER_INFO_AUTH.equals("0")) {
                                                     pm.Main(mContext);
                                                 } else {
@@ -869,7 +840,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                         TaskUpdateInterface api = retrofit.create(TaskUpdateInterface.class);
 
                         //--반복 요일
-                        dlog.i("------------------SaveAddWork22------------------");
+                        dlog.i("------------------UpdateWork------------------");
                         Call<String> call = api.getData(task_no, place_id, USER_INFO_ID, "0", WorkTitle, WorkContents, TaskKind
                                 , WorkDay, start_time, end_time
                                 , Sun, Mon, Tue, Wed, Thu, Fri, Sat, overdate
@@ -879,7 +850,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 //반복되는 요일을 일시 초기화 해준다
-                                dlog.e("SaveAddWork function START");
+                                dlog.e("UpdateWork function START");
                                 dlog.e("response 1: " + response.isSuccessful());
                                 dlog.e("response 2: " + response.body());
                                 if (response.isSuccessful() && response.body() != null) {
@@ -987,13 +958,46 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
     }
 
     private boolean SaveCheck() {
-        WorkContents = binding.inputWorkcontents.getText().toString();
+        String getYoil = shardpref.getString("yoillist", "").replace("  ", "").replace("[", "").replace("]", "");
+        dlog.i("yoillist : " + yoillist);
+        Sun = "0";
+        Mon = "0";
+        Tue = "0";
+        Wed = "0";
+        Thu = "0";
+        Fri = "0";
+        Sat = "0";//한번 초기화
+        for (String str : getYoil.split(",")) {
+            if (str.trim().equals("일")) {
+                Sun = "1";
+            } else if (str.trim().equals("월")) {
+                Mon = "1";
+            } else if (str.trim().equals("화")) {
+                Tue = "1";
+            } else if (str.trim().equals("수")) {
+                Wed = "1";
+            } else if (str.trim().equals("목")) {
+                Thu = "1";
+            } else if (str.trim().equals("금")) {
+                Fri = "1";
+            } else if (str.trim().equals("토")) {
+                Sat = "1";
+            }
+        }
+        if (searchDate.isEmpty()) {
+            toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+        } else {
+            toDay = searchDate;
+        }
         WorkTitle = binding.inputWorktitle.getText().toString();
-        TaskKind = String.valueOf(make_kind);
+        WorkContents = binding.inputWorkcontents.getText().toString();
+        start_time = binding.eventStarttime.getText().toString();
+        end_time = binding.eventEndttime.getText().toString();
+        user_id = String.valueOf(item_user_id).replace("[", "").replace("]", "").replace(" ", "").trim();
+        overdate = overdate.replace("년 ", "-").replace("월 ", "-").replace("일", "").trim();
 
         if (WorkTitle.equals("")) {
             dlog.i("WorkTitle");

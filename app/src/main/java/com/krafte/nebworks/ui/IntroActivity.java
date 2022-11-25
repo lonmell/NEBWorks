@@ -11,9 +11,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -477,9 +482,8 @@ public class IntroActivity extends AppCompatActivity {
 //                                    pm.PlaceList(mContext);
                                     pm.AuthSelect(mContext);
                                 }else{
-                                    shardpref.putString("editstate","insert");
                                     binding.loginAlertText.setVisibility(View.GONE);
-                                    pm.ProfileEdit(mContext);
+                                    pm.Login(mContext);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -497,6 +501,19 @@ public class IntroActivity extends AppCompatActivity {
         });
     }
 
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
     //-------몰입화면 설정
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

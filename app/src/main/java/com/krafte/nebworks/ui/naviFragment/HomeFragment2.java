@@ -244,11 +244,13 @@ public class HomeFragment2 extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+//        timer.cancel();
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
+//        timer.cancel();
     }
 
     @Override
@@ -266,49 +268,47 @@ public class HomeFragment2 extends Fragment {
 //            @SuppressLint("SetTextI18n")
 //            @Override
 //            public void run() {
-//                // 반복실행할 구문
-//
+                // 반복실행할 구문
+                activity.runOnUiThread(() -> {
+                    if(location_cnt > 3){
+                        timer.cancel();
+                    }
+                    location_cnt ++;
+                    long now = System.currentTimeMillis();
+                    Date mDate = new Date(now);
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+
+                    dlog.i("location_cnt : " + location_cnt);
+                    dlog.i("GET_TIME : " + simpleDate.format(mDate));
+//                    binding.timeSet.setText(simpleDate.format(mDate));
+                    latitude = gpsTracker.getLatitude();
+                    longitude = gpsTracker.getLongitude();
+//                    binding.lonLat.setText("위도 : " + latitude + ", 경도 : " + longitude);
+                    binding.distance.setText(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))) + "m");
+                    getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+                    if(getDistance <= 30){
+                        if (kind.equals("-1")) {
+                            binding.ioAbleTv.setText("출근처리 가능");
+                            binding.ioAbleTv.setTextColor(R.color.red);
+                        } else if (kind.equals("0")) {
+                            binding.ioAbleTv.setText("퇴근처리 가능");
+                            binding.ioAbleTv.setTextColor(R.color.red);
+                        }
+                    }else{
+                        if (kind.equals("-1")) {
+                            binding.ioAbleTv.setText("출근처리 불가능");
+                            binding.ioAbleTv.setTextColor(R.color.blue);
+                        } else if (kind.equals("0")) {
+                            binding.ioAbleTv.setText("퇴근처리 불가능");
+                            binding.ioAbleTv.setTextColor(R.color.blue);
+                        }
+
+                    }
+                });
 //            }
 //        };
 //        timer.schedule(TT, 5000, 5000); //Timer 실행
-        activity.runOnUiThread(() -> {
-            if(location_cnt > 3){
-                timer.cancel();
-            }
-            location_cnt ++;
-            long now = System.currentTimeMillis();
-            Date mDate = new Date(now);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-
-            dlog.i("location_cnt : " + location_cnt);
-            dlog.i("GET_TIME : " + simpleDate.format(mDate));
-//                    binding.timeSet.setText(simpleDate.format(mDate));
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-//                    binding.lonLat.setText("위도 : " + latitude + ", 경도 : " + longitude);
-            binding.distance.setText(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))) + "m");
-            getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-            if(getDistance <= 30){
-                if (kind.equals("-1")) {
-                    binding.ioAbleTv.setText("출근처리 가능");
-                    binding.ioAbleTv.setTextColor(R.color.red);
-                } else if (kind.equals("0")) {
-                    binding.ioAbleTv.setText("퇴근처리 가능");
-                    binding.ioAbleTv.setTextColor(R.color.red);
-                }
-            }else{
-                if (kind.equals("-1")) {
-                    binding.ioAbleTv.setText("출근처리 불가능");
-                    binding.ioAbleTv.setTextColor(R.color.blue);
-                } else if (kind.equals("0")) {
-                    binding.ioAbleTv.setText("퇴근처리 불가능");
-                    binding.ioAbleTv.setTextColor(R.color.blue);
-                }
-
-            }
-        });
-
     }
 
     public void InOutLogMember() {
@@ -499,6 +499,7 @@ public class HomeFragment2 extends Fragment {
                                 dlog.i("LoginCheck jsonResponse : " + response.body());
                                 try {
                                     if (response.body().replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
+//                                        timer.cancel();
                                         Intent intent = new Intent(mContext, InoutPopActivity.class);
                                         intent.putExtra("title", io_state + " 처리되었습니다.");
                                         intent.putExtra("time", GET_TIME);

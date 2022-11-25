@@ -1,5 +1,7 @@
 package com.krafte.nebworks.data;
 
+import java.util.List;
+
 public class TaskCheckData {
     private static final String TAG = "TaskCheckData";
 
@@ -10,11 +12,10 @@ public class TaskCheckData {
         String requester_id = "";
         String requester_name = "";
         String requester_img_path = "";
-        String requester_department = "";
-        String requester_position = "";
         String title = "";
         String contents = "";
         String complete_kind = "";
+        String start_time = "";
         String end_time = "0";
         String complete_time = "0";
         String task_img_path = "";
@@ -24,6 +25,7 @@ public class TaskCheckData {
         String task_date = "";
         String request_date = "";
         String approval_date = "";
+        List<String> users;
 
         public TaskCheckData_list(String id,
                                   String state,
@@ -31,11 +33,10 @@ public class TaskCheckData {
                                   String requester_id,
                                   String requester_name,
                                   String requester_img_path,
-                                  String requester_department,
-                                  String requester_position,
                                   String title,
                                   String contents,
                                   String complete_kind,
+                                  String start_time,
                                   String end_time,
                                   String complete_time,
                                   String task_img_path,
@@ -44,18 +45,18 @@ public class TaskCheckData {
                                   String reject_reason,
                                   String task_date,
                                   String request_date,
-                                  String approval_date) {
+                                  String approval_date,
+                                  List<String> users) {
             this.id = id;
             this.state = state;
             this.request_task_no = request_task_no;
             this.requester_id = requester_id;
             this.requester_name = requester_name;
             this.requester_img_path = requester_img_path;
-            this.requester_department = requester_department;
-            this.requester_position = requester_position;
             this.title = title;
             this.contents = contents;
             this.complete_kind = complete_kind;
+            this.start_time = start_time;
             this.end_time = end_time;
             this.complete_time = complete_time;
             this.task_img_path = task_img_path;
@@ -65,6 +66,7 @@ public class TaskCheckData {
             this.task_date = task_date;
             this.request_date = request_date;
             this.approval_date = approval_date;
+            this.users = users;
         }
 
         public String getId() {
@@ -115,22 +117,6 @@ public class TaskCheckData {
             this.requester_img_path = requester_img_path;
         }
 
-        public String getRequester_department() {
-            return requester_department;
-        }
-
-        public void setRequester_department(String requester_department) {
-            this.requester_department = requester_department;
-        }
-
-        public String getRequester_position() {
-            return requester_position;
-        }
-
-        public void setRequester_position(String requester_position) {
-            this.requester_position = requester_position;
-        }
-
         public String getTitle() {
             return title;
         }
@@ -153,6 +139,14 @@ public class TaskCheckData {
 
         public void setComplete_kind(String complete_kind) {
             this.complete_kind = complete_kind;
+        }
+
+        public String getStart_time() {
+            return start_time;
+        }
+
+        public void setStart_time(String start_time) {
+            this.start_time = start_time;
         }
 
         public String getEnd_time() {
@@ -225,6 +219,14 @@ public class TaskCheckData {
 
         public void setApproval_date(String approval_date) {
             this.approval_date = approval_date;
+        }
+
+        public List<String> getUsers() {
+            return users;
+        }
+
+        public void setUsers(List<String> users) {
+            this.users = users;
         }
     }
 }

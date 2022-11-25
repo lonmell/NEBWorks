@@ -27,7 +27,6 @@ import com.krafte.nebworks.bottomsheet.MemberOption;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
-import com.krafte.nebworks.ui.fragment.approval.ApprovalFragment1;
 import com.krafte.nebworks.ui.fragment.member.MemberSubFragment1;
 import com.krafte.nebworks.ui.fragment.member.MemberSubFragment2;
 import com.krafte.nebworks.ui.fragment.member.MemberSubFragment3;
@@ -87,7 +86,6 @@ public class MemberManagement extends AppCompatActivity {
     Dlog dlog = new Dlog();
     String return_page = "";
 
-    ApprovalFragment1 af1 = new ApprovalFragment1();
     int total_member_cnt = 0;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
@@ -182,7 +180,6 @@ public class MemberManagement extends AppCompatActivity {
                         @Override
                         public void run() {
                             binding.tabLayout.getTabAt(SELECT_POSITION).select();
-
                         }
                     }, 100);
 

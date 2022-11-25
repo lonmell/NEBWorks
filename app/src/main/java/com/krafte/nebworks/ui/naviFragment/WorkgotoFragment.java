@@ -666,7 +666,8 @@ public class WorkgotoFragment extends Fragment {
                                             jsonObject.getString("complete_yn"),
                                             jsonObject.getString("incomplete_reason"),
                                             jsonObject.getString("approval_state"),
-                                            jsonObject.getString("task_overdate")
+                                            jsonObject.getString("task_overdate"),
+                                            jsonObject.getString("reject_reason")
                                     ));
                                 }
                             }

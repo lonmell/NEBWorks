@@ -26,12 +26,14 @@ public class TodolistData {
         String incomplete_reason;
         String approval_state;
         String task_overdate;
+        String reject_reason;
 
         public TodolistData_list(String id, String writer_id, String kind,
                                  String title, String contents, String complete_kind, List<String> users,
                                  String task_date, String start_time, String end_time, String sun,
                                  String mon, String tue, String wed, String thu,String fri, String sat,
-                                 String img_path, String complete_yn, String incomplete_reason, String approval_state, String task_overdate) {
+                                 String img_path, String complete_yn, String incomplete_reason,
+                                 String approval_state, String task_overdate, String reject_reason) {
             this.id = id;
             this.writer_id = writer_id;
             this.kind = kind;
@@ -54,6 +56,7 @@ public class TodolistData {
             this.incomplete_reason = incomplete_reason;
             this.approval_state = approval_state;
             this.task_overdate = task_overdate;
+            this.reject_reason =reject_reason;
         }
 
         public String getId() {
@@ -230,6 +233,14 @@ public class TodolistData {
 
         public void setTask_overdate(String task_overdate) {
             this.task_overdate = task_overdate;
+        }
+
+        public String getReject_reason() {
+            return reject_reason;
+        }
+
+        public void setReject_reason(String reject_reason) {
+            this.reject_reason = reject_reason;
         }
     }
 }
