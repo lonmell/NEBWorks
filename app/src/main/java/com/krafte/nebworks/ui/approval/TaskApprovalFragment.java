@@ -133,10 +133,14 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 pm.Main2(mContext);
             }
         });
-        
         setBtnEvent();
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        GetApprovalList("","");
+    }
     @Override
     public void onResume(){
         super.onResume();
@@ -181,7 +185,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
         }
     }
     private void setBtnEvent(){
-
         binding.select01.setOnClickListener(v -> {
             ChangeTap("");
             dlog.i("select_date : " + select_date);
@@ -323,6 +326,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
         binding.changePlace.setOnClickListener(v -> {
             PaySelectPlaceActivity psp = new PaySelectPlaceActivity();
             psp.show(getSupportFragmentManager(), "PaySelectPlaceActivity");
@@ -426,10 +430,10 @@ public class TaskApprovalFragment extends AppCompatActivity {
                             Log.i(TAG, "GET SIZE : " + Response.length());
                             binding.noDataTxt.setVisibility(View.VISIBLE);
                         } else {
+                            //본인이 추가한 할일이 점주에게 보이지 안보이는지 회의 필요
                             binding.noDataTxt.setVisibility(View.GONE);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
-
                                 mAdapter.addItem(new TaskCheckData.TaskCheckData_list(
                                         jsonObject.getString("id"),
                                         jsonObject.getString("state"),

@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,7 +44,7 @@ public class OneButtonTItlePopActivity extends Activity {
         //데이터 가져오기
         intent = getIntent();
         title         = intent.getStringExtra("title");
-        data             = intent.getStringExtra("data");
+        data          = intent.getStringExtra("data");
 
         setContentLayout();
         setBtnEvent();

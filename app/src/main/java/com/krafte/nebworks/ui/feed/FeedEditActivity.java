@@ -422,7 +422,7 @@ public class FeedEditActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, feed_id, "");
+        Call<String> call = api.getData(place_id, feed_id, "","1");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "CheckResult"})
             @Override
@@ -551,7 +551,7 @@ public class FeedEditActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, noti_title, noti_contents, noti_link, ProfileUrl, "",noti_event_start,noti_event_end);
+        Call<String> call = api.getData(feed_id, noti_title, noti_contents, noti_link, ProfileUrl, "",noti_event_start,noti_event_end,"","");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

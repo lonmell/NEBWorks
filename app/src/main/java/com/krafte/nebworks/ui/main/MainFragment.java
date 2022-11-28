@@ -394,8 +394,10 @@ public class MainFragment extends AppCompatActivity {
             pm.Main(mContext);
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
             pm.addWorkGo(mContext);
-        }  else if (view.getId() == R.id.select_nav09) {
+        } else if (view.getId() == R.id.select_nav09) {
             pm.Approval(mContext);
+        } else if (view.getId() == R.id.select_nav12) {
+            pm.CommunityActivity(mContext);
         }
 
     }

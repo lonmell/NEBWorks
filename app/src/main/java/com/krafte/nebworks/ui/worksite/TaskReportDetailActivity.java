@@ -1,9 +1,13 @@
 package com.krafte.nebworks.ui.worksite;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +27,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
+import com.krafte.nebworks.dataInterface.ApprovalUpdateInterface;
 import com.krafte.nebworks.databinding.ActivityTaskReportDetailBinding;
+import com.krafte.nebworks.pop.OneButtonTItlePopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -31,6 +38,12 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class TaskReportDetailActivity extends AppCompatActivity {
     private static final String TAG = "TaskReportDetailActivity";
@@ -88,6 +101,11 @@ public class TaskReportDetailActivity extends AppCompatActivity {
     String toDay = "";
     String return_page = "";
 
+    Drawable check_on;
+    Drawable check_off;
+    Drawable x_on;
+    Drawable x_off;
+
     boolean NeedReportTF = false;
 
     int a = 0;
@@ -128,6 +146,11 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
 
+            check_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_blue_check);
+            check_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_gray_check);
+            x_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_red_x);
+            x_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_white_x);
+
             setBtnEvent();
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
             WorkDay = toDay;
@@ -138,6 +161,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
 
 
     private void setBtnEvent() {
+
         binding.backBtn.setOnClickListener(v -> {
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.remove("SELECT_POSITION_sub");
@@ -165,6 +189,8 @@ public class TaskReportDetailActivity extends AppCompatActivity {
     List<String> item_user_img;
     List<String> item_user_jikgup;
     InputMethodManager imm;
+    String decision = "";
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -285,8 +311,9 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                 binding.incompleteArea.setVisibility(View.VISIBLE);
                 binding.incompleteTitle.setText(incomplete_reason);
             }
+
             //--approval_state -- // 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
-            if(approval_state.equals("0") ||approval_state.equals("1") || approval_state.equals("3")){
+            if(approval_state.equals("0") || approval_state.equals("1") || approval_state.equals("3")){
                 binding.approvalState.setTextColor(Color.parseColor("#6395EC"));
                 if(approval_state.equals("0")){
                     binding.approvalState.setText("결재대기중");
@@ -299,6 +326,11 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                 binding.rejectTv.setText(reject_reason);
                 binding.approvalState.setTextColor(Color.parseColor("#FF0000"));
                 binding.approvalState.setText("반려");
+                if(reject_reason.length() > 0){
+                    binding.rejectTitle.setVisibility(View.VISIBLE);
+                }else{
+                    binding.rejectTitle.setVisibility(View.GONE);
+                }
             }
             dlog.i("-----getTaskContents END-----");
 
@@ -317,6 +349,45 @@ public class TaskReportDetailActivity extends AppCompatActivity {
 
     }
 
+    public void setUpdateWorktodo(String kind, String task_no, String user_id, String reject_reason) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApprovalUpdateInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ApprovalUpdateInterface api = retrofit.create(ApprovalUpdateInterface.class);
+//        task_no.replace(",","|")
+        Call<String> call = api.getData(task_no, user_id, kind, "");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "setUpdateWorktodo function START");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                Log.e(TAG, "response 2: " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().replace("\"", "").equals("success")) {
+                        Intent intent = new Intent(mContext, OneButtonTItlePopActivity.class);
+                        if (kind.equals("1")) {
+                            intent.putExtra("title", "승인 완료");
+                            intent.putExtra("data", "승인처리가 완료 되었습니다.");
+                        } else {
+                            intent.putExtra("title", "반려 완료");
+                            intent.putExtra("data", "반려처리가 완료 되었습니다.");
+                        }
+                        mContext.startActivity(intent);
+                        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                    } else {
+                        Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
+    }
 
     private void RemoveShared() {
         shardpref.remove("task_no");

@@ -199,6 +199,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/refresh_btn"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
@@ -227,18 +228,28 @@
                             android:text=" 떨어져있습니다"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/io_able_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:text="출근처리가능"
+                            android:layout_marginStart="10dp"
+                            android:textColor="@color/red"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
 
                     <TextView
-                        android:id="@+id/io_able_tv"
+                        android:id="@+id/refresh_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
                         android:fontFamily="@font/inter_bold"
+                        android:layout_alignParentEnd="true"
                         android:gravity="center"
-                        android:text="출근처리가능"
-                        android:textColor="@color/red"
+                        android:text="새로고침"
+                        android:textColor="@color/blue"
                         android:textSize="14sp" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
@@ -325,7 +336,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="center"
-                        android:text="1시간 70분"
+                        android:text="0"
                         android:textColor="#696969"
                         android:textSize="12sp" />
 
@@ -338,7 +349,7 @@
                         android:layout_toEndOf="@+id/work_hour_text02"
                         android:max="60"
                         android:padding="5dp"
-                        android:progress="20"
+                        android:progress="0"
                         android:progressDrawable="@drawable/custom_seekbar_progress_week"
                         android:thumb="@drawable/seek_tumb" />
                 </LinearLayout>
@@ -368,7 +379,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="center"
-                        android:text="1시간 70분"
+                        android:text="0"
                         android:textColor="#696969"
                         android:textSize="12sp" />
 
@@ -381,7 +392,7 @@
                         android:layout_toEndOf="@+id/work_hour_text02"
                         android:max="60"
                         android:padding="5dp"
-                        android:progress="45"
+                        android:progress="0"
                         android:progressDrawable="@drawable/custom_seekbar_progress_week"
                         android:thumb="@drawable/seek_tumb" />
                 </LinearLayout>
@@ -410,7 +421,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="center"
-                        android:text="1시간 70분"
+                        android:text="0"
                         android:textColor="#696969"
                         android:textSize="12sp" />
 
@@ -423,7 +434,7 @@
                         android:layout_toEndOf="@+id/work_hour_text02"
                         android:max="60"
                         android:padding="5dp"
-                        android:progress="30"
+                        android:progress="0"
                         android:progressDrawable="@drawable/custom_seekbar_progress_week"
                         android:thumb="@drawable/seek_tumb" />
                 </LinearLayout>
@@ -746,7 +757,7 @@
                             android:layout_marginBottom="10dp"
                             android:fontFamily="@font/inter_bold"
                             android:gravity="center"
-                            android:text="결재 현황"
+                            android:text="출결목록"
                             android:textColor="@color/black" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>

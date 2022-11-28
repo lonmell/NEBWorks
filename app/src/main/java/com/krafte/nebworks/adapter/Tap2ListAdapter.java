@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,8 +143,12 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             try {
                 if (item.getWriter_id().equals(USER_INFO_ID)) {
                     holder.list_setting.setVisibility(View.VISIBLE);
+                    holder.list_setting.setClickable(true);
+                    holder.list_setting.setEnabled(true);
                 } else {
-                    holder.list_setting.setVisibility(View.GONE);
+                    holder.list_setting.setVisibility(View.INVISIBLE);
+                    holder.list_setting.setClickable(false);
+                    holder.list_setting.setEnabled(false);
                 }
 
                 JSONArray Response = new JSONArray(item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
@@ -220,6 +225,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                         int Cnt = Response.length() - 3;
                         holder.other_cnt.setText("+" + Cnt);
                     }
+
                     String join_membertv = String.valueOf(join_member).replace(",", "/").replace("[", "").replace("]", "");
                     dlog.i("join_member.size() : " + join_member.size());
                     if (join_member.size() > 3) {
@@ -243,7 +249,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     }
                 }
 
-
                 dlog.i("work_title : " + item.getTitle());
                 dlog.i("item.getStart_time() : " + item.getStart_time());
                 dlog.i("item.getEnd_time() : " + item.getEnd_time());
@@ -263,6 +268,22 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 } else {
                     holder.work_end_time.setText(item.getEnd_time() + " 마감");
                 }
+
+                //0:대기, 1:승인, 2:반려
+                String state = "";
+                if(item.getApproval_state().equals("")){
+                    state = "";
+                }else if(item.getApproval_state().equals("0")){
+                    state = "승인대기";
+                    holder.approval_state.setTextColor(Color.parseColor("#6395EC"));
+                }else if(item.getApproval_state().equals("1")){
+                    state = "승인";
+                    holder.approval_state.setTextColor(Color.parseColor("#C3C3C3"));
+                }else if(item.getApproval_state().equals("2")){
+                    state = "반려";
+                    holder.approval_state.setTextColor(Color.parseColor("#DD6540"));
+                }
+                holder.approval_state.setText(state);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -363,31 +384,28 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
 
         CardView workimg_url01, workimg_url02, workimg_url03, workimg_url04;
         ImageView workimg1, workimg2, workimg3;
-        TextView other_cnt;
+        TextView other_cnt,approval_state;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            item_total = itemView.findViewById(R.id.item_total);
-            member_img_array = itemView.findViewById(R.id.member_img_array);
-
-            work_title = itemView.findViewById(R.id.work_title);
-            work_start_time = itemView.findViewById(R.id.work_start_time);
-            work_end_time = itemView.findViewById(R.id.work_end_time);
-            member_name = itemView.findViewById(R.id.member_name);
-
-            member_list = itemView.findViewById(R.id.member_list);
-            list_setting = itemView.findViewById(R.id.list_setting);
-
-            workimg_url01 = itemView.findViewById(R.id.workimg_url01);
-            workimg_url02 = itemView.findViewById(R.id.workimg_url02);
-            workimg_url03 = itemView.findViewById(R.id.workimg_url03);
-            workimg_url04 = itemView.findViewById(R.id.workimg_url04);
-
-            workimg1 = itemView.findViewById(R.id.workimg1);
-            workimg2 = itemView.findViewById(R.id.workimg2);
-            workimg3 = itemView.findViewById(R.id.workimg3);
-            other_cnt = itemView.findViewById(R.id.other_cnt);
+            item_total          = itemView.findViewById(R.id.item_total);
+            member_img_array    = itemView.findViewById(R.id.member_img_array);
+            work_title          = itemView.findViewById(R.id.work_title);
+            work_start_time     = itemView.findViewById(R.id.work_start_time);
+            work_end_time       = itemView.findViewById(R.id.work_end_time);
+            member_name         = itemView.findViewById(R.id.member_name);
+            member_list         = itemView.findViewById(R.id.member_list);
+            list_setting        = itemView.findViewById(R.id.list_setting);
+            workimg_url01       = itemView.findViewById(R.id.workimg_url01);
+            workimg_url02       = itemView.findViewById(R.id.workimg_url02);
+            workimg_url03       = itemView.findViewById(R.id.workimg_url03);
+            workimg_url04       = itemView.findViewById(R.id.workimg_url04);
+            workimg1            = itemView.findViewById(R.id.workimg1);
+            workimg2            = itemView.findViewById(R.id.workimg2);
+            workimg3            = itemView.findViewById(R.id.workimg3);
+            other_cnt           = itemView.findViewById(R.id.other_cnt);
+            approval_state      = itemView.findViewById(R.id.approval_state);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");

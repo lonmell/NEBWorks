@@ -185,6 +185,11 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
             WorkDay = toDay;
             binding.storeName.setText(place_name);
+            //권한에 따른 ui 변동
+            if(USER_INFO_AUTH.equals("1")){
+                //근로자일때 일부 UI 안보이게 해야함
+                binding.memberSelectArea.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -754,6 +759,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         dlog.i("sat : " + Sat);
         dlog.i("users : " + user_id);
         dlog.i("overdate : " + overdate);
+        if(USER_INFO_AUTH.equals("1")){
+            user_id = USER_INFO_ID;
+        }
         if (make_kind == 1) {
             if (task_no.equals("0")) {
                 @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
@@ -1027,16 +1035,21 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             if (make_kind == 2) {
                 return true;
             } else {
-                if (total_member_cnt == 0) {
-                    Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-                    intent.putExtra("data", "등록된 직원이 없습니다. 직원을 추가 후 이용해 주세요.");
-                    intent.putExtra("left_btn_txt", "닫기");
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.translate_up, 0);
-                } else {
-                    Toast.makeText(this, "업무를 배정할 직원을 선택해주세요.", Toast.LENGTH_SHORT).show();
+                if(USER_INFO_AUTH.equals("1")){
+                    return true;
+                }else{
+                    if (total_member_cnt == 0) {
+                        Intent intent = new Intent(mContext, OneButtonPopActivity.class);
+                        intent.putExtra("data", "등록된 직원이 없습니다. 직원을 추가 후 이용해 주세요.");
+                        intent.putExtra("left_btn_txt", "닫기");
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.translate_up, 0);
+                    } else {
+                        Toast.makeText(this, "업무를 배정할 직원을 선택해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                    return false;
                 }
-                return false;
+
             }
         } else {
             dlog.i("제목2 : " + WorkTitle);
@@ -1045,7 +1058,12 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             dlog.i("마감시간2 : " + end_time + ":" + EndTime02);
             dlog.i("반복 : " + getYoil.toString().replace("[", "").replace("]", ""));
             dlog.i("작업날짜 : " + WorkDay);
-            dlog.i("선택된 직원 : " + user_id);
+            if(USER_INFO_AUTH.equals("1")){
+                dlog.i("선택된 직원 : " + USER_INFO_ID);
+            }else{
+                dlog.i("선택된 직원 : " + user_id);
+            }
+
             return true;
         }
     }

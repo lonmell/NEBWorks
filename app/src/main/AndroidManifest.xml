@@ -195,6 +195,10 @@
             android:name=".ui.career.CareerActivity"
             android:theme="@style/Theme.Kogas" />
 
+        <!-- community -->
+        <activity android:name=".ui.community.CommunityActivity" />
+        <activity android:name=".ui.community.CommunityAddActivity" />
+
         <!-- workstatus-->
         <activity android:name=".ui.workstatus.AddWorkPartActivity" />
 

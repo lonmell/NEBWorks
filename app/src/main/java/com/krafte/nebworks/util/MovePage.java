@@ -18,6 +18,11 @@ public interface MovePage {
     //--ui.career
     void Career(Context context);
 
+    //--ui.community
+    void CommunityActivity(Context context);
+
+    void CommunityAdd(Context context);
+
     void MoreGo(Context context);
 
     void MoreBack(Context context);

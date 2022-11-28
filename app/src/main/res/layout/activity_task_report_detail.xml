@@ -282,12 +282,12 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
                     android:fontFamily="@font/inter_bold"
                     android:text="보고사항"
                     android:textColor="@color/black"
@@ -298,7 +298,7 @@
                     android:id="@+id/taskKind00"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
+                    android:layout_marginStart="10dp"
                     android:fontFamily="@font/inter_bold"
                     android:text=""
                     android:textColor="@color/blue"
@@ -306,17 +306,16 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- 업무 보고 방식 영역 -->
             <ImageView
                 android:id="@+id/task_kind_01"
                 android:layout_width="95dp"
                 android:layout_height="95dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:scaleType="fitXY"
                 android:background="@drawable/empty_photo"
                 android:visibility="visible" />
 
-            <!-- 업무 보고 방식 영역 -->
             <LinearLayout
                 android:id="@+id/incomplete_area"
                 android:layout_width="match_parent"
@@ -326,25 +325,18 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="미완료 및 지연사유"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
                     android:id="@+id/incomplete_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_regular"
+                    android:background="@drawable/grayback_gray_round"
+                    android:minHeight="50dp"
                     android:text=""
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
-            </LinearLayout>
 
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/reject_area"
@@ -360,6 +352,7 @@
                     android:orientation="horizontal" />
 
                 <TextView
+                    android:id="@+id/reject_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
@@ -368,17 +361,16 @@
                     android:textColor="@color/black"
                     android:textSize="25sp"
                     android:textStyle="bold" />
-
                 <TextView
                     android:id="@+id/reject_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/inter_bold"
                     android:text=""
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
             </LinearLayout>
 

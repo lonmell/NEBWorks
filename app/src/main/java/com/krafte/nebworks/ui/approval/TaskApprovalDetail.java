@@ -6,7 +6,12 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -20,6 +25,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
+import com.krafte.nebworks.dataInterface.ApprovalUpdateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.TaskSelectMInterface;
 import com.krafte.nebworks.databinding.ActivityTaskapprovalDetailBinding;
@@ -119,6 +125,12 @@ public class TaskApprovalDetail extends AppCompatActivity {
     ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mem_mList;
     MemberListPopAdapter mem_mAdapter;
 
+    Drawable check_on;
+    Drawable check_off;
+    Drawable x_on;
+    Drawable x_off;
+
+
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +146,10 @@ public class TaskApprovalDetail extends AppCompatActivity {
         dlog.DlogContext(mContext);
         icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
         icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+        check_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_blue_check);
+        check_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_gray_check);
+        x_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_red_x);
+        x_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_white_x);
 
         setBtnEvent();
 
@@ -196,6 +212,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
             dlog.i("usersn : " + usersn);
             dlog.i("usersimg : " + usersimg);
             setTodoData(request_date,id);
+
             dlog.i( "----------------------------------------------------------------------");
 
             /**
@@ -349,13 +366,65 @@ public class TaskApprovalDetail extends AppCompatActivity {
                     binding.rejectArea.setVisibility(View.GONE);
                 }else{
                     binding.rejectArea.setVisibility(View.VISIBLE);
-                    binding.rejectTv.setText(reject_reason);
                     binding.approvalState.setTextColor(Color.parseColor("#FF0000"));
                     binding.approvalState.setText("반려");
+                    if(reject_reason.length() > 0){
+                        binding.rejectTv.setText(reject_reason);
+                    }
                 }
             } catch (Exception e) {
                 dlog.i( "Exception : " + e);
             }
+
+            if(USER_INFO_AUTH.equals("0")){
+                binding.decisionArea.setVisibility(View.VISIBLE);
+                binding.bottomBtnBox.setVisibility(View.GONE);
+            }else{
+                binding.decisionArea.setVisibility(View.GONE);
+                binding.bottomBtnBox.setVisibility(View.VISIBLE);
+            }
+
+            binding.selectApproval01.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
+            binding.selectApproval01tv.setTextColor(Color.parseColor("#6395EC"));
+            binding.selectApproval01tv.setCompoundDrawablesWithIntrinsicBounds(check_on,null,null,null);
+            binding.selectApproval02.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
+            binding.selectApproval02tv.setTextColor(Color.parseColor("#DD6540"));
+            binding.selectApproval02tv.setCompoundDrawablesWithIntrinsicBounds(x_on,null,null,null);
+            binding.rejectTv.setVisibility(View.GONE);
+            binding.rejectSave.setVisibility(View.GONE);
+
+            binding.selectApproval01.setOnClickListener(v -> {
+                //승인버튼
+                binding.selectApproval01.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
+                binding.selectApproval01tv.setTextColor(Color.parseColor("#6395EC"));
+                binding.selectApproval01tv.setCompoundDrawablesWithIntrinsicBounds(check_on,null,null,null);
+                binding.selectApproval02.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
+                binding.selectApproval02tv.setTextColor(Color.parseColor("#DD6540"));
+                binding.selectApproval02tv.setCompoundDrawablesWithIntrinsicBounds(x_on,null,null,null);
+                binding.rejectTv.setVisibility(View.GONE);
+                binding.rejectSave.setVisibility(View.GONE);
+                setUpdateWorktodo("1");
+            });
+            binding.selectApproval02.setOnClickListener(v -> {
+                //반려버튼
+                binding.selectApproval01.setCardBackgroundColor(Color.parseColor("#DBDBDB"));
+                binding.selectApproval01tv.setTextColor(Color.parseColor("#949494"));
+                binding.selectApproval01tv.setCompoundDrawablesWithIntrinsicBounds(check_off,null,null,null);
+                binding.selectApproval02.setCardBackgroundColor(Color.parseColor("#DD6540"));
+                binding.selectApproval02tv.setTextColor(Color.parseColor("#ffffff"));
+                binding.selectApproval02tv.setCompoundDrawablesWithIntrinsicBounds(x_off,null,null,null);
+                binding.rejectTv.setVisibility(View.VISIBLE);
+                binding.rejectSave.setVisibility(View.VISIBLE);
+            });
+
+            binding.rejectSave.setOnClickListener(v -> {
+                if( binding.rejectTv.getText().toString().length() == 0){
+                    Toast_Nomal("반려사유를 입력해주세요.");
+                }else{
+                    setUpdateWorktodo("2");
+                }
+            });
+
         } catch (Exception e) {
             dlog.i( "Exception E" + e);
         }
@@ -401,52 +470,52 @@ public class TaskApprovalDetail extends AppCompatActivity {
 
 
     public void setUpdateWorktodo(String kind) {
+        incomplete_reason = binding.rejectTv.getText().toString();
+
         dlog.i("-----setUpdateWorktodo-----");
         dlog.i("id : " + id);
         dlog.i("requester_id : " + requester_id);
         dlog.i("kind : " + kind);
         dlog.i("incomplete_reason : " + incomplete_reason);
-//        dlog.i("inrejectInput : " + binding.inrejectInput.getText().toString());
         dlog.i("-----setUpdateWorktodo-----");
 
-//        incomplete_reason = binding.incompleteInput.getText().toString();
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(ApprovalUpdateInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        ApprovalUpdateInterface api = retrofit.create(ApprovalUpdateInterface.class);
-//        Call<String> call = api.getData(id,USER_INFO_ID,kind,binding.inrejectInput.getText().toString());
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                Log.e(TAG, "setUpdateWorktodo function START");
-//                Log.e(TAG, "response 1: " + response.isSuccessful());
-//                Log.e(TAG, "response 2: " + response.body());
-//                if (response.isSuccessful() && response.body() != null) {
-//                    dlog.i( "resultData : " + resultData.getRESULT());
-//                    if (response.body().replace("\"", "").equals("success")) {
-//                        for(int a = 0; a < user_id.size(); a++){
-//                            if(place_owner_id.equals(user_id.get(a))){
-//                                getManagerToken(user_id.get(a), "0", place_id, place_name,state);
-//                            }else{
-//                                getManagerToken(user_id.get(a), "1", place_id, place_name,state);
-//                            }
-//                        }
-//
-//                        dlog.i( "complete_kind : " + complete_kind);
-//                        pm.Approval(mContext);
-//                    } else {
-//                        Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                Log.e(TAG, "에러 = " + t.getMessage());
-//            }
-//        });
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApprovalUpdateInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ApprovalUpdateInterface api = retrofit.create(ApprovalUpdateInterface.class);
+        Call<String> call = api.getData(id,USER_INFO_ID,kind,incomplete_reason);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "setUpdateWorktodo function START");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                Log.e(TAG, "response 2: " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    dlog.i( "resultData : " + resultData.getRESULT());
+                    if (response.body().replace("\"", "").equals("success")) {
+                        for(int a = 0; a < user_id.size(); a++){
+                            if(place_owner_id.equals(user_id.get(a))){
+                                getManagerToken(user_id.get(a), "0", place_id, place_name,state);
+                            }else{
+                                getManagerToken(user_id.get(a), "1", place_id, place_name,state);
+                            }
+                        }
+
+                        dlog.i( "complete_kind : " + complete_kind);
+                        pm.Approval(mContext);
+                    } else {
+                        Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
     }
 
     List<String> inmember = new ArrayList<>();
@@ -593,4 +662,19 @@ public class TaskApprovalDetail extends AppCompatActivity {
         }
     }
     /* -- 할일 추가 FCM 전송 영역 */
+
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
 }

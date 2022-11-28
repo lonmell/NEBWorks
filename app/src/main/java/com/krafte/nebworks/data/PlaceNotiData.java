@@ -23,12 +23,14 @@ public class PlaceNotiData {
         String updated_at = "";
         String open_date = "";
         String close_date = "";
+        String boardkind = "";
+        String category = "";
 
         public PlaceNotiData_list(String id, String place_id, String title, String contents,
                 String writer_id, String writer_name, String writer_img_path, String jikgup,
                 String view_cnt, String comment_cnt, String link,
                 String feed_img_path, String created_at, String updated_at,
-                String open_date, String close_date) {
+                String open_date, String close_date, String boardkind, String category) {
             this.id = id;
             this.place_id = place_id;
             this.title = title;
@@ -45,6 +47,8 @@ public class PlaceNotiData {
             this.updated_at = updated_at;
             this.open_date = open_date;
             this.close_date = close_date;
+            this.boardkind = boardkind;
+            this.category = category;
         }
 
         public String getId() {
@@ -173,6 +177,22 @@ public class PlaceNotiData {
 
         public void setClose_date(String close_date) {
             this.close_date = close_date;
+        }
+
+        public String getBoardkind() {
+            return boardkind;
+        }
+
+        public void setBoardkind(String boardkind) {
+            this.boardkind = boardkind;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public void setCategory(String category) {
+            this.category = category;
         }
     }
 }

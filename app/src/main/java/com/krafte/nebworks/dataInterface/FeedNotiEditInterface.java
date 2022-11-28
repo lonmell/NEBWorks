@@ -18,6 +18,8 @@ public interface FeedNotiEditInterface {
             @Field("img_path") String img_path,
             @Field("file_path") String file_path,
             @Field("open_date") String open_date,
-            @Field("close_date") String close_date
+            @Field("close_date") String close_date,
+            @Field("category") String category,
+            @Field("boardkind") String boardkind
     );
 }

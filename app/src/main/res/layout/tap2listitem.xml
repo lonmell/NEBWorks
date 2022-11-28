@@ -20,18 +20,36 @@
 
             <TextView
                 android:id="@+id/work_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/list_setting"
                 android:layout_alignBottom="@+id/list_setting"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/list_setting"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/approval_state"
                 android:fontFamily="@font/inter_bold"
                 android:gravity="start|center"
                 android:singleLine="true"
                 android:text="제목"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/approval_state"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/list_setting"
+                android:layout_alignBottom="@+id/list_setting"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/list_setting"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="start|center"
+                android:singleLine="true"
+                android:text="state"
+                android:textColor="@color/black"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 

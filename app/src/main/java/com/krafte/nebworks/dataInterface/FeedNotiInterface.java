@@ -14,6 +14,7 @@ public interface FeedNotiInterface
     Call<String> getData(
             @Field("place_id") String place_id,
             @Field("feed_id") String feed_id,
-            @Field("sort") String sort
+            @Field("sort") String sort,
+            @Field("kind") String kind
     );
 }

@@ -208,15 +208,37 @@ public class TaskDetailActivity extends AppCompatActivity {
                 binding.acceptTv.setText("수정하기");
             }else{
                 binding.acceptTv.setText("업무 보고하기");
+                int a = 0;
                 for(String str : user_id.split(",")){
                     dlog.i("acceptTv str : " + str);
                     dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-                    dlog.i("str.equals(USER_INFO_ID) : " + str.equals(USER_INFO_ID));
+                    dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").equals(USER_INFO_ID));
                     if(str.replace("[","").replace("]","").equals(USER_INFO_ID)){
+                        //배정 아이디가 포함되는 직원이 한명이라도 있을때는 업무 보고하기 버튼 보이기
+                        a++;
+                    }
+                    if(a > 0){
                         binding.acceptBtnBox.setVisibility(View.VISIBLE);
                     }else{
                         binding.acceptBtnBox.setVisibility(View.GONE);
                     }
+                }
+            }
+        }else if(approval_state.equals("2")){
+            binding.acceptTv.setText("업무 보고하기");
+            int a = 0;
+            for(String str : user_id.split(",")){
+                dlog.i("acceptTv str : " + str);
+                dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+                dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").equals(USER_INFO_ID));
+                if(str.replace("[","").replace("]","").equals(USER_INFO_ID)){
+                    //배정 아이디가 포함되는 직원이 한명이라도 있을때는 업무 보고하기 버튼 보이기
+                    a++;
+                }
+                if(a > 0){
+                    binding.acceptBtnBox.setVisibility(View.VISIBLE);
+                }else{
+                    binding.acceptBtnBox.setVisibility(View.GONE);
                 }
             }
         }else{
@@ -328,6 +350,8 @@ public class TaskDetailActivity extends AppCompatActivity {
                 }else{
                     pm.TaskReport(mContext);
                 }
+            }else if(approval_state.equals("2")){
+                pm.TaskReport(mContext);
             }else{
                 pm.TaskReportDetail(mContext);
             }

@@ -223,7 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
-                    android:text="업무 보고"
+                    android:text="업무지시 보고"
                     android:textColor="@color/black"
                     android:textSize="25sp"
                     android:textStyle="bold"
@@ -279,16 +279,15 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <!-- 업무 보고 방식 영역 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
                     android:fontFamily="@font/inter_bold"
                     android:text="보고사항"
                     android:textColor="@color/black"
@@ -299,7 +298,7 @@
                     android:id="@+id/taskKind00"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
+                    android:layout_marginStart="10dp"
                     android:fontFamily="@font/inter_bold"
                     android:text=""
                     android:textColor="@color/blue"
@@ -316,7 +315,6 @@
                 android:background="@drawable/empty_photo"
                 android:visibility="visible" />
 
-            <!-- 업무 보고 방식 영역 -->
             <LinearLayout
                 android:id="@+id/incomplete_area"
                 android:layout_width="match_parent"
@@ -326,25 +324,111 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="미완료 및 지연사유"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
                     android:id="@+id/incomplete_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_regular"
+                    android:minHeight="50dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
                     android:text=""
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/decision_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+                <!-- 승인/반려 결정 영역-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/select_approval01"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#E0EAFB"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="0dp">
+
+                        <TextView
+                            android:id="@+id/select_approval01tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:drawableStart="@drawable/ic_blue_check"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="center"
+                            android:text="    승인하기"
+                            android:textColor="#6395EC"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/select_approval02"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#FCF0EC"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="0dp">
+
+                        <TextView
+                            android:id="@+id/select_approval02tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:drawableStart="@drawable/ic_red_x"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="center"
+                            android:text="    반려하기"
+                            android:textColor="#DD6540"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/reject_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="102dp"
+                    android:layout_marginTop="20dp"
+                    android:hint="반려 사유를 입력해주세요."
+                    android:padding="10dp"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:textColorHint="#a9a9a9"
+                    android:textColor="@color/black"
+                    android:background="@drawable/default_input_round"/>
+                <TextView
+                    android:id="@+id/reject_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#6395EC"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="전송하기"
+                    android:textColor="@color/white"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/reject_area"
@@ -369,17 +453,6 @@
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/reject_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/inter_regular"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout

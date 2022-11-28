@@ -34,6 +34,7 @@ import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.dataInterface.PlaceDelInterface;
 import com.krafte.nebworks.dataInterface.UserDelInterface;
 import com.krafte.nebworks.databinding.ActivityTwobuttonPopBinding;
+import com.krafte.nebworks.ui.community.CommunityActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -199,6 +200,13 @@ public class TwoButtonPopActivity extends Activity {
                 TaskDel();
             } else if(flag.equals("그룹신청")){
                 Toast_Nomal("개발중....");
+            } else if (flag.equals("작성여부")) {
+                Intent intent = new Intent(this, CommunityActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, R.anim.translate_down);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                finish();
+//                ClosePop();
             }
         });
         binding.popLeftTxt.setOnClickListener(v -> {
