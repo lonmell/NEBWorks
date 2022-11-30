@@ -124,7 +124,7 @@
             android:id="@+id/write_contents"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/input_area"
+            android:layout_above="@+id/option_area"
             android:layout_marginBottom="0dp"
             android:background="#ffffff"
             android:gravity="top"
@@ -137,17 +137,82 @@
             android:textColorHint="#a9a9a9"
             tools:ignore="HardcodedText,TextContrastCheck" />
 
-        <ImageView
-            android:id="@+id/limit_img"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+        <LinearLayout
+            android:id="@+id/option_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_above="@+id/input_area"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/empty_photo"
-            android:scaleType="fitXY" />
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DBDBDB"/>
+            <EditText
+                android:id="@+id/link_txt"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="#ffffff"
+                android:hint="참고링크 입력"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:textColorHint="#a9a9a9"
+                tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck"
+                android:autofillHints=""
+                android:importantForAutofill="no" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DBDBDB"/>
+            <EditText
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="#ffffff"
+                android:hint="지역선택"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:textColorHint="#a9a9a9"
+                tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck"
+                android:autofillHints=""
+                android:importantForAutofill="no" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DBDBDB"/>
+            <EditText
+                android:id="@+id/pay"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="#ffffff"
+                android:hint="금액입력(만원단위)"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:textColorHint="#a9a9a9"
+                tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck"
+                android:autofillHints=""
+                android:importantForAutofill="no" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DBDBDB"/>
+            <EditText
+                android:id="@+id/over_date"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="#ffffff"
+                android:hint="마감날짜 입력"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:textColorHint="#a9a9a9"
+                tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck"
+                android:autofillHints=""
+                android:importantForAutofill="no" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/input_area"
             android:layout_width="match_parent"

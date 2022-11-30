@@ -6,10 +6,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
@@ -44,7 +46,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     String USER_INFO_ID = "";
     String token = "";
     Dlog dlog = new Dlog();
-
+    int kind = 0;
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
@@ -55,9 +57,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
         this.mListener = listener;
     }
 
-    public CommunityAdapter(Context context, ArrayList<PlaceNotiData.PlaceNotiData_list> data) {
+    public CommunityAdapter(Context context, ArrayList<PlaceNotiData.PlaceNotiData_list> data, int kind) {
         this.mData = data;
         this.mContext = context;
+        this.kind = kind;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull
@@ -80,7 +83,20 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
         PlaceNotiData.PlaceNotiData_list item = mData.get(position);
 
         try{
-            holder.rank_tv.setText(String.valueOf(position));
+            if(kind == 0){
+                holder.rank_area.setVisibility(View.VISIBLE);
+                holder.profile_area.setVisibility(View.VISIBLE);
+                holder.name.setVisibility(View.VISIBLE);
+                holder.write_date.setVisibility(View.VISIBLE);
+                holder.category_box.setVisibility(View.VISIBLE);
+            }else if(kind == 1){
+                holder.rank_area.setVisibility(View.GONE);
+                holder.profile_area.setVisibility(View.GONE);
+                holder.name.setVisibility(View.GONE);
+                holder.write_date.setVisibility(View.GONE);
+                holder.category_box.setVisibility(View.GONE);
+            }
+            holder.rank_tv.setText(String.valueOf(position+1));
             holder.title.setText(item.getTitle());
             holder.write_date.setText(item.getCreated_at());
             holder.name.setText(item.getWriter_name());
@@ -102,6 +118,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
         TextView rank_tv,title,name,write_date,contents,categorytv,view_com,like_cnt;
         RelativeLayout list_setting;
 
+        LinearLayout rank_area;
+        CardView profile_area;
+        LinearLayout category_box;
+
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -115,6 +135,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             view_com        = itemView.findViewById(R.id.view_com);
             like_cnt        = itemView.findViewById(R.id.like_cnt);
             list_setting    = itemView.findViewById(R.id.list_setting);
+            rank_area       = itemView.findViewById(R.id.rank_area);
+            profile_area    = itemView.findViewById(R.id.profile_area);
+            category_box    = itemView.findViewById(R.id.category_box);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

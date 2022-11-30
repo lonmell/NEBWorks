@@ -34,7 +34,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.bottomsheet.FeedSelectActivity;
+import com.krafte.nebworks.bottomsheet.SelectStringBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.FeedNotiAddInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
@@ -75,7 +75,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 
-public class CommunityAddActivity extends AppCompatActivity implements FeedSelectActivity.BottomSheetListener{
+public class CommunityAddActivity extends AppCompatActivity {
     private ActivityCommunityAddBinding binding;
     private final static String TAG = "WorkCommunityWriteAcitivy";
     Context mContext;
@@ -154,84 +154,83 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
         icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
 
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_NO = shardpref.getString("USER_INFO_NO","");
+        USER_INFO_NO = shardpref.getString("USER_INFO_NO", "");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
 
-        place_id = shardpref.getString("place_id","");
-        feed_id = shardpref.getString("place_id","");
-        
+        place_id = shardpref.getString("place_id", "");
+        feed_id = shardpref.getString("place_id", "");
+
         /*작성자가 수정 버튼을 눌렀을때 가져옴*/
-        state_txt       = shardpref.getString("state","");
-        write_id_txt    = shardpref.getString("write_id","");
-        write_nickname  = shardpref.getString("write_nickname","");
+        state_txt = shardpref.getString("state", "");
+        write_id_txt = shardpref.getString("write_id", "");
+        write_nickname = shardpref.getString("write_nickname", "");
         dlog.i("--------------------------WorkCommunityWriteAcitivy--------------------------");
         user_input_name = USER_INFO_NAME;
-        if(write_id_txt.equals(USER_INFO_ID)){
-            if(state_txt.equals("EditFeed")){
+        if (write_id_txt.equals(USER_INFO_ID)) {
+            if (state_txt.equals("EditFeed")) {
                 //작성자의 글 수정
-                feed_id         = shardpref.getString("feed_id","");
-                writer_name_txt = shardpref.getString("writer_name","");
-                title_txt       = shardpref.getString("title","");
-                contents_txt    = shardpref.getString("contents","");
-                write_date_txt  = shardpref.getString("write_date","");
-                view_cnt        = shardpref.getString("view_cnt","");
-                like_cnt        = shardpref.getString("like_cnt","");
-                boardkind       = shardpref.getString("boardkind","");
-                category        = shardpref.getString("category","");
-                feed_img        = shardpref.getString("feed_img","");
+                feed_id = shardpref.getString("feed_id", "");
+                writer_name_txt = shardpref.getString("writer_name", "");
+                title_txt = shardpref.getString("title", "");
+                contents_txt = shardpref.getString("contents", "");
+                write_date_txt = shardpref.getString("write_date", "");
+                view_cnt = shardpref.getString("view_cnt", "");
+                like_cnt = shardpref.getString("like_cnt", "");
+                boardkind = shardpref.getString("boardkind", "");
+                category = shardpref.getString("category", "");
+                feed_img = shardpref.getString("feed_img", "");
 
                 binding.writeTitle.setText(title_txt);
                 binding.writeContents.setText(contents_txt);
                 binding.addcommunityBtn.setText("수정");
-                if(!category.isEmpty()){
-                    binding.selectCategoryTxt.setText(boardkind + " #" +category);
-                }else{
-                    binding.selectCategoryTxt.setText(boardkind);
-                }
-                if(!writer_name_txt.equals(write_nickname)){
+                binding.selectBoardkindTxt.setText(boardkind);
+                binding.selectCategoryTxt.setText("#" + category);
+
+                if (!writer_name_txt.equals(write_nickname)) {
                     //닉네임x
                     nickname_select = 1;
-                }else{
+                } else {
                     //닉네임o
                     nickname_select = 2;
                 }
-                if(nickname_select == 1){
+                if (nickname_select == 1) {
                     user_input_name = USER_INFO_NAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
-                }else{
+                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
+                } else {
                     user_input_name = USER_INFO_NICKNAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
+                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
                 }
+
                 Glide.with(mContext).load(feed_img)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .into(binding.limitImg);
 
-                if(write_nickname.equals(USER_INFO_NICKNAME)){
+                if (write_nickname.equals(USER_INFO_NICKNAME)) {
                     //닉네임으로 선택하고 작성했을 경우
                     nickname_select = 2;
                     user_input_name = USER_INFO_NICKNAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
-                }else if(write_nickname.equals(USER_INFO_NAME)){
+                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
+                } else if (write_nickname.equals(USER_INFO_NAME)) {
                     nickname_select = 1;
                     user_input_name = USER_INFO_NAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
+                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
                 }
             }
-        }else{
+        } else {
             user_input_name = USER_INFO_NAME;
             dlog.i("user_input_name : " + user_input_name);
             binding.addcommunityBtn.setText("등록");
         }
-        if(state_txt.isEmpty() || state_txt.equals("ViewFeed")){
-            //처음에는 피드 강제 설정
-            FeedSelectActivity feedselect = new FeedSelectActivity();
-            feedselect.show(getSupportFragmentManager(), "FeedSelectActivity");
-        }
+//        if(state_txt.isEmpty() || state_txt.equals("ViewFeed")){
+//            //처음에는 피드 강제 설정
+//            FeedSelectActivity feedselect = new FeedSelectActivity();
+//            feedselect.show(getSupportFragmentManager(), "FeedSelectActivity");
+//        }
         dlog.i("1 state_txt : " + state_txt);
         dlog.i("1 state_txt : " + state_txt);
         dlog.i("place_id : " + place_id);
@@ -258,13 +257,39 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         ImgfileMaker = ImageNameMaker();
     }
 
     @SuppressLint("LongLogTag")
-    private void setBtnEvent(){
+    private void setBtnEvent() {
+
+
+        binding.selectBoardkindTxt.setOnClickListener(v -> {
+            shardpref.putInt("SelectKind", 0);
+            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
+            ssb.show(getSupportFragmentManager(), "selectBoardkindTxt");
+            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, String category) {
+                    binding.selectBoardkindTxt.setText(category);
+                }
+            });
+        });
+        binding.selectCategoryTxt.setOnClickListener(v -> {
+            shardpref.putInt("SelectKind", 1);
+            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
+            ssb.show(getSupportFragmentManager(), "selectBoardkindTxt");
+            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, String category) {
+                    binding.selectCategoryTxt.setText(category);
+                }
+            });
+        });
+
+
         binding.backBtn.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
             intent.putExtra("data", "작성을 종료하시겠습니까?\n편집한 내용이 저장되지 않습니다.");
@@ -272,28 +297,27 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
             intent.putExtra("left_btn_txt", "계속작성");
             intent.putExtra("right_btn_txt", "작성종료");
             mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up,0);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
 
 
-
         binding.addcommunityBtn.setOnClickListener(v -> {
             dlog.i("3 state_txt : " + state_txt);
-            if(DataCheck()){
-                if(state_txt.equals("EditFeed")){
+            if (DataCheck()) {
+                if (state_txt.equals("EditFeed")) {
                     EditStroeNoti();
-                }else{
+                } else {
                     AddFeedCommunity();
                 }
-            }else {
-                Toast.makeText(this,"입력되지 않은 값이 있습니다.",Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "입력되지 않은 값이 있습니다.", Toast.LENGTH_LONG).show();
             }
         });
 
         binding.writerName.setOnClickListener(v -> {
-            if (USER_INFO_NICKNAME.isEmpty()){
-                shardpref.putString("returnPage",TAG);
+            if (USER_INFO_NICKNAME.isEmpty()) {
+                shardpref.putString("returnPage", TAG);
 
                 Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
                 intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");
@@ -301,37 +325,22 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
                 intent.putExtra("left_btn_txt", "확인");
                 intent.putExtra("right_btn_txt", "취소");
                 mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up,0);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            }else{
-                if(nickname_select == 1){
+            } else {
+                if (nickname_select == 1) {
                     nickname_select = 2;
                     user_input_name = USER_INFO_NICKNAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
-                }else{
+                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
+                } else {
                     nickname_select = 1;
                     user_input_name = USER_INFO_NAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
+                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
                 }
             }
 
         });
 
-        binding.selectCategoryTxt.setOnClickListener(v -> {
-            FeedSelectActivity feedselect = new FeedSelectActivity();
-            feedselect.show(getSupportFragmentManager(), "FeedSelectActivity");
-        });
-//        like_input.setOnClickListener(v -> {
-//            setUpdateWorktodo("7",feed_id);
-//        });
-
-//        getimg_view.setOnClickListener(v -> {
-//            CommImageSelect = 0;
-//            Intent intent = new Intent();
-//            intent.setType("image/*");
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            startActivityForResult(intent, GALLEY_CODE);
-//        });
         //------게시글 이미지 등록 / 갤러리 열기
         binding.limitImg.setOnClickListener(v -> {
             Intent intent = new Intent();
@@ -342,7 +351,7 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
     }
 
     @SuppressLint("LongLogTag")
-    private boolean DataCheck(){
+    private boolean DataCheck() {
 
         CommTitle = binding.writeTitle.getText().toString();
         CommContnets = binding.writeContents.getText().toString();
@@ -356,9 +365,9 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
         dlog.i("feed_thumnail_path : " + feed_thumnail_path);
         dlog.i("-----------------DataCheck------------------");
 
-        if(!CommTitle.isEmpty() && !CommContnets.isEmpty() && !user_input_name.isEmpty()){
+        if (!CommTitle.isEmpty() && !CommContnets.isEmpty() && !user_input_name.isEmpty()) {
             return true;
-        }else {
+        } else {
             return false;
         }
 
@@ -368,10 +377,15 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
     public void AddFeedCommunity() {
         String title = binding.writeTitle.getText().toString();
         String content = binding.writeContents.getText().toString();
+        boardkind = binding.selectBoardkindTxt.getText().toString();
+        category = binding.selectCategoryTxt.getText().toString();
+
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + title);
         dlog.i("content : " + content);
         dlog.i("Profile Url : " + ProfileUrl);
+        dlog.i("BoardKind : " + boardkind);
+        dlog.i("category : " + category);
         dlog.i("-----AddStroeNoti Check-----");
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -379,7 +393,7 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id, title, content, USER_INFO_ID, "", ProfileUrl, "","","","2",boardkind,category);
+        Call<String> call = api.getData(place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -417,10 +431,15 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
     public void EditStroeNoti() {
         String title = binding.writeTitle.getText().toString();
         String content = binding.writeContents.getText().toString();
+        boardkind = binding.selectBoardkindTxt.getText().toString();
+        category = binding.selectCategoryTxt.getText().toString();
+
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + title);
         dlog.i("content : " + content);
         dlog.i("Profile Url : " + ProfileUrl);
+        dlog.i("BoardKind : " + boardkind);
+        dlog.i("category : " + category);
         dlog.i("-----AddStroeNoti Check-----");
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -428,7 +447,7 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, title, content, "", ProfileUrl, "","","",category,boardkind);
+        Call<String> call = api.getData(feed_id, title, content, "", ProfileUrl, "", "", "", category, boardkind);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -464,7 +483,7 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         shardpref.remove("writer_name");
         shardpref.remove("write_nickname");
@@ -477,7 +496,7 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
         shardpref.remove("TopFeed");
     }
 
-    private void BackMove(){
+    private void BackMove() {
 //        if(state_txt.equals("EditFeed")){
 //            Intent intent = new Intent(this, WorkCommunityDetailActivity.class);
 //            startActivity(intent);
@@ -498,56 +517,6 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
         BackMove();
     }
 
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onButtonClicked(String getboardkind,String getcategory) {
-        dlog.i("boardkind : " + getboardkind);
-        dlog.i("category : " + getcategory);
-        boardkind = getboardkind;
-        category = getcategory;
-        if(category.isEmpty()){
-            binding.selectCategoryTxt.setText(getboardkind);
-        }else{
-            binding.selectCategoryTxt.setText(getboardkind + " #" + getcategory);
-        }
-
-    }
-    public void setRecyclerView() {
-//        rc.workCheckListData_lists.clear();
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(WorkListInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        WorkListInterface api = retrofit.create(WorkListInterface.class);
-//        Call<String> call = api.getData(place_id,USER_INFO_ID,"1");
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                dlog.e("WorkTapListFragment1 / setRecyclerView");
-//                dlog.e("response 1: " + response.isSuccessful());
-//                dlog.e("response 2: " +  rc.getBase64decode(response.body()));
-//                if (response.isSuccessful() && response.body() != null) {
-//                    String jsonResponse =  rc.getBase64decode(response.body());
-//                    dlog.e( "GetWorkStateInfo function onSuccess : " + jsonResponse);
-//                    try {
-//                        //Array데이터를 받아올 때
-//                        JSONArray Response = new JSONArray(jsonResponse);
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                dlog.e( "에러 = " + t.getMessage());
-//            }
-//        });
-    }
     //이미지 업로드에 필요한 소스 START
     @SuppressLint("LongLogTag")
     @Override
@@ -649,14 +618,14 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
         //Create Bitmap -> File
         final String IMG_FILE_EXTENSION = ".JPEG";
         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String inputDate = dc.GET_YEAR+dc.GET_MONTH+dc.GET_DAY;
+        String inputDate = dc.GET_YEAR + dc.GET_MONTH + dc.GET_DAY;
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
         String file_name = USER_INFO_NO + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
         String fullFileName = BACKUP_PATH;
 
-        dlog.i( "(saveBitmapAndGetURI)ex_storage : " + ex_storage);
-        dlog.i( "(saveBitmapAndGetURI)USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i( "(saveBitmapAndGetURI)file_name : " + file_name);
+        dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
+        dlog.i("(saveBitmapAndGetURI)USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("(saveBitmapAndGetURI)file_name : " + file_name);
 
         File file_path;
         try {
@@ -664,8 +633,8 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
             if (!file_path.isDirectory()) {
                 file_path.mkdirs();
             }
-            dlog.i( "(saveBitmapAndGetURI)file_path : " + file_path);
-            dlog.i( "(saveBitmapAndGetURI)file_name : " + file_name);
+            dlog.i("(saveBitmapAndGetURI)file_path : " + file_path);
+            dlog.i("(saveBitmapAndGetURI)file_name : " + file_name);
             file = new File(file_path, file_name);
             FileOutputStream out = new FileOutputStream(file);
             saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
@@ -675,7 +644,7 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
             feed_thumnail_path = "http://krafte.net/app_php/feedimg/" + file_name;
             saveBitmapToFile(file);
 
-            dlog.e( "이미지 저장경로 : " + ProfileUrl);
+            dlog.e("이미지 저장경로 : " + ProfileUrl);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
             RetrofitInterface retrofitInterface = ApiClient.getApiClient().create(RetrofitInterface.class);
@@ -685,7 +654,7 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Log.e("uploaded_file()", "성공 : call = " + call + "response = " + response);
-                    Log.e(TAG,"response.body() : " + response.body());
+                    Log.e(TAG, "response.body() : " + response.body());
 
                     if (fileDelete(String.valueOf(file))) {
                         Log.e("uploaded_file()", "기존 이미지 삭제 완료");
@@ -703,16 +672,17 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
 
             out.close();
             binding.loginAlertText.setVisibility(View.GONE);
-            dlog.i( "(saveBitmapAndGetURI)file : " + file);
+            dlog.i("(saveBitmapAndGetURI)file : " + file);
 //            mHandler = new Handler(Looper.getMainLooper());
 //            mHandler.postDelayed(this::setUpdateUserStoreThumnail, 0);
         } catch (FileNotFoundException exception) {
-            dlog.e( "FileNotFoundException : " + exception.getMessage());
+            dlog.e("FileNotFoundException : " + exception.getMessage());
         } catch (IOException exception) {
-            dlog.e( "IOException : " + exception.getMessage());
+            dlog.e("IOException : " + exception.getMessage());
         }
         return null;
     }
+
     public static class ApiClient {
         private static final String BASE_URL = "http://krafte.net/app_php/";
         private static Retrofit retrofit;
@@ -732,6 +702,7 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
         }
 
     }
+
     public interface RetrofitInterface {
         //api를 관리해주는 인터페이스
         @Multipart
@@ -748,10 +719,11 @@ public class CommunityAddActivity extends AppCompatActivity implements FeedSelec
                 return true;
             }
         } catch (Exception e) {
-            Log.e(TAG,e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
         return false;
     }
+
     public File saveBitmapToFile(File file) {
         try {
             // BitmapFactory options to downsize the image

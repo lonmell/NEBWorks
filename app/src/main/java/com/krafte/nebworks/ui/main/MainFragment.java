@@ -28,7 +28,7 @@ import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
-import com.krafte.nebworks.ui.naviFragment.CalendarFragment;
+import com.krafte.nebworks.ui.naviFragment.CommunityFragment;
 import com.krafte.nebworks.ui.naviFragment.HomeFragment;
 import com.krafte.nebworks.ui.naviFragment.MoreFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkgotoFragment;
@@ -146,14 +146,14 @@ public class MainFragment extends AppCompatActivity {
             }
 
             final List<String> tabElement;
-            tabElement = Arrays.asList("홈", "할일", "캘린더", "근무현황", "더보기");
+            tabElement = Arrays.asList("홈", "할일", "근무현황", "커뮤니티", "더보기");
             ArrayList<Fragment> fragments = new ArrayList<>();
 
             //점주일때
             fragments.add(HomeFragment.newInstance(0));
             fragments.add(WorkgotoFragment.newInstance(1));
             fragments.add(WorkstatusFragment.newInstance(2));
-            fragments.add(CalendarFragment.newInstance(3));
+            fragments.add(CommunityFragment.newInstance(3));
             fragments.add(MoreFragment.newInstance(4));
             viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
 
@@ -397,7 +397,9 @@ public class MainFragment extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav09) {
             pm.Approval(mContext);
         } else if (view.getId() == R.id.select_nav12) {
-            pm.CommunityActivity(mContext);
+            dlog.i("커뮤니티 Click!");
+            binding.title.setText("커뮤니티");
+            binding.tabLayout.getTabAt(3).select();
         }
 
     }

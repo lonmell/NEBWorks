@@ -54,6 +54,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="10dp">
         <LinearLayout
+            android:id="@+id/line01"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -101,6 +102,7 @@
 
     <!-- 두번째 줄 -->
     <HorizontalScrollView
+        android:id="@+id/line02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -134,6 +136,7 @@
 
     <!-- 세번째 줄 -->
     <HorizontalScrollView
+        android:id="@+id/line03"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -167,6 +170,7 @@
 
     <!-- 네번째 줄 -->
     <HorizontalScrollView
+        android:id="@+id/line04"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

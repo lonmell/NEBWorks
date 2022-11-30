@@ -94,4 +94,5 @@
     <style name="AppTheme.NumberPicker" parent="AppTheme">
         <item name="colorControlNormal">@color/colorPrimary</item>
     </style>
+
 </resources>

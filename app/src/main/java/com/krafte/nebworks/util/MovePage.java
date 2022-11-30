@@ -23,6 +23,10 @@ public interface MovePage {
 
     void CommunityAdd(Context context);
 
+    void MoreListCommunity(Context context);
+
+    void OwnerFeedAdd(Context context);
+
     void MoreGo(Context context);
 
     void MoreBack(Context context);

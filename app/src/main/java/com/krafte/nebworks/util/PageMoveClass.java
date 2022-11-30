@@ -9,6 +9,8 @@ import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
 import com.krafte.nebworks.ui.career.CareerActivity;
 import com.krafte.nebworks.ui.community.CommunityActivity;
 import com.krafte.nebworks.ui.community.CommunityAddActivity;
+import com.krafte.nebworks.ui.community.MoreListCommunityActivity;
+import com.krafte.nebworks.ui.community.OwnerFeedAddActivity;
 import com.krafte.nebworks.ui.feed.FeedAddActivity;
 import com.krafte.nebworks.ui.feed.FeedDetailActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
@@ -471,6 +473,23 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
+    @Override
+    public void MoreListCommunity(Context context) {
+        Intent intent = new Intent(context, MoreListCommunityActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void OwnerFeedAdd(Context context) {
+        Intent intent = new Intent(context, OwnerFeedAddActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
 
     //--ui.BottomNavi
     @Override
