@@ -41,6 +41,7 @@ import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.UserInsertInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityLoginBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -287,12 +288,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
                                 if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     pm.AuthSelect(mContext);
                                 }else{
 //                                    shardpref.putString("editstate","insert");
@@ -405,15 +406,17 @@ public class LoginActivity extends AppCompatActivity {
             @SuppressLint("LongLogTag")
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.e("response 1: " + response.isSuccessful());
+                dlog.e("response 2: " + rc.getBase64decode(response.body()));
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                            dlog.i("LoginCheck jsonResponse : " + response.body());
+                            dlog.i("LoginCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("LoginCheck jsonResponse : " + jsonResponse);
                             try {
-
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     if (Response.length() != 0) {
                                         String getid = Response.getJSONObject(0).getString("id");
                                         String getname = Response.getJSONObject(0).getString("name");
@@ -423,7 +426,6 @@ public class LoginActivity extends AppCompatActivity {
                                         String getgender = Response.getJSONObject(0).getString("gender");
                                         String getimg_path = Response.getJSONObject(0).getString("img_path");
                                         String getPlatform = Response.getJSONObject(0).getString("platform");
-
 
                                         String decodePw = "";
                                         dlog.i("LoginCheck platform : " + platform);
@@ -491,7 +493,7 @@ public class LoginActivity extends AppCompatActivity {
                                     } else {
                                         if (!platform.equals("NEB")) {
                                             UserCheck(GET_ACCOUNT_EMAIL);
-//                                            INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL, platform);
+                                            INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL, platform);
                                         }else{
                                             Toast_Nomal("아이디 혹은 비밀번호를 확인하세요");
                                             shardpref.remove("USER_INFO_ID");
@@ -513,6 +515,57 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void INPUT_JOIN_DATA(String USER_INFO_EMAIL,String USER_INFO_NAME, String imgpath, String platform) {
+        try {
+            USER_INFO_PW = aes256Util.encode("kraftmysecretkey" + USER_INFO_PW + "nrkwl3nkv54");
+//            USER_INFO_PW = aes256Util.encode(USER_INFO_PW);
+        } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
+                | NoSuchPaddingException | IllegalBlockSizeException
+                | NoSuchAlgorithmException | BadPaddingException
+                | InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        dlog.i("-----INPUT_JOIN_DATA-----");
+        dlog.i("account : " + USER_INFO_EMAIL);
+        dlog.i("인코딩 후 USER_INFO_PW : " + USER_INFO_PW);
+        dlog.i("name : " + USER_INFO_NAME);
+        dlog.i("-----INPUT_JOIN_DATA-----");
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserInsertInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserInsertInterface api = retrofit.create(UserInsertInterface.class);
+        Call<String> call = api.getData(USER_INFO_EMAIL, USER_INFO_NAME, "",USER_INFO_PW, "", "", imgpath, platform);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    dlog.e("ConnectThread_UserInfo onSuccess not base64 : " + response.body().replace("\"", ""));
+                    try {
+                        if (response.body().replace("\"", "").equals("success")) {
+                            shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
+                            shardpref.putString("USER_INFO_EMAIL", USER_INFO_EMAIL);
+                            shardpref.remove("USER_INFO_NAME");
+                            shardpref.remove("USER_INFO_PHONE");
+                            shardpref.remove("USER_INFO_PW");
+                            pm.AuthSelect(mContext);
+                        }
+                    } catch (Exception e) {
+                        dlog.i("Exception : " + e);
+                    }
                 }
             }
 

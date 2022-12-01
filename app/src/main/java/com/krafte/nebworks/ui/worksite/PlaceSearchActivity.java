@@ -175,12 +175,12 @@ public class PlaceSearchActivity  extends AppCompatActivity {
             @SuppressLint({"NotifyDataSetChanged", "LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.e("SetWorkplaceList function START");
-                dlog.e("response 1: " + response.isSuccessful());
-//                dlog.e("response 2: " + response.body());
-//                dlog.e("response 2: " + rc.getBase64decode(response.body()));
 //                login_alert_text.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.e("SetWorkplaceList function START");
+                    dlog.e("response 1: " + response.isSuccessful());
+                    dlog.e("response 2: " + rc.getBase64decode(response.body()));
                     try {
                         mList = new ArrayList<>();
                         searchmList = new ArrayList<>();
@@ -188,7 +188,7 @@ public class PlaceSearchActivity  extends AppCompatActivity {
                         binding.addressList.setAdapter(mAdapter);
                         binding.addressList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(jsonResponse);
                         for (int i = 0; i < Response.length(); i++) {
                             JSONObject jsonObject = Response.getJSONObject(i);
 

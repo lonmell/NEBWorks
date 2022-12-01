@@ -376,7 +376,7 @@
                                                 android:layout_weight="1"
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center"
-                                                android:text="전체"
+                                                android:text="퇴근"
                                                 android:textColor="#696969" />
 
                                             <TextView
@@ -398,6 +398,7 @@
                                             android:weightSum="4">
 
                                             <TextView
+                                                android:id="@+id/cnt01"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_alignParentEnd="true"
@@ -408,6 +409,7 @@
                                                 android:textColor="@color/black" />
 
                                             <TextView
+                                                android:id="@+id/cnt02"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_alignParentEnd="true"
@@ -423,6 +425,7 @@
                                                 android:background="#dbdbdb" />
 
                                             <TextView
+                                                android:id="@+id/cnt03"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_alignParentEnd="true"
@@ -433,6 +436,7 @@
                                                 android:textColor="#dbdbdb" />
 
                                             <TextView
+                                                android:id="@+id/cnt04"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_alignParentEnd="true"

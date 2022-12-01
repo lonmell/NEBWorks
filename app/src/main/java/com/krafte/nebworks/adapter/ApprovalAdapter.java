@@ -174,21 +174,9 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             dlog.i("오늘 :" + toDay);
             shardpref.putString("FtoDay",toDay);
 
-            if (item.getStart_time().length() > 5) {
-                String date = item.getStart_time().substring(0, 10);
-                String time = item.getStart_time().substring(11, 16);
-                holder.work_start_time.setText(date.replace("-", ".") + " | " + time + " 시작");
-            } else {
-                holder.work_start_time.setText(toDay + " | " + item.getStart_time() + " 시작");
-            }
 
-            if (item.getEnd_time().length() > 5) {
-                String date = item.getEnd_time().substring(0, 10);
-                String time = item.getEnd_time().substring(11, 16);
-                holder.work_end_time.setText(date.replace("-", ".") + " | " + time + " 마감");
-            } else {
-                holder.work_end_time.setText(toDay + " | " + item.getEnd_time() + " 마감");
-            }
+            holder.work_start_time.setText(item.getStart_time() + " 시작");
+            holder.work_end_time.setText(item.getEnd_time() + " 마감");
 
             holder.accept_btn.setOnClickListener(v -> {
                 if (mListener != null) {
@@ -265,6 +253,25 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                     shardpref.putString("task_date", item.getTask_date());
                     shardpref.putString("request_date", item.getRequest_date());
                     shardpref.putString("approval_date", item.getApproval_date());
+                    JSONArray Response = null;
+                    try {
+                        user_id.removeAll(user_id);
+                        user_name.removeAll(user_name);
+                        user_img_path.removeAll(user_img_path);
+                        user_img_jikgup.removeAll(user_img_jikgup);
+                        Response = new JSONArray(item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
+                        for (int i = 0; i < Response.length(); i++) {
+                            JSONObject jsonObject = Response.getJSONObject(i);
+                            if (!jsonObject.getString("user_name").equals("null")) {
+                                user_id.add(jsonObject.getString("user_id"));
+                                user_name.add(jsonObject.getString("user_name"));
+                                user_img_path.add(jsonObject.getString("img_path"));
+                                user_img_jikgup.add(jsonObject.getString("jikgup"));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     shardpref.putString("users", user_id.toString());
                     shardpref.putString("usersn", user_name.toString());
                     shardpref.putString("usersimg", user_img_path.toString());

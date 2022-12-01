@@ -211,8 +211,6 @@ public class PlaceEditActivity extends AppCompatActivity {
     boolean boheom01TF = false;
     boolean boheom02TF = false;
     boolean boheom03TF = false;
-    boolean boheom04TF = false;
-    boolean boheom05TF = false;
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
@@ -288,14 +286,14 @@ public class PlaceEditActivity extends AppCompatActivity {
         binding.boheomarea01.setOnClickListener(v -> {
             if (!boheom01TF) {
                 boheom01TF = true;
-                boheom05TF = false;
-                boheom.add("고용보험");
+                boheom03TF = false;
+                boheom.add("4대보험");
                 boheom.remove("없음");
-                binding.boheom01.setBackgroundResource(R.drawable.resize_service_on);
-                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom01.setBackgroundResource(R.drawable.select_full_round);
+                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
             } else {
                 boheom01TF = false;
-                boheom.remove("고용보험");
+                boheom.remove("4대보험");
                 binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
@@ -303,67 +301,32 @@ public class PlaceEditActivity extends AppCompatActivity {
         binding.boheomarea02.setOnClickListener(v -> {
             if (!boheom02TF) {
                 boheom02TF = true;
-                boheom05TF = false;
-                boheom.add("산재보험");
+                boheom03TF = false;
+                boheom.add("3.3%소득세");
                 boheom.remove("없음");
-                binding.boheom02.setBackgroundResource(R.drawable.resize_service_on);
-                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom02.setBackgroundResource(R.drawable.select_full_round);
+                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
             } else {
                 boheom02TF = false;
-                boheom.remove("산재보험");
+                boheom.remove("3.3%소득세");
                 binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
 
         binding.boheomarea03.setOnClickListener(v -> {
             if (!boheom03TF) {
-                boheom03TF = true;
-                boheom05TF = false;
-                boheom.add("국민연금");
-                boheom.remove("없음");
-                binding.boheom03.setBackgroundResource(R.drawable.resize_service_on);
-                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
-            } else {
-                boheom03TF = false;
-                boheom.remove("국민연금");
-                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
-            }
-        });
-
-        binding.boheomarea04.setOnClickListener(v -> {
-            if (!boheom04TF) {
-                boheom04TF = true;
-                boheom05TF = false;
-                boheom.add("건강보험");
-                boheom.remove("없음");
-                binding.boheom04.setBackgroundResource(R.drawable.resize_service_on);
-                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
-            } else {
-                boheom04TF = false;
-                boheom.remove("건강보험");
-                binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
-            }
-        });
-
-        binding.boheomarea05.setOnClickListener(v -> {
-            if (!boheom05TF) {
                 boheom01TF = false;
                 boheom02TF = false;
-                boheom03TF = false;
-                boheom04TF = false;
-                boheom05TF = true;
+                boheom03TF = true;
                 boheom.clear();
                 boheom.add("없음");
-                boheom.remove("없음");
                 binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
                 binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
-                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
-                binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
-                binding.boheom05.setBackgroundResource(R.drawable.resize_service_on);
+                binding.boheom03.setBackgroundResource(R.drawable.select_full_round);
             } else {
-                boheom01TF = false;
+                boheom03TF = false;
                 boheom.clear();
-                binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
 
@@ -399,12 +362,12 @@ public class PlaceEditActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + response.body().length());
-                            dlog.i("GetPlaceList jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                             try {
                                 //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(response.body());
+                                JSONArray Response = new JSONArray(jsonResponse);
                                 name = Response.getJSONObject(0).getString("name");
                                 registr_num = Response.getJSONObject(0).getString("registr_num");
                                 store_kind = Response.getJSONObject(0).getString("store_kind");
@@ -434,37 +397,26 @@ public class PlaceEditActivity extends AppCompatActivity {
                                 binding.inputbox01.setText(name);
                                 binding.inputbox02.setText(registr_num);
                                 binding.inputbox03.setText(store_kind);
-                                binding.inputbox04.setText(address);
-
-                                for (String str : insurance.split(",")) {
+                                dlog.i("insurance : " + insurance.replace(" ", ""));
+                                for (String str : insurance.replace(" ", "").split(",")) {
                                     boheom.add(str.replace(" ", ""));
-                                    if (str.contains("고용보험")) {
+                                    if (str.contains("4대보험")) {
                                         boheom01TF = true;
-                                        boheom05TF = false;
+                                        boheom03TF = false;
                                         binding.boheom01.setBackgroundResource(R.drawable.resize_service_on);
-                                        binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
-                                    } else if (str.contains("산재보험")) {
+                                        binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
+                                    } else if (str.contains("3.3%소득세")) {
                                         boheom02TF = true;
-                                        boheom05TF = false;
+                                        boheom03TF = false;
                                         binding.boheom02.setBackgroundResource(R.drawable.resize_service_on);
-                                        binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
-                                    } else if (str.contains("국민연금")) {
-                                        boheom03TF = true;
-                                        boheom05TF = false;
-                                        binding.boheom03.setBackgroundResource(R.drawable.resize_service_on);
-                                        binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
-                                    } else if (str.contains("건강보험")) {
-                                        boheom04TF = true;
-                                        boheom05TF = false;
-                                        binding.boheom04.setBackgroundResource(R.drawable.resize_service_on);
-                                        binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                                        binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
                                     } else if (str.contains("없음")) {
-                                        boheom05TF = true;
+                                        boheom03TF = true;
+                                        boheom01TF = false;
+                                        boheom02TF = false;
                                         binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
                                         binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
-                                        binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
-                                        binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
-                                        binding.boheom05.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.boheom03.setBackgroundResource(R.drawable.resize_service_on);
                                     }
                                 }
                                 binding.inputbox08.setText(start_time);
@@ -579,12 +531,12 @@ public class PlaceEditActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
                                     String name = Response.getJSONObject(0).getString("name");
                                     String img_path = Response.getJSONObject(0).getString("img_path");

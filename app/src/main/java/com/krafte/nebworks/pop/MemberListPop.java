@@ -22,6 +22,7 @@ import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.ActivityMemberlistPopBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,6 +92,7 @@ public class MemberListPop extends Activity {
     }
 
     /*직원 전체 리스트 START*/
+    RetrofitConnect rc = new RetrofitConnect();
     public void SetAllMemberList() {
         dlog.i("-----MemberListPop-----");
         dlog.i("place_id : " + place_id);
@@ -102,15 +104,14 @@ public class MemberListPop extends Activity {
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
             Call<String> call = api.getData(place_id, "");
-
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.e("onSuccess : ", response.body());
+                        Log.e("onSuccess : ", rc.getBase64decode(response.body()));
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
                             mList = new ArrayList<>();
                             mAdapter = new MemberListPopAdapter(mContext, mList,0);
                             binding.allMemberList.setAdapter(mAdapter);

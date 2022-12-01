@@ -236,6 +236,7 @@
             app:cardCornerRadius="5dp">
 
             <TextView
+                android:id="@+id/add_detail_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/inter_bold"

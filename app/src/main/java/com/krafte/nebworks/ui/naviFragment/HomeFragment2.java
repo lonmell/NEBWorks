@@ -531,13 +531,12 @@ public class HomeFragment2 extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("getPlaceData jsonResponse length : " + response.body().length());
-                            dlog.i("getPlaceData jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
-
-
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     place_name = Response.getJSONObject(0).getString("name");
                                     place_owner_id = Response.getJSONObject(0).getString("owner_id");
                                     place_owner_name = Response.getJSONObject(0).getString("owner_name");
@@ -621,10 +620,12 @@ public class HomeFragment2 extends Fragment {
                 dlog.e("response 1: " + response.isSuccessful());
                 activity.runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-
+                            JSONArray Response = new JSONArray(jsonResponse);
                             try {
                                 mem_id = Response.getJSONObject(0).getString("id");
                                 mem_name = Response.getJSONObject(0).getString("name");

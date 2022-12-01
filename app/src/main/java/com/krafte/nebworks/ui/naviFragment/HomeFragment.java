@@ -242,10 +242,13 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                        dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-                            dlog.i("SetAllMemberList response.body() length : " + response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
+                            dlog.i("SetAllMemberList response.body() length : " + jsonResponse);
 
                             if (Response.length() == 0) {
                                 //직원이 없을때
@@ -294,11 +297,12 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("getPlaceData jsonResponse length : " + response.body().length());
-                            dlog.i("getPlaceData jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                             try {
                                 if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
 
 
                                     place_name = Response.getJSONObject(0).getString("name");
@@ -422,12 +426,12 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
 //                                    String kind = Response.getJSONObject(0).getString("kind");
                                     String name = Response.getJSONObject(0).getString("name");
@@ -489,12 +493,12 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
                             dlog.i("PlaceWorkCheck jsonResponse length : " + response.body().length());
-                            dlog.i("PlaceWorkCheck jsonResponse : " + response.body());
+                            dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
                             try {
                                 if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
 //                                    i_cnt;                // 출근 count(퇴근한 인원은 제외)
 //                                    o_cnt;                // 퇴근 count
 //                                    task_total_cnt;       // 할일 전체

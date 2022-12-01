@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
@@ -25,6 +24,7 @@ import com.krafte.nebworks.databinding.ActivitySelectmemberpopBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,6 +86,7 @@ public class SelectMemberPop extends Activity {
 
     /*직원 전체 리스트 START*/
     int total_member_cnt = 0;
+    RetrofitConnect rc = new RetrofitConnect();
     public void SetAllMemberList() {
         total_member_cnt = 0;
         dlog.i("-----SetAllMemberList------");
@@ -103,11 +104,12 @@ public class SelectMemberPop extends Activity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.e("onSuccess : ", response.body());
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                        dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-
+                            JSONArray Response = new JSONArray(jsonResponse);
                             mList = new ArrayList<>();
                             mAdapter = new PlaceMemberSelectAdapter(mContext, mList);
                             binding.allMemberlist.setAdapter(mAdapter);

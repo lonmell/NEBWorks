@@ -27,6 +27,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -249,6 +250,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     }
 
     /*직원 전체 리스트 START*/
+    RetrofitConnect rc = new RetrofitConnect();
     public void SetAllMemberList(String place_id, String user_id) {
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
@@ -262,10 +264,13 @@ public class MemberDetailActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         Log.e("onSuccess : ", response.body());
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
                             String name = Response.getJSONObject(0).getString("name");
                             String place_name = Response.getJSONObject(0).getString("place_name");
                             String join_date = Response.getJSONObject(0).getString("join_date");

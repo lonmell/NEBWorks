@@ -644,7 +644,7 @@
                         android:gravity="start|center"
                         android:paddingStart="8dp"
                         android:paddingEnd="1dp"
-                        android:text="고용보험"
+                        android:text="4대보험"
                         android:textColor="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
@@ -678,7 +678,7 @@
                         android:gravity="start|center"
                         android:paddingStart="8dp"
                         android:paddingEnd="1dp"
-                        android:text="산재보험"
+                        android:text="3.3%소득세"
                         android:textColor="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
@@ -706,74 +706,6 @@
 
                     <TextView
                         android:id="@+id/boheomtv_03"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="1dp"
-                        android:text="국민연금"
-                        android:textColor="#a9a9a9"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/boheomarea04"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/default_input_round"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/boheom04"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerInParent="true"
-                            android:background="@drawable/select_empty_round" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/boheomtv_04"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="1dp"
-                        android:text="건강보험"
-                        android:textColor="#a9a9a9"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/boheomarea05"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/default_input_round"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/boheom05"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerInParent="true"
-                            android:background="@drawable/select_empty_round" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/boheomtv_05"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:fontFamily="@font/inter_regular"

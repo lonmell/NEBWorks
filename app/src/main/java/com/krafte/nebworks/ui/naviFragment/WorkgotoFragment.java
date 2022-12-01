@@ -450,7 +450,7 @@ public class WorkgotoFragment extends Fragment {
                             JSONArray Response2 = new JSONArray(response2.body());
                             if (Response2.length() == 0) {
                                 dlog.i("GET SIZE : " + Response2.length());
-                                GetCalenderList(Year, Month, mList2);
+                                GetCalenderList(Year, Month, mList2,getYMPicker.substring(0,7));
                             } else {
                                 for (int i = 0; i < Response2.length(); i++) {
                                     JSONObject jsonObject = Response2.getJSONObject(i);
@@ -460,7 +460,7 @@ public class WorkgotoFragment extends Fragment {
                                             Collections.singletonList(jsonObject.getString("task"))
                                     ));
                                 }
-                                GetCalenderList(Year, Month, mList2);
+                                GetCalenderList(Year, Month, mList2,getYMPicker.substring(0,7));
                             }
 
                         } catch (JSONException e) {
@@ -480,9 +480,11 @@ public class WorkgotoFragment extends Fragment {
 
     ArrayList<String> kind = new ArrayList<>();
     ArrayList<String> title = new ArrayList<>();
+    ArrayList<String> task_overdate = new ArrayList<>();
+
     ArrayList<String> write_name = new ArrayList<>();
     ArrayList<String> end = new ArrayList<>();
-    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetData.CalendarSetData_list> mList2) {
+    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetData.CalendarSetData_list> mList2,String date) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalenderInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -500,7 +502,7 @@ public class WorkgotoFragment extends Fragment {
                     if (response.isSuccessful() && response.body() != null) {
                         dlog.i("onResume place_id :" + place_id);
                         dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
-                        dlog.i("onResume getYMPicker :" + getYMPicker);
+                        dlog.i("onResume getYMPicker :" + getYMPicker.substring(0,7));
                         dlog.i("onResume mList2 :" + mList2);
                         try{
                             String select_date = Year + "-" + Month;

@@ -25,6 +25,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
 import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.WorkCalenderData;
+import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.WorkstatusCalendersetData;
 import com.krafte.nebworks.databinding.WorkstatusfragmentBinding;
@@ -142,6 +143,8 @@ public class WorkstatusFragment extends Fragment {
             place_owner_id = shardpref.getString("place_owner_id", "0");
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub",0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+
+            PlaceWorkCheck(place_id);
 
             if(SELECT_POSITION_sub == 0){
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
@@ -393,46 +396,6 @@ public class WorkstatusFragment extends Fragment {
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();
-//                                mAdapter.setOnItemClickListener(new WorkStatusCalenderAdapter.OnItemClickListener() {
-//                                    @Override
-//                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-//                                        dlog.i("data :" + data);
-//                                        try{
-//                                            user_id = new ArrayList<>();
-//                                            user_name = new ArrayList<>();
-//                                            img_path = new ArrayList<>();
-//                                            jikgup = new ArrayList<>();
-//                                            worktime = new ArrayList<>();
-//                                            workyoil = new ArrayList<>();
-//                                            for (int i = 0; i < mList2.size(); i++) {
-//                                                if (data.equals(mList2.get(i).getDay().length() == 1?"0"+mList2.get(i).getDay():mList2.get(i).getDay())) {
-//                                                    JSONArray Response = new JSONArray(mList2.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
-//                                                    for (int i3 = 0; i3 < Response.length(); i3++) {
-//                                                        JSONObject jsonObject = Response.getJSONObject(i3);
-//                                                        user_id.add(jsonObject.getString("user_id"));
-//                                                        user_name.add(jsonObject.getString("user_name"));
-//                                                        img_path.add(jsonObject.getString("img_path"));
-//                                                        jikgup.add(jsonObject.getString("jikgup"));
-//                                                        worktime.add(jsonObject.getString("worktime"));
-//                                                        workyoil.add(jsonObject.getString("workyoil"));
-//                                                    }
-//                                                }
-//                                            }
-//                                            shardpref.putString("task_date",WorkDay);
-//                                            dlog.i("WorkDay :" + WorkDay);
-//                                            shardpref.putString("worker_user_id", String.valueOf(user_id));
-//                                            shardpref.putString("worker_user_name", String.valueOf(user_name));
-//                                            shardpref.putString("worker_img_path", String.valueOf(img_path));
-//                                            shardpref.putString("worker_jikgup", String.valueOf(jikgup));
-//                                            shardpref.putString("worker_worktime", String.valueOf(worktime));
-//                                            shardpref.putString("worker_workyoil", String.valueOf(workyoil));
-//                                            WorkerListActivity wla = new WorkerListActivity();
-//                                            wla.show(getParentFragmentManager(),"WorkerListActivity");
-//                                        }catch (Exception e){
-//                                            dlog.i("onItemClick Exception :" + e);
-//                                        }
-//                                    }
-//                                });
                             }
                         }catch (JSONException e){
                             dlog.i("JSONException :" + e);
@@ -489,5 +452,94 @@ public class WorkstatusFragment extends Fragment {
             childFt.addToBackStack(null);
             childFt.commit();
         }
+    }
+
+
+    public void PlaceWorkCheck(String place_id) {
+        dlog.i("PlaceWorkCheck place_id : " + place_id);
+        dlog.i("PlaceWorkCheck USER_INFO_ID : " + USER_INFO_ID);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MainWorkCntInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+//                                    i_cnt;                // 출근 count(퇴근한 인원은 제외)
+//                                    o_cnt;                // 퇴근 count
+//                                    task_total_cnt;       // 할일 전체
+//                                    task_complete_cnt;    // 완료된 업무
+//                                    task_incomplete_cnt;  // 미완료 업무
+//                                    approval_total_cnt;   // 결재 전체
+//                                    waiting_cnt;          // 결재 대기
+//                                    approval_cnt;         // 결재 승인
+//                                    reject_cnt;           // 결재 반려
+//                                    rest_cnt              // 휴무 직원 수
+//                                     absence_cnt           // 결석
+                                    try {
+                                        String i_cnt = Response.getJSONObject(0).getString("i_cnt");
+                                        String o_cnt = Response.getJSONObject(0).getString("o_cnt");
+                                        String task_total_cnt = Response.getJSONObject(0).getString("task_total_cnt");
+                                        String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt"); //-- 가입할때의 게정
+                                        String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt"); //-- 사번
+                                        String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
+                                        String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
+                                        String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
+                                        String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
+                                        String rest_cnt = Response.getJSONObject(0).getString("rest_cnt");
+                                        String absence_cnt = Response.getJSONObject(0).getString("absence_cnt");
+
+                                        dlog.i("------PlaceWorkCheck-------");
+                                        dlog.i("출근 count(퇴근한 인원은 제외) : " + i_cnt);
+                                        dlog.i("퇴근 count : " + o_cnt);
+                                        dlog.i("할일 전체 : " + task_total_cnt);
+                                        dlog.i("완료된 업무 : " + task_complete_cnt);
+                                        dlog.i("미완료 업무 : " + task_incomplete_cnt);
+                                        dlog.i("결재 전체 : " + approval_total_cnt);
+                                        dlog.i("결재 대기 : " + waiting_cnt);
+                                        dlog.i("결재 승인 : " + approval_cnt);
+                                        dlog.i("결재 반려 : " + reject_cnt);
+                                        dlog.i("휴무 : " + rest_cnt);
+                                        dlog.i("결석/미출근 : " + absence_cnt);
+                                        int total_cnt = 0;
+                                        total_cnt = Integer.parseInt(i_cnt) + Integer.parseInt(o_cnt) + Integer.parseInt(task_total_cnt)
+                                                + Integer.parseInt(task_complete_cnt) + Integer.parseInt(task_incomplete_cnt) + Integer.parseInt(approval_total_cnt)
+                                                + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
+
+                                        binding.cnt01.setText(i_cnt);
+                                        binding.cnt02.setText(absence_cnt);
+                                        binding.cnt03.setText(o_cnt);
+                                        binding.cnt04.setText(rest_cnt);
+                                        dlog.i("------PlaceWorkCheck-------");
+                                    } catch (Exception e) {
+                                        dlog.i("UserCheck Exception : " + e);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 }

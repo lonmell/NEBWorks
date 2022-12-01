@@ -226,13 +226,14 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="급여명세"
-                android:layout_alignParentTop="true"
                 android:layout_above="@+id/line01"
-                android:gravity="center"/>
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:text="급여명세" />
             <LinearLayout
                 android:id="@+id/line02"
                 android:layout_width="match_parent"

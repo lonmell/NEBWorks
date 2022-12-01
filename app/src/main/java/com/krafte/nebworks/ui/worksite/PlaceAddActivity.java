@@ -204,8 +204,6 @@ public class PlaceAddActivity extends AppCompatActivity {
     boolean boheom01TF = false;
     boolean boheom02TF = false;
     boolean boheom03TF = false;
-    boolean boheom04TF = false;
-    boolean boheom05TF = false;
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
@@ -281,14 +279,14 @@ public class PlaceAddActivity extends AppCompatActivity {
         binding.boheomarea01.setOnClickListener(v -> {
             if (!boheom01TF) {
                 boheom01TF = true;
-                boheom05TF = false;
-                boheom.add("고용보험");
+                boheom03TF = false;
+                boheom.add("4대보험");
                 boheom.remove("없음");
                 binding.boheom01.setBackgroundResource(R.drawable.select_full_round);
-                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
             } else {
                 boheom01TF = false;
-                boheom.remove("고용보험");
+                boheom.remove("4대보험");
                 binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
@@ -296,69 +294,36 @@ public class PlaceAddActivity extends AppCompatActivity {
         binding.boheomarea02.setOnClickListener(v -> {
             if (!boheom02TF) {
                 boheom02TF = true;
-                boheom05TF = false;
-                boheom.add("산재보험");
+                boheom03TF = false;
+                boheom.add("3.3%소득세");
                 boheom.remove("없음");
                 binding.boheom02.setBackgroundResource(R.drawable.select_full_round);
-                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
             } else {
                 boheom02TF = false;
-                boheom.remove("산재보험");
+                boheom.remove("3.3%소득세");
                 binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
 
         binding.boheomarea03.setOnClickListener(v -> {
             if (!boheom03TF) {
-                boheom03TF = true;
-                boheom05TF = false;
-                boheom.add("국민연금");
-                boheom.remove("없음");
-                binding.boheom03.setBackgroundResource(R.drawable.select_full_round);
-                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
-            } else {
-                boheom03TF = false;
-                boheom.remove("국민연금");
-                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
-            }
-        });
-
-        binding.boheomarea04.setOnClickListener(v -> {
-            if (!boheom04TF) {
-                boheom04TF = true;
-                boheom05TF = false;
-                boheom.add("건강보험");
-                boheom.remove("없음");
-                binding.boheom04.setBackgroundResource(R.drawable.select_full_round);
-                binding.boheom05.setBackgroundResource(R.drawable.select_empty_round);
-            } else {
-                boheom04TF = false;
-                boheom.remove("건강보험");
-                binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
-            }
-        });
-
-        binding.boheomarea05.setOnClickListener(v -> {
-            if (!boheom05TF) {
                 boheom01TF = false;
                 boheom02TF = false;
-                boheom03TF = false;
-                boheom04TF = false;
-                boheom05TF = true;
+                boheom03TF = true;
                 boheom.clear();
                 boheom.add("없음");
-                boheom.remove("없음");
                 binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
                 binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
-                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
-                binding.boheom04.setBackgroundResource(R.drawable.select_empty_round);
-                binding.boheom05.setBackgroundResource(R.drawable.select_full_round);
+                binding.boheom03.setBackgroundResource(R.drawable.select_full_round);
             } else {
-                boheom01TF = false;
+                boheom03TF = false;
                 boheom.clear();
-                binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
             }
         });
+
+
         binding.inputbox02.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -627,10 +592,10 @@ public class PlaceAddActivity extends AppCompatActivity {
         test_day = binding.inputbox06.getText().toString();
         restday = binding.inputbox07.getText().toString();
         placeAddress_get = placeAddress + " " + placeDtailAddress;
-        registr_num = binding.inputbox02.getText().toString();
+        registr_num = binding.inputbox02.getText().toString().replace("-","");
         accept_state = binding.inputbox03.getText().toString();
 
-        SearchRestrnum(binding.inputbox02.getText().toString());
+        SearchRestrnum(binding.inputbox02.getText().toString().replace("-",""));
         if(boheom.size() == 0){
             boheom.add("없음");
         }

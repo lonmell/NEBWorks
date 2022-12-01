@@ -159,10 +159,12 @@ public class WorkStatusSubFragment2 extends Fragment {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.e("onSuccess : ", response.body());
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
 
                             mList = new ArrayList<>();
                             mAdapter = new WorkTapMemberAdapter(mContext, mList, getParentFragmentManager());

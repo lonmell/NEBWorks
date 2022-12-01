@@ -57,6 +57,7 @@ import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.HashCode;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 import com.krafte.nebworks.util.disconnectHandler;
 
 import org.json.JSONArray;
@@ -76,7 +77,6 @@ public class IntroActivity extends AppCompatActivity {
     private static final String TAG = "IntroActivity";
     private ActivityIntroBinding binding;
     Context mContext;
-
 
     //Other 클래스
     PreferenceHelper shardpref;
@@ -454,6 +454,9 @@ public class IntroActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(this::getLastVersion,100); //0.5초 후 인트로 실행
     }
+
+
+    RetrofitConnect rc = new RetrofitConnect();
     public void UserCheck(String account) {
         dlog.i("UserCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -469,12 +472,12 @@ public class IntroActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     binding.loginAlertText.setVisibility(View.GONE);
 //                                    shardpref.putString("USER_INFO_AUTH", "0");
 //                                    shardpref.putInt("SELECT_POSITION", 0);

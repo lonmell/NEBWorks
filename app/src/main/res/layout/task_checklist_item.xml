@@ -77,7 +77,6 @@
                     android:id="@+id/kind"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:background="@drawable/ic_taskkind01"
                     android:scaleType="fitXY" />
             </LinearLayout>
 

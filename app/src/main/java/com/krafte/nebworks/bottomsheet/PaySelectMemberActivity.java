@@ -23,6 +23,7 @@ import com.krafte.nebworks.data.StringTwoData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +83,8 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
             change_place_id = shardpref.getString("change_place_id","");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-
+            dlog.i("place_id : " + place_id);
+            dlog.i("change_place_id : " + change_place_id);
 
             SetAllMemberList(change_place_id.equals("")?place_id:change_place_id);
 
@@ -123,6 +125,7 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
         this.mListener = listener;
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void SetAllMemberList(String place_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
@@ -136,10 +139,13 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                        dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-                            dlog.i("SetAllMemberList response.body() length : " + response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
+                            dlog.i("SetAllMemberList response.body() length : " + jsonResponse);
                             if (Response.length() == 0) {
                                 no_data_txt.setVisibility(View.VISIBLE);
                             } else {

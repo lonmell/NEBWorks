@@ -30,6 +30,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 import com.krafte.nebworks.util.disconnectHandler;
 
 import java.io.UnsupportedEncodingException;
@@ -408,7 +409,7 @@ public class JoinActivity extends AppCompatActivity {
 
     int UserCheckCnt = 0;
     int cnt = 0;
-
+    RetrofitConnect rc = new RetrofitConnect();
     public int UserCheck(int i, String account) {
         dlog.i("UserCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -421,16 +422,19 @@ public class JoinActivity extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "WorkTapListFragment2 / setRecyclerView");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                dlog.e("response 2: " + rc.getBase64decode(response.body()));
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
 
-                            if (!response.body().equals("[]")) {
-                                dlog.i("UserCheck length : " + response.body().length());
-                                cnt = response.body().length();
+                            if (!jsonResponse.equals("[]")) {
+                                dlog.i("UserCheck length : " + jsonResponse.length());
+                                cnt = jsonResponse.length();
                                 Toast.makeText(mContext,"이미 존재하는 이메일입니다.",Toast.LENGTH_SHORT).show();
                             } else {
                                 binding.tv06.setBackgroundColor(Color.parseColor("#a9a9a9"));

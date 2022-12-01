@@ -24,6 +24,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -144,6 +145,7 @@ public class PlaceListActivity extends AppCompatActivity {
         }
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void LoginCheck(String account) {
         dlog.i("LoginCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -159,12 +161,12 @@ public class PlaceListActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                            dlog.i("LoginCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("LoginCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("LoginCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     id = Response.getJSONObject(0).getString("id");
                                     name = Response.getJSONObject(0).getString("name");
                                     email = Response.getJSONObject(0).getString("account");
@@ -219,13 +221,13 @@ public class PlaceListActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + response.body().length());
-                            dlog.i("GetPlaceList jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                             try {
                                 //Array데이터를 받아올 때
                                 store_cnt = 0;
-                                JSONArray Response = new JSONArray(response.body());
+                                JSONArray Response = new JSONArray(jsonResponse);
                                 if (USER_INFO_AUTH.equals("0")) {
                                     binding.storeCntTv.setText("관리중인 매장");
                                 } else {
@@ -366,10 +368,12 @@ public class PlaceListActivity extends AppCompatActivity {
                 dlog.e("response 1: " + response.isSuccessful());
                 runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-
+                            JSONArray Response = new JSONArray(jsonResponse);
                             if (Response.length() == 0) {
                                 dlog.i("GET SIZE : " + Response.length());
                                 confirm_cnt = 0;

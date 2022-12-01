@@ -101,8 +101,8 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             intent.putExtra("data", "해당 매장에 근무신청을 보냅니다.");
             intent.putExtra("flag", "그룹신청");
             intent.putExtra("take_user_id", item.getOwner_id());
-            intent.putExtra("left_btn_txt", "전송");
-            intent.putExtra("right_btn_txt", "취소");
+            intent.putExtra("left_btn_txt", "취소");
+            intent.putExtra("right_btn_txt", "전송");
             mContext.startActivity(intent);
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

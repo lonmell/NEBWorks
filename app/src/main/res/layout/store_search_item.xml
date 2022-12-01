@@ -72,8 +72,8 @@
 
     <RelativeLayout
         android:id="@+id/applicant_store_line"
-        android:layout_width="82dp"
-        android:layout_height="28dp"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
         android:layout_marginTop="15dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"

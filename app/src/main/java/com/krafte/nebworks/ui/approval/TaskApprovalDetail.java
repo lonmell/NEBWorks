@@ -263,21 +263,9 @@ public class TaskApprovalDetail extends AppCompatActivity {
                 dlog.i("오늘 :" + toDay);
                 shardpref.putString("FtoDay",toDay);
 
-                if (start_time.length() > 5) {
-                    String sdate = start_time.substring(0, 10);
-                    String stime = start_time.substring(11, 16);
-                    binding.startTime.setText(sdate.replace("-", ".") + " | " + stime + " 시작");
-                } else {
-                    binding.startTime.setText(toDay + " | " + start_time + " 시작");
-                }
+                binding.startTime.setText(start_time + " 시작");
+                binding.endTime.setText(end_time + " 마감");
 
-                if (end_time.length() > 5) {
-                    String edate = end_time.substring(0, 10);
-                    String etime = end_time.substring(11, 16);
-                    binding.endTime.setText(edate.replace("-", ".") + " | " + etime + " 마감");
-                } else {
-                    binding.endTime.setText(toDay + " | " + end_time + " 마감");
-                }
                 item_user_id = new ArrayList<>();
                 item_user_name = new ArrayList<>();
                 item_user_img = new ArrayList<>();
@@ -369,7 +357,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
                     binding.approvalState.setTextColor(Color.parseColor("#FF0000"));
                     binding.approvalState.setText("반려");
                     if(reject_reason.length() > 0){
-                        binding.rejectTv.setText(reject_reason);
+                        binding.rejectReasonTv.setText(reject_reason);
                     }
                 }
             } catch (Exception e) {
@@ -439,6 +427,10 @@ public class TaskApprovalDetail extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+
+    private void removeShared(){
         shardpref.remove("id");
         shardpref.remove("state");
         shardpref.remove("request_task_no");
@@ -466,6 +458,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        removeShared();
     }
 
 
@@ -504,6 +497,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
                         }
 
                         dlog.i( "complete_kind : " + complete_kind);
+                        removeShared();
                         pm.Approval(mContext);
                     } else {
                         Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();

@@ -63,7 +63,11 @@ public class TasklistAdapter extends RecyclerView.Adapter<TasklistAdapter.ViewHo
 //        dlog.i("mData title :" + item.getTitle());
 //        dlog.i("mData contents :" + item.getContents());
         try{
-            if(mData.size() == 1){
+            if(mData.size() == 0){
+                dlog.i("mData size :" + mData.size());
+                dlog.i("mData title :" + item.getTitle());
+                dlog.i("mData contents :" + item.getContents());
+            }else if(mData.size() == 1){
                 holder.task_tv1.setText(mData.get(0).getTitle());
                 holder.task_tv1.setTextColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#ffffff":"#6395EC"));
                 holder.task_tv1.setBackgroundColor(Color.parseColor(mData.get(0).getKind().equals("0")?"#6395EC":"#E0EAFB"));

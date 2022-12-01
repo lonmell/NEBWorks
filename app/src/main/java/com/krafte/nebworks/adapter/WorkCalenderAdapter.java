@@ -129,22 +129,26 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
             try {
                 for (int sun = 0; sun < mData2.size(); sun++) {
                     if (item.getSun().equals(mData2.get(sun).getDay().length() == 1?"0"+mData2.get(sun).getDay():mData2.get(sun).getDay())) {
-                        dlog.i("mdata :" + mData2.get(sun).getTask().toString().replace("[[", "[").replace("]]", "]"));
+
                         JSONArray Response = new JSONArray(mData2.get(sun).getTask().toString().replace("[[", "[").replace("]]", "]"));
                         caltaskdata1 = new ArrayList<>();
                         mAdapter1 = new TasklistAdapter(mContext, caltaskdata1);
                         holder.sunlist.setAdapter(mAdapter1);
                         holder.sunlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                        for (int i3 = 0; i3 < 4; i3++) {
-                            JSONObject jsonObject = Response.getJSONObject(i3);
-                            mAdapter1.addItem(new CalendarTaskData.CalendarTaskData_list(
-                                    jsonObject.getString("id"),
-                                    jsonObject.getString("kind"),
-                                    jsonObject.getString("title"),
-                                    jsonObject.getString("contents"),
-                                    jsonObject.getString("complete_kind"),
-                                    Collections.singletonList(jsonObject.getString("users"))
-                            ));
+                        if(Response.toString().equals("[]")){
+                            holder.sunlist.setVisibility(View.GONE);
+                        }else{
+                            for (int i3 = 0; i3 < 4; i3++) {
+                                JSONObject jsonObject = Response.getJSONObject(i3);
+                                mAdapter1.addItem(new CalendarTaskData.CalendarTaskData_list(
+                                        jsonObject.getString("id"),
+                                        jsonObject.getString("kind"),
+                                        jsonObject.getString("title"),
+                                        jsonObject.getString("contents"),
+                                        jsonObject.getString("complete_kind"),
+                                        Collections.singletonList(jsonObject.getString("users"))
+                                ));
+                            }
                         }
                     }
                 }
@@ -162,16 +166,22 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                             mAdapter2 = new TasklistAdapter(mContext, caltaskdata2);
                             holder.monlist.setAdapter(mAdapter2);
                             holder.monlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                            for (int i3 = 0; i3 < 4; i3++) {
-                                JSONObject jsonObject = Response.getJSONObject(i3);
-                                mAdapter2.addItem(new CalendarTaskData.CalendarTaskData_list(
-                                        jsonObject.getString("id"),
-                                        jsonObject.getString("kind"),
-                                        jsonObject.getString("title"),
-                                        jsonObject.getString("contents"),
-                                        jsonObject.getString("complete_kind"),
-                                        Collections.singletonList(jsonObject.getString("users"))
-                                ));
+                            dlog.i("getMon : " + item.getMon());
+                            dlog.i("mData2.get(m).getTask().toString() : " + mData2.get(m).getTask().toString().replace("[[", "[").replace("]]", "]"));
+                            if(Response.toString().equals("[]")){
+                                holder.monlist.setVisibility(View.GONE);
+                            }else{
+                                for (int i3 = 0; i3 < 4; i3++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i3);
+                                    mAdapter2.addItem(new CalendarTaskData.CalendarTaskData_list(
+                                            jsonObject.getString("id"),
+                                            jsonObject.getString("kind"),
+                                            jsonObject.getString("title"),
+                                            jsonObject.getString("contents"),
+                                            jsonObject.getString("complete_kind"),
+                                            Collections.singletonList(jsonObject.getString("users"))
+                                    ));
+                                }
                             }
                         }
                     }
@@ -190,16 +200,20 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                         mAdapter3 = new TasklistAdapter(mContext, caltaskdata3);
                         holder.tuelist.setAdapter(mAdapter3);
                         holder.tuelist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                        for (int i3 = 0; i3 < 4; i3++) {
-                            JSONObject jsonObject = Response.getJSONObject(i3);
-                            mAdapter3.addItem(new CalendarTaskData.CalendarTaskData_list(
-                                    jsonObject.getString("id"),
-                                    jsonObject.getString("kind"),
-                                    jsonObject.getString("title"),
-                                    jsonObject.getString("contents"),
-                                    jsonObject.getString("complete_kind"),
-                                    Collections.singletonList(jsonObject.getString("users"))
-                            ));
+                        if(Response.toString().equals("[]")){
+                            holder.tuelist.setVisibility(View.GONE);
+                        }else{
+                            for (int i3 = 0; i3 < 4; i3++) {
+                                JSONObject jsonObject = Response.getJSONObject(i3);
+                                mAdapter3.addItem(new CalendarTaskData.CalendarTaskData_list(
+                                        jsonObject.getString("id"),
+                                        jsonObject.getString("kind"),
+                                        jsonObject.getString("title"),
+                                        jsonObject.getString("contents"),
+                                        jsonObject.getString("complete_kind"),
+                                        Collections.singletonList(jsonObject.getString("users"))
+                                ));
+                            }
                         }
                     }
                 }
@@ -292,6 +306,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
             holder.sat.setText(item.getSat().equals("null") ? "" : item.getSat());
             try {
                 for (int sat = 0; sat < mData2.size(); sat++) {
+
                     if (item.getSat().equals(mData2.get(sat).getDay().length() == 1?"0"+mData2.get(sat).getDay():mData2.get(sat).getDay())) {
                         JSONArray Response = new JSONArray(mData2.get(sat).getTask().toString().replace("[[", "[").replace("]]", "]"));
                         caltaskdata7 = new ArrayList<>();

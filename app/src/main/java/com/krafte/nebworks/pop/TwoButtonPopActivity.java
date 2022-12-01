@@ -32,9 +32,11 @@ import com.krafte.nebworks.dataInterface.FeedCommentDelInterface;
 import com.krafte.nebworks.dataInterface.FeedDelInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.dataInterface.PlaceDelInterface;
+import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
 import com.krafte.nebworks.dataInterface.UserDelInterface;
 import com.krafte.nebworks.databinding.ActivityTwobuttonPopBinding;
 import com.krafte.nebworks.ui.community.CommunityActivity;
+import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -68,7 +70,9 @@ public class TwoButtonPopActivity extends Activity {
     PreferenceHelper shardpref;
     String store_no = "";
     String USER_INFO_ID = "";
+    String USER_INFO_NAME = "";
     String USER_LOGIN_METHOD = "";
+    String USER_INFO_PHONE = "";
     String place_id = "";
     String mem_id = "";
 
@@ -79,7 +83,7 @@ public class TwoButtonPopActivity extends Activity {
     String message = "";
     String topic = "";
     String click_action = "";
-
+    DateCurrent dc = new DateCurrent();
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -126,6 +130,7 @@ public class TwoButtonPopActivity extends Activity {
         store_no = shardpref.getString("store_no","0");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","");
+        USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
 
         place_id = shardpref.getString("place_id", "-1");
         mem_id = shardpref.getString("mem_id","");
@@ -199,7 +204,9 @@ public class TwoButtonPopActivity extends Activity {
             } else if(flag.equals("직원삭제")){
                 TaskDel();
             } else if(flag.equals("그룹신청")){
-                Toast_Nomal("개발중....");
+                message = "새로운 근무지원 신청이 도착했습니다.";
+                click_action = "MemberManagement";
+                AddPlaceMember(USER_INFO_ID, USER_INFO_NAME, USER_INFO_PHONE, "","");
             } else if (flag.equals("작성여부")) {
                 Intent intent = new Intent(this, CommunityActivity.class);
                 startActivity(intent);
@@ -442,6 +449,43 @@ public class TwoButtonPopActivity extends Activity {
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    /*지원한 매장의 점주에게 이력서 발송 + 지원요청할 지원자에게 점주가 매장정보 발송(스카우트)*/
+    public void AddPlaceMember(String user_id, String name, String phone, String Jumin, String JoinDate) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceMemberAddInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceMemberAddInterface api = retrofit.create(PlaceMemberAddInterface.class);
+        Call<String> call = api.getData(place_id, user_id,Jumin,"0",JoinDate);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
+                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
+                            if (response.body().replace("\"", "").equals("success")) {
+                                Toast_Nomal("근무신청이 완료되었습니다.");
+                                ClosePop();
+                            }else{
+                                Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
                             }
                         }
                     });

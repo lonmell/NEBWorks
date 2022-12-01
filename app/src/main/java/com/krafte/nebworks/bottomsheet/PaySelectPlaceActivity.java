@@ -22,6 +22,7 @@ import com.krafte.nebworks.data.StringTwoData;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -118,6 +119,7 @@ public class PaySelectPlaceActivity extends BottomSheetDialogFragment {
         this.mListener = listener;
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void GetPlaceList() {
         dlog.i("------GetPlaceList------");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -136,12 +138,12 @@ public class PaySelectPlaceActivity extends BottomSheetDialogFragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + response.body().length());
-                            dlog.i("GetPlaceList jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(response.body());
+                                JSONArray Response = new JSONArray(jsonResponse);
                                 mList = new ArrayList<>();
                                 mAdapter = new TwoItemStringAdapter(mContext, mList);
                                 mAdapter.addItem(new StringTwoData.StringTwoData_list(

@@ -2,39 +2,38 @@ package com.krafte.nebworks.ui.member;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
+import com.krafte.nebworks.adapter.WorkplaceMemberAdapter;
 import com.krafte.nebworks.bottomsheet.MemberOption;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
+import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
+import com.krafte.nebworks.dataInterface.MemberUpdateBasicInterface;
 import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
-import com.krafte.nebworks.ui.fragment.member.MemberSubFragment1;
-import com.krafte.nebworks.ui.fragment.member.MemberSubFragment2;
-import com.krafte.nebworks.ui.fragment.member.MemberSubFragment3;
-import com.krafte.nebworks.ui.fragment.member.MemberSubFragment4;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,8 +41,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,7 +60,8 @@ public class MemberManagement extends AppCompatActivity {
 
     // shared 저장값
     PreferenceHelper shardpref;
-    ApprovalAdapter mAdapter = null;
+    ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mList = new ArrayList<>();;
+    WorkplaceMemberAdapter mAdapter = null;
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
@@ -120,73 +118,6 @@ public class MemberManagement extends AppCompatActivity {
             store_no = shardpref.getString("store_no", "");
             shardpref.putString("returnPage", "BusinessApprovalActivity");
 
-            final List<String> tabElement;
-            tabElement = Arrays.asList("전체", "등록", "대기", "휴직");
-            ArrayList<Fragment> fragments = new ArrayList<>();
-            //점주일때
-            fragments.add(MemberSubFragment1.newInstance(0));
-            fragments.add(MemberSubFragment2.newInstance(1));
-            fragments.add(MemberSubFragment3.newInstance(2));
-            fragments.add(MemberSubFragment4.newInstance(3));
-            viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
-
-            binding.viewPager.setAdapter(viewPagerFregmentAdapter);
-
-            //ViewPager2와 TabLayout을 연결
-            new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
-                TextView textView = new TextView(MemberManagement.this);
-                textView.setText(tabElement.get(position));
-                textView.setTextColor(Color.parseColor("#696969"));
-                textView.setGravity(Gravity.CENTER);
-                tab.setCustomView(textView);
-            }).attach();
-
-            binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    binding.viewPager.setCurrentItem(tab.getPosition(), false);
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
-            binding.viewPager.setUserInputEnabled(false);
-            binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    super.onPageSelected(position);
-                    paging_position = position;
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                    super.onPageScrollStateChanged(state);
-                }
-            });
-            new Handler().postDelayed(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.tabLayout.getTabAt(SELECT_POSITION).select();
-                        }
-                    }, 100);
-
-            if (SELECT_POSITION != -99) {
-                binding.viewPager.setCurrentItem(SELECT_POSITION);
-            }
-
             binding.addMemberBtn.setOnClickListener(v -> {
                 MemberOption mo = new MemberOption();
                 mo.show(getSupportFragmentManager(),"MemberOption");
@@ -219,8 +150,7 @@ public class MemberManagement extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        dlog.i("binding.tabLayout.getSelectedTabPosition() :" + binding.tabLayout.getSelectedTabPosition());
-        SetAllMemberList(binding.tabLayout.getSelectedTabPosition());
+        SetAllMemberList(place_id);
     }
 
     @Override
@@ -229,8 +159,14 @@ public class MemberManagement extends AppCompatActivity {
     }
 
     /*직원 전체 리스트 START*/
-    public void SetAllMemberList(int i) {
+    RetrofitConnect rc = new RetrofitConnect();
+    public void SetAllMemberList(String place_id) {
+        mList.clear();
         total_member_cnt = 0;
+        dlog.i("-----SetAllMemberList------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("place_owner_id : " + place_owner_id);
+        dlog.i("-----SetAllMemberList------");
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(AllMemberInterface.URL)
@@ -243,30 +179,79 @@ public class MemberManagement extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        dlog.e("GetInsurancePercent function START");
+                        dlog.e("response 1: " + response.isSuccessful());
+                        dlog.e("response 2: " + rc.getBase64decode(response.body()));
                         Log.e("onSuccess : ", response.body());
                         try {
+                            String jsonResponse = rc.getBase64decode(response.body());
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
+
+                            mList = new ArrayList<>();
+                            mAdapter = new WorkplaceMemberAdapter(mContext, mList, getSupportFragmentManager());
+                            binding.allMemberlist.setAdapter(mAdapter);
+                            binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+
                             if (Response.length() == 0) {
                                 total_member_cnt = 0;
-                                binding.tabLayout.setVisibility(View.GONE);
+                                binding.nodataArea.setVisibility(View.VISIBLE);
+                                binding.allMemberlist.setVisibility(View.GONE);
                             } else {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if(!place_owner_id.equals(jsonObject.getString("id"))){
-                                        if(i != 0){
-                                            if (jsonObject.getString("state").equals(String.valueOf(i))) {
-                                                total_member_cnt ++;
-                                            }
-                                        }else{
-                                            total_member_cnt ++;
-                                        }
+                                        total_member_cnt ++;
+                                        mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("place_name"),
+                                                jsonObject.getString("account"),
+                                                jsonObject.getString("name"),
+                                                jsonObject.getString("phone"),
+                                                jsonObject.getString("gender"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("jumin"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("join_date"),
+                                                jsonObject.getString("state"),
+                                                jsonObject.getString("jikgup"),
+                                                jsonObject.getString("pay"),
+                                                jsonObject.getString("worktime")
+                                        ));
                                     }
                                 }
-                                dlog.i("total_member_cnt ; " + total_member_cnt);
                                 if(total_member_cnt == 0){
-                                    binding.tabLayout.setVisibility(View.GONE);
+                                    binding.nodataArea.setVisibility(View.VISIBLE);
+                                    binding.allMemberlist.setVisibility(View.GONE);
+                                }else{
+                                    binding.nodataArea.setVisibility(View.GONE);
+                                    binding.allMemberlist.setVisibility(View.VISIBLE);
                                 }
+                                mAdapter.setOnItemClickListener2(new WorkplaceMemberAdapter.OnItemClickListener2() {
+                                    @Override
+                                    public void onItemClick(View v, int position, int kind) {
+                                        try{
+                                            dlog.i("mAdapter setOnItemClickListener2 Click!");
+                                            dlog.i("position : " + position);
+
+                                            String id = Response.getJSONObject(position).getString("id");
+                                            String name = Response.getJSONObject(position).getString("name");
+                                            String phone = Response.getJSONObject(position).getString("phone");
+                                            String jumin = Response.getJSONObject(position).getString("jumin");
+                                            String join_date = Response.getJSONObject(position).getString("join_date");
+                                            if(kind == 1){
+                                                dlog.i("kind : " + kind);
+                                                TaskDel(id);
+                                            }else if(kind == 2){
+                                                dlog.i("kind : " + kind);
+                                                UpdateBasic(id, name, phone, jumin, "1", join_date);
+                                            }
+                                        }catch (JSONException e){
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                mAdapter.notifyDataSetChanged();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -289,6 +274,93 @@ public class MemberManagement extends AppCompatActivity {
     }
     /*직원 전체 리스트 END*/
 
+    public void TaskDel(String mem_id) {
+//        매장 멤버 삭제 (매장에서 나가기, 매장에서 내보내기)
+//        http://krafte.net/kogas/place/delete_member.php?place_id=28&user_id=24
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MemberOutPlaceInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MemberOutPlaceInterface api = retrofit.create(MemberOutPlaceInterface.class);
+        Call<String> call = api.getData(place_id, mem_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
+                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            try {
+                                if (response.body().replace("\"", "").equals("success")) {
+                                    Toast_Nomal("해당 직원의 데이터 삭제가 완료되었습니다.");
+                                    SetAllMemberList(place_id);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+    public void UpdateBasic(String mem_id,String name, String phone, String jumin, String kind, String join_date) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MemberUpdateBasicInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MemberUpdateBasicInterface api = retrofit.create(MemberUpdateBasicInterface.class);
+        Call<String> call = api.getData(place_id, mem_id, name, phone, jumin, kind, join_date);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
+                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            try {
+                                if (response.body().replace("\"", "").equals("success")) {
+                                    Toast_Nomal("해당 직원의 데이터가 업데이트되었습니다.");
+                                    SetAllMemberList(place_id);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
 //    //-------몰입화면 설정
 //    @Override
 //    public void onWindowFocusChanged(boolean hasFocus) {

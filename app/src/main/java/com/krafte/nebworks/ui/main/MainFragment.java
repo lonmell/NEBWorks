@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +36,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -259,6 +259,7 @@ public class MainFragment extends AppCompatActivity {
     String name ="";
     String img_path ="";
     String getjikgup ="";
+    RetrofitConnect rc = new RetrofitConnect();
     public void SetAllMemberList() {
         dlog.i("-----SetAllMemberList-----");
         dlog.i("place_id : " + place_id);
@@ -275,10 +276,12 @@ public class MainFragment extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.e("SetAllMemberList onSuccess : ", response.body());
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
                             name = Response.getJSONObject(0).getString("name");
                             img_path = Response.getJSONObject(0).getString("img_path");
                             getjikgup = Response.getJSONObject(0).getString("jikgup");

@@ -115,16 +115,16 @@ public class PayManagementActivity extends AppCompatActivity {
             binding.backBtn.setOnClickListener(v -> {
                 shardpref.putInt("SELECT_POSITION", 0);
                 shardpref.putInt("SELECT_POSITION_sub", 0);
-                if(USER_INFO_AUTH.equals("0")){
+                if (USER_INFO_AUTH.equals("0")) {
                     pm.Main(mContext);
-                }else{
+                } else {
                     pm.Main2(mContext);
                 }
             });
-            if(Tap.equals("0")){
+            if (Tap.equals("0")) {
                 binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
                 binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
-            }else{
+            } else {
                 binding.line01.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
             }
@@ -148,13 +148,13 @@ public class PayManagementActivity extends AppCompatActivity {
                         change_place_name = getplace_name;
                         dlog.i("change_place_id : " + getplace_id);
                         dlog.i("change_place_name : " + getplace_name);
-                        if(getplace_name.equals("전체매장")){
+                        if (getplace_name.equals("전체매장")) {
                             binding.changePlaceTv.setText("전체매장");
                             change_place_id = "";
                             change_place_name = "";
                             shardpref.putString("change_place_id", place_id);
                             shardpref.putString("change_place_name", "");
-                        }else{
+                        } else {
                             binding.changePlaceTv.setText(getplace_name);
                             shardpref.putString("change_place_id", getplace_id);
                             shardpref.putString("change_place_name", getplace_name);
@@ -174,11 +174,11 @@ public class PayManagementActivity extends AppCompatActivity {
                     public void onClick(View v, String user_id, String user_name) {
                         change_member_id = user_id;
                         change_member_name = user_name;
-                        if(user_name.equals("전체직원")){
+                        if (user_name.equals("전체직원")) {
                             binding.changeMemberTv.setText("전체직원");
                             change_place_id = "";
                             change_place_name = "";
-                        }else{
+                        } else {
                             binding.changeMemberTv.setText(user_name);
                         }
                         dlog.i("change_member_id : " + user_id);
@@ -297,21 +297,23 @@ public class PayManagementActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id,  binding.setdate.getText().toString(), Tap);
+        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
     }
+
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         shardpref.remove("Tap");
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         shardpref.remove("Tap");
     }
+
     // 직원 급여 명세서 리스트
-    public void WritePaymentList(String place_id, String SelectId, String GET_DATE,String tap) {
+    public void WritePaymentList(String place_id, String SelectId, String GET_DATE, String tap) {
         GetInsurancePercent();
         dlog.i("------------PaymentFragment2 List------------");
         dlog.i("place_id : " + place_id);
@@ -326,8 +328,8 @@ public class PayManagementActivity extends AppCompatActivity {
                 .build();
         paymanaInterface api = retrofit.create(paymanaInterface.class);
         Call<String> call = api.getData("1", place_id, GET_DATE, SelectId, "", "", "", "", "", "", "", "", "", "");
-        String url = "http://krafte.net/NEBWorks/pay/paymanager.php?flag=1&place_id="+place_id+"&GET_DATE="+GET_DATE+"&user_id="+SelectId+"&basic_pay=&second_pay=&overwork_hour=&overwork_pay=&meal_allowance_yn=&meal_pay=&store_insurance_yn=&other_memo=&all_payment=&selectym=";
-        dlog.i("url : " + url);
+//        String url = "http://krafte.net/NEBWorks/pay/paymanager.php?flag=1&place_id="+place_id+"&GET_DATE="+GET_DATE+"&user_id="+SelectId+"&basic_pay=&second_pay=&overwork_hour=&overwork_pay=&meal_allowance_yn=&meal_pay=&store_insurance_yn=&other_memo=&all_payment=&selectym=";
+//        dlog.i("url : " + url);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override

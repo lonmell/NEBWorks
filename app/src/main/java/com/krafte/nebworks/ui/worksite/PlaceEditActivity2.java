@@ -29,6 +29,7 @@ import com.krafte.nebworks.databinding.ActivityAddplace2Binding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,7 +107,7 @@ public class PlaceEditActivity2 extends AppCompatActivity {
     }
 
 
-
+    RetrofitConnect rc = new RetrofitConnect();
     private void getPlaceContents() {
         dlog.i("-----getPlaceContents-----");
         dlog.i("place_id : " + place_id);
@@ -126,12 +127,12 @@ public class PlaceEditActivity2 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + response.body().length());
-                            dlog.i("GetPlaceList jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                             try {
                                 //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(response.body());
+                                JSONArray Response = new JSONArray(jsonResponse);
                                 name = Response.getJSONObject(0).getString("name");
                                 registr_num = Response.getJSONObject(0).getString("registr_num");
                                 store_kind = Response.getJSONObject(0).getString("store_kind");
