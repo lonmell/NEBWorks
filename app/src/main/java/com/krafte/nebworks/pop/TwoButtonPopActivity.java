@@ -35,7 +35,6 @@ import com.krafte.nebworks.dataInterface.PlaceDelInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
 import com.krafte.nebworks.dataInterface.UserDelInterface;
 import com.krafte.nebworks.databinding.ActivityTwobuttonPopBinding;
-import com.krafte.nebworks.ui.community.CommunityActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -208,12 +207,12 @@ public class TwoButtonPopActivity extends Activity {
                 click_action = "MemberManagement";
                 AddPlaceMember(USER_INFO_ID, USER_INFO_NAME, USER_INFO_PHONE, "","");
             } else if (flag.equals("작성여부")) {
-                Intent intent = new Intent(this, CommunityActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, R.anim.translate_down);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                finish();
-//                ClosePop();
+                shardpref.putInt("SELECT_POSITION",3);
+                pm.Main(mContext);
+                ClosePop();
+            } else if(flag.equals("닉네임없음")){
+                pm.ProfileEdit(mContext);
+                ClosePop();
             }
         });
         binding.popLeftTxt.setOnClickListener(v -> {

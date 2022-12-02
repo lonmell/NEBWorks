@@ -291,14 +291,7 @@ public class CommunityAddActivity extends AppCompatActivity {
 
 
         binding.backBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-            intent.putExtra("data", "작성을 종료하시겠습니까?\n편집한 내용이 저장되지 않습니다.");
-            intent.putExtra("flag", "작성여부");
-            intent.putExtra("left_btn_txt", "계속작성");
-            intent.putExtra("right_btn_txt", "작성종료");
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            BackMove();
         });
 
 
@@ -318,12 +311,11 @@ public class CommunityAddActivity extends AppCompatActivity {
         binding.writerName.setOnClickListener(v -> {
             if (USER_INFO_NICKNAME.isEmpty()) {
                 shardpref.putString("returnPage", TAG);
-
                 Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
                 intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");
                 intent.putExtra("flag", "닉네임없음");
-                intent.putExtra("left_btn_txt", "확인");
-                intent.putExtra("right_btn_txt", "취소");
+                intent.putExtra("left_btn_txt", "취소");
+                intent.putExtra("right_btn_txt", "확인");
                 mContext.startActivity(intent);
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -410,7 +402,8 @@ public class CommunityAddActivity extends AppCompatActivity {
                                         saveBitmapAndGetURI();
                                     }
                                     Toast_Nomal("게시글 저장이 완료되었습니다.");
-                                    pm.CommunityActivity(mContext);
+                                    shardpref.putInt("SELECT_POSITION", 3);
+                                    pm.Main(mContext);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -485,6 +478,9 @@ public class CommunityAddActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    private void BackMove() {
         shardpref.remove("writer_name");
         shardpref.remove("write_nickname");
         shardpref.remove("title");
@@ -494,20 +490,15 @@ public class CommunityAddActivity extends AppCompatActivity {
         shardpref.remove("like_cnt");
         shardpref.remove("categoryItem");
         shardpref.remove("TopFeed");
-    }
 
-    private void BackMove() {
-//        if(state_txt.equals("EditFeed")){
-//            Intent intent = new Intent(this, WorkCommunityDetailActivity.class);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        }else{
-//            Intent intent = new Intent(this, WorkCommunityActivity.class);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        }
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("data", "작성을 종료하시겠습니까?\n편집한 내용이 저장되지 않습니다.");
+        intent.putExtra("flag", "작성여부");
+        intent.putExtra("left_btn_txt", "계속작성");
+        intent.putExtra("right_btn_txt", "작성종료");
+        mContext.startActivity(intent);
+        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
 

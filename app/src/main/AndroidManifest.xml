@@ -196,10 +196,11 @@
             android:theme="@style/Theme.Kogas" />
 
         <!-- community -->
-        <activity android:name=".ui.community.CommunityActivity" />
         <activity android:name=".ui.community.CommunityAddActivity" />
         <activity android:name=".ui.community.MoreListCommunityActivity" />
         <activity android:name=".ui.community.OwnerFeedAddActivity" />
+        <activity android:name=".ui.community.OwnerFeedDetailActivity" />
+
 
         <!-- workstatus-->
         <activity android:name=".ui.workstatus.AddWorkPartActivity" />

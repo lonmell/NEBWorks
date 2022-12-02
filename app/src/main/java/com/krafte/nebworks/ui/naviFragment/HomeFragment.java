@@ -410,7 +410,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
+//    USER_INFO_NICKNAME
     public void UserCheck(String account) {
         dlog.i("UserCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -433,21 +433,16 @@ public class HomeFragment extends Fragment {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
-//                                    String kind = Response.getJSONObject(0).getString("kind");
                                     String name = Response.getJSONObject(0).getString("name");
                                     String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
-//                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
-//                                    String department = Response.getJSONObject(0).getString("department");
-//                                    String position = Response.getJSONObject(0).getString("position");
+                                    String nick_name = Response.getJSONObject(0).getString("nick_name");
                                     String img_path = Response.getJSONObject(0).getString("img_path");
 
                                     try {
                                         dlog.i("------UserCheck-------");
                                         dlog.i("프로필 사진 url : " + img_path);
                                         dlog.i("성명 : " + name);
-//                                        dlog.i("부서 : " + department);
-//                                        dlog.i("직책 : " + position);
-//                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
+                                        dlog.i("닉네임 : " + nick_name);
                                         dlog.i("------UserCheck-------");
 
                                         if (place_owner_id.equals(id)) {
@@ -457,6 +452,9 @@ public class HomeFragment extends Fragment {
                                             USER_INFO_AUTH = "1";
                                             binding.gotoPlace.setVisibility(View.GONE);
                                         }
+                                        shardpref.putString("USER_INFO_PROFILE",img_path);
+                                        shardpref.putString("USER_INFO_NAME",name);
+                                        shardpref.putString("USER_INFO_NICKNAME",nick_name);
                                         getFCMToken();
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -494,7 +492,7 @@ public class HomeFragment extends Fragment {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("PlaceWorkCheck jsonResponse length : " + response.body().length());
+                            dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
                             dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
                             try {
                                 if (!response.body().equals("[]")) {

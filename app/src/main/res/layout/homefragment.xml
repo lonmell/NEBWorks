@@ -418,7 +418,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center"
-                                android:text="휴가"
+                                android:text="휴무"
                                 android:textColor="#696969" />
                         </LinearLayout>
 

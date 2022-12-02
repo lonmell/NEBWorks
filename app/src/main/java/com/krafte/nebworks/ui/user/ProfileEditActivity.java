@@ -146,6 +146,13 @@ public class ProfileEditActivity extends AppCompatActivity {
     Boolean CertiSuccessTF = false;
     Drawable icon_off;
     Drawable icon_on;
+    String mem_id = "";
+    String mem_kind = "";
+    String mem_name = "";
+    String mem_nick = "";
+    String mem_phone = "";
+    String mem_gender = "";
+    String mem_img_path = "";
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -183,6 +190,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.translate_up, 0);
         }
+
         myTimer = new MyTimer(60000, 1000);
         UserCheck(USER_INFO_EMAIL);
     }
@@ -500,14 +508,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         }
     }
 
-    String mem_id = "";
-    String mem_kind = "";
-    String mem_name = "";
-    String mem_nick = "";
-    String mem_phone = "";
-    String mem_gender = "";
-    String mem_img_path = "";
-
     public void UserCheck(String account) {
         dlog.i("---------UserCheck---------");
         dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
@@ -527,9 +527,12 @@ public class ProfileEditActivity extends AppCompatActivity {
                 dlog.e("response 1: " + response.isSuccessful());
                 runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
 
                             try {
                                 mem_id = Response.getJSONObject(0).getString("id");
@@ -542,18 +545,50 @@ public class ProfileEditActivity extends AppCompatActivity {
                                 dlog.i("------UserCheck-------");
                                 USER_INFO_ID = mem_id;
                                 dlog.i("프로필 사진 url : " + mem_img_path);
-                                dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
-                                dlog.i("성명 : " + mem_name);
+                                dlog.i("성명 : "           + mem_name);
+                                dlog.i("성별 : "           + mem_gender);
+                                dlog.i("닉네임 : "          + mem_nick);
+                                dlog.i("전화번호 : "        + mem_phone);
                                 dlog.i("------UserCheck-------");
 
-                                Glide.with(mContext).load(mem_img_path)
-                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                        .skipMemoryCache(true)
-                                        .into(binding.profileSetimg);
-
+                                if (!mem_phone.isEmpty()){
+                                    CertiSuccessTF = true;
+                                }
+                                dlog.i("START profileSetimg1");
                                 binding.userName.setText(mem_name);
                                 binding.userNick.setText(mem_nick.equals("null")?"":mem_nick);
                                 binding.userPhone.setText(mem_phone.equals("null")?"":mem_phone);
+
+                                if(mem_img_path != null){
+                                    dlog.i("mem_img_path : " + mem_img_path.trim());
+                                    Glide.with(mContext).load(mem_img_path.trim())
+                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                            .skipMemoryCache(true)
+                                            .into(binding.profileSetimg);
+                                    binding.imgPlus.setVisibility(View.GONE);
+                                    ProfileUrl = mem_img_path;
+                                }
+
+
+                                if(mem_gender.equals("1")){
+                                    USER_INFO_GENDER = "1";
+                                    binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
+                                    binding.manTxt.setBackgroundColor(Color.parseColor("#ffffff"));
+                                    binding.selectMan.setBackgroundColor(Color.parseColor("#1E90FF"));
+
+                                    binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+                                    binding.womanTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
+                                    binding.selectWoman.setBackgroundColor(Color.parseColor("#a9a9a9"));
+                                }else{
+                                    USER_INFO_GENDER = "2";
+                                    binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+                                    binding.manTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
+                                    binding.selectMan.setBackgroundColor(Color.parseColor("#a9a9a9"));
+
+                                    binding.womanTxt.setTextColor(Color.parseColor("#1E90FF"));
+                                    binding.womanTxt.setBackgroundColor(Color.parseColor("#ffffff"));
+                                    binding.selectWoman.setBackgroundColor(Color.parseColor("#1E90FF"));
+                                }
 
                             } catch (Exception e) {
                                 dlog.i("UserCheck Exception : " + e);
@@ -818,6 +853,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                     Glide.with(this)
                             .load(imagePath)
                             .into(binding.profileSetimg);
+
                     binding.clearImg.setVisibility(View.VISIBLE);
                     binding.imgPlus.setVisibility(View.GONE);
 

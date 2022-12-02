@@ -14,7 +14,7 @@ public interface UserUpdateInterface
     Call<String> getData(
             @Field("id") String id,
             @Field("name") String name,
-            @Field("nickname") String nickname,
+            @Field("nick_name") String nick_name,
             @Field("phone") String phone,
             @Field("gender") String gender,
             @Field("img_path") String img_path

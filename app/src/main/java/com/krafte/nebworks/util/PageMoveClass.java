@@ -7,10 +7,10 @@ import com.krafte.nebworks.ui.PushActivity;
 import com.krafte.nebworks.ui.approval.TaskApprovalDetail;
 import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
 import com.krafte.nebworks.ui.career.CareerActivity;
-import com.krafte.nebworks.ui.community.CommunityActivity;
 import com.krafte.nebworks.ui.community.CommunityAddActivity;
 import com.krafte.nebworks.ui.community.MoreListCommunityActivity;
 import com.krafte.nebworks.ui.community.OwnerFeedAddActivity;
+import com.krafte.nebworks.ui.community.OwnerFeedDetailActivity;
 import com.krafte.nebworks.ui.feed.FeedAddActivity;
 import com.krafte.nebworks.ui.feed.FeedDetailActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
@@ -459,14 +459,6 @@ public class PageMoveClass implements MovePage {
 
     //--ui.community
     @Override
-    public void CommunityActivity(Context context) {
-        Intent intent = new Intent(context, CommunityActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-
-    @Override
     public void CommunityAdd(Context context) {
         Intent intent = new Intent(context, CommunityAddActivity.class);
         context.startActivity(intent);
@@ -485,6 +477,14 @@ public class PageMoveClass implements MovePage {
     @Override
     public void OwnerFeedAdd(Context context) {
         Intent intent = new Intent(context, OwnerFeedAddActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void OwnerFeedDetail(Context context) {
+        Intent intent = new Intent(context, OwnerFeedDetailActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

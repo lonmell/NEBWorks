@@ -15,23 +15,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="59dp"
             android:background="#ffffff"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/inter_regular"
-                android:gravity="center"
-                android:text=""
-                android:textColor="#000000"
-                android:textSize="17sp" />
-
             <RelativeLayout
                 android:id="@+id/back_btn"
-                android:layout_width="45dp"
-                android:layout_height="45dp">
+                android:layout_width="59dp"
+                android:layout_height="59dp">
 
                 <TextView
                     android:layout_width="24dp"
@@ -44,10 +35,7 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#a9a9a9" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,8 +49,8 @@
 
                 <RelativeLayout
                     android:id="@+id/profile_img"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_centerInParent="true"
                     android:layout_alignParentBottom="true">
                     <androidx.cardview.widget.CardView
@@ -72,20 +60,19 @@
                         app:cardBackgroundColor="#dcdcdc"
                         app:cardElevation="0dp">
                         <ImageView
-                            android:id="@+id/profile_setimg"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="0dp"
-                            android:layout_margin="0dp"
-                            android:scaleType="fitXY" />
-
-                        <ImageView
                             android:id="@+id/img_plus"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:layout_centerInParent="true"
                             android:background="@drawable/certi01" />
+                        <ImageView
+                            android:id="@+id/profile_setimg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="0dp"
+                            android:layout_margin="0dp"
+                            android:scaleType="fitXY" />
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
 

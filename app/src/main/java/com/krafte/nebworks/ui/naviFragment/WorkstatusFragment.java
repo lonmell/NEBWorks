@@ -472,8 +472,8 @@ public class WorkstatusFragment extends Fragment {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);

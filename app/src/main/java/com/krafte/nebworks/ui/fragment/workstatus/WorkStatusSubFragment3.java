@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -145,6 +146,7 @@ public class WorkStatusSubFragment3 extends Fragment {
     }
 
     /*직원 전체 리스트 START*/
+    List<String> yoil = new ArrayList<>();
     public void SetAllMemberList() {
         total_member_cnt = 0;
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
@@ -153,7 +155,7 @@ public class WorkStatusSubFragment3 extends Fragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             WorkStatusTapInterface api = retrofit.create(WorkStatusTapInterface.class);
-            Call<String> call = api.getData(place_id,"-1",toDay);
+            Call<String> call = api.getData(place_id,"2",toDay);
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -179,21 +181,22 @@ public class WorkStatusSubFragment3 extends Fragment {
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if(!place_owner_id.equals(jsonObject.getString("user_id"))){
-                                        mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
-                                                jsonObject.getString("id"),
-                                                jsonObject.getString("place_id"),
-                                                jsonObject.getString("user_id"),
-                                                jsonObject.getString("name"),
-                                                jsonObject.getString("img_path"),
-                                                jsonObject.getString("kind"),
-                                                jsonObject.getString("jikgup"),
-                                                jsonObject.getString("join_date"),
-                                                jsonObject.getString("yoil"),
-                                                jsonObject.getString("io_date"),
-                                                jsonObject.getString("io_time")
-                                        ));
-                                    }
+                                        if(jsonObject.getString("commuting").equals("미출근")){
+                                            mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("place_id"),
+                                                    jsonObject.getString("user_id"),
+                                                    jsonObject.getString("name"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("kind"),
+                                                    jsonObject.getString("jikgup"),
+                                                    jsonObject.getString("join_date"),
+                                                    jsonObject.getString("yoil"),
+                                                    jsonObject.getString("io_date"),
+                                                    jsonObject.getString("io_time"),
+                                                    jsonObject.getString("commuting")
+                                            ));
+                                        }
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }

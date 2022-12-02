@@ -118,7 +118,12 @@ public class OwnerCommunityAdapter  extends RecyclerView.Adapter<OwnerCommunityA
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     SecondTapCommunityData.SecondTapCommunityData_list item = mData.get(pos);
-                    dlog.i("Item Click link : " + "https://www.bizinfo.go.kr/web/lay1/bbs/S1T122C128/AS/74/" + item.getLink());
+                    String oc_link = "https://www.bizinfo.go.kr/web/lay1/bbs/S1T122C128/AS/74/" + item.getLink();
+                    shardpref.putString("oc_link",oc_link);
+                    shardpref.putString("oc_cate",item.getCategory());
+                    shardpref.putString("oc_title",item.getTitle());
+                    dlog.i("Item Click link : " + oc_link);
+                    pm.OwnerFeedDetail(mContext);
                 }
             });
         }
@@ -132,6 +137,5 @@ public class OwnerCommunityAdapter  extends RecyclerView.Adapter<OwnerCommunityA
     public int getItemViewType(int position) {
         return position;
     }
-
 
 }

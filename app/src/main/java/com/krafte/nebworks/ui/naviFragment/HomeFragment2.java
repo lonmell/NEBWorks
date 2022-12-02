@@ -219,7 +219,7 @@ public class HomeFragment2 extends Fragment {
             USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
             shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
 
-            if (accept_state == 0) {
+            if (accept_state == 3) {
                 //승인 대기중
                 binding.acceptArea.setVisibility(View.VISIBLE);
             } else {

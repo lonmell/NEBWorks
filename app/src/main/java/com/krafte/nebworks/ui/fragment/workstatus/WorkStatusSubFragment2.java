@@ -179,7 +179,6 @@ public class WorkStatusSubFragment2 extends Fragment {
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if(!place_owner_id.equals(jsonObject.getString("user_id"))){
                                         mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_id"),
@@ -191,9 +190,9 @@ public class WorkStatusSubFragment2 extends Fragment {
                                                 jsonObject.getString("join_date"),
                                                 jsonObject.getString("yoil"),
                                                 jsonObject.getString("io_date"),
-                                                jsonObject.getString("io_time")
+                                                jsonObject.getString("io_time"),
+                                                jsonObject.getString("commuting")
                                         ));
-                                    }
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }

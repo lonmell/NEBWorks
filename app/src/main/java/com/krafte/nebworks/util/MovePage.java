@@ -19,13 +19,13 @@ public interface MovePage {
     void Career(Context context);
 
     //--ui.community
-    void CommunityActivity(Context context);
-
     void CommunityAdd(Context context);
 
     void MoreListCommunity(Context context);
 
     void OwnerFeedAdd(Context context);
+
+    void OwnerFeedDetail(Context context);
 
     void MoreGo(Context context);
 

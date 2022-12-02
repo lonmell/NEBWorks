@@ -30,6 +30,8 @@ import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdapter.ViewHolder> {
     private static final String TAG = "WorkTapMemberAdapter";
@@ -49,6 +51,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
     Activity activity;
     PageMoveClass pm = new PageMoveClass();
     int lastpos = -99;
+    List<String> yoil = new ArrayList<>();
 
 
     public interface OnItemClickListener {
@@ -96,30 +99,33 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
                     .skipMemoryCache(true)
                     .into(holder.user_thumnail);
 
-            holder.jikgup.setText(item.getJikgup().equals("null")?"미정":item.getJikgup());
+            holder.jikgup.setText(item.getJikgup().equals("null") ? "미정" : item.getJikgup());
 
-            if(item.getKind().equals("0")) {
+            yoil.addAll(Arrays.asList(item.getYoil().split(",")));
+
+            if (item.getKind().equals("0")) {
                 state = "근무 중";
                 holder.state_tv.setTextColor(R.color.blue);
                 holder.state.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
-            }else if(item.getKind().equals("1")){
+            } else if (item.getKind().equals("1")) {
                 state = "퇴근";
                 holder.state_tv.setTextColor(Color.parseColor("#696969"));
                 holder.state.setCardBackgroundColor(Color.parseColor("#dbdbdb"));
-            }else if(item.getKind().equals("-1")){
-                state = "미출근";
+            } else if (item.getKind().equals("2")) {
+                //출근날인데 출근 안한거
+                state = item.getCommuting();
                 holder.state_tv.setTextColor(Color.parseColor("#DD6540"));
                 holder.state.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
             }
-            holder.pay.setText(item.getYoil().isEmpty()?"":item.getYoil());
+            holder.pay.setText(item.getYoil().isEmpty() ? "" : item.getYoil());
             holder.state_tv.setText(state);
 
             holder.list_setting.setOnClickListener(v -> {
-                shardpref.putString("mem_id",item.getId());
-                shardpref.putString("mem_name",item.getName());
+                shardpref.putString("mem_id", item.getId());
+                shardpref.putString("mem_name", item.getName());
                 Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
                 intent.putExtra("place_id", place_id);
-                intent.putExtra("user_id",item.getId());
+                intent.putExtra("user_id", item.getId());
                 mContext.startActivity(intent);
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -141,24 +147,24 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, jikgup, pay, state_tv;
-        CardView add_detail, state,edit_linear;
-        RelativeLayout list_setting,item_total;
+        CardView add_detail, state, edit_linear;
+        RelativeLayout list_setting, item_total;
         LinearLayout linear01, linear02;
         ImageView user_thumnail;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            item_total    = itemView.findViewById(R.id.item_total);
-            name          = itemView.findViewById(R.id.name);
-            jikgup        = itemView.findViewById(R.id.jikgup);
-            pay           = itemView.findViewById(R.id.pay);
-            state_tv      = itemView.findViewById(R.id.state_tv);
-            add_detail    = itemView.findViewById(R.id.add_detail);
-            state         = itemView.findViewById(R.id.state);
-            list_setting  = itemView.findViewById(R.id.list_setting);
-            linear01      = itemView.findViewById(R.id.linear01);
-            linear02      = itemView.findViewById(R.id.linear02);
+            item_total = itemView.findViewById(R.id.item_total);
+            name = itemView.findViewById(R.id.name);
+            jikgup = itemView.findViewById(R.id.jikgup);
+            pay = itemView.findViewById(R.id.pay);
+            state_tv = itemView.findViewById(R.id.state_tv);
+            add_detail = itemView.findViewById(R.id.add_detail);
+            state = itemView.findViewById(R.id.state);
+            list_setting = itemView.findViewById(R.id.list_setting);
+            linear01 = itemView.findViewById(R.id.linear01);
+            linear02 = itemView.findViewById(R.id.linear02);
             user_thumnail = itemView.findViewById(R.id.user_thumnail);
 
 
