@@ -9,6 +9,7 @@ public interface MemberUpdateBasicInterface
 {
     String URL = "http://krafte.net/NEBWorks/place/";
 
+    //http://krafte.net/NEBWorks/place/update_member_basic.php
     @FormUrlEncoded
     @POST("update_member_basic.php")
     Call<String> getData(

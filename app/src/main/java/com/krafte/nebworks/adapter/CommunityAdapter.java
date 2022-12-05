@@ -3,6 +3,7 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceNotiData;
+import com.krafte.nebworks.pop.CommunityOptionActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -103,6 +105,27 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             holder.contents.setText(item.getContents());
             holder.categorytv.setText("#" + item.getCategory());
             holder.view_com.setText("조회수 " + item.getView_cnt() + " / 댓글 " + item.getComment_cnt());
+
+            holder.list_setting.setOnClickListener(v -> {
+                shardpref.putString("feed_id",item.getId());
+                shardpref.putString("place_id",item.getPlace_id());
+                shardpref.putString("title",item.getTitle());
+                shardpref.putString("contents",item.getContents());
+                shardpref.putString("writer_id",item.getWriter_id());
+                shardpref.putString("writer_name",item.getWriter_name());
+                shardpref.putString("writer_img_path",item.getWriter_img_path());
+                shardpref.putString("feed_img_path",item.getFeed_img_path());
+                shardpref.putString("jikgup",item.getJikgup());
+                shardpref.putString("view_cnt",item.getView_cnt());
+                shardpref.putString("comment_cnt",item.getComment_cnt());
+                shardpref.putString("category",item.getCategory());
+                shardpref.putString("state","EditCommunity");
+                Intent intent = new Intent(mContext, CommunityOptionActivity.class);
+                intent.putExtra("state", "EditCommunity");
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            });
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }

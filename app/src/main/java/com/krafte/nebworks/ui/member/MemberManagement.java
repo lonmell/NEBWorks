@@ -324,10 +324,10 @@ public class MemberManagement extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    dlog.i("UpdateBasic jsonResponse length : " + response.body().length());
+                    dlog.i("UpdateBasic jsonResponse : " + response.body());
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
-                            dlog.i("TaskDel jsonResponse : " + response.body());
                             try {
                                 if (response.body().replace("\"", "").equals("success")) {
                                     Toast_Nomal("해당 직원의 데이터가 업데이트되었습니다.");

@@ -196,9 +196,10 @@ public class CommunityFragment extends Fragment {
         addbtn_tv.setText("게시글 작성");
         add_worktime_btn.setOnClickListener(v -> {
             if (paging_position == 0) {
+                shardpref.putString("state","AddCommunity");
                 pm.CommunityAdd(mContext);
             } else if (paging_position == 1) {
-                pm.OwnerFeedAdd(mContext);
+                Toast_Nomal("사장님 게시글");
             } else if (paging_position == 2) {
                 Toast_Nomal("세금/노무");
             }

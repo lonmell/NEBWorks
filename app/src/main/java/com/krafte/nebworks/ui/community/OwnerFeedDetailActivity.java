@@ -21,7 +21,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-public class OwnerFeedDetailActivity  extends AppCompatActivity {
+public class OwnerFeedDetailActivity extends AppCompatActivity {
     private ActivityOwnerfeedDetailBinding binding;
     private final static String TAG = "OwnerFeedDetailActivity";
     Context mContext;
@@ -54,9 +54,21 @@ public class OwnerFeedDetailActivity  extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
-        oc_link = shardpref.getString("oc_link","");
-        oc_cate = shardpref.getString("oc_cate","");
-        oc_title = shardpref.getString("oc_title","");
+        oc_link = shardpref.getString("oc_link", "");
+        oc_cate = shardpref.getString("oc_cate", "");
+        oc_title = shardpref.getString("oc_title", "");
+
+        binding.backBtn.setOnClickListener(v -> {
+            RemoveShared();
+            super.onBackPressed();
+        });
+
+    }
+
+    private void RemoveShared() {
+        shardpref.remove("oc_link");
+        shardpref.remove("oc_cate");
+        shardpref.remove("oc_title");
     }
 
     @Override
@@ -65,6 +77,11 @@ public class OwnerFeedDetailActivity  extends AppCompatActivity {
         GetCrawling();
     }
 
+    @Override
+    public void onBackPressed() {
+        RemoveShared();
+        super.onBackPressed();
+    }
 
     Elements temele;
     Elements hash;
@@ -74,6 +91,7 @@ public class OwnerFeedDetailActivity  extends AppCompatActivity {
     String period = "";
     String overview = "";
     String hashtv = "";
+
     private void GetCrawling() {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
@@ -82,13 +100,13 @@ public class OwnerFeedDetailActivity  extends AppCompatActivity {
                 dlog.i("oc_link : " + oc_link);
                 temele = d.select(".sub_cont");
 //                Pagewrap = d.select("#container").select("div.sub_cont").select("div.page_wrap").select("a");
-                date = String.valueOf(d.select(".support_project_detail .top_info ul li")).replace("<li>","").replace("</li>","") ;
-                department = String.valueOf(d.select(".view_cont").select("ul").select("li").get(0).select(".txt")).replace("<div class=\"txt\">","").replace("</div>","").replace(" ","");
-                agency = String.valueOf(d.select(".view_cont").select("ul").select("li").get(1).select(".txt")).replace("<div class=\"txt\">","").replace("</div>","");
-                period = String.valueOf(d.select(".view_cont").select("ul").select("li").get(2).select(".txt")).replace("<div class=\"txt\">","").replace("</div>","").replace("<span>","").replace("</span>","");
-                overview = String.valueOf(d.select(".view_cont").select("ul").select("li").get(3).select(".txt").select("p")).replace("<p>","").replace("</p>","").trim().replace("<br>","").replace("</br>","");
+                date = String.valueOf(d.select(".support_project_detail .top_info ul li")).replace("<li>", "").replace("</li>", "");
+                department = String.valueOf(d.select(".view_cont").select("ul").select("li").get(0).select(".txt")).replace("<div class=\"txt\">", "").replace("</div>", "").replace(" ", "");
+                agency = String.valueOf(d.select(".view_cont").select("ul").select("li").get(1).select(".txt")).replace("<div class=\"txt\">", "").replace("</div>", "");
+                period = String.valueOf(d.select(".view_cont").select("ul").select("li").get(2).select(".txt")).replace("<div class=\"txt\">", "").replace("</div>", "").replace("<span>", "").replace("</span>", "");
+                overview = String.valueOf(d.select(".view_cont").select("ul").select("li").get(3).select(".txt").select("p")).replace("<p>", "").replace("</p>", "").trim().replace("<br>", "").replace("</br>", "");
                 hash = d.select(".tag_list").select("ul").select("li");
-                hashtv = String.valueOf(d.select(".tag_list").select("ul").select("li").select("span")).replace("<span>","").replace("</span>","").replace(" ",",").trim();
+                hashtv = String.valueOf(d.select(".tag_list").select("ul").select("li").select("span")).replace("<span>", "").replace("</span>", "").replace(" ", ",").trim();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -103,7 +121,8 @@ public class OwnerFeedDetailActivity  extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private void setUIData(){
+
+    private void setUIData() {
         binding.cate.setText(oc_cate);
         binding.title.setText(oc_title);
         binding.date.setText(date);
@@ -115,8 +134,8 @@ public class OwnerFeedDetailActivity  extends AppCompatActivity {
         dlog.i("period : " + period.trim());
         binding.overview.setText(overview);
         dlog.i("overview : " + overview);
-        binding.hashTag.setText(hashtv);
-        dlog.i("hashTag ; " + hashtv.replace(" ",",").trim());
+        binding.hashTag.setText("링크로 이동하기");
+        dlog.i("hashTag ; " + hashtv.replace(" ", ",").trim());
         binding.link.setText(oc_link);
     }
 }

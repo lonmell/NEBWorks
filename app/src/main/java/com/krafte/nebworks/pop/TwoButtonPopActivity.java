@@ -67,7 +67,6 @@ public class TwoButtonPopActivity extends Activity {
 
     //shared Data
     PreferenceHelper shardpref;
-    String store_no = "";
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_LOGIN_METHOD = "";
@@ -126,11 +125,9 @@ public class TwoButtonPopActivity extends Activity {
         setBtnEvent();
 
 
-        store_no = shardpref.getString("store_no","0");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","");
         USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
-
         place_id = shardpref.getString("place_id", "-1");
         mem_id = shardpref.getString("mem_id","");
 
@@ -205,7 +202,9 @@ public class TwoButtonPopActivity extends Activity {
             } else if(flag.equals("그룹신청")){
                 message = "새로운 근무지원 신청이 도착했습니다.";
                 click_action = "MemberManagement";
-                AddPlaceMember(USER_INFO_ID, USER_INFO_NAME, USER_INFO_PHONE, "","");
+                dlog.i(message);
+                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+                AddPlaceMember(USER_INFO_ID, USER_INFO_NAME, USER_INFO_PHONE, "",today);
             } else if (flag.equals("작성여부")) {
                 shardpref.putInt("SELECT_POSITION",3);
                 pm.Main(mContext);
@@ -213,6 +212,10 @@ public class TwoButtonPopActivity extends Activity {
             } else if(flag.equals("닉네임없음")){
                 pm.ProfileEdit(mContext);
                 ClosePop();
+            } else if(flag.equals("게시글삭제")){
+                String feed_id = "0";
+                feed_id = shardpref.getString("feed_id","");
+                FeedDelete(feed_id);
             }
         });
         binding.popLeftTxt.setOnClickListener(v -> {
@@ -475,17 +478,20 @@ public class TwoButtonPopActivity extends Activity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    //String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
+                    dlog.i("AddPlaceMember jsonResponse : " + response.body());
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
-                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
+
                             if (response.body().replace("\"", "").equals("success")) {
                                 Toast_Nomal("근무신청이 완료되었습니다.");
                                 ClosePop();
                             }else{
                                 Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
                             }
+                        }else{
+                            dlog.i(response.body());
                         }
                     });
                 }

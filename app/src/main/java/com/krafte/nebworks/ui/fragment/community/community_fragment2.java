@@ -17,9 +17,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.krafte.nebworks.adapter.CateAdapter;
 import com.krafte.nebworks.adapter.OwnerCommunityAdapter;
+import com.krafte.nebworks.adapter.PagingAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.SecondTapCommunityData;
+import com.krafte.nebworks.data.StringData;
 import com.krafte.nebworks.databinding.CommunityFragment2Binding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -63,14 +66,19 @@ public class community_fragment2  extends Fragment {
     SimpleDateFormat sdf = new SimpleDateFormat(format);
 
     //position 1
-    ArrayList<SecondTapCommunityData.SecondTapCommunityData_list> mList2 = new ArrayList<>();
-    OwnerCommunityAdapter mAdapter2 = null;
-    String category = "";
+    ArrayList<SecondTapCommunityData.SecondTapCommunityData_list> mList = new ArrayList<>();
+    ArrayList<SecondTapCommunityData.SecondTapCommunityData_list> searchmList = new ArrayList<>();
+    OwnerCommunityAdapter mAdapter = null;
+
+    ArrayList<StringData.StringData_list> subcateList = new ArrayList<>();
+    ArrayList<String> subCate = new ArrayList<>();
+    CateAdapter subcateAdapter = null;
 
     public static community_fragment2 newInstance() {
         return new community_fragment2();
     }
 
+    String category = "전체";
     String str;
 
     /*Fragment 콜백함수*/
@@ -112,6 +120,39 @@ public class community_fragment2  extends Fragment {
             shardpref.putInt("SELECT_POSITION", 0);
             //-- 날짜 세팅
             dlog.i("place_owner_id : " + place_owner_id);
+
+            subCate.add("전체");
+            subCate.add("금융");
+            subCate.add("기술");
+            subCate.add("인력");
+            subCate.add("수출");
+            subCate.add("내수");
+            subCate.add("창업");
+            subCate.add("경영");
+            subCate.add("기타");
+
+            subcateList = new ArrayList<>();
+            subcateAdapter = new CateAdapter(mContext, subcateList);
+            binding.subCateList.setAdapter(subcateAdapter);
+            binding.subCateList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+            for (int i = 0; i < subCate.size(); i++) {
+                subcateAdapter.addItem(new StringData.StringData_list(
+                        subCate.get(i)
+                ));
+            }
+            subcateAdapter.notifyDataSetChanged();
+            subcateAdapter.setOnItemClickListener(new CateAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    subcateAdapter.notifyDataSetChanged();
+                    dlog.i("select item : " + subCate.get(position));
+                    category = subCate.get(position);
+                    binding.searchTv.setText("");
+                    setRecyclerViewpo2();
+                }
+            });
+
+
             setBtnEvent();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -142,8 +183,33 @@ public class community_fragment2  extends Fragment {
         handler.postDelayed(this::GetCrawling, 0);// 0.8초
     }
 
-    private void setBtnEvent() {
+    @SuppressLint("NotifyDataSetChanged")
+    public void searchFilter(String searchText) {
+        if(searchText.length() != 0 && mList.size() != 0){
+            searchmList.clear();
+            dlog.i("searchFilter 1");
+            dlog.i("mList.size() : " + mList.size());
+            for (int i = 0; i < mList.size(); i++) {
+                if (mList.get(i).getTitle().toLowerCase().contains(searchText.toLowerCase())) {
+                    dlog.i("searchFilter contain : " + mList.get(i).getTitle() + "/" + mList.get(i).getTitle().toLowerCase().contains(searchText.toLowerCase()));
+                    searchmList.add(mList.get(i));
+                }
+            }
+            mAdapter.filterList(searchmList);
+            mAdapter.notifyDataSetChanged();
+        }else{
+            dlog.i("searchFilter 2");
+            mAdapter.filterList(mList);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 
+    String search = "";
+    private void setBtnEvent() {
+        binding.searchBtn.setOnClickListener(v -> {
+            search = binding.searchTv.getText().toString();
+            searchFilter(search);
+        });
     }
 
     //position 2
@@ -157,19 +223,22 @@ public class community_fragment2  extends Fragment {
     List<String> view_cnt;
     List<String> link;
     List<String> paging;
+    ArrayList<StringData.StringData_list> mPage = new ArrayList<>();
+    PagingAdapter mPAdapter;
     boolean isEmpty;
     Elements temele;
     Elements Pagewrap;
+    String page_num = "1";
 
     private void GetCrawling() {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
             try {
                 stclist.clear();
-                String URL = "https://www.bizinfo.go.kr/web/lay1/bbs/S1T122C128/AS/74/list.do?rows=15&cpage=1"; // 지원리스트
+                String URL = "https://www.bizinfo.go.kr/web/lay1/bbs/S1T122C128/AS/74/list.do?rows=15&cpage=" + page_num; // 지원리스트
                 Document d = Jsoup.connect(URL).timeout(50000).get();    //URL 웹사이트에 있는 html 코드를 다 끌어오기
                 temele = d.select("#articleSearchForm").select("div.support_project").select("div.table_Type_1").select("table").select("tbody").select("tr");
-                Pagewrap = d.select("#container").select("div.sub_cont").select("div.page_wrap").select("a");
+                Pagewrap = d.select("#container").select(".sub_cont").select(".page_wrap").select("a");
                 isEmpty = temele.isEmpty(); //빼온 값 null체크
                 id = new ArrayList<>();
                 cate = new ArrayList<>();
@@ -192,15 +261,18 @@ public class community_fragment2  extends Fragment {
                 }
 
                 for(int a = 0; a < Pagewrap.size(); a++){
-                    paging.add(Pagewrap.get(a).data());
+                    paging.add(Pagewrap.get(a).attr("title").replace("페이지","").replace(" ",""));
+                    dlog.i("Pagewrap.get(" + a + ") : " + Pagewrap.get(a).attr("title"));
                 }
-                dlog.i("paging : " + paging);
+                paging.remove("이전");
+                paging.remove("처음");
+                paging.remove("다음");
+                paging.remove("마지막");
+                dlog.i("paging : " + paging.toString().replace("페이지","").replace(" ",""));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            activity.runOnUiThread(() -> {
-                setRecyclerViewpo2();
-            });
+            activity.runOnUiThread(this::setRecyclerViewpo2);
         });
         th.start();
         try {
@@ -215,10 +287,34 @@ public class community_fragment2  extends Fragment {
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 try{
-                    //Array데이터를 받아올 때
-                    mList2 = new ArrayList<>();
-                    mAdapter2 = new OwnerCommunityAdapter(mContext, mList2, 1);
-                    binding.allList2.setAdapter(mAdapter2);
+
+                    //Array데이터를 받아올 때 -- 페이징 번호
+                    mPage = new ArrayList<>();
+                    mPAdapter = new PagingAdapter(mContext, mPage,page_num);
+                    binding.pageingList1.setAdapter(mPAdapter);
+                    binding.pageingList1.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                    Log.i(TAG, "SetNoticeListview Thread run!");
+                    for (int i = 0; i < paging.size(); i++) {
+                        mPAdapter.addItem(new StringData.StringData_list(
+                                paging.get(i)
+                        ));
+                    }
+                    mPAdapter.notifyDataSetChanged();
+                    mPAdapter.setOnItemClickListener(new PagingAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View v, int position) {
+                            mPAdapter.notifyDataSetChanged();
+                            page_num = paging.get(position);
+                            dlog.i("page_num : " + page_num);
+                            GetCrawling();
+                        }
+                    });
+
+                    //Array데이터를 받아올 때 -- 리스트 내용
+                    mList = new ArrayList<>();
+                    mAdapter = new OwnerCommunityAdapter(mContext, mList, 1);
+                    binding.allList2.setAdapter(mAdapter);
+                    binding.allList2.smoothScrollToPosition(0);
                     binding.allList2.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                     Log.i(TAG, "SetNoticeListview Thread run!");
                     dlog.i("temele : " + temele);
@@ -228,23 +324,43 @@ public class community_fragment2  extends Fragment {
                     dlog.i("title : " + title);
                     if(temele != null){
                         if (isEmpty) {
-                            mList2.clear();
+                            mList.clear();
                         } else {
-                            for (int i = 0; i < temele.size(); i++) {
-                                mAdapter2.addItem(new SecondTapCommunityData.SecondTapCommunityData_list(
-                                        id.get(0),
-                                        cate.get(0),
-                                        title.get(0),
-                                        gigan.get(0),
-                                        location.get(0),
-                                        date.get(0),
-                                        view_cnt.get(0),
-                                        link.get(0)
-                                ));
+                            if(category.equals("전체")){
+                                for (int i = 0; i < temele.size(); i++) {
+                                    mAdapter.addItem(new SecondTapCommunityData.SecondTapCommunityData_list(
+                                            id.get(i),
+                                            cate.get(i),
+                                            title.get(i),
+                                            gigan.get(i),
+                                            location.get(i),
+                                            date.get(i),
+                                            view_cnt.get(i),
+                                            link.get(i)
+                                    ));
+                                }
+                            }else{
+                                for (int i = 0; i < temele.size(); i++) {
+                                    if(category.equals(cate.get(i))){
+                                        mAdapter.addItem(new SecondTapCommunityData.SecondTapCommunityData_list(
+                                                id.get(i),
+                                                cate.get(i),
+                                                title.get(i),
+                                                gigan.get(i),
+                                                location.get(i),
+                                                date.get(i),
+                                                view_cnt.get(i),
+                                                link.get(i)
+                                        ));
+                                    }
+                                }
                             }
-                            mAdapter2.notifyDataSetChanged();
+
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
+
+
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -254,5 +370,7 @@ public class community_fragment2  extends Fragment {
             e.printStackTrace();
         }
     }
+
+
 
 }

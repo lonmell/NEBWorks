@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.ui.community.CommunityAddActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -80,6 +81,9 @@ public class CommunityOptionActivity extends Activity {
         }else if(state.equals("EditFeed")){
             feed_edit.setText("공지 수정");
             feed_delete.setText("공지 삭제");
+        }else if(state.equals("EditCommunity")){
+            feed_edit.setText("게시글 수정");
+            feed_delete.setText("게시글 삭제");
         }
 
     }
@@ -98,6 +102,8 @@ public class CommunityOptionActivity extends Activity {
                 shardpref.putString("comment_contents",comment_contents);
             }else if(state.equals("EditFeed")){
                 dlog.i("edit_feed_id : " + shardpref.getString("edit_feed_id","0"));
+            }else if(state.equals("EditCommunity")){
+                dlog.i("edit_feed_id : " + shardpref.getString("edit_feed_id","0"));
             }
             setUpdateWorktodo();
             closePop();
@@ -111,6 +117,9 @@ public class CommunityOptionActivity extends Activity {
             }else if(state.equals("EditFeed")){
                 intent.putExtra("data", "해당 공지사항을 삭제하시겠습니까?");
                 intent.putExtra("flag", "공지삭제");
+            }else if(state.equals("EditCommunity")){
+                intent.putExtra("data", "해당 게시글을 삭제하시겠습니까?");
+                intent.putExtra("flag", "게시글삭제");
             }
             intent.putExtra("left_btn_txt", "취소");
             intent.putExtra("right_btn_txt", "삭제");
@@ -151,6 +160,11 @@ public class CommunityOptionActivity extends Activity {
             overridePendingTransition(0, R.anim.translate_down);
         }else if(state.equals("EditFeed")){
             Intent intent = new Intent(mContext, FeedEditActivity.class);
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }else if(state.equals("EditCommunity")){
+            Intent intent = new Intent(mContext, CommunityAddActivity.class);
             mContext.startActivity(intent);
             ((Activity) mContext).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

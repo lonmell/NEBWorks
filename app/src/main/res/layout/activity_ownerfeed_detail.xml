@@ -155,11 +155,11 @@
                 android:id="@+id/hashTag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="지원사업 페이지로 이동하기"
                 android:fontFamily="@font/inter_regular"
                 android:textSize="16sp"
                 android:layout_marginTop="20dp"
-                android:textColor="@color/blue"/>
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/link"
@@ -169,7 +169,6 @@
                 android:autoLink="web"
                 android:fontFamily="@font/inter_regular"
                 android:textSize="16sp"
-                android:layout_marginTop="20dp"
                 android:textColor="@color/blue"/>
         </LinearLayout>
     </LinearLayout>

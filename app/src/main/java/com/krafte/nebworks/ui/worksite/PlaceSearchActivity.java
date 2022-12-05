@@ -38,7 +38,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class PlaceSearchActivity  extends AppCompatActivity {
+public class PlaceSearchActivity extends AppCompatActivity {
     private ActivityPlaceSearchBinding binding;
     private static final String TAG = "StoreSearchActivity";
     Context mContext;
@@ -127,12 +127,12 @@ public class PlaceSearchActivity  extends AppCompatActivity {
 //                    break;
                 }
             }
-            binding.searchCnt.setText(searchmList.size());
+            binding.searchCnt.setText(String.valueOf(searchmList.size()));
             mAdapter.filterList(searchmList);
             mAdapter.notifyDataSetChanged();
         }else{
             dlog.i("searchFilter 2");
-            binding.searchCnt.setText(mList.size());
+            binding.searchCnt.setText(String.valueOf(mList.size()));
             mAdapter.filterList(mList);
             mAdapter.notifyDataSetChanged();
         }
@@ -144,6 +144,7 @@ public class PlaceSearchActivity  extends AppCompatActivity {
         binding.backBtn.setOnClickListener(v -> {
             pm.PlaceList(mContext);
         });
+
         binding.searchBtn.setOnClickListener(v -> {
             Setaddress = binding.searchStore.getText().toString();
             searchFilter(Setaddress);

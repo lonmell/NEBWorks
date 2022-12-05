@@ -97,6 +97,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
         holder.applicant_storegroup.setOnClickListener(v -> {
             shardpref.putString("guin_store_no", item.getId());
+            shardpref.putString("place_id", item.getId());
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
             intent.putExtra("data", "해당 매장에 근무신청을 보냅니다.");
             intent.putExtra("flag", "그룹신청");

@@ -112,12 +112,6 @@ public class CommunityAddActivity extends AppCompatActivity {
     //--EditData
     String state_txt = "";
     String write_id_txt = "";
-    String writer_name_txt = "";
-    String title_txt = "";
-    String contents_txt = "";
-    String write_date_txt = "";
-    String view_cnt = "";
-    String like_cnt = "";
     String boardkind = "";
     String category = "";
     String user_input_name = "";
@@ -134,7 +128,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     String ProfileUrl = "";
     String feed_thumnail_path = "";
     String ImgfileMaker = "";
-
+    String state = "";
 
     @SuppressLint({"LongLogTag", "UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -160,6 +154,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
+        state = shardpref.getString("state", "");
 
         place_id = shardpref.getString("place_id", "");
         feed_id = shardpref.getString("place_id", "");
@@ -168,92 +163,37 @@ public class CommunityAddActivity extends AppCompatActivity {
         state_txt = shardpref.getString("state", "");
         write_id_txt = shardpref.getString("write_id", "");
         write_nickname = shardpref.getString("write_nickname", "");
-        dlog.i("--------------------------WorkCommunityWriteAcitivy--------------------------");
+
         user_input_name = USER_INFO_NAME;
-        if (write_id_txt.equals(USER_INFO_ID)) {
-            if (state_txt.equals("EditFeed")) {
-                //작성자의 글 수정
-                feed_id = shardpref.getString("feed_id", "");
-                writer_name_txt = shardpref.getString("writer_name", "");
-                title_txt = shardpref.getString("title", "");
-                contents_txt = shardpref.getString("contents", "");
-                write_date_txt = shardpref.getString("write_date", "");
-                view_cnt = shardpref.getString("view_cnt", "");
-                like_cnt = shardpref.getString("like_cnt", "");
-                boardkind = shardpref.getString("boardkind", "");
-                category = shardpref.getString("category", "");
-                feed_img = shardpref.getString("feed_img", "");
-
-                binding.writeTitle.setText(title_txt);
-                binding.writeContents.setText(contents_txt);
-                binding.addcommunityBtn.setText("수정");
-                binding.selectBoardkindTxt.setText(boardkind);
-                binding.selectCategoryTxt.setText("#" + category);
-
-                if (!writer_name_txt.equals(write_nickname)) {
-                    //닉네임x
-                    nickname_select = 1;
-                } else {
-                    //닉네임o
-                    nickname_select = 2;
-                }
-                if (nickname_select == 1) {
-                    user_input_name = USER_INFO_NAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                } else {
-                    user_input_name = USER_INFO_NICKNAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-                }
-
-                Glide.with(mContext).load(feed_img)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(binding.limitImg);
-
-                if (write_nickname.equals(USER_INFO_NICKNAME)) {
-                    //닉네임으로 선택하고 작성했을 경우
-                    nickname_select = 2;
-                    user_input_name = USER_INFO_NICKNAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-                } else if (write_nickname.equals(USER_INFO_NAME)) {
-                    nickname_select = 1;
-                    user_input_name = USER_INFO_NAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                }
-            }
-        } else {
-            user_input_name = USER_INFO_NAME;
-            dlog.i("user_input_name : " + user_input_name);
-            binding.addcommunityBtn.setText("등록");
-        }
-//        if(state_txt.isEmpty() || state_txt.equals("ViewFeed")){
-//            //처음에는 피드 강제 설정
-//            FeedSelectActivity feedselect = new FeedSelectActivity();
-//            feedselect.show(getSupportFragmentManager(), "FeedSelectActivity");
-//        }
-        dlog.i("1 state_txt : " + state_txt);
-        dlog.i("1 state_txt : " + state_txt);
-        dlog.i("place_id : " + place_id);
-        dlog.i("feed_id : " + feed_id);
-        dlog.i("writer_name_txt : " + writer_name_txt);
-        dlog.i("title_txt : " + title_txt);
-        dlog.i("contents_txt : " + contents_txt);
-        dlog.i("write_date_txt : " + write_date_txt);
-        dlog.i("view_cnt : " + view_cnt);
-        dlog.i("like_cnt : " + like_cnt);
-        dlog.i("boardkind : " + boardkind);
-        dlog.i("category : " + category);
-        dlog.i("write_id_txt : " + write_id_txt);
-        dlog.i("write_nickname : " + write_nickname);
-        dlog.i("USER_INFO_NAME : " + USER_INFO_NAME);
-        dlog.i("USER_INFO_NICKNAME : " + USER_INFO_NICKNAME);
-        dlog.i("2 state_txt : " + state_txt);
-        dlog.i("DataCheck() : " + DataCheck());
-        dlog.i("feed_img : " + feed_img);
+        binding.addcommunityBtn.setText("등록");
         feed_thumnail_path = feed_img;
+
+        dlog.i("user_input_name : " + user_input_name);
+        dlog.i("state : " + state);
         //-------------------------------
+        //-- 게시글 수정할때
+        feed_id          = shardpref.getString("feed_id","");
+        String place_id         = shardpref.getString("place_id","");
+        String title            = shardpref.getString("title","");
+        String contents         = shardpref.getString("contents","");
+        String writer_id        = shardpref.getString("writer_id","");
+        String writer_name      = shardpref.getString("writer_name","");
+        String writer_img_path  = shardpref.getString("writer_img_path","");
+        String feed_img_path    = shardpref.getString("feed_img_path","");
+        String jikgup           = shardpref.getString("jikgup","");
+        String view_cnt         = shardpref.getString("view_cnt","");
+        String comment_cnt      = shardpref.getString("comment_cnt","");
+        String category         = shardpref.getString("category","");
+
+        binding.selectCategoryTxt.setText(category);
+        binding.writeTitle.setText(title);
+        binding.writeContents.setText(contents);
+        Glide.with(mContext).load(feed_img_path)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.limitImg);
+
         setBtnEvent();
-        dlog.i("-----------------------------------------------------------------------------");
     }
 
     @Override
@@ -264,19 +204,18 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     private void setBtnEvent() {
-
-
-        binding.selectBoardkindTxt.setOnClickListener(v -> {
-            shardpref.putInt("SelectKind", 0);
-            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
-            ssb.show(getSupportFragmentManager(), "selectBoardkindTxt");
-            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
-                @Override
-                public void onItemClick(View v, String category) {
-                    binding.selectBoardkindTxt.setText(category);
-                }
-            });
-        });
+//        binding.selectBoardkindTxt.setOnClickListener(v -> {
+//            shardpref.putInt("SelectKind", 0);
+//            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
+//            ssb.show(getSupportFragmentManager(), "selectBoardkindTxt");
+//            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(View v, String category) {
+//                    binding.selectBoardkindTxt.setText(category);
+//                }
+//            });
+//        });
+        binding.selectBoardkindTxt.setText("자유게시판");
         binding.selectCategoryTxt.setOnClickListener(v -> {
             shardpref.putInt("SelectKind", 1);
             SelectStringBottomSheet ssb = new SelectStringBottomSheet();
@@ -298,7 +237,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         binding.addcommunityBtn.setOnClickListener(v -> {
             dlog.i("3 state_txt : " + state_txt);
             if (DataCheck()) {
-                if (state_txt.equals("EditFeed")) {
+                if (state_txt.equals("EditCommunity")) {
                     EditStroeNoti();
                 } else {
                     AddFeedCommunity();
@@ -440,7 +379,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, title, content, "", ProfileUrl, "", "", "", category, boardkind);
+        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -490,6 +429,18 @@ public class CommunityAddActivity extends AppCompatActivity {
         shardpref.remove("like_cnt");
         shardpref.remove("categoryItem");
         shardpref.remove("TopFeed");
+
+        shardpref.remove("place_id");
+        shardpref.remove("title");
+        shardpref.remove("contents");
+        shardpref.remove("writer_id");
+        shardpref.remove("writer_name");
+        shardpref.remove("writer_img_path");
+        shardpref.remove("feed_img_path");
+        shardpref.remove("jikgup");
+        shardpref.remove("view_cnt");
+        shardpref.remove("comment_cnt");
+        shardpref.remove("category");
 
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
         intent.putExtra("data", "작성을 종료하시겠습니까?\n편집한 내용이 저장되지 않습니다.");

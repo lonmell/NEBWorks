@@ -138,4 +138,10 @@ public class OwnerCommunityAdapter  extends RecyclerView.Adapter<OwnerCommunityA
         return position;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterList(ArrayList<SecondTapCommunityData.SecondTapCommunityData_list> filteredList) {
+        mData = filteredList;
+        notifyDataSetChanged();
+    }
+
 }
