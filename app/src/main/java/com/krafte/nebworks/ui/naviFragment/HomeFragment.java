@@ -218,13 +218,20 @@ public class HomeFragment extends Fragment {
         });
 
         binding.homeMenu01.setOnClickListener(v -> {
+            dlog.i("직원관리");
             pm.MemberManagement(mContext);
         });
         binding.homeMenu02.setOnClickListener(v -> {
+            dlog.i("결재현황");
             pm.Approval(mContext);
         });
         binding.homeMenu03.setOnClickListener(v -> {
+            dlog.i("급여관리");
             pm.PayManagement(mContext);
+        });
+        binding.homeMenu04.setOnClickListener(v -> {
+            dlog.i("근로계약서 전체 관리");
+            pm.ContractFragment(mContext);
         });
     }
 

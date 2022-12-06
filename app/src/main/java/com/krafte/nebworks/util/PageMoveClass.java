@@ -14,6 +14,7 @@ import com.krafte.nebworks.ui.community.OwnerFeedDetailActivity;
 import com.krafte.nebworks.ui.contract.AddContractPage01;
 import com.krafte.nebworks.ui.contract.AddContractPage02;
 import com.krafte.nebworks.ui.contract.AddContractPage03;
+import com.krafte.nebworks.ui.contract.AddContractPage04;
 import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
 import com.krafte.nebworks.ui.feed.FeedAddActivity;
 import com.krafte.nebworks.ui.feed.FeedDetailActivity;
@@ -519,6 +520,13 @@ public class PageMoveClass implements MovePage {
     @Override
     public void AddContractPage03(Context context) {
         Intent intent = new Intent(context, AddContractPage03.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void AddContractPage04(Context context) {
+        Intent intent = new Intent(context, AddContractPage04.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

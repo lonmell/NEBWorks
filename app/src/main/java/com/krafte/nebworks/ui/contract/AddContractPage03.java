@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.dataInterface.ContractBasicInterface;
 import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd03Binding;
 import com.krafte.nebworks.ui.WebViewActivity;
@@ -49,6 +51,8 @@ public class AddContractPage03 extends AppCompatActivity {
     // shared 저장값
     PreferenceHelper shardpref;
     String place_id = "";
+    String worker_id = "";
+    String USER_INFO_ID = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -76,6 +80,11 @@ public class AddContractPage03 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
+        shardpref       = new PreferenceHelper(mContext);
+        place_id        = shardpref.getString("place_id","0");
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
+        worker_id       = shardpref.getString("worker_id","0");
+
         setBtnEvent();
 
         //basic setting
@@ -122,54 +131,6 @@ public class AddContractPage03 extends AppCompatActivity {
         binding.sizeBox03.setOnClickListener(v -> {
             ChangeSize010203(3);
         });
-    }
-
-    private void ChangeSelect0102(int i){
-        binding.select01.setBackgroundResource(R.drawable.default_gray_round);
-        binding.select01Round.setBackgroundResource(R.drawable.select_empty_round);
-        binding.select01tv.setTextColor(Color.parseColor("#000000"));
-
-        binding.select02.setBackgroundResource(R.drawable.default_gray_round);
-        binding.select02Round.setBackgroundResource(R.drawable.select_empty_round);
-        binding.select02tv.setTextColor(Color.parseColor("#000000"));
-        select0102 = i;
-        if(i == 1){
-            binding.select01.setBackgroundResource(R.drawable.default_select_round);
-            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round);
-            binding.select01tv.setTextColor(Color.parseColor("#6395EC"));
-        }else if(i == 2){
-            binding.select02.setBackgroundResource(R.drawable.default_select_round);
-            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
-            binding.select02tv.setTextColor(Color.parseColor("#6395EC"));
-
-        }
-    }
-    private void ChangeSize010203(int i){
-        binding.sizeBox01.setBackgroundResource(R.drawable.default_gray_round);
-        binding.sizeRound01.setBackgroundResource(R.drawable.select_empty_round);
-        binding.sizetv01.setTextColor(Color.parseColor("#000000"));
-
-        binding.sizeBox01.setBackgroundResource(R.drawable.default_gray_round);
-        binding.sizeRound01.setBackgroundResource(R.drawable.select_empty_round);
-        binding.sizetv01.setTextColor(Color.parseColor("#000000"));
-
-        binding.sizeBox01.setBackgroundResource(R.drawable.default_gray_round);
-        binding.sizeRound01.setBackgroundResource(R.drawable.select_empty_round);
-        binding.sizetv01.setTextColor(Color.parseColor("#000000"));
-        size010203 = i;
-        if(i == 1){
-            binding.sizeBox01.setBackgroundResource(R.drawable.default_select_round);
-            binding.sizeRound01.setBackgroundResource(R.drawable.ic_full_round);
-            binding.sizetv01.setTextColor(Color.parseColor("#6395EC"));
-        }else if(i == 2){
-            binding.sizeBox02.setBackgroundResource(R.drawable.default_select_round);
-            binding.sizeRound02.setBackgroundResource(R.drawable.ic_full_round);
-            binding.sizetv02.setTextColor(Color.parseColor("#6395EC"));
-        }else if(i == 3){
-            binding.sizeBox03.setBackgroundResource(R.drawable.default_select_round);
-            binding.sizeRound03.setBackgroundResource(R.drawable.ic_full_round);
-            binding.sizetv03.setTextColor(Color.parseColor("#6395EC"));
-        }
 
         binding.input02.addTextChangedListener(new TextWatcher() {
             @Override
@@ -204,10 +165,60 @@ public class AddContractPage03 extends AppCompatActivity {
 
             }
         });
-        
+
         binding.next.setOnClickListener(v -> {
-            DataCheck();
+            if(DataCheck()){
+                SaveContractBasic();
+            }
         });
+    }
+
+    private void ChangeSelect0102(int i){
+        binding.select01.setBackgroundResource(R.drawable.default_gray_round);
+        binding.select01Round.setBackgroundResource(R.drawable.select_empty_round);
+        binding.select01tv.setTextColor(Color.parseColor("#000000"));
+
+        binding.select02.setBackgroundResource(R.drawable.default_gray_round);
+        binding.select02Round.setBackgroundResource(R.drawable.select_empty_round);
+        binding.select02tv.setTextColor(Color.parseColor("#000000"));
+        select0102 = i;
+        if(i == 1){
+            binding.select01.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round);
+            binding.select01tv.setTextColor(Color.parseColor("#6395EC"));
+        }else if(i == 2){
+            binding.select02.setBackgroundResource(R.drawable.default_select_round);
+            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
+            binding.select02tv.setTextColor(Color.parseColor("#6395EC"));
+
+        }
+    }
+    private void ChangeSize010203(int i){
+        binding.sizeBox01.setBackgroundResource(R.drawable.default_gray_round);
+        binding.sizeRound01.setBackgroundResource(R.drawable.select_empty_round);
+        binding.sizetv01.setTextColor(Color.parseColor("#000000"));
+
+        binding.sizeBox02.setBackgroundResource(R.drawable.default_gray_round);
+        binding.sizeRound02.setBackgroundResource(R.drawable.select_empty_round);
+        binding.sizetv02.setTextColor(Color.parseColor("#000000"));
+
+        binding.sizeBox03.setBackgroundResource(R.drawable.default_gray_round);
+        binding.sizeRound03.setBackgroundResource(R.drawable.select_empty_round);
+        binding.sizetv03.setTextColor(Color.parseColor("#000000"));
+        size010203 = i;
+        if(i == 1){
+            binding.sizeBox01.setBackgroundResource(R.drawable.default_select_round);
+            binding.sizeRound01.setBackgroundResource(R.drawable.ic_full_round);
+            binding.sizetv01.setTextColor(Color.parseColor("#6395EC"));
+        }else if(i == 2){
+            binding.sizeBox02.setBackgroundResource(R.drawable.default_select_round);
+            binding.sizeRound02.setBackgroundResource(R.drawable.ic_full_round);
+            binding.sizetv02.setTextColor(Color.parseColor("#6395EC"));
+        }else if(i == 3){
+            binding.sizeBox03.setBackgroundResource(R.drawable.default_select_round);
+            binding.sizeRound03.setBackgroundResource(R.drawable.ic_full_round);
+            binding.sizetv03.setTextColor(Color.parseColor("#6395EC"));
+        }
     }
     //이미지 업로드에 필요한 소스 START
     @SuppressLint("LongLogTag")
@@ -242,8 +253,8 @@ public class AddContractPage03 extends AppCompatActivity {
         dlog.i("owner_name : "          + owner_name);
         dlog.i("owner_registrnum : "    + owner_registrnum);
         dlog.i("zipcode : "             + zipcode);
-        dlog.i("owner_registrnum : "    + owner_registrnum);
-        dlog.i("size010203 : "          + size010203);
+        dlog.i("owner_address : "       + owner_address);
+        dlog.i("owner_address_detail : "+ owner_address_detail);
         dlog.i("owner_phone : "         + owner_phone);
         dlog.i("owner_email : "         + owner_email);
         dlog.i("-----DataCheck-----");
@@ -303,9 +314,10 @@ public class AddContractPage03 extends AppCompatActivity {
                         dlog.i("invoice_apply_dt : " + Response.getJSONObject(0).getString("invoice_apply_dt"));
 
                         if (tax_type.equals("국세청에 등록되지 않은 사업자등록번호입니다.")) {
+                            Toast_Nomal("국세청에 등록되지 않은 사업자등록번호입니다.");
                             binding.registrNumState.setText("국세청에 등록되지 않은 사업자등록번호입니다.");
                             binding.registrNumState.setTextColor(R.color.red);
-                            registrTF = false;
+                            registrTF = true;//--테스트 후 false로
                         }else{
                             registrTF = true;
                         }
@@ -322,9 +334,47 @@ public class AddContractPage03 extends AppCompatActivity {
             }
 
         });
-        return registrTF;
+//        return tax_type.equals("국세청에 등록되지 않은 사업자등록번호입니다.");
+        return true;
     }
 
+    public void SaveContractBasic() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractBasicInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractBasicInterface api = retrofit.create(ContractBasicInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID, worker_id, String.valueOf(select0102), owner_name
+                , owner_registrnum, zipcode, owner_address, owner_address_detail, String.valueOf(size010203), owner_phone, owner_email);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("SaveWorkPartTime Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("SaveWorkPartTime jsonResponse length : " + response.body().length());
+                            dlog.i("SaveWorkPartTime jsonResponse : " + response.body());
+                            try {
+                                    String contract_id = response.body();
+                                    shardpref.putString("contract_id",contract_id);
+                                    pm.AddContractPage04(mContext);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));

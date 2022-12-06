@@ -100,6 +100,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                 }
             }
             holder.item_total.setOnClickListener(v -> {
+                shardpref.putString("worker_id",item.getUser_id());
                 if(item.getContract_yn().equals("0")){
                    pm.AddContractPage01(mContext);
                 }else if(item.getContract_yn().equals("1")){

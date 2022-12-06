@@ -3,9 +3,11 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,8 +23,8 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.util.ArrayList;
 
-public class ListStringAdapter extends RecyclerView.Adapter<ListStringAdapter.ViewHolder> {
-    private static final String TAG = "ListStringAdapter";
+public class YoilStringAdapter extends RecyclerView.Adapter<YoilStringAdapter.ViewHolder> {
+    private static final String TAG = "YoilStringAdapter";
     private ArrayList<StringData.StringData_list> mData = null;
     Context mContext;
     PageMoveClass pm = new PageMoveClass();
@@ -39,24 +41,24 @@ public class ListStringAdapter extends RecyclerView.Adapter<ListStringAdapter.Vi
         void onItemClick(View v, int position);
     }
 
-    private OnItemClickListener mListener = null;
+    private YoilStringAdapter.OnItemClickListener mListener = null;
 
-    public void setOnItemClickListener(ListStringAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(YoilStringAdapter.OnItemClickListener listener) {
         this.mListener = listener;
     }
 
-    public ListStringAdapter(Context context, ArrayList<StringData.StringData_list> data) {
+    public YoilStringAdapter(Context context, ArrayList<StringData.StringData_list> data) {
         this.mData = data;
         this.mContext = context;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull
     @Override
-    public ListStringAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public YoilStringAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.list_string_item, parent, false);
-        ListStringAdapter.ViewHolder vh = new ListStringAdapter.ViewHolder(view);
+        View view = inflater.inflate(R.layout.list_string_yoil_item, parent, false);
+        YoilStringAdapter.ViewHolder vh = new YoilStringAdapter.ViewHolder(view);
 
         if (context instanceof Activity)
             activity = (Activity) context;
@@ -66,11 +68,20 @@ public class ListStringAdapter extends RecyclerView.Adapter<ListStringAdapter.Vi
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ListStringAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull YoilStringAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         StringData.StringData_list item = mData.get(position);
         try{
             dlog.i("mData item : " + mData.get(position));
             holder.item_name.setText(item.getItem());
+
+            if(item.getItem().equals("토")){
+                holder.item_name.setTextColor(Color.parseColor("#1762E6"));
+            }else if(item.getItem().equals("일")){
+                holder.item_name.setTextColor(Color.parseColor("#DD6540"));
+            }
+            holder.total_item.setOnClickListener(v -> {
+
+            });
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }
@@ -83,12 +94,13 @@ public class ListStringAdapter extends RecyclerView.Adapter<ListStringAdapter.Vi
     } // 아이템 뷰를 저장하는 뷰홀더 클래스
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
+        LinearLayout total_item;
         TextView item_name;
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            item_name = itemView.findViewById(R.id.item_name);
+            item_name   = itemView.findViewById(R.id.item_name);
+            total_item  = itemView.findViewById(R.id.total_item);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

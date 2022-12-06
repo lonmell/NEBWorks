@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -104,17 +103,6 @@ public class ContractFragmentActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-    }
-
-    CardView add_worktime_btn;
-    TextView addbtn_tv;
-    private void setAddBtnSetting() {
-        add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
-        addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
-        addbtn_tv.setText("게시글 작성");
-        add_worktime_btn.setOnClickListener(v -> {
-
-        });
     }
 
     @Override
