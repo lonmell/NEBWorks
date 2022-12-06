@@ -403,6 +403,9 @@ public class MainFragment extends AppCompatActivity {
             dlog.i("커뮤니티 Click!");
             binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
+        } else if(view.getId() == R.id.select_nav10) {
+            dlog.i("근로계약서 전체 관리");
+            pm.ContractFragment(mContext);
         }
 
     }

@@ -177,8 +177,6 @@ public class CommunityFragment extends Fragment {
         }
     }
 
-    CardView add_worktime_btn;
-    TextView addbtn_tv;
 
     private void setChildFragment(Fragment child) {
         FragmentTransaction childFt = getChildFragmentManager().beginTransaction();
@@ -190,6 +188,8 @@ public class CommunityFragment extends Fragment {
         }
     }
 
+    CardView add_worktime_btn;
+    TextView addbtn_tv;
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);

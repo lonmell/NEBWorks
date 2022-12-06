@@ -267,7 +267,17 @@ public class LoginActivity extends AppCompatActivity {
             shardpref.putString("findkind", "password");
             pm.SearchEmail(mContext);
         });
+
+
+        binding.ltdTv.setOnClickListener(v -> {
+            clickcnt++;
+            if(clickcnt == 3){
+                clickcnt = 0;
+
+            }
+        });
     }
+    int clickcnt = 0;
 
     private void LockTost() {
         Toast.makeText(mContext, "잠겨있는 기능입니다.", Toast.LENGTH_SHORT).show();

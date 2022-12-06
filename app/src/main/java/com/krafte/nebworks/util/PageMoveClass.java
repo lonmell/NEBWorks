@@ -11,6 +11,10 @@ import com.krafte.nebworks.ui.community.CommunityAddActivity;
 import com.krafte.nebworks.ui.community.MoreListCommunityActivity;
 import com.krafte.nebworks.ui.community.OwnerFeedAddActivity;
 import com.krafte.nebworks.ui.community.OwnerFeedDetailActivity;
+import com.krafte.nebworks.ui.contract.AddContractPage01;
+import com.krafte.nebworks.ui.contract.AddContractPage02;
+import com.krafte.nebworks.ui.contract.AddContractPage03;
+import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
 import com.krafte.nebworks.ui.feed.FeedAddActivity;
 import com.krafte.nebworks.ui.feed.FeedDetailActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
@@ -490,6 +494,35 @@ public class PageMoveClass implements MovePage {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    //--ui.contract
+    @Override
+    public void ContractFragment(Context context) {
+        Intent intent = new Intent(context, ContractFragmentActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void AddContractPage01(Context context) {
+        Intent intent = new Intent(context, AddContractPage01.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void AddContractPage02(Context context) {
+        Intent intent = new Intent(context, AddContractPage02.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void AddContractPage03(Context context) {
+        Intent intent = new Intent(context, AddContractPage03.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 
     //--ui.BottomNavi
     @Override

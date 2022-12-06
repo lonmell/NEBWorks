@@ -27,6 +27,15 @@ public interface MovePage {
 
     void OwnerFeedDetail(Context context);
 
+    //--ui.contract
+    void ContractFragment(Context context);
+
+    void AddContractPage01(Context context);
+
+    void AddContractPage02(Context context);
+
+    void AddContractPage03(Context context);
+
     void MoreGo(Context context);
 
     void MoreBack(Context context);

@@ -161,6 +161,7 @@
                 android:textSize="13sp" />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/semu_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -326,6 +327,7 @@
                 android:textSize="13sp" />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/nomu_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"/>
