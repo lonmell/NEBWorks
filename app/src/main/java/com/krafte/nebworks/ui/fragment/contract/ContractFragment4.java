@@ -161,7 +161,9 @@ public class ContractFragment4 extends Fragment {
                                                 jsonObject.getString("kind"),
                                                 jsonObject.getString("join_date"),
                                                 jsonObject.getString("owner_sign_id"),
-                                                jsonObject.getString("worker_sign_id")
+                                                jsonObject.getString("worker_sign_id"),
+                                                jsonObject.getString("progress_pos"),
+                                                jsonObject.getString("contract_id")
                                         ));
                                     }
                                 }

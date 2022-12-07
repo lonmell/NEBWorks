@@ -3,18 +3,17 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.StringData;
+import com.krafte.nebworks.data.TermData;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -22,11 +21,10 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class YoilStringAdapter extends RecyclerView.Adapter<YoilStringAdapter.ViewHolder> {
-    private static final String TAG = "YoilStringAdapter";
-    private ArrayList<StringData.StringData_list> mData = null;
+public class ContractTermAdapter extends RecyclerView.Adapter<ContractTermAdapter.ViewHolder> {
+    private static final String TAG = "ContractTermAdapter";
+    private ArrayList<TermData.TermData_list> mData = null;
     Context mContext;
     PageMoveClass pm = new PageMoveClass();
     PreferenceHelper shardpref;
@@ -38,30 +36,28 @@ public class YoilStringAdapter extends RecyclerView.Adapter<YoilStringAdapter.Vi
     String USER_INFO_ID = "";
     Dlog dlog = new Dlog();
 
-    List<String> setYoil = new ArrayList<>();
-
     public interface OnItemClickListener {
-        void onItemClick(View v, int position, String yoil);
+        void onItemClick(View v, int position);
     }
 
-    private YoilStringAdapter.OnItemClickListener mListener = null;
+    private ContractTermAdapter.OnItemClickListener mListener = null;
 
-    public void setOnItemClickListener(YoilStringAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(ContractTermAdapter.OnItemClickListener listener) {
         this.mListener = listener;
     }
 
-    public YoilStringAdapter(Context context, ArrayList<StringData.StringData_list> data) {
+    public ContractTermAdapter(Context context, ArrayList<TermData.TermData_list> data) {
         this.mData = data;
         this.mContext = context;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull
     @Override
-    public YoilStringAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ContractTermAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.list_string_yoil_item, parent, false);
-        YoilStringAdapter.ViewHolder vh = new YoilStringAdapter.ViewHolder(view);
+        View view = inflater.inflate(R.layout.term_item, parent, false);
+        ContractTermAdapter.ViewHolder vh = new ContractTermAdapter.ViewHolder(view);
 
         if (context instanceof Activity)
             activity = (Activity) context;
@@ -71,30 +67,17 @@ public class YoilStringAdapter extends RecyclerView.Adapter<YoilStringAdapter.Vi
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull YoilStringAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        StringData.StringData_list item = mData.get(position);
-        try {
+    public void onBindViewHolder(@NonNull ContractTermAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        TermData.TermData_list item = mData.get(position);
+        try{
             dlog.i("mData item : " + mData.get(position));
-            holder.item_name.setText(item.getItem());
-
-            if (item.getItem().equals("토")) {
-                holder.item_name.setTextColor(Color.parseColor("#1762E6"));
-            } else if (item.getItem().equals("일")) {
-                holder.item_name.setTextColor(Color.parseColor("#DD6540"));
-            }
-            holder.total_item.setOnClickListener(v -> {
-                if (setYoil.contains(item.getItem())) {
-                    holder.total_item.setBackgroundResource(R.drawable.grayback_gray_round);
-                    setYoil.remove(item.getItem());
-                } else {
-                    holder.total_item.setBackgroundResource(R.drawable.default_select_round);
-                    setYoil.add(item.getItem());
-                }
+            holder.term_tv.setText(item.getTerm());
+            holder.del_term01.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position, String.valueOf(setYoil));
+                    mListener.onItemClick(v,position);
                 }
             });
-        } catch (Exception e) {
+        }catch (Exception e){
             dlog.i("Exception : " + e);
         }
 
@@ -106,35 +89,37 @@ public class YoilStringAdapter extends RecyclerView.Adapter<YoilStringAdapter.Vi
     } // 아이템 뷰를 저장하는 뷰홀더 클래스
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout total_item;
-        TextView item_name;
+
+        TextView term_tv;
+        RelativeLayout del_term01;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            item_name = itemView.findViewById(R.id.item_name);
-            total_item = itemView.findViewById(R.id.total_item);
+            term_tv = itemView.findViewById(R.id.term_tv);
+            del_term01 = itemView.findViewById(R.id.del_term01);
 
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            place_id = shardpref.getString("place_id", "");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
+            place_id = shardpref.getString("place_id","");
 
             dlog.DlogContext(mContext);
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
+
                 }
             });
         }
     }
 
-    public void addItem(StringData.StringData_list data) {
+    public void addItem(TermData.TermData_list data) {
         mData.add(data);
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void filterList(ArrayList<StringData.StringData_list> filteredList) {
+    public void filterList(ArrayList<TermData.TermData_list> filteredList) {
         mData = filteredList;
         notifyDataSetChanged();
     }

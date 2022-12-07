@@ -116,7 +116,7 @@ public class AddContractPage03 extends AppCompatActivity {
         });
 
         //주소
-        binding.input03.setOnClickListener(v -> {
+        binding.searchBtn.setOnClickListener(v -> {
             Intent i = new Intent(this, WebViewActivity.class);
             startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
         });
@@ -375,6 +375,7 @@ public class AddContractPage03 extends AppCompatActivity {
             }
         });
     }
+
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
@@ -388,4 +389,5 @@ public class AddContractPage03 extends AppCompatActivity {
         toast.setView(layout);
         toast.show();
     }
+
 }

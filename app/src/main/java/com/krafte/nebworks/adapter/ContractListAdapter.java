@@ -104,10 +104,38 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                 if(item.getContract_yn().equals("0")){
                    pm.AddContractPage01(mContext);
                 }else if(item.getContract_yn().equals("1")){
-                    if(item.getWorker_sign_id().isEmpty() || item.getWorker_sign_id().equals("null")){
-                       dlog.i("서명대기중");
-                    }else if(!item.getWorker_sign_id().isEmpty() && !item.getWorker_sign_id().isEmpty()){
-                        dlog.i("완료");
+//                    if(item.getWorker_sign_id().isEmpty() || item.getWorker_sign_id().equals("null")){
+//                       dlog.i("서명대기중");
+//                    }else if(!item.getWorker_sign_id().isEmpty() && !item.getWorker_sign_id().isEmpty()){
+//                        dlog.i("완료");
+//                    }
+                    shardpref.putString("contract_id",item.getContract_id());
+                    /* item.getContract_id()
+                    *   현재 진행중인 페이지
+                        1 - 사업장 기본사항
+                        2 - 근무 기본사항
+                        3 - 급여 기본사항
+                        4 - 특약
+                        5 - 근로자 인적사항
+                        6 - 서명
+                    * */
+                    if(item.getProgress_pos().equals("1")){
+                        //근무 기본사항 부터
+                        pm.AddContractPage04(mContext);
+                    }else if(item.getProgress_pos().equals("2")){
+                        //급여 기본사항 부터
+                        pm.AddContractPage05(mContext);
+                    }else if(item.getProgress_pos().equals("3")){
+                        //특약 부터
+                        pm.AddContractPage06(mContext);
+                    }else if(item.getProgress_pos().equals("4")){
+                        //근로자 인적사항 부터
+                        pm.AddContractPage07(mContext);
+                    }else if(item.getProgress_pos().equals("5")){
+                        //서명 부터
+                        pm.AddContractPage08(mContext);
+                    }else if(item.getProgress_pos().equals("6")){
+                        //해당 근로계약서 전체 상세 페이지로
                     }
                 }
             });

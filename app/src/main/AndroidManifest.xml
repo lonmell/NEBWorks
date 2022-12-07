@@ -207,6 +207,11 @@
         <activity android:name=".ui.contract.AddContractPage02"/>
         <activity android:name=".ui.contract.AddContractPage03"/>
         <activity android:name=".ui.contract.AddContractPage04"/>
+        <activity android:name=".ui.contract.AddContractPage05"/>
+        <activity android:name=".ui.contract.AddContractPage06"/>
+        <activity android:name=".ui.contract.AddContractPage07"/>
+        <activity android:name=".ui.contract.AddContractPage08"/>
+        <activity android:name=".ui.contract.AddContractPage09"/>
 
         <!-- workstatus-->
         <activity android:name=".ui.workstatus.AddWorkPartActivity" />
@@ -308,6 +313,10 @@
         <activity
             android:name=".ui.WebViewActivity"
             android:theme="@android:style/Theme.Dialog"/>
+
+        <activity
+            android:name=".pop.SignPopActivity"
+            android:theme="@android:style/Theme.Dialog" />
     </application>
 
 </manifest>

@@ -38,6 +38,16 @@ public interface MovePage {
 
     void AddContractPage04(Context context);
 
+    void AddContractPage05(Context context);
+
+    void AddContractPage06(Context context);
+
+    void AddContractPage07(Context context);
+
+    void AddContractPage08(Context context);
+
+    void AddContractPage09(Context context);
+
     void MoreGo(Context context);
 
     void MoreBack(Context context);

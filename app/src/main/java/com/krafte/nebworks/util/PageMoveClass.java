@@ -15,6 +15,11 @@ import com.krafte.nebworks.ui.contract.AddContractPage01;
 import com.krafte.nebworks.ui.contract.AddContractPage02;
 import com.krafte.nebworks.ui.contract.AddContractPage03;
 import com.krafte.nebworks.ui.contract.AddContractPage04;
+import com.krafte.nebworks.ui.contract.AddContractPage05;
+import com.krafte.nebworks.ui.contract.AddContractPage06;
+import com.krafte.nebworks.ui.contract.AddContractPage07;
+import com.krafte.nebworks.ui.contract.AddContractPage08;
+import com.krafte.nebworks.ui.contract.AddContractPage09;
 import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
 import com.krafte.nebworks.ui.feed.FeedAddActivity;
 import com.krafte.nebworks.ui.feed.FeedDetailActivity;
@@ -531,6 +536,42 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+    @Override
+    public void AddContractPage05(Context context) {
+        Intent intent = new Intent(context, AddContractPage05.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void AddContractPage06(Context context) {
+        Intent intent = new Intent(context, AddContractPage06.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void AddContractPage07(Context context) {
+        Intent intent = new Intent(context, AddContractPage07.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void AddContractPage08(Context context) {
+        Intent intent = new Intent(context, AddContractPage08.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void AddContractPage09(Context context) {
+        Intent intent = new Intent(context, AddContractPage09.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
 
     //--ui.BottomNavi
     @Override

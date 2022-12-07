@@ -510,7 +510,7 @@ public class PlaceEditActivity extends AppCompatActivity {
                 if (!vacation_select.isEmpty()) {
                     binding.inputbox07.setText(vacation_select);
                 } else {
-                    binding.inputbox07.setText("매월 초");
+                    binding.inputbox07.setText("없음");
                 }
             }
         });

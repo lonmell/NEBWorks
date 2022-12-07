@@ -13,10 +13,12 @@ public class ContractData {
         String join_date;
         String owner_sign_id;
         String worker_sign_id;
+        String progress_pos;
+        String contract_id;
 
         public ContractData_list(String id, String place_id, String user_id,
                                  String name, String contract_yn, String img_path, String jumin,
-                                 String kind, String join_date, String owner_sign_id, String worker_sign_id) {
+                                 String kind, String join_date, String owner_sign_id, String worker_sign_id, String progress_pos, String contract_id) {
             this.id = id;
             this.place_id = place_id;
             this.user_id = user_id;
@@ -28,6 +30,8 @@ public class ContractData {
             this.join_date = join_date;
             this.owner_sign_id = owner_sign_id;
             this.worker_sign_id = worker_sign_id;
+            this.progress_pos = progress_pos;
+            this.contract_id = contract_id;
         }
 
         public String getId() {
@@ -116,6 +120,22 @@ public class ContractData {
 
         public void setWorker_sign_id(String worker_sign_id) {
             this.worker_sign_id = worker_sign_id;
+        }
+
+        public String getProgress_pos() {
+            return progress_pos;
+        }
+
+        public void setProgress_pos(String progress_pos) {
+            this.progress_pos = progress_pos;
+        }
+
+        public String getContract_id() {
+            return contract_id;
+        }
+
+        public void setContract_id(String contract_id) {
+            this.contract_id = contract_id;
         }
     }
 }

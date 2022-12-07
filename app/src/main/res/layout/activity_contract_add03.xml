@@ -71,7 +71,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center"
                 android:text="사업자 구분"
-                android:textColor="#949494"
+                android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -151,7 +151,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center"
                 android:text="사업주 명"
-                android:textColor="#949494"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
 
@@ -178,7 +178,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center"
                 android:text=""
-                android:textColor="#949494"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
             <TextView
@@ -188,7 +188,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center"
                 android:text="사업자번호"
-                android:textColor="#949494"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
 
@@ -220,7 +220,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center"
                 android:text="주소입력"
-                android:textColor="#949494"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
             <TextView
@@ -236,26 +236,46 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:textColor="#000000"
+                android:visibility="gone"
                 android:textColorHint="#a9a9a9"
                 android:textSize="16sp"
                 tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
-
-            <EditText
-                android:id="@+id/input04"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/default_gray_round"
-                android:fontFamily="@font/inter_regular"
-                android:hint="기본주소"
-                android:inputType="text"
-                android:paddingStart="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#a9a9a9"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck" />
+                android:layout_marginEnd="15dp">
+
+                <EditText
+                    android:id="@+id/input04"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/search_btn"
+                    android:background="@drawable/default_gray_round"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="기본주소"
+                    android:inputType="text"
+                    android:paddingStart="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#a9a9a9"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/search_btn"
+                    android:layout_width="102dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:text="주소검색"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:textColor="#54585A"
+                    android:background="@drawable/grayback_gray_round" />
+            </RelativeLayout>
+
 
             <EditText
                 android:id="@+id/input05"
@@ -281,7 +301,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
                 android:text="사업장 규모"
-                android:textColor="#949494"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -390,7 +410,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
                 android:text="휴대폰 번호"
-                android:textColor="#949494"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
             <EditText
@@ -417,7 +437,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
                 android:text="이메일 주소"
-                android:textColor="#949494"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
             <EditText
