@@ -203,6 +203,8 @@
 
         <!--contract-->
         <activity android:name=".ui.contract.ContractFragmentActivity"/>
+
+        <!--관리자-->
         <activity android:name=".ui.contract.AddContractPage01"/>
         <activity android:name=".ui.contract.AddContractPage02"/>
         <activity android:name=".ui.contract.AddContractPage03"/>
@@ -212,6 +214,10 @@
         <activity android:name=".ui.contract.AddContractPage07"/>
         <activity android:name=".ui.contract.AddContractPage08"/>
         <activity android:name=".ui.contract.AddContractPage09"/>
+
+        <!--근로자-->
+        <activity android:name=".ui.contract.ContractWorkerAccept"/>
+        <activity android:name=".ui.contract.ContractWorkerSignActivity"/>
 
         <!-- workstatus-->
         <activity android:name=".ui.workstatus.AddWorkPartActivity" />
@@ -317,6 +323,10 @@
         <activity
             android:name=".pop.SignPopActivity"
             android:theme="@android:style/Theme.Dialog" />
+
+        <activity
+            android:name=".pop.LawPopActivity" />
+
     </application>
 
 </manifest>

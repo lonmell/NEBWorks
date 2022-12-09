@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.contract;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,6 +28,9 @@ import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,7 +59,6 @@ public class AddContractPage07 extends AppCompatActivity {
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     RetrofitConnect rc = new RetrofitConnect();
-
 
     //Param
     String name = "";

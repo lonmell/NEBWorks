@@ -21,6 +21,8 @@ import com.krafte.nebworks.ui.contract.AddContractPage07;
 import com.krafte.nebworks.ui.contract.AddContractPage08;
 import com.krafte.nebworks.ui.contract.AddContractPage09;
 import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
+import com.krafte.nebworks.ui.contract.ContractWorkerAccept;
+import com.krafte.nebworks.ui.contract.ContractWorkerSignActivity;
 import com.krafte.nebworks.ui.feed.FeedAddActivity;
 import com.krafte.nebworks.ui.feed.FeedDetailActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
@@ -572,6 +574,20 @@ public class PageMoveClass implements MovePage {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    @Override
+    public void ContractWorkerAccept(Context context) {
+        Intent intent = new Intent(context, ContractWorkerAccept.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void ContractWorkerSign(Context context) {
+        Intent intent = new Intent(context, ContractWorkerSignActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 
     //--ui.BottomNavi
     @Override

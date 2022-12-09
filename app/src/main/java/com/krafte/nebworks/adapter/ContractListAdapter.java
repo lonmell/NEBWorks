@@ -36,7 +36,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
     RetrofitConnect rc = new RetrofitConnect();
     DateCurrent dc = new DateCurrent();
     Activity activity;
-
+    String USER_INFO_AUTH = "";
     private boolean animationsLocked = false;
     private boolean delayEnterAnimation = true;
 
@@ -119,24 +119,30 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                         5 - 근로자 인적사항
                         6 - 서명
                     * */
-                    if(item.getProgress_pos().equals("1")){
-                        //근무 기본사항 부터
-                        pm.AddContractPage04(mContext);
-                    }else if(item.getProgress_pos().equals("2")){
-                        //급여 기본사항 부터
-                        pm.AddContractPage05(mContext);
-                    }else if(item.getProgress_pos().equals("3")){
-                        //특약 부터
-                        pm.AddContractPage06(mContext);
-                    }else if(item.getProgress_pos().equals("4")){
-                        //근로자 인적사항 부터
-                        pm.AddContractPage07(mContext);
-                    }else if(item.getProgress_pos().equals("5")){
-                        //서명 부터
-                        pm.AddContractPage08(mContext);
-                    }else if(item.getProgress_pos().equals("6")){
-                        //해당 근로계약서 전체 상세 페이지로
+                    if(USER_INFO_AUTH.equals("0")){
+                        if(item.getProgress_pos().equals("1")){
+                            //근무 기본사항 부터
+                            pm.AddContractPage04(mContext);
+                        }else if(item.getProgress_pos().equals("2")){
+                            //급여 기본사항 부터
+                            pm.AddContractPage05(mContext);
+                        }else if(item.getProgress_pos().equals("3")){
+                            //특약 부터
+                            pm.AddContractPage06(mContext);
+                        }else if(item.getProgress_pos().equals("4")){
+                            //근로자 인적사항 부터
+                            pm.AddContractPage07(mContext);
+                        }else if(item.getProgress_pos().equals("5")){
+                            //서명 부터
+                            pm.AddContractPage08(mContext);
+                        }else if(item.getProgress_pos().equals("6")){
+                            //해당 근로계약서 전체 상세 페이지로
+                        }
+                    }else{
+                        //근로자일경우
+                        pm.ContractWorkerAccept(mContext);
                     }
+
                 }
             });
 
@@ -185,6 +191,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
 
             call_icon.setVisibility(View.GONE);
             shardpref = new PreferenceHelper(mContext);
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
             dlog.DlogContext(mContext);
             dlog.i("mData : " + mData.size());
 

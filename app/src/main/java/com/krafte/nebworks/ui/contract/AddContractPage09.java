@@ -16,7 +16,7 @@ import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
-public class AddContractPage09  extends AppCompatActivity {
+public class AddContractPage09 extends AppCompatActivity {
     private ActivityContractAdd09Binding binding;
     private final static String TAG = "AddContractPage08";
     private static final int SIGNING_BITMAP = 2022;

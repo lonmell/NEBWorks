@@ -335,6 +335,7 @@ public class HomeFragment2 extends Fragment {
                                 }
                             }
                         }
+                        dlog.i("InOutLogMember kind 2 : " + kind);
                         if (kind.equals("-1")) {
                             binding.ioImg.setBackgroundResource(R.drawable.workinout01);
                             binding.state.setText("현재 퇴근 중");
@@ -342,10 +343,6 @@ public class HomeFragment2 extends Fragment {
                             binding.ioImg.setBackgroundResource(R.drawable.workinout02);
                             binding.state.setText("현재 출근 중");
                         }
-//                        else {
-//                            binding.selectWorkse.setText("확인");
-//                            binding.closeArea.setVisibility(View.GONE);
-//                        }
                     });
                 }
             }
@@ -449,6 +446,11 @@ public class HomeFragment2 extends Fragment {
         });
         binding.acceptBtn.setOnClickListener(v -> {
             UpdateDirectMemberBasic();
+        });
+
+        binding.homeMenu04.setOnClickListener(v -> {
+            dlog.i("근로계약서 전체 관리");
+            pm.ContractFragment(mContext);
         });
     }
 
@@ -688,12 +690,12 @@ public class HomeFragment2 extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("PlaceWorkCheck jsonResponse length : " + response.body().length());
-                            dlog.i("PlaceWorkCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
 //                                    i_cnt;                // 출근 count(퇴근한 인원은 제외)
 //                                    o_cnt;                // 퇴근 count
 //                                    task_total_cnt;       // 할일 전체

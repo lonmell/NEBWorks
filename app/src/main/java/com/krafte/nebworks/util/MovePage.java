@@ -48,6 +48,10 @@ public interface MovePage {
 
     void AddContractPage09(Context context);
 
+    void ContractWorkerAccept(Context context);
+
+    void ContractWorkerSign(Context context);
+
     void MoreGo(Context context);
 
     void MoreBack(Context context);

@@ -129,10 +129,10 @@
                     android:layout_toStartOf="@+id/payment_tv"
                     android:background="@drawable/default_gray_round"
                     android:hint="급여 액수를 입력해주세요"
+                    android:inputType="number"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp"
                     android:text=""
-                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#a9a9a9" />
                 <TextView

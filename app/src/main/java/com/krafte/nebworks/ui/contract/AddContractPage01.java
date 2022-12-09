@@ -1,14 +1,18 @@
 package com.krafte.nebworks.ui.contract;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.databinding.ActivityContractAdd01Binding;
+import com.krafte.nebworks.pop.LawPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -47,6 +51,7 @@ public class AddContractPage01 extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         setBtnEvent();
+        //LawPopActivity
     }
 
     @Override
@@ -57,6 +62,21 @@ public class AddContractPage01 extends AppCompatActivity {
     private void setBtnEvent(){
         binding.writeContract.setOnClickListener(v -> {
             pm.AddContractPage02(mContext);
+        });
+
+        binding.select01.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, LawPopActivity.class);
+            intent.putExtra("flag", "1");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        });
+        binding.select02.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, LawPopActivity.class);
+            intent.putExtra("flag", "2");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
     }
 }

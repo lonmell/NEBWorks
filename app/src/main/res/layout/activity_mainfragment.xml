@@ -96,7 +96,9 @@
                 android:layout_marginBottom="70dp">
             </androidx.viewpager2.widget.ViewPager2>
 
-            <include android:id="@+id/bottom_navigation" layout="@layout/bottom_navigation" />
+            <include
+                android:id="@+id/bottom_navigation"
+                layout="@layout/bottom_navigation" />
         </RelativeLayout>
     </LinearLayout>
 

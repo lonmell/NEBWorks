@@ -25,6 +25,7 @@ import com.krafte.nebworks.ui.fragment.contract.ContractFragment2;
 import com.krafte.nebworks.ui.fragment.contract.ContractFragment3;
 import com.krafte.nebworks.ui.fragment.contract.ContractFragment4;
 import com.krafte.nebworks.util.Dlog;
+import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 import java.util.ArrayList;
@@ -40,8 +41,9 @@ public class ContractFragmentActivity extends AppCompatActivity {
     ViewPagerFregmentAdapter viewPagerFregmentAdapter;
     PreferenceHelper shardpref;
     Dlog dlog = new Dlog();
-
+    String USER_INFO_AUTH = "";
     int paging_position = 0;
+    PageMoveClass pm = new PageMoveClass();
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
@@ -58,6 +60,8 @@ public class ContractFragmentActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
 
         try {
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+
             final List<String> tabElement = Arrays.asList("전체", "서명대기중", "완료", "미작성");
             //before 전체피드 / 랭킹 / 매장 / 구인구직
             //after 매장 / 전체피드 / 구인구직 / 랭킹
@@ -108,7 +112,12 @@ public class ContractFragmentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-
+        shardpref.putInt("SELECT_POSITION",0);
+        if(USER_INFO_AUTH.equals("0")){
+            pm.Main(mContext);
+        }else{
+            pm.Main2(mContext);
+        }
     }
 
     @Override

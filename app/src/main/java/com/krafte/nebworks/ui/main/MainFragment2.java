@@ -37,6 +37,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -259,6 +260,7 @@ public class MainFragment2 extends AppCompatActivity {
     String name ="";
     String img_path ="";
     String getjikgup ="";
+    RetrofitConnect rc = new RetrofitConnect();
     public void SetAllMemberList() {
         dlog.i("-----SetAllMemberList-----");
         dlog.i("place_id : " + place_id);
@@ -275,10 +277,11 @@ public class MainFragment2 extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.e("SetAllMemberList onSuccess : ", response.body());
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        Log.e("SetAllMemberList onSuccess : ", jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
                             name = Response.getJSONObject(0).getString("name");
                             img_path = Response.getJSONObject(0).getString("img_path");
                             getjikgup = Response.getJSONObject(0).getString("jikgup");
@@ -396,6 +399,13 @@ public class MainFragment2 extends AppCompatActivity {
             pm.addWorkGo(mContext);
         }  else if (view.getId() == R.id.select_nav09) {
             pm.Approval(mContext);
+        } else if (view.getId() == R.id.select_nav12) {
+            dlog.i("커뮤니티 Click!");
+            binding.title.setText("커뮤니티");
+            binding.tabLayout.getTabAt(3).select();
+        } else if(view.getId() == R.id.select_nav10) {
+            dlog.i("근로계약서 전체 관리");
+            pm.ContractFragment(mContext);
         }
 
     }
