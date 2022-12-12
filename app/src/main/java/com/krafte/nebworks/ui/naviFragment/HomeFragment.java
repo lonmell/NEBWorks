@@ -15,20 +15,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.adapter.WorkTapMemberAdapter;
+import com.krafte.nebworks.adapter.MainMemberLAdapter;
+import com.krafte.nebworks.adapter.MainNotiLAdapter;
 import com.krafte.nebworks.bottomsheet.MemberOption;
-import com.krafte.nebworks.data.WorkStatusTapData;
+import com.krafte.nebworks.data.MainMemberLData;
+import com.krafte.nebworks.data.MainNotiData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
-import com.krafte.nebworks.dataInterface.FeedNotiInterface;
-import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
+import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.HomefragmentBinding;
@@ -41,7 +44,9 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -102,8 +107,11 @@ public class HomeFragment extends Fragment {
     RetrofitConnect rc = new RetrofitConnect();
     RandomOut ro = new RandomOut();
 
-    ArrayList<WorkStatusTapData.WorkStatusTapData_list> mList;
-    WorkTapMemberAdapter mAdapter = null;
+    ArrayList<MainMemberLData.MainMemberLData_list> mList;
+    MainMemberLAdapter mAdapter = null;
+
+    ArrayList<MainNotiData.MainNotiData_list> mList2;
+    MainNotiLAdapter mAdapter2 = null;
 
     public static HomeFragment newInstance(int number) {
         HomeFragment fragment = new HomeFragment();
@@ -193,7 +201,8 @@ public class HomeFragment extends Fragment {
         super.onResume();
         UserCheck(USER_INFO_EMAIL);
         getPlaceData();
-        PlaceWorkCheck(place_id);
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
         SetAllMemberList();
     }
 
@@ -354,8 +363,7 @@ public class HomeFragment extends Fragment {
                                     shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
 
                                     binding.title.setText(place_name);
-                                    binding.memberCnt.setText(place_totalcnt);
-                                    newlyFeedOne();
+                                    binding.memberCnt.setText(place_totalcnt + "명");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -373,51 +381,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void newlyFeedOne() {
-        //i : 0 = 정렬없음 / 1 = 오름차순 / 2 = 내림차순
-        dlog.i("setRecyclerView place_id : " + place_id);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FeedNotiInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "2","1");
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.e(TAG, "WorkTapListFragment1 / setRecyclerView");
-                Log.e(TAG, "response 1: " + response.isSuccessful());
-                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
-                    try {
-                        //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
 
-                        dlog.i("place_feed_cnt : " + Response.length());
 
-                        if (Response.length() == 0) {
-                            binding.limitNotitv.setText("별도의 공지사항이 없습니다.");
-                            binding.limitNotitv.setTextColor(Color.parseColor("#949494"));
-                        } else {
-                            String feedtv = Response.getJSONObject(0).getString("title");
-                            binding.limitNotitv.setText(feedtv);
-                            binding.limitNotitv.setTextColor(Color.parseColor("#000000"));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러 = " + t.getMessage());
-            }
-        });
-    }
-//    USER_INFO_NICKNAME
+    //    USER_INFO_NICKNAME
     public void UserCheck(String account) {
         dlog.i("UserCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -459,9 +425,9 @@ public class HomeFragment extends Fragment {
                                             USER_INFO_AUTH = "1";
                                             binding.gotoPlace.setVisibility(View.GONE);
                                         }
-                                        shardpref.putString("USER_INFO_PROFILE",img_path);
-                                        shardpref.putString("USER_INFO_NAME",name);
-                                        shardpref.putString("USER_INFO_NICKNAME",nick_name);
+                                        shardpref.putString("USER_INFO_PROFILE", img_path);
+                                        shardpref.putString("USER_INFO_NAME", name);
+                                        shardpref.putString("USER_INFO_NICKNAME", nick_name);
                                         getFCMToken();
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -483,14 +449,14 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void PlaceWorkCheck(String place_id) {
+    public void PlaceWorkCheck(String place_id, String auth, String kind) {
         dlog.i("PlaceWorkCheck place_id : " + place_id);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MainWorkCntInterface.URL)
+                .baseUrl(MainContentsInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID);
+        MainContentsInterface api = retrofit.create(MainContentsInterface.class);
+        Call<String> call = api.getData(place_id, auth, USER_INFO_ID, kind);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -504,59 +470,89 @@ public class HomeFragment extends Fragment {
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-//                                    i_cnt;                // 출근 count(퇴근한 인원은 제외)
-//                                    o_cnt;                // 퇴근 count
-//                                    task_total_cnt;       // 할일 전체
-//                                    task_complete_cnt;    // 완료된 업무
-//                                    task_incomplete_cnt;  // 미완료 업무
-//                                    approval_total_cnt;   // 결재 전체
-//                                    waiting_cnt;          // 결재 대기
-//                                    approval_cnt;         // 결재 승인
-//                                    reject_cnt;           // 결재 반려
-//                                    rest_cnt              // 휴무 직원 수
-//                                     absence_cnt           // 결석
-                                    try {
-                                        String i_cnt = Response.getJSONObject(0).getString("i_cnt");
-                                        String o_cnt = Response.getJSONObject(0).getString("o_cnt");
-                                        String task_total_cnt = Response.getJSONObject(0).getString("task_total_cnt");
-                                        String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt"); //-- 가입할때의 게정
-                                        String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt"); //-- 사번
-                                        String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
-                                        String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
-                                        String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
-                                        String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
-                                        String rest_cnt = Response.getJSONObject(0).getString("rest_cnt");
-                                        String absence_cnt = Response.getJSONObject(0).getString("absence_cnt");
 
-                                        dlog.i("------PlaceWorkCheck-------");
-                                        dlog.i("출근 count(퇴근한 인원은 제외) : " + i_cnt);
-                                        dlog.i("퇴근 count : " + o_cnt);
-                                        dlog.i("할일 전체 : " + task_total_cnt);
-                                        dlog.i("완료된 업무 : " + task_complete_cnt);
-                                        dlog.i("미완료 업무 : " + task_incomplete_cnt);
-                                        dlog.i("결재 전체 : " + approval_total_cnt);
-                                        dlog.i("결재 대기 : " + waiting_cnt);
-                                        dlog.i("결재 승인 : " + approval_cnt);
-                                        dlog.i("결재 반려 : " + reject_cnt);
-                                        dlog.i("휴무 : " + rest_cnt);
-                                        dlog.i("결석/미출근 : " + absence_cnt);
-                                        int total_cnt = 0;
-                                        total_cnt = Integer.parseInt(i_cnt) + Integer.parseInt(o_cnt) + Integer.parseInt(task_total_cnt)
-                                                + Integer.parseInt(task_complete_cnt) + Integer.parseInt(task_incomplete_cnt) + Integer.parseInt(approval_total_cnt)
-                                                + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
-                                        binding.inCnt.setText(i_cnt);
-                                        binding.notinCnt.setText(absence_cnt);
-                                        binding.outCnt.setText(o_cnt);
-                                        binding.restCnt.setText(rest_cnt);
-//                                        binding.noticeCnt.setText(String.valueOf(total_cnt));
-//                                        binding.stateCnt01.setText("출근  " + i_cnt);
-//                                        binding.stateCnt02.setText("퇴근  " + o_cnt);
-//                                        binding.stateCnt05.setText(task_incomplete_cnt);
-//                                        binding.stateCnt06.setText(task_complete_cnt);
-//                                        binding.stateCnt07.setText(waiting_cnt);
-//                                        binding.stateCnt08.setText(approval_cnt);
-//                                        binding.stateCnt09.setText(reject_cnt);
-                                        dlog.i("------PlaceWorkCheck-------");
+                                    try {
+                                        if (kind.equals("0")) {
+                                            binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
+                                            binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
+                                            binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
+                                            binding.restCnt.setText(Response.getJSONObject(0).getString("rest_cnt"));
+                                            dlog.i("-----MainData-----");
+                                            dlog.i("i_cnt : " + Response.getJSONObject(0).getString("i_cnt"));
+                                            dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
+                                            dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
+                                            dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
+
+
+                                            int allPay = 0;
+                                            for (int i = 0; i < Response.length(); i++) {
+                                                allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",",""));
+                                            }
+                                            DecimalFormat myFormatter = new DecimalFormat("###,###");
+                                            binding.paynum.setText(myFormatter.format(allPay) + "원");
+                                            dlog.i("allPay : " + myFormatter.format(allPay));
+                                            dlog.i("-----MainData-----");
+                                            mList = new ArrayList<>();
+                                            mAdapter = new MainMemberLAdapter(mContext, mList);
+                                            binding.importantList.setAdapter(mAdapter);
+                                            binding.importantList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                            dlog.i("SIZE : " + Response.length());
+                                            if (response.body().equals("[]")) {
+                                                dlog.i("SetNoticeListview Thread run! ");
+                                                dlog.i("GET SIZE : " + Response.length());
+                                            } else {
+                                                for (int i = 0; i < Response.length(); i++) {
+                                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                                    mAdapter.addItem(new MainMemberLData.MainMemberLData_list(
+                                                            jsonObject.getString("id"),
+                                                            jsonObject.getString("join_date"),
+                                                            jsonObject.getString("user_id"),
+                                                            jsonObject.getString("user_name"),
+                                                            jsonObject.getString("user_img"),
+                                                            jsonObject.getString("recent_pay")
+                                                    ));
+                                                }
+
+                                                mAdapter.setOnItemClickListener(new MainMemberLAdapter.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(View v, int position) {
+
+                                                    }
+                                                });
+
+                                            }
+                                            mAdapter.notifyDataSetChanged();
+                                        } else {
+                                            mList2 = new ArrayList<>();
+                                            mAdapter2 = new MainNotiLAdapter(mContext, mList2);
+                                            binding.mainNotiList.setAdapter(mAdapter2);
+                                            binding.mainNotiList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                            dlog.i("SIZE : " + Response.length());
+
+                                            if (Response.length() == 0) {
+                                                binding.limitNotitv.setText("별도의 공지사항이 없습니다.");
+                                                binding.limitNotitv.setTextColor(Color.parseColor("#949494"));
+                                                binding.mainNotiList.setVisibility(View.GONE);
+                                            } else {
+                                                binding.limitNotitv.setVisibility(View.GONE);
+                                                binding.mainNotiList.setVisibility(View.VISIBLE);
+
+                                                for (int i = 0; i < Response.length(); i++) {
+                                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                                    mAdapter2.addItem(new MainNotiData.MainNotiData_list(
+                                                            jsonObject.getString("feed_title"),
+                                                            jsonObject.getString("updated_at")
+                                                    ));
+                                                }
+                                                mAdapter2.setOnItemClickListener(new MainNotiLAdapter.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(View v, int position) {
+                                                        pm.FeedList(mContext);
+                                                    }
+                                                });
+                                            }
+                                            mAdapter2.notifyDataSetChanged();
+                                        }
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }

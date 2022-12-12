@@ -5,13 +5,15 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-public interface MainWorkCntInterface {
+public interface MainContentsInterface {
     String URL = "http://krafte.net/NEBWorks/place/";
-    //http://krafte.net/NEBWorks/place/get_main2.php?place_id=24&user_id=16
+    //http://krafte.net/NEBWorks/place/get_main.php?place_id=24&user_id=16
     @FormUrlEncoded
-    @POST("get_main2.php")
+    @POST("get_main.php")
     Call<String> getData(
             @Field("place_id") String place_id,
-            @Field("user_id") String user_id
+            @Field("auth") String auth,
+            @Field("user_id") String user_id,
+            @Field("kind") String kind
     );
 }

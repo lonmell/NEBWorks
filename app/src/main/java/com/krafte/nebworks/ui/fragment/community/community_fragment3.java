@@ -152,6 +152,9 @@ public class community_fragment3 extends Fragment {
         mList2.clear();
     }
 
+    int semu_cnt = 0;
+    int nomu_cnt = 0;
+
     public void setRecyclerView() {
         allClear();
         dlog.i("position 0 setRecyclerView place_id : " + place_id);
@@ -179,10 +182,19 @@ public class community_fragment3 extends Fragment {
                         binding.semuList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         Log.i(TAG, "SetNoticeListview Thread run! ");
 
+                        for (int i = 0; i < Response.length(); i++) {
+                            JSONObject jsonObject = Response.getJSONObject(i);
+                            if(jsonObject.getString("kind").equals("1")){
+                                semu_cnt ++ ;
+                            }else if(jsonObject.getString("kind").equals("2")){
+                                nomu_cnt ++ ;
+                            }
+                        }
+
                         if (Response.length() == 0) {
                             Log.i(TAG, "GET SIZE : " + mList.size());
                         } else {
-                            if(Response.length() > 3){
+                            if(semu_cnt > 3){
                                 for (int i = 0; i < 4; i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if(jsonObject.getString("kind").equals("1")){
@@ -233,11 +245,11 @@ public class community_fragment3 extends Fragment {
                         if (Response.length() == 0) {
                             Log.i(TAG, "GET SIZE : " + mList2.size());
                         } else {
-                            if(Response.length() > 4){
+                            if(nomu_cnt > 4){
                                 for (int i = 0; i < 5; i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if(jsonObject.getString("kind").equals("2")){
-                                        mAdapter.addItem(new TaxMemberData.TaxMemberData_list(
+                                        mAdapter2.addItem(new TaxMemberData.TaxMemberData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_id"),
                                                 jsonObject.getString("name"),
@@ -255,7 +267,7 @@ public class community_fragment3 extends Fragment {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if(jsonObject.getString("kind").equals("2")){
-                                        mAdapter.addItem(new TaxMemberData.TaxMemberData_list(
+                                        mAdapter2.addItem(new TaxMemberData.TaxMemberData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_id"),
                                                 jsonObject.getString("name"),

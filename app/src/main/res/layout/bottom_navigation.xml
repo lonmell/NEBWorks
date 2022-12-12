@@ -22,14 +22,25 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="btnOnclick"
+            android:orientation="vertical"
             tools:ignore="SpeakableTextPresentCheck">
 
             <ImageView
                 android:id="@+id/bottom_icon01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bottom_icon01"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_main_off"
+                android:layout_marginBottom="5dp"
                 tools:ignore="ImageContrastCheck" />
+            <TextView
+                android:id="@+id/bottom_icon01tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="#C3C3C3"
+                android:text="메인"/>
         </LinearLayout>
 
         <LinearLayout
@@ -39,14 +50,25 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="btnOnclick"
+            android:orientation="vertical"
             tools:ignore="SpeakableTextPresentCheck">
 
             <ImageView
                 android:id="@+id/bottom_icon02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bottom_icon02"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_task_off"
+                android:layout_marginBottom="5dp"
                 tools:ignore="ImageContrastCheck" />
+            <TextView
+                android:id="@+id/bottom_icon02tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="#C3C3C3"
+                android:text="할일"/>
         </LinearLayout>
 
         <LinearLayout
@@ -56,14 +78,25 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="btnOnclick"
+            android:orientation="vertical"
             tools:ignore="SpeakableTextPresentCheck">
 
             <ImageView
                 android:id="@+id/bottom_icon03"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bottom_icon03"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_member_off"
+                android:layout_marginBottom="5dp"
                 tools:ignore="ImageContrastCheck" />
+            <TextView
+                android:id="@+id/bottom_icon03tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="#C3C3C3"
+                android:text="직원 현황"/>
         </LinearLayout>
 
         <LinearLayout
@@ -73,14 +106,25 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="btnOnclick"
+            android:orientation="vertical"
             tools:ignore="SpeakableTextPresentCheck">
 
             <ImageView
                 android:id="@+id/bottom_icon04"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bottom_icon04"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_community_off"
+                android:layout_marginBottom="5dp"
                 tools:ignore="ImageContrastCheck" />
+            <TextView
+                android:id="@+id/bottom_icon04tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="#C3C3C3"
+                android:text="커뮤니티"/>
         </LinearLayout>
 
         <LinearLayout
@@ -90,14 +134,25 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="btnOnclick"
+            android:orientation="vertical"
             tools:ignore="SpeakableTextPresentCheck">
 
             <ImageView
                 android:id="@+id/bottom_icon05"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bottom_icon05"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_more_off"
+                android:layout_marginBottom="5dp"
                 tools:ignore="ImageContrastCheck" />
+            <TextView
+                android:id="@+id/bottom_icon05tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="#C3C3C3"
+                android:text="더보기"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

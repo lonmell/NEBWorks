@@ -50,7 +50,7 @@
         android:layout_height="55dp"
         android:layout_below="@+id/top_bar"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
         android:weightSum="2"
         android:orientation="horizontal">
@@ -207,6 +207,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/select01tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/line01"
@@ -228,6 +229,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/select02tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/line01"
@@ -248,6 +250,7 @@
         android:layout_height="match_parent"
         android:background="#ffffff"
         tools:ignore="HardcodedText,ContentDescription">
+
 
         <LinearLayout
             android:layout_width="match_parent"

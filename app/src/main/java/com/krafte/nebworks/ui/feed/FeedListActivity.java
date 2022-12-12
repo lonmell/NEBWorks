@@ -231,13 +231,13 @@ public class FeedListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-        shardpref.putInt("SELECT_POSITION",0);
-        if(USER_INFO_AUTH.equals("0")){
-            pm.Main(mContext);
-        }else{
-            pm.Main2(mContext);
-        }
+//        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+//        shardpref.putInt("SELECT_POSITION",0);
+//        if(USER_INFO_AUTH.equals("0")){
+//            pm.Main(mContext);
+//        }else{
+//            pm.Main2(mContext);
+//        }
     }
 }
 

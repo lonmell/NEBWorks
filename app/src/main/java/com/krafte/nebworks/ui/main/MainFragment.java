@@ -53,8 +53,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /*
-* 점주용 메인페이지 프래그먼트
-* */
+ * 점주용 메인페이지 프래그먼트
+ * */
 public class MainFragment extends AppCompatActivity {
     private static final String TAG = "TaskApprovalFragment";
     private ActivityMainfragmentBinding binding;
@@ -64,6 +64,7 @@ public class MainFragment extends AppCompatActivity {
 
     //BottomNavigation
     ImageView bottom_icon01, bottom_icon02, bottom_icon03, bottom_icon04, bottom_icon05;
+    TextView bottom_icon01tv, bottom_icon02tv, bottom_icon03tv, bottom_icon04tv, bottom_icon05tv;
 
     // shared 저장값
     PreferenceHelper shardpref;
@@ -133,21 +134,31 @@ public class MainFragment extends AppCompatActivity {
             bottom_icon03 = binding.getRoot().findViewById(R.id.bottom_icon03);
             bottom_icon04 = binding.getRoot().findViewById(R.id.bottom_icon04);
             bottom_icon05 = binding.getRoot().findViewById(R.id.bottom_icon05);
+            bottom_icon01tv = binding.getRoot().findViewById(R.id.bottom_icon01tv);
+            bottom_icon02tv = binding.getRoot().findViewById(R.id.bottom_icon02tv);
+            bottom_icon03tv = binding.getRoot().findViewById(R.id.bottom_icon03tv);
+            bottom_icon04tv = binding.getRoot().findViewById(R.id.bottom_icon04tv);
+            bottom_icon05tv = binding.getRoot().findViewById(R.id.bottom_icon05tv);
+
             drawerLayout = findViewById(R.id.drawer_layout);
             drawerView = findViewById(R.id.drawer2);
+
             SetAllMemberList();
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("place_name : " + place_name);
 
-            if(USER_INFO_AUTH.equals("0")){
-                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03);
-            }else{
-                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1);
-            }
+            bottom_icon02.setBackgroundResource(R.drawable.ic_task_off);
+            bottom_icon03.setBackgroundResource(R.drawable.ic_member_off);
+            ChangePosition(0);
 
             final List<String> tabElement;
             tabElement = Arrays.asList("홈", "할일", "근무현황", "커뮤니티", "더보기");
             ArrayList<Fragment> fragments = new ArrayList<>();
+            bottom_icon01tv.setText(tabElement.get(0));
+            bottom_icon02tv.setText(tabElement.get(1));
+            bottom_icon03tv.setText(tabElement.get(2));
+            bottom_icon04tv.setText(tabElement.get(3));
+            bottom_icon05tv.setText(tabElement.get(4));
 
             //점주일때
             fragments.add(HomeFragment.newInstance(0));
@@ -256,10 +267,11 @@ public class MainFragment extends AppCompatActivity {
     }
 
     /*본인 정보 START*/
-    String name ="";
-    String img_path ="";
-    String getjikgup ="";
+    String name = "";
+    String img_path = "";
+    String getjikgup = "";
     RetrofitConnect rc = new RetrofitConnect();
+
     public void SetAllMemberList() {
         dlog.i("-----SetAllMemberList-----");
         dlog.i("place_id : " + place_id);
@@ -271,7 +283,7 @@ public class MainFragment extends AppCompatActivity {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-            Call<String> call = api.getData(place_id,USER_INFO_ID);
+            Call<String> call = api.getData(place_id, USER_INFO_ID);
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -311,22 +323,23 @@ public class MainFragment extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     /*본인 정보 START*/
     //navbar.xml
     DrawerLayout drawerLayout;
     View drawerView;
-    ImageView close_btn,user_profile,my_setting;
-    TextView user_name,jikgup,store_name;
+    ImageView close_btn, user_profile, my_setting;
+    TextView user_name, jikgup, store_name;
 
     @SuppressLint("LongLogTag")
     public void setNavBarBtnEvent() {
-        drawerView          = findViewById(R.id.drawer2);
-        close_btn           = findViewById(R.id.close_btn);
-        user_profile        = findViewById(R.id.user_profile);
-        my_setting          = findViewById(R.id.my_setting);
-        user_name           = findViewById(R.id.user_name);
-        jikgup              = findViewById(R.id.jikgup);
-        store_name          = findViewById(R.id.store_name);
+        drawerView = findViewById(R.id.drawer2);
+        close_btn = findViewById(R.id.close_btn);
+        user_profile = findViewById(R.id.user_profile);
+        my_setting = findViewById(R.id.my_setting);
+        user_name = findViewById(R.id.user_name);
+        jikgup = findViewById(R.id.jikgup);
+        store_name = findViewById(R.id.store_name);
 
 
         dlog.i("name : " + name);
@@ -382,17 +395,17 @@ public class MainFragment extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav03) {
             pm.MemberManagement(mContext);
         } else if (view.getId() == R.id.select_nav04) {
-            shardpref.putInt("SELECT_POSITION",2);
+            shardpref.putInt("SELECT_POSITION", 2);
             shardpref.putInt("SELECT_POSITION_sub", 0);
             pm.Main(mContext);
         } else if (view.getId() == R.id.select_nav05) {
-            shardpref.putString("Tap","0");
+            shardpref.putString("Tap", "0");
             pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav06) {
-            shardpref.putString("Tap","1");
+            shardpref.putString("Tap", "1");
             pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
-            shardpref.putInt("SELECT_POSITION",1);
+            shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 0);
             pm.Main(mContext);
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
@@ -403,7 +416,7 @@ public class MainFragment extends AppCompatActivity {
             dlog.i("커뮤니티 Click!");
             binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
-        } else if(view.getId() == R.id.select_nav10) {
+        } else if (view.getId() == R.id.select_nav10) {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
         }
@@ -411,30 +424,32 @@ public class MainFragment extends AppCompatActivity {
     }
 
     private void ChangePosition(int i) {
-        bottom_icon01.setBackgroundResource(R.drawable.bottom_icon01);
-        bottom_icon02.setBackgroundResource(R.drawable.bottom_icon02);
-        if(USER_INFO_AUTH.equals("0")){
-            bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03);
-        }else{
-            bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1);
-        }
-        bottom_icon04.setBackgroundResource(R.drawable.bottom_icon04);
-        bottom_icon05.setBackgroundResource(R.drawable.bottom_icon05);
+        bottom_icon01.setBackgroundResource(R.drawable.ic_main_off);
+        bottom_icon02.setBackgroundResource(R.drawable.ic_task_off);
+        bottom_icon03.setBackgroundResource(R.drawable.ic_member_off);
+        bottom_icon04.setBackgroundResource(R.drawable.ic_community_off);
+        bottom_icon05.setBackgroundResource(R.drawable.ic_more_off);
+        bottom_icon01tv.setTextColor(Color.parseColor("#C3C3C3"));
+        bottom_icon02tv.setTextColor(Color.parseColor("#C3C3C3"));
+        bottom_icon03tv.setTextColor(Color.parseColor("#C3C3C3"));
+        bottom_icon04tv.setTextColor(Color.parseColor("#C3C3C3"));
+        bottom_icon05tv.setTextColor(Color.parseColor("#C3C3C3"));
 
         if (i == 0) {
-            bottom_icon01.setBackgroundResource(R.drawable.bottom_icon01_on);
+            bottom_icon01.setBackgroundResource(R.drawable.ic_main_on);
+            bottom_icon01tv.setTextColor(Color.parseColor("#6395EC"));
         } else if (i == 1) {
-            bottom_icon02.setBackgroundResource(R.drawable.bottom_icon02_on);
+            bottom_icon02.setBackgroundResource(R.drawable.ic_task_on);
+            bottom_icon02tv.setTextColor(Color.parseColor("#6395EC"));
         } else if (i == 2) {
-            if(USER_INFO_AUTH.equals("0")){
-                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_on);
-            }else{
-                bottom_icon03.setBackgroundResource(R.drawable.bottom_icon03_1_on);
-            }
+            bottom_icon03.setBackgroundResource(R.drawable.ic_member_on);
+            bottom_icon03tv.setTextColor(Color.parseColor("#6395EC"));
         } else if (i == 3) {
-            bottom_icon04.setBackgroundResource(R.drawable.bottom_icon04_on);
+            bottom_icon04.setBackgroundResource(R.drawable.ic_community_on);
+            bottom_icon04tv.setTextColor(Color.parseColor("#6395EC"));
         } else if (i == 4) {
-            bottom_icon05.setBackgroundResource(R.drawable.bottom_icon05_on);
+            bottom_icon05.setBackgroundResource(R.drawable.ic_more_on);
+            bottom_icon05tv.setTextColor(Color.parseColor("#6395EC"));
         }
     }
 

@@ -22,18 +22,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.MainNotiLAdapter;
+import com.krafte.nebworks.adapter.MainTaskLAdapter;
+import com.krafte.nebworks.data.MainNotiData;
+import com.krafte.nebworks.data.MainTaskData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
 import com.krafte.nebworks.dataInterface.InOutInsertInterface;
 import com.krafte.nebworks.dataInterface.InOutLogInterface;
-import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
+import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
@@ -49,11 +55,12 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -155,6 +162,12 @@ public class HomeFragment2 extends Fragment {
     String GET_TIME_AGE = simpleDate_age.format(mDate);
     String GET_TIME = simpleDate_time.format(mDate);
 
+    ArrayList<MainTaskData.MainTaskData_list> mList;
+    MainTaskLAdapter mAdapter = null;
+
+    ArrayList<MainNotiData.MainNotiData_list> mList2;
+    MainNotiLAdapter mAdapter2 = null;
+
     public static HomeFragment2 newInstance(int number) {
         HomeFragment2 fragment = new HomeFragment2();
         Bundle bundle = new Bundle();
@@ -225,45 +238,12 @@ public class HomeFragment2 extends Fragment {
             } else {
                 binding.acceptArea.setVisibility(View.GONE);
             }
+
+            String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+            binding.ioMytime.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
-
-        binding.refreshBtn.setOnClickListener(v -> {
-            MoveMyLocation();
-            dlog.i("location_cnt : " + location_cnt);
-            long now = System.currentTimeMillis();
-            Date mDate = new Date(now);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-//                    binding.timeSet.setText(simpleDate.format(mDate));
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-//                    binding.lonLat.setText("위도 : " + latitude + ", 경도 : " + longitude);
-            binding.distance.setText(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))) + "m");
-            getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-            dlog.i("location_cnt : " + location_cnt);
-            dlog.i("GET_TIME : " + simpleDate.format(mDate));
-            dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-            if(getDistance <= 30){
-                if (kind.equals("-1")) {
-                    binding.ioAbleTv.setText("출근처리 가능");
-                    binding.ioAbleTv.setTextColor(R.color.red);
-                } else if (kind.equals("0")) {
-                    binding.ioAbleTv.setText("퇴근처리 가능");
-                    binding.ioAbleTv.setTextColor(R.color.red);
-                }
-            }else{
-                if (kind.equals("-1")) {
-                    binding.ioAbleTv.setText("출근처리 불가능");
-                    binding.ioAbleTv.setTextColor(R.color.blue);
-                } else if (kind.equals("0")) {
-                    binding.ioAbleTv.setText("퇴근처리 불가능");
-                    binding.ioAbleTv.setTextColor(R.color.blue);
-                }
-
-            }
-        });
 
         return binding.getRoot();
 //        return rootView;
@@ -273,8 +253,6 @@ public class HomeFragment2 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        UserCheck();
-
     }
 
     @Override
@@ -294,7 +272,7 @@ public class HomeFragment2 extends Fragment {
         super.onResume();
         UserCheck();
         getPlaceData();
-        PlaceWorkCheck(place_id);
+        PlaceWorkCheck(place_id,USER_INFO_AUTH,"0");
         InOutLogMember();
     }
 
@@ -356,57 +334,6 @@ public class HomeFragment2 extends Fragment {
     }
 
     public void setBtnEvent() {
-//        binding.workstateGo.setOnClickListener(v -> {
-//            shardpref.putInt("SELECT_POSITION",3);
-//            shardpref.remove("SELECT_POSITION_sub");
-//            pm.WorkStateListGo(mContext);
-//        });
-//
-//        binding.taskstateGo.setOnClickListener(v -> {
-//            pm.PlaceWorkGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",1);
-//            shardpref.putInt("SELECT_POSITION_sub",1);
-//        });
-//
-//        binding.taskoverGo.setOnClickListener(v -> {
-//            pm.PlaceWorkGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",1);
-//            shardpref.putInt("SELECT_POSITION_sub",1);
-//        });
-//
-//        binding.approval1Go.setOnClickListener(v -> {
-//            pm.ApprovalGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",0);
-//        });
-//        binding.approval2Go.setOnClickListener(v -> {
-//            pm.ApprovalGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",1);
-//        });
-//        binding.approval3Go.setOnClickListener(v -> {
-//            pm.ApprovalGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",2);
-//        });
-//
-//        binding.myplace.setOnClickListener(v -> {
-//            shardpref.putString("return_page", "MainActivity");
-//            pm.MyPlsceGo(mContext);
-//        });
-//
-//        binding.communityBtn.setOnClickListener(view -> {
-//        });
-//
-//        binding.gotoPlace.setOnClickListener(v -> {
-//            pm.PlaceEditGo(mContext);
-//        });
-//
-//        binding.paymentText.setOnClickListener(v -> {
-//            pm.MemberGo(mContext);
-//        });
-//
-//        binding.businessApproval.setOnClickListener(view -> {
-//            pm.ApprovalGo(mContext);
-//            shardpref.putInt("SELECT_POSITION",0);
-//        });
         binding.approvalGo.setOnClickListener(v -> {
             pm.Approval(mContext);
         });
@@ -426,15 +353,27 @@ public class HomeFragment2 extends Fragment {
                 } else {
                     kind = "1";
                 }
-                if (getDistance > 30) {
-                    Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
-                } else {
+                MoveMyLocation();
+                dlog.i("location_cnt : " + location_cnt);
+                long now = System.currentTimeMillis();
+                Date mDate = new Date(now);
+                @SuppressLint("SimpleDateFormat")
+                SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+                latitude = gpsTracker.getLatitude();
+                longitude = gpsTracker.getLongitude();
+                getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+                dlog.i("location_cnt : " + location_cnt);
+                dlog.i("GET_TIME : " + simpleDate.format(mDate));
+                dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
+                if(getDistance <= 30){
                     dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
                     InOutLogMember();
                     if (!place_owner_id.equals(USER_INFO_ID)) {
                         getManagerToken(place_owner_id, "0", place_id, place_name);
                     }
                     InOutInsert(kind);
+                }else{
+                    Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
                 }
             }else {
                 if(USER_INFO_AUTH.equals("0")){
@@ -443,6 +382,7 @@ public class HomeFragment2 extends Fragment {
                     pm.Main2(mContext);
                 }
             }
+
         });
         binding.acceptBtn.setOnClickListener(v -> {
             UpdateDirectMemberBasic();
@@ -499,6 +439,8 @@ public class HomeFragment2 extends Fragment {
                                         if (!place_owner_id.equals(USER_INFO_ID)) {
 //                                            getEmployerToken();
                                         }
+                                        InOutLogMember();
+                                        PlaceWorkCheck(place_id,USER_INFO_AUTH,"0");
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -655,6 +597,7 @@ public class HomeFragment2 extends Fragment {
                                 } else {
                                     USER_INFO_AUTH = "1";
                                 }
+                                binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
                                 getFCMToken();
                             } catch (Exception e) {
                                 dlog.i("UserCheck Exception : " + e);
@@ -675,14 +618,17 @@ public class HomeFragment2 extends Fragment {
         });
     }
 
-    public void PlaceWorkCheck(String place_id) {
+    public void PlaceWorkCheck(String place_id,String auth, String kind) {
         dlog.i("PlaceWorkCheck place_id : " + place_id);
+        dlog.i("PlaceWorkCheck auth : " + auth);
+        dlog.i("PlaceWorkCheck kind : " + kind);
+        dlog.i("PlaceWorkCheck USER_INFO_ID : " + USER_INFO_ID);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MainWorkCntInterface.URL)
+                .baseUrl(MainContentsInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID);
+        MainContentsInterface api = retrofit.create(MainContentsInterface.class);
+        Call<String> call = api.getData(place_id, auth, USER_INFO_ID, kind);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -696,103 +642,93 @@ public class HomeFragment2 extends Fragment {
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-//                                    i_cnt;                // 출근 count(퇴근한 인원은 제외)
-//                                    o_cnt;                // 퇴근 count
-//                                    task_total_cnt;       // 할일 전체
-//                                    task_complete_cnt;    // 완료된 업무
-//                                    task_incomplete_cnt;  // 미완료 업무
-//                                    approval_total_cnt;   // 결재 전체
-//                                    waiting_cnt;          // 결재 대기
-//                                    approval_cnt;         // 결재 승인
-//                                    reject_cnt;           // 결재 반려
-//                                    rest_cnt              // 휴무 직원 수
-//                                     absence_cnt           // 결석
                                     try {
-                                        String i_cnt                = Response.getJSONObject(0).getString("i_cnt");
-                                        String o_cnt                = Response.getJSONObject(0).getString("o_cnt");
-                                        String task_total_cnt       = Response.getJSONObject(0).getString("task_total_cnt");
-                                        String task_complete_cnt    = Response.getJSONObject(0).getString("task_complete_cnt"); //-- 가입할때의 게정
-                                        String task_incomplete_cnt  = Response.getJSONObject(0).getString("task_incomplete_cnt"); //-- 사번
-                                        String approval_total_cnt   = Response.getJSONObject(0).getString("approval_total_cnt");
-                                        String waiting_cnt          = Response.getJSONObject(0).getString("waiting_cnt");
-                                        String approval_cnt         = Response.getJSONObject(0).getString("approval_cnt");
-                                        String reject_cnt           = Response.getJSONObject(0).getString("reject_cnt");
-                                        String rest_cnt             = Response.getJSONObject(0).getString("rest_cnt");
-                                        String absence_cnt          = Response.getJSONObject(0).getString("absence_cnt");
-                                        String sieob                = Response.getJSONObject(0).getString("sieob");
-                                        String jongeob              = Response.getJSONObject(0).getString("jongeob");
-                                        long now = System.currentTimeMillis();
-                                        Date date = new Date(now);
-                                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                                        String getTime = sdf.format(date);
-                                        String todayH = "";
-                                        String todayM = "";
-                                        List<String> todayl = new ArrayList<>();
-                                        todayl.addAll(Arrays.asList(getTime.split(":")));
-                                        todayH = todayl.get(0);
-                                        todayM = todayl.get(1);
-                                        String ampmt = "";
-                                        if(Integer.parseInt(todayH) < 12){
-                                            ampmt = "오전";
-                                        }else{
-                                            ampmt = "오후";
+                                        if(kind.equals("0")){
+                                            mList = new ArrayList<>();
+                                            mAdapter = new MainTaskLAdapter(mContext, mList);
+                                            binding.mainTaskList.setAdapter(mAdapter);
+                                            binding.mainTaskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                            dlog.i("Task Get SIZE : " + Response.length());
+                                            if (Response.length() == 0) {
+                                                dlog.i("SetNoticeListview Thread run! ");
+                                                dlog.i("GET SIZE : " + Response.length());
+                                                binding.mainTaskList.setVisibility(View.GONE);
+                                                binding.limitTasktv.setVisibility(View.VISIBLE);
+                                            } else {
+                                                binding.mainTaskList.setVisibility(View.VISIBLE);
+                                                binding.limitTasktv.setVisibility(View.GONE);
+                                                for (int i = 0; i < Response.length(); i++) {
+                                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                                    mAdapter.addItem(new MainTaskData.MainTaskData_list(
+                                                            jsonObject.getString("title"),
+                                                            jsonObject.getString("end_date"),
+                                                            jsonObject.getString("end_hour"),
+                                                            jsonObject.getString("end_min")
+                                                    ));
+                                                }
+
+                                                mAdapter.setOnItemClickListener(new MainTaskLAdapter.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(View v, int position) {
+
+                                                    }
+                                                });
+
+                                            }
+                                            mAdapter.notifyDataSetChanged();
+                                            PlaceWorkCheck(place_id,USER_INFO_AUTH,"1");
+                                        }else if(kind.equals("1")){
+                                            mList2 = new ArrayList<>();
+                                            mAdapter2 = new MainNotiLAdapter(mContext, mList2);
+                                            binding.mainNotiList.setAdapter(mAdapter2);
+                                            binding.mainNotiList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                            dlog.i("Noti Get SIZE : " + Response.length());
+                                            if (Response.length() == 0) {
+                                                dlog.i("SetNoticeListview Thread run! ");
+                                                dlog.i("GET SIZE : " + Response.length());
+                                                binding.mainNotiList.setVisibility(View.GONE);
+                                                binding.limitNotitv.setVisibility(View.VISIBLE);
+                                            } else {
+                                                binding.mainNotiList.setVisibility(View.VISIBLE);
+                                                binding.limitNotitv.setVisibility(View.GONE);
+                                                for (int i = 0; i < Response.length(); i++) {
+                                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                                    mAdapter2.addItem(new MainNotiData.MainNotiData_list(
+                                                            jsonObject.getString("feed_title"),
+                                                            jsonObject.getString("updated_at")
+                                                    ));
+                                                }
+
+                                                mAdapter2.setOnItemClickListener(new MainNotiLAdapter.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(View v, int position) {
+
+                                                    }
+                                                });
+
+                                            }
+                                            mAdapter.notifyDataSetChanged();
+                                            PlaceWorkCheck(place_id,USER_INFO_AUTH,"2");
+                                        }else if(kind.equals("2")){
+                                            binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
+                                            binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
+                                            binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
+                                            binding.restCnt.setText(Response.getJSONObject(0).getString("rest_cnt"));
+                                            dlog.i("-----MainData-----");
+                                            dlog.i("i_cnt : " + Response.getJSONObject(0).getString("i_cnt"));
+                                            dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
+                                            dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
+                                            dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
+                                            PlaceWorkCheck(place_id,USER_INFO_AUTH,"3");
+                                        }else if(kind.equals("3")){
+                                            int allPay = 0;
+                                            for (int i = 0; i < Response.length(); i++) {
+                                                allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",",""));
+                                            }
+                                            DecimalFormat myFormatter = new DecimalFormat("###,###");
+                                            binding.paynum.setText(myFormatter.format(allPay) + "원");
+                                            dlog.i("allPay : " + myFormatter.format(allPay));
                                         }
-                                        binding.ioTime.setText(ampmt + " " +todayH + "시" + " " + todayM + "분");
-
-                                        dlog.i("------PlaceWorkCheck-------");
-                                        dlog.i("출근 count(퇴근한 인원은 제외) : " + i_cnt);
-                                        dlog.i("퇴근 count : " + o_cnt);
-                                        dlog.i("할일 전체 : " + task_total_cnt);
-                                        dlog.i("완료된 업무 : " + task_complete_cnt);
-                                        dlog.i("미완료 업무 : " + task_incomplete_cnt);
-                                        dlog.i("결재 전체 : " + approval_total_cnt);
-                                        dlog.i("결재 대기 : " + waiting_cnt);
-                                        dlog.i("결재 승인 : " + approval_cnt);
-                                        dlog.i("결재 반려 : " + reject_cnt);
-                                        dlog.i("휴무 : " + rest_cnt);
-                                        dlog.i("결석/미출근 : " + absence_cnt);
-                                        dlog.i("현재시간 : " + getTime);
-                                        List<String> sieobl = new ArrayList<>();
-                                        List<String> jongeobl = new ArrayList<>();
-
-                                        String sieobH = "";
-                                        String sieobM = "";
-                                        sieobl.addAll(Arrays.asList(sieob.split(":")));
-                                        sieobH = sieobl.get(0);
-                                        sieobM = sieobl.get(1);
-
-                                        String jongeobH = "";
-                                        String jongeobM = "";
-                                        jongeobl.addAll(Arrays.asList(jongeob.split(":")));
-                                        jongeobH = sieobl.get(0);
-                                        jongeobM = sieobl.get(1);
-
-                                        String ampm1 = "";
-                                        String ampm2 = "";
-                                        if(Integer.parseInt(sieobH) < 12){
-                                            ampm1 = "오전";
-                                        }else{
-                                            ampm1 = "오후";
-                                        }
-                                        if(Integer.parseInt(jongeobH) < 12){
-                                            ampm2 = "오전";
-                                        }else{
-                                            ampm2 = "오후";
-                                        }
-
-                                        String totaltv01 = "오늘 나의 근무시간 " + ampm1 + " " + sieobH + "시" + sieobM + "분" + " ~ " + ampm2 + " " + jongeobH + "시" + jongeobM + "분";
-                                        binding.ioMytime.setText(totaltv01);
-                                        int total_cnt = 0;
-                                        total_cnt = Integer.parseInt(i_cnt) + Integer.parseInt(o_cnt) + Integer.parseInt(task_total_cnt)
-                                                + Integer.parseInt(task_complete_cnt) + Integer.parseInt(task_incomplete_cnt) + Integer.parseInt(approval_total_cnt)
-                                                + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
-
-                                        binding.stateCnt05.setText(task_incomplete_cnt);
-                                        binding.stateCnt06.setText(task_complete_cnt);
-                                        binding.stateCnt07.setText(waiting_cnt);
-                                        binding.stateCnt08.setText(approval_cnt);
-                                        binding.stateCnt09.setText(reject_cnt);
-                                        dlog.i("------PlaceWorkCheck-------");
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }
