@@ -4,24 +4,29 @@ public class WorkGotoListData {
 
     public static class WorkGotoListData_list {
         String day = "";
-        String day_off = "";
+        String yoil = "";
         String in_time = "";
         String out_time = "";
-        String late_time = "";
-        String working_time = "";
+        String workdiff = "";
+        String state = "";
+        String sieob1 = "";
+        String sieob2 = "";
+        String jongeob1 = "";
+        String jongeob2 = "";
 
-        public WorkGotoListData_list(String day,
-                String day_off,
-                String in_time,
-                String out_time,
-                String late_time,
-                String working_time) {
+        public WorkGotoListData_list( String day, String yoil, String in_time,
+                String out_time, String workdiff, String state, String sieob1, String sieob2,
+                String jongeob1, String jongeob2) {
             this.day = day;
-            this.day_off = day_off;
+            this.yoil = yoil;
             this.in_time = in_time;
             this.out_time = out_time;
-            this.late_time = late_time;
-            this.working_time = working_time;
+            this.workdiff = workdiff;
+            this.state = state;
+            this.sieob1 = sieob1;
+            this.sieob2 = sieob2;
+            this.jongeob1 = jongeob1;
+            this.jongeob2 = jongeob2;
         }
 
         public String getDay() {
@@ -32,12 +37,12 @@ public class WorkGotoListData {
             this.day = day;
         }
 
-        public String getDay_off() {
-            return day_off;
+        public String getYoil() {
+            return yoil;
         }
 
-        public void setDay_off(String day_off) {
-            this.day_off = day_off;
+        public void setYoil(String yoil) {
+            this.yoil = yoil;
         }
 
         public String getIn_time() {
@@ -56,20 +61,52 @@ public class WorkGotoListData {
             this.out_time = out_time;
         }
 
-        public String getLate_time() {
-            return late_time;
+        public String getWorkdiff() {
+            return workdiff;
         }
 
-        public void setLate_time(String late_time) {
-            this.late_time = late_time;
+        public void setWorkdiff(String workdiff) {
+            this.workdiff = workdiff;
         }
 
-        public String getWorking_time() {
-            return working_time;
+        public String getState() {
+            return state;
         }
 
-        public void setWorking_time(String working_time) {
-            this.working_time = working_time;
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public String getSieob1() {
+            return sieob1;
+        }
+
+        public void setSieob1(String sieob1) {
+            this.sieob1 = sieob1;
+        }
+
+        public String getSieob2() {
+            return sieob2;
+        }
+
+        public void setSieob2(String sieob2) {
+            this.sieob2 = sieob2;
+        }
+
+        public String getJongeob1() {
+            return jongeob1;
+        }
+
+        public void setJongeob1(String jongeob1) {
+            this.jongeob1 = jongeob1;
+        }
+
+        public String getJongeob2() {
+            return jongeob2;
+        }
+
+        public void setJongeob2(String jongeob2) {
+            this.jongeob2 = jongeob2;
         }
     }
 }

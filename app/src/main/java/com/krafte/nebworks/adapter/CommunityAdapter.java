@@ -49,6 +49,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     String token = "";
     Dlog dlog = new Dlog();
     int kind = 0;
+
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
@@ -173,7 +174,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     PlaceNotiData.PlaceNotiData_list item = mData.get(pos);
-
+                    if (mListener != null) {
+                        mListener.onItemClick(view,pos);
+                    }
                 }
             });
         }

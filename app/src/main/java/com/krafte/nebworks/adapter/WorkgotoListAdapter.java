@@ -73,7 +73,7 @@ public class WorkgotoListAdapter extends RecyclerView.Adapter<WorkgotoListAdapte
                 holder.gotowork_itme00.setText(item.getDay() + "일");
                 holder.gotowork_itme01_1.setText(item.getIn_time().equals("null")?"":item.getIn_time().isEmpty()?"":item.getIn_time().substring(0,5));
                 holder.gotowork_itme03.setText(item.getOut_time().equals("null")?"":item.getOut_time().isEmpty()?"":item.getOut_time().substring(0,5));
-                holder.gotowork_itme04.setText(item.getLate_time().equals("null")?"":item.getLate_time().isEmpty()?"":item.getLate_time());
+                holder.gotowork_itme04.setText(item.getWorkdiff().equals("null")?"":item.getWorkdiff().isEmpty()?"":item.getWorkdiff());
             }
         }catch (Exception e){
             dlog.i("Exception : " + e);

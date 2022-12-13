@@ -9,18 +9,25 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.MemberInoutAdapter;
 import com.krafte.nebworks.data.WorkGotoListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.dataInterface.MainContentsInterface;
+import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
 import com.krafte.nebworks.dataInterface.WorkGotoListInterface;
 import com.krafte.nebworks.databinding.ActivityMemberdetailBinding;
 import com.krafte.nebworks.util.DateCurrent;
@@ -86,7 +93,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     String getYMPicker = "";
     String bYear = "";
     String bMonth = "";
-
+    String place_name = "";
 
     //Other
     /*라디오 버튼들 boolean*/
@@ -98,6 +105,7 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     ArrayList<WorkGotoListData.WorkGotoListData_list> inoutmList;
     MemberInoutAdapter inoutmAdapter;
+
 
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
@@ -138,10 +146,75 @@ public class MemberDetailActivity extends AppCompatActivity {
             item_user_id = shardpref.getString("item_user_id", "");
 
             setBtnEvent();
+            drawerLayout = findViewById(R.id.drawer_layout);
+            drawerView = findViewById(R.id.drawer2);
+            drawerLayout.addDrawerListener(listener);
+            drawerView.setOnTouchListener((v, event) -> false);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+            //슬라이드 했을때
+        }
+
+        @Override
+        public void onDrawerOpened(@NonNull View drawerView) {
+            //Drawer가 오픈된 상황일때 호출
+        }
+
+        @Override
+        public void onDrawerClosed(@NonNull View drawerView) {
+            // 닫힌 상황일 때 호출
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+            // 특정상태가 변결될 때 호출
+        }
+    };
+
+
+    //navbar.xml
+    DrawerLayout drawerLayout;
+    View drawerView;
+    ImageView close_btn, user_profile, my_setting;
+    TextView user_name, jikgup, store_name;
+    /*본인 정보 START*/
+    String Navname = "";
+    String Navimg_path = "";
+    String Navgetjikgup = "";
+
+    @SuppressLint("LongLogTag")
+    public void setNavBarBtnEvent() {
+        drawerView = findViewById(R.id.drawer2);
+        close_btn = findViewById(R.id.close_btn);
+        user_profile = findViewById(R.id.user_profile);
+        my_setting = findViewById(R.id.my_setting);
+        user_name = findViewById(R.id.user_name);
+        jikgup = findViewById(R.id.jikgup);
+        store_name = findViewById(R.id.store_name);
+
+        dlog.i("Navname : " + Navname);
+        dlog.i("Navimg_path : " + Navimg_path);
+        dlog.i("Navgetjikgup : " + Navgetjikgup);
+
+        user_name.setText(Navname);
+        jikgup.setText(Navgetjikgup);
+        Glide.with(mContext).load(Navimg_path)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(user_profile);
+
+        store_name.setText(place_name);
+
+        close_btn.setOnClickListener(v -> {
+            drawerLayout.closeDrawer(drawerView);
+        });
     }
 
     private void setBtnEvent() {
@@ -237,8 +310,8 @@ public class MemberDetailActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-        SetAllMemberList(stub_place_id,stub_user_id);
+        SetAllMemberList(stub_place_id, stub_user_id);
+        MainWorkCnt(stub_place_id, stub_user_id);
     }
 
     @Override
@@ -249,9 +322,76 @@ public class MemberDetailActivity extends AppCompatActivity {
         shardpref.remove("stub_user_account");
     }
 
-    /*직원 전체 리스트 START*/
+    /*업무카운팅 START*/
     RetrofitConnect rc = new RetrofitConnect();
+
+    public void MainWorkCnt(String place_id, String user_id) {
+        dlog.i("SetAllMemberList place_id : " + place_id);
+        dlog.i("SetAllMemberList user_id : " + user_id);
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(MainWorkCntInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
+            Call<String> call = api.getData(place_id, user_id);
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
+                        Log.e("onSuccess : ", response.body());
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(jsonResponse);
+                            String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
+                            String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt");
+                            String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
+                            String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
+                            String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
+                            String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
+
+                            dlog.i("-----MainWorkCnt-----");
+                            dlog.i("task_complete_cnt : " + task_complete_cnt);
+                            dlog.i("task_incomplete_cnt : " + task_incomplete_cnt);
+                            dlog.i("waiting_cnt : " + waiting_cnt);
+                            dlog.i("approval_cnt : " + approval_cnt);
+                            dlog.i("reject_cnt : " + reject_cnt);
+                            dlog.i("-----MainWorkCnt-----");
+                            binding.workdata01.setText(task_complete_cnt);
+                            binding.workdata02.setText(task_incomplete_cnt);
+                            binding.workdata03.setText(waiting_cnt);
+                            binding.workdata04.setText(approval_cnt);
+                            binding.workdata05.setText(reject_cnt);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    /*업무카운팅 START*/
+
+    /*직원 전체 리스트 START*/
+    String workpay = "";
     public void SetAllMemberList(String place_id, String user_id) {
+        dlog.i("SetAllMemberList place_id : " + place_id);
+        dlog.i("SetAllMemberList user_id : " + user_id);
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(AllMemberInterface.URL)
@@ -273,20 +413,51 @@ public class MemberDetailActivity extends AppCompatActivity {
                             JSONArray Response = new JSONArray(jsonResponse);
                             String name = Response.getJSONObject(0).getString("name");
                             String place_name = Response.getJSONObject(0).getString("place_name");
-                            String join_date = Response.getJSONObject(0).getString("join_date");
+                            String join_date = Response.getJSONObject(0).getString("join_date").replace("-", ".");
+                            String img_path = Response.getJSONObject(0).getString("img_path");
+                            String phone = Response.getJSONObject(0).getString("phone");
+                            String owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
+                                    + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
+                                    + Response.getJSONObject(0).getString("owner_phone").substring(7, 11);
+                            String jikgup = Response.getJSONObject(0).getString("jikgup");
+
                             binding.name.setText(name);
                             binding.placeNametv.setText(place_name);
-                            binding.joinDatetv.setText(join_date);
+                            binding.joinDatetv.setText(join_date + "부터 가입");
+                            Glide.with(mContext).load(img_path)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                                    .into(binding.profileImg);
+
                             String inoutstate = Response.getJSONObject(0).getString("inoutstate");
-                            if(inoutstate.equals("-1")){
+                            if (inoutstate.equals("-1")) {
                                 binding.workState.setText("미출근");
-                            }else if(inoutstate.equals("0")){
+                            } else if (inoutstate.equals("0")) {
                                 binding.workState.setText("출근");
-                            }else if(inoutstate.equals("1")){
+                            } else if (inoutstate.equals("1")) {
                                 binding.workState.setText("퇴근");
                             }
-                            binding.workPay.setText(Response.getJSONObject(0).getString("pay").equals("null")?"미정":Response.getJSONObject(0).getString("pay"));
-                            binding.userPhone.setText(Response.getJSONObject(0).getString("phone").equals("null")?"미입력":Response.getJSONObject(0).getString("phone"));
+                            workpay = Response.getJSONObject(0).getString("pay").equals("null") ? "미정" : Response.getJSONObject(0).getString("pay");
+                            binding.workPay.setText(Response.getJSONObject(0).getString("pay").equals("null") ? "미정" : Response.getJSONObject(0).getString("pay"));
+
+                            if (phone.isEmpty() || phone.equals("null")) {
+                                phone = "미입력";
+                            }
+                            if (owner_phone.equals("null") || owner_phone.isEmpty()) {
+                                owner_phone = "미입력";
+                            }
+                            if (USER_INFO_AUTH.equals("0")) {
+                                binding.callNumber.setText("전화걸기");
+                                binding.userPhone.setText(phone);
+                            } else {
+                                binding.callNumber.setText("사장님께 전화걸기");
+                                binding.userPhone.setText(owner_phone);
+                            }
+                            Navname = name;
+                            Navimg_path = img_path;
+                            Navgetjikgup = jikgup;
+                            setNavBarBtnEvent();
+                            PlaceWorkCheck(stub_place_id, "1", "3");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -350,11 +521,15 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             JSONObject jsonObject = Response.getJSONObject(i);
                                             inoutmAdapter.addItem(new WorkGotoListData.WorkGotoListData_list(
                                                     jsonObject.getString("day"),
-                                                    jsonObject.getString("day_off"),
+                                                    jsonObject.getString("yoil"),
                                                     jsonObject.getString("in_time"),
                                                     jsonObject.getString("out_time"),
-                                                    jsonObject.getString("late_time"),
-                                                    jsonObject.getString("working_time")
+                                                    jsonObject.getString("workdiff"),
+                                                    jsonObject.getString("state"),
+                                                    jsonObject.getString("sieob1"),
+                                                    jsonObject.getString("sieob2"),
+                                                    jsonObject.getString("jongeob1"),
+                                                    jsonObject.getString("jongeob2")
                                             ));
                                         }
                                         inoutmAdapter.notifyDataSetChanged();
@@ -384,4 +559,114 @@ public class MemberDetailActivity extends AppCompatActivity {
         }
     }
 
+    public void PlaceWorkCheck(String place_id, String auth, String kind) {
+        dlog.i("PlaceWorkCheck place_id : " + place_id);
+        dlog.i("PlaceWorkCheck auth : " + auth);
+        dlog.i("PlaceWorkCheck kind : " + kind);
+        dlog.i("PlaceWorkCheck USER_INFO_ID : " + stub_user_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MainContentsInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MainContentsInterface api = retrofit.create(MainContentsInterface.class);
+        Call<String> call = api.getData(place_id, auth, stub_user_id, kind);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+
+                                    try {
+                                        int allPay = 0;//pay_diff_bar
+                                        String getPay = "";
+                                        for (int i = 0; i < Response.length(); i++) {
+                                            getPay = Response.getJSONObject(i).getString("recent_pay").replace(",", "");
+                                            allPay += Integer.parseInt(getPay);
+                                        }
+                                        DecimalFormat myFormatter = new DecimalFormat("###,###");
+                                        workpay = workpay.replace(",","");
+                                        int WorkPaY = Integer.parseInt(workpay);
+                                        int UntilNowPay = (allPay*100) / WorkPaY;
+                                        dlog.i("allPay : " + allPay);
+                                        dlog.i("WorkPaY : " + WorkPaY);
+                                        dlog.i("UntilNowPay : " + UntilNowPay);
+                                        binding.nowPayTv.setText(String.valueOf(myFormatter.format(allPay)) + "원");
+                                        binding.nowPay.setText(String.valueOf(myFormatter.format(allPay)) + "원");
+                                        binding.payTv.setText(workpay + "원");
+                                        binding.payDiffBar.setProgress(UntilNowPay);
+                                    } catch (Exception e) {
+                                        dlog.i("UserCheck Exception : " + e);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void btnOnclick(View view) {
+        if (view.getId() == R.id.menu) {
+            drawerLayout.openDrawer(drawerView);
+        } else if (view.getId() == R.id.out_store) {
+            pm.PlaceList(mContext);
+        } else if (view.getId() == R.id.select_nav01) {
+            pm.PlaceList(mContext);
+        } else if (view.getId() == R.id.select_nav02) {
+            pm.PlaceAddGo(mContext);
+        } else if (view.getId() == R.id.select_nav03) {
+            drawerLayout.closeDrawer(drawerView);
+        } else if (view.getId() == R.id.select_nav04) {
+            shardpref.putInt("SELECT_POSITION", 2);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.Main(mContext);
+            drawerLayout.closeDrawer(drawerView);
+        } else if (view.getId() == R.id.select_nav05) {
+            shardpref.putString("Tap", "0");
+            pm.PayManagement(mContext);
+        } else if (view.getId() == R.id.select_nav06) {
+            shardpref.putString("Tap", "1");
+            pm.PayManagement(mContext);
+        } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
+            shardpref.putInt("SELECT_POSITION", 1);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.Main(mContext);
+            drawerLayout.closeDrawer(drawerView);
+        } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
+            pm.addWorkGo(mContext);
+        } else if (view.getId() == R.id.select_nav09) {
+            pm.Approval(mContext);
+        } else if (view.getId() == R.id.select_nav12) {
+            dlog.i("커뮤니티 Click!");
+            if(USER_INFO_AUTH.equals("0")){
+                shardpref.putInt("SELECT_POSITION", 3);
+                pm.Main(mContext);
+            }else{
+                shardpref.putInt("SELECT_POSITION", 3);
+                pm.Main(mContext);
+            }
+            drawerLayout.closeDrawer(drawerView);
+        } else if (view.getId() == R.id.select_nav10) {
+            dlog.i("근로계약서 전체 관리");
+            pm.ContractFragment(mContext);
+        }
+
+    }
 }

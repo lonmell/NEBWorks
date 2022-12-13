@@ -152,20 +152,21 @@
         android:layout_below="@+id/category_box"
         android:layout_marginTop="10dp"
         android:background="#DBDBDB" />
+
     <TextView
         android:id="@+id/view_com"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_bold"
         android:layout_below="@+id/line01"
-        android:layout_marginTop="5dp"
         android:layout_alignStart="@+id/profile_area"
-        android:gravity="start|top"
-        android:textSize="15sp"
-        android:text="조회수 0 / 댓글 0"
-        android:padding="8dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:textColor="#54585A" />
+        android:fontFamily="@font/inter_bold"
+        android:gravity="start|top"
+        android:padding="8dp"
+        android:text="조회수 0 / 댓글 0"
+        android:textColor="#54585A"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/like_cnt"

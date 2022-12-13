@@ -62,7 +62,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         app:cardBackgroundColor="#F5F6F8"
@@ -136,5 +136,6 @@
                     android:background="@drawable/list_setting" />
             </RelativeLayout>
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 </LinearLayout>

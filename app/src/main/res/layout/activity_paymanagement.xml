@@ -156,8 +156,8 @@
                 android:id="@+id/setdate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center"
                 android:text="0000년 00월"
@@ -196,8 +196,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@+id/select01"

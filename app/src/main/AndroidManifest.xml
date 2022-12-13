@@ -200,6 +200,7 @@
         <activity android:name=".ui.community.MoreListCommunityActivity" />
         <activity android:name=".ui.community.OwnerFeedAddActivity" />
         <activity android:name=".ui.community.OwnerFeedDetailActivity" />
+        <activity android:name=".ui.community.CommunityDetailActivity" />
 
         <!--contract-->
         <activity android:name=".ui.contract.ContractFragmentActivity"/>

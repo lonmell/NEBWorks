@@ -55,7 +55,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PaymentFragment extends Fragment {
-    private final static String TAG = "MoreFragment";
+    private final static String TAG = "PaymentFragment";
     private ActivityPaymanagementBinding binding;
     Context mContext;
     Activity activity;
@@ -161,7 +161,6 @@ public class PaymentFragment extends Fragment {
 
 
             Log.i(TAG, "USER_INFO_AUTH : " + USER_INFO_AUTH);
-            ChangePage(0);
             setAddBtnSetting();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -302,6 +301,14 @@ public class PaymentFragment extends Fragment {
     FragmentTransaction transaction;
 
     private void TimeSetFun() {
+        if(USER_INFO_AUTH.equals("1")){
+            binding.tabLayout.setVisibility(View.GONE);
+            binding.selectArea.setVisibility(View.GONE);
+            change_place_id = place_id;
+            change_member_id = USER_INFO_ID;
+            binding.select01.setVisibility(View.GONE);
+        }
+
         transaction = getChildFragmentManager().beginTransaction();
 
         cal = Calendar.getInstance();
@@ -310,9 +317,18 @@ public class PaymentFragment extends Fragment {
         Year = toDay.substring(0, 4);
         Month = toDay.substring(5, 7);
         binding.setdate.setText(Year + "-" + Month);
+        if(USER_INFO_AUTH.equals("1")){
+            binding.tabLayout.setVisibility(View.GONE);
+            binding.selectArea.setVisibility(View.GONE);
+            change_place_id = place_id;
+            change_member_id = USER_INFO_ID;
+            binding.select01.setVisibility(View.GONE);
+        }
+
         WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
 
         binding.prevDate.setOnClickListener(v -> {
+            dlog.i("prevDate Click!! PaymentFragment");
             cal.add(Calendar.DATE, -1);
             toDay = sdf.format(cal.getTime());
             binding.setdate.setText(toDay);
@@ -330,6 +346,7 @@ public class PaymentFragment extends Fragment {
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
         });
         binding.nextDate.setOnClickListener(v -> {
+            dlog.i("nextDate Click!! PaymentFragment");
             cal.add(Calendar.DATE, +1);
             toDay = sdf.format(cal.getTime());
             Year = toDay.substring(0, 4);
@@ -343,6 +360,7 @@ public class PaymentFragment extends Fragment {
                 bYear = gYear;
                 bMonth = gMonth;
             }
+
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
         });
 
@@ -389,7 +407,17 @@ public class PaymentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
+        if(USER_INFO_AUTH.equals("1")){
+            binding.tabLayout.setVisibility(View.GONE);
+            binding.selectArea.setVisibility(View.GONE);
+            change_place_id = place_id;
+            change_member_id = USER_INFO_ID;
+            binding.select01.setVisibility(View.GONE);
+            ChangePage(1);
+        }else{
+            ChangePage(0);
+        }
+//        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
     }
 
     @Override

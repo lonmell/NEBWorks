@@ -433,8 +433,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             android:weightSum="4">
@@ -488,8 +486,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             android:weightSum="4">
@@ -552,6 +548,7 @@
                         android:layout_marginTop="20dp"
                         app:cardBackgroundColor="#f2f2f2"
                         app:cardCornerRadius="8dp"
+                        android:visibility="gone"
                         app:cardElevation="0dp">
 
                         <TextView
@@ -667,6 +664,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/paymentmanagement_select"
                     android:layout_width="74dp"
                     android:layout_height="106dp"
                     android:layout_margin="5dp"

@@ -545,11 +545,15 @@ public class WorkState2Activity extends AppCompatActivity {
                                             if (!jsonObject.getString("in_time").equals("null")) {
                                                 mAdapter.addItem(new WorkGotoListData.WorkGotoListData_list(
                                                         jsonObject.getString("day"),
-                                                        jsonObject.getString("day_off"),
+                                                        jsonObject.getString("yoil"),
                                                         jsonObject.getString("in_time"),
                                                         jsonObject.getString("out_time"),
-                                                        jsonObject.getString("late_time"),
-                                                        jsonObject.getString("working_time")
+                                                        jsonObject.getString("workdiff"),
+                                                        jsonObject.getString("state"),
+                                                        jsonObject.getString("sieob1"),
+                                                        jsonObject.getString("sieob2"),
+                                                        jsonObject.getString("jongeob1"),
+                                                        jsonObject.getString("jongeob2")
                                                 ));
                                             }
                                         }

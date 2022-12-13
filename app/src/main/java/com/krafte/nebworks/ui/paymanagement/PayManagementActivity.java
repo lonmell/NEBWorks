@@ -138,6 +138,15 @@ public class PayManagementActivity extends AppCompatActivity {
                 binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), "1");
             });
+
+            Log.i(TAG, "USER_INFO_AUTH : " + USER_INFO_AUTH);
+            if(USER_INFO_AUTH.equals("1")){
+                binding.tabLayout.setVisibility(View.GONE);
+                binding.selectArea.setVisibility(View.GONE);
+                change_place_id = place_id;
+                change_member_id = USER_INFO_ID;
+            }
+
             binding.changePlace.setOnClickListener(v -> {
                 PaySelectPlaceActivity psp = new PaySelectPlaceActivity();
                 psp.show(getSupportFragmentManager(), "PaySelectPlaceActivity");
@@ -223,12 +232,12 @@ public class PayManagementActivity extends AppCompatActivity {
         WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
 
         binding.prevDate.setOnClickListener(v -> {
+            dlog.i("prevDate Click!! PayManagementActivity");
             cal.add(Calendar.DATE, -1);
             toDay = sdf.format(cal.getTime());
-            binding.setdate.setText(toDay);
+
             Year = toDay.substring(0, 4);
             Month = toDay.substring(5, 7);
-            binding.setdate.setText(Year + "-" + Month);
             if (!gYear.equals(gYear) || !bMonth.equals(gMonth)) {
                 dlog.i("gYear : " + gYear);
                 dlog.i("bYear : " + bYear);
@@ -236,15 +245,16 @@ public class PayManagementActivity extends AppCompatActivity {
                 dlog.i("bMonth : " + bMonth);
                 bYear = gYear;
                 bMonth = gMonth;
+                binding.setdate.setText(Year + "-" + Month);
             }
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
         });
         binding.nextDate.setOnClickListener(v -> {
+            dlog.i("nextDate Click!! PayManagementActivity");
             cal.add(Calendar.DATE, +1);
             toDay = sdf.format(cal.getTime());
             Year = toDay.substring(0, 4);
             Month = toDay.substring(5, 7);
-            binding.setdate.setText(Year + "-" + Month);
             if (!gYear.equals(gYear) || !bMonth.equals(gMonth)) {
                 dlog.i("gYear : " + gYear);
                 dlog.i("bYear : " + bYear);
@@ -252,6 +262,7 @@ public class PayManagementActivity extends AppCompatActivity {
                 dlog.i("bMonth : " + bMonth);
                 bYear = gYear;
                 bMonth = gMonth;
+                binding.setdate.setText(Year + "-" + Month);
             }
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
         });

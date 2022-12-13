@@ -22,6 +22,8 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdapter.ViewHolder> {
     private static final String TAG = "PaymentMemberAdapter";
@@ -35,6 +37,7 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
     PageMoveClass pm = new PageMoveClass();
     int AllPayment = 0;
     String Tap = "";
+    String USER_INFO_AUTH = "";
 
     String insurance1 = "";
     String insurance2 = "";
@@ -76,16 +79,10 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
         try{
             AllPayment = Integer.parseInt(item.getTotal_payment().equals("null")?"0":item.getTotal_payment()) + Integer.parseInt(item.getSecond_pay().equals("null")?"0":item.getSecond_pay()) + Integer.parseInt(item.getOverwork_pay().equals("null")?"0":item.getOverwork_pay());
             holder.name.setText(item.getUser_name());
-            if(Tap.equals("0")){
-                holder.gongje_box.setVisibility(View.GONE);
+
+            if(USER_INFO_AUTH.equals("1")){
                 holder.send_user_state.setVisibility(View.GONE);
-                holder.write_payment.setVisibility(View.VISIBLE);
-                holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
-                holder.progress_tvarea.setVisibility(View.VISIBLE);
-            }else if(Tap.equals("1")){
-                dlog.i("AllPayment : " + AllPayment);
                 holder.gongje_box.setVisibility(View.VISIBLE);
-                holder.send_user_state.setVisibility(View.VISIBLE);
                 holder.write_payment.setVisibility(View.GONE);
                 holder.weekly_worktime_progress.setVisibility(View.GONE);
                 holder.progress_tvarea.setVisibility(View.GONE);
@@ -108,17 +105,58 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
                 String resultGonjeTv = myFormatter.format(result_gongje_int);
                 holder.result_pay.setText(item.getPayment() + "원");
                 holder.result_gongje.setText(resultGonjeTv + "원");
+                dlog.i("result_pay : " + item.getPayment());
+                dlog.i("result_gongje : " + resultGonjeTv);
+            }else if(USER_INFO_AUTH.equals("0")){
+                if(Tap.equals("0")){
+                    holder.gongje_box.setVisibility(View.GONE);
+                    holder.send_user_state.setVisibility(View.GONE);
+                    holder.write_payment.setVisibility(View.VISIBLE);
+                    holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                    holder.progress_tvarea.setVisibility(View.VISIBLE);
+                }else if(Tap.equals("1")){
+                    dlog.i("AllPayment : " + AllPayment);
+                    holder.gongje_box.setVisibility(View.VISIBLE);
+                    holder.send_user_state.setVisibility(View.VISIBLE);
+                    holder.write_payment.setVisibility(View.GONE);
+                    holder.weekly_worktime_progress.setVisibility(View.GONE);
+                    holder.progress_tvarea.setVisibility(View.GONE);
+
+                    insurance1 = String.valueOf(Math.round((AllPayment * insurance01p)/100));
+                    insurance2 = String.valueOf(Math.round((AllPayment * insurance02p)/100));
+                    insurance3 = String.valueOf(Math.round((AllPayment * insurance03p)/100));
+                    insurance4 = String.valueOf(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+                    dlog.i("insurance01p : " + insurance01p);
+                    dlog.i("insurance02p : " + insurance02p);
+                    dlog.i("insurance03p : " + insurance03p);
+                    dlog.i("insurance04p : " + insurance04p);
+                    dlog.i("insurance1 : " + insurance1);
+                    dlog.i("insurance2 : " + insurance2);
+                    dlog.i("insurance3 : " + insurance3);
+                    dlog.i("insurance4 : " + insurance4);
+                    dlog.i("result_pay : " + item.getPayment());
+                    dlog.i("result_gongje : " + (insurance1+insurance2+insurance3+insurance4));
+                    int result_gongje_int = Integer.parseInt(insurance1)+Integer.parseInt(insurance2)+Integer.parseInt(insurance3)+Integer.parseInt(insurance4);
+                    String resultGonjeTv = myFormatter.format(result_gongje_int);
+                    holder.result_pay.setText(item.getPayment() + "원");
+                    holder.result_gongje.setText(resultGonjeTv + "원");
+                    dlog.i("result_pay : " + item.getPayment());
+                    dlog.i("result_gongje : " + resultGonjeTv);
+                }
             }
 
             String pay = myFormatter.format(Integer.parseInt(item.getGongjeynpay().equals("null")?"0":item.getGongjeynpay()));
             holder.total_pay.setText(pay.isEmpty()?"미정":pay);
 
             holder.work_day.setText(item.getTotal_workday() + "일");
-            holder.work_time.setText(item.getWorkhour() + "시간");
-            holder.weekly_worktime_progress.setProgress(Integer.parseInt(item.getWorkhour()));
+
+            List<String> workhour = new ArrayList<>(Arrays.asList(item.getWorkhour().split("\\.")));
+            holder.work_time.setText(workhour.get(0) + "시간");
+            holder.weekly_worktime_progress.setProgress(Integer.parseInt(workhour.get(0)));
 
             holder.nowpay.setText("예상 급여 " + myFormatter.format(Integer.parseInt(item.getTotal_payment())) + "원");
             holder.mypay.setText("계약 급여 " + item.getPayment() + "원");
+
 
             holder.write_payment.setOnClickListener(v -> {
                 dlog.i("write_payment Click");
@@ -165,17 +203,14 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
             result_gongje            = itemView.findViewById(R.id.result_gongje);
             progress_tvarea          = itemView.findViewById(R.id.progress_tvarea);
 
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1");
+
             itemView.setOnClickListener(v -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     // 리스너 객체의 메서드 호출.
                     PaymentData.PaymentData_list item = mData.get(pos);
-                    if(Tap.equals("0")){
-                        shardpref.putString("stub_place_id",item.getStore_no());
-                        shardpref.putString("stub_user_id",item.getUser_id());
-                        shardpref.putString("stub_user_account",item.getAccount());
-                        pm.MemberDetail(mContext);
-                    }else if(Tap.equals("1")){
+                    if(USER_INFO_AUTH.equals("1")){
                         if(!item.getBasic_pay().equals("null")
                                 || !item.getSecond_pay().equals("null")
                                 || !item.getOverwork_pay().equals("null")
@@ -203,9 +238,43 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
 //                        shardpref.putString("returnPage","");
                             pm.PaystubAll(mContext);
                         }
+                    }else if(USER_INFO_AUTH.equals("0")){
+                        if(Tap.equals("0")){
+                            shardpref.putString("stub_place_id",item.getStore_no());
+                            shardpref.putString("stub_user_id",item.getUser_id());
+                            shardpref.putString("stub_user_account",item.getAccount());
+                            pm.MemberDetail(mContext);
+                        }else if(Tap.equals("1")){
+                            if(!item.getBasic_pay().equals("null")
+                                    || !item.getSecond_pay().equals("null")
+                                    || !item.getOverwork_pay().equals("null")
+                                    || !item.getMeal_allowance_yn().equals("null")
+                                    || !item.getStore_insurance_yn().equals("null")
+                                    || !item.getMeal_pay().equals("null")){
+                                shardpref.putString("select_month",selectdate.substring(5,7));
+                                shardpref.putString("stub_place_id",item.getStore_no());
+                                shardpref.putString("stub_user_id",item.getUser_id());
+                                shardpref.putString("stub_user_name",item.getUser_name());
+                                shardpref.putString("stub_jikgup",item.getJikgup());
+                                shardpref.putString("stub_basic_pay",item.getBasic_pay());
+                                shardpref.putString("stub_second_pay",item.getSecond_pay());
+                                shardpref.putString("stub_overwork_pay",item.getOverwork_pay());
+                                shardpref.putString("stub_meal_allowance_yn",item.getMeal_allowance_yn());
+                                shardpref.putString("stub_store_insurance_yn",item.getStore_insurance_yn());
+                                shardpref.putString("stub_gongjeynpay",item.getGongjeynpay());
+                                shardpref.putString("stub_total_payment",item.getTotal_payment());
+                                shardpref.putString("stub_workday",item.getWorkday());
+                                shardpref.putString("stub_total_workday",item.getTotal_workday());
+                                shardpref.putString("stub_total_workhour", item.getWorkhour());
+                                shardpref.putString("stub_payment",item.getPayment());
+                                shardpref.putString("stub_selectdate",selectdate);
+                                shardpref.putString("stub_meal_pay",item.getMeal_pay());
+//                        shardpref.putString("returnPage","");
+                                pm.PaystubAll(mContext);
+                            }
+                        }
                     }
                 }
-
             });
         }
     }

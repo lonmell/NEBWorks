@@ -273,6 +273,9 @@ public class HomeFragment2 extends Fragment {
         UserCheck();
         getPlaceData();
         PlaceWorkCheck(place_id,USER_INFO_AUTH,"0");
+        PlaceWorkCheck(place_id,USER_INFO_AUTH,"1");
+        PlaceWorkCheck(place_id,USER_INFO_AUTH,"2");
+        PlaceWorkCheck(place_id,USER_INFO_AUTH,"3");
         InOutLogMember();
     }
 
@@ -335,7 +338,10 @@ public class HomeFragment2 extends Fragment {
 
     public void setBtnEvent() {
         binding.approvalGo.setOnClickListener(v -> {
-            pm.Approval(mContext);
+            shardpref.putString("stub_place_id", place_id);
+            shardpref.putString("stub_user_id", USER_INFO_ID);
+            shardpref.putString("stub_user_account", USER_INFO_EMAIL);
+            pm.MemberDetail(mContext);
         });
         binding.itemArea.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH","1");
@@ -346,6 +352,12 @@ public class HomeFragment2 extends Fragment {
             pm.MemberManagement(mContext);
         });
 
+        binding.paymentmanagementSelect.setOnClickListener(v -> {
+            shardpref.putInt("Tap", 0);
+            shardpref.putInt("SELECT_POSITION", 1);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.Main2(mContext);
+        });
         binding.ioArea.setOnClickListener(v -> {
             if (kind.equals("-1") || kind.equals("0")) {
                 if (kind.equals("-1")) {
@@ -440,7 +452,6 @@ public class HomeFragment2 extends Fragment {
 //                                            getEmployerToken();
                                         }
                                         InOutLogMember();
-                                        PlaceWorkCheck(place_id,USER_INFO_AUTH,"0");
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -676,7 +687,6 @@ public class HomeFragment2 extends Fragment {
 
                                             }
                                             mAdapter.notifyDataSetChanged();
-                                            PlaceWorkCheck(place_id,USER_INFO_AUTH,"1");
                                         }else if(kind.equals("1")){
                                             mList2 = new ArrayList<>();
                                             mAdapter2 = new MainNotiLAdapter(mContext, mList2);
@@ -708,7 +718,6 @@ public class HomeFragment2 extends Fragment {
 
                                             }
                                             mAdapter.notifyDataSetChanged();
-                                            PlaceWorkCheck(place_id,USER_INFO_AUTH,"2");
                                         }else if(kind.equals("2")){
                                             binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
                                             binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
@@ -719,7 +728,6 @@ public class HomeFragment2 extends Fragment {
                                             dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
                                             dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
                                             dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
-                                            PlaceWorkCheck(place_id,USER_INFO_AUTH,"3");
                                         }else if(kind.equals("3")){
                                             int allPay = 0;
                                             for (int i = 0; i < Response.length(); i++) {

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.ActivityPaystuballBinding;
-import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -45,7 +43,7 @@ public class PaystuballActivity extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
-    String store_no;
+    String place_id;
 
     String stub_store_name = "";
     String stub_place_id = "";
@@ -65,6 +63,7 @@ public class PaystuballActivity extends AppCompatActivity {
     String stub_selectdate = "";
     String stub_meal_pay = "";
     String select_month = "";
+    String place_name = "";
 
     float insurance01p = 0;//국민연금 퍼센트
     float insurance02p = 0;//건강보험 퍼센트
@@ -92,17 +91,11 @@ public class PaystuballActivity extends AppCompatActivity {
     String select0102 = "직접입력";
     String select0304 = "포함";
 
-    String result = "";
-    final DecimalFormat decimalFormat = new DecimalFormat("#,###");
-    String sendTopic = "";
-    String sendToken = "";
-    boolean rcvchannelId2 = false;
-    Handler mHandler;
-    DBConnection dbConnection = new DBConnection();
-    String click_action = "";
-    String message = "";
-    String topic = "";
     int AllPayment = 0;
+    String GET_DATE = "";
+    String Year = "";
+    String Month = "";
+    String Day = "";
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
@@ -126,7 +119,8 @@ public class PaystuballActivity extends AppCompatActivity {
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-        store_no = shardpref.getString("store_no", "");
+        place_id = shardpref.getString("place_id", "");
+        place_name = shardpref.getString("place_name","");
 
         //-------------------
         select_month = shardpref.getString("select_month","");
@@ -156,6 +150,15 @@ public class PaystuballActivity extends AppCompatActivity {
         super.onResume();
         DataCheck();
         GetInsurancePercent();
+        if(USER_INFO_AUTH.equals("0")){
+            binding.resendBtn.setText("급여명세서 재발송");
+        }else{
+            binding.resendBtn.setText("확인");
+            binding.resendBtn.setOnClickListener(v -> {
+                super.onBackPressed();
+            });
+        }
+
     }
 
     private void DataCheck(){
@@ -235,7 +238,7 @@ public class PaystuballActivity extends AppCompatActivity {
 //        Thread th = new Thread(() -> {
 //            click_action = "EmployeeMainActivity";
 //            message = stub_selectdate + " 급여명세서가 재발송되었습니다.";
-//            dbConnection.FcmTestFunction(topic, message, token_get, click_action, "1", store_no);
+//            dbConnection.FcmTestFunction(topic, message, token_get, click_action, "1", place_id);
 //            runOnUiThread(() -> {
 //            });
 //        });

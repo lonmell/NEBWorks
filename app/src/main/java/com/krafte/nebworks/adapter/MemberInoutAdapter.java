@@ -2,6 +2,7 @@ package com.krafte.nebworks.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
     RetrofitConnect rc = new RetrofitConnect();
     String month = "";
 
-    public MemberInoutAdapter(Context context, ArrayList<WorkGotoListData.WorkGotoListData_list> data,String month) {
+    public MemberInoutAdapter(Context context, ArrayList<WorkGotoListData.WorkGotoListData_list> data, String month) {
         this.mData = data;
         this.mContext = context;
         this.month = month;
@@ -51,24 +52,62 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
     @Override
     public void onBindViewHolder(@NonNull MemberInoutAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         WorkGotoListData.WorkGotoListData_list item = mData.get(position);
-        try{
-            if(position == 0){
+        try {
+            if (position == 0) {
                 holder.first_pos.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.first_pos.setVisibility(View.GONE);
             }
             holder.date.setText(month + "월 " + item.getDay() + "일");
-            if(item.getWorking_time().length() <= 4) {
-                //뒤에 분이 없을때
-                holder.time.setText(item.getWorking_time().substring(0,2) + "시간");
-            }else if(item.getWorking_time().length() > 4){
-                //뒤에 분이 있을때
-                holder.time.setText(item.getWorking_time().substring(0,2) + "시간" + item.getWorking_time().substring(3,5) + " 분");
-            }
 
-            holder.in_time.setText(item.getIn_time().substring(0,5));
-            holder.out_time.setText(item.getOut_time().substring(0,5));
-        }catch (Exception e){
+            dlog.i("item.getWorkdiff() : " + item.getWorkdiff());
+            dlog.i("item.getState() : " + item.getState());
+
+            if (!item.getWorkdiff().equals("null")) {
+                holder.time.setText(item.getWorkdiff());
+            } else {
+                if (item.getState().equals("휴무")) {
+                    holder.time.setTextColor(Color.parseColor("#6395EC"));
+                    holder.time.setText(item.getState());
+                } else if (item.getState().equals("결근")) {
+                    holder.time.setTextColor(Color.parseColor("#DD6540"));
+                    holder.time.setText(item.getState());
+                } else {
+                    if(item.getSieob1().equals("지각")){
+                        holder.time.setText(item.getSieob1());
+                        holder.time.setTextColor(Color.parseColor("#DD6540"));
+                    }else if(item.getSieob1().equals("조기퇴근")){
+                        holder.time.setText(item.getSieob1());
+                        holder.time.setTextColor(Color.parseColor("#DD6540"));
+                    }else if(item.getSieob1().equals("추가근무/퇴근")){
+                        holder.time.setText(item.getSieob1());
+                        holder.time.setTextColor(Color.parseColor("#6395EC"));
+                    }else{
+                        holder.time.setText("");
+                    }
+                }
+            }
+            if (!item.getSieob1().equals("null")) {
+                holder.in_time.setTextColor(Color.parseColor("#DD6540"));
+            } else {
+                holder.in_time.setTextColor(Color.parseColor("#6395EC"));
+            }
+            if (!item.getJongeob1().equals("null")) {
+                holder.out_time.setTextColor(Color.parseColor("#DD6540"));
+            } else {
+                holder.out_time.setTextColor(Color.parseColor("#6395EC"));
+            }
+            if (!item.getIn_time().equals("null")) {
+                holder.in_time.setText(item.getIn_time());
+            } else {
+                holder.in_time.setText("");
+            }
+            if (!item.getOut_time().equals("null")) {
+                holder.out_time.setText(item.getOut_time());
+            } else {
+                holder.out_time.setText("");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -82,7 +121,7 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView date,time,in_time,out_time;
+        TextView date, time, in_time, out_time;
         RelativeLayout list_setting;
         LinearLayout first_pos;
 
@@ -92,12 +131,12 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
 
-            date            = itemView.findViewById(R.id.date);
-            time            = itemView.findViewById(R.id.time);
-            in_time         = itemView.findViewById(R.id.in_time);
-            out_time        = itemView.findViewById(R.id.out_time);
-            list_setting    = itemView.findViewById(R.id.list_setting);
-            first_pos       = itemView.findViewById(R.id.first_pos);
+            date = itemView.findViewById(R.id.date);
+            time = itemView.findViewById(R.id.time);
+            in_time = itemView.findViewById(R.id.in_time);
+            out_time = itemView.findViewById(R.id.out_time);
+            list_setting = itemView.findViewById(R.id.list_setting);
+            first_pos = itemView.findViewById(R.id.first_pos);
 
             dlog.i("mData size : " + mData.size());
             itemView.setOnClickListener(v -> {

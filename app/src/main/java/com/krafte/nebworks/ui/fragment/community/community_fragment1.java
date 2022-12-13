@@ -310,6 +310,11 @@ public class community_fragment1 extends Fragment {
                                 }
                             }
                             mAdapter.notifyDataSetChanged();
+                            mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View v, int position) {
+                                }
+                            });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

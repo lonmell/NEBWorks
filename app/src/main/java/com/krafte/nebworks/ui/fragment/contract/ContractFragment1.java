@@ -48,6 +48,7 @@ public class ContractFragment1 extends Fragment {
     //shared Data
     PreferenceHelper shardpref;
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
     String place_id = "";
 
     //Other
@@ -100,6 +101,7 @@ public class ContractFragment1 extends Fragment {
         shardpref = new PreferenceHelper(mContext);
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         place_id = shardpref.getString("place_id", "");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
         dlog.DlogContext(mContext);
         setBtnEvent();
@@ -148,21 +150,42 @@ public class ContractFragment1 extends Fragment {
                                 binding.nodataArea.setVisibility(View.GONE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    mAdapter.addItem(new ContractData.ContractData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("place_id"),
-                                            jsonObject.getString("user_id"),
-                                            jsonObject.getString("name"),
-                                            jsonObject.getString("contract_yn"),
-                                            jsonObject.getString("img_path"),
-                                            jsonObject.getString("jumin"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("join_date"),
-                                            jsonObject.getString("owner_sign_id"),
-                                            jsonObject.getString("worker_sign_id"),
-                                            jsonObject.getString("progress_pos"),
-                                            jsonObject.getString("contract_id")
-                                    ));
+                                    if(USER_INFO_AUTH.equals("0")){
+                                        mAdapter.addItem(new ContractData.ContractData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("place_id"),
+                                                jsonObject.getString("user_id"),
+                                                jsonObject.getString("name"),
+                                                jsonObject.getString("contract_yn"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("jumin"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("join_date"),
+                                                jsonObject.getString("owner_sign_id"),
+                                                jsonObject.getString("worker_sign_id"),
+                                                jsonObject.getString("progress_pos"),
+                                                jsonObject.getString("contract_id")
+                                        ));
+                                    }else if(USER_INFO_AUTH.equals("1")){
+                                        if(jsonObject.getString("user_id").equals(USER_INFO_ID)){
+                                            mAdapter.addItem(new ContractData.ContractData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("place_id"),
+                                                    jsonObject.getString("user_id"),
+                                                    jsonObject.getString("name"),
+                                                    jsonObject.getString("contract_yn"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("jumin"),
+                                                    jsonObject.getString("kind"),
+                                                    jsonObject.getString("join_date"),
+                                                    jsonObject.getString("owner_sign_id"),
+                                                    jsonObject.getString("worker_sign_id"),
+                                                    jsonObject.getString("progress_pos"),
+                                                    jsonObject.getString("contract_id")
+                                            ));
+                                        }
+                                    }
+
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }
