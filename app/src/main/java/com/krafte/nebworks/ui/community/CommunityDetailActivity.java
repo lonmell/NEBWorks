@@ -7,12 +7,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -30,6 +26,7 @@ import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentEidtInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentInsertInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentListInterface;
+import com.krafte.nebworks.dataInterface.UpdateViewInterfcae;
 import com.krafte.nebworks.databinding.ActivityCommunityDetailBinding;
 import com.krafte.nebworks.pop.CommunityOptionActivity;
 import com.krafte.nebworks.util.DBConnection;
@@ -64,16 +61,25 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
     int SELECTED_POSITION = 0;
-    String store_insurance = "";
     String USER_INFO_NICKNAME = "";
     String place_id = "";
-    String feed_id = "";
     String USER_INFO_EMAIL = "";
     String state = "";
     String comment_no = "";
     String CommContnets = "";
-    String place_name = "";
-    String employee_no = "";
+
+    //Community SharedData
+    String feed_id = "";
+    String title = "";
+    String contents = "";
+    String writer_id = "";
+    String writer_name = "";
+    String writer_img_path = "";
+    String jikgup = "";
+    String view_cnt = "";
+    String comment_cnt = "";
+    String category = "";
+    String updated_at = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -120,8 +126,32 @@ public class CommunityDetailActivity extends AppCompatActivity {
         USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
+        feed_id = shardpref.getString("feed_id", "");
+
+        title = shardpref.getString("title", "");
+        contents = shardpref.getString("contents", "");
+        writer_id = shardpref.getString("writer_id", "");
+        writer_name = shardpref.getString("writer_name", "");
+        writer_img_path = shardpref.getString("writer_img_path", "");
+        jikgup = shardpref.getString("jikgup", "");
+        view_cnt = shardpref.getString("view_cnt", "");
+        comment_cnt = shardpref.getString("comment_cnt", "");
+        category = shardpref.getString("category", "");
+        updated_at = shardpref.getString("updated_at", "");
 
         setBtnEvent();
+        DataCheck();
+        UpdateView(feed_id);
+        binding.title.setText(title);
+        Glide.with(mContext).load(writer_img_path)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .placeholder(R.drawable.certi01)
+                .skipMemoryCache(true)
+                .into(binding.profileImg);
+        binding.writerName.setText(writer_name);
+        binding.date.setText(updated_at);
+        binding.contents.setText(contents);
+        binding.cate.setText("#"+category);
     }
 
     @Override
@@ -201,6 +231,39 @@ public class CommunityDetailActivity extends AppCompatActivity {
         });
     }
 
+    public void UpdateView(String feed_id) {
+        dlog.i("-----UpdateView Check-----");
+        dlog.i("feed_id : " + feed_id);
+        dlog.i("-----UpdateView Check-----");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UpdateViewInterfcae.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UpdateViewInterfcae api = retrofit.create(UpdateViewInterfcae.class);
+        Call<String> call = api.getData(feed_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("UpdateView Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("UpdateView jsonResponse length : " + response.body().length());
+                            dlog.i("UpdateView jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
     public void AddComment(String feed_id, String comment, String writer_id) {
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("feed_id : " + feed_id);
@@ -255,16 +318,17 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     String comment = "";
     private void setBtnEvent(){
-        binding.addCommentTxt.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    comment = v.getText().toString();
-                    return true;
-                }
-                return false;
-            }
+        Glide.with(mContext).load(writer_img_path)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .placeholder(R.drawable.certi01)
+                .skipMemoryCache(true)
+                .into(binding.myprofileImg);
+
+        binding.addCommentBtn.setOnClickListener(v -> {
+            comment = binding.addCommentTxt.getText().toString();
+            AddComment(feed_id, comment,USER_INFO_ID);
         });
+
     }
     String mem_id = "";
     String mem_kind = "";

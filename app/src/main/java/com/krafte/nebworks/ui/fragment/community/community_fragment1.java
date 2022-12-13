@@ -313,6 +313,18 @@ public class community_fragment1 extends Fragment {
                             mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View v, int position) {
+                                    shardpref.putString("feed_id",mList.get(position).getId());
+                                    shardpref.putString("title",mList.get(position).getTitle());
+                                    shardpref.putString("contents",mList.get(position).getContents());
+                                    shardpref.putString("writer_id",mList.get(position).getWriter_id());
+                                    shardpref.putString("writer_name",mList.get(position).getWriter_name());
+                                    shardpref.putString("writer_img_path",mList.get(position).getWriter_img_path());
+                                    shardpref.putString("jikgup",mList.get(position).getJikgup());
+                                    shardpref.putString("view_cnt",mList.get(position).getView_cnt());
+                                    shardpref.putString("comment_cnt",mList.get(position).getComment_cnt());
+                                    shardpref.putString("category",mList.get(position).getCategory());
+                                    shardpref.putString("updated_at",mList.get(position).getUpdated_at());
+                                    pm.CommunityDetail(mContext);
                                 }
                             });
                         }
