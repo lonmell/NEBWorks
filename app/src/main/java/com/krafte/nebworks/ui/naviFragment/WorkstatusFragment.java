@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -135,7 +137,6 @@ public class WorkstatusFragment extends Fragment {
         shardpref = new PreferenceHelper(mContext);
 
         setBtnEvent();
-
         //UI 데이터 세팅
         try {
             place_id = shardpref.getString("place_id", "0");
@@ -145,7 +146,7 @@ public class WorkstatusFragment extends Fragment {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
 
             PlaceWorkCheck(place_id);
-
+            setAddBtnSetting();
             if(SELECT_POSITION_sub == 0){
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -278,9 +279,9 @@ public class WorkstatusFragment extends Fragment {
                     datePickerDialog.show();
                 }
             });
-            binding.addWorktimeBtn.setOnClickListener(v -> {
-                pm.AddWorkPart(mContext);
-            });
+//            binding.addWorktimeBtn.setOnClickListener(v -> {
+//                pm.AddWorkPart(mContext);
+//            });
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -540,6 +541,17 @@ public class WorkstatusFragment extends Fragment {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
             }
+        });
+    }
+
+    CardView add_worktime_btn;
+    TextView addbtn_tv;
+    private void setAddBtnSetting() {
+        add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
+        addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
+        addbtn_tv.setText("직원추가");
+        add_worktime_btn.setOnClickListener(v -> {
+            pm.AddWorkPart(mContext);
         });
     }
 }

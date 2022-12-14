@@ -322,14 +322,4 @@
 
         </LinearLayout>
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/add_member_btn"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignBottom="@+id/viewPager"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="40dp"
-        android:background="@drawable/addmemberbtn" />
 </LinearLayout>

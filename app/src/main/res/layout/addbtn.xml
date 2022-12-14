@@ -5,25 +5,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.cardview.widget.CardView
         android:id="@+id/add_worktime_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end|bottom"
-        android:layout_margin="15dp"
+        android:layout_margin="25dp"
         android:onClick="btnOnclick"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="60dp"
         app:cardBackgroundColor="@color/blue"
         app:cardElevation="0dp">
-
-            <TextView
-                android:id="@+id/addbtn_tv"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:fontFamily="@font/inter_bold"
-                android:gravity="center"
-                android:text="할일추가"/>
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_plus2"
+                    android:layout_above="@+id/center_line"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"/>
+                <LinearLayout
+                    android:id="@+id/center_line"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    android:layout_centerInParent="true"/>
+                <TextView
+                    android:id="@+id/addbtn_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_below="@+id/center_line"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="할일추가"/>
+            </RelativeLayout>
+
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -299,7 +299,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedCommentInsertInterface api = retrofit.create(FeedCommentInsertInterface.class);
-        Call<String> call = api.getData(feed_id, comment, writer_id);
+        Call<String> call = api.getData(feed_id, comment, writer_id,"");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -360,7 +360,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, feed_id, "","1");
+        Call<String> call = api.getData(place_id, feed_id, "","1",USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

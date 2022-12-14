@@ -59,7 +59,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import okhttp3.MediaType;
@@ -105,9 +104,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     int like_state = 0;
     String CommTitle = "";
     String CommContnets = "";
-    int nickname_select = 1;
-
-    ArrayList<String> SetCategoryList;
+    int nickname_select = 0;
 
     //--EditData
     String state_txt = "";
@@ -259,12 +256,12 @@ public class CommunityAddActivity extends AppCompatActivity {
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             } else {
-                if (nickname_select == 1) {
-                    nickname_select = 2;
+                if (nickname_select == 0) {
+                    nickname_select = 1;
                     user_input_name = USER_INFO_NICKNAME;
                     binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
                 } else {
-                    nickname_select = 1;
+                    nickname_select = 0;
                     user_input_name = USER_INFO_NAME;
                     binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
                 }
@@ -317,6 +314,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         dlog.i("Profile Url : " + ProfileUrl);
         dlog.i("BoardKind : " + boardkind);
         dlog.i("category : " + category);
+        dlog.i("nickname_select : " + nickname_select);
         dlog.i("-----AddStroeNoti Check-----");
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -324,7 +322,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category);
+        Call<String> call = api.getData(place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category, String.valueOf(nickname_select));
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -372,6 +370,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         dlog.i("Profile Url : " + ProfileUrl);
         dlog.i("BoardKind : " + boardkind);
         dlog.i("category : " + category);
+        dlog.i("nickname_select : " + nickname_select);
         dlog.i("-----AddStroeNoti Check-----");
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -379,7 +378,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category);
+        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category, String.valueOf(nickname_select));
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -405,7 +404,6 @@ public class CommunityAddActivity extends AppCompatActivity {
                     });
                 }
             }
-
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
@@ -434,7 +432,6 @@ public class CommunityAddActivity extends AppCompatActivity {
         shardpref.remove("title");
         shardpref.remove("contents");
         shardpref.remove("writer_id");
-        shardpref.remove("writer_name");
         shardpref.remove("writer_img_path");
         shardpref.remove("feed_img_path");
         shardpref.remove("jikgup");

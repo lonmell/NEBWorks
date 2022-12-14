@@ -22,6 +22,7 @@ public interface FeedNotiAddInterface {
             @Field("close_date") String close_date,
             @Field("kind") String kind,
             @Field("boardkind") String boardkind,
-            @Field("category") String category
+            @Field("category") String category,
+            @Field("nicknameyn") String nicknameyn
     );
 }

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -118,10 +119,10 @@ public class MemberManagement extends AppCompatActivity {
             store_no = shardpref.getString("store_no", "");
             shardpref.putString("returnPage", "BusinessApprovalActivity");
 
-            binding.addMemberBtn.setOnClickListener(v -> {
-                MemberOption mo = new MemberOption();
-                mo.show(getSupportFragmentManager(),"MemberOption");
-            });
+//            binding.addMemberBtn.setOnClickListener(v -> {
+//                MemberOption mo = new MemberOption();
+//                mo.show(getSupportFragmentManager(),"MemberOption");
+//            });
 
             binding.changePlace.setOnClickListener(v -> {
                 PlaceListBottomSheet plb = new PlaceListBottomSheet();
@@ -151,6 +152,7 @@ public class MemberManagement extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         SetAllMemberList(place_id);
+        setAddBtnSetting();
     }
 
     @Override
@@ -360,6 +362,18 @@ public class MemberManagement extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    CardView add_worktime_btn;
+    TextView addbtn_tv;
+    private void setAddBtnSetting() {
+        add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
+        addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
+        addbtn_tv.setText("직원추가");
+        add_worktime_btn.setOnClickListener(v -> {
+            MemberOption mo = new MemberOption();
+            mo.show(getSupportFragmentManager(),"MemberOption");
+        });
     }
 //    //-------몰입화면 설정
 //    @Override

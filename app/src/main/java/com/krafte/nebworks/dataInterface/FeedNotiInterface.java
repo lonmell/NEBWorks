@@ -15,6 +15,7 @@ public interface FeedNotiInterface
             @Field("place_id") String place_id,
             @Field("feed_id") String feed_id,
             @Field("sort") String sort,
-            @Field("kind") String kind
+            @Field("kind") String kind,
+            @Field("user_id") String user_id //해당게시물에 사용자의 좋아요가 있는지 확인하기 위한 user_id 전송
     );
 }

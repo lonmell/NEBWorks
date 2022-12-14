@@ -13,6 +13,7 @@ public interface FeedCommentInsertInterface {
     Call<String> getData(
             @Field("feed_id") String feed_id,
             @Field("comment") String comment,
-            @Field("writer_id") String writer_id
+            @Field("writer_id") String writer_id,
+            @Field("comment_id") String comment_id
     );
 }

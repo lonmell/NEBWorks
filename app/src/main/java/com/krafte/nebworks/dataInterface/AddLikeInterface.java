@@ -5,13 +5,15 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-public interface FeedCommentListInterface {
-    String URL = "http://krafte.net/NEBWorks/comment/";
+public interface AddLikeInterface {
+    String URL = "http://krafte.net/NEBWorks/feed/";
 
     @FormUrlEncoded
-    @POST("get.php")
+    @POST("post_like.php")
     Call<String> getData(
             @Field("feed_id") String feed_id,
-            @Field("user_id") String user_id
+            @Field("comment_id") String comment_id,
+            @Field("user_id") String user_id,
+            @Field("kind") String kind
     );
 }

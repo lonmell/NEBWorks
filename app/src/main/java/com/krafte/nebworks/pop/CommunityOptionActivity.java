@@ -38,7 +38,7 @@ public class CommunityOptionActivity extends Activity {
     String state = "";
     String board_no = "";
     String click_htn = "";
-    String comment_no = "";
+    String comment_id = "";
     String comment_contents = "";
 
     //Other
@@ -69,7 +69,7 @@ public class CommunityOptionActivity extends Activity {
 
         intent = getIntent();
         state = intent.getStringExtra("state");
-        comment_no = intent.getStringExtra("comment_no");
+        comment_id = intent.getStringExtra("comment_id");
         comment_contents = intent.getStringExtra("comment_contents");
 
         setContentLayout();
@@ -98,7 +98,7 @@ public class CommunityOptionActivity extends Activity {
         feed_edit.setOnClickListener(v -> {
             if(state.equals("EditComment")){
                 shardpref.putString("editstate","EditComment");
-                shardpref.putString("comment_no",comment_no);
+                shardpref.putString("comment_id",comment_id);
                 shardpref.putString("comment_contents",comment_contents);
             }else if(state.equals("EditFeed")){
                 dlog.i("edit_feed_id : " + shardpref.getString("edit_feed_id","0"));

@@ -476,7 +476,7 @@ public class FeedAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "",noti_event_start,noti_event_end,"1","","");
+        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "",noti_event_start,noti_event_end,"1","","","");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

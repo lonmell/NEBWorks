@@ -22,6 +22,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkCommentListAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkCommentData;
+import com.krafte.nebworks.dataInterface.AddLikeInterface;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentEidtInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentInsertInterface;
@@ -41,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,7 +67,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String place_id = "";
     String USER_INFO_EMAIL = "";
     String state = "";
-    String comment_no = "";
+    String comment_id = "";
     String CommContnets = "";
 
     //Community SharedData
@@ -78,8 +80,10 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String jikgup = "";
     String view_cnt = "";
     String comment_cnt = "";
+    String like_cnt = "";
     String category = "";
     String updated_at = "";
+    String mylikeyn = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -96,10 +100,13 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String click_htn = "";
     String comment_txt = "";
     String WriteName = "";
-
+    boolean like_int = false;
     InputMethodManager imm;
     ArrayList<WorkCommentData.WorkCommentData_list> mList;
     WorkCommentListAdapter mAdapter = null;
+
+    String subcomment_id = "";
+    String subcomment_name = "";
 
     @SuppressLint({"LongLogTag", "UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -126,8 +133,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
         USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
-        feed_id = shardpref.getString("feed_id", "");
 
+        feed_id = shardpref.getString("feed_id", "");
         title = shardpref.getString("title", "");
         contents = shardpref.getString("contents", "");
         writer_id = shardpref.getString("writer_id", "");
@@ -136,8 +143,10 @@ public class CommunityDetailActivity extends AppCompatActivity {
         jikgup = shardpref.getString("jikgup", "");
         view_cnt = shardpref.getString("view_cnt", "");
         comment_cnt = shardpref.getString("comment_cnt", "");
+        like_cnt = shardpref.getString("like_cnt", "");
         category = shardpref.getString("category", "");
         updated_at = shardpref.getString("updated_at", "");
+        mylikeyn = shardpref.getString("mylikeyn", "");
 
         setBtnEvent();
         DataCheck();
@@ -151,7 +160,43 @@ public class CommunityDetailActivity extends AppCompatActivity {
         binding.writerName.setText(writer_name);
         binding.date.setText(updated_at);
         binding.contents.setText(contents);
-        binding.cate.setText("#"+category);
+        binding.cate.setText("#" + category);
+        binding.viewCom.setText("조회수 " + view_cnt + " / 댓글 " + comment_cnt);
+        binding.backBtn.setOnClickListener(v -> {
+            RemoveShared();
+            super.onBackPressed();
+        });
+
+        binding.likeCnt.setText(like_cnt);
+        if (mylikeyn.equals("0")) {
+            like_int = false;
+            binding.likeIcon.setBackgroundResource(R.drawable.ic_like_off);
+        } else {
+            like_int = true;
+            binding.likeIcon.setBackgroundResource(R.drawable.ic_like_on);
+        }
+        binding.likeArea.setOnClickListener(v -> {
+            if (!like_int) {
+                like_int = true;
+                binding.likeIcon.setBackgroundResource(R.drawable.ic_like_on);
+            } else {
+                like_int = false;
+                binding.likeIcon.setBackgroundResource(R.drawable.ic_like_off);
+            }
+            AddLike(feed_id);
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        RemoveShared();
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        GetCommentList(false);
     }
 
     @Override
@@ -160,20 +205,27 @@ public class CommunityDetailActivity extends AppCompatActivity {
         //UI 데이터 세팅
         try {
             UserCheck();
-            dlog.i("onResume state : " + shardpref.getString("editstate",""));
-            if (state.equals("EditComment")) {
+            dlog.i("onResume state : " + shardpref.getString("editstate", ""));
+            if (shardpref.getString("editstate", "").equals("EditComment")) {
                 dlog.i("----------댓글 수정의 경우----------");
-                comment_no = shardpref.getString("comment_no", "");
+                comment_id = shardpref.getString("comment_id", "");
                 CommContnets = shardpref.getString("comment_contents", "");
                 binding.addCommentTxt.setText(CommContnets);
                 dlog.i("EditComment state : " + state);
-                dlog.i("EditComment comment_no : " + comment_no);
+                dlog.i("EditComment comment_id : " + comment_id);
                 dlog.i("EditComment CommContnets : " + CommContnets);
                 dlog.i("----------댓글 수정의 경우----------");
                 shardpref.remove("editstate");
+                GetCommentList(true);
+            }else if (shardpref.getString("editstate", "").equals("DelComment")) {
+                shardpref.remove("editstate");
+                GetCommentList(true);
+            }else{
+                GetCommentList(false);
             }
+
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
-            GetCommentList();
+
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -209,11 +261,12 @@ public class CommunityDetailActivity extends AppCompatActivity {
                             try {
                                 if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
                                     dlog.i("Comment Edit success");
-                                    shardpref.remove("comment_no");
+                                    shardpref.remove("comment_id");
+                                    shardpref.remove("comment_contents");
                                     binding.addCommentTxt.setText("");
                                     binding.addCommentTxt.clearFocus();
                                     imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
-                                    GetCommentList();
+                                    GetCommentList(true);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -264,7 +317,44 @@ public class CommunityDetailActivity extends AppCompatActivity {
         });
     }
 
+    public void AddLike(String feed_id) {
+        dlog.i("-----UpdateView Check-----");
+        dlog.i("feed_id : " + feed_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("-----UpdateView Check-----");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(AddLikeInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        AddLikeInterface api = retrofit.create(AddLikeInterface.class);
+        Call<String> call = api.getData(feed_id, "",USER_INFO_ID,"0");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("UpdateView Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("UpdateView jsonResponse length : " + response.body().length());
+                            dlog.i("UpdateView jsonResponse : " + response.body());
+                            like_cnt = response.body().replace("\"", "");
+                            binding.likeCnt.setText(like_cnt);
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
     public void AddComment(String feed_id, String comment, String writer_id) {
+//        comment = comment.replace(subcomment_name, "");
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("feed_id : " + feed_id);
         dlog.i("comment : " + comment);
@@ -276,7 +366,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedCommentInsertInterface api = retrofit.create(FeedCommentInsertInterface.class);
-        Call<String> call = api.getData(feed_id, comment, writer_id);
+        Call<String> call = api.getData(feed_id, comment, writer_id, subcomment_id);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -293,7 +383,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                     binding.addCommentTxt.setText("");
                                     binding.addCommentTxt.clearFocus();
                                     imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
-                                    GetCommentList();
+                                    GetCommentList(true);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -317,7 +407,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     String comment = "";
-    private void setBtnEvent(){
+
+    private void setBtnEvent() {
         Glide.with(mContext).load(writer_img_path)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.drawable.certi01)
@@ -326,10 +417,16 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
         binding.addCommentBtn.setOnClickListener(v -> {
             comment = binding.addCommentTxt.getText().toString();
-            AddComment(feed_id, comment,USER_INFO_ID);
+            if(comment_id.isEmpty()){
+                AddComment(feed_id, comment, USER_INFO_ID);
+            }else{
+                EditComment(comment_id,comment);
+            }
+
         });
 
     }
+
     String mem_id = "";
     String mem_kind = "";
     String mem_name = "";
@@ -342,6 +439,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String mem_pay = "";
     String mem_img_path = "";
     String io_state = "";
+
     public void UserCheck() {
         dlog.i("---------UserCheck---------");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -361,10 +459,12 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 dlog.e("response 1: " + response.isSuccessful());
                 runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-
+                            JSONArray Response = new JSONArray(jsonResponse);
                             try {
                                 mem_id = Response.getJSONObject(0).getString("id");
                                 mem_name = Response.getJSONObject(0).getString("name");
@@ -411,13 +511,13 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     //댓글 리스트 조회
-    public void GetCommentList() {
+    public void GetCommentList(boolean opnclo) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedCommentListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedCommentListInterface api = retrofit.create(FeedCommentListInterface.class);
-        Call<String> call = api.getData(feed_id);
+        Call<String> call = api.getData(feed_id,USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -433,7 +533,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                 JSONArray Response = new JSONArray(response.body());
 
                                 mList = new ArrayList<>();
-                                mAdapter = new WorkCommentListAdapter(mContext, mList, mem_id);
+                                mAdapter = new WorkCommentListAdapter(mContext, mList, mem_id, opnclo);
                                 binding.commentList.setAdapter(mAdapter);
                                 binding.commentList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                 listitemsize = Response.length();
@@ -450,45 +550,54 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                         mAdapter.addItem(new WorkCommentData.WorkCommentData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("feed_id"),
+                                                jsonObject.getString("comment_id"),
                                                 jsonObject.getString("comment"),
+                                                Collections.singletonList(jsonObject.getString("reply")),
                                                 jsonObject.getString("writer_id"),
                                                 jsonObject.getString("writer_name"),
                                                 jsonObject.getString("writer_img_path"),
                                                 jsonObject.getString("edit_yn"),
                                                 jsonObject.getString("delete_yn"),
                                                 jsonObject.getString("created_at"),
-                                                jsonObject.getString("updated_at")
+                                                jsonObject.getString("updated_at"),
+                                                jsonObject.getString("comment_cnt"),
+                                                jsonObject.getString("like_cnt"),
+                                                jsonObject.getString("mylike_cnt")
                                         ));
                                     }
                                     mAdapter.notifyDataSetChanged();
                                     mAdapter.setOnItemClickListener(new WorkCommentListAdapter.OnItemClickListener() {
                                         @Override
-                                        public void onItemClick(View v, int position) {
-                                            try {
-                                                binding.addCommentTxt.clearFocus();
-                                                imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
-                                                shardpref.putString("comment_no",Response.getJSONObject(position).getString("id"));
-                                                Intent intent = new Intent(mContext, CommunityOptionActivity.class);
-                                                WriteName = Response.getJSONObject(position).getString("writer_name").isEmpty() ?
-                                                        Response.getJSONObject(position).getString("writer_name") : "";
+                                        public void onItemClick(View v, int position, String comment_id, String comment, String writer_name
+                                                ,String feed_id,String write_id, String title, String contents, String comment_contents,String write_date) {
+                                            binding.addCommentTxt.clearFocus();
+                                            imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
+                                            shardpref.putString("comment_id", comment_id);
+                                            Intent intent = new Intent(mContext, CommunityOptionActivity.class);
+                                            WriteName = writer_name;
 
-                                                intent.putExtra("state", "EditComment");
-                                                intent.putExtra("feed_id", Response.getJSONObject(position).getString("feed_id"));
-                                                intent.putExtra("comment_no", Response.getJSONObject(position).getString("id"));
-                                                intent.putExtra("write_id", Response.getJSONObject(position).getString("writer_id"));
-                                                intent.putExtra("writer_name", WriteName);
-                                                intent.putExtra("title", "");
-                                                intent.putExtra("contents", "");
-                                                intent.putExtra("comment_contents", Response.getJSONObject(position).getString("comment"));
-                                                intent.putExtra("write_date", Response.getJSONObject(position).getString("created_at"));
-                                                intent.putExtra("write_nickname","");
+                                            intent.putExtra("state", "EditComment");
+                                            intent.putExtra("feed_id", feed_id);
+                                            intent.putExtra("comment_id", comment_id);
+                                            intent.putExtra("write_id", write_id);
+                                            intent.putExtra("writer_name", writer_name);
+                                            intent.putExtra("title", title);
+                                            intent.putExtra("contents", contents);
+                                            intent.putExtra("comment_contents", comment_contents);
+                                            intent.putExtra("write_date", write_date);
+                                            intent.putExtra("write_nickname", "");
 
-                                                mContext.startActivity(intent);
-                                                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
+                                            mContext.startActivity(intent);
+                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        }
+                                    });
+                                    mAdapter.setOnItemClickListener2(new WorkCommentListAdapter.OnItemClickListener2() {
+                                        @Override
+                                        public void onItemClick2(View v, int position, String writer_id, String writer_name) {
+                                            subcomment_id = writer_id;
+                                            subcomment_name = "@"+writer_name + "  ";
+                                            binding.addCommentTxt.setText(subcomment_name);
                                         }
                                     });
                                 }
@@ -507,5 +616,19 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
+    }
+
+    private void RemoveShared() {
+        shardpref.remove("feed_id");
+        shardpref.remove("title");
+        shardpref.remove("contents");
+        shardpref.remove("writer_id");
+        shardpref.remove("writer_name");
+        shardpref.remove("writer_img_path");
+        shardpref.remove("jikgup");
+        shardpref.remove("view_cnt");
+        shardpref.remove("comment_cnt");
+        shardpref.remove("category");
+        shardpref.remove("updated_at");
     }
 }

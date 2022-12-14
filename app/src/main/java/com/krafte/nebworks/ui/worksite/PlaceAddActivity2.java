@@ -23,13 +23,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WifiAdapter;
 import com.krafte.nebworks.data.PlaceListData;
-import com.krafte.nebworks.dataInterface.PlaceEditInterface;
 import com.krafte.nebworks.dataInterface.PlaceGetId;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
+import com.krafte.nebworks.dataInterface.WifiUpdateInterface;
 import com.krafte.nebworks.databinding.ActivityAddplace2Binding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -144,6 +145,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
         });
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     private void getPlaceContents() {
         dlog.i("-----getPlaceContents-----");
         dlog.i("place_id : " + place_id);
@@ -160,14 +162,15 @@ public class PlaceAddActivity2 extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + response.body().length());
-                            dlog.i("GetPlaceList jsonResponse : " + response.body());
+                        dlog.e("GetInsurancePercent function START");
+                        dlog.e("response 1: " + response.isSuccessful());
+                        dlog.e("response 2: " + rc.getBase64decode(response.body()));
+                        runOnUiThread(() -> {
+                            if (response.isSuccessful() && response.body() != null) {
+                                String jsonResponse = rc.getBase64decode(response.body());
                             try {
                                 //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(response.body());
+                                JSONArray Response = new JSONArray(jsonResponse);
                                 name = Response.getJSONObject(0).getString("name");
                                 registr_num = Response.getJSONObject(0).getString("registr_num");
                                 store_kind = Response.getJSONObject(0).getString("store_kind");
@@ -282,14 +285,13 @@ public class PlaceAddActivity2 extends AppCompatActivity {
 
     public void UpdatePlace(int i) {
         //i = 0:임시저장 / 1:저장
+        dlog.i("UpdatePlace!!");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceEditInterface.URL)
+                .baseUrl(WifiUpdateInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
-        Call<String> call = api.getData(place_id,name,registr_num,store_kind,address
-                ,String.valueOf(latitude),String.valueOf(longitude),pay_day,test_period,vacation_select
-                ,insurance,start_time,end_time,img_path,String.valueOf(i),start_date,SSIDName);
+        WifiUpdateInterface api = retrofit.create(WifiUpdateInterface.class);
+        Call<String> call = api.getData(place_id,String.valueOf(i),SSIDName);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override

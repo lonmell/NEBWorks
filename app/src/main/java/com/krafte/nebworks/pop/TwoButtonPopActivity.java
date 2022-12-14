@@ -182,9 +182,9 @@ public class TwoButtonPopActivity extends Activity {
             }else if(flag.equals("회원탈퇴")){
                 UserDelete(USER_INFO_ID);
             }else if (flag.equals("댓글삭제")) {
-                String comment_no = "0";
-                comment_no = shardpref.getString("comment_no","");
-                CommentDelete(comment_no);
+                String comment_id = "0";
+                comment_id = shardpref.getString("comment_id","");
+                CommentDelete(comment_id);
                 ClosePop();
             } else if (flag.equals("공지삭제") || flag.equals("공지삭제2")) {
                 String feed_id = "0";
@@ -334,6 +334,8 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("LoginCheck jsonResponse : " + response.body());
                             try {
                                 if(response.body().replace("\"","").equals("")){
+                                    shardpref.putString("editstate","DelComment");
+
                                     ClosePop();
                                 }
                             } catch (Exception e) {

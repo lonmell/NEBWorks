@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.pop.CommunityOptionActivity;
@@ -100,12 +103,29 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
                 holder.category_box.setVisibility(View.GONE);
             }
             holder.rank_tv.setText(String.valueOf(position+1));
+
             holder.title.setText(item.getTitle());
+
             holder.write_date.setText(item.getCreated_at());
+
+            Glide.with(mContext).load(item.getWriter_img_path())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .placeholder(R.drawable.identificon)
+                    .skipMemoryCache(true)
+                    .into(holder.profile_img);
             holder.name.setText(item.getWriter_name());
+
             holder.contents.setText(item.getContents());
             holder.categorytv.setText("#" + item.getCategory());
             holder.view_com.setText("조회수 " + item.getView_cnt() + " / 댓글 " + item.getComment_cnt());
+
+            holder.like_cnt.setText(item.getLike_cnt());
+
+            if(item.getMylikeyn().equals("0")){
+                holder.like_icon.setBackgroundResource(R.drawable.ic_like_off);
+            }else{
+                holder.like_icon.setBackgroundResource(R.drawable.ic_like_on);
+            }
 
             holder.list_setting.setOnClickListener(v -> {
                 shardpref.putString("feed_id",item.getId());
@@ -145,7 +165,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
         LinearLayout rank_area;
         CardView profile_area;
         LinearLayout category_box;
-
+        ImageView profile_img, like_icon;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -162,6 +182,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             rank_area       = itemView.findViewById(R.id.rank_area);
             profile_area    = itemView.findViewById(R.id.profile_area);
             category_box    = itemView.findViewById(R.id.category_box);
+            profile_img     = itemView.findViewById(R.id.profile_img);
+            like_icon       = itemView.findViewById(R.id.like_icon);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

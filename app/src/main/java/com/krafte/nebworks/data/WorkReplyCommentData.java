@@ -1,16 +1,13 @@
 package com.krafte.nebworks.data;
 
-import java.util.List;
-
-public class WorkCommentData {
+public class WorkReplyCommentData {
     private static final String TAG = "WorkCommentData";
 
-    public static class WorkCommentData_list {
+    public static class WorkReplyCommentData_list {
         String id;
         String feed_id;
         String comment_id;
         String comment;
-        List<String> reply;
         String write_id;
         String writer_name;
         String writer_img_path;
@@ -22,14 +19,13 @@ public class WorkCommentData {
         String like_cnt;
         String mylike_cnt;
 
-        public WorkCommentData_list(String id, String feed_id, String comment_id, String comment, List<String> reply, String write_id,
+        public WorkReplyCommentData_list(String id, String feed_id, String comment_id, String comment, String write_id,
                                     String writer_name, String writer_img_path, String edit_yn, String delete_yn,
                                     String created_at, String updated_at, String comment_cnt, String like_cnt, String mylike_cnt) {
             this.id = id;
             this.feed_id = feed_id;
             this.comment_id = comment_id;
             this.comment = comment;
-            this.reply = reply;
             this.write_id = write_id;
             this.writer_name = writer_name;
             this.writer_img_path = writer_img_path;
@@ -72,14 +68,6 @@ public class WorkCommentData {
 
         public void setComment(String comment) {
             this.comment = comment;
-        }
-
-        public List<String> getReply() {
-            return reply;
-        }
-
-        public void setReply(List<String> reply) {
-            this.reply = reply;
         }
 
         public String getWrite_id() {

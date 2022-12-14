@@ -17,6 +17,7 @@ public class PlaceNotiData {
         String jikgup = "";
         String view_cnt = "0";
         String comment_cnt = "0";
+        String like_cnt = "";
         String link = "";
         String feed_img_path = "";
         String created_at = "";
@@ -25,12 +26,13 @@ public class PlaceNotiData {
         String close_date = "";
         String boardkind = "";
         String category = "";
+        String mylikeyn = "";
 
         public PlaceNotiData_list(String id, String place_id, String title, String contents,
                 String writer_id, String writer_name, String writer_img_path, String jikgup,
-                String view_cnt, String comment_cnt, String link,
+                String view_cnt, String comment_cnt, String like_cnt, String link,
                 String feed_img_path, String created_at, String updated_at,
-                String open_date, String close_date, String boardkind, String category) {
+                String open_date, String close_date, String boardkind, String category, String mylikeyn) {
             this.id = id;
             this.place_id = place_id;
             this.title = title;
@@ -41,6 +43,7 @@ public class PlaceNotiData {
             this.jikgup = jikgup;
             this.view_cnt = view_cnt;
             this.comment_cnt = comment_cnt;
+            this.like_cnt = like_cnt;
             this.link = link;
             this.feed_img_path = feed_img_path;
             this.created_at = created_at;
@@ -49,6 +52,7 @@ public class PlaceNotiData {
             this.close_date = close_date;
             this.boardkind = boardkind;
             this.category = category;
+            this.mylikeyn = mylikeyn;
         }
 
         public String getId() {
@@ -131,6 +135,14 @@ public class PlaceNotiData {
             this.comment_cnt = comment_cnt;
         }
 
+        public String getLike_cnt() {
+            return like_cnt;
+        }
+
+        public void setLike_cnt(String like_cnt) {
+            this.like_cnt = like_cnt;
+        }
+
         public String getLink() {
             return link;
         }
@@ -193,6 +205,14 @@ public class PlaceNotiData {
 
         public void setCategory(String category) {
             this.category = category;
+        }
+
+        public String getMylikeyn() {
+            return mylikeyn;
+        }
+
+        public void setMylikeyn(String mylikeyn) {
+            this.mylikeyn = mylikeyn;
         }
     }
 }

@@ -179,7 +179,7 @@ public class community_fragment1 extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "3", "2");
+        Call<String> call = api.getData(place_id, "", "3", "2",USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -207,7 +207,8 @@ public class community_fragment1 extends Fragment {
                             binding.bestList.setVisibility(View.VISIBLE);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
-                                if(Integer.parseInt(jsonObject.getString("view_cnt")) > 50){
+                                if(Integer.parseInt(jsonObject.getString("view_cnt")) > 50
+                                        && jsonObject.getString("boardkind").equals("자유게시판")){
                                     total_cnt ++;
                                     BestmAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                             jsonObject.getString("id"),
@@ -220,6 +221,7 @@ public class community_fragment1 extends Fragment {
                                             jsonObject.getString("jikgup"),
                                             jsonObject.getString("view_cnt"),
                                             jsonObject.getString("comment_cnt"),
+                                            jsonObject.getString("like_cnt"),
                                             jsonObject.getString("link"),
                                             jsonObject.getString("feed_img_path"),
                                             jsonObject.getString("created_at"),
@@ -227,7 +229,8 @@ public class community_fragment1 extends Fragment {
                                             jsonObject.getString("open_date"),
                                             jsonObject.getString("close_date"),
                                             jsonObject.getString("boardkind"),
-                                            jsonObject.getString("category")
+                                            jsonObject.getString("category"),
+                                            jsonObject.getString("mylikeyn")
                                     ));
                                 }
 
@@ -260,7 +263,7 @@ public class community_fragment1 extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "2", "2");
+        Call<String> call = api.getData(place_id, "", "0", "2",USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -298,6 +301,7 @@ public class community_fragment1 extends Fragment {
                                             jsonObject.getString("jikgup"),
                                             jsonObject.getString("view_cnt"),
                                             jsonObject.getString("comment_cnt"),
+                                            jsonObject.getString("like_cnt"),
                                             jsonObject.getString("link"),
                                             jsonObject.getString("feed_img_path"),
                                             jsonObject.getString("created_at"),
@@ -305,7 +309,8 @@ public class community_fragment1 extends Fragment {
                                             jsonObject.getString("open_date"),
                                             jsonObject.getString("close_date"),
                                             jsonObject.getString("boardkind"),
-                                            jsonObject.getString("category")
+                                            jsonObject.getString("category"),
+                                            jsonObject.getString("mylikeyn")
                                     ));
                                 }
                             }
@@ -322,8 +327,10 @@ public class community_fragment1 extends Fragment {
                                     shardpref.putString("jikgup",mList.get(position).getJikgup());
                                     shardpref.putString("view_cnt",mList.get(position).getView_cnt());
                                     shardpref.putString("comment_cnt",mList.get(position).getComment_cnt());
+                                    shardpref.putString("like_cnt",mList.get(position).getLike_cnt());
                                     shardpref.putString("category",mList.get(position).getCategory());
                                     shardpref.putString("updated_at",mList.get(position).getUpdated_at());
+                                    shardpref.putString("mylikeyn",mList.get(position).getMylikeyn());
                                     pm.CommunityDetail(mContext);
                                 }
                             });

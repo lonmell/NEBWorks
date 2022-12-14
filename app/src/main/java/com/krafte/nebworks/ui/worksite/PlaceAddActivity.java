@@ -442,12 +442,12 @@ public class PlaceAddActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
                                     String name = Response.getJSONObject(0).getString("name");
                                     String img_path = Response.getJSONObject(0).getString("img_path");

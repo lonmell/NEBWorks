@@ -76,6 +76,7 @@ public class AddContractPage08 extends AppCompatActivity {
     String place_id = "";
     String worker_id = "";
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
     String contract_id = "";
 
     //Other
@@ -114,6 +115,8 @@ public class AddContractPage08 extends AppCompatActivity {
         worker_id       = shardpref.getString("worker_id","0");
         contract_id     = shardpref.getString("contract_id","0");
 
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1");
+        
         MakeDirs();
         setBtnEvent();
     }
@@ -202,7 +205,12 @@ public class AddContractPage08 extends AppCompatActivity {
                             try {
                                 if(response.body().replace("\"","").equals("success")){
                                     saveBitmapAndGetURI();
-                                    pm.AddContractPage09(mContext);
+                                    if(USER_INFO_AUTH.equals("0")){
+                                        //fcm으로 알림 메세지 보내기
+                                    }else{
+                                        pm.AddContractPage09(mContext);
+                                    }
+                                    
                                 }
                             } catch(Exception e){
                                 e.printStackTrace();

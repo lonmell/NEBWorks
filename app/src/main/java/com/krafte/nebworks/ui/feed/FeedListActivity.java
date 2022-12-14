@@ -138,7 +138,7 @@ public class FeedListActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", String.valueOf(i),"1");
+        Call<String> call = api.getData(place_id, "", String.valueOf(i),"1",USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -175,6 +175,7 @@ public class FeedListActivity extends AppCompatActivity {
                                         jsonObject.getString("jikgup"),
                                         jsonObject.getString("view_cnt"),
                                         jsonObject.getString("comment_cnt"),
+                                        jsonObject.getString("like_cnt"),
                                         jsonObject.getString("link"),
                                         jsonObject.getString("feed_img_path"),
                                         jsonObject.getString("created_at"),
@@ -182,7 +183,8 @@ public class FeedListActivity extends AppCompatActivity {
                                         jsonObject.getString("open_date"),
                                         jsonObject.getString("close_date"),
                                         jsonObject.getString("boardkind"),
-                                        jsonObject.getString("category")
+                                        jsonObject.getString("category"),
+                                        jsonObject.getString("mylikeyn")
                                 ));
                             }
                             mAdapter.notifyDataSetChanged();

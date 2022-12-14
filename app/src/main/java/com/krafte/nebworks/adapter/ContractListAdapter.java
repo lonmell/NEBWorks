@@ -87,12 +87,12 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                 holder.address.setText("근로계약서 작성");
                 holder.address.setTextColor(Color.parseColor("#DD6540"));
             }else if(item.getContract_yn().equals("1")){
-                if(item.getWorker_sign_id().isEmpty() || item.getWorker_sign_id().equals("null")){
+                if(!item.getOwner_sign_id().equals("null") && item.getWorker_sign_id().equals("null")){
                     holder.profile_img.setCardBackgroundColor(Color.parseColor("#6395EC"));
                     holder.profile_tv.setText("서명\n대기중");
                     holder.address.setText("근로계약서 작성");
                     holder.address.setTextColor(Color.parseColor("#6395EC"));
-                }else if(!item.getWorker_sign_id().isEmpty() && !item.getWorker_sign_id().isEmpty()){
+                }else if(!item.getOwner_sign_id().equals("null") && !item.getWorker_sign_id().equals("null")){
                     holder.profile_img.setCardBackgroundColor(Color.parseColor("#DBDBDB"));
                     holder.profile_tv.setText("완료");
                     holder.address.setText("근로계약서 작성");
