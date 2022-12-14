@@ -1,7 +1,6 @@
 package com.krafte.nebworks.ui;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,7 +44,6 @@ public class PushLogActivity  extends AppCompatActivity {
             actionBar.hide();
         }
 
-        notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         mContext = this;
         dlog.DlogContext(mContext);
 

@@ -232,6 +232,9 @@ public class LoginActivity extends AppCompatActivity {
 //            LockTost();
 //        });
 
+        binding.naverLogin.setOnClickListener(v -> {
+            Toast_Nomal("준비중인 기능입니다.");
+        });
         binding.loginBtn.setOnClickListener(v -> {
             String email = binding.deviceNumEdit.getText().toString();
             String pw = binding.pwdEdit.getText().toString();

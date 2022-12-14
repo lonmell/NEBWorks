@@ -61,7 +61,7 @@ public class ChangePWActivity extends AppCompatActivity {
 
     String changePw1 = "";
     String changePw2 = "";
-
+    String returnPage = "";
     boolean ConfirmPw = false;
 
     //Other
@@ -95,7 +95,7 @@ public class ChangePWActivity extends AppCompatActivity {
         USER_INFO_PW = shardpref.getString("USER_INFO_PW", "");
         USER_INFO_GENDER = shardpref.getString("USER_INFO_GENDER", "");
         USER_INFO_IMG = shardpref.getString("USER_INFO_IMG", "");
-
+        returnPage = shardpref.getString("returnPage", "");
         Log.i(TAG, "USER_INFO_ID = " + USER_INFO_ID);
         Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
         Log.i(TAG, "USER_INFO_EMAIL = " + USER_INFO_EMAIL);
@@ -103,9 +103,13 @@ public class ChangePWActivity extends AppCompatActivity {
         Log.i(TAG, "USER_INFO_PW = " + USER_INFO_PW);
         Log.i(TAG, "USER_INFO_GENDER = " + USER_INFO_GENDER);
         Log.i(TAG, "USER_INFO_IMG = " + USER_INFO_IMG);
+        Log.i(TAG, "returnPage = " + returnPage);
     }
 
     private void setBtnEvent(){
+        binding.backBtn.setOnClickListener(v -> {
+           super.onBackPressed();
+        });
         binding.inputPw.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

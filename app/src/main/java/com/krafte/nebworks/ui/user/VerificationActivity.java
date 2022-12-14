@@ -375,7 +375,7 @@ public class VerificationActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_NAME", Uname);
                                     shardpref.putString("USER_INFO_GENDER", gender);
                                     shardpref.putString("USER_INFO_IMG", img_path);
-
+                                    shardpref.putString("returnpage","VerificationActivity");
                                     Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                                     intent.putExtra("data", "이미 가입한 내역이 있습니다.");
                                     intent.putExtra("left_btn_txt", "확인");

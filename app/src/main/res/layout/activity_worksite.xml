@@ -11,7 +11,21 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="59dp">
+        <LinearLayout
+            android:id="@+id/back_btn"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
 
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/find_right_arrow"
+                android:rotation="180" />
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,12 +44,6 @@
             android:layout_marginEnd="20dp"
             android:background="@drawable/bell" />
     </RelativeLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CBCBCB" />
 
     <RelativeLayout
         android:layout_width="match_parent"

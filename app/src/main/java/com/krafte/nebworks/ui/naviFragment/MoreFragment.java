@@ -145,7 +145,7 @@ public class MoreFragment extends Fragment {
             pm.ProfileEdit(mContext);
         });
         binding.settingList02Txt.setOnClickListener(v -> {
-            pm.PushLog(mContext);
+//            pm.PushLog(mContext);
         });
         binding.settingList03Txt.setOnClickListener(v -> {
             pm.Push(mContext);

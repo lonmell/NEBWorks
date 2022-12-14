@@ -75,6 +75,7 @@ public class OneButtonPopActivity extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setBtnEvent() {
         binding.popLeftTxt.setOnClickListener(v -> {
+            ClosePop();
             if(data.equals("비밀번호가 성공적으로 변경되었습니다.") || data.equals("카카오 로그인에 문제가 생겼습니다.")){
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
@@ -118,17 +119,22 @@ public class OneButtonPopActivity extends Activity {
                 startActivity(intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            }else{
-                //데이터 전달하기
-                //액티비티(팝업) 닫기
-                finish();
-                Intent intent = new Intent();
-                intent.putExtra("result", "Close Popup");
-                setResult(RESULT_OK, intent);
-                overridePendingTransition(0, R.anim.translate_down);
-
             }
+//            else{
+//                //데이터 전달하기
+//                //액티비티(팝업) 닫기
+//                ClosePop();
+//            }
+
         });
+    }
+
+    private void ClosePop(){
+        finish();
+        Intent intent = new Intent();
+        intent.putExtra("result", "Close Popup");
+        setResult(RESULT_OK, intent);
+        overridePendingTransition(0, R.anim.translate_down);
     }
 
     @Override

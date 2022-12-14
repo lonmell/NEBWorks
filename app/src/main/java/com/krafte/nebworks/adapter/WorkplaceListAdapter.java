@@ -23,12 +23,24 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceListData;
+import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.pop.PlaceBottomNaviActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /*
  * 2022-10-04 방창배 작성
@@ -44,6 +56,8 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
     String USER_INFO_ID = "";
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
+    Activity activity;
+    RetrofitConnect rc = new RetrofitConnect();
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
@@ -73,6 +87,10 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.workplace_item, parent, false);
         WorkplaceListAdapter.ViewHolder vh = new WorkplaceListAdapter.ViewHolder(view);
+
+        if (context instanceof Activity)
+            activity = (Activity) context;
+
         return vh;
     } // onBindViewHolder : position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시
 
@@ -82,7 +100,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         PlaceListData.PlaceListData_list item = mData.get(position);
 
         try{
-
+            PlaceWorkCheck(item.getId(),"0","0",holder);
             Glide.with(mContext).load(item.getImg_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
@@ -174,7 +192,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView store_thumnail;
         TextView title,name,address,state_tv;
-        TextView item_peoplecnt;
+        TextView item_peoplecnt,total_money;
         CardView store_kind_state,item_area,total_item,store_invite_accept;
         RelativeLayout list_setting,list_img_area,place_state;
         LinearLayout money_area;
@@ -195,6 +213,8 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             total_item      = itemView.findViewById(R.id.total_item);
             item_area       = itemView.findViewById(R.id.item_area);
             state_tv        = itemView.findViewById(R.id.state_tv);
+            total_money     = itemView.findViewById(R.id.total_money);
+
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
@@ -218,6 +238,58 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
 
     public void addItem(PlaceListData.PlaceListData_list workPlaceListData_list) {
         mData.add(workPlaceListData_list);
+    }
+
+    public void PlaceWorkCheck(String place_id, String auth, String kind, ViewHolder holder) {
+        dlog.i("PlaceWorkCheck place_id : " + place_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MainContentsInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MainContentsInterface api = retrofit.create(MainContentsInterface.class);
+        Call<String> call = api.getData(place_id, auth, USER_INFO_ID, kind);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
+                            try {
+                                if (!response.body().equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+
+                                    try {
+                                            dlog.i("-----MainData-----");
+                                            int allPay = 0;
+                                            for (int i = 0; i < Response.length(); i++) {
+                                                allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",",""));
+                                            }
+                                            DecimalFormat myFormatter = new DecimalFormat("###,###");
+                                            holder.total_money.setText(myFormatter.format(allPay) + "원");
+                                            dlog.i("allPay : " + myFormatter.format(allPay));
+                                            dlog.i("-----MainData-----");
+                                    } catch (Exception e) {
+                                        dlog.i("UserCheck Exception : " + e);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 
 
