@@ -241,7 +241,7 @@
                 android:orientation="horizontal"
                 android:weightSum="2"
                 app:layout_constraintTop_toBottomOf="@+id/location_state">
-
+                <!--i_area-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -257,6 +257,83 @@
                         android:gravity="center" />
                 </LinearLayout>
             </LinearLayout>
+            <!--o_area-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/o_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="29dp"
+                android:visibility="gone"
+                app:contentPadding="20dp"
+                app:cardBackgroundColor="#ffffff"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/today_workdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="0000.00.00"
+                        android:textSize="16sp"
+                        android:textColor="#949494"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="현재 근무중입니다."
+                        android:textSize="20sp"
+                        android:textColor="@color/black"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="37dp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="12dp"
+                        android:background="#EFF4FD">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/inter_bold"
+                            android:text="출근시간"
+                            android:textSize="13sp"
+                            android:gravity="center"
+                            android:layout_marginStart="15dp"
+                            android:textColor="#6395EC"/>
+                        <TextView
+                            android:id="@+id/in_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/inter_regular"
+                            android:text="00:00"
+                            android:gravity="center"
+                            android:textSize="13sp"
+                            android:layout_marginStart="15dp"
+                            android:textColor="#6395EC"/>
+                    </LinearLayout>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/o_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="11dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="#6395EC"
+                        app:cardCornerRadius="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/inter_bold"
+                            android:text="퇴근하기"
+                            android:gravity="center"
+                            android:textSize="13sp"
+                            android:textColor="@color/white"/>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardview00"
@@ -267,8 +344,7 @@
                 android:layout_marginTop="29dp"
                 app:cardBackgroundColor="#ffffff"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/cardview02">
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

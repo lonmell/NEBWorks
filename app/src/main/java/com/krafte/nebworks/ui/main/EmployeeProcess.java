@@ -35,8 +35,10 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.threeten.bp.LocalDateTime;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +63,8 @@ public class EmployeeProcess extends AppCompatActivity {
     int getDistance = 0;
     int location_cnt = 0;
     String USER_INFO_ID = "";
-
+    String kind = "";
+    String place_end_time = "";
     long now = System.currentTimeMillis();
     Date mDate = new Date(now);
     @SuppressLint("SimpleDateFormat")
@@ -76,6 +79,7 @@ public class EmployeeProcess extends AppCompatActivity {
     String GET_DAY = simpleDate.format(mDate) + " " + simpleDate_time.format(mDate);
     String GET_TIME_AGE = simpleDate_age.format(mDate);
     String GET_TIME = simpleDate_time.format(mDate);
+    String title = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +97,10 @@ public class EmployeeProcess extends AppCompatActivity {
         try{
             place_id        = shardpref.getString("place_id","0");
             USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
-
+            kind            = shardpref.getString("kind", "0");
+            place_end_time  = shardpref.getString("place_end_time","");
             onBtnEvent();
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -116,21 +122,81 @@ public class EmployeeProcess extends AppCompatActivity {
         dlog.i("location_cnt : " + location_cnt);
         dlog.i("GET_TIME : " + simpleDate.format(mDate));
         dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-        binding.storeDistance.setText("매장과 " + getDistance + "m 떨어져있습니다.");
+
         if (getDistance <= 30) {
-            binding.inoutAble.setText("출근처리가능");
+            if(kind.equals("0")){
+                title = "출근처리";
+            }else{
+                title = "퇴근근처리 불가";
+            }
+            binding.storeDistance.setText("매장과 " + getDistance + "m 떨어져있습니다.");
+            binding.inoutAble.setText(kind.equals("0")?"출근처리가능":"퇴근처리가능");
             binding.inoutAble.setTextColor(Color.parseColor("#6395EC"));
             dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
             InOutInsert();
         } else {
+            if(kind.equals("0")){
+                title = "출근처리 불가";
+            }else{
+                try {
+                    String today = dc.GET_TIME;
+
+                    compareDate1(place_end_time, today);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                title = "퇴근근처리 불가";
+            }
+            binding.storeDistance.setText("매장과의 거리가 30미터 이상 입니다.");
             binding.inoutAble.setText("출근처리불가");
             binding.inoutAble.setTextColor(Color.parseColor("#DD6540"));
-            Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
+//            Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
+        }
+    }
+
+    public void compareDate1(String before, String after) throws ParseException {
+
+        LocalDateTime date1 = LocalDateTime.parse(before); //before
+        LocalDateTime date2 = LocalDateTime.parse(after); //after
+
+        if (date1.isBefore(date2)) {
+            System.out.println("Date1 is before Date2");
+        }
+
+        if (date1.isAfter(date2)) {
+            System.out.println("Date1 is after Date2");
+        }
+
+        if (date1.isEqual(date2)) {
+            System.out.println("Date1 is equal Date2");
         }
     }
 
     private void onBtnEvent(){
-
+        binding.ioBtn.setOnClickListener(v -> {
+            MoveMyLocation();
+            dlog.i("location_cnt : " + location_cnt);
+            long now = System.currentTimeMillis();
+            Date mDate = new Date(now);
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+            dlog.i("location_cnt : " + location_cnt);
+            dlog.i("GET_TIME : " + simpleDate.format(mDate));
+            dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
+            if (getDistance <= 30) {
+                dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+//                InOutLogMember();
+//                if (!place_owner_id.equals(USER_INFO_ID)) {
+//                    getManagerToken(place_owner_id, "0", place_id, place_name);
+//                }
+                InOutInsert();
+            } else {
+                Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
+            }
+        });
     }
 
     String place_id = "";
@@ -143,7 +209,6 @@ public class EmployeeProcess extends AppCompatActivity {
     String place_vacation_select = "";
     String place_insurance = "";
     String place_wifi_name = "";
-    String kind = "";
 
     private void getPlaceData() {
         dlog.i("PlaceCheck place_id : " + place_id);
@@ -196,6 +261,7 @@ public class EmployeeProcess extends AppCompatActivity {
 
     private void InOutInsert() {
         dlog.i("--------InOutInsert--------");
+        dlog.i("titel : " + title);
         dlog.i("place_id : " + place_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("kind - 0출근, 1퇴근 : " + kind);
@@ -226,7 +292,7 @@ public class EmployeeProcess extends AppCompatActivity {
                                         Intent intent = new Intent(mContext, InoutPopActivity.class);
                                         intent.putExtra("title", "출근 처리되었습니다.");
                                         intent.putExtra("time", GET_TIME);
-                                        intent.putExtra("state", "1");
+                                        intent.putExtra("state", kind);
                                         intent.putExtra("store_name", place_name);
                                         mContext.startActivity(intent);
                                         ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);

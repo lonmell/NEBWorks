@@ -300,6 +300,8 @@ public class HomeFragment2 extends Fragment {
                             //그날 최초 출근
                             kind = "-1";
 //                            InOutInsert("0");
+                            binding.oArea.setVisibility(View.GONE);
+                            binding.ioArea.setVisibility(View.VISIBLE);
                         } else if (response.body().replace("[", "").replace("]", "").length() > 0) {
                             if (response.isSuccessful() && response.body() != null) {
                                 dlog.i("InOutLogMember jsonResponse length : " + response.body().length());
@@ -310,6 +312,11 @@ public class HomeFragment2 extends Fragment {
                                     dlog.i("InOutLogMember kind : " + kind);
                                     if (kind.equals("1")) {
                                         kind = "-1";
+                                        binding.oArea.setVisibility(View.GONE);
+                                        binding.ioArea.setVisibility(View.VISIBLE);
+                                    }else{
+                                        binding.oArea.setVisibility(View.VISIBLE);
+                                        binding.ioArea.setVisibility(View.GONE);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -365,6 +372,7 @@ public class HomeFragment2 extends Fragment {
                 } else {
                     kind = "1";
                 }
+                shardpref.putString("kind", kind);
                 pm.EmployeeProcess(mContext);
 //                MoveMyLocation();
 //                dlog.i("location_cnt : " + location_cnt);
@@ -388,8 +396,6 @@ public class HomeFragment2 extends Fragment {
 //                } else {
 //                    Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
 //                }
-            } else {
-                pm.Main2(mContext);
             }
         });
         binding.acceptBtn.setOnClickListener(v -> {
@@ -533,7 +539,7 @@ public class HomeFragment2 extends Fragment {
                                     dlog.i("USER_INFO_ID : " + USER_INFO_ID);
                                     dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
                                     shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-
+                                    shardpref.putString("place_end_time",place_end_time);
                                     binding.title.setText(place_name);
                                 }
                             } catch (JSONException e) {
