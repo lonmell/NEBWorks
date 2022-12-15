@@ -24,6 +24,7 @@ import com.krafte.nebworks.databinding.ActivityPlacelistBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,7 +107,7 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
     }
 
 
-
+    RetrofitConnect rc = new RetrofitConnect();
     public void GetPlaceList() {
         dlog.i("------GetPlaceList------");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -125,14 +126,14 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + response.body().length());
-                            dlog.i("GetPlaceList jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                             try {
                                 //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(response.body());
+                                JSONArray Response = new JSONArray(jsonResponse);
                                 mList = new ArrayList<>();
-                                mAdapter = new WorkplaceListAdapter(mContext, mList);
+                                mAdapter = new WorkplaceListAdapter(binding.getRoot().getContext(), mList);
                                 binding.placeList.setAdapter(mAdapter);
                                 binding.placeList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                 dlog.i("SIZE : " + Response.length());

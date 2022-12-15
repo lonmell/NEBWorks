@@ -262,7 +262,7 @@ public class HomeFragment2 extends Fragment {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
 //        timer.cancel();
     }
@@ -272,10 +272,10 @@ public class HomeFragment2 extends Fragment {
         super.onResume();
         UserCheck();
         getPlaceData();
-        PlaceWorkCheck(place_id,USER_INFO_AUTH,"0");
-        PlaceWorkCheck(place_id,USER_INFO_AUTH,"1");
-        PlaceWorkCheck(place_id,USER_INFO_AUTH,"2");
-        PlaceWorkCheck(place_id,USER_INFO_AUTH,"3");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
         InOutLogMember();
     }
 
@@ -308,7 +308,7 @@ public class HomeFragment2 extends Fragment {
                                     JSONArray Response = new JSONArray(response.body());
                                     kind = Response.getJSONObject(0).getString("kind");
                                     dlog.i("InOutLogMember kind : " + kind);
-                                    if(kind.equals("1")){
+                                    if (kind.equals("1")) {
                                         kind = "-1";
                                     }
                                 } catch (Exception e) {
@@ -344,7 +344,7 @@ public class HomeFragment2 extends Fragment {
             pm.MemberDetail(mContext);
         });
         binding.itemArea.setOnClickListener(v -> {
-            shardpref.putString("USER_INFO_AUTH","1");
+            shardpref.putString("USER_INFO_AUTH", "1");
             pm.PlaceList(mContext);
         });
 
@@ -365,36 +365,32 @@ public class HomeFragment2 extends Fragment {
                 } else {
                     kind = "1";
                 }
-                MoveMyLocation();
-                dlog.i("location_cnt : " + location_cnt);
-                long now = System.currentTimeMillis();
-                Date mDate = new Date(now);
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-                latitude = gpsTracker.getLatitude();
-                longitude = gpsTracker.getLongitude();
-                getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-                dlog.i("location_cnt : " + location_cnt);
-                dlog.i("GET_TIME : " + simpleDate.format(mDate));
-                dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-                if(getDistance <= 30){
-                    dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
-                    InOutLogMember();
-                    if (!place_owner_id.equals(USER_INFO_ID)) {
-                        getManagerToken(place_owner_id, "0", place_id, place_name);
-                    }
-                    InOutInsert(kind);
-                }else{
-                    Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
-                }
-            }else {
-                if(USER_INFO_AUTH.equals("0")){
-                    pm.Main(mContext);
-                }else{
-                    pm.Main2(mContext);
-                }
+                pm.EmployeeProcess(mContext);
+//                MoveMyLocation();
+//                dlog.i("location_cnt : " + location_cnt);
+//                long now = System.currentTimeMillis();
+//                Date mDate = new Date(now);
+//                @SuppressLint("SimpleDateFormat")
+//                SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+//                latitude = gpsTracker.getLatitude();
+//                longitude = gpsTracker.getLongitude();
+//                getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+//                dlog.i("location_cnt : " + location_cnt);
+//                dlog.i("GET_TIME : " + simpleDate.format(mDate));
+//                dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
+//                if (getDistance <= 30) {
+//                    dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+//                    InOutLogMember();
+//                    if (!place_owner_id.equals(USER_INFO_ID)) {
+//                        getManagerToken(place_owner_id, "0", place_id, place_name);
+//                    }
+//                    InOutInsert(kind);
+//                } else {
+//                    Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
+//                }
+            } else {
+                pm.Main2(mContext);
             }
-
         });
         binding.acceptBtn.setOnClickListener(v -> {
             UpdateDirectMemberBasic();
@@ -629,7 +625,7 @@ public class HomeFragment2 extends Fragment {
         });
     }
 
-    public void PlaceWorkCheck(String place_id,String auth, String kind) {
+    public void PlaceWorkCheck(String place_id, String auth, String kind) {
         dlog.i("PlaceWorkCheck place_id : " + place_id);
         dlog.i("PlaceWorkCheck auth : " + auth);
         dlog.i("PlaceWorkCheck kind : " + kind);
@@ -654,7 +650,7 @@ public class HomeFragment2 extends Fragment {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     try {
-                                        if(kind.equals("0")){
+                                        if (kind.equals("0")) {
                                             mList = new ArrayList<>();
                                             mAdapter = new MainTaskLAdapter(mContext, mList);
                                             binding.mainTaskList.setAdapter(mAdapter);
@@ -687,7 +683,7 @@ public class HomeFragment2 extends Fragment {
 
                                             }
                                             mAdapter.notifyDataSetChanged();
-                                        }else if(kind.equals("1")){
+                                        } else if (kind.equals("1")) {
                                             mList2 = new ArrayList<>();
                                             mAdapter2 = new MainNotiLAdapter(mContext, mList2);
                                             binding.mainNotiList.setAdapter(mAdapter2);
@@ -718,7 +714,7 @@ public class HomeFragment2 extends Fragment {
 
                                             }
                                             mAdapter.notifyDataSetChanged();
-                                        }else if(kind.equals("2")){
+                                        } else if (kind.equals("2")) {
                                             binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
                                             binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
                                             binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
@@ -728,10 +724,10 @@ public class HomeFragment2 extends Fragment {
                                             dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
                                             dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
                                             dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
-                                        }else if(kind.equals("3")){
+                                        } else if (kind.equals("3")) {
                                             int allPay = 0;
                                             for (int i = 0; i < Response.length(); i++) {
-                                                allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",",""));
+                                                allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                             }
                                             DecimalFormat myFormatter = new DecimalFormat("###,###");
                                             binding.paynum.setText(myFormatter.format(allPay) + "원");
@@ -939,8 +935,6 @@ public class HomeFragment2 extends Fragment {
                     String name = shardpref.getString("USER_INFO_NAME", "");
                     dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
                     dlog.i("token : " + Response.getJSONObject(0).getString("token"));
-                    dlog.i("department : " + Response.getJSONObject(0).getString("department"));
-                    dlog.i("position : " + Response.getJSONObject(0).getString("position"));
 
                     boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
                     if (!token.isEmpty() && channelId1) {

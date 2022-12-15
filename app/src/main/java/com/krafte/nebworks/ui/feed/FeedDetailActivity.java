@@ -7,17 +7,13 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,12 +22,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FeedConfrimLogAdapter;
 import com.krafte.nebworks.data.FeedConfirmData;
-import com.krafte.nebworks.dataInterface.FeedCommentEidtInterface;
-import com.krafte.nebworks.dataInterface.FeedCommentInsertInterface;
 import com.krafte.nebworks.dataInterface.FeedConfrimInterface;
 import com.krafte.nebworks.dataInterface.FeedConfrimlistInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
-import com.krafte.nebworks.dataInterface.FeedViewcntInterface;
 import com.krafte.nebworks.databinding.ActivityFeedDetailBinding;
 import com.krafte.nebworks.pop.PhotoPopActivity;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -68,11 +61,6 @@ public class FeedDetailActivity extends AppCompatActivity {
     DateCurrent dc = new DateCurrent();
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
-
-    //navbar.xml
-    DrawerLayout drawerLayout;
-    View drawerView;
-    ImageView close_btn;
 
     //shared
     String USER_INFO_ID = "";
@@ -148,19 +136,6 @@ public class FeedDetailActivity extends AppCompatActivity {
         super.onResume();
         //UI 데이터 세팅
         try {
-            dlog.i("onResume state : " + shardpref.getString("editstate", ""));
-            if (state.equals("EditComment")) {
-                dlog.i("----------댓글 수정의 경우----------");
-                comment_no = shardpref.getString("comment_no", "");
-                CommContnets = shardpref.getString("comment_contents", "");
-                binding.addCommentTxt.setText(CommContnets);
-                dlog.i("EditComment state : " + state);
-                dlog.i("EditComment comment_no : " + comment_no);
-                dlog.i("EditComment CommContnets : " + CommContnets);
-                dlog.i("----------댓글 수정의 경우----------");
-                shardpref.remove("editstate");
-            }
-            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
             UpdateWorkNotifyReadYn();
             getWorkNotifyReadYn();
         } catch (Exception e) {
@@ -174,6 +149,9 @@ public class FeedDetailActivity extends AppCompatActivity {
     }
 
     private void setBtnEvent() {
+        binding.backBtn.setOnClickListener(v -> {
+            pm.FeedList(mContext);
+        });
         binding.editGo.setOnClickListener(v -> {
             dlog.i("editGo");
             shardpref.putString("edit_feed_id", feed_id);
@@ -191,147 +169,6 @@ public class FeedDetailActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
 
-        binding.addCommentTxt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //입력란에 변화가 있을때
-                if (charSequence.length() > 0) {
-                    binding.addCommentBtn.setVisibility(View.VISIBLE);
-                    binding.addCommentBtn.setEnabled(true);
-                } else {
-                    binding.addCommentBtn.setVisibility(View.INVISIBLE);
-                    binding.addCommentBtn.setEnabled(false);
-                }
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //입력이 끝났을때
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                //입력하기 전에
-            }
-        });
-
-        binding.addCommentBtn.setOnClickListener(v -> {
-            click_htn = "add_comment_btn";
-            imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
-            binding.commentList.scrollToPosition(listitemsize);
-            String in_comment = binding.addCommentTxt.getText().toString();
-            comment_no = shardpref.getString("comment_no", "");
-            if (DataCheck()) {
-                if (comment_no.equals("")) {
-                    AddComment(feed_id, in_comment, USER_INFO_ID);
-                } else {
-                    EditComment(comment_no, in_comment);
-                }
-            }
-        });
-    }
-
-
-    private boolean DataCheck() {
-        comment_txt = binding.addCommentTxt.getText().toString();
-        return !comment_txt.isEmpty();
-    }
-
-
-    public void EditComment(String comt_id, String comment) {
-        dlog.i("-----AddStroeNoti Check-----");
-        dlog.i("feed_id : " + comt_id);
-        dlog.i("comment : " + comment);
-        dlog.i("-----AddStroeNoti Check-----");
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FeedCommentEidtInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        FeedCommentEidtInterface api = retrofit.create(FeedCommentEidtInterface.class);
-        Call<String> call = api.getData(comt_id, comment);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("AddStroeNoti Callback : " + response.body());
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
-                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
-                            try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
-                                    dlog.i("Comment Edit success");
-                                    shardpref.remove("comment_no");
-                                    binding.addCommentTxt.setText("");
-                                    binding.addCommentTxt.clearFocus();
-                                    imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
-                                    GetCommentList();
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
-
-    public void AddComment(String feed_id, String comment, String writer_id) {
-        dlog.i("-----AddStroeNoti Check-----");
-        dlog.i("feed_id : " + feed_id);
-        dlog.i("comment : " + comment);
-        dlog.i("writer_id : " + writer_id);
-        dlog.i("-----AddStroeNoti Check-----");
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FeedCommentInsertInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        FeedCommentInsertInterface api = retrofit.create(FeedCommentInsertInterface.class);
-        Call<String> call = api.getData(feed_id, comment, writer_id,"");
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("AddStroeNoti Callback : " + response.body());
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
-                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
-                            try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
-                                    dlog.i("Comment insert success");
-                                    binding.addCommentTxt.setText("");
-                                    binding.addCommentTxt.clearFocus();
-                                    imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
-                                    GetCommentList();
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
     }
 
 
@@ -360,7 +197,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, feed_id, "","1",USER_INFO_ID);
+        Call<String> call = api.getData(place_id, feed_id, "", "1", USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -393,11 +230,10 @@ public class FeedDetailActivity extends AppCompatActivity {
                                     try {
                                         binding.feedTitle.setText(title);
                                         if (place_owner_id.equals(writer_id)) {
-                                            binding.userName.setText(jikgup);
+                                            binding.userName.setText("매니저");
                                         } else {
                                             binding.userName.setText(writer_name + "(" + jikgup + ")");
                                         }
-
 
                                         if (link.isEmpty() || link.equals("null")) {
                                             binding.linkTxt.setVisibility(View.GONE);
@@ -430,7 +266,6 @@ public class FeedDetailActivity extends AppCompatActivity {
                                                     .placeholder(R.drawable.no_image)
                                                     .into(binding.notiSetimg);
                                         }
-                                        SETFeedViewcnt();
                                         place_name = shardpref.getString("place_name", "-1");
 
 
@@ -468,138 +303,7 @@ public class FeedDetailActivity extends AppCompatActivity {
         });
     }
 
-    public void SETFeedViewcnt() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FeedViewcntInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        FeedViewcntInterface api = retrofit.create(FeedViewcntInterface.class);
-        Call<String> call = api.getData(feed_id);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            try {
-                                dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                                dlog.i("UserCheck jsonResponse : " + response.body());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
 
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
-
-    //댓글 리스트 조회
-    public void GetCommentList() {
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(FeedCommentListInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        FeedCommentListInterface api = retrofit.create(FeedCommentListInterface.class);
-//        Call<String> call = api.getData(feed_id);
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    runOnUiThread(() -> {
-//                        if (response.isSuccessful() && response.body() != null) {
-////                            String jsonResponse = rc.getBase64decode(response.body());
-//                            dlog.i("GetCommentList jsonResponse length : " + response.body().length());
-//                            dlog.i("GetCommentList jsonResponse : " + response.body());
-//                            try {
-//                                //Array데이터를 받아올 때
-//                                JSONArray Response = new JSONArray(response.body());
-//
-//                                mList = new ArrayList<>();
-//                                mAdapter = new WorkCommentListAdapter(mContext, mList,writer_id);
-//                                binding.commentList.setAdapter(mAdapter);
-//                                binding.commentList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-//                                listitemsize = Response.length();
-//
-//                                if (Response.length() == 0) {
-//                                    dlog.i("SetNoticeListview Thread run! ");
-//                                    dlog.i("GET SIZE : " + Response.length());
-//                                    binding.noDataTxt.setVisibility(View.VISIBLE);
-//                                } else {
-//                                    binding.noDataTxt.setVisibility(View.GONE);
-//                                    for (int i = 0; i < Response.length(); i++) {
-//                                        JSONObject jsonObject = Response.getJSONObject(i);
-//                                        //작업 일자가 없으면 표시되지 않음.
-//                                        mAdapter.addItem(new WorkCommentData.WorkCommentData_list(
-//                                                jsonObject.getString("id"),
-//                                                jsonObject.getString("feed_id"),
-//                                                jsonObject.getString("comment"),
-//                                                jsonObject.getString("writer_id"),
-//                                                jsonObject.getString("writer_name"),
-//                                                jsonObject.getString("writer_img_path"),
-//                                                jsonObject.getString("edit_yn"),
-//                                                jsonObject.getString("delete_yn"),
-//                                                jsonObject.getString("created_at"),
-//                                                jsonObject.getString("updated_at")
-//                                        ));
-//                                    }
-//                                    mAdapter.notifyDataSetChanged();
-//                                    mAdapter.setOnItemClickListener(new WorkCommentListAdapter.OnItemClickListener() {
-//                                        @Override
-//                                        public void onItemClick(View v, int position) {
-//                                            try {
-//                                                binding.addCommentTxt.clearFocus();
-//                                                imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
-//                                                shardpref.putString("comment_no",Response.getJSONObject(position).getString("id"));
-//                                                Intent intent = new Intent(mContext, CommunityOptionActivity.class);
-//                                                WriteName = Response.getJSONObject(position).getString("writer_name").isEmpty() ?
-//                                                        Response.getJSONObject(position).getString("writer_name") : "";
-//
-//                                                intent.putExtra("state", "EditComment");
-//                                                intent.putExtra("feed_id", Response.getJSONObject(position).getString("feed_id"));
-//                                                intent.putExtra("comment_no", Response.getJSONObject(position).getString("id"));
-//                                                intent.putExtra("write_id", Response.getJSONObject(position).getString("writer_id"));
-//                                                intent.putExtra("writer_name", WriteName);
-//                                                intent.putExtra("title", "");
-//                                                intent.putExtra("contents", "");
-//                                                intent.putExtra("comment_contents", Response.getJSONObject(position).getString("comment"));
-//                                                intent.putExtra("write_date", Response.getJSONObject(position).getString("created_at"));
-//                                                intent.putExtra("write_nickname","");
-//
-//                                                mContext.startActivity(intent);
-//                                                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-//                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                            } catch (JSONException e) {
-//                                                e.printStackTrace();
-//                                            }
-//                                        }
-//                                    });
-//                                }
-//                                dlog.i("SetNoticeListview Thread run! ");
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                dlog.e("에러1 = " + t.getMessage());
-//            }
-//        });
-    }
 
     @SuppressLint("LongLogTag")
     private void UpdateWorkNotifyReadYn() {
@@ -667,6 +371,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                                 binding.commentList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                 listitemsize = Response.length();
 
+                                binding.confirmCnt.setText(Response.length() + "명");
                                 if (Response.length() == 0) {
                                     dlog.i("SetNoticeListview Thread run! ");
                                     dlog.i("GET SIZE : " + Response.length());
@@ -675,7 +380,6 @@ public class FeedDetailActivity extends AppCompatActivity {
                                     binding.noDataTxt.setVisibility(View.GONE);
                                     for (int i = 0; i < Response.length(); i++) {
                                         JSONObject jsonObject = Response.getJSONObject(i);
-                                        //작업 일자가 없으면 표시되지 않음.
                                         mAdapter.addItem(new FeedConfirmData.FeedConfirmData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("feed_id"),

@@ -106,25 +106,28 @@
             android:textColor="#dcdcdc"
             android:textSize="20sp"
             tools:ignore="HardcodedText" />
-        <androidx.cardview.widget.CardView
-            android:id="@+id/add_work_btn"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="25dp"
-            app:cardBackgroundColor="#68B0FF"
-            app:cardCornerRadius="60dp">
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/add_work_btn"-->
+<!--            android:layout_width="55dp"-->
+<!--            android:layout_height="55dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_marginEnd="25dp"-->
+<!--            android:layout_marginBottom="25dp"-->
+<!--            app:cardBackgroundColor="#68B0FF"-->
+<!--            app:cardCornerRadius="60dp">-->
 
-            <ImageView
-                android:id="@+id/wirte_add_img"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:background="@drawable/drawing_pen" />
-        </androidx.cardview.widget.CardView>
+<!--            <ImageView-->
+<!--                android:id="@+id/wirte_add_img"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_margin="5dp"-->
+<!--                android:background="@drawable/drawing_pen" />-->
+<!--        </androidx.cardview.widget.CardView>-->
+        <include
+            android:id="@+id/add_btn"
+            layout="@layout/addbtn"/>
     </RelativeLayout>
 
 </LinearLayout>

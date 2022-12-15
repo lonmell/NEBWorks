@@ -200,6 +200,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     String change_place_owner_id = "";
 
     private void setBtnEvent() {
+        binding.backBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
         binding.placeChangeArea.setOnClickListener(v -> {
             PlaceListBottomSheet plb = new PlaceListBottomSheet();
             plb.show(getSupportFragmentManager(), "PlaceListBottomSheet");

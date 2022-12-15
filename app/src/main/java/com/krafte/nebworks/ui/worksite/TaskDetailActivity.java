@@ -356,6 +356,9 @@ public class TaskDetailActivity extends AppCompatActivity {
                 pm.TaskReportDetail(mContext);
             }
         });
+        binding.backBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
     }
 
     public void Toast_Nomal(String message){

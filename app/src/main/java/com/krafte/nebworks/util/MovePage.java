@@ -54,11 +54,15 @@ public interface MovePage {
 
     void ContractWorkerSign(Context context);
 
+    void ContractAll(Context context);
+
     void MoreGo(Context context);
 
     void MoreBack(Context context);
 
     void Main2(Context context);
+
+    void EmployeeProcess(Context context);
 
     void Push(Context context);
 

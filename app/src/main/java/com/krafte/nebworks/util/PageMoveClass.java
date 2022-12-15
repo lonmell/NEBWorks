@@ -21,6 +21,7 @@ import com.krafte.nebworks.ui.contract.AddContractPage06;
 import com.krafte.nebworks.ui.contract.AddContractPage07;
 import com.krafte.nebworks.ui.contract.AddContractPage08;
 import com.krafte.nebworks.ui.contract.AddContractPage09;
+import com.krafte.nebworks.ui.contract.ContractAllDataActivity;
 import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
 import com.krafte.nebworks.ui.contract.ContractWorkerAccept;
 import com.krafte.nebworks.ui.contract.ContractWorkerSignActivity;
@@ -29,6 +30,7 @@ import com.krafte.nebworks.ui.feed.FeedDetailActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
 import com.krafte.nebworks.ui.feed.FeedListActivity;
 import com.krafte.nebworks.ui.login.LoginActivity;
+import com.krafte.nebworks.ui.main.EmployeeProcess;
 import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.ui.member.AddMemberDetail;
@@ -93,6 +95,13 @@ public class PageMoveClass implements MovePage {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    @Override
+    public void EmployeeProcess(Context context) {
+        Intent intent = new Intent(context, EmployeeProcess.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 
 
     @Override
@@ -594,6 +603,13 @@ public class PageMoveClass implements MovePage {
     @Override
     public void ContractWorkerSign(Context context) {
         Intent intent = new Intent(context, ContractWorkerSignActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+    @Override
+    public void ContractAll(Context context) {
+        Intent intent = new Intent(context, ContractAllDataActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -131,12 +131,12 @@ public class PayManagementActivity extends AppCompatActivity {
             binding.select01.setOnClickListener(v -> {
                 binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
                 binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
-                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), "0");
+                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , "0");
             });
             binding.select02.setOnClickListener(v -> {
                 binding.line01.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
-                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), "1");
+                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , "1");
             });
 
             Log.i(TAG, "USER_INFO_AUTH : " + USER_INFO_AUTH);
@@ -170,7 +170,7 @@ public class PayManagementActivity extends AppCompatActivity {
                         }
                         dlog.i("change_place_id : " + change_place_id);
                         dlog.i("change_place_name : " + change_place_name);
-                        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
+                        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , Tap);
                     }
                 });
             });
@@ -194,7 +194,7 @@ public class PayManagementActivity extends AppCompatActivity {
                         dlog.i("change_member_name : " + user_name);
                         shardpref.putString("change_member_id", user_id);
                         shardpref.putString("change_member_name", user_name);
-                        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
+                        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , Tap);
                     }
                 });
             });
@@ -219,7 +219,7 @@ public class PayManagementActivity extends AppCompatActivity {
     String bYear = "";
     String bMonth = "";
     FragmentTransaction transaction;
-
+    String setDate = "";
     private void TimeSetFun() {
         transaction = getSupportFragmentManager().beginTransaction();
 
@@ -228,43 +228,29 @@ public class PayManagementActivity extends AppCompatActivity {
         dlog.i("오늘 :" + toDay);
         Year = toDay.substring(0, 4);
         Month = toDay.substring(5, 7);
-        binding.setdate.setText(Year + "-" + Month);
-        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
+        binding.setdate.setText(Year + "년 " + Month + "월");
+        setDate = Year + "-" + Month;
+        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
 
         binding.prevDate.setOnClickListener(v -> {
             dlog.i("prevDate Click!! PayManagementActivity");
-            cal.add(Calendar.DATE, -1);
+            cal.add(Calendar.MONTH, -1);
             toDay = sdf.format(cal.getTime());
-
             Year = toDay.substring(0, 4);
             Month = toDay.substring(5, 7);
-            if (!gYear.equals(gYear) || !bMonth.equals(gMonth)) {
-                dlog.i("gYear : " + gYear);
-                dlog.i("bYear : " + bYear);
-                dlog.i("gMonth : " + gMonth);
-                dlog.i("bMonth : " + bMonth);
-                bYear = gYear;
-                bMonth = gMonth;
-                binding.setdate.setText(Year + "-" + Month);
-            }
-            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
+            setDate = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월");
+            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
         });
         binding.nextDate.setOnClickListener(v -> {
             dlog.i("nextDate Click!! PayManagementActivity");
-            cal.add(Calendar.DATE, +1);
+            cal.add(Calendar.MONTH, +1);
             toDay = sdf.format(cal.getTime());
             Year = toDay.substring(0, 4);
             Month = toDay.substring(5, 7);
-            if (!gYear.equals(gYear) || !bMonth.equals(gMonth)) {
-                dlog.i("gYear : " + gYear);
-                dlog.i("bYear : " + bYear);
-                dlog.i("gMonth : " + gMonth);
-                dlog.i("bMonth : " + bMonth);
-                bYear = gYear;
-                bMonth = gMonth;
-                binding.setdate.setText(Year + "-" + Month);
-            }
-            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
+            setDate = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월");
+            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
         });
 
         Calendar c = Calendar.getInstance();
@@ -282,7 +268,7 @@ public class PayManagementActivity extends AppCompatActivity {
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 binding.setdate.setText(year + "-" + Month);
                 getYMPicker = binding.setdate.getText().toString().substring(0, 7);
-                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
+                WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , Tap);
             }
         }, mYear, mMonth, mDay);
 
@@ -308,7 +294,7 @@ public class PayManagementActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, binding.setdate.getText().toString(), Tap);
+        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , Tap);
     }
 
     @Override

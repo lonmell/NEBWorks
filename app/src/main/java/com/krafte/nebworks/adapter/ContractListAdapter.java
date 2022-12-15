@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -135,8 +136,10 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                         }else if(item.getProgress_pos().equals("5")){
                             //서명 부터
                             pm.AddContractPage08(mContext);
-                        }else if(item.getProgress_pos().equals("6")){
+                        }else if(item.getProgress_pos().equals("7")){
                             //해당 근로계약서 전체 상세 페이지로
+                            shardpref.putString("contract_id", item.getContract_id());
+                            pm.ContractAll(mContext);
                         }
                     }else{
                         //근로자일경우
@@ -199,7 +202,12 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     ContractData.ContractData_list item = mData.get(pos);
-                    // 전화 걸기
+                    if(!item.getOwner_sign_id().equals("null") && !item.getWorker_sign_id().equals("null")){
+                        shardpref.putString("contract_id", item.getContract_id());
+                        pm.ContractAll(mContext);
+                    }else{
+                        Toast.makeText(mContext,"근로계약서 작성이 완료되지 않았습니다.",Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -213,6 +221,5 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
     public int getItemViewType(int position) {
         return position;
     }
-
 
 }

@@ -68,7 +68,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
 
     String place_id = "";
     String place_name = "";
-    String setYoil = "";
+    String setYoil;
     String sieob_get = "";
     String jong_eob_get = "";
     String total_work_time_get = "";
@@ -98,8 +98,8 @@ public class AddWorkPartActivity extends AppCompatActivity {
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
 
-            place_id = shardpref.getString("place_id","0");
-            place_name = shardpref.getString("place_name","0");
+            place_id = shardpref.getString("place_id", "0");
+            place_name = shardpref.getString("place_name", "0");
 
             binding.storeName.setText(place_name);
             setBtnEvent();
@@ -111,7 +111,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
     }
 
@@ -119,18 +119,18 @@ public class AddWorkPartActivity extends AppCompatActivity {
     String item_user_name = "";
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         //부여할 사용자 가져오기
-        item_user_id = shardpref.getString("item_user_id","");
-        item_user_name = shardpref.getString("item_user_name","");
-        if(!item_user_id.isEmpty() && !item_user_name.isEmpty()){
+        item_user_id = shardpref.getString("item_user_id", "");
+        item_user_name = shardpref.getString("item_user_name", "");
+        if (!item_user_id.isEmpty() && !item_user_name.isEmpty()) {
             binding.memName.setVisibility(View.VISIBLE);
             binding.memCnt.setVisibility(View.GONE);
             binding.memSelect.setVisibility(View.GONE);
             binding.memName.setText(item_user_name);
-        }else{
+        } else {
             binding.memName.setVisibility(View.GONE);
             binding.memCnt.setVisibility(View.VISIBLE);
             binding.memSelect.setVisibility(View.VISIBLE);
@@ -242,19 +242,23 @@ public class AddWorkPartActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
     }
 
-    private void setBtnEvent(){
+    private void setBtnEvent() {
+        binding.backBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
         binding.yoil.setOnClickListener(v -> {
             SelectYoilActivity sya = new SelectYoilActivity();
-            sya.show(getSupportFragmentManager(),"SelectYoilActivity");
+            sya.show(getSupportFragmentManager(), "SelectYoilActivity");
             sya.setOnItemClickListener(new SelectYoilActivity.OnItemClickListener() {
                 @Override
                 public void onItemClick(View v, String category) {
-                    binding.yoilTv.setText(category);
-                    setYoil = category.replace("요일","");
+                    binding.yoilTv.setText(category.replace("[", "").replace("]", ""));
+                    setYoil = category.replace("요일", "").replace(" ", "");
+                    dlog.i("setYoil : " + setYoil);
                 }
             });
         });
@@ -289,12 +293,13 @@ public class AddWorkPartActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.translate_up, 0);
         });
         binding.saveWorkpart.setOnClickListener(v -> {
-            if(SaveCheck()){
+            if (SaveCheck()) {
                 SaveWorkPartTime(item_user_id);
             }
         });
     }
-    private boolean SaveCheck(){
+
+    private boolean SaveCheck() {
         sieob_get = binding.selectTime01.getText().toString();
         jong_eob_get = binding.selectTime02.getText().toString();
         break_time_get01 = binding.selectTime03.getText().toString();
@@ -354,28 +359,29 @@ public class AddWorkPartActivity extends AppCompatActivity {
         dlog.i("RestEnd : " + break_time_get02);
         dlog.i("RestTotal : " + diff_break_time_get);
         dlog.i("-----SaveCheck-----");
-        if(setYoil.isEmpty()){
+        if (setYoil.isEmpty()) {
             Toast_Nomal("요일을 선택해주세요.");
             return false;
-        }else if(sieob_get.isEmpty()){
+        } else if (sieob_get.isEmpty()) {
             Toast_Nomal("근무 시작시간을 선택해주세요.");
             return false;
-        }else if(jong_eob_get.isEmpty()){
+        } else if (jong_eob_get.isEmpty()) {
             Toast_Nomal("근무 종료시간을 선택해주세요.");
             return false;
-        }else{
+        } else {
             return true;
         }
 
     }
 
     public void SaveWorkPartTime(String user_id) {
+        dlog.i("setYoil : " + setYoil);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkPartSaveInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkPartSaveInterface api = retrofit.create(WorkPartSaveInterface.class);
-        Call<String> call = api.getData(place_id,user_id,setYoil,total_work_time_get,sieob_get,jong_eob_get,break_time_get01,break_time_get02,diff_break_time_get);
+        Call<String> call = api.getData(place_id, user_id, setYoil.replace("[", "").replace("]", ""), total_work_time_get, sieob_get, jong_eob_get, break_time_get01, break_time_get02, diff_break_time_get);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -391,6 +397,8 @@ public class AddWorkPartActivity extends AppCompatActivity {
                                     Toast_Nomal("근무시간이 업데이트 되었습니다.");
                                     shardpref.remove("item_user_id");
                                     shardpref.remove("item_user_name");
+                                    shardpref.putInt("SELECT_POSITION", 2);
+                                    pm.Main(mContext);
 //                                    getPartTimeYoil(setYoil);
                                 }
                             } catch (Exception e) {
@@ -410,10 +418,10 @@ public class AddWorkPartActivity extends AppCompatActivity {
     }
 
 
-    public void Toast_Nomal(String message){
+    public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
-        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
         toast_textview.setText(String.valueOf(message));
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
@@ -425,7 +433,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
     }
 }

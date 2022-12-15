@@ -11,10 +11,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.WorkGotoListData;
+import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -31,6 +33,7 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
     PageMoveClass pm = new PageMoveClass();
     RetrofitConnect rc = new RetrofitConnect();
     String month = "";
+    DateCurrent dc = new DateCurrent();
 
     public MemberInoutAdapter(Context context, ArrayList<WorkGotoListData.WorkGotoListData_list> data, String month) {
         this.mData = data;
@@ -58,7 +61,12 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
             } else {
                 holder.first_pos.setVisibility(View.GONE);
             }
-            holder.date.setText(month + "월 " + item.getDay() + "일");
+            String today = dc.GET_MONTH + "월 " + dc.GET_DAY + "일";
+            String toItemday = month + "월 " + item.getDay() + "일";
+            if(today.equals(toItemday)){
+                holder.today_area.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
+            }
+            holder.date.setText(toItemday);
 
             dlog.i("item.getWorkdiff() : " + item.getWorkdiff());
             dlog.i("item.getState() : " + item.getState());
@@ -124,6 +132,7 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
         TextView date, time, in_time, out_time;
         RelativeLayout list_setting;
         LinearLayout first_pos;
+        CardView today_area;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -131,12 +140,13 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
 
-            date = itemView.findViewById(R.id.date);
-            time = itemView.findViewById(R.id.time);
-            in_time = itemView.findViewById(R.id.in_time);
-            out_time = itemView.findViewById(R.id.out_time);
-            list_setting = itemView.findViewById(R.id.list_setting);
-            first_pos = itemView.findViewById(R.id.first_pos);
+            date            = itemView.findViewById(R.id.date);
+            time            = itemView.findViewById(R.id.time);
+            in_time         = itemView.findViewById(R.id.in_time);
+            out_time        = itemView.findViewById(R.id.out_time);
+            list_setting    = itemView.findViewById(R.id.list_setting);
+            first_pos       = itemView.findViewById(R.id.first_pos);
+            today_area      = itemView.findViewById(R.id.today_area);
 
             dlog.i("mData size : " + mData.size());
             itemView.setOnClickListener(v -> {

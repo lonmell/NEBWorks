@@ -27,6 +27,7 @@ import com.krafte.nebworks.bottomsheet.MemberOption;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.dataInterface.MemberUpdateBasicInterface;
 import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
@@ -71,7 +72,6 @@ public class MemberManagement extends AppCompatActivity {
 
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
-    String store_no;
     boolean wifi_certi_flag = false;
     boolean gps_certi_flag = false;
 
@@ -116,7 +116,6 @@ public class MemberManagement extends AppCompatActivity {
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
             return_page = shardpref.getString("return_page", "");
-            store_no = shardpref.getString("store_no", "");
             shardpref.putString("returnPage", "BusinessApprovalActivity");
 
 //            binding.addMemberBtn.setOnClickListener(v -> {
@@ -130,7 +129,12 @@ public class MemberManagement extends AppCompatActivity {
                 plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
                     shardpref.putString("change_place_id",place_id);
                     dlog.i("change_place_id : " + place_id);
+                    SetAllMemberList(place_id);
+                    binding.changePlace.setTag(place_name);
                 });
+            });
+            binding.notiArea.setOnClickListener(v -> {
+                pm.FeedList(mContext);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,6 +145,7 @@ public class MemberManagement extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
+        shardpref.putInt("SELECT_POSITION", 0);
         if(USER_INFO_AUTH.equals("0")){
             pm.Main(mContext);
         }else{
@@ -153,6 +158,7 @@ public class MemberManagement extends AppCompatActivity {
         super.onResume();
         SetAllMemberList(place_id);
         setAddBtnSetting();
+        getNotReadFeedcnt();
     }
 
     @Override
@@ -160,6 +166,44 @@ public class MemberManagement extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public void getNotReadFeedcnt() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FeedNotiInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
+        Call<String> call = api.getData("", "", "","1",USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.e( "WorkTapListFragment1 / setRecyclerView");
+                dlog.e( "response 1: " + response.isSuccessful());
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    dlog.e( "GetWorkStateInfo function onSuccess : " + response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(response.body());
+                        String NotRead = Response.getJSONObject(0).getString("notread_feed");
+                        if(NotRead.equals("0")){
+                            binding.notiRed.setVisibility(View.INVISIBLE);
+                        }else{
+                            binding.notiRed.setVisibility(View.VISIBLE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e( "에러 = " + t.getMessage());
+            }
+        });
+    }
+    
     /*직원 전체 리스트 START*/
     RetrofitConnect rc = new RetrofitConnect();
     public void SetAllMemberList(String place_id) {

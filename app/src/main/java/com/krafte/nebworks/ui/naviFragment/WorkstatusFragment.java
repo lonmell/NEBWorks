@@ -549,7 +549,7 @@ public class WorkstatusFragment extends Fragment {
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
-        addbtn_tv.setText("직원추가");
+        addbtn_tv.setText("근무설정");
         add_worktime_btn.setOnClickListener(v -> {
             pm.AddWorkPart(mContext);
         });

@@ -139,6 +139,7 @@
         <!-- main -->
         <activity android:name=".ui.main.MainFragment" />
         <activity android:name=".ui.main.MainFragment2" />
+        <activity android:name=".ui.main.EmployeeProcess" />
 
         <!--notify-->
         <activity android:name=".ui.notify.NotifyListActivity" />
@@ -204,6 +205,7 @@
 
         <!--contract-->
         <activity android:name=".ui.contract.ContractFragmentActivity"/>
+        <activity android:name=".ui.contract.ContractAllDataActivity"/>
 
         <!--관리자-->
         <activity android:name=".ui.contract.AddContractPage01"/>

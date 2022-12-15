@@ -31,18 +31,19 @@
                     android:layout_width="1dp"
                     android:layout_height="1dp"
                     android:layout_centerInParent="true"/>
+
                 <TextView
                     android:id="@+id/addbtn_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
                     android:layout_below="@+id/center_line"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
-                    android:textSize="12sp"
                     android:fontFamily="@font/inter_bold"
                     android:gravity="center"
-                    android:text="할일추가"/>
+                    android:text="할일추가"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
             </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

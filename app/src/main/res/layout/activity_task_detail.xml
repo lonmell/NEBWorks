@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.worksite.TaskDetailActivity">
 
     <LinearLayout
@@ -15,19 +16,24 @@
             android:layout_width="match_parent"
             android:layout_height="59dp"
             android:orientation="horizontal"
-            android:paddingStart="10dp"
             tools:ignore="RtlSymmetry">
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/back_btn"
-                android:layout_width="25dp"
-                android:layout_height="20dp"
-                android:layout_alignParentStart="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:background="@drawable/find_right_arrow"
-                android:padding="20dp"
-                android:rotation="180" />
+                android:layout_alignParentStart="true"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/find_right_arrow"
+                    android:rotation="180"
+                    tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+            </LinearLayout>
 
 
             <TextView

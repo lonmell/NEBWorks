@@ -62,6 +62,7 @@
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:tabTextColor="#696969"
                                     tools:ignore="SpeakableTextPresentCheck" />
+
                                 <RelativeLayout
                                     android:id="@+id/place_status2"
                                     android:layout_width="match_parent"
@@ -73,6 +74,7 @@
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:visibility="gone"
                                         android:orientation="horizontal">
 
                                         <RelativeLayout

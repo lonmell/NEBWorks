@@ -123,7 +123,7 @@ public class AddContractPage06 extends AppCompatActivity {
                                 //Array데이터를 받아올 때
                                 JSONArray Response = new JSONArray(jsonResponse);
                                 mList = new ArrayList<>();
-                                mAdapter = new ContractTermAdapter(mContext, mList);
+                                mAdapter = new ContractTermAdapter(mContext, mList,0);
                                 binding.termList.setAdapter(mAdapter);
                                 binding.termList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                 dlog.i("SIZE : " + Response.length());

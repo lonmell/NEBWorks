@@ -15,16 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.adapter.ListStringAdapter;
-import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.adapter.ListYoilStringAdapter;
 import com.krafte.nebworks.data.StringData;
 import com.krafte.nebworks.databinding.ActivitySelectyoilBinding;
-import com.krafte.nebworks.util.DBConnection;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,18 +35,12 @@ public class SelectYoilActivity extends BottomSheetDialogFragment {
     PreferenceHelper shardpref;
 
     //Other
-    DateCurrent dc = new DateCurrent();
-    DecimalFormat decimalFormat = new DecimalFormat("#,###");
-    DBConnection dbConnection = new DBConnection();
-    GetResultData resultData = new GetResultData();
-    int setSelectPicker = 0;
     Dlog dlog = new Dlog();
-    String SetItem = "";
     List<String> setItem = new ArrayList<>();
     ArrayList<StringData.StringData_list> mList;
     ArrayList<StringData.StringData_list> searchmList;
-
-    ListStringAdapter mAdapter;
+    List<String> selectYoil = new ArrayList<>();
+    ListYoilStringAdapter mAdapter;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -72,7 +62,7 @@ public class SelectYoilActivity extends BottomSheetDialogFragment {
 
         mList = new ArrayList<>();
         searchmList = new ArrayList<>();
-        mAdapter = new ListStringAdapter(mContext, mList);
+        mAdapter = new ListYoilStringAdapter(mContext, mList);
         binding.categoryList.setAdapter(mAdapter);
         binding.categoryList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         for (int i = 0; i < setItem.size(); i++) {
@@ -81,17 +71,23 @@ public class SelectYoilActivity extends BottomSheetDialogFragment {
             ));
         }
         mAdapter.notifyDataSetChanged();
-        mAdapter.setOnItemClickListener(new ListStringAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new ListYoilStringAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 dlog.i("Get onItem : " + mList.get(position));
-                if (mListener != null) {
-                    mListener.onItemClick(v, mList.get(position).getItem());
+                if(selectYoil.contains(mList.get(position).getItem())){
+                    selectYoil.remove(mList.get(position).getItem());
+                }else{
+                    selectYoil.add(mList.get(position).getItem());
                 }
-                dismiss();
             }
         });
-
+        binding.saveYoilBtn.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onItemClick(v, String.valueOf(selectYoil));
+            }
+            dismiss();
+        });
 
         return binding.getRoot();
     }

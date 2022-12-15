@@ -51,20 +51,28 @@
                     android:textSize="16sp" />
 
                 <RelativeLayout
-                    android:id="@+id/notice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/noti_area"
+                    android:layout_width="59dp"
+                    android:layout_height="59dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="20dp"
-                    android:onClick="btnOnclick"
-                    android:padding="5dp"
-                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
+                    android:layout_centerVertical="true">
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/noti_red"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        app:cardCornerRadius="60dp"
+                        android:layout_alignTop="@+id/notice"
+                        android:layout_alignEnd="@+id/notice"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="#DD6540"/>
 
                     <ImageView
-                        android:id="@+id/bell_icon"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:id="@+id/notice"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="18dp"
                         android:background="@drawable/bell" />
                 </RelativeLayout>
             </RelativeLayout>

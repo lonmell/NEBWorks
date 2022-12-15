@@ -15,12 +15,10 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.databinding.ActivityMemberoptionBinding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -28,12 +26,6 @@ import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 import java.text.DecimalFormat;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class WorkMemberOptionActivity extends Activity {
     private ActivityMemberoptionBinding binding;
@@ -54,7 +46,7 @@ public class WorkMemberOptionActivity extends Activity {
     String USER_INFO_ID = "";
     String mem_id = "";
     String mem_name = "";
-
+    String remote = "";
 
     //Other
     private final DateCurrent dc = new DateCurrent();
@@ -89,6 +81,7 @@ public class WorkMemberOptionActivity extends Activity {
         mem_id = shardpref.getString("mem_id", "");
         mem_name = shardpref.getString("mem_name", "");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        remote = shardpref.getString("remote", "");
 
         Log.i(TAG, "place_id : " + place_id);
         Log.i(TAG, "user_id : " + user_id);
@@ -117,14 +110,26 @@ public class WorkMemberOptionActivity extends Activity {
             if (mem_id.equals(USER_INFO_ID)) {
                 Toast_Nomal("관리자계정은 삭제할수 없습니다.");
             } else {
-                Intent intent = new Intent(this, TwoButtonPopActivity.class);
-                intent.putExtra("data", "[" + mem_name + "]님을\n삭제하시겠습니까?");
-                intent.putExtra("flag", "직원삭제");
-                intent.putExtra("left_btn_txt", "취소");
-                intent.putExtra("right_btn_txt", "삭제");
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                if(remote.equals("workhour")){
+                    Intent intent = new Intent(this, TwoButtonPopActivity.class);
+                    intent.putExtra("data", "[" + mem_name + "]님의 근무정보를 삭제하시겠습니까?");
+                    intent.putExtra("flag", "근무정보삭제");
+                    intent.putExtra("left_btn_txt", "취소");
+                    intent.putExtra("right_btn_txt", "삭제");
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                }else{
+                    Intent intent = new Intent(this, TwoButtonPopActivity.class);
+                    intent.putExtra("data", "[" + mem_name + "]님의 정보를 삭제하시겠습니까?");
+                    intent.putExtra("flag", "직원삭제");
+                    intent.putExtra("left_btn_txt", "취소");
+                    intent.putExtra("right_btn_txt", "삭제");
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                }
+
                 closePop();
             }
         });

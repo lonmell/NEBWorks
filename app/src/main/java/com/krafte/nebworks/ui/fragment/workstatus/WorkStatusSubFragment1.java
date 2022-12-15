@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.fragment.workstatus;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +17,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkTapMemberAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkStatusTapData;
 import com.krafte.nebworks.dataInterface.WorkStatusTapInterface;
 import com.krafte.nebworks.databinding.MembersubFragment1Binding;
+import com.krafte.nebworks.pop.WorkMemberOptionActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -196,6 +199,20 @@ public class WorkStatusSubFragment1 extends Fragment {
                                         ));
                                 }
                                 mAdapter.notifyDataSetChanged();
+                                mAdapter.setOnItemClickListener(new WorkTapMemberAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View v, int position) {
+                                        shardpref.putString("mem_id", mList.get(position).getUser_id());
+                                        shardpref.putString("mem_name", mList.get(position).getName());
+                                        shardpref.putString("remote", "workhour");
+                                        Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
+                                        intent.putExtra("place_id", place_id);
+                                        intent.putExtra("user_id", mList.get(position).getId());
+                                        mContext.startActivity(intent);
+                                        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    }
+                                });
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

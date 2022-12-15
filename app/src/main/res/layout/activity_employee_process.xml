@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#6395EC"
+    android:orientation="vertical"
+    tools:context=".ui.main.EmployeeProcess">
+
+    <LinearLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end"
+        android:layout_margin="20dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_white_close" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:text="0000년 00월 00일"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="000님 ~"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"/>
+    <ImageView
+        android:layout_width="188dp"
+        android:layout_height="188dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/ic_in_btn_white" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/place_change_area"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:layout_above="@+id/inout_able_state"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="20dp"
+            android:padding="5dp"
+            app:cardBackgroundColor="#EFF4FD"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toStartOf="@+id/refresh_area"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/store_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="start|center"
+                        android:text="store_name"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/store_name"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="start|center"
+                        android:text="현재 선택된 매장"
+                        android:textColor="#696969"
+                        android:textSize="13sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/refresh_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/refresh_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_refresh_btn"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <RelativeLayout
+            android:id="@+id/inout_able_state"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:background="@color/black"
+            android:layout_above="@+id/close_btn"
+            android:layout_margin="20dp">
+            <TextView
+                android:id="@+id/store_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="start|center"
+                android:layout_marginStart="15dp"
+                android:layout_toStartOf="@+id/inout_able"
+                android:layout_alignParentStart="true"
+                android:text="매장과 0m 떨어져 있습니다"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/inout_able"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="end|center"
+                android:text="출근처리가능"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/close_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/store_name"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text="@string/close_txt"
+            android:textColor="@color/white"
+            android:layout_marginBottom="43dp"
+            android:textSize="13sp"
+            tools:ignore="HardcodedText"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+</LinearLayout>

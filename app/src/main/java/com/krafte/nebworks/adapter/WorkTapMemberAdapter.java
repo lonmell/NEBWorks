@@ -3,7 +3,6 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkStatusTapData;
-import com.krafte.nebworks.pop.WorkMemberOptionActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -121,14 +119,6 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             holder.state_tv.setText(state);
 
             holder.list_setting.setOnClickListener(v -> {
-                shardpref.putString("mem_id", item.getId());
-                shardpref.putString("mem_name", item.getName());
-                Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
-                intent.putExtra("place_id", place_id);
-                intent.putExtra("user_id", item.getId());
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 if (mListener != null) {
                     mListener.onItemClick(v, position);
                 }

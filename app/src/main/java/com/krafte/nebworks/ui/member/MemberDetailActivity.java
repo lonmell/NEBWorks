@@ -3,18 +3,26 @@ package com.krafte.nebworks.ui.member;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -107,7 +115,6 @@ public class MemberDetailActivity extends AppCompatActivity {
     MemberInoutAdapter inoutmAdapter;
 
 
-
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +157,7 @@ public class MemberDetailActivity extends AppCompatActivity {
             drawerView = findViewById(R.id.drawer2);
             drawerLayout.addDrawerListener(listener);
             drawerView.setOnTouchListener((v, event) -> false);
+            setAddBtnSetting();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -232,19 +240,12 @@ public class MemberDetailActivity extends AppCompatActivity {
         }
 
         binding.prevDate.setOnClickListener(v -> {
-            cal.add(Calendar.DATE, -1);
+            cal.add(Calendar.MONTH, -1);
             toDay = sdf.format(cal.getTime());
+            dlog.i("prevDate :" + toDay);
             Year = toDay.substring(0, 4);
             Month = toDay.substring(5, 7);
             binding.setdate.setText(Year + "년 " + Month + "월");
-            if (!Year.equals(bYear) || !Month.equals(bMonth)) {
-                dlog.i("Year : " + Year);
-                dlog.i("Year : " + bYear);
-                dlog.i("gMonth : " + Month);
-                dlog.i("bMonth : " + bMonth);
-                bYear = Year;
-                bMonth = Month;
-            }
             if (!stub_place_id.equals("0")) {
                 SetGotoWorkDayList(stub_place_id, stub_user_id, Year + "-" + Month);
             } else {
@@ -252,19 +253,12 @@ public class MemberDetailActivity extends AppCompatActivity {
             }
         });
         binding.nextDate.setOnClickListener(v -> {
-            cal.add(Calendar.DATE, +1);
+            cal.add(Calendar.MONTH, +1);
             toDay = sdf.format(cal.getTime());
+            dlog.i("nextDate :" + toDay);
             Year = toDay.substring(0, 4);
             Month = toDay.substring(5, 7);
             binding.setdate.setText(Year + "년 " + Month + "월");
-            if (!Year.equals(bYear) || !Month.equals(bMonth)) {
-                dlog.i("Year : " + Year);
-                dlog.i("Year : " + bYear);
-                dlog.i("gMonth : " + Month);
-                dlog.i("bMonth : " + bMonth);
-                bYear = Year;
-                bMonth = Month;
-            }
             if (!stub_place_id.equals("0")) {
                 SetGotoWorkDayList(stub_place_id, stub_user_id, Year + "-" + Month);
             } else {
@@ -299,6 +293,20 @@ public class MemberDetailActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+        binding.inoutPrint.setOnClickListener(v -> {
+            String date = Year + "-" + Month;
+            dlog.i("-----inoutPrint-----");
+            dlog.i("user_id : " + stub_user_id);
+            dlog.i("place_id : " + place_id);
+            dlog.i("date : " + binding.setdate.getText().toString());
+            dlog.i("-----inoutPrint-----");
+//            https://krafte.net/NEBWorks/Commute.php?user_id=64&place_id=97&date=2022-12
+            String Contract_uri = "https://krafte.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date="+date;
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
+            startActivity(intent);
+        });
+
     }
 
     @Override
@@ -324,6 +332,7 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     /*업무카운팅 START*/
     RetrofitConnect rc = new RetrofitConnect();
+    String contract_id = "";
 
     public void MainWorkCnt(String place_id, String user_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
@@ -335,7 +344,6 @@ public class MemberDetailActivity extends AppCompatActivity {
                     .build();
             MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
             Call<String> call = api.getData(place_id, user_id);
-
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -347,25 +355,53 @@ public class MemberDetailActivity extends AppCompatActivity {
                         try {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
-                            String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
-                            String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt");
-                            String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
-                            String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
-                            String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
-                            String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
+                            if (Response.length() != 0) {
+                                String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
+                                String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt");
+                                String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
+                                String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
+                                String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
+                                String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
+                                String contract_cnt = Response.getJSONObject(0).getString("contract_cnt");
+                                String owner_sign_id = Response.getJSONObject(0).getString("owner_sign_id");
+                                String worker_sign_id = Response.getJSONObject(0).getString("worker_sign_id");
 
-                            dlog.i("-----MainWorkCnt-----");
-                            dlog.i("task_complete_cnt : " + task_complete_cnt);
-                            dlog.i("task_incomplete_cnt : " + task_incomplete_cnt);
-                            dlog.i("waiting_cnt : " + waiting_cnt);
-                            dlog.i("approval_cnt : " + approval_cnt);
-                            dlog.i("reject_cnt : " + reject_cnt);
-                            dlog.i("-----MainWorkCnt-----");
-                            binding.workdata01.setText(task_complete_cnt);
-                            binding.workdata02.setText(task_incomplete_cnt);
-                            binding.workdata03.setText(waiting_cnt);
-                            binding.workdata04.setText(approval_cnt);
-                            binding.workdata05.setText(reject_cnt);
+                                contract_id = Response.getJSONObject(0).getString("id");
+
+                                dlog.i("-----MainWorkCnt-----");
+                                dlog.i("task_complete_cnt : " + task_complete_cnt);
+                                dlog.i("task_incomplete_cnt : " + task_incomplete_cnt);
+                                dlog.i("waiting_cnt : " + waiting_cnt);
+                                dlog.i("approval_cnt : " + approval_cnt);
+                                dlog.i("reject_cnt : " + reject_cnt);
+                                dlog.i("contract_cnt : " + contract_cnt);
+                                dlog.i("contract_id : " + contract_id);
+                                dlog.i("owner_sign_id : " + owner_sign_id);
+                                dlog.i("worker_sign_id : " + worker_sign_id);
+                                dlog.i("-----MainWorkCnt-----");
+                                binding.workdata01.setText(task_complete_cnt);
+                                binding.workdata02.setText(task_incomplete_cnt);
+                                binding.workdata03.setText(waiting_cnt);
+                                binding.workdata04.setText(approval_cnt);
+                                binding.workdata05.setText(reject_cnt);
+                                if (!worker_sign_id.equals("null") && !owner_sign_id.equals("null")) {
+                                    binding.contractState.setTextColor(Color.parseColor("#6395EC"));
+                                    binding.contractState.setText("작성완료");
+                                    binding.contractAllGo.setOnClickListener(v -> {
+                                        shardpref.putString("contract_id", contract_id);
+                                        pm.ContractAll(mContext);
+                                    });
+                                } else {
+                                    if (worker_sign_id.equals("null") && owner_sign_id.equals("null")) {
+                                        binding.contractState.setTextColor(Color.parseColor("#DD6540"));
+                                        binding.contractState.setText("미처리");
+                                    } else {
+                                        binding.contractState.setTextColor(Color.parseColor("#DD6540"));
+                                        binding.contractState.setText("작성중");
+                                    }
+                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
+                                }
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -385,10 +421,12 @@ public class MemberDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     /*업무카운팅 START*/
 
     /*직원 전체 리스트 START*/
     String workpay = "";
+
     public void SetAllMemberList(String place_id, String user_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
         dlog.i("SetAllMemberList user_id : " + user_id);
@@ -497,17 +535,18 @@ public class MemberDetailActivity extends AppCompatActivity {
                 @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    dlog.e("SetGotoWorkDayList function START");
-                    dlog.e("response 1: " + response.isSuccessful());
-                    dlog.e("response 2: " + response.body());
                     runOnUiThread(() -> {
-                        if (response.body().equals("[]")) {
-                            binding.noDataTxt.setVisibility(View.VISIBLE);
-                        } else {
-                            binding.noDataTxt.setVisibility(View.GONE);
-                            if (response.isSuccessful() && response.body() != null) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.e("SetGotoWorkDayList function START");
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.e("response 1: " + response.isSuccessful());
+                            dlog.e("response 2: " + jsonResponse);
+                            if (jsonResponse.equals("[]")) {
+                                binding.noDataTxt.setVisibility(View.VISIBLE);
+                            } else {
+                                binding.noDataTxt.setVisibility(View.GONE);
                                 try {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     inoutmList = new ArrayList<>();
                                     inoutmAdapter = new MemberInoutAdapter(mContext, inoutmList, Month);
                                     binding.inoutList.setAdapter(inoutmAdapter);
@@ -540,6 +579,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 }
                             }
                         }
+
                     });
 
                 }
@@ -592,9 +632,9 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             allPay += Integer.parseInt(getPay);
                                         }
                                         DecimalFormat myFormatter = new DecimalFormat("###,###");
-                                        workpay = workpay.replace(",","");
+                                        workpay = workpay.replace(",", "");
                                         int WorkPaY = Integer.parseInt(workpay);
-                                        int UntilNowPay = (allPay*100) / WorkPaY;
+                                        int UntilNowPay = (allPay * 100) / WorkPaY;
                                         dlog.i("allPay : " + allPay);
                                         dlog.i("WorkPaY : " + WorkPaY);
                                         dlog.i("UntilNowPay : " + UntilNowPay);
@@ -655,10 +695,10 @@ public class MemberDetailActivity extends AppCompatActivity {
             pm.Approval(mContext);
         } else if (view.getId() == R.id.select_nav12) {
             dlog.i("커뮤니티 Click!");
-            if(USER_INFO_AUTH.equals("0")){
+            if (USER_INFO_AUTH.equals("0")) {
                 shardpref.putInt("SELECT_POSITION", 3);
                 pm.Main(mContext);
-            }else{
+            } else {
                 shardpref.putInt("SELECT_POSITION", 3);
                 pm.Main(mContext);
             }
@@ -668,5 +708,31 @@ public class MemberDetailActivity extends AppCompatActivity {
             pm.ContractFragment(mContext);
         }
 
+    }
+
+    CardView add_worktime_btn;
+    TextView addbtn_tv;
+
+    private void setAddBtnSetting() {
+        add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
+        addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
+        addbtn_tv.setText("직원추가");
+        add_worktime_btn.setOnClickListener(v -> {
+            pm.AddWorkPart(mContext);
+        });
+    }
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }

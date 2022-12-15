@@ -146,11 +146,11 @@ public class AddMemberDetail extends AppCompatActivity {
             input_kind = 1;
             setInputSetting();
         }
+        GetDetailInfo();
+        GetOtherInfo();
         setBasicInfo();
         setDetailInfo();
         setOtherInfo();
-        GetDetailInfo();
-        GetOtherInfo();
     }
 
     private void setInputSetting() {

@@ -27,6 +27,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
 import com.krafte.nebworks.ui.naviFragment.CalendarFragment;
 import com.krafte.nebworks.ui.naviFragment.CommunityFragment;
@@ -230,6 +231,9 @@ public class MainFragment2 extends AppCompatActivity {
             drawerLayout.addDrawerListener(listener);
             drawerView.setOnTouchListener((v, event) -> false);
 
+            binding.notiArea.setOnClickListener(v -> {
+                pm.FeedList(mContext);
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -357,7 +361,7 @@ public class MainFragment2 extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
+        getNotReadFeedcnt();
         setNavBarBtnEvent();
     }
 
@@ -460,6 +464,44 @@ public class MainFragment2 extends AppCompatActivity {
             bottom_icon05.setBackgroundResource(R.drawable.ic_more_on);
             bottom_icon05tv.setTextColor(Color.parseColor("#6395EC"));
         }
+    }
+
+    public void getNotReadFeedcnt() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FeedNotiInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
+        Call<String> call = api.getData("", "", "","1",USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.e( "WorkTapListFragment1 / setRecyclerView");
+                dlog.e( "response 1: " + response.isSuccessful());
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    dlog.e( "GetWorkStateInfo function onSuccess : " + response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(response.body());
+                        String NotRead = Response.getJSONObject(0).getString("notread_feed");
+                        if(NotRead.equals("0")){
+                            binding.notiRed.setVisibility(View.INVISIBLE);
+                        }else{
+                            binding.notiRed.setVisibility(View.GONE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e( "에러 = " + t.getMessage());
+            }
+        });
     }
 
     @Override

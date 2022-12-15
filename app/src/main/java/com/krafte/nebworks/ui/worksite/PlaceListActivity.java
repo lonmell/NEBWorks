@@ -16,6 +16,7 @@ import com.krafte.nebworks.bottomsheet.StoreListBottomSheet;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityWorksiteBinding;
@@ -117,6 +118,7 @@ public class PlaceListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         GetPlaceList();
+        getNotReadFeedcnt();
     }
 
     @Override
@@ -133,6 +135,9 @@ public class PlaceListActivity extends AppCompatActivity {
         });
         binding.addPlace2.setOnClickListener(v -> {
             onStartAuth();
+        });
+        binding.notiArea.setOnClickListener(v -> {
+            pm.FeedList(mContext);
         });
     }
 
@@ -353,6 +358,43 @@ public class PlaceListActivity extends AppCompatActivity {
         });
     }
 
+    public void getNotReadFeedcnt() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FeedNotiInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
+        Call<String> call = api.getData("", "", "","1",USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.e( "WorkTapListFragment1 / setRecyclerView");
+                dlog.e( "response 1: " + response.isSuccessful());
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    dlog.e( "GetWorkStateInfo function onSuccess : " + response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(response.body());
+                        String NotRead = Response.getJSONObject(0).getString("notread_feed");
+                        if(NotRead.equals("0")){
+                            binding.notiRed.setVisibility(View.INVISIBLE);
+                        }else{
+                            binding.notiRed.setVisibility(View.VISIBLE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e( "에러 = " + t.getMessage());
+            }
+        });
+    }
 
 
 

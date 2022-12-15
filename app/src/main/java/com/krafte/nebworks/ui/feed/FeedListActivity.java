@@ -7,10 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -114,18 +116,25 @@ public class FeedListActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        setAddBtnSetting();
         setRecyclerView(spinner_i);
     }
 
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            super.onBackPressed();
+            if(USER_INFO_AUTH.equals("0")){
+                shardpref.putInt("SELECT_POSITION", 0);
+                pm.Main(mContext);
+            }else{
+                shardpref.putInt("SELECT_POSITION", 0);
+                pm.Main2(mContext);
+            }
         });
 
-        binding.addWorkBtn.setOnClickListener(v -> {
-            pm.addNotiGo(mContext);
-        });
+//        binding.addWorkBtn.setOnClickListener(v -> {
+//            pm.addNotiGo(mContext);
+//        });
     }
 
 
@@ -203,43 +212,27 @@ public class FeedListActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("LongLogTag")
-    private void UpdateWorkNotifyReadYn(String flag, String notify_no, String notify_store_no) {
-
-//        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
-//            dbConnection.WorkNotifyManagement(flag, notify_no, notify_store_no, "", "", 0, "", "");
-////                    Log.i(TAG, "Result = " + resultData.getRESULT());
-//            String getMessage = resultData.getRESULT().replaceAll("\"", "");
-//            dlog.i("getMessage = " + getMessage);
-//
-//            if (getMessage.equals("success")) {
-//                if (flag.equals("4")) {
-//
-//                } else {
-//                    dlog.i("getMessage = " + getMessage);
-//                }
-//            } else {
-//                Toast.makeText(mContext, "이력서전송에 문제가 발생했습니다.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        th.start();
-//        try {
-//            th.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-    }
-
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-//        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-//        shardpref.putInt("SELECT_POSITION",0);
-//        if(USER_INFO_AUTH.equals("0")){
-//            pm.Main(mContext);
-//        }else{
-//            pm.Main2(mContext);
-//        }
+//        super.onBackPressed();
+        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+        shardpref.putInt("SELECT_POSITION",0);
+        if(USER_INFO_AUTH.equals("0")){
+            pm.Main(mContext);
+        }else{
+            pm.Main2(mContext);
+        }
+    }
+
+    CardView add_worktime_btn;
+    TextView addbtn_tv;
+    private void setAddBtnSetting() {
+        add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
+        addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
+        addbtn_tv.setText("공지작성");
+        add_worktime_btn.setOnClickListener(v -> {
+            pm.addNotiGo(mContext);
+        });
     }
 }
 

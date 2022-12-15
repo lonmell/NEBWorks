@@ -62,7 +62,9 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
+
     private OnItemClickListener mListener = null;
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
@@ -74,11 +76,15 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
 
 
     //--옵션창 열기
-    public interface OnClickOptionListener{
+    public interface OnClickOptionListener {
         void onClick(View v);
     }
+
     private OnClickOptionListener Olistener = null;
-    public void setOnClickOption(OnClickOptionListener Olistener){this.Olistener = Olistener;}
+
+    public void setOnClickOption(OnClickOptionListener Olistener) {
+        this.Olistener = Olistener;
+    }
 
     @NonNull
     @Override
@@ -99,8 +105,8 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PlaceListData.PlaceListData_list item = mData.get(position);
 
-        try{
-            PlaceWorkCheck(item.getId(),"0","0",holder);
+        try {
+
             Glide.with(mContext).load(item.getImg_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
@@ -110,29 +116,29 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             holder.title.setText(item.getName());
             holder.address.setText(item.getAddress());
 
-            if(item.getOwner_id().equals(USER_INFO_ID)){
+            if (item.getOwner_id().equals(USER_INFO_ID)) {
                 //관리자일경우
                 holder.list_img_area.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.list_img_area.setVisibility(View.GONE);
             }
 
-            if(item.getSave_kind().equals("0")){
-                if(item.getOwner_id().equals(USER_INFO_ID)){
+            if (item.getSave_kind().equals("0")) {
+                if (item.getOwner_id().equals(USER_INFO_ID)) {
                     //본인이 생성한 매장
                     holder.money_area.setVisibility(View.INVISIBLE);
                     holder.store_kind_state.setVisibility(View.VISIBLE);
                     holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
-                }else{
+                } else {
                     //다른사람이 생성한 매장 ( 초대 받았을 경우 )
-                    if(item.getAccept_state().equals("0")){
+                    if (item.getAccept_state().equals("0")) {
                         holder.money_area.setVisibility(View.INVISIBLE);
                         holder.store_kind_state.setVisibility(View.VISIBLE);
                         holder.state_tv.setText("임시저장 중 / 승인대기 중");
                         holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
                         holder.list_setting.setVisibility(View.INVISIBLE);
                         holder.list_setting.setClickable(false);
-                    }else{
+                    } else {
                         holder.money_area.setVisibility(View.INVISIBLE);
                         holder.store_kind_state.setVisibility(View.VISIBLE);
                         holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
@@ -140,22 +146,22 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                         holder.list_setting.setClickable(false);
                     }
                 }
-            }else if(item.getSave_kind().equals("1")){
-                if(item.getOwner_id().equals(USER_INFO_ID)){
+            } else if (item.getSave_kind().equals("1")) {
+                if (item.getOwner_id().equals(USER_INFO_ID)) {
                     //본인이 생성한 매장
                     holder.money_area.setVisibility(View.VISIBLE);
                     holder.store_kind_state.setVisibility(View.INVISIBLE);
                     holder.item_area.setCardBackgroundColor(Color.parseColor("#ffffff"));
-                }else{
+                } else {
                     //다른사람이 생성한 매장 ( 초대 받았을 경우 )
-                    if(item.getAccept_state().equals("0")){
+                    if (item.getAccept_state().equals("0")) {
                         holder.money_area.setVisibility(View.INVISIBLE);
                         holder.store_kind_state.setVisibility(View.VISIBLE);
                         holder.state_tv.setText("승인대기중");
                         holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
                         holder.list_setting.setVisibility(View.INVISIBLE);
                         holder.list_setting.setClickable(false);
-                    }else{
+                    } else {
                         holder.money_area.setVisibility(View.VISIBLE);
                         holder.store_kind_state.setVisibility(View.INVISIBLE);
                         holder.item_area.setCardBackgroundColor(Color.parseColor("#ffffff"));
@@ -176,7 +182,8 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             });
-        }catch (Exception e){
+            PlaceWorkCheck(item.getId(), "0", "0", holder);
+        } catch (Exception e) {
             dlog.i("Exception : " + e);
         }
 
@@ -191,33 +198,33 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView store_thumnail;
-        TextView title,name,address,state_tv;
-        TextView item_peoplecnt,total_money;
-        CardView store_kind_state,item_area,total_item,store_invite_accept;
-        RelativeLayout list_setting,list_img_area,place_state;
+        TextView title, name, address, state_tv;
+        TextView item_peoplecnt, total_money;
+        CardView store_kind_state, item_area, total_item, store_invite_accept;
+        RelativeLayout list_setting, list_img_area, place_state;
         LinearLayout money_area;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            store_thumnail  = itemView.findViewById(R.id.store_thumnail);
-            title           = itemView.findViewById(R.id.title);
-            item_peoplecnt  = itemView.findViewById(R.id.item_peoplecnt);
-            name            = itemView.findViewById(R.id.name);
-            place_state     = itemView.findViewById(R.id.place_state);
-            address         = itemView.findViewById(R.id.address);
-            list_setting    = itemView.findViewById(R.id.list_setting);
-            list_img_area   = itemView.findViewById(R.id.list_img_area);
-            money_area      = itemView.findViewById(R.id.money_area);
-            store_kind_state= itemView.findViewById(R.id.store_kind_state);
-            total_item      = itemView.findViewById(R.id.total_item);
-            item_area       = itemView.findViewById(R.id.item_area);
-            state_tv        = itemView.findViewById(R.id.state_tv);
-            total_money     = itemView.findViewById(R.id.total_money);
+            store_thumnail = itemView.findViewById(R.id.store_thumnail);
+            title = itemView.findViewById(R.id.title);
+            item_peoplecnt = itemView.findViewById(R.id.item_peoplecnt);
+            name = itemView.findViewById(R.id.name);
+            place_state = itemView.findViewById(R.id.place_state);
+            address = itemView.findViewById(R.id.address);
+            list_setting = itemView.findViewById(R.id.list_setting);
+            list_img_area = itemView.findViewById(R.id.list_img_area);
+            money_area = itemView.findViewById(R.id.money_area);
+            store_kind_state = itemView.findViewById(R.id.store_kind_state);
+            total_item = itemView.findViewById(R.id.total_item);
+            item_area = itemView.findViewById(R.id.item_area);
+            state_tv = itemView.findViewById(R.id.state_tv);
+            total_money = itemView.findViewById(R.id.total_money);
 
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
@@ -253,34 +260,32 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
-                            dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
-                            try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(jsonResponse);
+//                    activity.runOnUiThread(() -> {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
+                    dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
+                    try {
+                        if (!response.body().equals("[]")) {
+                            JSONArray Response = new JSONArray(jsonResponse);
 
-                                    try {
-                                            dlog.i("-----MainData-----");
-                                            int allPay = 0;
-                                            for (int i = 0; i < Response.length(); i++) {
-                                                allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",",""));
-                                            }
-                                            DecimalFormat myFormatter = new DecimalFormat("###,###");
-                                            holder.total_money.setText(myFormatter.format(allPay) + "원");
-                                            dlog.i("allPay : " + myFormatter.format(allPay));
-                                            dlog.i("-----MainData-----");
-                                    } catch (Exception e) {
-                                        dlog.i("UserCheck Exception : " + e);
-                                    }
+                            try {
+                                dlog.i("-----MainData-----");
+                                int allPay = 0;
+                                for (int i = 0; i < Response.length(); i++) {
+                                    allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                DecimalFormat myFormatter = new DecimalFormat("###,###");
+                                holder.total_money.setText(myFormatter.format(allPay) + "원");
+                                dlog.i("allPay : " + myFormatter.format(allPay));
+                                dlog.i("-----MainData-----");
+                            } catch (Exception e) {
+                                dlog.i("UserCheck Exception : " + e);
                             }
                         }
-                    });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+//                    });
                 }
             }
 

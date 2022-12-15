@@ -11,25 +11,24 @@
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="59dp"
         android:layout_alignParentTop="true"
         android:background="@color/white">
 
         <LinearLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/back_btn"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:gravity="center">
+            android:layout_centerVertical="true">
 
             <ImageView
-                android:id="@+id/back_btn"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="20dp"
                 android:background="@drawable/find_right_arrow"
-                android:onClick="btnOnclick"
-                android:rotation="180"
-                tools:ignore="UsingOnClickInXml,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                android:rotation="180" />
         </LinearLayout>
 
         <TextView
@@ -38,27 +37,11 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fontFamily="@font/inter_bold"
-            android:text=""
+            android:text="근무시간 추가"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
-        <RelativeLayout
-            android:id="@+id/notice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="20dp"
-            android:onClick="btnOnclick"
-            android:padding="5dp"
-            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck">
 
-            <ImageView
-                android:id="@+id/bell_icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/bell" />
-        </RelativeLayout>
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView

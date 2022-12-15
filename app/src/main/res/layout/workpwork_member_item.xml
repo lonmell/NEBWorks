@@ -47,14 +47,13 @@
         android:layout_width="35dp"
         android:layout_height="30dp"
         android:layout_alignTop="@+id/name"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="15dp">
+        android:layout_alignParentEnd="true">
 
         <ImageView
             android:layout_width="3dp"
             android:layout_height="15dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
             android:background="@drawable/list_setting" />
     </RelativeLayout>
     <LinearLayout
@@ -130,6 +129,7 @@
         android:layout_alignBottom="@+id/linear02"
         android:layout_alignEnd="@+id/list_setting"
         app:cardBackgroundColor="#f2f2f2"
+        android:layout_marginEnd="15dp"
         app:cardElevation="0dp"
         app:cardCornerRadius="5dp">
 

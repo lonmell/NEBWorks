@@ -220,6 +220,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     shardpref.putString("mem_state",item.getState());
                     shardpref.putString("mem_jikgup",item.getJikgup());
                     shardpref.putString("mem_pay",item.getPay());
+                    shardpref.putString("remote", "member");
                     Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
                     intent.putExtra("place_id", place_id);
                     intent.putExtra("user_id",item.getId());

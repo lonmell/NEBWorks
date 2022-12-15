@@ -28,6 +28,7 @@ import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.dataInterface.DelWorkhourInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentDelInterface;
 import com.krafte.nebworks.dataInterface.FeedDelInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
@@ -199,6 +200,8 @@ public class TwoButtonPopActivity extends Activity {
                 PlaceDel(place_id);
             } else if(flag.equals("직원삭제")){
                 TaskDel();
+            }  else if(flag.equals("근무정보삭제")){
+                WorkHourDel();
             } else if(flag.equals("그룹신청")){
                 message = "새로운 근무지원 신청이 도착했습니다.";
                 click_action = "MemberManagement";
@@ -449,6 +452,46 @@ public class TwoButtonPopActivity extends Activity {
                             try {
                                 if (response.body().replace("\"", "").equals("success")) {
                                     Toast_Nomal("해당 직원의 데이터 삭제가 완료되었습니다.");
+                                    shardpref.remove("remote");
+                                    ClosePop();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void WorkHourDel() {
+//        매장 멤버 삭제 (매장에서 나가기, 매장에서 내보내기)
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(DelWorkhourInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        DelWorkhourInterface api = retrofit.create(DelWorkhourInterface.class);
+        Call<String> call = api.getData(place_id,mem_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
+                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            try {
+                                if (response.body().replace("\"", "").equals("success")) {
+                                    Toast_Nomal("해당 직원의 근무 데이터 삭제가 완료되었습니다.");
+                                    shardpref.remove("remote");
                                     ClosePop();
                                 }
                             } catch (Exception e) {

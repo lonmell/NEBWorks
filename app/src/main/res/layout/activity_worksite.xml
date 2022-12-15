@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".ui.worksite.PlaceListActivity"
     tools:ignore="HardcodedText">
 
@@ -35,14 +36,32 @@
             android:textColor="#000000"
             android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/notice"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <RelativeLayout
+            android:id="@+id/noti_area"
+            android:layout_width="59dp"
+            android:layout_height="59dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/bell" />
+            android:layout_centerVertical="true">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/noti_red"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                app:cardCornerRadius="60dp"
+                android:layout_alignTop="@+id/notice"
+                android:layout_alignEnd="@+id/notice"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#DD6540"/>
+
+            <ImageView
+                android:id="@+id/notice"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="18dp"
+                android:background="@drawable/bell" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <RelativeLayout
