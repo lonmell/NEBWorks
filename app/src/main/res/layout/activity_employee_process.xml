@@ -9,6 +9,7 @@
     tools:context=".ui.main.EmployeeProcess">
 
     <LinearLayout
+        android:id="@+id/close_process"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="end"
@@ -16,12 +17,13 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:layout_gravity="center"
             android:background="@drawable/ic_white_close" />
     </LinearLayout>
     <TextView
+        android:id="@+id/process_date"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
@@ -31,6 +33,7 @@
         android:fontFamily="@font/inter_bold"
         android:gravity="center"/>
     <TextView
+        android:id="@+id/process_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="000님 ~"
@@ -154,18 +157,19 @@
                 android:textSize="16sp"
                 tools:ignore="HardcodedText" />
         </RelativeLayout>
+
         <TextView
             android:id="@+id/close_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/store_name"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="43dp"
             android:fontFamily="@font/inter_bold"
             android:gravity="center"
             android:text="@string/close_txt"
             android:textColor="@color/white"
-            android:layout_marginBottom="43dp"
             android:textSize="13sp"
-            tools:ignore="HardcodedText"
-            android:layout_alignParentBottom="true"/>
+            tools:ignore="HardcodedText" />
     </RelativeLayout>
 </LinearLayout>

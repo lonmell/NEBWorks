@@ -246,9 +246,11 @@
         <activity
             android:name=".pop.Tap1OptionActivity"
             android:theme="@android:style/Theme.Dialog" />
-        <activity
-            android:name=".pop.InoutPopActivity"
-            android:theme="@android:style/Theme.Dialog" />
+
+<!--        <activity-->
+<!--            android:name=".pop.InoutPopActivity"-->
+<!--            android:theme="@android:style/Theme.Dialog" />-->
+
         <activity
             android:name=".pop.CommunityOptionActivity"
             android:theme="@android:style/Theme.Dialog"

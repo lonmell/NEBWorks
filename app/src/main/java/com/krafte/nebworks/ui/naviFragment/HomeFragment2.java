@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -43,7 +42,6 @@ import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
-import com.krafte.nebworks.pop.InoutPopActivity;
 import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
@@ -374,29 +372,11 @@ public class HomeFragment2 extends Fragment {
                 }
                 shardpref.putString("kind", kind);
                 pm.EmployeeProcess(mContext);
-//                MoveMyLocation();
-//                dlog.i("location_cnt : " + location_cnt);
-//                long now = System.currentTimeMillis();
-//                Date mDate = new Date(now);
-//                @SuppressLint("SimpleDateFormat")
-//                SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-//                latitude = gpsTracker.getLatitude();
-//                longitude = gpsTracker.getLongitude();
-//                getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-//                dlog.i("location_cnt : " + location_cnt);
-//                dlog.i("GET_TIME : " + simpleDate.format(mDate));
-//                dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-//                if (getDistance <= 30) {
-//                    dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
-//                    InOutLogMember();
-//                    if (!place_owner_id.equals(USER_INFO_ID)) {
-//                        getManagerToken(place_owner_id, "0", place_id, place_name);
-//                    }
-//                    InOutInsert(kind);
-//                } else {
-//                    Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
-//                }
             }
+        });
+        binding.oBtn.setOnClickListener(v -> {
+            shardpref.putString("kind", "1");
+            pm.EmployeeProcess(mContext);
         });
         binding.acceptBtn.setOnClickListener(v -> {
             UpdateDirectMemberBasic();
@@ -443,13 +423,13 @@ public class HomeFragment2 extends Fragment {
                                 try {
                                     if (response.body().replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
 //                                        timer.cancel();
-                                        Intent intent = new Intent(mContext, InoutPopActivity.class);
-                                        intent.putExtra("title", io_state + " 처리되었습니다.");
-                                        intent.putExtra("time", GET_TIME);
-                                        intent.putExtra("state", "1");
-                                        intent.putExtra("store_name", place_name);
-                                        mContext.startActivity(intent);
-                                        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+//                                        Intent intent = new Intent(mContext, InoutPopActivity.class);
+//                                        intent.putExtra("title", io_state + " 처리되었습니다.");
+//                                        intent.putExtra("time", GET_TIME);
+//                                        intent.putExtra("state", "1");
+//                                        intent.putExtra("store_name", place_name);
+//                                        mContext.startActivity(intent);
+//                                        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                                         if (!place_owner_id.equals(USER_INFO_ID)) {
 //                                            getEmployerToken();
                                         }
@@ -610,6 +590,7 @@ public class HomeFragment2 extends Fragment {
                                 } else {
                                     USER_INFO_AUTH = "1";
                                 }
+                                shardpref.putString("mem_name",mem_name);
                                 binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
                                 getFCMToken();
                             } catch (Exception e) {
@@ -714,7 +695,7 @@ public class HomeFragment2 extends Fragment {
                                                 mAdapter2.setOnItemClickListener(new MainNotiLAdapter.OnItemClickListener() {
                                                     @Override
                                                     public void onItemClick(View v, int position) {
-
+                                                        pm.FeedList(mContext);
                                                     }
                                                 });
 

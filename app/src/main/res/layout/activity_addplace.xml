@@ -204,6 +204,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -229,12 +230,13 @@
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/confirm_registrnum"
                         android:layout_width="102dp"
                         android:layout_height="50dp"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
                         android:padding="10dp"
                         app:cardBackgroundColor="#f2f2f2"
                         app:cardCornerRadius="8dp">
@@ -406,9 +408,9 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="5dp"
                         android:textColor="#696969"
-                        android:visibility="visible"
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
+                        android:visibility="visible"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                 </LinearLayout>
             </RelativeLayout>
@@ -416,13 +418,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="50dp"
                 android:background="#f2f2f2" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="24dp"
                 android:fontFamily="@font/inter_bold"
                 android:gravity="start|center"
                 android:paddingStart="20dp"
@@ -452,6 +454,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -476,16 +479,17 @@
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
                     <TextView
                         android:id="@+id/tv05"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:text="일"
-                        android:textSize="16sp"
-                        android:gravity="center"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:textColor="#949494"/>
+                        android:gravity="center"
+                        android:text="일"
+                        android:textColor="#949494"
+                        android:textSize="16sp" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -510,6 +514,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -534,16 +539,17 @@
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
                     <TextView
                         android:id="@+id/tv06"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:text="일"
-                        android:textSize="16sp"
-                        android:gravity="center"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:textColor="#949494"/>
+                        android:gravity="center"
+                        android:text="일"
+                        android:textColor="#949494"
+                        android:textSize="16sp" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -567,10 +573,12 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp">
+
                     <TextView
                         android:id="@+id/inputbox07"
                         android:layout_width="match_parent"
@@ -732,6 +740,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="주 운영시간"
@@ -740,43 +749,188 @@
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#dbdbdb" />
+
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="45dp"
+                    android:layout_margin="15dp">
 
-                    <TextView
-                        android:id="@+id/inputbox08"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/inputbox08box"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
                         android:layout_toStartOf="@+id/inputbox_inside"
-                        android:background="@drawable/default_input_round"
-                        android:gravity="center"
-                        android:text="HHMM"
-                        android:textSize="16sp" />
+                        app:cardBackgroundColor="#ffffff"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp">
 
-                    <TextView
+                        <TextView
+                            android:id="@+id/inputbox08"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:text="HHMM"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </androidx.cardview.widget.CardView>
+
+
+                    <ImageView
                         android:id="@+id/inputbox_inside"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
+                        android:background="@drawable/left_arrow_resize"
+                        android:rotation="180" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/inputbox09box"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toEndOf="@+id/inputbox_inside"
+                        app:cardBackgroundColor="#ffffff"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp">
+
+                        <TextView
+                            android:id="@+id/inputbox09"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:text="HHMM"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="80dp"
+                        android:layout_height="150dp"
+                        android:orientation="vertical"
+                        android:weightSum="2">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/selectampm01box"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerVertical="true"
+                                app:cardBackgroundColor="#ffffff"
+                                app:cardCornerRadius="20dp"
+                                app:cardElevation="0dp">
+
+                                <TextView
+                                    android:id="@+id/selectampm01"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentStart="true"
+                                    android:fontFamily="@font/inter_bold"
+                                    android:gravity="center"
+                                    android:text="오전"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp" />
+                            </androidx.cardview.widget.CardView>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/selectampm02box"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerVertical="true"
+                                app:cardBackgroundColor="#ffffff"
+                                app:cardCornerRadius="20dp"
+                                app:cardElevation="0dp">
+
+                                <TextView
+                                    android:id="@+id/selectampm02"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentStart="true"
+                                    android:fontFamily="@font/inter_bold"
+                                    android:gravity="center"
+                                    android:text="오후"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp" />
+                            </androidx.cardview.widget.CardView>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/input_hour"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:fontFamily="@font/inter_bold"
                         android:gravity="center"
-                        android:text="~"
-                        android:textColor="#000000" />
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:selectAllOnFocus="true"
+                        android:text="00"
+                        android:focusable="true"
+                        android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/inputbox09"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_toEndOf="@+id/inputbox_inside"
-                        android:background="@drawable/default_input_round"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/inter_bold"
                         android:gravity="center"
-                        android:text="HHMM"
+                        android:text=":"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
-                </RelativeLayout>
+
+                    <EditText
+                        android:id="@+id/input_min"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="center"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:selectAllOnFocus="true"
+                        android:text="00"
+                        android:focusable="true"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#dbdbdb" />
             </LinearLayout>
 
             <androidx.cardview.widget.CardView

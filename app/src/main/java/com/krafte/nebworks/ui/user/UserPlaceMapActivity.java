@@ -29,7 +29,7 @@ import com.krafte.nebworks.dataInterface.InOutInsertInterface;
 import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
 import com.krafte.nebworks.databinding.ActivityUserplacemapBinding;
-import com.krafte.nebworks.pop.InoutPopActivity;
+import com.krafte.nebworks.bottomsheet.InoutPopActivity;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
@@ -496,13 +496,13 @@ public class UserPlaceMapActivity extends AppCompatActivity implements MapView.M
                                 dlog.i("LoginCheck jsonResponse : " + response.body());
                                 try {
                                     if (response.body().replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
-                                        Intent intent = new Intent(mContext, InoutPopActivity.class);
-                                        intent.putExtra("title", io_state + " 처리되었습니다.");
-                                        intent.putExtra("time", GET_TIME);
-                                        intent.putExtra("state", "1");
-                                        intent.putExtra("store_name", place_name);
-                                        startActivity(intent);
-                                        overridePendingTransition(R.anim.translate_up, 0);
+//                                        Intent intent = new Intent(mContext, InoutPopActivity.class);
+//                                        intent.putExtra("title", io_state + " 처리되었습니다.");
+//                                        intent.putExtra("time", GET_TIME);
+//                                        intent.putExtra("state", "1");
+//                                        intent.putExtra("store_name", place_name);
+//                                        startActivity(intent);
+//                                        overridePendingTransition(R.anim.translate_up, 0);
                                         if (!place_owner_id.equals(USER_INFO_ID)) {
 //                                            getEmployerToken();
                                         }

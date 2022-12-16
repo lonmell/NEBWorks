@@ -11,7 +11,7 @@ public class DateCurrent {
     long now = System.currentTimeMillis();
     Date mDate = new Date(now);
     @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat simpleDate_age = new SimpleDateFormat("yyyy");

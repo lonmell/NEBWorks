@@ -180,7 +180,7 @@ public class HomeFragment extends Fragment {
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
-
+//        place_end_time
         return binding.getRoot();
 //        return rootView;
     }
@@ -205,6 +205,7 @@ public class HomeFragment extends Fragment {
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
         SetAllMemberList();
     }
+
 
     public void setBtnEvent() {
         binding.cardview00.setOnClickListener(v -> {

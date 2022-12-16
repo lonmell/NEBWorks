@@ -475,11 +475,13 @@ public class MainFragment extends AppCompatActivity {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(response.body());
-                        String NotRead = Response.getJSONObject(0).getString("notread_feed");
-                        if(NotRead.equals("0")){
-                            binding.notiRed.setVisibility(View.INVISIBLE);
-                        }else{
-                            binding.notiRed.setVisibility(View.VISIBLE);
+                        if(!response.body().equals("[]")){
+                            String NotRead = Response.getJSONObject(0).getString("notread_feed");
+                            if(NotRead.equals("0")){
+                                binding.notiRed.setVisibility(View.INVISIBLE);
+                            }else{
+                                binding.notiRed.setVisibility(View.VISIBLE);
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

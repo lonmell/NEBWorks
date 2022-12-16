@@ -1,0 +1,451 @@
+package com.krafte.nebworks.bottomsheet;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.icu.text.SimpleDateFormat;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.InOutInsertInterface;
+import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
+import com.krafte.nebworks.util.DateCurrent;
+import com.krafte.nebworks.util.Dlog;
+import com.krafte.nebworks.util.GpsTracker;
+import com.krafte.nebworks.util.PageMoveClass;
+import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+public class InoutPopActivity extends BottomSheetDialogFragment {
+    private static final String TAG = "InoutPopActivity";
+    Context mContext;
+    private View view;
+
+    Activity activity;
+    FragmentManager fragmentManager;
+
+    // shared 저장값
+    PreferenceHelper shardpref;
+
+    //Other
+    Dlog dlog = new Dlog();
+    PageMoveClass pm = new PageMoveClass();
+    DateCurrent dc = new DateCurrent();
+
+    String USER_INFO_AUTH = "";
+    String place_id = "";
+    String USER_INFO_ID = "";
+
+    String time = "";
+    String state = "";
+    String store_name = "";
+    String inout_tv = "";
+    String inout_tv2 = "";
+    String place_end_time = "";
+
+    String kind = "";
+
+    //xml 
+    ImageView inout_icon;
+    TextView Setinout_tv, Setinout_tv2, in_time, close_btn, inout_insert;
+    LinearLayout time_area;
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.activity_inout_pop, container, false);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle);
+        try {
+            mContext = inflater.getContext();
+            dlog.DlogContext(mContext);
+            fragmentManager = getParentFragmentManager();
+
+            shardpref = new PreferenceHelper(mContext);
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+            place_id = shardpref.getString("place_id", "");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            place_end_time = shardpref.getString("place_end_time", "");
+
+            //데이터 가져오기
+            time = shardpref.getString("time", "");
+            state = shardpref.getString("state", "");
+            store_name = shardpref.getString("store_name", "");
+            inout_tv = shardpref.getString("inout_tv", "");
+            inout_tv2 = shardpref.getString("inout_tv2", "");
+
+            place_end_time = place_end_time.substring(0, 5);
+
+            inout_icon = view.findViewById(R.id.inout_icon);
+            Setinout_tv = view.findViewById(R.id.inout_tv);
+            Setinout_tv2 = view.findViewById(R.id.inout_tv2);
+            in_time = view.findViewById(R.id.in_time);
+            close_btn = view.findViewById(R.id.close_btn);
+            inout_insert = view.findViewById(R.id.inout_insert);
+            time_area = view.findViewById(R.id.time_area);
+
+            setBtnEvent();
+            getPlaceData();
+
+            //state
+            /*
+             * 1 - 출근처리
+             * 2 - 출근처리 불가
+             * 3 - 퇴근처리 하시겠습니까? - 등록된 퇴근시간 아닐때
+             * 4 - 퇴근처리
+             * * */
+            switch (state) {
+                case "1":
+                case "4":
+                    if (state.equals("1")) {
+                        kind = "0";
+                    } else {
+                        kind = "1";
+                        inout_insert.setText("재시도");
+                    }
+                    time_area.setVisibility(View.VISIBLE);
+                    inout_icon.setBackgroundResource(R.drawable.ic_inout_ok);
+                    break;
+                case "2":
+                    Setinout_tv2.setVisibility(View.VISIBLE);
+                    inout_icon.setBackgroundResource(R.drawable.ic_in_enable);
+                    break;
+                case "3":
+                    kind = "1";
+                    inout_insert.setText("퇴근");
+                    Setinout_tv2.setVisibility(View.VISIBLE);
+                    inout_icon.setBackgroundResource(R.drawable.ic_out_ok);
+                    break;
+            }
+            Setinout_tv.setText(inout_tv);
+            Setinout_tv2.setText(inout_tv2);
+            in_time.setText(time);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return view;
+    }
+
+    /*Fragment 콜백함수*/
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity)
+            activity = (Activity) context;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        shardpref.remove("change_place_id");
+    }
+
+    //list_settingitem01
+    public interface OnClickListener {
+        void onClick(View v, String user_id, String user_name);
+    }
+
+    private PaySelectMemberActivity.OnClickListener mListener = null;
+
+    public void setOnClickListener(PaySelectMemberActivity.OnClickListener listener) {
+        this.mListener = listener;
+    }
+
+    GpsTracker gpsTracker;
+    double latitude = 0;
+    double longitude = 0;
+
+    private void MoveMyLocation() {
+        try {
+            gpsTracker = new GpsTracker(mContext);
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            reverseCoding(latitude, longitude);
+        } catch (Exception e) {
+            dlog.i("Exception : " + e);
+        }
+    }
+
+    int getDistance = 0;
+    int location_cnt = 0;
+    private void setBtnEvent() {
+        close_btn.setOnClickListener(v -> {
+            dismiss();
+        });
+        inout_insert.setOnClickListener(v -> {
+            if (!state.equals("2")) {
+                if(state.equals("4")){
+                    MoveMyLocation();
+                    dlog.i("location_cnt : " + location_cnt);
+                    long now = System.currentTimeMillis();
+                    Date mDate = new Date(now);
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+                    latitude = gpsTracker.getLatitude();
+                    longitude = gpsTracker.getLongitude();
+                    getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+                    dlog.i("location_cnt : " + location_cnt);
+                    dlog.i("GET_TIME : " + simpleDate.format(mDate));
+                    dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
+                    if (kind.equals("0")) {
+                        if (getDistance <= 40) {
+                            InOutInsert();
+                        } else {
+                            Toast_Nomal("설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.");
+                        }
+                    } else {
+                        if (getDistance <= 40) {
+                            InOutInsert();
+                        } else {
+                            Toast_Nomal("설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.");
+                        }
+                    }
+                }else{
+                    InOutInsert();
+                }
+
+            } else {
+                ClosePop();
+            }
+        });
+    }
+
+    private void ClosePop() {
+        //데이터 전달하기
+        shardpref.remove("change_place_id");
+        shardpref.remove("mem_name");
+        shardpref.remove("time");
+        shardpref.remove("state");
+        shardpref.remove("store_name");
+        shardpref.remove("inout_tv");
+        shardpref.remove("inout_tv2");
+        shardpref.putInt("SELECT_POSITION", 0);
+        shardpref.putInt("SELECT_POSITION_sub", 0);
+        pm.Main2(mContext);
+        dismiss();
+    }
+
+    private void InOutInsert() {
+        String change_place_id = "";
+        change_place_id = shardpref.getString("change_place_id", "");
+        if (!change_place_id.isEmpty()) {
+            place_id = change_place_id;
+        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(InOutInsertInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        InOutInsertInterface api = retrofit.create(InOutInsertInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID, kind);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.body().replace("[", "").replace("]", "").replace("\"", "").length() == 0) {
+                            //최초 출근
+
+                        } else if (response.body().replace("[", "").replace("]", "").length() > 0) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                dlog.i("LoginCheck jsonResponse length : " + response.body().length());
+                                dlog.i("LoginCheck jsonResponse : " + response.body());
+                                try {
+                                    if (response.body().replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
+//                                        if (!place_owner_id.equals(USER_INFO_ID)) {
+////                                            getEmployerToken();
+//                                        }
+                                        ClosePop();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    String place_owner_id = "";
+    String place_name = "";
+    Double place_latitude = 0.0;
+    Double place_longitude = 0.0;
+    String place_pay_day = "";
+    String place_test_period = "";
+    String place_vacation_select = "";
+    String place_insurance = "";
+    String place_wifi_name = "";
+    RetrofitConnect rc = new RetrofitConnect();
+    private void getPlaceData() {
+        dlog.i("PlaceCheck place_id : " + place_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceThisDataInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceThisDataInterface api = retrofit.create(PlaceThisDataInterface.class);
+        Call<String> call = api.getData(place_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    place_name = Response.getJSONObject(0).getString("name");
+                                    place_owner_id = Response.getJSONObject(0).getString("owner_id");
+                                    place_latitude = Double.parseDouble(Response.getJSONObject(0).getString("latitude"));
+                                    place_longitude = Double.parseDouble(Response.getJSONObject(0).getString("longitude"));
+                                    place_pay_day = Response.getJSONObject(0).getString("pay_day");
+                                    place_test_period = Response.getJSONObject(0).getString("test_period");
+                                    place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
+                                    place_insurance = Response.getJSONObject(0).getString("insurance");
+                                    place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    //역 지오코딩 ( 위,경도 >> 주소 ) START
+    @SuppressLint({"SetTextI18n", "LongLogTag"})
+    public void reverseCoding(double latitude, double longitube) { // 위도 경도 넣어서 역지오코딩 주소값 뽑아낸다
+        Geocoder geocoder = new Geocoder(mContext);
+        List<Address> gList = null;
+        String Setaddress = "";
+        dlog.i("(reverseCoding)latitude,longitube : " + latitude + "," + longitube);
+        try {
+            gList = geocoder.getFromLocation(latitude, longitube, 6);
+        } catch (IOException e) {
+            e.printStackTrace();
+            dlog.e("setMaskLocation() - 서버에서 주소변환시 에러발생");
+            // Fragment1 으로 강제이동 시키기
+        }
+        if (gList != null) {
+            if (gList.size() == 0) {
+                Toast.makeText(mContext, " 현재위치에서 검색된 주소정보가 없습니다. ", Toast.LENGTH_SHORT).show();
+            } else {
+                Address address = gList.get(0);
+                Address address1 = gList.get(1);
+                Address address2 = gList.get(2);
+                Address address3 = gList.get(3);
+                dlog.i("address : " + address);
+                dlog.i("address1 : " + address1);
+                dlog.i("address2 : " + address2);
+                dlog.i("address3 : " + address3);
+                String addresslines = address.getAddressLine(0);
+                String subaddresslines = address1.getAddressLine(0);
+
+                Setaddress = addresslines.replace("대한민국", "").trim();
+                String dong = address1.getThoroughfare() == null ? "" : address1.getThoroughfare();
+                String jibun = address1.getFeatureName() == null ? "" : address1.getFeatureName();
+                String postalCode = address1.getPostalCode() == null ? "" : address1.getPostalCode();
+                subaddresslines = dong + " " + jibun;
+                dlog.i("Setaddress : " + Setaddress);
+                dlog.i("subaddresslines : " + subaddresslines);
+
+                shardpref.putString("pin_store_address", Setaddress);
+                shardpref.putString("pin_store_addressdetail", subaddresslines);
+                shardpref.putString("pin_zipcode", postalCode);
+                shardpref.putString("pin_latitude", String.valueOf(latitude));
+                shardpref.putString("pin_longitube", String.valueOf(longitube));
+            }
+        }
+    }
+
+    /**
+     * Returns The approximate distance in meters between this
+     * location and the given location. Distance is defined using
+     * the WGS84 ellipsoid.
+     *
+     * @param //dest the destination location
+     * @return the approximate distance in meters
+     */
+    //설정된 매장과 현재 내 위치의 거리를 재고 작업시작/종료 버튼의 활성화 비활성화 목적
+    @SuppressLint("LongLogTag")
+    public double getDistance(double lat1, double lng1, double lat2, double lng2) {
+        double distance;
+        dlog.i("매장 위치 : " + lat1 + "," + lng1);
+        dlog.i("현재 위치 : " + lat2 + "," + lng2);
+
+        Location locationA = new Location("point A");
+        locationA.setLatitude(lat1);
+        locationA.setLongitude(lng1);
+
+        Location locationB = new Location("point B");
+        locationB.setLatitude(lat2);
+        locationB.setLongitude(lng2);
+
+        distance = locationA.distanceTo(locationB);
+
+        return distance;
+    }
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, null);
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(mContext);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
+}

@@ -1,9 +1,7 @@
 package com.krafte.nebworks.ui.main;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.location.Address;
@@ -20,12 +18,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.net.ParseException;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.dataInterface.InOutInsertInterface;
+import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.databinding.ActivityEmployeeProcessBinding;
-import com.krafte.nebworks.pop.InoutPopActivity;
+import com.krafte.nebworks.bottomsheet.InoutPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.GpsTracker;
@@ -35,10 +34,9 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.threeten.bp.LocalDateTime;
 
 import java.io.IOException;
-import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +63,12 @@ public class EmployeeProcess extends AppCompatActivity {
     String USER_INFO_ID = "";
     String kind = "";
     String place_end_time = "";
+    String mem_name = "";
+    Calendar cal;
+    String today = "";
+    String format = "HH:mm";
+    SimpleDateFormat sdf = new SimpleDateFormat(format);
+
     long now = System.currentTimeMillis();
     Date mDate = new Date(now);
     @SuppressLint("SimpleDateFormat")
@@ -76,10 +80,9 @@ public class EmployeeProcess extends AppCompatActivity {
     @SuppressLint("SimpleDateFormat")
     java.text.SimpleDateFormat simpleDate_time = new java.text.SimpleDateFormat("HH:mm:ss");
 
-    String GET_DAY = simpleDate.format(mDate) + " " + simpleDate_time.format(mDate);
-    String GET_TIME_AGE = simpleDate_age.format(mDate);
     String GET_TIME = simpleDate_time.format(mDate);
     String title = "";
+    String io_state = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,20 +97,43 @@ public class EmployeeProcess extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
-        try{
-            place_id        = shardpref.getString("place_id","0");
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
+        try {
+            place_id        = shardpref.getString("place_id", "0");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "0");
             kind            = shardpref.getString("kind", "0");
-            place_end_time  = shardpref.getString("place_end_time","");
+            place_end_time  = shardpref.getString("place_end_time", "");
+            mem_name        = shardpref.getString("mem_name", "");
+
             onBtnEvent();
 
-        }catch (Exception e){
+            if (kind.equals("0")) {
+                binding.ioBtn.setBackgroundResource(R.drawable.ic_in_btn_white);
+            } else {
+                binding.ioBtn.setBackgroundResource(R.drawable.workinout02);
+            }
+
+            binding.processDate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
+            binding.processTitle.setText(mem_name + "님 오늘도 화이팅하세요!");
+
+            binding.closeProcess.setOnClickListener(v -> {
+                super.onBackPressed();
+            });
+            binding.closeBtn.setOnClickListener(v -> {
+                super.onBackPressed();
+            });
+
+            cal = Calendar.getInstance();
+            today = sdf.format(cal.getTime());
+            dlog.i("오늘 :" + today);
+            dlog.i("place_end_time :" + place_end_time);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         getPlaceData();
         MoveMyLocation();
@@ -123,28 +149,20 @@ public class EmployeeProcess extends AppCompatActivity {
         dlog.i("GET_TIME : " + simpleDate.format(mDate));
         dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
 
-        if (getDistance <= 30) {
-            if(kind.equals("0")){
+        if (getDistance <= 40) {
+            if (kind.equals("0")) {
                 title = "출근처리";
-            }else{
-                title = "퇴근근처리 불가";
+            } else {
+                title = "퇴근처리";
             }
             binding.storeDistance.setText("매장과 " + getDistance + "m 떨어져있습니다.");
-            binding.inoutAble.setText(kind.equals("0")?"출근처리가능":"퇴근처리가능");
+            binding.inoutAble.setText(kind.equals("0") ? "출근처리가능" : "퇴근처리가능");
             binding.inoutAble.setTextColor(Color.parseColor("#6395EC"));
             dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
-            InOutInsert();
         } else {
-            if(kind.equals("0")){
+            if (kind.equals("0")) {
                 title = "출근처리 불가";
-            }else{
-                try {
-                    String today = dc.GET_TIME;
-
-                    compareDate1(place_end_time, today);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+            } else {
                 title = "퇴근근처리 불가";
             }
             binding.storeDistance.setText("매장과의 거리가 30미터 이상 입니다.");
@@ -154,25 +172,27 @@ public class EmployeeProcess extends AppCompatActivity {
         }
     }
 
-    public void compareDate1(String before, String after) throws ParseException {
+    public boolean compareDate2() throws ParseException {
+        boolean returntf = false;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date date1 = sdf.parse(today);
+            Date date2 = sdf.parse(place_end_time);
+            System.out.println(sdf.format(date1));
+            System.out.println(sdf.format(date2));
 
-        LocalDateTime date1 = LocalDateTime.parse(before); //before
-        LocalDateTime date2 = LocalDateTime.parse(after); //after
-
-        if (date1.isBefore(date2)) {
-            System.out.println("Date1 is before Date2");
+            returntf =  date1.after(date2);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        if (date1.isAfter(date2)) {
-            System.out.println("Date1 is after Date2");
-        }
-
-        if (date1.isEqual(date2)) {
-            System.out.println("Date1 is equal Date2");
-        }
+        return returntf;
     }
 
-    private void onBtnEvent(){
+    String change_place_id = "";
+    String change_place_name = "";
+    String change_place_owner_id = "";
+
+    private void onBtnEvent() {
         binding.ioBtn.setOnClickListener(v -> {
             MoveMyLocation();
             dlog.i("location_cnt : " + location_cnt);
@@ -186,16 +206,45 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("location_cnt : " + location_cnt);
             dlog.i("GET_TIME : " + simpleDate.format(mDate));
             dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-            if (getDistance <= 30) {
-                dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
-//                InOutLogMember();
-//                if (!place_owner_id.equals(USER_INFO_ID)) {
-//                    getManagerToken(place_owner_id, "0", place_id, place_name);
-//                }
-                InOutInsert();
+
+            if (kind.equals("0")) {
+                if (getDistance <= 40) {
+                    io_state = "출근처리";
+                    InOutPop(GET_TIME, "1", place_name, io_state, "");
+                } else {
+                    InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.");
+                }
             } else {
-                Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
+                if (getDistance <= 40) {
+                    io_state = "퇴근처리";
+                    dlog.i("compareDate2 :" +  compareDate2());
+                    if(compareDate2()){
+                        InOutPop(GET_TIME, "4", place_name, io_state, "");
+                    }else{
+                        InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.");//퇴근시간 전일때
+                    }
+
+                } else {
+                    InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.");
+                }
             }
+        });
+
+        binding.placeChangeArea.setOnClickListener(v -> {
+            PlaceListBottomSheet plb = new PlaceListBottomSheet();
+            plb.show(getSupportFragmentManager(), "PlaceListBottomSheet");
+            plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
+                change_place_id = place_id;
+                change_place_name = place_name;
+                change_place_owner_id = place_owner_id;
+                shardpref.putString("change_place_id", place_id);
+                shardpref.putString("change_place_name", place_name);
+                shardpref.putString("change_place_owner_id", place_owner_id);
+                dlog.i("change_place_id : " + place_id);
+                dlog.i("change_place_name : " + place_name);
+                dlog.i("change_place_owner_id : " + place_owner_id);
+                binding.storeName.setText(place_name);
+            });
         });
     }
 
@@ -259,68 +308,22 @@ public class EmployeeProcess extends AppCompatActivity {
         });
     }
 
-    private void InOutInsert() {
-        dlog.i("--------InOutInsert--------");
-        dlog.i("titel : " + title);
-        dlog.i("place_id : " + place_id);
-        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("kind - 0출근, 1퇴근 : " + kind);
-        dlog.i("--------InOutInsert--------");
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(InOutInsertInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        InOutInsertInterface api = retrofit.create(InOutInsertInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID, "0");
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        if (response.body().replace("[", "").replace("]", "").replace("\"", "").length() == 0) {
-                            //최초 출근
-
-                        } else if (response.body().replace("[", "").replace("]", "").length() > 0) {
-                            if (response.isSuccessful() && response.body() != null) {
-                                dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                                dlog.i("LoginCheck jsonResponse : " + response.body());
-                                try {
-                                    if (response.body().replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
-//                                        timer.cancel();
-                                        Intent intent = new Intent(mContext, InoutPopActivity.class);
-                                        intent.putExtra("title", "출근 처리되었습니다.");
-                                        intent.putExtra("time", GET_TIME);
-                                        intent.putExtra("state", kind);
-                                        intent.putExtra("store_name", place_name);
-                                        mContext.startActivity(intent);
-                                        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                                        if (!place_owner_id.equals(USER_INFO_ID)) {
-//                                            getEmployerToken();
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
+    private void InOutPop(String time, String state, String store_name, String inout_tv, String inout_tv2) {
+        shardpref.putString("time", time);
+        shardpref.putString("state", state);
+        shardpref.putString("store_name", store_name);
+        shardpref.putString("inout_tv", inout_tv);
+        shardpref.putString("inout_tv2", inout_tv2);
+        InoutPopActivity ipp = new InoutPopActivity();
+        ipp.show(getSupportFragmentManager(),"InoutPopActivity");
     }
+
+
 
     GpsTracker gpsTracker;
     double latitude = 0;
     double longitude = 0;
+
     private void MoveMyLocation() {
         try {
             gpsTracker = new GpsTracker(mContext);
@@ -331,6 +334,7 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("Exception : " + e);
         }
     }
+
     //역 지오코딩 ( 위,경도 >> 주소 ) START
     @SuppressLint({"SetTextI18n", "LongLogTag"})
     public void reverseCoding(double latitude, double longitube) { // 위도 경도 넣어서 역지오코딩 주소값 뽑아낸다
