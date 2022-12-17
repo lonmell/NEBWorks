@@ -74,6 +74,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
     int confirm_cnt = 0;
     List<String> confirm_member = new ArrayList<>();
+    String page_state = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,12 +113,12 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        GetPlaceList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        GetPlaceList();
         getNotReadFeedcnt();
     }
 
@@ -143,6 +144,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
     private void onStartAuth() {
         if (USER_INFO_AUTH.equals("0")) {
+            shardpref.putString("page_state","0");//첫 입력
             pm.PlaceAddGo(mContext);
         } else {
             StoreListBottomSheet slb = new StoreListBottomSheet();
@@ -224,6 +226,7 @@ public class PlaceListActivity extends AppCompatActivity {
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
         Call<String> call = api.getData("", USER_INFO_ID, USER_INFO_AUTH);
+        //
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override

@@ -104,6 +104,13 @@ public class PlaceAddActivity2 extends AppCompatActivity {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-99");
             getPlaceId();
             wifiScan();
+
+            binding.save2btn.setOnClickListener(v -> {
+                UpdatePlace(0);
+            });
+            binding.addPlaceBtn.setOnClickListener(v -> {
+                UpdatePlace(1);
+            });
         } catch (Exception ignored) {
             ignored.printStackTrace();
         }
@@ -188,12 +195,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                                 start_date = Response.getJSONObject(0).getString("start_date");
 
 
-                                binding.save2btn.setOnClickListener(v -> {
-                                    UpdatePlace(0);
-                                });
-                                binding.addPlaceBtn.setOnClickListener(v -> {
-                                    UpdatePlace(1);
-                                });
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

@@ -449,53 +449,55 @@ public class MemberDetailActivity extends AppCompatActivity {
                         try {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
-                            String name = Response.getJSONObject(0).getString("name");
-                            String place_name = Response.getJSONObject(0).getString("place_name");
-                            String join_date = Response.getJSONObject(0).getString("join_date").replace("-", ".");
-                            String img_path = Response.getJSONObject(0).getString("img_path");
-                            String phone = Response.getJSONObject(0).getString("phone");
-                            String owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
-                                    + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
-                                    + Response.getJSONObject(0).getString("owner_phone").substring(7, 11);
-                            String jikgup = Response.getJSONObject(0).getString("jikgup");
+                            if(Response.length() != 0){
+                                String name = Response.getJSONObject(0).getString("name");
+                                String place_name = Response.getJSONObject(0).getString("place_name");
+                                String join_date = Response.getJSONObject(0).getString("join_date").replace("-", ".");
+                                String img_path = Response.getJSONObject(0).getString("img_path");
+                                String phone = Response.getJSONObject(0).getString("phone");
+                                String owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
+                                        + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
+                                        + Response.getJSONObject(0).getString("owner_phone").substring(7, 11);
+                                String jikgup = Response.getJSONObject(0).getString("jikgup");
 
-                            binding.name.setText(name);
-                            binding.placeNametv.setText(place_name);
-                            binding.joinDatetv.setText(join_date + "부터 가입");
-                            Glide.with(mContext).load(img_path)
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true)
-                                    .into(binding.profileImg);
+                                binding.name.setText(name);
+                                binding.placeNametv.setText(place_name);
+                                binding.joinDatetv.setText(join_date + "부터 가입");
+                                Glide.with(mContext).load(img_path)
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .skipMemoryCache(true)
+                                        .into(binding.profileImg);
 
-                            String inoutstate = Response.getJSONObject(0).getString("inoutstate");
-                            if (inoutstate.equals("-1")) {
-                                binding.workState.setText("미출근");
-                            } else if (inoutstate.equals("0")) {
-                                binding.workState.setText("출근");
-                            } else if (inoutstate.equals("1")) {
-                                binding.workState.setText("퇴근");
-                            }
-                            workpay = Response.getJSONObject(0).getString("pay").equals("null") ? "미정" : Response.getJSONObject(0).getString("pay");
-                            binding.workPay.setText(Response.getJSONObject(0).getString("pay").equals("null") ? "미정" : Response.getJSONObject(0).getString("pay"));
+                                String inoutstate = Response.getJSONObject(0).getString("inoutstate");
+                                if (inoutstate.equals("-1")) {
+                                    binding.workState.setText("미출근");
+                                } else if (inoutstate.equals("0")) {
+                                    binding.workState.setText("출근");
+                                } else if (inoutstate.equals("1")) {
+                                    binding.workState.setText("퇴근");
+                                }
+                                workpay = Response.getJSONObject(0).getString("pay").equals("null") ? "미정" : Response.getJSONObject(0).getString("pay");
+                                binding.workPay.setText(Response.getJSONObject(0).getString("pay").equals("null") ? "미정" : Response.getJSONObject(0).getString("pay"));
 
-                            if (phone.isEmpty() || phone.equals("null")) {
-                                phone = "미입력";
+                                if (phone.isEmpty() || phone.equals("null")) {
+                                    phone = "미입력";
+                                }
+                                if (owner_phone.equals("null") || owner_phone.isEmpty()) {
+                                    owner_phone = "미입력";
+                                }
+                                if (USER_INFO_AUTH.equals("0")) {
+                                    binding.callNumber.setText("전화걸기");
+                                    binding.userPhone.setText(phone);
+                                } else {
+                                    binding.callNumber.setText("사장님께 전화걸기");
+                                    binding.userPhone.setText(owner_phone);
+                                }
+                                Navname = name;
+                                Navimg_path = img_path;
+                                Navgetjikgup = jikgup;
+                                setNavBarBtnEvent();
+                                PlaceWorkCheck(stub_place_id, "1", "3");
                             }
-                            if (owner_phone.equals("null") || owner_phone.isEmpty()) {
-                                owner_phone = "미입력";
-                            }
-                            if (USER_INFO_AUTH.equals("0")) {
-                                binding.callNumber.setText("전화걸기");
-                                binding.userPhone.setText(phone);
-                            } else {
-                                binding.callNumber.setText("사장님께 전화걸기");
-                                binding.userPhone.setText(owner_phone);
-                            }
-                            Navname = name;
-                            Navimg_path = img_path;
-                            Navgetjikgup = jikgup;
-                            setNavBarBtnEvent();
-                            PlaceWorkCheck(stub_place_id, "1", "3");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

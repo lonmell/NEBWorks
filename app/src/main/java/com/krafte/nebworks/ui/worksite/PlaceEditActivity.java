@@ -748,7 +748,8 @@ public class PlaceEditActivity extends AppCompatActivity {
         PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
         Call<String> call = api.getData(place_id, placeName, registr_num, accept_state, placeAddress_get
                 , String.valueOf(latitude), String.valueOf(longitude), payday, test_day, restday
-                , (String.valueOf(boheom).replace("[", "").replace("]", "")), place_starttime, place_endtime, ProfileUrl, String.valueOf(i), start_date, SSIDName);
+                , (String.valueOf(boheom).replace("[", "").replace("]", "")), place_starttime, place_endtime, ProfileUrl, String.valueOf(i)
+                , SSIDName);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override

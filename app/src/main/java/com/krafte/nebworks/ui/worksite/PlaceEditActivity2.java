@@ -258,7 +258,7 @@ public class PlaceEditActivity2 extends AppCompatActivity {
         PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
         Call<String> call = api.getData(place_id,name,registr_num,store_kind,address
                 ,String.valueOf(latitude),String.valueOf(longitude),pay_day,test_period,vacation_select
-                ,insurance,start_time,end_time,img_path,String.valueOf(i),start_date,SSIDName);
+                ,insurance,start_time,end_time,img_path,String.valueOf(i),SSIDName);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override

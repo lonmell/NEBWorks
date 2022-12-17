@@ -27,7 +27,6 @@ public interface PlaceEditInterface
             @Field("end_time") String end_time,
             @Field("img_path") String img_path,
             @Field("save_kind") String save_kind,
-            @Field("start_date") String start_date,
             @Field("wifi_name") String wifi_name
     );
 }

@@ -147,7 +147,6 @@
                 app:cardBackgroundColor="#ffffff"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="0dp"
-                android:layout_marginTop="10dp"
                 android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent">
 

@@ -172,6 +172,8 @@ public class LoginActivity extends AppCompatActivity {
             if (!GET_ACCOUNT_EMAIL.equals("-99") && !USER_INFO_PW.equals("-99")) {
                 LoginCheck(GET_ACCOUNT_EMAIL, USER_INFO_PW, "NEB");
             }
+        }else{
+            shardpref.clear();
         }
         // Check if user is signed in (non-null) and update UI accordingly.
     }

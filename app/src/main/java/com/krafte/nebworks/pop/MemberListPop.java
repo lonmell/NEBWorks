@@ -48,6 +48,7 @@ public class MemberListPop extends Activity {
     Dlog dlog = new Dlog();
     String USER_INFO_ID = "";
     String place_id = "";
+    String place_owner_id = "";
 
     ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mList;
     MemberListPopAdapter mAdapter;
@@ -70,7 +71,7 @@ public class MemberListPop extends Activity {
         shardpref = new PreferenceHelper(mContext);
         place_id = shardpref.getString("place_id", "0");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-
+        place_owner_id = shardpref.getString("place_owner_id", "0");
         //-- 기본데이터 세팅 END
         setBtnEvent();
     }
@@ -125,22 +126,24 @@ public class MemberListPop extends Activity {
                                 binding.allMemberList.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("place_name"),
-                                            jsonObject.getString("account"),
-                                            jsonObject.getString("name"),
-                                            jsonObject.getString("phone"),
-                                            jsonObject.getString("gender"),
-                                            jsonObject.getString("img_path"),
-                                            jsonObject.getString("jumin"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("join_date"),
-                                            jsonObject.getString("state"),
-                                            jsonObject.getString("jikgup"),
-                                            jsonObject.getString("pay"),
-                                            jsonObject.getString("worktime")
-                                    ));
+                                    if(!place_owner_id.equals(jsonObject.getString("id"))){
+                                        mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("place_name"),
+                                                jsonObject.getString("account"),
+                                                jsonObject.getString("name"),
+                                                jsonObject.getString("phone"),
+                                                jsonObject.getString("gender"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("jumin"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("join_date"),
+                                                jsonObject.getString("state"),
+                                                jsonObject.getString("jikgup"),
+                                                jsonObject.getString("pay"),
+                                                jsonObject.getString("worktime")
+                                        ));
+                                    }
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }
