@@ -15,6 +15,7 @@ public interface TaskSelectWInterface
     Call<String> getData(
             @Field("place_id") String place_id,
             @Field("user_id") String user_id,
-            @Field("selected_date") String selected_date
+            @Field("selected_date") String selected_date,
+            @Field("auth") String auth
     );
 }

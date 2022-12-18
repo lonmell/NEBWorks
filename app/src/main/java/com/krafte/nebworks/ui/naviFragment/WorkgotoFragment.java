@@ -603,16 +603,20 @@ public class WorkgotoFragment extends Fragment {
 
     public void setRecyclerView() {
         String select_date = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
+        if(change_member_id.isEmpty()){
+            change_member_id = USER_INFO_ID;
+        }
         dlog.i("setTodoWList place_id : " + change_place_id);
         dlog.i("setTodoWList USER_INFO_ID : " + change_member_id);
         dlog.i("setTodoWList select_date : " + select_date);
+        dlog.i("setTodoWList USER_INFO_AUTH : " + USER_INFO_AUTH);
         Todo_mList.clear();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TaskSelectWInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         TaskSelectWInterface api = retrofit.create(TaskSelectWInterface.class);
-        Call<String> call = api.getData(change_place_id, change_member_id, select_date);
+        Call<String> call = api.getData(change_place_id, change_member_id, select_date,USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -645,7 +649,7 @@ public class WorkgotoFragment extends Fragment {
                             binding.nodataArea.setVisibility(View.GONE);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
-                                if(!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")){
+                                if(USER_INFO_AUTH.equals("0")){
                                     Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
                                             jsonObject.getString("id"),
                                             jsonObject.getString("writer_id"),
@@ -671,6 +675,34 @@ public class WorkgotoFragment extends Fragment {
                                             jsonObject.getString("task_overdate"),
                                             jsonObject.getString("reject_reason")
                                     ));
+                                }else{
+                                    if(!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")){
+                                        Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("writer_id"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("title"),
+                                                jsonObject.getString("contents"),
+                                                jsonObject.getString("complete_kind"),
+                                                Collections.singletonList(jsonObject.getString("users")),
+                                                jsonObject.getString("task_date"),
+                                                jsonObject.getString("start_time"),
+                                                jsonObject.getString("end_time"),
+                                                jsonObject.getString("sun"),
+                                                jsonObject.getString("mon"),
+                                                jsonObject.getString("tue"),
+                                                jsonObject.getString("wed"),
+                                                jsonObject.getString("thu"),
+                                                jsonObject.getString("fri"),
+                                                jsonObject.getString("sat"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("complete_yn"),
+                                                jsonObject.getString("incomplete_reason"),
+                                                jsonObject.getString("approval_state"),
+                                                jsonObject.getString("task_overdate"),
+                                                jsonObject.getString("reject_reason")
+                                        ));
+                                    }
                                 }
                             }
                             for (int a = 0; a < Response.length(); a++) {
