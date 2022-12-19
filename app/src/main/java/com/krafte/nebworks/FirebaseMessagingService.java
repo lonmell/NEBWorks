@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
-import com.krafte.nebworks.ui.IntroActivity;
 import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
 import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.main.MainFragment2;
@@ -104,18 +103,33 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             if (message0.equals("1") && channelId1) {
                 showNotification(String.valueOf(remoteMessage.getData().get("title"))
                         , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
+                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message"))
+                        , String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("2") && channelId2) {
                 showNotification(String.valueOf(remoteMessage.getData().get("title"))
                         , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
+                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message"))
+                        , String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("3") && channelId3) {
                 showNotification(String.valueOf(remoteMessage.getData().get("title"))
                         , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
+                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message"))
+                        , String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("4") && channelId4) {
                 showNotification(String.valueOf(remoteMessage.getData().get("title"))
                         , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
+                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message"))
+                        , String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("9")) {
                 showNotification(String.valueOf(remoteMessage.getData().get("title"))
                         , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
+                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message"))
+                        , String.valueOf(remoteMessage.getData().get("click_action")));
             }
 
             if (/* Check if data needs to be processed by long running job */ true) {
@@ -232,29 +246,29 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Log.i(TAG, "intent : " + intent);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
-//        if(click_action.equals("MainActivity")){
-//            shardpref.putInt("SELECT_POSITION",0);
-//            if(USER_INFO_AUTH.equals("0")){
-//                intent = new Intent(this, MainFragment.class);
-//            }else{
-//                intent = new Intent(this, MainFragment2.class);
-//            }
-//        }else if(click_action.equals("PlaceWorkFragment")){
-//            shardpref.putInt("SELECT_POSITION",1);
-//            shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
-//            if(USER_INFO_AUTH.equals("0")){
-//                intent = new Intent(this, MainFragment.class);
-//            }else{
-//                intent = new Intent(this, MainFragment2.class);
-//            }
-//        }else if(click_action.equals("TaskApprovalFragment")){
-//            shardpref.putInt("SELECT_POSITION", Integer.parseInt(message0));
-//            intent = new Intent(this, TaskApprovalFragment.class);
-//        }else if(click_action.equals("PlaceListActivity")){
-//            intent = new Intent(this, PlaceListActivity.class);
-//        }
-        Intent intent = new Intent(this, IntroActivity.class);
-        intent.putExtra("click_action", click_action);
+        if(click_action.equals("MainActivity")){
+            shardpref.putInt("SELECT_POSITION",0);
+            if(USER_INFO_AUTH.equals("0")){
+                intent = new Intent(this, MainFragment.class);
+            }else{
+                intent = new Intent(this, MainFragment2.class);
+            }
+        }else if(click_action.equals("PlaceWorkFragment")){
+            shardpref.putInt("SELECT_POSITION",1);
+            shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
+            if(USER_INFO_AUTH.equals("0")){
+                intent = new Intent(this, MainFragment.class);
+            }else{
+                intent = new Intent(this, MainFragment2.class);
+            }
+        }else if(click_action.equals("TaskApprovalFragment")){
+            shardpref.putInt("SELECT_POSITION", Integer.parseInt(message0));
+            intent = new Intent(this, TaskApprovalFragment.class);
+        }else if(click_action.equals("PlaceListActivity")){
+            intent = new Intent(this, PlaceListActivity.class);
+        }
+//        Intent intent = new Intent(this, IntroActivity.class);
+//        intent.putExtra("click_action", click_action);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_MUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
@@ -314,8 +328,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
             mNotification =
                     new Notification.Builder(this,Channel)
-                            .setContentTitle(title)
-                            .setContentText(message + "," + click_action)
+                            .setContentTitle("넵 웍스")
+                            .setContentText(message)
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setContentIntent(pendingIntent)
                             .build();
@@ -327,7 +341,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Log.i(TAG,"mNotification SHOW 2");
             mNotification =
                     new NotificationCompat.Builder(this,Channel)
-                            .setContentTitle(title)
+                            .setContentTitle("넵 웍스")
                             .setContentText(message)
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setSound(defaultSoundUri)
