@@ -285,6 +285,15 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
 //                                        if (!place_owner_id.equals(USER_INFO_ID)) {
 ////                                            getEmployerToken();
 //                                        }
+                                        if(kind.equals("0")){
+                                            String input_date = dc.GET_YEAR + "." + dc.GET_MONTH + "." + dc.GET_DAY;
+                                            String in_time = dc.GET_TIME.substring(11);
+                                            shardpref.putString("input_date",input_date);
+                                            shardpref.putString("in_time",in_time);
+                                        }else{
+                                            shardpref.remove("input_date");
+                                        }
+
                                         ClosePop();
                                     }
                                 } catch (Exception e) {

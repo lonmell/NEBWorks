@@ -19,6 +19,40 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:id="@+id/top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:text="근무현황"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
+
+                <RelativeLayout
+                    android:id="@+id/back_btn2"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:background="@drawable/find_right_arrow"
+                        android:padding="20dp"
+                        android:rotation="180" />
+                </RelativeLayout>
+            </RelativeLayout>
+
             <!-- 참고 사이트 : https://bumjae.tistory.com/31 -->
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/center_tap_coordinator"

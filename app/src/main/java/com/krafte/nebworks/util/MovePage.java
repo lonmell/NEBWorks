@@ -143,6 +143,8 @@ public interface MovePage {
 
     void TaskReportDetail(Context context);
 
+    void TaskList(Context context);
+
     //--ui.user
     void SearchEmail(Context context);
 

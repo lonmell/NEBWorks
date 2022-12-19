@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -144,10 +145,8 @@ public class MainFragment2 extends AppCompatActivity {
 
             drawerLayout = findViewById(R.id.drawer_layout);
             drawerView = findViewById(R.id.drawer2);
-            SetAllMemberList();
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("place_name : " + place_name);
-
 
             bottom_icon02.setBackgroundResource(R.drawable.ic_payment_off);
             bottom_icon03.setBackgroundResource(R.drawable.ic_calendar_off);
@@ -332,8 +331,9 @@ public class MainFragment2 extends AppCompatActivity {
     //navbar.xml
     DrawerLayout drawerLayout;
     View drawerView;
+    LinearLayout area03, area04, area06;
     ImageView close_btn, user_profile, my_setting;
-    TextView user_name, jikgup, store_name;
+    TextView user_name, jikgup, store_name,select_nav09;
 
     @SuppressLint("LongLogTag")
     public void setNavBarBtnEvent() {
@@ -344,18 +344,19 @@ public class MainFragment2 extends AppCompatActivity {
         user_name = findViewById(R.id.user_name);
         jikgup = findViewById(R.id.jikgup);
         store_name = findViewById(R.id.store_name);
+        area03 = findViewById(R.id.area03);
+        area04 = findViewById(R.id.area04);
+        area06 = findViewById(R.id.area06);
+        select_nav09 = findViewById(R.id.select_nav09);
 
-
-        dlog.i("name : " + name);
-        dlog.i("img_path : " + img_path);
-        dlog.i("getjikgup : " + getjikgup);
+        area04.setVisibility(View.VISIBLE);
+        area06.setVisibility(View.GONE);
+        select_nav09.setVisibility(View.GONE);
 
         store_name.setText(place_name);
-
         close_btn.setOnClickListener(v -> {
             drawerLayout.closeDrawer(drawerView);
         });
-
     }
 
     @Override
@@ -363,6 +364,7 @@ public class MainFragment2 extends AppCompatActivity {
         super.onResume();
         getNotReadFeedcnt();
         setNavBarBtnEvent();
+        SetAllMemberList();
     }
 
     public void btnOnclick(View view) {
@@ -370,10 +372,12 @@ public class MainFragment2 extends AppCompatActivity {
             drawerLayout.openDrawer(drawerView);
         } else if (view.getId() == R.id.out_store) {
             pm.PlaceList(mContext);
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation01) {
             dlog.i("메인 Click!");
             binding.title.setText("");
             binding.tabLayout.getTabAt(0).select();
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation02) {
             dlog.i("급여관리 Click!");
             shardpref.putInt("Tap", 0);
@@ -381,28 +385,33 @@ public class MainFragment2 extends AppCompatActivity {
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 0);
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation03) {
-            dlog.i("근무현황 Click!");
-            binding.title.setText("근무현황");
+            dlog.i("캘린더 Click!");
+            binding.title.setText("캘린더");
             binding.tabLayout.getTabAt(2).select();
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation04) {
             dlog.i("커뮤니티 Click!");
             binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation05) {
             dlog.i("더보기 Click!");
             binding.title.setText("더보기");
             binding.tabLayout.getTabAt(4).select();
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav01) {
             pm.PlaceList(mContext);
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav02) {
             pm.PlaceAddGo(mContext);
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav03) {
             pm.MemberManagement(mContext);
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav04) {
-            shardpref.putInt("SELECT_POSITION", 2);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
-            pm.Main(mContext);
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav05) {
 //            shardpref.putString("Tap", "0");
 //            pm.PayManagement(mContext);
@@ -418,9 +427,8 @@ public class MainFragment2 extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 0);
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
-            shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
-            pm.Main(mContext);
+            pm.TaskList(mContext);
+            drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
             pm.addWorkGo(mContext);
         } else if (view.getId() == R.id.select_nav09) {
@@ -433,7 +441,6 @@ public class MainFragment2 extends AppCompatActivity {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
         }
-
     }
 
     private void ChangePosition(int i) {

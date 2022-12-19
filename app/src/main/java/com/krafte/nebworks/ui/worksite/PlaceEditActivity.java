@@ -147,6 +147,7 @@ public class PlaceEditActivity extends AppCompatActivity {
     String registr_num = "";
     String store_kind = "";
     String address = "";
+    String address_detail = "";
     String latitude = "";
     String longitude = "";
     String pay_day = "";
@@ -372,6 +373,7 @@ public class PlaceEditActivity extends AppCompatActivity {
                                 registr_num = Response.getJSONObject(0).getString("registr_num");
                                 store_kind = Response.getJSONObject(0).getString("store_kind");
                                 address = Response.getJSONObject(0).getString("address");
+                                address_detail = Response.getJSONObject(0).getString("address_detail");
                                 latitude = Response.getJSONObject(0).getString("latitude");
                                 longitude = Response.getJSONObject(0).getString("longitude");
 
@@ -397,6 +399,8 @@ public class PlaceEditActivity extends AppCompatActivity {
                                 binding.inputbox01.setText(name);
                                 binding.inputbox02.setText(registr_num);
                                 binding.inputbox03.setText(store_kind);
+                                binding.inputbox04.setText(address);
+                                binding.inputbox041.setText(address_detail);
                                 dlog.i("insurance : " + insurance.replace(" ", ""));
                                 for (String str : insurance.replace(" ", "").split(",")) {
                                     boheom.add(str.replace(" ", ""));
@@ -746,7 +750,7 @@ public class PlaceEditActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
-        Call<String> call = api.getData(place_id, placeName, registr_num, accept_state, placeAddress_get
+        Call<String> call = api.getData(place_id, placeName, registr_num, accept_state, placeAddress, placeDtailAddress
                 , String.valueOf(latitude), String.valueOf(longitude), payday, test_day, restday
                 , (String.valueOf(boheom).replace("[", "").replace("]", "")), place_starttime, place_endtime, ProfileUrl, String.valueOf(i)
                 , SSIDName);

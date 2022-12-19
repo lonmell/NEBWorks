@@ -211,10 +211,13 @@ public class FeedAddActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-                            dlog.i("SetAllMemberList response.body() length : " + response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
+                            dlog.i("SetAllMemberList response.body() length : " + jsonResponse);
                             if (Response.length() == 0) {
                                 dlog.i("ZERO SIZE : " + Response.length());
                             } else {
@@ -414,10 +417,12 @@ public class FeedAddActivity extends AppCompatActivity {
                 dlog.e("response 1: " + response.isSuccessful());
                 runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                        dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
-
+                            JSONArray Response = new JSONArray(jsonResponse);
                             try {
                                 mem_id = Response.getJSONObject(0).getString("id");
                                 mem_name = Response.getJSONObject(0).getString("name");

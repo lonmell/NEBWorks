@@ -136,7 +136,9 @@ public class FeedDetailActivity extends AppCompatActivity {
         super.onResume();
         //UI 데이터 세팅
         try {
-            UpdateWorkNotifyReadYn();
+            if(USER_INFO_AUTH.equals("1")){
+                UpdateWorkNotifyReadYn();
+            }
             getWorkNotifyReadYn();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -228,6 +230,9 @@ public class FeedDetailActivity extends AppCompatActivity {
                                     updated_at = Response.getJSONObject(0).getString("updated_at");
 
                                     try {
+                                        if(!writer_id.equals(USER_INFO_ID)){
+                                            binding.detailEditArea.setVisibility(View.GONE);
+                                        }
                                         binding.feedTitle.setText(title);
                                         if (place_owner_id.equals(writer_id)) {
                                             binding.userName.setText("매니저");

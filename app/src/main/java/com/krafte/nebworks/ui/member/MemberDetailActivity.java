@@ -455,9 +455,12 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 String join_date = Response.getJSONObject(0).getString("join_date").replace("-", ".");
                                 String img_path = Response.getJSONObject(0).getString("img_path");
                                 String phone = Response.getJSONObject(0).getString("phone");
-                                String owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
-                                        + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
-                                        + Response.getJSONObject(0).getString("owner_phone").substring(7, 11);
+                                String owner_phone = Response.getJSONObject(0).getString("owner_phone");
+                                if(!owner_phone.isEmpty()){
+                                    owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
+                                            + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
+                                            + Response.getJSONObject(0).getString("owner_phone").substring(7, 11);
+                                }
                                 String jikgup = Response.getJSONObject(0).getString("jikgup");
 
                                 binding.name.setText(name);

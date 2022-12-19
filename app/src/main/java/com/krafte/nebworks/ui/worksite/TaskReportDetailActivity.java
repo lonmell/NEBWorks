@@ -96,6 +96,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
     String end_time = "-99";
     String complete_yn = "";
     String reject_reason = "";
+    String updated_at = "";
 
     String Sun = "0", Mon = "0", Tue = "0", Wed = "0", Thu = "0", Fri = "0", Sat = "0";
     String toDay = "";
@@ -168,7 +169,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             if(USER_INFO_AUTH.equals("0")){
                 pm.Main(mContext);
             }else if(USER_INFO_AUTH.equals("1")){
-                pm.Main2(mContext);
+                pm.TaskList(mContext);
             }
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
@@ -177,7 +178,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             if(USER_INFO_AUTH.equals("0")){
                 pm.Main(mContext);
             }else if(USER_INFO_AUTH.equals("1")){
-                pm.Main2(mContext);
+                pm.TaskList(mContext);
             }
         });
     }
@@ -224,6 +225,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             complete_yn         = shardpref.getString("complete_yn", "n");
             reject_reason       = shardpref.getString("reject_reason", "n");
             incomplete_reason   = shardpref.getString("incomplete_reason", "n");
+            updated_at          = shardpref.getString("updated_at", "0");
 
             binding.workSave.setText("목록으로");
             binding.inputWorktitle.setText(WorkTitle);
@@ -231,7 +233,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             binding.taskKind.setText(TaskKind.equals("0")?"체크":"인증사진");
             binding.startTime.setText(start_time);
             binding.endTime.setText(end_time);
-
+            binding.reportTime.setText(updated_at);
 
             item_user_id = new ArrayList<>();
             item_user_name = new ArrayList<>();
@@ -445,7 +447,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
         if(USER_INFO_AUTH.equals("0")){
             pm.Main(mContext);
         }else if(USER_INFO_AUTH.equals("1")){
-            pm.Main2(mContext);
+            pm.TaskList(mContext);
         }
     }
 }

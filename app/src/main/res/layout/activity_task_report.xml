@@ -137,13 +137,54 @@
             android:textSize="16sp" />
 
         <!-- 업무 보고 방식 영역 -->
-        <ImageView
-            android:id="@+id/task_kind_01"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:layout_margin="20dp"
-            android:visibility="gone"
-            android:background="@drawable/empty_photo" />
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="start"
+            android:layout_margin="20dp">
+
+            <RelativeLayout
+                android:id="@+id/noti_img"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="5dp"
+                    app:cardBackgroundColor="#dcdcdc"
+                    app:cardElevation="0dp">
+                    <ImageView
+                        android:id="@+id/task_kind_01"
+                        android:layout_width="95dp"
+                        android:layout_height="95dp"
+                        android:visibility="visible"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/empty_photo" />
+
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/clear_img"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:cardElevation="0dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                app:cardCornerRadius="120dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/approval_fail" />
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/task_kind_00"
             android:layout_width="match_parent"

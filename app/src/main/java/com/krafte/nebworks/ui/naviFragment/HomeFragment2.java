@@ -128,6 +128,8 @@ public class HomeFragment2 extends Fragment {
     String mem_pay = "";
     String mem_img_path = "";
     String io_state = "";
+    String input_date = "";
+    String in_time = "";
 
     //Other 클래스
     PageMoveClass pm = new PageMoveClass();
@@ -214,6 +216,8 @@ public class HomeFragment2 extends Fragment {
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
             accept_state = shardpref.getInt("accept_state", -99);
+            input_date = shardpref.getString("input_date", "-1");
+            in_time = shardpref.getString("in_time", "");
 
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + place_id).addOnCompleteListener(task -> {
@@ -239,6 +243,8 @@ public class HomeFragment2 extends Fragment {
 
             String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
             binding.ioMytime.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
+            binding.todayWorkdate.setText(input_date);
+            binding.inTime.setText(in_time);
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -385,6 +391,10 @@ public class HomeFragment2 extends Fragment {
         binding.homeMenu04.setOnClickListener(v -> {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
+        });
+
+        binding.cardview01.setOnClickListener(v -> {
+            pm.FeedList(mContext);
         });
     }
 
@@ -698,7 +708,6 @@ public class HomeFragment2 extends Fragment {
                                                         pm.FeedList(mContext);
                                                     }
                                                 });
-
                                             }
                                             mAdapter.notifyDataSetChanged();
                                         } else if (kind.equals("2")) {

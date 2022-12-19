@@ -21,10 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.net.ParseException;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.bottomsheet.InoutPopActivity;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.databinding.ActivityEmployeeProcessBinding;
-import com.krafte.nebworks.bottomsheet.InoutPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.GpsTracker;
@@ -83,6 +83,7 @@ public class EmployeeProcess extends AppCompatActivity {
     String GET_TIME = simpleDate_time.format(mDate);
     String title = "";
     String io_state = "";
+    String input_date = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,39 +138,42 @@ public class EmployeeProcess extends AppCompatActivity {
         super.onResume();
         getPlaceData();
         MoveMyLocation();
-        dlog.i("location_cnt : " + location_cnt);
-        long now = System.currentTimeMillis();
-        Date mDate = new Date(now);
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-        latitude = gpsTracker.getLatitude();
-        longitude = gpsTracker.getLongitude();
-        getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-        dlog.i("location_cnt : " + location_cnt);
-        dlog.i("GET_TIME : " + simpleDate.format(mDate));
-        dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-
-        if (getDistance <= 40) {
-            if (kind.equals("0")) {
-                title = "출근처리";
+        handler.postDelayed(() -> {
+            dlog.i("location_cnt : " + location_cnt);
+            long now = System.currentTimeMillis();
+            Date mDate = new Date(now);
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+            dlog.i("location_cnt : " + location_cnt);
+            dlog.i("GET_TIME : " + simpleDate.format(mDate));
+            dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
+            dlog.i("거리 : " + getDistance);
+            if (getDistance <= 40) {
+                if (kind.equals("0")) {
+                    title = "출근처리";
+                } else {
+                    title = "퇴근처리";
+                }
+                binding.storeDistance.setText("매장과 " + getDistance + "m 떨어져있습니다.");
+                binding.inoutAble.setText(kind.equals("0") ? "출근처리가능" : "퇴근처리가능");
+                binding.inoutAble.setTextColor(Color.parseColor("#6395EC"));
+                dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
             } else {
-                title = "퇴근처리";
-            }
-            binding.storeDistance.setText("매장과 " + getDistance + "m 떨어져있습니다.");
-            binding.inoutAble.setText(kind.equals("0") ? "출근처리가능" : "퇴근처리가능");
-            binding.inoutAble.setTextColor(Color.parseColor("#6395EC"));
-            dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
-        } else {
-            if (kind.equals("0")) {
-                title = "출근처리 불가";
-            } else {
-                title = "퇴근근처리 불가";
-            }
-            binding.storeDistance.setText("매장과의 거리가 30미터 이상 입니다.");
-            binding.inoutAble.setText("출근처리불가");
-            binding.inoutAble.setTextColor(Color.parseColor("#DD6540"));
+                if (kind.equals("0")) {
+                    title = "출근처리 불가";
+                } else {
+                    title = "퇴근근처리 불가";
+                }
+                binding.storeDistance.setText("매장과의 거리가 30미터 이상 입니다.");
+                binding.inoutAble.setText("출근처리불가");
+                binding.inoutAble.setTextColor(Color.parseColor("#DD6540"));
 //            Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
-        }
+            }
+        }, 1000); //0.5초 후 인트로 실행
+
     }
 
     public boolean compareDate2() throws ParseException {

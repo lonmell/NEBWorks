@@ -109,6 +109,10 @@ public class FeedListActivity extends AppCompatActivity {
                 feed_spinner = "알바";
             }
         });
+
+        if(USER_INFO_AUTH.equals("1")){
+            binding.addBtn.getRoot().setVisibility(View.GONE);
+        }
     }
 
 

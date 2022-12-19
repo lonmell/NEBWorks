@@ -176,6 +176,7 @@
         <activity android:name=".ui.worksite.TaskDetailActivity" />
         <activity android:name=".ui.worksite.TaskReportActivity" />
         <activity android:name=".ui.worksite.TaskReportDetailActivity" />
+        <activity android:name=".ui.worksite.TaskListActivity" />
 
         <!-- Other -->
         <activity android:name=".ui.PinSelectLocationActivity" />

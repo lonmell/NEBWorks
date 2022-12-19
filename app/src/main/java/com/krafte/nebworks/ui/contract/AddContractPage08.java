@@ -207,6 +207,7 @@ public class AddContractPage08 extends AppCompatActivity {
                                     saveBitmapAndGetURI();
                                     if(USER_INFO_AUTH.equals("0")){
                                         //fcm으로 알림 메세지 보내기
+                                        pm.ContractFragment(mContext);
                                     }else{
                                         pm.AddContractPage09(mContext);
                                     }

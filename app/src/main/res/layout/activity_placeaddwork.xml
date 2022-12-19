@@ -290,13 +290,15 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
+            <!--  (구)근무일정 설정  -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -412,6 +414,152 @@
                         android:textColor="@color/black" />
                 </RelativeLayout>
             </LinearLayout>
+            <!--  (신)근무일정 설정  -->
+            <LinearLayout
+                android:id="@+id/area09"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/select_area01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/inputbox_inside"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/input_date_box01"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_marginBottom="15dp"
+                            app:cardBackgroundColor="#ffffff"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp">
+
+                            <TextView
+                                android:id="@+id/input_date01"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentStart="true"
+                                android:gravity="center"
+                                android:text="0000.00.00"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/input_time_box01"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            app:cardBackgroundColor="#ffffff"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp">
+
+                            <TextView
+                                android:id="@+id/input_time01"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentStart="true"
+                                android:gravity="center"
+                                android:text="HHMM"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/inputbox_inside"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/left_arrow_resize"
+                        android:gravity="center"
+                        android:rotation="180"
+                        android:textColor="#000000" />
+
+                    <LinearLayout
+                        android:id="@+id/select_area02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_toEndOf="@+id/inputbox_inside"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/input_date_box02"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_marginBottom="15dp"
+                            android:layout_toEndOf="@+id/datebox_inside"
+                            app:cardBackgroundColor="#ffffff"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp">
+
+                            <TextView
+                                android:id="@+id/input_date02"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="0000.00.00"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/input_time_box02"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_toEndOf="@+id/timebox_inside"
+                            app:cardBackgroundColor="#ffffff"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp">
+
+                            <TextView
+                                android:id="@+id/input_time02"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="HHMM"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#dbdbdb" />
+
+                <TimePicker
+                    android:id="@+id/time_setpicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:numbersBackgroundColor="#ffffff"
+                    android:numbersSelectorColor="#6395EC"
+                    android:numbersTextColor="@color/black"
+                    android:theme="@style/NumberPicker"
+                    android:timePickerMode="spinner"
+                    android:visibility="gone" />
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/cv_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:mcv_calendarMode="month"
+                    app:mcv_selectionColor="#f79256" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -419,11 +567,13 @@
                 android:layout_marginTop="30dp"
                 android:background="#F5F6F8"
                 android:orientation="horizontal" />
+
             <LinearLayout
                 android:id="@+id/member_select_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/select_member_title"
                     android:layout_width="wrap_content"

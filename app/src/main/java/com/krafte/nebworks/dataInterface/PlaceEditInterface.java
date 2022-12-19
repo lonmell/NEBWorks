@@ -17,6 +17,7 @@ public interface PlaceEditInterface
             @Field("registr_num") String registr_num,
             @Field("store_kind") String store_kind,
             @Field("address") String address,
+            @Field("address_detail") String address_detail,
             @Field("latitude") String latitude,
             @Field("longitude") String longitude,
             @Field("pay_day") String pay_day,

@@ -66,6 +66,7 @@ public class PlaceEditActivity2 extends AppCompatActivity {
     String registr_num = "";
     String store_kind = "";
     String address = "";
+    String address_detail = "";
     String latitude = "";
     String longitude = "";
     String pay_day = "";
@@ -137,6 +138,7 @@ public class PlaceEditActivity2 extends AppCompatActivity {
                                 registr_num = Response.getJSONObject(0).getString("registr_num");
                                 store_kind = Response.getJSONObject(0).getString("store_kind");
                                 address = Response.getJSONObject(0).getString("address");
+                                address_detail = Response.getJSONObject(0).getString("address_detail");
                                 latitude = Response.getJSONObject(0).getString("latitude");
                                 longitude = Response.getJSONObject(0).getString("longitude");
                                 pay_day = Response.getJSONObject(0).getString("pay_day");
@@ -256,7 +258,7 @@ public class PlaceEditActivity2 extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
-        Call<String> call = api.getData(place_id,name,registr_num,store_kind,address
+        Call<String> call = api.getData(place_id,name,registr_num,store_kind,address,address_detail
                 ,String.valueOf(latitude),String.valueOf(longitude),pay_day,test_period,vacation_select
                 ,insurance,start_time,end_time,img_path,String.valueOf(i),SSIDName);
         call.enqueue(new Callback<String>() {

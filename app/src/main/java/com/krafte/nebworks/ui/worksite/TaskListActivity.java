@@ -1,7 +1,6 @@
-package com.krafte.nebworks.ui.naviFragment;
+package com.krafte.nebworks.ui.worksite;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
@@ -11,13 +10,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,12 +59,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class WorkgotoFragment extends Fragment {
-    private final static String TAG = "WorkgotoFragment";
+/*
+* 2022-12-19
+* 직원이 할일 페이지 들어올때 - MainFragment2 -> fragment(x) / Activity(o)
+* */
+public class TaskListActivity extends AppCompatActivity {
+    private final static String TAG = "TaskLIstActivity";
     private WorkgotofragmentBinding binding;
     Context mContext;
-
-    Activity activity;
 
     //Other 클래스
     PageMoveClass pm = new PageMoveClass();
@@ -113,7 +114,7 @@ public class WorkgotoFragment extends Fragment {
     boolean chng_icon = false;
     Calendar cal;
     String format = "yyyy-MM-dd";
-    SimpleDateFormat sdf = new SimpleDateFormat(format);
+    android.icu.text.SimpleDateFormat sdf = new SimpleDateFormat(format);
     String toDay = "";
     String Year = "";
     String Month = "";
@@ -128,43 +129,20 @@ public class WorkgotoFragment extends Fragment {
     String change_member_id = "";
     String change_member_name = "";
 
-    public static WorkgotoFragment newInstance(int number) {
-        WorkgotoFragment fragment = new WorkgotoFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("number", number);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    /*Fragment 콜백함수*/
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof Activity)
-            activity = (Activity) context;
-    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            int num = getArguments().getInt("number");
-            Log.i(TAG, "num : " + num);
+//        setContentView(R.layout.activity_main);
+        binding = WorkgotofragmentBinding.inflate(getLayoutInflater()); // 1
+        setContentView(binding.getRoot()); // 2
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
         }
-    }
 
-
-    @SuppressLint("SetTextI18n")
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.workgotofragment, container, false);
-        binding = WorkgotofragmentBinding.inflate(inflater);
-        mContext = inflater.getContext();
-        //UI 데이터 세팅
-        try {
+        try{
+            mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
 
@@ -187,7 +165,9 @@ public class WorkgotoFragment extends Fragment {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1"); //0-관리자 / 1- 근로자
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
             return_page = shardpref.getString("return_page","");
+
             setBtnEvent();
+            binding.topBar.setVisibility(View.VISIBLE);
             change_place_id = place_id;
             change_member_id = "";
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
@@ -206,13 +186,12 @@ public class WorkgotoFragment extends Fragment {
                 binding.selectArea.setVisibility(View.GONE);
                 SetCalenderData();
             }
-        } catch (Exception e) {
-            dlog.i("onCreate Exception : " + e);
+            RemoveShared();
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        return binding.getRoot();
     }
-
     @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
@@ -228,7 +207,6 @@ public class WorkgotoFragment extends Fragment {
     public void onResume() {
         super.onResume();
         try{
-            RemoveShared();
             setAddBtnSetting();
         }catch (Exception e){
             e.printStackTrace();
@@ -255,6 +233,9 @@ public class WorkgotoFragment extends Fragment {
     }
 
     public void setBtnEvent() {
+        binding.backBtn2.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);
@@ -350,7 +331,7 @@ public class WorkgotoFragment extends Fragment {
         });
         binding.changePlace.setOnClickListener(v -> {
             PaySelectPlaceActivity psp = new PaySelectPlaceActivity();
-            psp.show(getChildFragmentManager(), "PaySelectPlaceActivity");
+            psp.show(getSupportFragmentManager(), "PaySelectPlaceActivity");
             psp.setOnClickListener(new PaySelectPlaceActivity.OnClickListener() {
                 @Override
                 public void onClick(View v, String getplace_id, String getplace_name) {
@@ -379,7 +360,7 @@ public class WorkgotoFragment extends Fragment {
 
         binding.changeMember.setOnClickListener(v -> {
             PaySelectMemberActivity psm = new PaySelectMemberActivity();
-            psm.show(getParentFragmentManager(), "PaySelectMemberActivity");
+            psm.show(getSupportFragmentManager(), "PaySelectMemberActivity");
             psm.setOnClickListener(new PaySelectMemberActivity.OnClickListener() {
                 @Override
                 public void onClick(View v, String user_id, String user_name) {
@@ -443,7 +424,7 @@ public class WorkgotoFragment extends Fragment {
                 Log.e(TAG, "response 1: " + response2.isSuccessful());
                 Log.e(TAG, "response 2: " + (response2.body() != null ? response2.body().length() : 0));
                 Log.e(TAG, "response 3: " + response2.body());
-                activity.runOnUiThread(() -> {
+                runOnUiThread(() -> {
                     //캘린더 내용 (업무가) 있을때
                     if (response2.isSuccessful() && response2.body() != null) {
                         try {
@@ -498,7 +479,7 @@ public class WorkgotoFragment extends Fragment {
                 Log.e(TAG, "GetCalenderList function START");
                 Log.e(TAG, "response 1: " + response.isSuccessful());
                 Log.e(TAG, "response 2: " + response.body());
-                activity.runOnUiThread(() -> {
+                runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
                         dlog.i("onResume place_id :" + place_id);
                         dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
@@ -561,7 +542,7 @@ public class WorkgotoFragment extends Fragment {
 //                                            startActivity(intent);
 //                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                                             WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
-                                            wgb.show(getChildFragmentManager(),"WorkgotoBottomSheet");
+                                            wgb.show(getSupportFragmentManager(),"WorkgotoBottomSheet");
                                         }catch (Exception e){
                                             dlog.i("onItemClick Exception :" + e);
                                         }
@@ -630,17 +611,20 @@ public class WorkgotoFragment extends Fragment {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
                         Todo_mList = new ArrayList<>();
-                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getParentFragmentManager(), 1);
+                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getSupportFragmentManager(), 1);
                         binding.taskList.setAdapter(Todo_mAdapter);
                         binding.taskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         Log.i(TAG, "SetNoticeListview Thread run! ");
                         Log.i(TAG, "GET SIZE : " + Response.length());
-
                         if (Response.length() == 0) {
                             binding.nodataArea.setVisibility(View.VISIBLE);
                             binding.line01.setVisibility(View.INVISIBLE);
                             Log.i(TAG, "SetNoticeListview Thread run! ");
                             Log.i(TAG, "GET SIZE : " + Response.length());
+//                            check_cnt.setText("0건");
+//                            all_checkbox.setClickable(false);
+//                            all_checkbox.setEnabled(false);
+//                            all_checkbox.setBackgroundResource(R.drawable.checkbox_off);
                         } else {
                             binding.line01.setVisibility(View.VISIBLE);
                             binding.nodataArea.setVisibility(View.GONE);
@@ -714,13 +698,22 @@ public class WorkgotoFragment extends Fragment {
                                 }
                             }
 
+//                            check_cnt.setText(state_null + "건");
+
                             dlog.i("state_null : " + state_null);
+//                            work_cnt.setText(String.valueOf(state_null));
                             Todo_mAdapter.setOnItemClickListener((v, position, Tcnt, Fcnt) -> {
                                 try {
                                     writer_id = Response.getJSONObject(position).getString("writer_id");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+//                                check_cnt.setText(Tcnt + "건");
+//                                if (Tcnt == mList.size() && Fcnt == 0) {
+//                                    all_checkbox.setBackgroundResource(R.drawable.checkbox_on);
+//                                } else {
+//                                    all_checkbox.setBackgroundResource(R.drawable.checkbox_off);
+//                                }
                             });
                             Todo_mAdapter.notifyDataSetChanged();
                         }
@@ -746,7 +739,7 @@ public class WorkgotoFragment extends Fragment {
         addbtn_tv.setText("할일추가");
         add_worktime_btn.setOnClickListener(v -> {
             TaskAddOption to = new TaskAddOption();
-            to.show(getChildFragmentManager(),"TaskAddOption");
+            to.show(getSupportFragmentManager(),"TaskAddOption");
         });
     }
     public void Toast_Nomal(String message){

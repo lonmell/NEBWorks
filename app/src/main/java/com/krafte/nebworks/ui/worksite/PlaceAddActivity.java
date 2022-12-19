@@ -159,7 +159,6 @@ public class PlaceAddActivity extends AppCompatActivity {
     String test_day = "";
     String restday = "";
     String accept_state = "";
-    String placeAddress_get = "";
     String registr_num = "";
     boolean registrTF = false;
     List<String> boheom = new ArrayList<>();
@@ -202,7 +201,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             String M = dc.GET_TIME.substring(2,4);
 
             String StartTime = (Integer.parseInt(H) < 12?"오전":"오후") + " " + (H.length() == 1?"0"+H:H) + ":" + (M.length()==1?"0"+M:M);
-            String EndTime = ((Integer.parseInt(H) + 1) < 12?"오전":"오후") + " " + String.valueOf(Integer.parseInt((H.length()==1?"0"+H:H)) + 1) + ":" + (M.length()==1?"0"+M:M);
+            String EndTime   = ((Integer.parseInt(H) + 1) < 12?"오전":"오후") + " " + String.valueOf(Integer.parseInt((H.length()==1?"0"+H:H)) + 1) + ":" + (M.length()==1?"0"+M:M);
             binding.inputbox08.setText(StartTime);
             binding.inputbox09.setText(EndTime);
             binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
@@ -408,6 +407,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 String HOUR = String.valueOf(hourOfDay);
                 String MIN = String.valueOf(minute);
+                binding.timeSetpicker.clearFocus();
                 if(!SELECTTIME){
                     place_starttime = HOUR + ":" + MIN;
                     binding.inputbox08.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
@@ -417,12 +417,10 @@ public class PlaceAddActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
-    String resgisternum = "";
     int textlength01 = 0;
-    int textlength02 = 0;
-    int textlength03 = 0;
     private void spinnerSetData() {
 
         /*급여 정산날짜*/
@@ -638,7 +636,6 @@ public class PlaceAddActivity extends AppCompatActivity {
         payday = binding.inputbox05.getText().toString();
         test_day = binding.inputbox06.getText().toString();
         restday = binding.inputbox07.getText().toString();
-        placeAddress_get = placeAddress + " " + placeDtailAddress;
         registr_num = binding.inputbox02.getText().toString().replace("-","");
         accept_state = binding.inputbox03.getText().toString();
 
@@ -698,7 +695,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
-        Call<String> call = api.getData(set_place_id, placeName, registr_num, accept_state, placeAddress_get
+        Call<String> call = api.getData(set_place_id, placeName, registr_num, accept_state, placeAddress, placeDtailAddress
                 , String.valueOf(latitude),String.valueOf(longitube), payday, test_day, restday
                 , (String.valueOf(boheom).replace("[", "").replace("]", "")), place_starttime, place_endtime, ProfileUrl
                 , String.valueOf(i), "");
@@ -749,7 +746,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceAddInterface api = retrofit.create(PlaceAddInterface.class);
-        Call<String> call = api.getData(placeName,USER_INFO_ID,registr_num,accept_state,placeAddress_get
+        Call<String> call = api.getData(placeName,USER_INFO_ID,registr_num,accept_state,placeAddress,placeDtailAddress
                 ,String.valueOf(latitude),String.valueOf(longitube),payday,test_day,restday
                 ,(String.valueOf(boheom).replace("[","").replace("]","")),place_starttime,place_endtime,ProfileUrl,String.valueOf(i),USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
@@ -802,57 +799,56 @@ public class PlaceAddActivity extends AppCompatActivity {
         super.onResume();
         page_state = shardpref.getString("page_state", "0");
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        ImgfileMaker = ImageNameMaker();
 //
-//        ImgfileMaker = ImageNameMaker();
+//        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
+//        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
+//        dlog.i("Min : " + shardpref.getInt("Min", 0));
+//        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
+//        int hourOfDay = shardpref.getInt("Hour", 0);
+//        int minute = shardpref.getInt("Min", 0);
 //
-        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
-        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
-        dlog.i("Min : " + shardpref.getInt("Min", 0));
-        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-        int hourOfDay = shardpref.getInt("Hour", 0);
-        int minute = shardpref.getInt("Min", 0);
-
-        dlog.i("timeSelect_flag : " + timeSelect_flag);
-        if (timeSelect_flag == 4) {
-            StartTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-            shardpref.remove("timeSelect_flag");
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
-            if (hourOfDay != 0) {
-                String ampm = "";
-                if (Integer.parseInt(StartTime01) < 12) {
-                    ampm = " AM";
-                    SelectStartTime = 1;
-                } else {
-                    ampm = " PM";
-                    SelectStartTime = 2;
-                }
-                binding.inputbox08.setText(StartTime01 + ":" + StartTime02 + ampm);
-                place_starttime = StartTime01 + ":" + StartTime02;
-                imm.hideSoftInputFromWindow(binding.inputbox08.getWindowToken(), 0);
-            }
-        } else if (timeSelect_flag == 5) {
-            EndTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-            shardpref.remove("timeSelect_flag");
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
-            if (hourOfDay != 0) {
-                String ampm = "";
-                if (Integer.parseInt(EndTime01) < 12) {
-                    ampm = " AM";
-                    SelectEndTime = 1;
-                } else {
-                    ampm = " PM";
-                    SelectEndTime = 2;
-                }
-                binding.inputbox09.setText(EndTime01 + ":" + EndTime02 + ampm);
-                place_endtime = EndTime01 + ":" + EndTime02;
-                imm.hideSoftInputFromWindow(binding.inputbox09.getWindowToken(), 0);
-            }
-
-        }
+//        dlog.i("timeSelect_flag : " + timeSelect_flag);
+//        if (timeSelect_flag == 4) {
+//            StartTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+//            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+//            shardpref.remove("timeSelect_flag");
+//            shardpref.remove("Hour");
+//            shardpref.remove("Min");
+//            if (hourOfDay != 0) {
+//                String ampm = "";
+//                if (Integer.parseInt(StartTime01) < 12) {
+//                    ampm = " AM";
+//                    SelectStartTime = 1;
+//                } else {
+//                    ampm = " PM";
+//                    SelectStartTime = 2;
+//                }
+//                binding.inputbox08.setText(StartTime01 + ":" + StartTime02 + ampm);
+//                place_starttime = StartTime01 + ":" + StartTime02;
+//                imm.hideSoftInputFromWindow(binding.inputbox08.getWindowToken(), 0);
+//            }
+//        } else if (timeSelect_flag == 5) {
+//            EndTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+//            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+//            shardpref.remove("timeSelect_flag");
+//            shardpref.remove("Hour");
+//            shardpref.remove("Min");
+//            if (hourOfDay != 0) {
+//                String ampm = "";
+//                if (Integer.parseInt(EndTime01) < 12) {
+//                    ampm = " AM";
+//                    SelectEndTime = 1;
+//                } else {
+//                    ampm = " PM";
+//                    SelectEndTime = 2;
+//                }
+//                binding.inputbox09.setText(EndTime01 + ":" + EndTime02 + ampm);
+//                place_endtime = EndTime01 + ":" + EndTime02;
+//                imm.hideSoftInputFromWindow(binding.inputbox09.getWindowToken(), 0);
+//            }
+//
+//        }
 
         dlog.i("onResume Area");
         String getlatitude = shardpref.getString("pin_latitude", "0.0");
@@ -1081,6 +1077,8 @@ public class PlaceAddActivity extends AppCompatActivity {
         }
         return false;
     }
+
+
 
     public static class ApiClient {
         private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";

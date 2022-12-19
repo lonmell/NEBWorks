@@ -9,7 +9,7 @@ import retrofit2.http.POST;
 public interface TaskSelectWInterface
 {
     String URL = "http://krafte.net/NEBWorks/task/";
-    //http://krafte.net/NEBWorks/task/get.php?place_id=70&user_id=47&selected_date=2022-11-23
+    //http://krafte.net/NEBWorks/task/get.php?place_id=116&user_id=69&selected_date=2022-12-19
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(

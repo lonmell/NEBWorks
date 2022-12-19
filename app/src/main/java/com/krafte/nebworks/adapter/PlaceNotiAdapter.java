@@ -99,6 +99,11 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
             holder.date.setText(year + "년 " + month + "월 " + day + "일");
             holder.writer_jikgup.setText(item.getJikgup());
 
+            if(!item.getWriter_id().equals(USER_INFO_ID)){
+                holder.list_edit_area.setVisibility(View.INVISIBLE);
+                holder.list_edit_area.setClickable(false);
+                holder.list_edit_area.setEnabled(false);
+            }
             holder.list_edit_area.setOnClickListener(v -> {
                 dlog.i("list_edit_area Click!!");
                 shardpref.putString("edit_feed_id",item.getId());

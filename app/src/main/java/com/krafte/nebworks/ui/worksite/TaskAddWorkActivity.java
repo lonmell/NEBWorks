@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,13 +38,19 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -198,6 +206,10 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     String change_place_id = "";
     String change_place_name = "";
     String change_place_owner_id = "";
+    boolean SELECTDATE = false; //false - 01 / true - 02
+    boolean SELECTTIME = false; //false - 01 / true - 02
+    String starttime = "";
+    String endtime = "";
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
@@ -213,9 +225,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 shardpref.putString("change_place_id", place_id);
                 shardpref.putString("change_place_name", place_name);
                 shardpref.putString("change_place_owner_id", place_owner_id);
-                dlog.i("change_place_id : " + place_id);
-                dlog.i("change_place_name : " + place_name);
-                dlog.i("change_place_owner_id : " + place_owner_id);
                 binding.storeName.setText(place_name);
             });
         });
@@ -305,6 +314,102 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 SaveAddWork();
             }
         });
+
+        //근무날짜 입력 영역
+        binding.inputDateBox01.setOnClickListener(v -> {
+            SELECTDATE = false;
+            binding.inputDateBox01.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
+            binding.inputDateBox02.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputTimeBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputTimeBox02.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.timeSetpicker.setVisibility(View.GONE);
+            binding.cvCalendar.setVisibility(View.VISIBLE);
+        });
+        binding.inputDateBox02.setOnClickListener(v -> {
+            SELECTDATE = true;
+            binding.inputDateBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputDateBox02.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
+            binding.inputTimeBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputTimeBox02.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.timeSetpicker.setVisibility(View.GONE);
+            binding.cvCalendar.setVisibility(View.VISIBLE);
+        });
+
+        binding.inputTimeBox01.setOnClickListener(v -> {
+            SELECTTIME = false;
+            binding.inputTimeBox01.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
+            binding.inputTimeBox02.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputDateBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputDateBox02.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.timeSetpicker.setVisibility(View.VISIBLE);
+            binding.cvCalendar.setVisibility(View.GONE);
+        });
+        binding.inputTimeBox02.setOnClickListener(v -> {
+            SELECTTIME = true;
+            binding.inputTimeBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputTimeBox02.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
+            binding.inputDateBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputDateBox02.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.timeSetpicker.setVisibility(View.VISIBLE);
+            binding.cvCalendar.setVisibility(View.GONE);
+        });
+        //시간입력
+        cal = Calendar.getInstance();
+        SimpleDateFormat getThisYear = new SimpleDateFormat("yyyy년");
+        SimpleDateFormat default_date = new SimpleDateFormat("MM월 dd일 (EE)");
+        SimpleDateFormat default_time = new SimpleDateFormat("a HH:mm", Locale.KOREA);
+        String getYear = getThisYear.format(cal.getTime());
+        binding.inputTime01.setText(default_time.format(cal.getTime()));
+        binding.inputTime02.setText(default_time.format(cal.getTime()));
+        binding.inputDate01.setText(default_date.format(cal.getTime()));
+        binding.inputDate02.setText(default_date.format(cal.getTime()));
+
+        binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                String HOUR = String.valueOf(hourOfDay);
+                String MIN = String.valueOf(minute);
+                binding.timeSetpicker.clearFocus();
+                if(!SELECTTIME){
+                    starttime = HOUR + ":" + MIN;
+                    binding.inputTime01.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
+                }else{
+                    endtime = HOUR + ":" + MIN;
+                    binding.inputTime02.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
+                }
+            }
+        });
+        //날짜입력
+        binding.cvCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                cal = Calendar.getInstance();
+                SimpleDateFormat calendar_get_format_year = new SimpleDateFormat("yyyy년");
+                SimpleDateFormat calendar_get_format_month = new SimpleDateFormat("MM월 dd일");
+                SimpleDateFormat calendar_get_yoil = new SimpleDateFormat("EE");
+                SimpleDateFormat save_date = new SimpleDateFormat("yyyy-MM-dd");
+                String Year = calendar_get_format_year.format(date.getDate());
+                String month = calendar_get_format_month.format(date.getDate());
+                String yoil = calendar_get_yoil.format(date.getDate());
+                if(!SELECTDATE){
+                    if(Year.equals(getYear)){
+                        binding.inputDate01.setText(month + " " + "(" + yoil + ")");
+                    }else{
+                        binding.inputDate01.setText(Year + "\n" +month + " " + "(" + yoil + ")");
+                    }
+                    getStartDate = save_date.format(date.getDate());
+                }else {
+                    if(Year.equals(getYear)){
+                        binding.inputDate02.setText(month + " " + "(" + yoil + ")");
+                    }else{
+                        binding.inputDate02.setText(Year + "\n" +month + " " + "(" + yoil + ")");
+                    }
+                    getEndDate = save_date.format(date.getDate());
+                }
+                dlog.i("binding.cvCalendar CalendarDay : " + Year + "\n" +month  + "," + yoil);
+            }
+        });
+
     }
 
     String picker_year = "";
@@ -325,11 +430,23 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     List<String> item_user_jikgup;
     InputMethodManager imm;
 
+    Calendar cal;
+    String format = "yyyy-MM";
+    SimpleDateFormat sdf = new SimpleDateFormat(format);
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
         super.onResume();
         try {
+            //기존에 저장된 반복데이터 삭제
+            shardpref.remove("SET_TASK_TIME_VALUE");
+            shardpref.remove("yoillist");
+            shardpref.remove("RepeatTF");
+            shardpref.remove("RepeatKind");
+            shardpref.remove("overdate");
+
+            //데이터 입력세팅
             imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             String thumnail_url = shardpref.getString("thumnail_url", "");
             String name = shardpref.getString("name", "");
@@ -347,90 +464,104 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             picker_month = shardpref.getString("picker_month", "00");
             picker_day = shardpref.getString("picker_day", "00");
             input_pop_time = shardpref.getString("input_pop_time", "");
-            dlog.i("yoillist : " + yoillist);
 
             if (!String.valueOf(yoillist).equals("[]")) {
                 RepeatCheck = true;
-                binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
-                binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
-
-                binding.startCalendar.setBackgroundResource(R.drawable.ic_time);
-                binding.endCalendar.setBackgroundResource(R.drawable.ic_time);
-                binding.eventStarttime.setHint("시간을 선택해주세요");
-                binding.eventEndttime.setHint("시간을 선택해주세요");
-
-                if(binding.eventStarttime.getText().toString().length() >= 10){
-                    binding.eventStarttime.setText("");
-                }
-                if(binding.eventEndttime.getText().toString().length() >= 10){
-                    binding.eventEndttime.setText("");
-                }
-
-                //반복요일 세팅
-                int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-                int hourOfDay = shardpref.getInt("Hour", 0);
-                int minute = shardpref.getInt("Min", 0);
-
-                dlog.i("------------------Data Check onResume------------------");
-                dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
-                dlog.i("Hour : " + shardpref.getInt("Hour", 0));
-                dlog.i("Min : " + shardpref.getInt("Min", 0));
-                dlog.i("timeSelect_flag : " + timeSelect_flag);
-                dlog.i("------------------Data Check onResume------------------");
-
-                if (timeSelect_flag == 2) {
-                    Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-                    Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-                    shardpref.remove("timeSelect_flag");
-                    shardpref.remove("Hour");
-                    shardpref.remove("Min");
-                    dlog.i("hourOfDay : " + hourOfDay);
-                    dlog.i("Time01 : " + Time01);
-                    dlog.i("Time02 : " + Time02);
-                    Time01 = Time01.equals("00") ? "12" : Time01;
-
-                    binding.eventStarttime.setText(Time01 + ":" + Time02);
-                    imm.hideSoftInputFromWindow(binding.inputWorktitle.getWindowToken(), 0);
-                    imm.hideSoftInputFromWindow(binding.inputWorkcontents.getWindowToken(), 0);
-                } else if (timeSelect_flag == 3) {
-                    Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-                    Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-                    shardpref.remove("timeSelect_flag");
-                    shardpref.remove("Hour");
-                    shardpref.remove("Min");
-                    dlog.i("hourOfDay : " + hourOfDay);
-                    dlog.i("Time01 : " + Time01);
-                    dlog.i("Time02 : " + Time02);
-                    Time01 = Time01.equals("00") ? "12" : Time01;
-                    binding.eventEndttime.setText(Time01 + ":" + Time02);
-                    imm.hideSoftInputFromWindow(binding.inputWorktitle.getWindowToken(), 0);
-                    imm.hideSoftInputFromWindow(binding.inputWorkcontents.getWindowToken(), 0);
-                }
+                binding.inputDateBox01.setVisibility(View.GONE);
+                binding.inputDateBox02.setVisibility(View.GONE);
+//                binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
+//                binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#6395EC"));
+//                binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
+//
+//                binding.startCalendar.setBackgroundResource(R.drawable.ic_time);
+//                binding.endCalendar.setBackgroundResource(R.drawable.ic_time);
+//                binding.eventStarttime.setHint("시간을 선택해주세요");
+//                binding.eventEndttime.setHint("시간을 선택해주세요");
+//
+//                if(binding.eventStarttime.getText().toString().length() >= 10){
+//                    binding.eventStarttime.setText("");
+//                }
+//                if(binding.eventEndttime.getText().toString().length() >= 10){
+//                    binding.eventEndttime.setText("");
+//                }
+//
+//                //반복요일 세팅
+//                int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
+//                int hourOfDay = shardpref.getInt("Hour", 0);
+//                int minute = shardpref.getInt("Min", 0);
+//
+//                dlog.i("------------------Data Check onResume------------------");
+//                dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
+//                dlog.i("Hour : " + shardpref.getInt("Hour", 0));
+//                dlog.i("Min : " + shardpref.getInt("Min", 0));
+//                dlog.i("timeSelect_flag : " + timeSelect_flag);
+//                dlog.i("------------------Data Check onResume------------------");
+//
+//                if (timeSelect_flag == 2) {
+//                    Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+//                    Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("Hour");
+//                    shardpref.remove("Min");
+//                    dlog.i("hourOfDay : " + hourOfDay);
+//                    dlog.i("Time01 : " + Time01);
+//                    dlog.i("Time02 : " + Time02);
+//                    Time01 = Time01.equals("00") ? "12" : Time01;
+//
+//                    binding.eventStarttime.setText(Time01 + ":" + Time02);
+//                    imm.hideSoftInputFromWindow(binding.inputWorktitle.getWindowToken(), 0);
+//                    imm.hideSoftInputFromWindow(binding.inputWorkcontents.getWindowToken(), 0);
+//                } else if (timeSelect_flag == 3) {
+//                    Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
+//                    Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("Hour");
+//                    shardpref.remove("Min");
+//                    dlog.i("hourOfDay : " + hourOfDay);
+//                    dlog.i("Time01 : " + Time01);
+//                    dlog.i("Time02 : " + Time02);
+//                    Time01 = Time01.equals("00") ? "12" : Time01;
+//                    binding.eventEndttime.setText(Time01 + ":" + Time02);
+//                    imm.hideSoftInputFromWindow(binding.inputWorktitle.getWindowToken(), 0);
+//                    imm.hideSoftInputFromWindow(binding.inputWorkcontents.getWindowToken(), 0);
+//                }
 
             } else {
                 dlog.i("input_pop_time : " + input_pop_time);
                 dlog.i("SET_TASK_TIME_VALUE : " + SET_TASK_TIME_VALUE);
                 RepeatCheck = false;
-                binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
-                binding.startCalendar.setBackgroundResource(R.drawable.calendar_resize);
-                binding.endCalendar.setBackgroundResource(R.drawable.calendar_resize);
-                binding.eventStarttime.setHint("날짜를 선택해주세요");
-                binding.eventEndttime.setHint("날짜를 선택해주세요");
-                if(binding.eventStarttime.getText().toString().length() < 10){
-                    binding.eventStarttime.setText("");
-                }
-                if(binding.eventEndttime.getText().toString().length() < 10){
-                    binding.eventEndttime.setText("");
-                }
+                binding.inputDateBox01.setVisibility(View.VISIBLE);
+                binding.inputDateBox02.setVisibility(View.VISIBLE);
 
-                if (SET_TASK_TIME_VALUE.equals("0")) {
-                    binding.eventStarttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
-                } else if (SET_TASK_TIME_VALUE.equals("1")) {
-                    binding.eventEndttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
-                }
-
+//                binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
+//                binding.startCalendar.setBackgroundResource(R.drawable.calendar_resize);
+//                binding.endCalendar.setBackgroundResource(R.drawable.calendar_resize);
+//                binding.eventStarttime.setHint("날짜를 선택해주세요");
+//                binding.eventEndttime.setHint("날짜를 선택해주세요");
+//                if(binding.eventStarttime.getText().toString().length() < 10){
+//                    binding.eventStarttime.setText("");
+//                }
+//                if(binding.eventEndttime.getText().toString().length() < 10){
+//                    binding.eventEndttime.setText("");
+//                }
+//
+//                if (SET_TASK_TIME_VALUE.equals("0")) {
+//                    binding.eventStarttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
+//                } else if (SET_TASK_TIME_VALUE.equals("1")) {
+//                    binding.eventEndttime.setText(picker_year + "-" + picker_month + "-" + picker_day + " " + input_pop_time);
+//                }
             }
+
+            //캘린더 세팅
+            binding.cvCalendar.setTitleFormatter(new TitleFormatter() {
+                @Override
+                public CharSequence format(CalendarDay day) {
+                    cal = Calendar.getInstance();
+                    SimpleDateFormat calendar_view_format = new SimpleDateFormat("yyyy년 MM월");
+                    String monthAndYear = calendar_view_format.format(day.getDate());
+                    return monthAndYear;
+                }
+            });
 
             //추가된 직원
             item_user_id = new ArrayList<>();
@@ -446,10 +577,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             item_user_name.removeAll(item_user_name);
             item_user_img.removeAll(item_user_img);
             item_user_jikgup.removeAll(item_user_jikgup);
-//            item_user_id.clear();
-//            item_user_name.clear();
-//            item_user_img.clear();
-//            item_user_jikgup.clear();
 
             if (!getuser_id.isEmpty()) {
                 item_user_id.addAll(Arrays.asList(getuser_id.split(",")));
@@ -586,7 +713,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         binding.inputWorkcontents.setText(WorkContents);
 
         //반복요일 세팅
-        String yoillist_String = "";
         List<String> getYoil = new ArrayList<>();
         if (Mon.equals("1")) {
             getYoil.add("월");
@@ -740,8 +866,18 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     }
 
     //업무 저장(추가)
+    String getStartDate = "";
+    String getEndDate = "";
     private void SaveAddWork() {
         dlog.i("------------------SaveAddWork------------------");
+        if(RepeatCheck){
+            start_time = starttime;
+            end_time = endtime;
+        }else{
+            start_time = getStartDate + " " + starttime;
+            end_time = getEndDate + " " + endtime;
+        }
+
         dlog.i("make_kind : " + make_kind);
         dlog.i("task_no : " + task_no);
         dlog.i("place_id : " + place_id);

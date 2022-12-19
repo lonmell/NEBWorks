@@ -138,6 +138,7 @@
                             tools:ignore="HardcodedText" />
 
                         <LinearLayout
+                            android:id="@+id/detail_edit_area"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"

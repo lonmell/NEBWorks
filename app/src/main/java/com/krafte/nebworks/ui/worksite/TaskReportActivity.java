@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -71,9 +72,9 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 /*
-* 2022-11-24 방창배 작성
-* USER_INFO_AUTH = 1 근로자가 업무보고작성하러 들어오는 페이지
-* */
+ * 2022-11-24 방창배 작성
+ * USER_INFO_AUTH = 1 근로자가 업무보고작성하러 들어오는 페이지
+ * */
 public class TaskReportActivity extends AppCompatActivity {
     private static final String TAG = "TaskReportActivity";
     private ActivityTaskReportBinding binding;
@@ -224,7 +225,7 @@ public class TaskReportActivity extends AppCompatActivity {
         Thu = shardpref.getString("thu", "0");
         Fri = shardpref.getString("fri", "0");
         Sat = shardpref.getString("sat", "0");
-        approval_state = shardpref.getString("approval_state","0");// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
+        approval_state = shardpref.getString("approval_state", "0");// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
 
 
         dlog.i("getTaskContents users : " + user_id);
@@ -242,20 +243,38 @@ public class TaskReportActivity extends AppCompatActivity {
         dlog.i("getTaskContents end_time : " + end_time);
         dlog.i("getTaskContents approval_state : " + approval_state);// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
 
-        if(end_time.length() >= 10){
+        if (end_time.length() >= 10) {
             //반복x ( 0000.00.00 00:00 )
-            binding.writeTime.setText(end_time.substring(11,16));
-        }else{
+            binding.writeTime.setText(end_time.substring(11, 16));
+        } else {
             //반복o ( 00:00 )
             binding.writeTime.setText(end_time);
         }
-        if(TaskKind.equals("0")){
+        if (TaskKind.equals("0")) {
             binding.taskKind00.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             binding.taskKind01.setVisibility(View.VISIBLE);
         }
         ImgfileMaker = ImageNameMaker();
+        dlog.i("saveBitmap : " + saveBitmap);
+        if (saveBitmap != null) {
+            binding.clearImg.setVisibility(View.VISIBLE);
+        } else {
+            binding.clearImg.setVisibility(View.GONE);
+        }
+        binding.clearImg.setOnClickListener(v -> {
+            try {
+                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
+                saveBitmap.eraseColor(Color.TRANSPARENT);
+                binding.taskKind01.setImageBitmap(saveBitmap);
+                ProfileUrl = "";
+                binding.clearImg.setVisibility(View.GONE);
+            } catch (Exception e) {
+                dlog.i("clearImg Exception : " + e);
+            }
+        });
         dlog.i("-----getTaskContents END-----");
+
     }
 
     @Override
@@ -376,6 +395,8 @@ public class TaskReportActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        dlog.i("resultCode : " + resultCode);
+        dlog.i("RESULT_OK : " + RESULT_OK);
         if (requestCode == GALLEY_CODE) {
             if (resultCode == RESULT_OK) {
 
@@ -394,19 +415,23 @@ public class TaskReportActivity extends AppCompatActivity {
                             saveBitmap = resource;
                         }
                     });
-
                     final String IMG_FILE_EXTENSION = ".JPEG";
                     String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
                     ProfileUrl = "http://krafte.net/NEBWorks/image/task_img/" + file_name;
+//                    if (saveBitmap != null) {
+//                        binding.clearImg.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.clearImg.setVisibility(View.GONE);
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                binding.clearImg.setVisibility(View.VISIBLE);
             } else if (resultCode == RESULT_CANCELED) {
-                Toast_Nomal("사진 선택 취소");
+                binding.clearImg.setVisibility(View.GONE);
+                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
-
     }
 
     private void setUpdateWorktodo(String task_id) {
@@ -431,7 +456,7 @@ public class TaskReportActivity extends AppCompatActivity {
 //                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
                             if (response.body().replace("\"", "").equals("success")) {
                                 Toast_Nomal("결재 요청이 완료되었습니다.");
-                                shardpref.putInt("SELECT_POSITION",1);
+                                shardpref.putInt("SELECT_POSITION", 1);
                                 shardpref.putInt("SELECT_POSITION_sub", 0);
                                 pm.PlaceWorkBack(mContext);
                             }
@@ -447,6 +472,7 @@ public class TaskReportActivity extends AppCompatActivity {
             }
         });
     }
+
     //절대경로를 구한다.
     private String getRealPathFromUri(Uri uri) {
         String[] proj = {MediaStore.Images.Media.DATA};
@@ -655,10 +681,10 @@ public class TaskReportActivity extends AppCompatActivity {
         return ImgfileMaker;
     }
 
-    public void Toast_Nomal(String message){
+    public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
-        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
         toast_textview.setText(String.valueOf(message));
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)

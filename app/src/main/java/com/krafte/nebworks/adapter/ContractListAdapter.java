@@ -88,20 +88,27 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                 holder.address.setText("근로계약서 작성");
                 holder.address.setTextColor(Color.parseColor("#DD6540"));
             }else if(item.getContract_yn().equals("1")){
-                if(!item.getOwner_sign_id().equals("null") && item.getWorker_sign_id().equals("null")){
+                if(!(item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && (item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())) {
                     holder.profile_img.setCardBackgroundColor(Color.parseColor("#6395EC"));
                     holder.profile_tv.setText("서명\n대기중");
                     holder.address.setText("근로계약서 작성");
                     holder.address.setTextColor(Color.parseColor("#6395EC"));
-                }else if(!item.getOwner_sign_id().equals("null") && !item.getWorker_sign_id().equals("null")){
+                } else if(!(item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && !(item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())){
                     holder.profile_img.setCardBackgroundColor(Color.parseColor("#DBDBDB"));
                     holder.profile_tv.setText("완료");
                     holder.address.setText("근로계약서 작성");
                     holder.address.setTextColor(Color.parseColor("#DBDBDB"));
+                }else if((item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && (item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())){
+                    holder.profile_img.setCardBackgroundColor(Color.parseColor("#6395EC"));
+                    holder.profile_tv.setText("작성중");
+                    holder.address.setText("근로계약서 작성중");
+                    holder.address.setTextColor(Color.parseColor("#6395EC"));
                 }
             }
             holder.item_total.setOnClickListener(v -> {
                 shardpref.putString("worker_id",item.getUser_id());
+                shardpref.putString("contract_place_id",item.getPlace_id());
+                shardpref.putString("contract_user_id",item.getUser_id());
                 if(item.getContract_yn().equals("0")){
                    pm.AddContractPage01(mContext);
                 }else if(item.getContract_yn().equals("1")){

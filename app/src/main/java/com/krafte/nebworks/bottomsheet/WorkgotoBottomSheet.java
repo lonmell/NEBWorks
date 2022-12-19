@@ -177,7 +177,8 @@ public class WorkgotoBottomSheet extends BottomSheetDialogFragment {
                                             jsonObject.getString("incomplete_reason"),
                                             jsonObject.getString("approval_state"),
                                             jsonObject.getString("task_overdate"),
-                                            jsonObject.getString("reject_reason")
+                                            jsonObject.getString("reject_reason"),
+                                            jsonObject.getString("updated_at")
                                     ));
                                 }
                             }

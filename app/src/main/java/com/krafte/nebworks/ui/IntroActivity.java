@@ -352,7 +352,7 @@ public class IntroActivity extends AppCompatActivity {
         shardpref.putString("USER_LOGIN_METHOD", "Google");
         shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
 
-        UserCheck(GET_KAKAO_ACCOUNT_EMAIL);
+        UserCheck(user.getEmail());
 
 //        INPUT_JOIN_DATA("Google", user.getDisplayName(), user.getPhoneNumber(), ""
 //                , "", "", "", "", ""

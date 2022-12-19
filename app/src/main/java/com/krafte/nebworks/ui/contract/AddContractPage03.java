@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.ContractBasicInterface;
+import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd03Binding;
 import com.krafte.nebworks.ui.WebViewActivity;
@@ -53,6 +56,8 @@ public class AddContractPage03 extends AppCompatActivity {
     String place_id = "";
     String worker_id = "";
     String USER_INFO_ID = "";
+    String contract_place_id = "";
+    String contract_user_id = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -80,13 +85,16 @@ public class AddContractPage03 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-        shardpref       = new PreferenceHelper(mContext);
-        place_id        = shardpref.getString("place_id","0");
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
-        worker_id       = shardpref.getString("worker_id","0");
+        shardpref           = new PreferenceHelper(mContext);
+        place_id            = shardpref.getString("place_id","0");
+        USER_INFO_ID        = shardpref.getString("USER_INFO_ID","0");
+        worker_id           = shardpref.getString("worker_id","0");
+        contract_place_id   = shardpref.getString("contract_place_id","0");
+        contract_user_id    = shardpref.getString("contract_user_id","0");
 
         setBtnEvent();
-
+        dlog.i("contract_place_id : " + contract_place_id);
+        dlog.i("contract_user_id : " + contract_user_id);
         //basic setting
         ChangeSelect0102(1);
     }
@@ -94,6 +102,8 @@ public class AddContractPage03 extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        UserCheck();
+        GetPlaceList();
     }
 
     int select0102 = 1;
@@ -239,6 +249,102 @@ public class AddContractPage03 extends AppCompatActivity {
             }
         }
 //        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void GetPlaceList() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceListInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceListInterface api = retrofit.create(PlaceListInterface.class);
+        Call<String> call = api.getData(contract_place_id, USER_INFO_ID, "0");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            try {
+                                //Array데이터를 받아올 때
+                                JSONArray Response = new JSONArray(jsonResponse);
+                                if(Response.length() != 0){
+                                    String owner_name       = Response.getJSONObject(0).getString("owner_name");
+                                    String registr_num      = Response.getJSONObject(0).getString("registr_num");
+                                    String address          = Response.getJSONObject(0).getString("address");
+                                    String address_detail   = Response.getJSONObject(0).getString("address_detail");
+
+                                    binding.input01.setText(owner_name);
+                                    binding.input02.setText(registr_num);
+                                    binding.input04.setText(address);
+                                    binding.input05.setText(address_detail);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void UserCheck() {
+        dlog.i("---------UserCheck---------");
+        dlog.i("---------UserCheck---------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(AllMemberInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+        Call<String> call = api.getData(contract_place_id,USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.e("UserCheck function START");
+                dlog.e("response 1: " + response.isSuccessful());
+                runOnUiThread(() -> {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(jsonResponse);
+                            try {
+                                if(Response.length() != 0){
+                                    String phone = Response.getJSONObject(0).getString("phone");
+                                    String account = Response.getJSONObject(0).getString("account");
+                                    binding.input06.setText(phone);
+                                    binding.input07.setText(account);
+                                }
+                            } catch (Exception e) {
+                                dlog.i("UserCheck Exception : " + e);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            @SuppressLint("LongLogTag")
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러2 = " + t.getMessage());
+            }
+        });
     }
 
     private boolean DataCheck(){

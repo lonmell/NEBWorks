@@ -1117,11 +1117,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         if(editstate.equals("insert")){
             pm.Login(mContext);
         }else{
-            if(USER_INFO_AUTH.equals("0")){
-                pm.Main(mContext);
-            }else{
-                pm.Main2(mContext);
-            }
+            super.onBackPressed();
         }
     }
 }

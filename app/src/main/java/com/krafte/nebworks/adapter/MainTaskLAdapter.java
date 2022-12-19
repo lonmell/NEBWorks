@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
@@ -87,6 +88,9 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
             }else {
                 holder.itemline.setVisibility(View.VISIBLE);
             }
+            holder.report_btn.setOnClickListener(v -> {
+                pm.TaskList(mContext);
+            });
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }
@@ -102,6 +106,7 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
 
         TextView title,date;
         LinearLayout itemline;
+        CardView report_btn;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -109,6 +114,7 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
             title         = itemView.findViewById(R.id.title);
             date          = itemView.findViewById(R.id.date);
             itemline      = itemView.findViewById(R.id.itemline);
+            report_btn    = itemView.findViewById(R.id.report_btn);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

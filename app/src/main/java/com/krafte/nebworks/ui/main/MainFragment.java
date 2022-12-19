@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -332,6 +333,7 @@ public class MainFragment extends AppCompatActivity {
     //navbar.xml
     DrawerLayout drawerLayout;
     View drawerView;
+    LinearLayout area02, area04;
     ImageView close_btn, user_profile, my_setting;
     TextView user_name, jikgup, store_name;
 
@@ -344,8 +346,10 @@ public class MainFragment extends AppCompatActivity {
         user_name = findViewById(R.id.user_name);
         jikgup = findViewById(R.id.jikgup);
         store_name = findViewById(R.id.store_name);
+        area02 = findViewById(R.id.area02);
+        area04 = findViewById(R.id.area04);
 
-
+        area02.setVisibility(View.VISIBLE);
         dlog.i("name : " + name);
         dlog.i("img_path : " + img_path);
         dlog.i("getjikgup : " + getjikgup);

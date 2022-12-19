@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00ff0000"
+    android:background="@color/white"
     android:orientation="vertical"
     android:theme="@style/Theme.Kogas"
     tools:ignore="HardcodedText,UsingOnClickInXml">
@@ -14,6 +14,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="할일"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                tools:ignore="HardcodedText" />
+
+            <RelativeLayout
+                android:id="@+id/back_btn2"
+                android:layout_width="45dp"
+                android:layout_height="45dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:background="@drawable/find_right_arrow"
+                    android:padding="20dp"
+                    android:rotation="180" />
+            </RelativeLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/select_area"
@@ -235,5 +269,7 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <include layout="@layout/navbar" />
+    <include
+        android:id="@+id/navbar01"
+        layout="@layout/navbar" />
 </androidx.drawerlayout.widget.DrawerLayout>
