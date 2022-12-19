@@ -173,6 +173,9 @@ dependencies {
     implementation "com.kakao.sdk:v2-navi:2.8.4" // 카카오내비
 
 
+    // # groovy
+    implementation 'com.navercorp.nid:oauth:5.3.0' // jdk 11
+    implementation 'com.navercorp.nid:oauth-jdk8:5.3.0' // jdk 8
 
     //구글 로그인
     implementation 'com.google.android.gms:play-services-auth:20.3.0'

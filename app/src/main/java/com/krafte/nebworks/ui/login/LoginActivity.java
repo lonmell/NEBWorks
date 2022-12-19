@@ -207,6 +207,15 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void NaverSetting(){
+        try{
+//            NaverIdLoginSDK.initialize(mContext, {OAUTH_CLIENT_ID}, {OAUTH_CLIENT_SECRET}, {OAUTH_CLIENT_NAME});
+//            NaverIdLoginSDK.INSTANCE.initialize(mContext, {OAUTH_CLIENT_ID}, {OAUTH_CLIENT_SECRET}, {OAUTH_CLIENT_NAME});
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
     private void GoogleSetting() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
