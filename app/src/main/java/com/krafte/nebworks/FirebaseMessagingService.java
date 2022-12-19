@@ -17,8 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
+import com.krafte.nebworks.ui.IntroActivity;
 import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
 import com.krafte.nebworks.ui.main.MainFragment;
+import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.util.PreferenceHelper;
 
@@ -51,6 +53,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     String Channel = "";
     String message0 = "";
     String message1 = "";
+    String USER_INFO_AUTH = "";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -58,11 +61,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         mContext = getApplicationContext();
         shardpref = new PreferenceHelper(mContext);
+        intent = new Intent();
+        notificationIntent = new Intent();
         channelId1 = shardpref.getBoolean("channelId1", false);
         channelId2 = shardpref.getBoolean("channelId2", false);
         channelId3 = shardpref.getBoolean("channelId3", false);
         channelId4 = shardpref.getBoolean("channelId4", false);
-
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
@@ -75,13 +80,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         if (remoteMessage.getData().size() > 0) {
             //Background
             Log.d(TAG, "1getData data payload: " + remoteMessage.getData());
-            Log.d(TAG, "1getData Notification title: " + remoteMessage.getNotification().getTitle());
-            Log.d(TAG, "1getData Notification Body: " + remoteMessage.getNotification().getBody());
-            Log.d(TAG, "1getData Notification clickAction: " + remoteMessage.getNotification().getClickAction());
-            Log.d(TAG, "1Message Notification getTag: " + remoteMessage.getNotification().getTag());
+            Log.d(TAG, "1getData Notification title: " + remoteMessage.getData().get("title"));
+            Log.d(TAG, "1getData Notification message: " + remoteMessage.getData().get("message"));
+            Log.d(TAG, "1getData Notification clickAction: " + remoteMessage.getData().get("click_action"));
+            Log.d(TAG, "1Message Notification getTag: " + remoteMessage.getData().get("tag"));
 
-            List<String> splitTag = new ArrayList<>(Arrays.asList(remoteMessage.getNotification().getTag().split(",")));
-            if (remoteMessage.getNotification().getTag().length() != 1) {
+            List<String> splitTag = new ArrayList<>(Arrays.asList(String.valueOf(remoteMessage.getData().get("tag")).split(",")));
+            if (String.valueOf(remoteMessage.getData().get("tag")).length() != 1) {
                 Log.d(TAG, "splitTag 0 : " + splitTag.get(0));
                 Log.d(TAG, "splitTag 1 : " + splitTag.get(1));
                 message0 = splitTag.get(0);
@@ -97,20 +102,20 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Log.d(TAG, "1channelId4: " + channelId4);
 
             if (message0.equals("1") && channelId1) {
-                showNotification(remoteMessage.getNotification().getTitle()
-                        , remoteMessage.getNotification().getBody(), String.valueOf(remoteMessage.getNotification().getClickAction()));
+                showNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("2") && channelId2) {
-                showNotification(remoteMessage.getNotification().getTitle()
-                        , remoteMessage.getNotification().getBody(), String.valueOf(remoteMessage.getNotification().getClickAction()));
+                showNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("3") && channelId3) {
-                showNotification(remoteMessage.getNotification().getTitle()
-                        , remoteMessage.getNotification().getBody(), String.valueOf(remoteMessage.getNotification().getClickAction()));
+                showNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("4") && channelId4) {
-                showNotification(remoteMessage.getNotification().getTitle()
-                        , remoteMessage.getNotification().getBody(), String.valueOf(remoteMessage.getNotification().getClickAction()));
+                showNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("9")) {
-                showNotification(remoteMessage.getNotification().getTitle()
-                        , remoteMessage.getNotification().getBody(), String.valueOf(remoteMessage.getNotification().getClickAction()));
+                showNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
             }
 
             if (/* Check if data needs to be processed by long running job */ true) {
@@ -123,58 +128,78 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }
 
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            //Forground
-            Log.d(TAG, "2Message Notification title: " + remoteMessage.getNotification().getTitle());
-            Log.d(TAG, "2Message Notification Body: " + remoteMessage.getNotification().getBody());
-            Log.d(TAG, "2Message Notification clickAction: " + remoteMessage.getNotification().getClickAction());
-            Log.d(TAG, "2Message Notification getTag: " + remoteMessage.getNotification().getTag());
+//        if (!remoteMessage.getData().isEmpty()) {
+//            //Forground
+//            Log.d(TAG, "2Message Notification title: " + String.valueOf(remoteMessage.getData().get("title")));
+//            Log.d(TAG, "2Message Notification Body: " + String.valueOf(remoteMessage.getData().get("message")));
+//            Log.d(TAG, "2Message Notification clickAction: " + remoteMessage.getData().get("click_action"));
+//            Log.d(TAG, "2Message Notification getTag: " + remoteMessage.getNotification().getTag());
+//
+//            List<String> splitTag = new ArrayList<>(Arrays.asList(remoteMessage.getNotification().getTag().split(",")));
+//            if (remoteMessage.getNotification().getTag().length() != 1 || remoteMessage.getNotification().getTag().length() != 2) {
+//                Log.d(TAG, "2splitTag 0 : " + splitTag.get(0));
+//                Log.d(TAG, "2splitTag 1 : " + splitTag.get(1));
+//                message0 = splitTag.get(0);
+//                message1 = splitTag.get(1);
+//                Log.d(TAG, "2getData Notification TAG : " + message0);
+//                Log.d(TAG, "2getData Notification place_id : " + message1);
+//            }
+//            Log.d(TAG, "2channelId1: " + channelId1);
+//            Log.d(TAG, "2channelId2: " + channelId2);
+//            Log.d(TAG, "2channelId3: " + channelId3);
+//            Log.d(TAG, "2channelId4: " + channelId4);
+//            shardpref.putString("place_id", message1);
+//
+//            if (message0.equals("1") && channelId1) {
+//                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+//                        ,String.valueOf(remoteMessage.getData().get("message"))
+//                        ,String.valueOf(remoteMessage.getData().get("click_action")));
+//            } else if (message0.equals("2") && channelId2) {
+//                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+//                        ,String.valueOf(remoteMessage.getData().get("message"))
+//                        ,String.valueOf(remoteMessage.getData().get("click_action")));
+//            } else if (message0.equals("3") && channelId3) {
+//                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+//                        ,String.valueOf(remoteMessage.getData().get("message"))
+//                        ,String.valueOf(remoteMessage.getData().get("click_action")));
+//            } else if (message0.equals("4") && channelId4) {
+//                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+//                        ,String.valueOf(remoteMessage.getData().get("message"))
+//                        ,String.valueOf(remoteMessage.getData().get("click_action")));
+//            } else if (message0.equals("0") && channelId2) {//공지사항 받을때
+//                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+//                        ,String.valueOf(remoteMessage.getData().get("message"))
+//                        ,String.valueOf(remoteMessage.getData().get("click_action")));
+//            } else if (message0.equals("9")) {
+//                showNotification(String.valueOf(remoteMessage.getData().get("title"))
+//                        , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
+//            }
+//        }
 
-            List<String> splitTag = new ArrayList<>(Arrays.asList(remoteMessage.getNotification().getTag().split(",")));
-            if (remoteMessage.getNotification().getTag().length() != 1 || remoteMessage.getNotification().getTag().length() != 2) {
-                Log.d(TAG, "2splitTag 0 : " + splitTag.get(0));
-                Log.d(TAG, "2splitTag 1 : " + splitTag.get(1));
-                message0 = splitTag.get(0);
-                message1 = splitTag.get(1);
-                Log.d(TAG, "2getData Notification TAG : " + message0);
-                Log.d(TAG, "2getData Notification place_id : " + message1);
-            }
-            Log.d(TAG, "2channelId1: " + channelId1);
-            Log.d(TAG, "2channelId2: " + channelId2);
-            Log.d(TAG, "2channelId3: " + channelId3);
-            Log.d(TAG, "2channelId4: " + channelId4);
-            shardpref.putString("place_id", message1);
-
-            if (message0.equals("1") && channelId1) {
-                sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
-            } else if (message0.equals("2") && channelId2) {
-                sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
-            } else if (message0.equals("3") && channelId3) {
-                sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
-            } else if (message0.equals("4") && channelId4) {
-                sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
-            } else if (message0.equals("0") && channelId2) {//공지사항 받을때
-                sendNotification(remoteMessage.getNotification(),remoteMessage.getNotification().getClickAction());
-            } else if (message0.equals("9")) {
-                showNotification(remoteMessage.getNotification().getTitle()
-                        , remoteMessage.getNotification().getBody(), String.valueOf(remoteMessage.getNotification().getClickAction()));
-            }
-        }
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private void sendNotification(RemoteMessage.Notification notification,String click_action) {
-
+    private void sendNotification(String title, String message,String click_action) {
+        //ForGround
+        Log.i(TAG, "intent : " + intent);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
         if(click_action.equals("MainActivity")){
             shardpref.putInt("SELECT_POSITION",0);
-            notificationIntent = new Intent(this, MainFragment.class);
+            if(USER_INFO_AUTH.equals("0")){
+                notificationIntent = new Intent(this, MainFragment.class);
+            }else{
+                notificationIntent = new Intent(this, MainFragment2.class);
+            }
         }else if(click_action.equals("PlaceWorkFragment")){
             shardpref.putInt("SELECT_POSITION",1);
             shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
-            notificationIntent = new Intent(this, MainFragment.class);
+            if(USER_INFO_AUTH.equals("0")){
+                notificationIntent = new Intent(this, MainFragment.class);
+            }else{
+                notificationIntent = new Intent(this, MainFragment2.class);
+            }
         }else if(click_action.equals("TaskApprovalFragment")){
             shardpref.putInt("SELECT_POSITION",Integer.parseInt(message0));
             notificationIntent = new Intent(this, TaskApprovalFragment.class);
@@ -182,16 +207,19 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             notificationIntent = new Intent(this, PlaceListActivity.class);
         }
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        notificationIntent = new Intent(this, IntroActivity.class);
+//        notificationIntent.putExtra("click_action", click_action);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         // 1. 알림 메시지를 관리하는 notificationManager 객체 추출
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = getNotificationBuilder(notificationManager, "chennal id", "첫번째 채널입니다");
 
-        builder.setContentTitle(notification.getTitle())       // 콘솔에서 설정한 타이틀
-                .setContentText(notification.getBody())         // 콘솔에서 설정한 내용
+        builder.setContentTitle(title)       // 콘솔에서 설정한 타이틀
+                .setContentText(message)         // 콘솔에서 설정한 내용
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setContentIntent(pendingIntent)// 사용자가 노티피케이션을 탭시 ResultActivity로 이동하도록 설정
                 .setAutoCancel(true);             // 메시지를 터치하면 메시지가 자동으로 제거됨
 
@@ -201,22 +229,32 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     @SuppressLint({"ObsoleteSdkInt", "LongLogTag"})
     private void showNotification(String title, String message, String click_action) {
         Log.i(TAG, "click_action : " + click_action);
-
+        Log.i(TAG, "intent : " + intent);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
-        if(click_action.equals("MainActivity")){
-            shardpref.putInt("SELECT_POSITION",0);
-            intent = new Intent(this, MainFragment.class);
-        }else if(click_action.equals("PlaceWorkFragment")){
-            shardpref.putInt("SELECT_POSITION",1);
-            shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
-            intent = new Intent(this, MainFragment.class);
-        }else if(click_action.equals("TaskApprovalFragment")){
-            shardpref.putInt("SELECT_POSITION", Integer.parseInt(message0));
-            intent = new Intent(this, TaskApprovalFragment.class);
-        }else if(click_action.equals("PlaceListActivity")){
-            intent = new Intent(this, PlaceListActivity.class);
-        }
+//        if(click_action.equals("MainActivity")){
+//            shardpref.putInt("SELECT_POSITION",0);
+//            if(USER_INFO_AUTH.equals("0")){
+//                intent = new Intent(this, MainFragment.class);
+//            }else{
+//                intent = new Intent(this, MainFragment2.class);
+//            }
+//        }else if(click_action.equals("PlaceWorkFragment")){
+//            shardpref.putInt("SELECT_POSITION",1);
+//            shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
+//            if(USER_INFO_AUTH.equals("0")){
+//                intent = new Intent(this, MainFragment.class);
+//            }else{
+//                intent = new Intent(this, MainFragment2.class);
+//            }
+//        }else if(click_action.equals("TaskApprovalFragment")){
+//            shardpref.putInt("SELECT_POSITION", Integer.parseInt(message0));
+//            intent = new Intent(this, TaskApprovalFragment.class);
+//        }else if(click_action.equals("PlaceListActivity")){
+//            intent = new Intent(this, PlaceListActivity.class);
+//        }
+        Intent intent = new Intent(this, IntroActivity.class);
+        intent.putExtra("click_action", click_action);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_MUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
@@ -277,13 +315,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             mNotification =
                     new Notification.Builder(this,Channel)
                             .setContentTitle(title)
-                            .setContentText(message)
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentText(message + "," + click_action)
+                            .setSmallIcon(R.drawable.ic_launcher)
                             .setContentIntent(pendingIntent)
                             .build();
             startForeground(1, mNotification);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0 /* ID of notification */, mNotification);
+            notificationManager.notify(1234 /* ID of notification */, mNotification);
 
         } else {
             Log.i(TAG,"mNotification SHOW 2");
@@ -291,13 +329,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                     new NotificationCompat.Builder(this,Channel)
                             .setContentTitle(title)
                             .setContentText(message)
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.drawable.ic_launcher)
                             .setSound(defaultSoundUri)
                             .setContentIntent(pendingIntent)
                             .build();
             startForeground(1, mNotification);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0 /* ID of notification */, mNotification);
+            notificationManager.notify(1234 /* ID of notification */, mNotification);
         }
 
     }
@@ -319,11 +357,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
             // 3. 알림 메시지를 관리하는 객체에 노티피케이션 채널을 등록
             notificationManager.createNotificationChannel(channel);
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
+            builder.setSmallIcon(R.drawable.ic_launcher); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
             return builder;
 
         } else { // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
-            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setSmallIcon(R.drawable.ic_launcher);
             return builder;
 
         }

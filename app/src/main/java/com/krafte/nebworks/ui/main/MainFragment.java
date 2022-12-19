@@ -299,16 +299,18 @@ public class MainFragment extends AppCompatActivity {
                         try {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
-                            name = Response.getJSONObject(0).getString("name");
-                            img_path = Response.getJSONObject(0).getString("img_path");
-                            getjikgup = Response.getJSONObject(0).getString("jikgup");
+                            if(Response.length() != 0){
+                                name = Response.getJSONObject(0).getString("name");
+                                img_path = Response.getJSONObject(0).getString("img_path");
+                                getjikgup = Response.getJSONObject(0).getString("jikgup");
 
-                            user_name.setText(name);
-                            jikgup.setText(getjikgup);
-                            Glide.with(mContext).load(img_path)
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true)
-                                    .into(user_profile);
+                                user_name.setText(name);
+                                jikgup.setText(getjikgup);
+                                Glide.with(mContext).load(img_path)
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .skipMemoryCache(true)
+                                        .into(user_profile);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -321,50 +321,52 @@ public class HomeFragment extends Fragment {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
 
+                                    if(Response.length() != 0){
+                                        place_name = Response.getJSONObject(0).getString("name");
+                                        place_owner_id = Response.getJSONObject(0).getString("owner_id");
+                                        place_owner_name = Response.getJSONObject(0).getString("owner_name");
+                                        registr_num = Response.getJSONObject(0).getString("registr_num");
+                                        store_kind = Response.getJSONObject(0).getString("store_kind");
+                                        place_address = Response.getJSONObject(0).getString("address");
+                                        place_latitude = Response.getJSONObject(0).getString("latitude");
+                                        place_longitude = Response.getJSONObject(0).getString("longitude");
+                                        place_pay_day = Response.getJSONObject(0).getString("pay_day");
+                                        place_test_period = Response.getJSONObject(0).getString("test_period");
+                                        place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
+                                        place_insurance = Response.getJSONObject(0).getString("insurance");
+                                        place_start_time = Response.getJSONObject(0).getString("start_time");
+                                        place_end_time = Response.getJSONObject(0).getString("end_time");
+                                        place_save_kind = Response.getJSONObject(0).getString("save_kind");
+                                        place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
+                                        place_img_path = Response.getJSONObject(0).getString("img_path");
+                                        place_start_date = Response.getJSONObject(0).getString("start_date");
+                                        place_created_at = Response.getJSONObject(0).getString("created_at");
+                                        place_icnt = Response.getJSONObject(0).getString("i_cnt");
+                                        place_ocnt = Response.getJSONObject(0).getString("o_cnt");
+                                        place_totalcnt = Response.getJSONObject(0).getString("total_cnt");
 
-                                    place_name = Response.getJSONObject(0).getString("name");
-                                    place_owner_id = Response.getJSONObject(0).getString("owner_id");
-                                    place_owner_name = Response.getJSONObject(0).getString("owner_name");
-                                    registr_num = Response.getJSONObject(0).getString("registr_num");
-                                    store_kind = Response.getJSONObject(0).getString("store_kind");
-                                    place_address = Response.getJSONObject(0).getString("address");
-                                    place_latitude = Response.getJSONObject(0).getString("latitude");
-                                    place_longitude = Response.getJSONObject(0).getString("longitude");
-                                    place_pay_day = Response.getJSONObject(0).getString("pay_day");
-                                    place_test_period = Response.getJSONObject(0).getString("test_period");
-                                    place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
-                                    place_insurance = Response.getJSONObject(0).getString("insurance");
-                                    place_start_time = Response.getJSONObject(0).getString("start_time");
-                                    place_end_time = Response.getJSONObject(0).getString("end_time");
-                                    place_save_kind = Response.getJSONObject(0).getString("save_kind");
-                                    place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
-                                    place_img_path = Response.getJSONObject(0).getString("img_path");
-                                    place_start_date = Response.getJSONObject(0).getString("start_date");
-                                    place_created_at = Response.getJSONObject(0).getString("created_at");
-                                    place_icnt = Response.getJSONObject(0).getString("i_cnt");
-                                    place_ocnt = Response.getJSONObject(0).getString("o_cnt");
-                                    place_totalcnt = Response.getJSONObject(0).getString("total_cnt");
+                                        Glide.with(mContext).load(place_img_path)
+                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                .placeholder(R.drawable.no_image)
+                                                .skipMemoryCache(true)
+                                                .into(binding.storeThumnail);
 
-                                    Glide.with(mContext).load(place_img_path)
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .placeholder(R.drawable.no_image)
-                                            .skipMemoryCache(true)
-                                            .into(binding.storeThumnail);
+                                        if (USER_INFO_ID.equals(place_owner_id)) {
+                                            USER_INFO_AUTH = "0";
+                                        } else {
+                                            USER_INFO_AUTH = "1";
+                                        }
 
-                                    if (USER_INFO_ID.equals(place_owner_id)) {
-                                        USER_INFO_AUTH = "0";
-                                    } else {
-                                        USER_INFO_AUTH = "1";
+                                        dlog.i("place_owner_id : " + place_owner_id);
+                                        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+                                        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+
+                                        shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
+
+                                        binding.title.setText(place_name);
+                                        binding.memberCnt.setText(place_totalcnt + "명");
                                     }
 
-                                    dlog.i("place_owner_id : " + place_owner_id);
-                                    dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-                                    dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-
-                                    shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-
-                                    binding.title.setText(place_name);
-                                    binding.memberCnt.setText(place_totalcnt + "명");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

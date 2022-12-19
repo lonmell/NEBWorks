@@ -113,6 +113,7 @@ public class IntroActivity extends AppCompatActivity {
     String GET_KAKAO_USER_AUTH = "9";
     String GET_KAKAO_USER_SERVICE = "S";
     boolean GET_JOIN_CONFIRM = false;
+    String USER_INFO_AUTH = "";
 
     int versionCode = 0;
     String versionName = "";
@@ -134,6 +135,7 @@ public class IntroActivity extends AppCompatActivity {
         mContext = this;
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
 
         anim_FadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_intro_fadein);
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -146,6 +148,7 @@ public class IntroActivity extends AppCompatActivity {
         dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
+        initView();
         //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
         FirebaseMessaging.getInstance().subscribeToTopic("NEBWorks").addOnCompleteListener(task -> {
             String msg = getString(R.string.msg_subscribed);
@@ -214,6 +217,26 @@ public class IntroActivity extends AppCompatActivity {
         }
         return null;
     };
+
+    private void initView(){
+        String url = getIntent().getStringExtra("click_action");
+        if(url != null){
+            dlog.i("url : " + url);
+            if(url.equals("MainActivity")){
+                shardpref.putInt("SELECT_POSITION", 0);
+                if (USER_INFO_AUTH.equals("0")) {
+                    pm.Main(mContext);
+                } else {
+                    pm.Main2(mContext);
+                }
+            }
+        }
+
+//        if(bundle != null){
+//            dlog.i("bundle : " + bundle);
+//        }
+//        dlog.i("remoteMessage : " + "12314123");
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -451,10 +474,26 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        createNotificationChannel();
         Handler handler = new Handler();
         handler.postDelayed(this::getLastVersion,100); //0.5초 후 인트로 실행
     }
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_1);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
     RetrofitConnect rc = new RetrofitConnect();
     public void UserCheck(String account) {
