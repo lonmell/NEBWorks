@@ -439,43 +439,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             dlog.DlogContext(mContext);
             checkareatf = new boolean[mData.size()];
 
-//            if (allcheck) {
-//                checkarea.setBackgroundResource(R.drawable.checkbox_on);
-//                Log.i(TAG, "mData.size() : " + mData.size());
-//                for (int i = 0; i < mData.size(); i++) {
-//                    try {
-//                        JSONArray Response = new JSONArray(mData.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
-//                        dlog.i("users : " + mData.get(i).getUsers().toString().replace("[[", "[").replace("]]", "]"));
-//                        dlog.i("users Response : " + Response.length());
-//                        if (Response.length() == 0) {
-//                            Log.i(TAG, "GET SIZE : " + Response.length());
-//                        } else {
-//                            user_id.removeAll(user_id);
-//                            for (int a = 0; a < Response.length(); a++) {
-//                                JSONObject jsonObject = Response.getJSONObject(a);
-//                                user_id.add(jsonObject.getString("user_id"));
-//                            }
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if(!mData.get(i).getApproval_state().equals("0") || !mData.get(i).getApproval_state().equals("1") || !user_id.contains(USER_INFO_ID)){
-//                        checkareatf[i] = true;
-//                        checkworkno.add(mData.get(i).getId());
-//                    }
-//                }
-//                Log.i(TAG, "checkworkno : " + checkworkno);
-//                shardpref.putString("checkworkno", String.valueOf(checkworkno));
-//            } else {
-//                checkarea.setBackgroundResource(R.drawable.checkbox_off);
-//                Log.i(TAG, "mData.size() : " + mData.size());
-//                for (int i = 0; i < mData.size(); i++) {
-//                        checkareatf[i] = false;
-//                        checkworkno.removeAll(mData.get(i).getUsers());
-//                }
-//                Log.i(TAG, "checkworkno : " + checkworkno);
-//            }
-
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {

@@ -18,8 +18,8 @@
         <RelativeLayout
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:visibility="gone"
+            android:layout_height="59dp"
+            android:visibility="visible"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -30,13 +30,13 @@
                 android:gravity="center"
                 android:text="할일"
                 android:textColor="#000000"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 tools:ignore="HardcodedText" />
 
             <RelativeLayout
                 android:id="@+id/back_btn2"
-                android:layout_width="45dp"
-                android:layout_height="45dp">
+                android:layout_width="59dp"
+                android:layout_height="59dp">
 
                 <ImageView
                     android:layout_width="25dp"
@@ -265,7 +265,9 @@
                     android:layout_height="match_parent" />
             </RelativeLayout>
 
-            <include layout="@layout/addbtn" />
+            <include
+                android:id="@+id/addbtn"
+                layout="@layout/addbtn" />
         </RelativeLayout>
     </LinearLayout>
 

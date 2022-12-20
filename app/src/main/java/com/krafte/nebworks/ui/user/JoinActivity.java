@@ -90,6 +90,9 @@ public class JoinActivity extends AppCompatActivity {
     Boolean CertiSuccessTF = false;
     int last_length = 0;
 
+    String emailValidation = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint({"SetTextI18n"})
     @Override
@@ -139,6 +142,7 @@ public class JoinActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkEmail();
             }
 
             @Override
@@ -326,6 +330,24 @@ public class JoinActivity extends AppCompatActivity {
         binding.editPw.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
     }
 
+
+    private boolean checkEmail(){
+        String email = binding.inputUserEmail.getText().toString().trim(); //공백제거
+        boolean p = Pattern.matches(emailValidation, email);// 서로 패턴이 맞닝?
+        if (p) {
+            //이메일 형태가 정상일 경우
+            binding.inputUserEmail.setTextColor(Color.parseColor("#000000"));
+            binding.emailCheck.setText("중복확인을 해주세요.");
+            binding.emailCheck.setTextColor(Color.parseColor("#1483FE"));
+            return true;
+        } else {
+            binding.inputUserEmail.setTextColor(-65536);
+            binding.emailCheck.setText("정상적인 이메일 형태가 아닙니다. ");
+            binding.emailCheck.setTextColor(Color.parseColor("#FF3D00"));
+            //또는 questionEmail.setTextColor(R.color.red.toInt())
+            return false;
+        }
+    }
     public boolean Join_Info_Check() {
         allcheck = true;
         Uservice01 = true;
@@ -435,12 +457,16 @@ public class JoinActivity extends AppCompatActivity {
                             if (!jsonResponse.equals("[]")) {
                                 dlog.i("UserCheck length : " + jsonResponse.length());
                                 cnt = jsonResponse.length();
-                                Toast.makeText(mContext,"이미 존재하는 이메일입니다.",Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(mContext,"이미 존재하는 이메일입니다.",Toast.LENGTH_SHORT).show();
+                                binding.emailCheck.setText("중복되는 이메일입니다.");
+                                binding.emailCheck.setTextColor(Color.parseColor("#FF3D00"));
                             } else {
                                 binding.tv06.setBackgroundColor(Color.parseColor("#a9a9a9"));
                                 binding.tv06.setTextColor(Color.parseColor("#ffffff"));
                                 binding.tv06.setClickable(false);
                                 binding.tv06.setEnabled(false);
+                                binding.emailCheck.setText("사용할 수 있습니다.");
+                                binding.emailCheck.setTextColor(Color.parseColor("#1483FE"));
                             }
                         }
                     });

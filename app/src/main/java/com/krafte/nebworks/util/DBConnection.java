@@ -37,7 +37,7 @@ public class DBConnection {
 
         // Log.i(TAG, "WorkPlaceEmployeeNotifyUpdate Starting...");
         try {
-            String page = URL + "/NEBWorks/kogas_fcmsend.php";
+            String page = URL + "/NEBWorks/fcmsend.php";
             // URL 객체 생성
             java.net.URL url = new URL(page);
             // 연결 객체 생성

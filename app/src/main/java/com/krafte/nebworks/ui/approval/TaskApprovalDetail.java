@@ -344,7 +344,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
                     binding.incompleteTitle.setText(incomplete_reason);
                 }
                 //--approval_state -- // 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
-                if(state.equals("0") ||state.equals("1") || state.equals("3")){
+                if(state.equals("0") || state.equals("1") || state.equals("3")){
                     binding.approvalState.setTextColor(Color.parseColor("#6395EC"));
                     if(state.equals("0")){
                         binding.approvalState.setText("결재대기중");

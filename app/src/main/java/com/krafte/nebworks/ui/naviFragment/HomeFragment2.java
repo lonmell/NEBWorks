@@ -130,6 +130,7 @@ public class HomeFragment2 extends Fragment {
     String io_state = "";
     String input_date = "";
     String in_time = "";
+    String jongeob = "";
 
     //Other 클래스
     PageMoveClass pm = new PageMoveClass();
@@ -243,7 +244,7 @@ public class HomeFragment2 extends Fragment {
 
             String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
             binding.ioMytime.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
-            binding.todayWorkdate.setText(input_date);
+            binding.todayWorkdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
             binding.inTime.setText(in_time);
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -585,7 +586,8 @@ public class HomeFragment2 extends Fragment {
                                 mem_state = Response.getJSONObject(0).getString("state");
                                 mem_jikgup = Response.getJSONObject(0).getString("jikgup");
                                 mem_pay = Response.getJSONObject(0).getString("pay");
-
+                                jongeob = Response.getJSONObject(0).getString("jongeob");
+                                shardpref.putString("jongeob",jongeob);
                                 dlog.i("------UserCheck-------");
                                 USER_INFO_ID = mem_id;
                                 dlog.i("프로필 사진 url : " + mem_img_path);
@@ -780,6 +782,8 @@ public class HomeFragment2 extends Fragment {
                                 Toast_Nomal("초대 수락이 완료되었습니다.");
                                 binding.acceptArea.setVisibility(View.GONE);
                                 accept_state = 1;
+                                String message = "[" + mem_name +"]근로자님이 매장초대를 수락하셨습니다.";
+                                getUserToken(place_owner_id,"0",message);
                             }
                         }
                     });
@@ -793,6 +797,7 @@ public class HomeFragment2 extends Fragment {
             }
         });
     }
+
 
     String id = "";
     String user_id = "";
@@ -909,7 +914,12 @@ public class HomeFragment2 extends Fragment {
         });
     }
 
-    public void getManagerToken(String user_id, String type, String place_id, String place_name) {
+    String message = "";
+    //근로자 > 점주 ( 초대수락 FCM )
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FCMSelectInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -923,20 +933,17 @@ public class HomeFragment2 extends Fragment {
                 dlog.i("Response Result : " + response.body());
                 try {
                     JSONArray Response = new JSONArray(response.body());
-
-                    String id = Response.getJSONObject(0).getString("id");
-                    String token = Response.getJSONObject(0).getString("token");
-                    String department = shardpref.getString("USER_INFO_SOSOK", "");
-                    String position = shardpref.getString("USER_INFO_JIKGUP", "");
-                    String name = shardpref.getString("USER_INFO_NAME", "");
-                    dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
-                    dlog.i("token : " + Response.getJSONObject(0).getString("token"));
-
-                    boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
-                    if (!token.isEmpty() && channelId1) {
-                        String workse = kind.equals("0") ? "작업종료" : "작업시작"; // 현작 작업 시작, 퇴근
-                        String message = department + " " + position + " " + name + " 님이 " + place_name + " 매장 " + workse + "했습니다.";
-                        PushFcmSend(id, "", message, token, "1", place_id);
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", place_id);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -959,6 +966,15 @@ public class HomeFragment2 extends Fragment {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
             click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
             dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
             activity.runOnUiThread(() -> {
             });

@@ -533,14 +533,6 @@ public class TaskListActivity extends AppCompatActivity {
 
                                             shardpref.putString("change_place_id", change_place_id.isEmpty()?place_id:change_place_id);
                                             shardpref.putString("change_member_id", change_member_id.isEmpty()?"":change_member_id);
-//                                            Intent intent = new Intent(mContext, TaskListPopActivity.class);
-//                                            intent.putStringArrayListExtra("kind", kind);
-//                                            intent.putStringArrayListExtra("title", title);
-//                                            intent.putExtra("date", data);
-//                                            intent.putExtra("yoil", yoil);
-//                                            intent.putExtra("write_name","");
-//                                            startActivity(intent);
-//                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                                             WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
                                             wgb.show(getSupportFragmentManager(),"WorkgotoBottomSheet");
                                         }catch (Exception e){
@@ -549,13 +541,6 @@ public class TaskListActivity extends AppCompatActivity {
 
                                     }
                                 });
-//                                if (USER_INFO_AUTH.equals("0")) {
-//                                    //관리자일때
-//                                    binding.addWorkBtn.setVisibility(View.VISIBLE);
-//                                } else {
-//                                    //근로자일때때
-//                                    binding.addWorkBtn.setVisibility(View.GONE);
-//                                }
                             }
                         }catch (JSONException e){
                             dlog.i("JSONException :" + e);
@@ -574,10 +559,6 @@ public class TaskListActivity extends AppCompatActivity {
     }
 
 
-    int listitemsize = 0;
-    String totalSendCheck = "";
-    String totalSendUser = "";
-    boolean AllCheck = false;
     //미처리인 업무 세기
     int state_null = 0;
     String writer_id = "";

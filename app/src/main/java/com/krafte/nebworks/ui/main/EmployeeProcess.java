@@ -62,7 +62,7 @@ public class EmployeeProcess extends AppCompatActivity {
     int location_cnt = 0;
     String USER_INFO_ID = "";
     String kind = "";
-    String place_end_time = "";
+    String jongeob = "";
     String mem_name = "";
     Calendar cal;
     String today = "";
@@ -102,7 +102,7 @@ public class EmployeeProcess extends AppCompatActivity {
             place_id        = shardpref.getString("place_id", "0");
             USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "0");
             kind            = shardpref.getString("kind", "0");
-            place_end_time  = shardpref.getString("place_end_time", "");
+            jongeob         = shardpref.getString("jongeob", "");
             mem_name        = shardpref.getString("mem_name", "");
 
             onBtnEvent();
@@ -126,7 +126,7 @@ public class EmployeeProcess extends AppCompatActivity {
             cal = Calendar.getInstance();
             today = sdf.format(cal.getTime());
             dlog.i("오늘 :" + today);
-            dlog.i("place_end_time :" + place_end_time);
+            dlog.i("jongeob :" + jongeob.substring(3));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -181,7 +181,7 @@ public class EmployeeProcess extends AppCompatActivity {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             Date date1 = sdf.parse(today);
-            Date date2 = sdf.parse(place_end_time);
+            Date date2 = sdf.parse(jongeob.substring(3));
             System.out.println(sdf.format(date1));
             System.out.println(sdf.format(date2));
 

@@ -228,8 +228,15 @@ public class WorkgotoFragment extends Fragment {
     public void onResume() {
         super.onResume();
         try{
+            //기존에 저장된 반복데이터 삭제
+            shardpref.remove("SET_TASK_TIME_VALUE");
+            shardpref.remove("yoillist");
+            shardpref.remove("RepeatTF");
+            shardpref.remove("RepeatKind");
+            shardpref.remove("overdate");
             RemoveShared();
             setAddBtnSetting();
+            setRecyclerView();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -593,10 +600,6 @@ public class WorkgotoFragment extends Fragment {
     }
 
 
-    int listitemsize = 0;
-    String totalSendCheck = "";
-    String totalSendUser = "";
-    boolean AllCheck = false;
     //미처리인 업무 세기
     int state_null = 0;
     String writer_id = "";

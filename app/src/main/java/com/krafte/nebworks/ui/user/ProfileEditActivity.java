@@ -680,7 +680,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                                         if(return_page.equals("MoreActivity")){
                                             pm.MoreBack(mContext);
                                         }else{
-                                            pm.UserPlsceMapBack(mContext);
+                                            pm.AuthSelect(mContext);
                                         }
                                     }
                                 } catch (Exception e) {

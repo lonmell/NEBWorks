@@ -64,6 +64,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
     String format = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
     String toDay = "";
+    String place_id = "";
 
     List<String> user_id = new ArrayList<>();
     List<String> user_name = new ArrayList<>();
@@ -183,12 +184,16 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                     mListener.onItemClick(v,position);
                 }
                 setUpdateWorktodo("1", item.getId(), USER_INFO_ID); //승인
+                String message = "[" + item.getTitle() + "] 가 승인되었습니다.";
+                getUserToken(item.getRequester_id(),"1",message);
             });
             holder.reject_btn.setOnClickListener(v -> {
                 if (mListener != null) {
                     mListener.onItemClick(v,position);
                 }
-                setUpdateWorktodo("2", item.getId(), USER_INFO_ID); //승인
+                setUpdateWorktodo("2", item.getId(), USER_INFO_ID); //반려
+                String message = "[" + item.getTitle() + "] 가 반려되었습니다.";
+                getUserToken(item.getRequester_id(),"1",message);
             });
         }catch (Exception e){
             dlog.i("Exception : " + e);
@@ -230,6 +235,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
             USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
+            place_id        = shardpref.getString("place_id", "");
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
@@ -349,7 +355,8 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
     }
 
     String message = "";
-    public void getManagerToken(String user_id, String type, String place_id, String place_name, String state, String position) {
+    //근로자 > 점주 ( 초대수락 FCM )
+    public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");
         dlog.i("user_id : " + user_id);
         dlog.i("type : " + type);
@@ -372,14 +379,10 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                         dlog.i("token : " + Response.getJSONObject(0).getString("token"));
                         String id = Response.getJSONObject(0).getString("id");
                         String token = Response.getJSONObject(0).getString("token");
-                        String department = shardpref.getString("USER_INFO_SOSOK", "");
-                        String position = shardpref.getString("USER_INFO_JIKGUP", "");
-                        String name = shardpref.getString("USER_INFO_NAME", "");
                         dlog.i("-----getManagerToken-----");
                         boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
                         if (!token.isEmpty() && channelId1) {
-                            message = "[" + place_name + "]" + state + "된 업무보고가 있습니다.";
-                            PushFcmSend(id, "", message, token, String.valueOf(position), place_id);
+                            PushFcmSend(id, "", message, token, "1", place_id);
                         }
                     }
                 } catch (JSONException e) {
@@ -395,14 +398,15 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         });
     }
 
+
     DBConnection dbConnection = new DBConnection();
     String click_action = "";
 
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "TaskApprovalFragment";
-            dlog.i("------FcmTestFunction------");
+            click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);
             dlog.i("message : " + message);
@@ -410,8 +414,10 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             dlog.i("click_action : " + click_action);
             dlog.i("tag : " + tag);
             dlog.i("place_id : " + place_id);
-            dlog.i("------FcmTestFunction------");
+            dlog.i("-----PushFcmSend-----");
             dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+//            activity.runOnUiThread(() -> {
+//            });
         });
         th.start();
         try {

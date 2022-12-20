@@ -164,22 +164,24 @@ public class TaskReportDetailActivity extends AppCompatActivity {
     private void setBtnEvent() {
 
         binding.backBtn.setOnClickListener(v -> {
-            shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.remove("SELECT_POSITION_sub");
-            if(USER_INFO_AUTH.equals("0")){
-                pm.Main(mContext);
-            }else if(USER_INFO_AUTH.equals("1")){
-                pm.TaskList(mContext);
-            }
+//            shardpref.putInt("SELECT_POSITION", 1);
+//            shardpref.remove("SELECT_POSITION_sub");
+//            if(USER_INFO_AUTH.equals("0")){
+//                pm.Main(mContext);
+//            }else if(USER_INFO_AUTH.equals("1")){
+//                pm.TaskList(mContext);
+//            }
+            super.onBackPressed();
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
-            shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.remove("SELECT_POSITION_sub");
-            if(USER_INFO_AUTH.equals("0")){
-                pm.Main(mContext);
-            }else if(USER_INFO_AUTH.equals("1")){
-                pm.TaskList(mContext);
-            }
+//            shardpref.putInt("SELECT_POSITION", 1);
+//            shardpref.remove("SELECT_POSITION_sub");
+//            if(USER_INFO_AUTH.equals("0")){
+//                pm.Main(mContext);
+//            }else if(USER_INFO_AUTH.equals("1")){
+//                pm.TaskList(mContext);
+//            }
+            super.onBackPressed();
         });
     }
 
@@ -227,6 +229,9 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             incomplete_reason   = shardpref.getString("incomplete_reason", "n");
             updated_at          = shardpref.getString("updated_at", "0");
 
+            dlog.i("TaskReportDetail img_path ; " + img_path);
+            dlog.i("TaskReportDetail TaskKind ; " + TaskKind);
+            dlog.i("TaskReportDetail complete_yn ; " + complete_yn);
             binding.workSave.setText("목록으로");
             binding.inputWorktitle.setText(WorkTitle);
             binding.inputWorkcontents.setText(WorkContents);

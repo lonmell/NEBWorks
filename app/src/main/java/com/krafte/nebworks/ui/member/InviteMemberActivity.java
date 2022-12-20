@@ -1,8 +1,11 @@
 package com.krafte.nebworks.ui.member;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,11 +20,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kakao.sdk.common.util.KakaoCustomTabsClient;
+import com.kakao.sdk.link.LinkClient;
+import com.kakao.sdk.link.WebSharerClient;
+import com.kakao.sdk.template.model.Content;
+import com.kakao.sdk.template.model.FeedTemplate;
+import com.kakao.sdk.template.model.ItemContent;
+import com.kakao.sdk.template.model.Link;
+import com.kakao.sdk.template.model.Social;
+import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.GetConfirmPlaceInterface;
+import com.krafte.nebworks.dataInterface.NonmemberInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
 import com.krafte.nebworks.dataInterface.UserNumSelectInterface;
 import com.krafte.nebworks.databinding.ActivityInviteMemberBinding;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -29,6 +44,7 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -54,10 +70,12 @@ public class InviteMemberActivity extends AppCompatActivity {
     boolean check = false;
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
+    Handler mHandler;
 
     String INPUT_NAME = "";
     String INPUT_PHONE = "";
-
+    String place_name = "";
+    DBConnection dbConnection = new DBConnection();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,25 +86,29 @@ public class InviteMemberActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        try{
+        try {
             mContext = this;
             setBtnEvent();
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             place_id = shardpref.getString("place_id", "");
+            place_name = shardpref.getString("place_name","");
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
             USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
             USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
             Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
             Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
             Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+            Log.i(TAG, "place_name = " + place_name);
 
             binding.inputbox01.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
                 @Override
                 public void afterTextChanged(Editable s) {
@@ -95,17 +117,19 @@ public class InviteMemberActivity extends AppCompatActivity {
             });
             binding.inputbox02.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
                 @Override
                 public void afterTextChanged(Editable s) {
                     INPUT_PHONE = s.toString();
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -152,17 +176,19 @@ public class InviteMemberActivity extends AppCompatActivity {
                                     int mMonth = c.get(Calendar.MONTH);
                                     int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                                    join_date = mYear + "-" + (String.valueOf(mMonth).length() == 1?"0"+mMonth:mMonth) + "-"
-                                            + (String.valueOf(mDay).length() == 1?"0"+String.valueOf(mDay):String.valueOf(mDay));
+                                    join_date = mYear + "-" + (String.valueOf(mMonth).length() == 1 ? "0" + mMonth : mMonth) + "-"
+                                            + (String.valueOf(mDay).length() == 1 ? "0" + String.valueOf(mDay) : String.valueOf(mDay));
 
-                                    if(ConfrimPlaceMember(id)){
+                                    if (ConfrimPlaceMember(id)) {
                                         AddPlaceMember(id, name, phone, "", join_date);
-                                    }else{
+                                    } else {
                                         Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
                                     }
+
                                 } else {
                                     dlog.i("Response 2: " + response.body().length());
-                                    Toast_Nomal("가입하지 않은 사용자입니다.");
+                                    Toast_Nomal("가입하지 않은 사용자입니다.\n초대문구를 발송합니다.");
+                                    PostNonmember();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -180,8 +206,66 @@ public class InviteMemberActivity extends AppCompatActivity {
         });
     }
 
+    FeedTemplate feedTemplate = new FeedTemplate(
+            new Content("NEBWorks 에서 사용자님을 초대합니다. 회원가입 후 초대된 매장에 자동 가입됩니다.",
+                    "http://krafte.net/NEBWorks/identificon.png",
+                    new Link("https://www.naver.com",
+                            "https://www.naver.com"),
+                    "#회원가입 #매장초대 #협업툴"
+            ),
+            new ItemContent("",
+                    "",
+                    "넵 웍스",
+                    "http://krafte.net/NEBWorks/identificon.png",
+                    "협업 툴"
+            ),
+            new Social(1004, 1004, 1004),
+            Arrays.asList(new com.kakao.sdk.template.model.Button("앱 다운로드", new Link("https://www.naver.com", "https://www.naver.com")))
+    );
+
+    public void kakaoLink() {
+        String TAG = "kakaoLink()";
+        // 카카오톡으로 카카오링크 공유 가능
+        LinkClient.getInstance().defaultTemplate(mContext, feedTemplate, null, (linkResult, error) -> {
+            if (error != null) {
+                Log.e("TAG", "카카오링크 보내기 실패", error);
+            } else if (linkResult != null) {
+                Log.d(TAG, "카카오링크 보내기 성공 ${linkResult.intent}");
+                mContext.startActivity(linkResult.getIntent());
+
+                // 카카오링크 보내기에 성공했지만 아래 경고 메시지가 존재할 경우 일부 컨텐츠가 정상 동작하지 않을 수 있습니다.
+                Log.w("TAG", "Warning Msg: " + linkResult.getWarningMsg());
+                Log.w("TAG", "Argument Msg: " + linkResult.getArgumentMsg());
+            }
+            return null;
+        });
+    }
+
+    public void webKakaoLink() {
+        String TAG = "webKakaoLink()";
+
+        // 카카오톡 미설치: 웹 공유 사용 권장
+        // 웹 공유 예시 코드
+        Uri sharerUrl = WebSharerClient.getInstance().defaultTemplateUri(feedTemplate);
+
+        // CustomTabs으로 웹 브라우저 열기
+        // 1. CustomTabs으로 Chrome 브라우저 열기
+        try {
+            KakaoCustomTabsClient.INSTANCE.openWithDefault(mContext, sharerUrl);
+        } catch (UnsupportedOperationException e) {
+            // Chrome 브라우저가 없을 때 예외처리
+        }
+
+        // 2. CustomTabs으로 디바이스 기본 브라우저 열기
+        try {
+            KakaoCustomTabsClient.INSTANCE.open(mContext, sharerUrl);
+        } catch (ActivityNotFoundException e) {
+            // 인터넷 브라우저가 없을 때 예외처리
+        }
+    }
+
     int cnt = 0;
-    private boolean ConfrimPlaceMember(String user_id){
+    private boolean ConfrimPlaceMember(String user_id) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(GetConfirmPlaceInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -219,13 +303,15 @@ public class InviteMemberActivity extends AppCompatActivity {
         });
         return cnt == 0;
     }
+
+    //직원한테
     public void AddPlaceMember(String user_id, String name, String phone, String Jumin, String JoinDate) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceMemberAddInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberAddInterface api = retrofit.create(PlaceMemberAddInterface.class);
-        Call<String> call = api.getData(place_id, user_id,Jumin,"3",JoinDate);
+        Call<String> call = api.getData(place_id, user_id, Jumin, "3", JoinDate);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -240,9 +326,11 @@ public class InviteMemberActivity extends AppCompatActivity {
                                 dlog.i("매장 멤버 추가 완료");
                                 Toast_Nomal("직원 초대가 완료되었습니다[승인 대기 중]");
                                 shardpref.putInt("SELECT_POSITION", 2);
-                                shardpref.putInt("SELECT_POSITION_sub",0);
+                                shardpref.putInt("SELECT_POSITION_sub", 0);
+                                String message = "[" + place_name + "] 에서 근무 초대가 도착했습니다.";
+                                getUserToken(user_id,"1",message);
                                 pm.MemberManagement(mContext);
-                            }else{
+                            } else {
                                 Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
                             }
                         }
@@ -258,11 +346,125 @@ public class InviteMemberActivity extends AppCompatActivity {
         });
     }
 
+    String message = "";
+    //근로자 > 점주 ( 초대수락 FCM )
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", place_id);
+                        }
 
-    public void Toast_Nomal(String message){
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    String click_action = "";
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+            runOnUiThread(() -> {
+
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void PostNonmember(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(NonmemberInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        NonmemberInterface api = retrofit.create(NonmemberInterface.class);
+        Call<String> call = api.getData(place_id, INPUT_NAME, INPUT_PHONE);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
+                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
+                            if (response.body().replace("\"", "").equals("success")) {
+                                if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
+                                    kakaoLink();
+                                } else {
+                                    webKakaoLink();
+                                }
+                                shardpref.putInt("SELECT_POSITION", 0);
+                                shardpref.putInt("SELECT_POSITION_sub", 0);
+                                pm.Main(mContext);
+                            } else {
+                                Toast_Nomal("이미 직원으로 등록되었거나 초대중인 직원입니다.");
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
-        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
         toast_textview.setText(String.valueOf(message));
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
@@ -272,8 +474,9 @@ public class InviteMemberActivity extends AppCompatActivity {
         toast.setView(layout);
         toast.show();
     }
+
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
     }
 }

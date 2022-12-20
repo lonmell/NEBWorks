@@ -318,7 +318,16 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-                                    pm.AuthSelect(mContext);
+                                    if(Response.length() != 0){
+                                        String name = Response.getJSONObject(0).getString("name");
+                                        String phone = Response.getJSONObject(0).getString("phone");
+                                        String platform = Response.getJSONObject(0).getString("platform");
+                                        if(name.isEmpty() || phone.isEmpty()){
+                                            pm.ProfileEdit(mContext);
+                                        }else{
+                                            pm.AuthSelect(mContext);
+                                        }
+                                    }
                                 }else{
 //                                    shardpref.putString("editstate","insert");
 //                                    pm.ProfileEdit(mContext);

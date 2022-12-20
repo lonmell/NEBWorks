@@ -36,10 +36,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.TaskApprovalInterface;
 import com.krafte.nebworks.dataInterface.TaskSaveInterface;
 import com.krafte.nebworks.databinding.ActivityTaskReportBinding;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -245,10 +247,10 @@ public class TaskReportActivity extends AppCompatActivity {
 
         if (end_time.length() >= 10) {
             //반복x ( 0000.00.00 00:00 )
-            binding.writeTime.setText(end_time.substring(11, 16));
+            binding.writeTime.setText(dc.GET_TIME.substring(11, 16));
         } else {
             //반복o ( 00:00 )
-            binding.writeTime.setText(end_time);
+            binding.writeTime.setText(dc.GET_TIME.replace("-","."));
         }
         if (TaskKind.equals("0")) {
             binding.taskKind00.setVisibility(View.VISIBLE);
@@ -266,7 +268,7 @@ public class TaskReportActivity extends AppCompatActivity {
             try {
                 saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
                 saveBitmap.eraseColor(Color.TRANSPARENT);
-                binding.taskKind01.setImageBitmap(saveBitmap);
+                binding.taskKind01img.setImageBitmap(saveBitmap);
                 ProfileUrl = "";
                 binding.clearImg.setVisibility(View.GONE);
             } catch (Exception e) {
@@ -407,7 +409,7 @@ public class TaskReportActivity extends AppCompatActivity {
 
                     Glide.with(this)
                             .load(imagePath)
-                            .into(binding.taskKind01);
+                            .into(binding.taskKind01img);
 
                     Glide.with(getApplicationContext()).asBitmap().load(imagePath).into(new SimpleTarget<Bitmap>() {
                         @Override
@@ -456,9 +458,16 @@ public class TaskReportActivity extends AppCompatActivity {
 //                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
                             if (response.body().replace("\"", "").equals("success")) {
                                 Toast_Nomal("결재 요청이 완료되었습니다.");
+                                String message = "["+WorkTitle+"]의 결재 요청이 도착했습니다.";
+                                getUserToken(place_owner_id,"0",message);
                                 shardpref.putInt("SELECT_POSITION", 1);
                                 shardpref.putInt("SELECT_POSITION_sub", 0);
-                                pm.PlaceWorkBack(mContext);
+                                if(USER_INFO_AUTH.equals("0")){
+                                    pm.PlaceWorkBack(mContext);
+                                }else{
+                                    pm.TaskList(mContext);
+                                }
+
                             }
                         }
                     });
@@ -473,6 +482,78 @@ public class TaskReportActivity extends AppCompatActivity {
         });
     }
 
+
+    //근로자 > 점주 ( 초대수락 FCM )
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    DBConnection dbConnection = new DBConnection();
+    String click_action = "";
+
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+            runOnUiThread(() -> {
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     //절대경로를 구한다.
     private String getRealPathFromUri(Uri uri) {
         String[] proj = {MediaStore.Images.Media.DATA};
@@ -525,7 +606,7 @@ public class TaskReportActivity extends AppCompatActivity {
 //            binding.loCanvas.setImageBitmap(ProfileUrl);
             Glide.with(mContext).load(ProfileUrl)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(binding.taskKind01);
+                    .skipMemoryCache(true).into(binding.taskKind01img);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
             PlaceWorkDetailActivity.RetrofitInterface retrofitInterface = PlaceWorkDetailActivity.ApiClient.getApiClient().create(PlaceWorkDetailActivity.RetrofitInterface.class);

@@ -23,8 +23,10 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.InOutInsertInterface;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.GpsTracker;
@@ -71,7 +73,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     String inout_tv = "";
     String inout_tv2 = "";
     String place_end_time = "";
-
+    String mem_name = "";
     String kind = "";
 
     //xml 
@@ -94,7 +96,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             place_id = shardpref.getString("place_id", "");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             place_end_time = shardpref.getString("place_end_time", "");
-
+            mem_name    = shardpref.getString("mem_name", "");
             //데이터 가져오기
             time = shardpref.getString("time", "");
             state = shardpref.getString("state", "");
@@ -129,7 +131,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                         kind = "0";
                     } else {
                         kind = "1";
-                        inout_insert.setText("재시도");
+                        inout_insert.setText("확인");
                     }
                     time_area.setVisibility(View.VISIBLE);
                     inout_icon.setBackgroundResource(R.drawable.ic_inout_ok);
@@ -140,7 +142,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     break;
                 case "3":
                     kind = "1";
-                    inout_insert.setText("퇴근");
+                    inout_insert.setText("재시도");
                     Setinout_tv2.setVisibility(View.VISIBLE);
                     inout_icon.setBackgroundResource(R.drawable.ic_out_ok);
                     break;
@@ -249,6 +251,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         shardpref.remove("store_name");
         shardpref.remove("inout_tv");
         shardpref.remove("inout_tv2");
+        shardpref.remove("jongeob");
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
         pm.Main2(mContext);
@@ -285,15 +288,28 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
 //                                        if (!place_owner_id.equals(USER_INFO_ID)) {
 ////                                            getEmployerToken();
 //                                        }
+                                        /*
+                                         * 1 - 출근처리
+                                         * 2 - 출근처리 불가
+                                         * 3 - 퇴근처리 하시겠습니까? - 등록된 퇴근시간 아닐때
+                                         * 4 - 퇴근처리
+                                         * * */
                                         if(kind.equals("0")){
                                             String input_date = dc.GET_YEAR + "." + dc.GET_MONTH + "." + dc.GET_DAY;
                                             String in_time = dc.GET_TIME.substring(11);
                                             shardpref.putString("input_date",input_date);
                                             shardpref.putString("in_time",in_time);
+                                            message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 출근처리가 완료되었습니다.";
                                         }else{
-                                            shardpref.remove("input_date");
+                                            if(state.equals("3")){
+                                                shardpref.remove("input_date");
+                                                message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 조기퇴근이 완료되었습니다.";
+                                            }else{
+                                                shardpref.remove("input_date");
+                                                message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
+                                            }
                                         }
-
+                                        getUserToken(place_owner_id,"0",message);
                                         ClosePop();
                                     }
                                 } catch (Exception e) {
@@ -313,6 +329,78 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         });
     }
 
+    String message = "";
+    //근로자 > 점주 ( 초대수락 FCM )
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    DBConnection dbConnection = new DBConnection();
+    String click_action = "";
+
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+            activity.runOnUiThread(() -> {
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     String place_owner_id = "";
     String place_name = "";

@@ -27,10 +27,12 @@ import com.krafte.nebworks.bottomsheet.MemberOption;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.dataInterface.MemberUpdateBasicInterface;
 import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -283,6 +285,7 @@ public class MemberManagement extends AppCompatActivity {
                                             dlog.i("position : " + position);
 
                                             String id = Response.getJSONObject(position).getString("id");
+                                            String place_name = Response.getJSONObject(position).getString("place_name");
                                             String name = Response.getJSONObject(position).getString("name");
                                             String phone = Response.getJSONObject(position).getString("phone");
                                             String jumin = Response.getJSONObject(position).getString("jumin");
@@ -292,7 +295,7 @@ public class MemberManagement extends AppCompatActivity {
                                                 TaskDel(id);
                                             }else if(kind == 2){
                                                 dlog.i("kind : " + kind);
-                                                UpdateBasic(id, name, phone, jumin, "1", join_date);
+                                                UpdateBasic(id, name, phone, jumin, "1", join_date, place_name);
                                             }
                                         }catch (JSONException e){
                                             e.printStackTrace();
@@ -360,7 +363,7 @@ public class MemberManagement extends AppCompatActivity {
             }
         });
     }
-    public void UpdateBasic(String mem_id,String name, String phone, String jumin, String kind, String join_date) {
+    public void UpdateBasic(String mem_id,String name, String phone, String jumin, String kind, String join_date, String place_name) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MemberUpdateBasicInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -380,6 +383,9 @@ public class MemberManagement extends AppCompatActivity {
                                 if (response.body().replace("\"", "").equals("success")) {
                                     Toast_Nomal("해당 직원의 데이터가 업데이트되었습니다.");
                                     SetAllMemberList(place_id);
+
+                                    String message = "[" + place_name + "]매장에서 근무신청이 수락되었습니다.";
+                                    getUserToken(mem_id,"1",message);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -395,6 +401,77 @@ public class MemberManagement extends AppCompatActivity {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
+    }
+
+    //근로자 > 점주 ( 초대수락 FCM )
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    DBConnection dbConnection = new DBConnection();
+    String click_action = "";
+
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+            runOnUiThread(() -> {
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
