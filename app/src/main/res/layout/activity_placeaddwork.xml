@@ -544,12 +544,12 @@
             <LinearLayout
                 android:id="@+id/report_visible"
                 android:layout_width="match_parent"
-                android:layout_height="59dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:id="@+id/select01_box"
@@ -557,7 +557,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="7dp"
                     android:layout_weight="1"
-                    android:background="#F5F6F8"
+                    android:background="@drawable/default_select_round"
                     android:orientation="horizontal">
 
                     <TextView
@@ -577,7 +577,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="7dp"
                     android:layout_weight="1"
-                    android:background="#F5F6F8"
+                    android:background="@drawable/default_select_round"
                     android:orientation="horizontal">
 
                     <TextView

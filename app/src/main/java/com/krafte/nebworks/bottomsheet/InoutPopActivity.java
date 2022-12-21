@@ -138,12 +138,13 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     inout_icon.setBackgroundResource(R.drawable.ic_inout_ok);
                     break;
                 case "2":
+                    inout_insert.setText("재시도");
                     Setinout_tv2.setVisibility(View.VISIBLE);
                     inout_icon.setBackgroundResource(R.drawable.ic_in_enable);
                     break;
                 case "3":
                     kind = "1";
-                    inout_insert.setText("재시도");
+                    inout_insert.setText("확인");
                     Setinout_tv2.setVisibility(View.VISIBLE);
                     inout_icon.setBackgroundResource(R.drawable.ic_out_ok);
                     break;

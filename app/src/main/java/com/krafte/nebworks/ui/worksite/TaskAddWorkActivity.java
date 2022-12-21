@@ -249,7 +249,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
                 binding.reportVisible.setVisibility(View.VISIBLE);
                 TaskKind = "1";
-                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
                 binding.select01.setTextColor(Color.parseColor("#ffffff"));
             } else {
                 NeedReportTF = false;
@@ -262,17 +262,17 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         binding.select01Box.setOnClickListener(v -> {
             TaskKind = "1";
             dlog.i("select01Box click [TaskKind : " + TaskKind + "]");
-            binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
             binding.select01.setTextColor(Color.parseColor("#ffffff"));
-            binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
             binding.select02.setTextColor(Color.parseColor("#000000"));
         });
         binding.select02Box.setOnClickListener(v -> {
             TaskKind = "0";
             dlog.i("select02Box click [TaskKind : " + TaskKind + "]");
-            binding.select01Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
             binding.select01.setTextColor(Color.parseColor("#000000"));
-            binding.select02Box.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round);
             binding.select02.setTextColor(Color.parseColor("#ffffff"));
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
