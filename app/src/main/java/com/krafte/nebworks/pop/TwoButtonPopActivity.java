@@ -35,6 +35,7 @@ import com.krafte.nebworks.dataInterface.FeedDelInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.dataInterface.PlaceDelInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.UserDelInterface;
 import com.krafte.nebworks.databinding.ActivityTwobuttonPopBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -539,6 +540,7 @@ public class TwoButtonPopActivity extends Activity {
                                 String place_owner_id = shardpref.getString("place_owner_id", "");
                                 String message = "새로운 근무 신청이 도착했습니다.";
                                 getUserToken(place_owner_id,"0",message);
+                                AddPush("근무신청",message,place_owner_id);
                                 ClosePop();
                             }else{
                                 Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
@@ -601,7 +603,35 @@ public class TwoButtonPopActivity extends Activity {
             }
         });
     }
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, USER_INFO_ID, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     DBConnection dbConnection = new DBConnection();
 

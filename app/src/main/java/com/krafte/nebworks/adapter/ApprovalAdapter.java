@@ -25,6 +25,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.TaskCheckData;
 import com.krafte.nebworks.dataInterface.ApprovalUpdateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.pop.OneButtonTItlePopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
@@ -111,7 +112,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
           2 - 반려
           3 - 거부
          * */
-        try{
+        try {
             JSONArray Response = new JSONArray(item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
             dlog.i("users : " + item.getUsers());
             dlog.i("users Response : " + Response.length());
@@ -134,17 +135,17 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                 }
             }
 
-            if(item.getState().equals("0")){
+            if (item.getState().equals("0")) {
                 //대기
                 holder.state_tv.setText("승인대기");
                 holder.state_area.setBackgroundResource(R.drawable.default_right_blue_round);
                 holder.state_line.setBackgroundColor(Color.parseColor("#6395EC"));
-            }else if(item.getState().equals("1")){
+            } else if (item.getState().equals("1")) {
                 //승인
                 holder.state_tv.setText("승인");
                 holder.state_area.setBackgroundResource(R.drawable.default_right_gray_round);
                 holder.state_line.setBackgroundColor(Color.parseColor("#C3C3C3"));
-            }else if(item.getState().equals("2")){
+            } else if (item.getState().equals("2")) {
                 //반려
                 holder.state_tv.setText("반려");
                 holder.state_area.setBackgroundResource(R.drawable.default_right_red_round);
@@ -156,12 +157,12 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                     .skipMemoryCache(true)
                     .into(holder.workimg);
 
-            if(item.getComplete_kind().equals("0")){
+            if (item.getComplete_kind().equals("0")) {
                 Glide.with(mContext).load(R.drawable.ic_taskkind00)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .into(holder.kind);
-            }else if(item.getComplete_kind().equals("1")){
+            } else if (item.getComplete_kind().equals("1")) {
                 Glide.with(mContext).load(R.drawable.ic_taskkind01)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
@@ -171,9 +172,9 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             holder.title.setText(item.getTitle());
             holder.name.setText(item.getRequester_name());
             cal = Calendar.getInstance();
-            toDay = sdf.format(cal.getTime()).replace("-",".");
+            toDay = sdf.format(cal.getTime()).replace("-", ".");
             dlog.i("오늘 :" + toDay);
-            shardpref.putString("FtoDay",toDay);
+            shardpref.putString("FtoDay", toDay);
 
 
             holder.work_start_time.setText(item.getStart_time() + " 시작");
@@ -181,21 +182,23 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
 
             holder.accept_btn.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v,position);
+                    mListener.onItemClick(v, position);
                 }
                 setUpdateWorktodo("1", item.getId(), USER_INFO_ID); //승인
                 String message = "[" + item.getTitle() + "] 가 승인되었습니다.";
-                getUserToken(item.getRequester_id(),"1",message);
+                getUserToken(item.getRequester_id(), "1", message);
+                AddPush("업무결재",message,item.getRequester_id());
             });
             holder.reject_btn.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v,position);
+                    mListener.onItemClick(v, position);
                 }
                 setUpdateWorktodo("2", item.getId(), USER_INFO_ID); //반려
                 String message = "[" + item.getTitle() + "] 가 반려되었습니다.";
-                getUserToken(item.getRequester_id(),"1",message);
+                getUserToken(item.getRequester_id(), "1", message);
+                AddPush("업무결재",message,item.getRequester_id());
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             dlog.i("Exception : " + e);
         }
     } // getItemCount : 전체 데이터의 개수를 리턴
@@ -207,35 +210,35 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView state_tv;
-        LinearLayout state_line,state_area;
+        LinearLayout state_line, state_area;
 
-        ImageView workimg,kind;
+        ImageView workimg, kind;
 
-        TextView title,name;
-        TextView work_start_time,work_end_time;
+        TextView title, name;
+        TextView work_start_time, work_end_time;
 
-        RelativeLayout accept_btn,reject_btn;
+        RelativeLayout accept_btn, reject_btn;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            state_tv        = itemView.findViewById(R.id.state_tv);
-            state_area      = itemView.findViewById(R.id.state_area);
-            state_line      = itemView.findViewById(R.id.state_line);
-            workimg         = itemView.findViewById(R.id.workimg);
-            kind            = itemView.findViewById(R.id.kind);
-            title           = itemView.findViewById(R.id.title);
-            name            = itemView.findViewById(R.id.name);
+            state_tv = itemView.findViewById(R.id.state_tv);
+            state_area = itemView.findViewById(R.id.state_area);
+            state_line = itemView.findViewById(R.id.state_line);
+            workimg = itemView.findViewById(R.id.workimg);
+            kind = itemView.findViewById(R.id.kind);
+            title = itemView.findViewById(R.id.title);
+            name = itemView.findViewById(R.id.name);
             work_start_time = itemView.findViewById(R.id.work_start_time);
-            work_end_time   = itemView.findViewById(R.id.work_end_time);
-            accept_btn      = itemView.findViewById(R.id.accept_btn);
-            reject_btn      = itemView.findViewById(R.id.reject_btn);
+            work_end_time = itemView.findViewById(R.id.work_end_time);
+            accept_btn = itemView.findViewById(R.id.accept_btn);
+            reject_btn = itemView.findViewById(R.id.reject_btn);
 
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
-            place_id        = shardpref.getString("place_id", "");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            place_id = shardpref.getString("place_id", "");
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
@@ -355,6 +358,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
     }
 
     String message = "";
+    String place_owner_id = "";
     //근로자 > 점주 ( 초대수락 FCM )
     public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");
@@ -380,6 +384,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                         String id = Response.getJSONObject(0).getString("id");
                         String token = Response.getJSONObject(0).getString("token");
                         dlog.i("-----getManagerToken-----");
+                        place_owner_id = shardpref.getString("place_owner_id","");
                         boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
                         if (!token.isEmpty() && channelId1) {
                             PushFcmSend(id, "", message, token, "1", place_id);
@@ -398,6 +403,30 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         });
     }
 
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     DBConnection dbConnection = new DBConnection();
     String click_action = "";

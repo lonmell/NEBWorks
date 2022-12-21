@@ -17,6 +17,7 @@ public interface TaskreuseInputInterface
             @Field("title") String title,
             @Field("contents") String contents,
             @Field("complete_kind") String complete_kind,
+            @Field("task_date") String task_date,
             @Field("start_time") String start_time,
             @Field("end_time") String end_time,
             @Field("sun") String sun,

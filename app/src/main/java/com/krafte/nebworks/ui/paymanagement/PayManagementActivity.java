@@ -45,7 +45,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PayManagementActivity extends AppCompatActivity {
-    private static final String TAG = "MemberManagement";
+    private static final String TAG = "PayManagementActivity";
     private ActivityPaymanagementBinding binding;
     Context mContext;
 
@@ -110,7 +110,7 @@ public class PayManagementActivity extends AppCompatActivity {
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-            Tap = shardpref.getString("Tap", "0");
+            Tap = USER_INFO_AUTH;
 
             binding.backBtn.setOnClickListener(v -> {
                 shardpref.putInt("SELECT_POSITION", 0);
@@ -214,10 +214,6 @@ public class PayManagementActivity extends AppCompatActivity {
     String Month = "";
     String Day = "";
     String getYMPicker = "";
-    String gYear = "";
-    String gMonth = "";
-    String bYear = "";
-    String bMonth = "";
     FragmentTransaction transaction;
     String setDate = "";
     private void TimeSetFun() {
@@ -310,6 +306,7 @@ public class PayManagementActivity extends AppCompatActivity {
     }
 
     // 직원 급여 명세서 리스트
+    int row_cnt = 0;
     public void WritePaymentList(String place_id, String SelectId, String GET_DATE, String tap) {
         GetInsurancePercent();
         dlog.i("------------PaymentFragment2 List------------");
@@ -352,25 +349,58 @@ public class PayManagementActivity extends AppCompatActivity {
                             binding.nodataArea.setVisibility(View.GONE);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
-                                mAdapter.addItem(new PaymentData.PaymentData_list(
-                                        jsonObject.getString("place_id"),
-                                        jsonObject.getString("user_id"),
-                                        jsonObject.getString("user_name"),
-                                        jsonObject.getString("account"),
-                                        jsonObject.getString("jikgup"),
-                                        jsonObject.getString("basic_pay"),
-                                        jsonObject.getString("second_pay"),
-                                        jsonObject.getString("overwork_pay"),
-                                        jsonObject.getString("meal_allowance_yn"),
-                                        jsonObject.getString("store_insurance_yn"),
-                                        jsonObject.getString("gongjeynpay"),
-                                        jsonObject.getString("total_pay"),
-                                        jsonObject.getString("meal_pay"),
-                                        jsonObject.getString("workday"),
-                                        jsonObject.getString("workhour"),
-                                        jsonObject.getString("total_workday"),
-                                        jsonObject.getString("payment")
-                                ));
+                                if(tap.equals("1")){
+                                    if(!jsonObject.getString("gongjeynpay").equals("null")){
+                                        mAdapter.addItem(new PaymentData.PaymentData_list(
+                                                jsonObject.getString("place_id"),
+                                                jsonObject.getString("user_id"),
+                                                jsonObject.getString("user_name"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("account"),
+                                                jsonObject.getString("jikgup"),
+                                                jsonObject.getString("basic_pay"),
+                                                jsonObject.getString("second_pay"),
+                                                jsonObject.getString("overwork_pay"),
+                                                jsonObject.getString("meal_allowance_yn"),
+                                                jsonObject.getString("store_insurance_yn"),
+                                                jsonObject.getString("gongjeynpay"),
+                                                jsonObject.getString("total_pay"),
+                                                jsonObject.getString("meal_pay"),
+                                                jsonObject.getString("set_month"),
+                                                jsonObject.getString("workday"),
+                                                jsonObject.getString("workhour"),
+                                                jsonObject.getString("total_workday"),
+                                                jsonObject.getString("payment")
+                                        ));
+                                        row_cnt++;
+                                    }
+                                }else{
+                                    mAdapter.addItem(new PaymentData.PaymentData_list(
+                                            jsonObject.getString("place_id"),
+                                            jsonObject.getString("user_id"),
+                                            jsonObject.getString("user_name"),
+                                            jsonObject.getString("img_path"),
+                                            jsonObject.getString("account"),
+                                            jsonObject.getString("jikgup"),
+                                            jsonObject.getString("basic_pay"),
+                                            jsonObject.getString("second_pay"),
+                                            jsonObject.getString("overwork_pay"),
+                                            jsonObject.getString("meal_allowance_yn"),
+                                            jsonObject.getString("store_insurance_yn"),
+                                            jsonObject.getString("gongjeynpay"),
+                                            jsonObject.getString("total_pay"),
+                                            jsonObject.getString("meal_pay"),
+                                            jsonObject.getString("set_month"),
+                                            jsonObject.getString("workday"),
+                                            jsonObject.getString("workhour"),
+                                            jsonObject.getString("total_workday"),
+                                            jsonObject.getString("payment")
+                                    ));
+                                    row_cnt++;
+                                }
+                            }
+                            if(row_cnt == 0){
+                                binding.nodataArea.setVisibility(View.VISIBLE);
                             }
                             mAdapter.notifyDataSetChanged();
                             mAdapter.setOnItemClickListener((v, position) -> {

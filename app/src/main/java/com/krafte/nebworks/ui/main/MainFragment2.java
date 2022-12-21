@@ -30,11 +30,11 @@ import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
-import com.krafte.nebworks.ui.naviFragment.CalendarFragment;
 import com.krafte.nebworks.ui.naviFragment.CommunityFragment;
 import com.krafte.nebworks.ui.naviFragment.HomeFragment2;
 import com.krafte.nebworks.ui.naviFragment.MoreFragment;
-import com.krafte.nebworks.ui.naviFragment.PaymentFragment;
+import com.krafte.nebworks.ui.naviFragment.WorkgotoFragment;
+import com.krafte.nebworks.ui.naviFragment.WorkstatusFragment;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -148,12 +148,10 @@ public class MainFragment2 extends AppCompatActivity {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("place_name : " + place_name);
 
-            bottom_icon02.setBackgroundResource(R.drawable.ic_payment_off);
-            bottom_icon03.setBackgroundResource(R.drawable.ic_calendar_off);
             ChangePosition(0);
 
             final List<String> tabElement;
-            tabElement = Arrays.asList("홈", "급여관리", "캘린더", "커뮤니티", "더보기");
+            tabElement = Arrays.asList("홈", "할일", "근무현황", "커뮤니티", "더보기");
             ArrayList<Fragment> fragments = new ArrayList<>();
             bottom_icon01tv.setText(tabElement.get(0));
             bottom_icon02tv.setText(tabElement.get(1));
@@ -163,8 +161,8 @@ public class MainFragment2 extends AppCompatActivity {
 
             //점주일때
             fragments.add(HomeFragment2.newInstance(0));
-            fragments.add(PaymentFragment.newInstance(1));
-            fragments.add(CalendarFragment.newInstance(2));
+            fragments.add(WorkgotoFragment.newInstance(1));
+            fragments.add(WorkstatusFragment.newInstance(2));
             fragments.add(CommunityFragment.newInstance(3));
             fragments.add(MoreFragment.newInstance(4));
             viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
@@ -381,14 +379,14 @@ public class MainFragment2 extends AppCompatActivity {
         } else if (view.getId() == R.id.bottom_navigation02) {
             dlog.i("급여관리 Click!");
             shardpref.putInt("Tap", 0);
-            binding.title.setText("급여관리");
+            binding.title.setText("할일");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 0);
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation03) {
             dlog.i("캘린더 Click!");
-            binding.title.setText("캘린더");
+            binding.title.setText("근무현황");
             binding.tabLayout.getTabAt(2).select();
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation04) {
@@ -427,7 +425,9 @@ public class MainFragment2 extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 0);
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
-            pm.TaskList(mContext);
+            shardpref.putInt("SELECT_POSITION", 1);
+            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.Main2(mContext);
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
             pm.addWorkGo(mContext);
@@ -440,36 +440,6 @@ public class MainFragment2 extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav10) {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
-        }
-    }
-
-    private void ChangePosition(int i) {
-        bottom_icon01.setBackgroundResource(R.drawable.ic_main_off);
-        bottom_icon01tv.setTextColor(Color.parseColor("#C3C3C3"));
-        bottom_icon02.setBackgroundResource(R.drawable.ic_payment_off);
-        bottom_icon02tv.setTextColor(Color.parseColor("#C3C3C3"));
-        bottom_icon03.setBackgroundResource(R.drawable.ic_calendar_off);
-        bottom_icon03tv.setTextColor(Color.parseColor("#C3C3C3"));
-        bottom_icon04.setBackgroundResource(R.drawable.ic_community_off);
-        bottom_icon04tv.setTextColor(Color.parseColor("#C3C3C3"));
-        bottom_icon05.setBackgroundResource(R.drawable.ic_more_off);
-        bottom_icon05tv.setTextColor(Color.parseColor("#C3C3C3"));
-
-        if (i == 0) {
-            bottom_icon01.setBackgroundResource(R.drawable.ic_main_on);
-            bottom_icon01tv.setTextColor(Color.parseColor("#6395EC"));
-        } else if (i == 1) {
-            bottom_icon02.setBackgroundResource(R.drawable.ic_payment_on);
-            bottom_icon02tv.setTextColor(Color.parseColor("#6395EC"));
-        } else if (i == 2) {
-            bottom_icon03.setBackgroundResource(R.drawable.ic_calendar_on);
-            bottom_icon03tv.setTextColor(Color.parseColor("#6395EC"));
-        } else if (i == 3) {
-            bottom_icon04.setBackgroundResource(R.drawable.ic_community_on);
-            bottom_icon04tv.setTextColor(Color.parseColor("#6395EC"));
-        } else if (i == 4) {
-            bottom_icon05.setBackgroundResource(R.drawable.ic_more_on);
-            bottom_icon05tv.setTextColor(Color.parseColor("#6395EC"));
         }
     }
 
@@ -518,6 +488,35 @@ public class MainFragment2 extends AppCompatActivity {
         super.onDestroy();
     }
 
+    private void ChangePosition(int i) {
+        bottom_icon01.setBackgroundResource(R.drawable.ic_main_off);
+        bottom_icon02.setBackgroundResource(R.drawable.ic_task_off);
+        bottom_icon03.setBackgroundResource(R.drawable.ic_member_off);
+        bottom_icon04.setBackgroundResource(R.drawable.ic_community_off);
+        bottom_icon05.setBackgroundResource(R.drawable.ic_more_off);
+        bottom_icon01tv.setTextColor(Color.parseColor("#C3C3C3"));
+        bottom_icon02tv.setTextColor(Color.parseColor("#C3C3C3"));
+        bottom_icon03tv.setTextColor(Color.parseColor("#C3C3C3"));
+        bottom_icon04tv.setTextColor(Color.parseColor("#C3C3C3"));
+        bottom_icon05tv.setTextColor(Color.parseColor("#C3C3C3"));
+
+        if (i == 0) {
+            bottom_icon01.setBackgroundResource(R.drawable.ic_main_on);
+            bottom_icon01tv.setTextColor(Color.parseColor("#6395EC"));
+        } else if (i == 1) {
+            bottom_icon02.setBackgroundResource(R.drawable.ic_task_on);
+            bottom_icon02tv.setTextColor(Color.parseColor("#6395EC"));
+        } else if (i == 2) {
+            bottom_icon03.setBackgroundResource(R.drawable.ic_member_on);
+            bottom_icon03tv.setTextColor(Color.parseColor("#6395EC"));
+        } else if (i == 3) {
+            bottom_icon04.setBackgroundResource(R.drawable.ic_community_on);
+            bottom_icon04tv.setTextColor(Color.parseColor("#6395EC"));
+        } else if (i == 4) {
+            bottom_icon05.setBackgroundResource(R.drawable.ic_more_on);
+            bottom_icon05tv.setTextColor(Color.parseColor("#6395EC"));
+        }
+    }
 //    //-------몰입화면 설정
 //    @Override
 //    public void onWindowFocusChanged(boolean hasFocus) {

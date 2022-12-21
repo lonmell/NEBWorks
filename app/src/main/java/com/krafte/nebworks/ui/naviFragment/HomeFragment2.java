@@ -41,6 +41,7 @@ import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
 import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.util.DBConnection;
@@ -284,7 +285,7 @@ public class HomeFragment2 extends Fragment {
         InOutLogMember();
     }
 
-    public void InOutLogMember() {
+    public void InOutLogMember() {//출퇴근상황 / 날짜가 변경됬을때는 퇴근중이 아닌 미출근 / 휴무날에는 휴무로 표시해야함
         dlog.i("--------InOutLogMember--------");
         dlog.i("place_id : " + place_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -364,12 +365,7 @@ public class HomeFragment2 extends Fragment {
             pm.MemberManagement(mContext);
         });
 
-        binding.paymentmanagementSelect.setOnClickListener(v -> {
-            shardpref.putInt("Tap", 0);
-            shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
-            pm.Main2(mContext);
-        });
+
         binding.ioArea.setOnClickListener(v -> {
             if (kind.equals("-1") || kind.equals("0")) {
                 if (kind.equals("-1")) {
@@ -387,6 +383,11 @@ public class HomeFragment2 extends Fragment {
         });
         binding.acceptBtn.setOnClickListener(v -> {
             UpdateDirectMemberBasic();
+        });
+
+        binding.homeMenu03.setOnClickListener(v -> {
+            dlog.i("급여관리");
+            pm.PayManagement(mContext);
         });
 
         binding.homeMenu04.setOnClickListener(v -> {
@@ -784,6 +785,7 @@ public class HomeFragment2 extends Fragment {
                                 accept_state = 1;
                                 String message = "[" + mem_name +"]근로자님이 매장초대를 수락하셨습니다.";
                                 getUserToken(place_owner_id,"0",message);
+                                AddPush("매장초대",message,place_owner_id);
                             }
                         }
                     });
@@ -957,7 +959,30 @@ public class HomeFragment2 extends Fragment {
             }
         });
     }
+    public void AddPush(String title, String content, String user_id) {
+        place_owner_id = shardpref.getString("place_owner_id","");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, USER_INFO_ID, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     DBConnection dbConnection = new DBConnection();
     String click_action = "";

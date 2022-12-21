@@ -493,6 +493,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/select06_box"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="10dp"
@@ -537,7 +538,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

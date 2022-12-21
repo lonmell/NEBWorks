@@ -111,7 +111,14 @@ public class TaskReuseActivity extends AppCompatActivity {
     }
 
     private void setBtnEvent() {
-
+        binding.backBtn.setOnClickListener(v -> {
+            shardpref.putInt("SELECT_POSITION",1);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else{
+                pm.Main2(mContext);
+            }
+        });
     }
 
     public void setTodoMList() {
@@ -193,5 +200,16 @@ public class TaskReuseActivity extends AppCompatActivity {
             shardpref.putInt("make_kind",2);
             pm.TaskReuesAdd(mContext);
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+//        super.onBackPressed();
+        shardpref.putInt("SELECT_POSITION",1);
+        if(USER_INFO_AUTH.equals("0")){
+            pm.Main(mContext);
+        }else{
+            pm.Main2(mContext);
+        }
     }
 }

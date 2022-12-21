@@ -183,6 +183,7 @@ public class PlaceSearchActivity extends AppCompatActivity {
                     dlog.e("response 1: " + response.isSuccessful());
                     dlog.e("response 2: " + rc.getBase64decode(response.body()));
                     try {
+
                         mList = new ArrayList<>();
                         searchmList = new ArrayList<>();
                         mAdapter = new PlaceSearchAdapter(mContext, mList,searchmList);
@@ -190,6 +191,7 @@ public class PlaceSearchActivity extends AppCompatActivity {
                         binding.addressList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
+                        binding.searchCnt.setText(String.valueOf(Response.length()));
                         for (int i = 0; i < Response.length(); i++) {
                             JSONObject jsonObject = Response.getJSONObject(i);
 

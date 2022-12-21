@@ -229,6 +229,7 @@ public class WorkgotoFragment extends Fragment {
         super.onResume();
         try{
             //기존에 저장된 반복데이터 삭제
+            shardpref.remove("return_page");
             shardpref.remove("SET_TASK_TIME_VALUE");
             shardpref.remove("yoillist");
             shardpref.remove("RepeatTF");

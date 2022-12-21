@@ -149,8 +149,6 @@ public class MainFragment extends AppCompatActivity {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("place_name : " + place_name);
 
-            bottom_icon02.setBackgroundResource(R.drawable.ic_task_off);
-            bottom_icon03.setBackgroundResource(R.drawable.ic_member_off);
             ChangePosition(0);
 
             final List<String> tabElement;

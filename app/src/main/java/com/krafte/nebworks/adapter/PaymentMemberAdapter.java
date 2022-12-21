@@ -5,25 +5,41 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PaymentData;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdapter.ViewHolder> {
     private static final String TAG = "PaymentMemberAdapter";
@@ -33,6 +49,7 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
     int select_flag = -1;
     int before_pos = 0;
     String selectdate = "0000.00";
+    String place_id = "";
     Dlog dlog = new Dlog();
     PageMoveClass pm = new PageMoveClass();
     int AllPayment = 0;
@@ -80,44 +97,14 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
             AllPayment = Integer.parseInt(item.getTotal_payment().equals("null")?"0":item.getTotal_payment()) + Integer.parseInt(item.getSecond_pay().equals("null")?"0":item.getSecond_pay()) + Integer.parseInt(item.getOverwork_pay().equals("null")?"0":item.getOverwork_pay());
             holder.name.setText(item.getUser_name());
 
-            if(USER_INFO_AUTH.equals("1")){
-                holder.send_user_state.setVisibility(View.GONE);
-                holder.gongje_box.setVisibility(View.VISIBLE);
-                holder.write_payment.setVisibility(View.GONE);
-                holder.weekly_worktime_progress.setVisibility(View.GONE);
-                holder.progress_tvarea.setVisibility(View.GONE);
+            Glide.with(mContext).load(item.getImg_path())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(holder.profile_setimg);
 
-                insurance1 = String.valueOf(Math.round((AllPayment * insurance01p)/100));
-                insurance2 = String.valueOf(Math.round((AllPayment * insurance02p)/100));
-                insurance3 = String.valueOf(Math.round((AllPayment * insurance03p)/100));
-                insurance4 = String.valueOf(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
-                dlog.i("insurance01p : " + insurance01p);
-                dlog.i("insurance02p : " + insurance02p);
-                dlog.i("insurance03p : " + insurance03p);
-                dlog.i("insurance04p : " + insurance04p);
-                dlog.i("insurance1 : " + insurance1);
-                dlog.i("insurance2 : " + insurance2);
-                dlog.i("insurance3 : " + insurance3);
-                dlog.i("insurance4 : " + insurance4);
-                dlog.i("result_pay : " + item.getPayment());
-                dlog.i("result_gongje : " + (insurance1+insurance2+insurance3+insurance4));
-                int result_gongje_int = Integer.parseInt(insurance1)+Integer.parseInt(insurance2)+Integer.parseInt(insurance3)+Integer.parseInt(insurance4);
-                String resultGonjeTv = myFormatter.format(result_gongje_int);
-                holder.result_pay.setText(item.getPayment() + "원");
-                holder.result_gongje.setText(resultGonjeTv + "원");
-                dlog.i("result_pay : " + item.getPayment());
-                dlog.i("result_gongje : " + resultGonjeTv);
-            }else if(USER_INFO_AUTH.equals("0")){
-                if(Tap.equals("0")){
-                    holder.gongje_box.setVisibility(View.GONE);
+            if(USER_INFO_AUTH.equals("1")){
                     holder.send_user_state.setVisibility(View.GONE);
-                    holder.write_payment.setVisibility(View.VISIBLE);
-                    holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
-                    holder.progress_tvarea.setVisibility(View.VISIBLE);
-                }else if(Tap.equals("1")){
-                    dlog.i("AllPayment : " + AllPayment);
                     holder.gongje_box.setVisibility(View.VISIBLE);
-                    holder.send_user_state.setVisibility(View.VISIBLE);
                     holder.write_payment.setVisibility(View.GONE);
                     holder.weekly_worktime_progress.setVisibility(View.GONE);
                     holder.progress_tvarea.setVisibility(View.GONE);
@@ -142,8 +129,52 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
                     holder.result_gongje.setText(resultGonjeTv + "원");
                     dlog.i("result_pay : " + item.getPayment());
                     dlog.i("result_gongje : " + resultGonjeTv);
+            }else if(USER_INFO_AUTH.equals("0")){
+                if(Tap.equals("0")){
+                    if(item.getGongjeynpay().isEmpty()){
+                        holder.gongje_box.setVisibility(View.GONE);
+                        holder.send_user_state.setVisibility(View.GONE);
+                        holder.write_payment.setVisibility(View.VISIBLE);
+                        holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                        holder.progress_tvarea.setVisibility(View.VISIBLE);
+                    }else{
+                        holder.gongje_box.setVisibility(View.VISIBLE);
+                        holder.send_user_state.setVisibility(View.GONE);
+                        holder.write_payment.setVisibility(View.GONE);
+                        holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                        holder.progress_tvarea.setVisibility(View.GONE);
+                    }
+                }else if(Tap.equals("1")){
+                    dlog.i("("+position + ") item.getGongjeynpay() : " + item.getGongjeynpay());
+                        dlog.i("AllPayment : " + AllPayment);
+                        holder.gongje_box.setVisibility(View.VISIBLE);
+                        holder.send_user_state.setVisibility(View.VISIBLE);
+                        holder.write_payment.setVisibility(View.GONE);
+                        holder.weekly_worktime_progress.setVisibility(View.GONE);
+                        holder.progress_tvarea.setVisibility(View.GONE);
                 }
             }
+
+            insurance1 = String.valueOf(Math.round((AllPayment * insurance01p)/100));
+            insurance2 = String.valueOf(Math.round((AllPayment * insurance02p)/100));
+            insurance3 = String.valueOf(Math.round((AllPayment * insurance03p)/100));
+            insurance4 = String.valueOf(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+            dlog.i("insurance01p : " + insurance01p);
+            dlog.i("insurance02p : " + insurance02p);
+            dlog.i("insurance03p : " + insurance03p);
+            dlog.i("insurance04p : " + insurance04p);
+            dlog.i("insurance1 : " + insurance1);
+            dlog.i("insurance2 : " + insurance2);
+            dlog.i("insurance3 : " + insurance3);
+            dlog.i("insurance4 : " + insurance4);
+            dlog.i("result_pay : " + item.getPayment());
+            dlog.i("result_gongje : " + (insurance1+insurance2+insurance3+insurance4));
+            int result_gongje_int = Integer.parseInt(insurance1)+Integer.parseInt(insurance2)+Integer.parseInt(insurance3)+Integer.parseInt(insurance4);
+            String resultGonjeTv = myFormatter.format(result_gongje_int);
+            holder.result_pay.setText(item.getPayment() + "원");
+            holder.result_gongje.setText(resultGonjeTv + "원");
+            dlog.i("result_pay : " + item.getPayment());
+            dlog.i("result_gongje : " + resultGonjeTv);
 
             String pay = myFormatter.format(Integer.parseInt(item.getGongjeynpay().equals("null")?"0":item.getGongjeynpay()));
             holder.total_pay.setText(pay.isEmpty()?"미정":pay);
@@ -164,6 +195,12 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
                     mListener.onItemClick(v, position);
                 }
             });
+
+            holder.paystub_resend.setOnClickListener(v -> {
+                String message = "["+item.getUser_name()+"] 님의 " + item.getSet_month() + "월 급여명세서가 도착했습니다.";
+                getUserToken(item.getUser_id(),"1",message);
+                AddPush("급여명세서",message,item.getUser_id());
+            });
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -182,6 +219,9 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
         TextView nowpay,mypay,result_pay,result_gongje;
         LinearLayout gongje_box,write_payment,send_user_state;
         RelativeLayout progress_tvarea;
+        ImageView profile_setimg;
+        CardView paystub_resend,send_money;
+
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -202,8 +242,12 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
             result_pay               = itemView.findViewById(R.id.result_pay);
             result_gongje            = itemView.findViewById(R.id.result_gongje);
             progress_tvarea          = itemView.findViewById(R.id.progress_tvarea);
+            profile_setimg           = itemView.findViewById(R.id.profile_setimg);
+            paystub_resend           = itemView.findViewById(R.id.paystub_resend);
+            send_money               = itemView.findViewById(R.id.send_money);
 
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1");
+            place_id = shardpref.getString("place_id","-1");
 
             itemView.setOnClickListener(v -> {
                 int pos = getBindingAdapterPosition();
@@ -291,5 +335,98 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
+    }
+
+    String place_owner_id = "";
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        place_owner_id = shardpref.getString("place_owner_id","");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+    DBConnection dbConnection = new DBConnection();
+    String click_action = "";
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+//            activity.runOnUiThread(() -> {
+//            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

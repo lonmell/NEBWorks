@@ -34,6 +34,7 @@ import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.GetConfirmPlaceInterface;
 import com.krafte.nebworks.dataInterface.NonmemberInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.UserNumSelectInterface;
 import com.krafte.nebworks.databinding.ActivityInviteMemberBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -327,8 +328,9 @@ public class InviteMemberActivity extends AppCompatActivity {
                                 Toast_Nomal("직원 초대가 완료되었습니다[승인 대기 중]");
                                 shardpref.putInt("SELECT_POSITION", 2);
                                 shardpref.putInt("SELECT_POSITION_sub", 0);
-                                String message = "[" + place_name + "] 에서 근무 초대가 도착했습니다.";
+                                String message = "[" + place_name + "] 에서 초대가 도착했습니다.";
                                 getUserToken(user_id,"1",message);
+                                AddPush("직원초대",message,user_id);
                                 pm.MemberManagement(mContext);
                             } else {
                                 Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
@@ -390,7 +392,37 @@ public class InviteMemberActivity extends AppCompatActivity {
             }
         });
     }
+    String place_owner_id = "";
+    public void AddPush(String title, String content, String user_id) {
+        place_owner_id = shardpref.getString("place_owner_id","");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     String click_action = "";
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {

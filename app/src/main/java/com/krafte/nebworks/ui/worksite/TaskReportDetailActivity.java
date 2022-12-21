@@ -452,7 +452,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
         if(USER_INFO_AUTH.equals("0")){
             pm.Main(mContext);
         }else if(USER_INFO_AUTH.equals("1")){
-            pm.TaskList(mContext);
+            pm.Main2(mContext);
         }
     }
 }

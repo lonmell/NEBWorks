@@ -167,7 +167,7 @@ public class TaskListActivity extends AppCompatActivity {
             return_page = shardpref.getString("return_page","");
 
             setBtnEvent();
-            binding.topBar.setVisibility(View.VISIBLE);
+//            binding.topBar.setVisibility(View.VISIBLE);
             change_place_id = place_id;
             change_member_id = "";
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
@@ -233,9 +233,9 @@ public class TaskListActivity extends AppCompatActivity {
     }
 
     public void setBtnEvent() {
-        binding.backBtn2.setOnClickListener(v -> {
-            super.onBackPressed();
-        });
+//        binding.backBtn2.setOnClickListener(v -> {
+//            super.onBackPressed();
+//        });
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);

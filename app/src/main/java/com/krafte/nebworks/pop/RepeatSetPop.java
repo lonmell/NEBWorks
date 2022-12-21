@@ -65,7 +65,7 @@ public class RepeatSetPop extends Activity {
         dlog.DlogContext(mContext);
 
         //기초 데이터
-        RepeatTF = true;
+        RepeatTF = false;
         RepeatKind = 1;
 
         shardpref = new PreferenceHelper(mContext);
@@ -84,7 +84,10 @@ public class RepeatSetPop extends Activity {
         dlog.i("overdate : " + overdate);
         dlog.i("----RepeatSetPop----");
 
+
         //-- 기본데이터 세팅 START
+        DefaultBtnSetting();
+
         Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
@@ -226,6 +229,25 @@ public class RepeatSetPop extends Activity {
         super.onResume();
     }
 
+    private void DefaultBtnSetting(){
+        RepeatTF = false;
+        binding.select01Round.setBackgroundResource(R.drawable.ic_empty_round);
+        binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
+        binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
+        binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
+
+        binding.select03Box.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.select03Round.setBackgroundResource(R.drawable.ic_empty_round);
+        binding.select04Box.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
+        binding.select05Box.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.select05Round.setBackgroundResource(R.drawable.ic_empty_round);
+        binding.yoilArea.setVisibility(View.GONE);
+        binding.select03Box.setClickable(false);
+        binding.select04Box.setClickable(false);
+        binding.select05Box.setClickable(false);
+        yoillist.clear();
+    }
     private void setBtnEvent(){
         binding.backBtn.setOnClickListener(v -> {
             closePop();
@@ -272,51 +294,57 @@ public class RepeatSetPop extends Activity {
 
         binding.select03Box.setOnClickListener(v -> {
             //매일
-            RepeatKind = 1;
-            binding.select03Box.setBackgroundResource(R.drawable.default_select_round);
-            binding.select03Round.setBackgroundResource(R.drawable.ic_full_round);
-            binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
-            binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
-            binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
-            binding.select05Round.setBackgroundResource(R.drawable.ic_empty_round);
-            binding.yoilArea.setVisibility(View.GONE);
-            yoillist.clear();
-            yoillist.add("월");
-            yoillist.add("화");
-            yoillist.add("수");
-            yoillist.add("목");
-            yoillist.add("금");
-            yoillist.add("토");
-            yoillist.add("일");
+            if(RepeatTF){
+                RepeatKind = 1;
+                binding.select03Box.setBackgroundResource(R.drawable.default_select_round);
+                binding.select03Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
+                binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
+                binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
+                binding.select05Round.setBackgroundResource(R.drawable.ic_empty_round);
+                binding.yoilArea.setVisibility(View.GONE);
+                yoillist.clear();
+                yoillist.add("월");
+                yoillist.add("화");
+                yoillist.add("수");
+                yoillist.add("목");
+                yoillist.add("금");
+                yoillist.add("토");
+                yoillist.add("일");
+            }
         });
         binding.select04Box.setOnClickListener(v -> {
             //주중 매일(월 ~ 금)
-            RepeatKind = 2;
-            binding.select03Box.setBackgroundResource(R.drawable.default_gray_round);
-            binding.select03Round.setBackgroundResource(R.drawable.ic_empty_round);
-            binding.select04Box.setBackgroundResource(R.drawable.default_select_round);
-            binding.select04Round.setBackgroundResource(R.drawable.ic_full_round);
-            binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
-            binding.select05Round.setBackgroundResource(R.drawable.ic_empty_round);
-            binding.yoilArea.setVisibility(View.GONE);
-            yoillist.clear();
-            yoillist.add("월");
-            yoillist.add("화");
-            yoillist.add("수");
-            yoillist.add("목");
-            yoillist.add("금");
+            if(RepeatTF){
+                RepeatKind = 2;
+                binding.select03Box.setBackgroundResource(R.drawable.default_gray_round);
+                binding.select03Round.setBackgroundResource(R.drawable.ic_empty_round);
+                binding.select04Box.setBackgroundResource(R.drawable.default_select_round);
+                binding.select04Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
+                binding.select05Round.setBackgroundResource(R.drawable.ic_empty_round);
+                binding.yoilArea.setVisibility(View.GONE);
+                yoillist.clear();
+                yoillist.add("월");
+                yoillist.add("화");
+                yoillist.add("수");
+                yoillist.add("목");
+                yoillist.add("금");
+            }
         });
         binding.select05Box.setOnClickListener(v -> {
             //맞춤설정
-            RepeatKind = 3;
-            binding.select03Box.setBackgroundResource(R.drawable.default_gray_round);
-            binding.select03Round.setBackgroundResource(R.drawable.ic_empty_round);
-            binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
-            binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
-            binding.select05Box.setBackgroundResource(R.drawable.default_select_round);
-            binding.select05Round.setBackgroundResource(R.drawable.ic_full_round);
-            binding.yoilArea.setVisibility(View.VISIBLE);
-            yoillist.clear();
+            if(RepeatTF){
+                RepeatKind = 3;
+                binding.select03Box.setBackgroundResource(R.drawable.default_gray_round);
+                binding.select03Round.setBackgroundResource(R.drawable.ic_empty_round);
+                binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
+                binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
+                binding.select05Box.setBackgroundResource(R.drawable.default_select_round);
+                binding.select05Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.yoilArea.setVisibility(View.VISIBLE);
+                yoillist.clear();
+            }
         });
         binding.mon.setOnClickListener(v -> {
             if(!montf){

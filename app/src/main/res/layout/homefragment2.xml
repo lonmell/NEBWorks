@@ -265,7 +265,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="29dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:contentPadding="20dp"
                 app:cardBackgroundColor="#ffffff"
                 app:cardCornerRadius="10dp"
@@ -740,7 +740,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/paymentmanagement_select"
+                    android:id="@+id/home_menu03"
                     android:layout_width="74dp"
                     android:layout_height="106dp"
                     android:layout_margin="5dp"

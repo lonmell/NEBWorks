@@ -31,8 +31,6 @@ import com.krafte.nebworks.databinding.ActivityPlaceaddworkBinding;
 import com.krafte.nebworks.pop.MemberListPop;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
 import com.krafte.nebworks.pop.RepeatSetPop;
-import com.krafte.nebworks.pop.SelectTaskDatePop;
-import com.krafte.nebworks.pop.WorkTimePicker;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -188,7 +186,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             if (task_no.equals("0")) {
                 user_id = "";
             }
-
+            dlog.i("task_no : " + task_no);
             setBtnEvent();
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
             WorkDay = toDay;
@@ -227,38 +225,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 shardpref.putString("change_place_owner_id", place_owner_id);
                 binding.storeName.setText(place_name);
             });
-        });
-
-        binding.eventStarttime.setOnClickListener(v -> {
-            if (RepeatCheck) {
-                Intent intent = new Intent(mContext, WorkTimePicker.class);
-                intent.putExtra("timeSelect_flag", 2);
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            } else {
-                Intent intent = new Intent(mContext, SelectTaskDatePop.class);
-                shardpref.putString("SET_TASK_TIME_VALUE", "0");
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            }
-        });
-
-        binding.eventEndttime.setOnClickListener(v -> {
-            if (RepeatCheck) {
-                Intent intent = new Intent(mContext, WorkTimePicker.class);
-                intent.putExtra("timeSelect_flag", 3);
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            } else {
-                Intent intent = new Intent(mContext, SelectTaskDatePop.class);
-                shardpref.putString("SET_TASK_TIME_VALUE", "1");
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            }
         });
 
         binding.selectRepeatBtn.setOnClickListener(v -> {
@@ -466,7 +432,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             } else {
                 RepeatCheck = false;
                 binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
-                binding.startCalendar.setBackgroundResource(R.drawable.calendar_resize);
                 binding.inputDateBox01.setVisibility(View.VISIBLE);
                 binding.inputDateBox02.setVisibility(View.VISIBLE);
             }
@@ -582,21 +547,22 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    String today = "";
     private void getTaskContents() {
         dlog.i("-----getTaskContents START-----");
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        task_no = shardpref.getString("task_no", "0");
-        writer_id = shardpref.getString("writer_id", "0");
-        WorkTitle = shardpref.getString("title", "0");
-        WorkContents = shardpref.getString("contents", "0");
-        TaskKind = shardpref.getString("complete_kind", "0");            // 0:체크, 1:사진
-        user_id = shardpref.getString("users", "0");
-        usersn = shardpref.getString("usersn", "0");
-        usersimg = shardpref.getString("usersimg", "0");
-        usersjikgup = shardpref.getString("usersjikgup", "0");
-        WorkDay = shardpref.getString("task_date", "0");
-        start_time = shardpref.getString("start_time", "0");
-        end_time = shardpref.getString("end_time", "0");
+        task_no = shardpref.getString("task_no", "");
+        writer_id = shardpref.getString("writer_id", "");
+        WorkTitle = shardpref.getString("title", "");
+        WorkContents = shardpref.getString("contents", "");
+        TaskKind = shardpref.getString("complete_kind", "");            // 0:체크, 1:사진
+        user_id = shardpref.getString("users", "");
+        usersn = shardpref.getString("usersn", "");
+        usersimg = shardpref.getString("usersimg", "");
+        usersjikgup = shardpref.getString("usersjikgup", "");
+        WorkDay = shardpref.getString("task_date", "");
+        start_time = shardpref.getString("start_time", "");
+        end_time = shardpref.getString("end_time", "");
         Sun = shardpref.getString("sun", "0");
         Mon = shardpref.getString("mon", "0");
         Tue = shardpref.getString("tue", "0");
@@ -610,6 +576,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         String complete_yn = shardpref.getString("complete_yn", "n");// y:완료, n:미완료
         String incomplete_reason = shardpref.getString("incomplete_reason", "n"); // n: 미완료 사유
 
+        dlog.i("getTaskContents task_no : " + task_no);
         dlog.i("getTaskContents users : " + user_id);
         dlog.i("getTaskContents usersn : " + usersn);
         dlog.i("getTaskContents usersimg : " + usersimg);
@@ -628,8 +595,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
         message = "수정된 업무가 있습니다.";
         binding.workSave.setText("업무 수정");
-        binding.inputWorktitle.setText(WorkTitle);
-        binding.inputWorkcontents.setText(WorkContents);
+        binding.inputWorktitle.setText(WorkTitle.equals("0")?"":WorkTitle);
+        binding.inputWorkcontents.setText(WorkContents.equals("0")?"":WorkContents);
 
         //반복요일 세팅
         List<String> getYoil = new ArrayList<>();
@@ -656,26 +623,17 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         }
         dlog.i("getYoil : " + getYoil);
         shardpref.putString("yoillist", String.valueOf(getYoil));
-        String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+        today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
         if (!String.valueOf(getYoil).equals("[]")) {
             RepeatCheck = true;
             binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
             binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#6395EC"));
             binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
-
-            binding.startCalendar.setBackgroundResource(R.drawable.ic_time);
-            binding.endCalendar.setBackgroundResource(R.drawable.ic_time);
-            binding.eventStarttime.setHint("시간을 선택해주세요");
-            binding.eventEndttime.setHint("시간을 선택해주세요");
         } else {
             dlog.i("input_pop_time : " + input_pop_time);
             dlog.i("SET_TASK_TIME_VALUE : " + SET_TASK_TIME_VALUE);
             RepeatCheck = false;
             binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
-            binding.startCalendar.setBackgroundResource(R.drawable.calendar_resize);
-            binding.endCalendar.setBackgroundResource(R.drawable.calendar_resize);
-            binding.eventStarttime.setHint("날짜를 선택해주세요");
-            binding.eventEndttime.setHint("날짜를 선택해주세요");
 
             if (return_page.equals("task_reuse")) {
                 shardpref.putString("picker_year", today.substring(0, 4));
@@ -687,14 +645,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 shardpref.putString("picker_day", start_time.substring(8, 10));
             }
         }
-        if (return_page.equals("task_reuse")) {
-            binding.eventStarttime.setText(today + " " + start_time);
-            binding.eventEndttime.setText(today + " " + end_time);
-        } else {
-            binding.eventStarttime.setText(start_time);
-            binding.eventEndttime.setText(end_time);
-        }
-
 
         item_user_id = new ArrayList<>();
         item_user_name = new ArrayList<>();
@@ -790,12 +740,15 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
     private void SaveAddWork() {
         dlog.i("------------------SaveAddWork------------------");
+        dlog.i("RepeatCheck : " + RepeatCheck);
+        today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+
         if (RepeatCheck) {
-            start_time = starttime;
-            end_time = endtime;
+            start_time = starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime;
+            end_time = endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime;
         } else {
-            start_time = getStartDate + " " + starttime;
-            end_time = getEndDate + " " + endtime;
+            start_time = (getStartDate.isEmpty()?today:getStartDate) + " " + (starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime);
+            end_time = (getEndDate.isEmpty()?today:getEndDate) + " " + (endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime);
         }
 
         dlog.i("make_kind : " + make_kind);
@@ -850,29 +803,27 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         dlog.i("SelectEmployeeid : " + user_id);
 
-                                        if (!user_id.equals("")) {
-                                            SendUserCheck(1);
-                                            if (return_page.equals("TaskCalenderActivity")) {
-                                                pm.CalenderBack(mContext);
-                                            } else {
-                                                shardpref.putInt("SELECT_POSITION", 1);
-                                                shardpref.putInt("SELECT_POSITION_sub", 0);
-                                                if (USER_INFO_AUTH.equals("0")) {
-                                                    pm.Main(mContext);
+                                        if (USER_INFO_AUTH.equals("0")) {
+                                            if (!user_id.equals("")) {
+                                                SendUserCheck(1);
+                                                if (return_page.equals("TaskCalenderActivity")) {
+                                                    pm.CalenderBack(mContext);
                                                 } else {
-                                                    pm.Main2(mContext);
+                                                    shardpref.putInt("SELECT_POSITION", 1);
+                                                    shardpref.putInt("SELECT_POSITION_sub", 0);
+                                                    pm.Main(mContext);
                                                 }
-                                            }
 
-                                            click_action = "PlaceWorkFragment";
-                                            dlog.i("EmployeeChannelId1 : " + EmployeeChannelId1);
-//                                            getEmployeeoken(SelectEmployeeid);
-//                                            FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
-//                                                dlog.i( "token : " + token);
-//                                                FcmTestFunctionCall();
-//                                            });
-                                            RemoveShared();
+                                                click_action = "PlaceWorkFragment";
+                                                dlog.i("EmployeeChannelId1 : " + EmployeeChannelId1);
+                                                RemoveShared();
+                                            }
+                                        } else {
+                                            shardpref.putInt("SELECT_POSITION", 1);
+                                            shardpref.putInt("SELECT_POSITION_sub", 0);
+                                            pm.Main2(mContext);
                                         }
+
 
                                     } else if (jsonResponse.replace("\"", "").equals("fail") || response.body().replace("\"", "").equals("fail")) {
                                         Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
@@ -1061,8 +1012,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         }
         WorkTitle = binding.inputWorktitle.getText().toString();
         WorkContents = binding.inputWorkcontents.getText().toString();
-        start_time = binding.eventStarttime.getText().toString();
-        end_time = binding.eventEndttime.getText().toString();
+        start_time = binding.inputTime01.getText().toString();
+        end_time = binding.inputTime02.getText().toString();
         user_id = String.valueOf(item_user_id).replace("[", "").replace("]", "").replace(" ", "").trim();
         overdate = overdate.replace("년 ", "-").replace("월 ", "-").replace("일", "").trim();
 
@@ -1114,7 +1065,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             dlog.i("제목2 : " + WorkTitle);
             dlog.i("내용 : " + WorkContents);
             dlog.i("완료방법2 : " + complete_kind);
-            dlog.i("마감시간2 : " + end_time + ":" + EndTime02);
+            dlog.i("시작시간 : " + start_time);
+            dlog.i("종료시간 : " + end_time);
             dlog.i("반복 : " + getYoil.toString().replace("[", "").replace("]", ""));
             dlog.i("작업날짜 : " + WorkDay);
             if (USER_INFO_AUTH.equals("1")) {

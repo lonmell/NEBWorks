@@ -107,10 +107,16 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
             }
             holder.item_total.setOnClickListener(v -> {
                 shardpref.putString("worker_id",item.getUser_id());
+                shardpref.putString("worker_name",item.getName());
                 shardpref.putString("contract_place_id",item.getPlace_id());
                 shardpref.putString("contract_user_id",item.getUser_id());
                 if(item.getContract_yn().equals("0")){
-                   pm.AddContractPage01(mContext);
+                    if(USER_INFO_AUTH.equals("0")){
+                        pm.AddContractPage01(mContext);
+                    }else{
+                        Toast.makeText(mContext,"작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
+                    }
+
                 }else if(item.getContract_yn().equals("1")){
 //                    if(item.getWorker_sign_id().isEmpty() || item.getWorker_sign_id().equals("null")){
 //                       dlog.i("서명대기중");

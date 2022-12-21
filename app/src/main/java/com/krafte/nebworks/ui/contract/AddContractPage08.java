@@ -28,7 +28,9 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.ContractOwnerSignInterface;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd08Binding;
 import com.krafte.nebworks.pop.SignPopActivity;
 import com.krafte.nebworks.util.DBConnection;
@@ -78,6 +80,7 @@ public class AddContractPage08 extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
     String contract_id = "";
+    String place_name = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -114,6 +117,7 @@ public class AddContractPage08 extends AppCompatActivity {
         USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
         worker_id       = shardpref.getString("worker_id","0");
         contract_id     = shardpref.getString("contract_id","0");
+        place_name      = shardpref.getString("place_name","");
 
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1");
         
@@ -207,7 +211,11 @@ public class AddContractPage08 extends AppCompatActivity {
                                     saveBitmapAndGetURI();
                                     if(USER_INFO_AUTH.equals("0")){
                                         //fcm으로 알림 메세지 보내기
+                                        String message = "[" + place_name + "] 에서 근로계약서가 도착했습니다.";
+                                        getUserToken(worker_id,"1",message);
+                                        AddPush("근로계약서",message,worker_id);
                                         pm.ContractFragment(mContext);
+                                        RemoveShared();
                                     }else{
                                         pm.AddContractPage09(mContext);
                                     }
@@ -227,6 +235,105 @@ public class AddContractPage08 extends AppCompatActivity {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
+    }
+
+    String place_owner_id = "";
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        place_owner_id = shardpref.getString("place_owner_id","");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    String click_action = "";
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+//            activity.runOnUiThread(() -> {
+//            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //이미지 업로드에 필요한 소스 START
@@ -426,6 +533,14 @@ public class AddContractPage08 extends AppCompatActivity {
         } catch (Exception e) {
             return null;
         }
+    }
+
+
+    private void RemoveShared(){
+        shardpref.remove("worker_id");
+        shardpref.remove("contract_id");
+        shardpref.remove("contract_email");
+        shardpref.remove("worker_name");
     }
 
     public void Toast_Nomal(String message){

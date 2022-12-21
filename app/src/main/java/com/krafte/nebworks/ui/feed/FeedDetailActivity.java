@@ -213,83 +213,85 @@ public class FeedDetailActivity extends AppCompatActivity {
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
-                                    id = Response.getJSONObject(0).getString("id");
-                                    place_id = Response.getJSONObject(0).getString("place_id");
-                                    title = Response.getJSONObject(0).getString("title");
-                                    contents = Response.getJSONObject(0).getString("contents");
-                                    writer_id = Response.getJSONObject(0).getString("writer_id");
-                                    writer_name = Response.getJSONObject(0).getString("writer_name");
-                                    writer_img_path = Response.getJSONObject(0).getString("writer_img_path");
+                                    if(Response.length() != 0){
+                                        id = Response.getJSONObject(0).getString("id");
+                                        place_id = Response.getJSONObject(0).getString("place_id");
+                                        title = Response.getJSONObject(0).getString("title");
+                                        contents = Response.getJSONObject(0).getString("contents");
+                                        writer_id = Response.getJSONObject(0).getString("writer_id");
+                                        writer_name = Response.getJSONObject(0).getString("writer_name");
+                                        writer_img_path = Response.getJSONObject(0).getString("writer_img_path");
 
-                                    jikgup = Response.getJSONObject(0).getString("jikgup");
-                                    view_cnt = Response.getJSONObject(0).getString("view_cnt");
-                                    comment_cnt = Response.getJSONObject(0).getString("comment_cnt");
-                                    link = Response.getJSONObject(0).getString("link");
-                                    feed_img_path = Response.getJSONObject(0).getString("feed_img_path");
-                                    created_at = Response.getJSONObject(0).getString("created_at");
-                                    updated_at = Response.getJSONObject(0).getString("updated_at");
+                                        jikgup = Response.getJSONObject(0).getString("jikgup");
+                                        view_cnt = Response.getJSONObject(0).getString("view_cnt");
+                                        comment_cnt = Response.getJSONObject(0).getString("comment_cnt");
+                                        link = Response.getJSONObject(0).getString("link");
+                                        feed_img_path = Response.getJSONObject(0).getString("feed_img_path");
+                                        created_at = Response.getJSONObject(0).getString("created_at");
+                                        updated_at = Response.getJSONObject(0).getString("updated_at");
 
-                                    try {
-                                        if(!writer_id.equals(USER_INFO_ID)){
-                                            binding.detailEditArea.setVisibility(View.GONE);
-                                        }
-                                        binding.feedTitle.setText(title);
-                                        if (place_owner_id.equals(writer_id)) {
-                                            binding.userName.setText("매니저");
-                                        } else {
-                                            binding.userName.setText(writer_name + "(" + jikgup + ")");
-                                        }
+                                        try {
+                                            if(!writer_id.equals(USER_INFO_ID)){
+                                                binding.detailEditArea.setVisibility(View.GONE);
+                                            }
+                                            binding.feedTitle.setText(title);
+                                            if (place_owner_id.equals(writer_id)) {
+                                                binding.userName.setText("매니저");
+                                            } else {
+                                                binding.userName.setText(writer_name + "(" + jikgup + ")");
+                                            }
 
-                                        if (link.isEmpty() || link.equals("null")) {
-                                            binding.linkTxt.setVisibility(View.GONE);
-                                            binding.moveLinkArea.setVisibility(View.GONE);
-                                        } else {
-                                            binding.linkTxt.setVisibility(View.VISIBLE);
-                                            binding.moveLinkArea.setVisibility(View.VISIBLE);
-                                        }
-                                        Glide.with(mContext).load(writer_img_path)
-                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                .skipMemoryCache(true)
-                                                .into(binding.profileImg);
-                                        String updated_list = updated_at.substring(0, 10);
-                                        List<String> updatedList = new ArrayList<>(Arrays.asList(updated_list.split("-")));
-                                        dlog.i("updated_list : " + updated_list);
-                                        dlog.i("updatedList : " + updatedList.get(0) + "년 " + updatedList.get(1) + "월 " + updatedList.get(2) + "일");
-
-                                        binding.inputDate.setText(updated_at);
-
-                                        binding.getWorkcontents.setText(contents);
-                                        binding.getMovelink.setText(link);
-                                        dlog.i("feed_img_path : " + feed_img_path);
-                                        if (feed_img_path.isEmpty() || feed_img_path.equals("null")) {
-                                            binding.notiSetimg.setVisibility(View.GONE);
-                                        } else {
-                                            binding.notiSetimg.setVisibility(View.VISIBLE);
-                                            Glide.with(mContext).load(feed_img_path)
+                                            if (link.isEmpty() || link.equals("null")) {
+                                                binding.linkTxt.setVisibility(View.GONE);
+                                                binding.moveLinkArea.setVisibility(View.GONE);
+                                            } else {
+                                                binding.linkTxt.setVisibility(View.VISIBLE);
+                                                binding.moveLinkArea.setVisibility(View.VISIBLE);
+                                            }
+                                            Glide.with(mContext).load(writer_img_path)
                                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                                                     .skipMemoryCache(true)
-                                                    .placeholder(R.drawable.no_image)
-                                                    .into(binding.notiSetimg);
+                                                    .into(binding.profileImg);
+                                            String updated_list = updated_at.substring(0, 10);
+                                            List<String> updatedList = new ArrayList<>(Arrays.asList(updated_list.split("-")));
+                                            dlog.i("updated_list : " + updated_list);
+                                            dlog.i("updatedList : " + updatedList.get(0) + "년 " + updatedList.get(1) + "월 " + updatedList.get(2) + "일");
+
+                                            binding.inputDate.setText(updated_at);
+
+                                            binding.getWorkcontents.setText(contents);
+                                            binding.getMovelink.setText(link);
+                                            dlog.i("feed_img_path : " + feed_img_path);
+                                            if (feed_img_path.isEmpty() || feed_img_path.equals("null")) {
+                                                binding.notiSetimg.setVisibility(View.GONE);
+                                            } else {
+                                                binding.notiSetimg.setVisibility(View.VISIBLE);
+                                                Glide.with(mContext).load(feed_img_path)
+                                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                        .skipMemoryCache(true)
+                                                        .placeholder(R.drawable.no_image)
+                                                        .into(binding.notiSetimg);
+                                            }
+                                            place_name = shardpref.getString("place_name", "-1");
+
+
+                                            StringBuilder total_watermark = new StringBuilder();
+                                            for (int a = 0; a < 20; a++) {
+                                                total_watermark.append(employee_no).append(" ");
+                                                total_watermark.append(place_name).append(" ");
+                                            }
+                                            dlog.i("total_watermark : " + total_watermark.toString());
+
+                                            binding.notiSetimg.setOnClickListener(v -> {
+                                                Intent intent = new Intent(mContext, PhotoPopActivity.class);
+                                                intent.putExtra("data", feed_img_path);
+                                                mContext.startActivity(intent);
+                                                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            });
+                                        } catch (Exception e) {
+                                            dlog.i("UserCheck Exception : " + e);
                                         }
-                                        place_name = shardpref.getString("place_name", "-1");
-
-
-                                        StringBuilder total_watermark = new StringBuilder();
-                                        for (int a = 0; a < 20; a++) {
-                                            total_watermark.append(employee_no).append(" ");
-                                            total_watermark.append(place_name).append(" ");
-                                        }
-                                        dlog.i("total_watermark : " + total_watermark.toString());
-
-                                        binding.notiSetimg.setOnClickListener(v -> {
-                                            Intent intent = new Intent(mContext, PhotoPopActivity.class);
-                                            intent.putExtra("data", feed_img_path);
-                                            mContext.startActivity(intent);
-                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        });
-                                    } catch (Exception e) {
-                                        dlog.i("UserCheck Exception : " + e);
                                     }
                                 }
                             } catch (JSONException e) {

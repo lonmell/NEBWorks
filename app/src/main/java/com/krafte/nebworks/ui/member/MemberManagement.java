@@ -31,6 +31,7 @@ import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.dataInterface.MemberUpdateBasicInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
@@ -270,6 +271,7 @@ public class MemberManagement extends AppCompatActivity {
                                         ));
                                     }
                                 }
+
                                 if(total_member_cnt == 0){
                                     binding.nodataArea.setVisibility(View.VISIBLE);
                                     binding.allMemberlist.setVisibility(View.GONE);
@@ -284,20 +286,22 @@ public class MemberManagement extends AppCompatActivity {
                                             dlog.i("mAdapter setOnItemClickListener2 Click!");
                                             dlog.i("position : " + position);
 
-                                            String id = Response.getJSONObject(position).getString("id");
-                                            String place_name = Response.getJSONObject(position).getString("place_name");
-                                            String name = Response.getJSONObject(position).getString("name");
-                                            String phone = Response.getJSONObject(position).getString("phone");
-                                            String jumin = Response.getJSONObject(position).getString("jumin");
-                                            String join_date = Response.getJSONObject(position).getString("join_date");
+                                            String getid = mList.get(position).getId();
+                                            String place_name = mList.get(position).getPlace_name();
+                                            String name = mList.get(position).getName();
+                                            String phone = mList.get(position).getPhone();
+                                            String jumin = mList.get(position).getJumin();
+                                            String join_date = mList.get(position).getJoin_date();
                                             if(kind == 1){
                                                 dlog.i("kind : " + kind);
-                                                TaskDel(id);
+                                                dlog.i("id : " + getid);
+                                                TaskDel(getid);
                                             }else if(kind == 2){
                                                 dlog.i("kind : " + kind);
-                                                UpdateBasic(id, name, phone, jumin, "1", join_date, place_name);
+                                                dlog.i("id : " + getid);
+                                                UpdateBasic(getid, name, phone, jumin, "1", join_date, place_name);
                                             }
-                                        }catch (JSONException e){
+                                        }catch (Exception e){
                                             e.printStackTrace();
                                         }
                                     }
@@ -386,6 +390,7 @@ public class MemberManagement extends AppCompatActivity {
 
                                     String message = "[" + place_name + "]매장에서 근무신청이 수락되었습니다.";
                                     getUserToken(mem_id,"1",message);
+                                    AddPush("근무신청",message,mem_id);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -445,6 +450,35 @@ public class MemberManagement extends AppCompatActivity {
         });
     }
 
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     DBConnection dbConnection = new DBConnection();
     String click_action = "";

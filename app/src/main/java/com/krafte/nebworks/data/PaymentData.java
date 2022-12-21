@@ -7,6 +7,7 @@ public class PaymentData {
         String store_no;
         String user_id;
         String user_name;
+        String img_path;
         String account;
         String jikgup;
         String basic_pay;
@@ -17,17 +18,19 @@ public class PaymentData {
         String gongjeynpay;
         String total_payment;
         String meal_pay;
+        String set_month;
         String workday;
         String workhour;
         String total_workday;
         String payment;
 
-        public PaymentData_list(String store_no, String user_id, String user_name, String account, String jikgup, String basic_pay, String second_pay, String overwork_pay
+        public PaymentData_list(String store_no, String user_id, String user_name, String img_path, String account, String jikgup, String basic_pay, String second_pay, String overwork_pay
                 , String meal_allowance_yn, String store_insurance_yn, String gongjeynpay
-                , String total_payment, String meal_pay, String workday, String workhour, String total_workday, String payment) {
+                , String total_payment, String meal_pay, String set_month, String workday, String workhour, String total_workday, String payment) {
             this.store_no = store_no;
             this.user_id = user_id;
             this.user_name = user_name;
+            this.img_path = img_path;
             this.account = account;
             this.jikgup = jikgup;
             this.basic_pay = basic_pay;
@@ -38,6 +41,7 @@ public class PaymentData {
             this.gongjeynpay = gongjeynpay;
             this.total_payment = total_payment;
             this.meal_pay = meal_pay;
+            this.set_month = set_month;
             this.workday = workday;
             this.workhour = workhour;
             this.total_workday = total_workday;
@@ -66,6 +70,14 @@ public class PaymentData {
 
         public void setUser_name(String user_name) {
             this.user_name = user_name;
+        }
+
+        public String getImg_path() {
+            return img_path;
+        }
+
+        public void setImg_path(String img_path) {
+            this.img_path = img_path;
         }
 
         public String getAccount() {
@@ -146,6 +158,14 @@ public class PaymentData {
 
         public void setMeal_pay(String meal_pay) {
             this.meal_pay = meal_pay;
+        }
+
+        public String getSet_month() {
+            return set_month;
+        }
+
+        public void setSet_month(String set_month) {
+            this.set_month = set_month;
         }
 
         public String getWorkday() {

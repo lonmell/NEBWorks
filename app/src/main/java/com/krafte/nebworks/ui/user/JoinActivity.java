@@ -10,7 +10,11 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -195,7 +199,12 @@ public class JoinActivity extends AppCompatActivity {
         });
 
         binding.tv06.setOnClickListener(v -> {
-            UserCheck(1, binding.inputUserEmail.getText().toString());
+            if(checkEmail()){
+                UserCheck(1, binding.inputUserEmail.getText().toString());
+            }else{
+                Toast_Nomal("이메일 형식이 올바르지 않습니다.");
+            }
+
         });
 
         binding.selectMan.setOnClickListener(v -> {
@@ -374,6 +383,14 @@ public class JoinActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.translate_up, 0);
 
+            return false;
+        }else if(!checkEmail()){
+            Intent intent = new Intent(this, JoinPopActivity.class);
+            intent.putExtra("data", "이메일 형식이 올바르지 않습니다.");
+            intent.putExtra("left_btn_txt", "뒤로가기");
+            intent.putExtra("right_btn_txt", "닫기");
+            startActivity(intent);
+            overridePendingTransition(R.anim.translate_up, 0);
             return false;
         }
         if (!check_validation(binding.editPw.getText().toString())) {
@@ -616,4 +633,17 @@ public class JoinActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
 }

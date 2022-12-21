@@ -79,6 +79,7 @@ public class WorkstatusFragment extends Fragment {
     String place_name = "";
     String place_owner_id = "";
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
 
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
@@ -144,7 +145,11 @@ public class WorkstatusFragment extends Fragment {
             place_owner_id = shardpref.getString("place_owner_id", "0");
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub",0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
 
+            if(USER_INFO_AUTH.equals("1")){
+                binding.addBtn.getRoot().setVisibility(View.GONE);
+            }
             PlaceWorkCheck(place_id);
             setAddBtnSetting();
             if(SELECT_POSITION_sub == 0){

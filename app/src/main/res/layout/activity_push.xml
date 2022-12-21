@@ -9,33 +9,38 @@
     tools:ignore="HardcodedText,SmallSp">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:paddingStart="10dp"
+        android:layout_height="59dp"
         tools:ignore="RtlSymmetry"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:background="@drawable/back_btn" />
+                android:background="@drawable/find_right_arrow"
+                android:rotation="180" />
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="start|center"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="end|center"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="알림관리"
             android:textColor="@color/black"
-            android:text="알림 관리"
-            android:layout_toEndOf="@+id/back_btn"
-            android:layout_toStartOf="@+id/save_btn"
-            android:fontFamily="@font/inter_bold"
-            android:textSize="16sp"
-            android:paddingStart="15dp"
+            android:textSize="18sp"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -53,10 +58,6 @@
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#f2f2f2"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -38,6 +38,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.TaskApprovalInterface;
 import com.krafte.nebworks.dataInterface.TaskSaveInterface;
 import com.krafte.nebworks.databinding.ActivityTaskReportBinding;
@@ -459,13 +460,16 @@ public class TaskReportActivity extends AppCompatActivity {
                             if (response.body().replace("\"", "").equals("success")) {
                                 Toast_Nomal("결재 요청이 완료되었습니다.");
                                 String message = "["+WorkTitle+"]의 결재 요청이 도착했습니다.";
+                                AddPush("업무보고",message,place_owner_id);
                                 getUserToken(place_owner_id,"0",message);
                                 shardpref.putInt("SELECT_POSITION", 1);
                                 shardpref.putInt("SELECT_POSITION_sub", 0);
                                 if(USER_INFO_AUTH.equals("0")){
                                     pm.PlaceWorkBack(mContext);
                                 }else{
-                                    pm.TaskList(mContext);
+                                    shardpref.putInt("SELECT_POSITION", 1);
+                                    shardpref.putInt("SELECT_POSITION_sub", 0);
+                                    pm.Main2(mContext);
                                 }
 
                             }
@@ -526,6 +530,35 @@ public class TaskReportActivity extends AppCompatActivity {
         });
     }
 
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     DBConnection dbConnection = new DBConnection();
     String click_action = "";

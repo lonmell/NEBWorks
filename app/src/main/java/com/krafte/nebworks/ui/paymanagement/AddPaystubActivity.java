@@ -16,8 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.ActivityAddpaystubalbaBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -50,7 +51,7 @@ public class AddPaystubActivity extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
-    String store_no;
+    String place_owner_id = "";
 
     String select_month = "";
     String select_user_id = "";
@@ -105,6 +106,7 @@ public class AddPaystubActivity extends AppCompatActivity {
     String topic = "";
     int AllPayment = 0;
 
+
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,7 @@ public class AddPaystubActivity extends AppCompatActivity {
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        place_owner_id = shardpref.getString("place_owner_id","");
         //-------------------
 
         select_month = shardpref.getString("select_month","");
@@ -138,6 +141,7 @@ public class AddPaystubActivity extends AppCompatActivity {
         select_total_workhour = shardpref.getString("select_total_workhour","");
         select_payment = shardpref.getString("select_payment","");
         select_GET_DATE = shardpref.getString("select_GET_DATE","");
+
         shardpref.putString("returnPage", "BusinessApprovalActivity");
         dlog.i("기본급 : " + select_payment);
 
@@ -145,7 +149,7 @@ public class AddPaystubActivity extends AppCompatActivity {
         GetInsurancePercent();
 
         binding.name.setText(select_user_name);
-        binding.selectMonth.setText(select_month.substring(5,7) + "월");
+        binding.selectMonth.setText(select_month.substring(6,8) + "월");
         binding.totalWorkDay.setText(select_workday);
         binding.totalWorkHour.setText(select_total_workhour);
         binding.minimumPay.setText("9,160");
@@ -378,7 +382,7 @@ public class AddPaystubActivity extends AppCompatActivity {
 
 
         //초과근무시간 입력여부 true - 직접입력 / false - 시간입력
-        binding.select01.setOnClickListener(v -> {
+        binding.select01Box.setOnClickListener(v -> {
             select0102 = "직접입력";
             binding.editOverwork.setClickable(true);
             binding.editOverwork.setEnabled(true);
@@ -390,7 +394,7 @@ public class AddPaystubActivity extends AppCompatActivity {
             binding.select01.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             binding.select02.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
         });
-        binding.select02.setOnClickListener(v -> {
+        binding.select02Box.setOnClickListener(v -> {
             select0102 = "시간입력";
             binding.editOverwork.setClickable(false);
             binding.editOverwork.setEnabled(false);
@@ -404,7 +408,7 @@ public class AddPaystubActivity extends AppCompatActivity {
         });
 
         //식대 true - 포함 / false - 미포함
-        binding.select03.setOnClickListener(v -> {
+        binding.select03Box.setOnClickListener(v -> {
             select0304 = "포함";
             binding.editMealPay.setVisibility(View.VISIBLE);
             binding.select03.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
@@ -432,7 +436,7 @@ public class AddPaystubActivity extends AppCompatActivity {
             String pay = myFormatter.format(AllPayment);
             binding.allPayment.setText(pay);
         });
-        binding.select04.setOnClickListener(v -> {
+        binding.select04Box.setOnClickListener(v -> {
             select0304 = "미포함";
             binding.editMealPay.setText("0");
             get_edit_mealpay = "0";
@@ -443,7 +447,7 @@ public class AddPaystubActivity extends AppCompatActivity {
         });
 
         //4대보험 true - 공제 / false - 미공제
-        binding.select05.setOnClickListener(v -> {
+        binding.select05Box.setOnClickListener(v -> {
             select0506 = "공제";
             binding.select05.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             binding.select06.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
@@ -456,7 +460,7 @@ public class AddPaystubActivity extends AppCompatActivity {
             String pay = myFormatter.format(AllPayment);
             binding.allPayment.setText(pay);
         });
-        binding.select06.setOnClickListener(v -> {
+        binding.select06Box.setOnClickListener(v -> {
             select0506 = "미공제";
             binding.select05.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
             binding.select06.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
@@ -526,9 +530,8 @@ public class AddPaystubActivity extends AppCompatActivity {
                     String jsonResponse = rc.getBase64decode(response.body());
 //                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + jsonResponse);
                     if(response.body().replace("\"","").equals("success")){
-                        getFCMToken();
-                        getEmployeroken(select_user_id);
                         pm.PayManagement(mContext);
+
                         shardpref.remove("select_month");
                         shardpref.remove("select_user_id");
                         shardpref.remove("select_place_id");
@@ -538,8 +541,9 @@ public class AddPaystubActivity extends AppCompatActivity {
                         shardpref.remove("select_total_workhour");
                         shardpref.remove("select_payment");
                         shardpref.remove("select_GET_DATE");
-                    }else{
-
+                        String message = "["+select_user_name+"] 님의 " + select_month.substring(6,8) + "월 급여명세서가 도착했습니다.";
+                        getUserToken(select_user_id,"1",message);
+                        AddPush("급여명세서",message,select_user_id);
                     }
 
                 }
@@ -553,76 +557,100 @@ public class AddPaystubActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("LongLogTag")
-    public void getFCMToken() {
-        final String[] token = {null};
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.w(TAG, "Fetching FCM registration token failed");
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                try {
+                    JSONArray Response = new JSONArray(response.body());
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", select_place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
-            token[0] = task.getResult();
-//            Log.d(TAG, "FCM Token is " + token[0]);
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(select_place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
         });
     }
 
-
-    @SuppressLint("LongLogTag")
-    private void getEmployeroken(String USER_ID) {
-//        mHandler = new Handler(Looper.getMainLooper());
-//        mHandler.postDelayed(() -> {
-//            Thread th = new Thread(() -> {
-//                dbConnection.UserTokenUpdate("2", USER_ID, "2", "", "", "", "", "");
-//                runOnUiThread(() -> {
-//                    Log.i(TAG, "user_id : " + dbConnection.tokenData_lists.get(0).getUser_id());
-//                    Log.i(TAG, "token : " + dbConnection.tokenData_lists.get(0).getToken());
-//                    sendTopic =  dbConnection.tokenData_lists.get(0).getUser_id();
-//                    sendToken = dbConnection.tokenData_lists.get(0).getToken();
-//                    rcvchannelId2 = dbConnection.tokenData_lists.get(0).getChannelId2().equals("1");
-//                    topic = USER_ID;
-//                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
-//                        dlog.i("rcvchannelId2 : " + rcvchannelId2);
-//                        if (rcvchannelId2) {
-//                            FcmTestFunctionCall(sendToken);
-//                        }else{
-//                            Intent intent = new Intent(mContext, PayManagerActivity.class);
-//                            startActivity(intent);
-//                            overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                        }
-//                    });
-//
-//
-//                });
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "PlaceListActivity";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+//            activity.runOnUiThread(() -> {
 //            });
-//            th.start();
-//            try {
-//                th.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }, 0);
-    }
-
-    private void FcmTestFunctionCall(String token_get) {
-//        @SuppressLint("SetTextI18n")
-//        Thread th = new Thread(() -> {
-//            click_action = "EmployeeMainActivity";
-//            message = select_month + " 급여명세서가 발송되었습니다.";
-//            dbConnection.FcmTestFunction(topic, message, token_get, click_action, "1", store_no);
-//            runOnUiThread(() -> {
-//
-//            });
-//        });
-//        th.start();
-//        try {
-//            th.join();
-//            Intent intent = new Intent(mContext, PayManagerActivity.class);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
