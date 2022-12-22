@@ -50,7 +50,6 @@ import com.krafte.nebworks.ui.user.FindEmailActivity;
 import com.krafte.nebworks.ui.user.JoinActivity;
 import com.krafte.nebworks.ui.user.ProfileEditActivity;
 import com.krafte.nebworks.ui.user.SearchAccountActivity;
-import com.krafte.nebworks.ui.user.UserPlaceMapActivity;
 import com.krafte.nebworks.ui.user.VerificationActivity;
 import com.krafte.nebworks.ui.worksite.PlaceAddActivity;
 import com.krafte.nebworks.ui.worksite.PlaceAddActivity2;
@@ -453,21 +452,6 @@ public class PageMoveClass implements MovePage {
         Intent intent = new Intent(context, PlaceSearchActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-
-    @Override
-    public void UserPlsceMapGo(Context context) {
-        Intent intent = new Intent(context, UserPlaceMapActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-    @Override
-    public void UserPlsceMapBack(Context context) {
-        Intent intent = new Intent(context, UserPlaceMapActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 

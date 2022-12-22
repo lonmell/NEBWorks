@@ -196,7 +196,6 @@
 
         <!-- user -->
         <activity android:name=".ui.user.ProfileEditActivity" />
-        <activity android:name=".ui.user.UserPlaceMapActivity" />
         <activity android:name=".ui.user.DeleteUserActivity" />
         <activity android:name=".ui.user.SearchAccountActivity" />
         <activity android:name=".ui.user.FindEmailActivity" />

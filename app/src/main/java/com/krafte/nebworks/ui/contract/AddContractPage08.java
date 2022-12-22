@@ -238,6 +238,7 @@ public class AddContractPage08 extends AppCompatActivity {
     }
 
     String place_owner_id = "";
+    //점주 > 근로자
     public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");
         dlog.i("user_id : " + user_id);
@@ -314,7 +315,7 @@ public class AddContractPage08 extends AppCompatActivity {
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceListActivity";
+            click_action = "contract1";
             dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);

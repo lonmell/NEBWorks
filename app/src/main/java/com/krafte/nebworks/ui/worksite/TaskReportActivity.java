@@ -487,7 +487,7 @@ public class TaskReportActivity extends AppCompatActivity {
     }
 
 
-    //근로자 > 점주 ( 초대수락 FCM )
+    //근로자 > 점주
     public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");
         dlog.i("user_id : " + user_id);
@@ -566,7 +566,7 @@ public class TaskReportActivity extends AppCompatActivity {
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceListActivity";
+            click_action = "TaskList0";
             dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);

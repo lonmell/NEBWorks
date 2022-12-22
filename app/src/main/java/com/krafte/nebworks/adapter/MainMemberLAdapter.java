@@ -72,7 +72,7 @@ public class MainMemberLAdapter extends RecyclerView.Adapter<MainMemberLAdapter.
     public void onBindViewHolder(@NonNull MainMemberLAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         MainMemberLData.MainMemberLData_list item = mData.get(position);
         try{
-            dlog.i("mData item : " + mData.get(position));
+            dlog.i("mData item : " + mData.get(position).getUser_name());
             Glide.with(mContext).load(item.getUser_img())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)

@@ -204,10 +204,12 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     shardpref.putString("mem_pay",item.getPay());
                     pm.AddMemberDetail(mContext);
                 });
-                if(!item.getId().equals(place_owner_id)){
+                if(item.getId().equals(place_owner_id)){
                     holder.list_setting.setVisibility(View.VISIBLE);
                 }else{
-                    holder.list_setting.setVisibility(View.GONE);
+                    holder.list_setting.setVisibility(View.INVISIBLE);
+                    holder.list_setting.setClickable(false);
+                    holder.list_setting.setEnabled(false);
                 }
                 holder.list_setting.setOnClickListener(v -> {
                     shardpref.putString("mem_id",item.getId());

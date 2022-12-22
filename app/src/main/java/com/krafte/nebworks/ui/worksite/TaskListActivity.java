@@ -173,19 +173,6 @@ public class TaskListActivity extends AppCompatActivity {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
-            if(SELECT_POSITION_sub == 0){
-                chng_icon = false;
-                binding.calendarArea.setVisibility(View.GONE);
-                binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
-                binding.selectArea.setVisibility(View.VISIBLE);
-                setRecyclerView();
-            }else if(SELECT_POSITION_sub == 1){
-                chng_icon = true;
-                binding.calendarArea.setVisibility(View.VISIBLE);
-                binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
-                binding.selectArea.setVisibility(View.GONE);
-                SetCalenderData();
-            }
             RemoveShared();
         }catch (Exception e){
             e.printStackTrace();
@@ -208,6 +195,19 @@ public class TaskListActivity extends AppCompatActivity {
         super.onResume();
         try{
             setAddBtnSetting();
+            if(SELECT_POSITION_sub == 0){
+                chng_icon = false;
+                binding.calendarArea.setVisibility(View.GONE);
+                binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+                binding.selectArea.setVisibility(View.VISIBLE);
+                setRecyclerView();
+            }else if(SELECT_POSITION_sub == 1){
+                chng_icon = true;
+                binding.calendarArea.setVisibility(View.VISIBLE);
+                binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
+                binding.selectArea.setVisibility(View.GONE);
+                SetCalenderData();
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

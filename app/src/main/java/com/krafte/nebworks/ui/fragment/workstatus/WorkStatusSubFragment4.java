@@ -154,7 +154,7 @@ public class WorkStatusSubFragment4 extends Fragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             WorkStatusTapInterface api = retrofit.create(WorkStatusTapInterface.class);
-            Call<String> call = api.getData(place_id,"2",toDay);//휴무조회
+            Call<String> call = api.getData(place_id,USER_INFO_ID,"",toDay);
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -181,12 +181,15 @@ public class WorkStatusSubFragment4 extends Fragment {
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
+                                    dlog.i("commuting : " + jsonObject.getString("commuting"));
                                     if(jsonObject.getString("commuting").equals("휴무")){
                                         mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_id"),
+                                                jsonObject.getString("place_name"),
                                                 jsonObject.getString("user_id"),
                                                 jsonObject.getString("name"),
+                                                jsonObject.getString("account"),
                                                 jsonObject.getString("img_path"),
                                                 jsonObject.getString("kind"),
                                                 jsonObject.getString("jikgup"),

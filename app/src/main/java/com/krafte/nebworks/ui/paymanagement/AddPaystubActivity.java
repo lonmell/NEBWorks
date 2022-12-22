@@ -557,7 +557,8 @@ public class AddPaystubActivity extends AppCompatActivity {
         });
     }
 
-    public void getUserToken(String user_id, String type, String message) {
+    //점주 > 근로자자
+   public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");
         dlog.i("user_id : " + user_id);
         dlog.i("type : " + type);
@@ -631,7 +632,7 @@ public class AddPaystubActivity extends AppCompatActivity {
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceListActivity";
+            click_action = "Payment0";
             dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);

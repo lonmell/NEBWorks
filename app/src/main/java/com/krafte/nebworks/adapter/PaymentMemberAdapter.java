@@ -405,10 +405,11 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
     }
     DBConnection dbConnection = new DBConnection();
     String click_action = "";
+    //점주 > 근로자
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceListActivity";
+            click_action = "Payment1";
             dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);

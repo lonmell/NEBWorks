@@ -13,6 +13,7 @@ public interface WorkStatusTapInterface
     @POST("get_tap.php")
     Call<String> getData(
             @Field("place_id") String place_id,
+            @Field("user_id") String user_id,
             @Field("tap") String tap,
             @Field("date") String date
     );

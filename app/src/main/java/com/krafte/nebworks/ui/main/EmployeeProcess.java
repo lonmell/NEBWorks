@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.main;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -7,6 +8,8 @@ import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -50,6 +53,10 @@ public class EmployeeProcess extends AppCompatActivity {
     private ActivityEmployeeProcessBinding binding;
     Context mContext;
 
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
+    private static final int PERMISSIONS_REQUEST_CODE = 100;
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
     //Other 클래스
     Dlog dlog = new Dlog();
     PreferenceHelper shardpref;
@@ -84,6 +91,7 @@ public class EmployeeProcess extends AppCompatActivity {
     String title = "";
     String io_state = "";
     String input_date = "";
+    String getMySSID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +136,10 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("오늘 :" + today);
             dlog.i("jongeob :" + jongeob.substring(3));
 
+            getMySSID = getNetworkName(mContext).replace("\"","");
+            if(getMySSID.equals("<unknown ssid>")){
+                getMySSID = "";
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,7 +185,6 @@ public class EmployeeProcess extends AppCompatActivity {
 //            Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
             }
         }, 1000); //0.5초 후 인트로 실행
-
     }
 
     public boolean compareDate2() throws ParseException {
@@ -210,26 +221,37 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("location_cnt : " + location_cnt);
             dlog.i("GET_TIME : " + simpleDate.format(mDate));
             dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
+            dlog.i("getDistance : " + getDistance);
+            dlog.i("kind : " + kind);
 
             if (kind.equals("0")) {
                 if (getDistance <= 40) {
-                    io_state = "출근처리";
-                    InOutPop(GET_TIME, "1", place_name, io_state, "");
+                    //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+                    if(getMySSID.equals(place_wifi_name)){
+                        io_state = "출근처리";
+                        InOutPop(GET_TIME, "1", place_name, io_state, "","0");
+                    }else{
+                        InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요","0");
+                    }
                 } else {
-                    InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.");
+                    InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.","0");
                 }
             } else {
                 if (getDistance <= 40) {
                     io_state = "퇴근처리";
                     dlog.i("compareDate2 :" +  compareDate2());
-                    if(compareDate2()){
-                        InOutPop(GET_TIME, "4", place_name, io_state, "");
+                    //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+                    if(getMySSID.equals(place_wifi_name)){
+                        if(compareDate2()){
+                            InOutPop(GET_TIME, "4", place_name, io_state, "","1");
+                        }else{
+                            InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.","1");//퇴근시간 전일때
+                        }
                     }else{
-                        InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.");//퇴근시간 전일때
+                        InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요","1");
                     }
-
                 } else {
-                    InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.");
+                    InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.","1");
                 }
             }
         });
@@ -293,7 +315,9 @@ public class EmployeeProcess extends AppCompatActivity {
                                     place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
                                     place_insurance = Response.getJSONObject(0).getString("insurance");
                                     place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
-
+                                    shardpref.putString("place_wifi_name",place_wifi_name);
+                                    shardpref.putString("place_latitude",String.valueOf(place_latitude));
+                                    shardpref.putString("place_longitude",String.valueOf(place_longitude));
                                     binding.storeName.setText(place_name);
                                 }
                             } catch (JSONException e) {
@@ -312,7 +336,8 @@ public class EmployeeProcess extends AppCompatActivity {
         });
     }
 
-    private void InOutPop(String time, String state, String store_name, String inout_tv, String inout_tv2) {
+    private void InOutPop(String time, String state, String store_name, String inout_tv, String inout_tv2, String kind) {
+        shardpref.putString("kind", kind);
         shardpref.putString("time", time);
         shardpref.putString("state", state);
         shardpref.putString("store_name", store_name);
@@ -411,6 +436,12 @@ public class EmployeeProcess extends AppCompatActivity {
         distance = locationA.distanceTo(locationB);
 
         return distance;
+    }
+
+    public String getNetworkName(Context context) {
+        WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        return info.getSSID();
     }
 
     public void Toast_Nomal(String message) {

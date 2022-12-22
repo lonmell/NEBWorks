@@ -48,6 +48,8 @@ public class WorkMemberOptionActivity extends Activity {
     String mem_name = "";
     String remote = "";
 
+    String status_id = "";
+
     //Other
     private final DateCurrent dc = new DateCurrent();
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
@@ -78,15 +80,18 @@ public class WorkMemberOptionActivity extends Activity {
         user_id = intent.getStringExtra("user_id");
 
         shardpref = new PreferenceHelper(mContext);
-        mem_id = shardpref.getString("mem_id", "");
-        mem_name = shardpref.getString("mem_name", "");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        remote = shardpref.getString("remote", "");
+        mem_id          = shardpref.getString("mem_id", "");
+        mem_name        = shardpref.getString("mem_name", "");
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
+        remote          = shardpref.getString("remote", "");
+        status_id       = shardpref.getString("status_id", "");
 
         Log.i(TAG, "place_id : " + place_id);
         Log.i(TAG, "user_id : " + user_id);
         Log.i(TAG, "mem_id : " + mem_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
+        Log.i(TAG, "status_id : " + status_id);
+
         if (mem_id.equals(USER_INFO_ID)) {
             binding.listSettingitem02.setVisibility(View.GONE);
         } else {
@@ -98,12 +103,21 @@ public class WorkMemberOptionActivity extends Activity {
     private void setBtnEvent() {
 
         binding.listSettingitem01.setOnClickListener(v -> {
-            pm.AddMemberDetail(mContext);
-            finish();
-            Intent intent = new Intent();
-            intent.putExtra("result", "Close Popup");
-            setResult(RESULT_OK, intent);
-            overridePendingTransition(0, R.anim.translate_down);
+            if(remote.equals("workhour")){
+                pm.AddWorkPart(mContext);
+                finish();
+                Intent intent = new Intent();
+                intent.putExtra("result", "Close Popup");
+                setResult(RESULT_OK, intent);
+                overridePendingTransition(0, R.anim.translate_down);
+            }else{
+                pm.AddMemberDetail(mContext);
+                finish();
+                Intent intent = new Intent();
+                intent.putExtra("result", "Close Popup");
+                setResult(RESULT_OK, intent);
+                overridePendingTransition(0, R.anim.translate_down);
+            }
         });
 
         binding.listSettingitem02.setOnClickListener(v -> {

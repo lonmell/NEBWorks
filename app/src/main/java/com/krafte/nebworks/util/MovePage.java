@@ -158,10 +158,6 @@ public interface MovePage {
 
     void PlaceSearch(Context context);
 
-    void UserPlsceMapGo(Context context);
-
-    void UserPlsceMapBack(Context context);
-
     //--ui.member
     void AuthSelect(Context context);
 

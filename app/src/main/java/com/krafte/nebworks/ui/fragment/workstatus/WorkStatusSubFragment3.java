@@ -155,7 +155,7 @@ public class WorkStatusSubFragment3 extends Fragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             WorkStatusTapInterface api = retrofit.create(WorkStatusTapInterface.class);
-            Call<String> call = api.getData(place_id,"2",toDay);
+            Call<String> call = api.getData(place_id,USER_INFO_ID,"",toDay);
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -185,8 +185,10 @@ public class WorkStatusSubFragment3 extends Fragment {
                                             mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
                                                     jsonObject.getString("id"),
                                                     jsonObject.getString("place_id"),
+                                                    jsonObject.getString("place_name"),
                                                     jsonObject.getString("user_id"),
                                                     jsonObject.getString("name"),
+                                                    jsonObject.getString("account"),
                                                     jsonObject.getString("img_path"),
                                                     jsonObject.getString("kind"),
                                                     jsonObject.getString("jikgup"),

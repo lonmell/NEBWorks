@@ -70,6 +70,7 @@ public class WorkStatusSubFragment1 extends Fragment {
     Calendar cal;
     String format = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
+    String FtoDay = "";
 
     public static WorkStatusSubFragment1 newInstance() {
         return new WorkStatusSubFragment1();
@@ -114,9 +115,10 @@ public class WorkStatusSubFragment1 extends Fragment {
             place_id = shardpref.getString("place_id", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
             shardpref.putInt("SELECT_POSITION", 0);
+            FtoDay = shardpref.getString("FtoDay",FtoDay);
             //-- 날짜 세팅
             dlog.i("place_owner_id : " + place_owner_id);
-            setBtnEvent();
+            dlog.i("FtoDay : " + FtoDay);
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -158,7 +160,7 @@ public class WorkStatusSubFragment1 extends Fragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             WorkStatusTapInterface api = retrofit.create(WorkStatusTapInterface.class);
-            Call<String> call = api.getData(place_id,"",toDay);
+            Call<String> call = api.getData(place_id,USER_INFO_ID,"",toDay);
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -186,8 +188,10 @@ public class WorkStatusSubFragment1 extends Fragment {
                                         mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_id"),
+                                                jsonObject.getString("place_name"),
                                                 jsonObject.getString("user_id"),
                                                 jsonObject.getString("name"),
+                                                jsonObject.getString("account"),
                                                 jsonObject.getString("img_path"),
                                                 jsonObject.getString("kind"),
                                                 jsonObject.getString("jikgup"),
@@ -202,6 +206,7 @@ public class WorkStatusSubFragment1 extends Fragment {
                                 mAdapter.setOnItemClickListener(new WorkTapMemberAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(View v, int position) {
+                                        shardpref.putString("status_id", mList.get(position).getId());
                                         shardpref.putString("mem_id", mList.get(position).getUser_id());
                                         shardpref.putString("mem_name", mList.get(position).getName());
                                         shardpref.putString("remote", "workhour");

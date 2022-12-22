@@ -27,7 +27,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
 import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.WorkCalenderData;
-import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
+import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.WorkstatusCalendersetData;
 import com.krafte.nebworks.databinding.WorkstatusfragmentBinding;
@@ -150,37 +150,10 @@ public class WorkstatusFragment extends Fragment {
             if(USER_INFO_AUTH.equals("1")){
                 binding.addBtn.getRoot().setVisibility(View.GONE);
             }
+            fg = WorkStatusSubFragment1.newInstance();
             PlaceWorkCheck(place_id);
             setAddBtnSetting();
-            if(SELECT_POSITION_sub == 0){
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = WorkStatusSubFragment1.newInstance();
-                setChildFragment(fg);
-            }else if(SELECT_POSITION_sub == 1){
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = WorkStatusSubFragment2.newInstance();
-                setChildFragment(fg);
-            }else if(SELECT_POSITION_sub == 2){
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = WorkStatusSubFragment3.newInstance();
-                setChildFragment(fg);
-            }else if(SELECT_POSITION_sub == 3){
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                fg = WorkStatusSubFragment4.newInstance();
-                setChildFragment(fg);
-            }
+            SendToday();
 
             binding.statusFragmentbtn1.setOnClickListener(v -> {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
@@ -229,34 +202,22 @@ public class WorkstatusFragment extends Fragment {
                 toDay = sdf.format(cal.getTime());
                 binding.setdate.setText(toDay);
                 shardpref.putString("FtoDay",toDay);
-                gYear = toDay.substring(0,4);
-                gMonth = toDay.substring(5,7);
-                if(!gYear.equals(gYear) || !bMonth.equals(gMonth)){
-                    dlog.i("gYear : " + gYear);
-                    dlog.i("bYear : " + bYear);
-                    dlog.i("gMonth : " + gMonth);
-                    dlog.i("bMonth : " + bMonth);
-                    bYear = gYear;
-                    bMonth = gMonth;
-                    SetCalenderData(gYear,gMonth);
-                }
+                Year = toDay.substring(0,4);
+                Month = toDay.substring(5,7);
+                Day = toDay.substring(8,10);
+                SetCalenderData(Year,Month);
+                SendToday();
             });
             binding.nextDate.setOnClickListener(v -> {
                 cal.add(Calendar.DATE, +1);
                 toDay = sdf.format(cal.getTime());
                 binding.setdate.setText(toDay);
                 shardpref.putString("FtoDay",toDay);
-                gYear = toDay.substring(0,4);
-                gMonth = toDay.substring(5,7);
-                if(!gYear.equals(gYear) || !bMonth.equals(gMonth)){
-                    dlog.i("gYear : " + gYear);
-                    dlog.i("bYear : " + bYear);
-                    dlog.i("gMonth : " + gMonth);
-                    dlog.i("bMonth : " + bMonth);
-                    bYear = gYear;
-                    bMonth = gMonth;
-                    SetCalenderData(gYear,gMonth);
-                }
+                Year = toDay.substring(0,4);
+                Month = toDay.substring(5,7);
+                Day = toDay.substring(8,10);
+                SetCalenderData(Year,Month);
+                SendToday();
             });
 
             Calendar c = Calendar.getInstance();
@@ -274,7 +235,7 @@ public class WorkstatusFragment extends Fragment {
                     Month = Month.length()==1?"0"+Month:Month;
                     binding.setdate.setText(year +"-" + Month + "-" + Day);
                     getYMPicker = binding.setdate.getText().toString().substring(0,7);
-                    shardpref.putString("FtoDay",toDay);
+                    SendToday();
                     SetCalenderData(String.valueOf(year),Month);
                 }
             }, mYear, mMonth, mDay);
@@ -294,6 +255,39 @@ public class WorkstatusFragment extends Fragment {
 //        return rootView;
     }
 
+    private void SendToday(){
+        shardpref.putString("FtoDay",toDay);
+
+        if(SELECT_POSITION_sub == 0){
+            binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+            fg = WorkStatusSubFragment1.newInstance();
+            setChildFragment(fg);
+        }else if(SELECT_POSITION_sub == 1){
+            binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+            fg = WorkStatusSubFragment2.newInstance();
+            setChildFragment(fg);
+        }else if(SELECT_POSITION_sub == 2){
+            binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+            fg = WorkStatusSubFragment3.newInstance();
+            setChildFragment(fg);
+        }else if(SELECT_POSITION_sub == 3){
+            binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            fg = WorkStatusSubFragment4.newInstance();
+            setChildFragment(fg);
+        }
+    }
     private void SetCalenderData(String Year,String Month){
         mList2.clear();
         dlog.i("------SetCalenderData------");
@@ -465,11 +459,11 @@ public class WorkstatusFragment extends Fragment {
         dlog.i("PlaceWorkCheck place_id : " + place_id);
         dlog.i("PlaceWorkCheck USER_INFO_ID : " + USER_INFO_ID);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MainWorkCntInterface.URL)
+                .baseUrl(MainContentsInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID);
+        MainContentsInterface api = retrofit.create(MainContentsInterface.class);
+        Call<String> call = api.getData(place_id, "0", USER_INFO_ID, "0");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -483,51 +477,16 @@ public class WorkstatusFragment extends Fragment {
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-//                                    i_cnt;                // 출근 count(퇴근한 인원은 제외)
-//                                    o_cnt;                // 퇴근 count
-//                                    task_total_cnt;       // 할일 전체
-//                                    task_complete_cnt;    // 완료된 업무
-//                                    task_incomplete_cnt;  // 미완료 업무
-//                                    approval_total_cnt;   // 결재 전체
-//                                    waiting_cnt;          // 결재 대기
-//                                    approval_cnt;         // 결재 승인
-//                                    reject_cnt;           // 결재 반려
-//                                    rest_cnt              // 휴무 직원 수
-//                                     absence_cnt           // 결석
                                     try {
-                                        String i_cnt = Response.getJSONObject(0).getString("i_cnt");
-                                        String o_cnt = Response.getJSONObject(0).getString("o_cnt");
-                                        String task_total_cnt = Response.getJSONObject(0).getString("task_total_cnt");
-                                        String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt"); //-- 가입할때의 게정
-                                        String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt"); //-- 사번
-                                        String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
-                                        String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
-                                        String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
-                                        String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
-                                        String rest_cnt = Response.getJSONObject(0).getString("rest_cnt");
-                                        String absence_cnt = Response.getJSONObject(0).getString("absence_cnt");
-
-                                        dlog.i("------PlaceWorkCheck-------");
-                                        dlog.i("출근 count(퇴근한 인원은 제외) : " + i_cnt);
-                                        dlog.i("퇴근 count : " + o_cnt);
-                                        dlog.i("할일 전체 : " + task_total_cnt);
-                                        dlog.i("완료된 업무 : " + task_complete_cnt);
-                                        dlog.i("미완료 업무 : " + task_incomplete_cnt);
-                                        dlog.i("결재 전체 : " + approval_total_cnt);
-                                        dlog.i("결재 대기 : " + waiting_cnt);
-                                        dlog.i("결재 승인 : " + approval_cnt);
-                                        dlog.i("결재 반려 : " + reject_cnt);
-                                        dlog.i("휴무 : " + rest_cnt);
-                                        dlog.i("결석/미출근 : " + absence_cnt);
-                                        int total_cnt = 0;
-                                        total_cnt = Integer.parseInt(i_cnt) + Integer.parseInt(o_cnt) + Integer.parseInt(task_total_cnt)
-                                                + Integer.parseInt(task_complete_cnt) + Integer.parseInt(task_incomplete_cnt) + Integer.parseInt(approval_total_cnt)
-                                                + Integer.parseInt(waiting_cnt) + Integer.parseInt(approval_cnt) + Integer.parseInt(reject_cnt);
-
-                                        binding.cnt01.setText(i_cnt);
-                                        binding.cnt02.setText(absence_cnt);
-                                        binding.cnt03.setText(o_cnt);
-                                        binding.cnt04.setText(rest_cnt);
+                                        binding.cnt01.setText(Response.getJSONObject(0).getString("i_cnt"));
+                                        binding.cnt02.setText(Response.getJSONObject(0).getString("absence_cnt"));
+                                        binding.cnt03.setText(Response.getJSONObject(0).getString("o_cnt"));
+                                        binding.cnt04.setText(Response.getJSONObject(0).getString("rest_cnt"));
+                                        dlog.i("-----MainData-----");
+                                        dlog.i("i_cnt : " + Response.getJSONObject(0).getString("i_cnt"));
+                                        dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
+                                        dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
+                                        dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
                                         dlog.i("------PlaceWorkCheck-------");
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);

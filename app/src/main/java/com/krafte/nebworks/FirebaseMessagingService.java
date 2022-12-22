@@ -17,9 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
-import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
+import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
 import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.main.MainFragment2;
+import com.krafte.nebworks.ui.member.MemberManagement;
+import com.krafte.nebworks.ui.paymanagement.PayManagementActivity;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.util.PreferenceHelper;
 
@@ -146,29 +148,24 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
     private void sendNotification(String title, String message,String click_action) {
         //ForGround
-        Log.i(TAG, "intent : " + intent);
+        Log.i(TAG, "notificationIntent : " + notificationIntent);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
-        if(click_action.equals("MainActivity")){
-            shardpref.putInt("SELECT_POSITION",0);
-            if(USER_INFO_AUTH.equals("0")){
-                notificationIntent = new Intent(this, MainFragment.class);
-            }else{
-                notificationIntent = new Intent(this, MainFragment2.class);
-            }
-        }else if(click_action.equals("PlaceWorkFragment")){
-            shardpref.putInt("SELECT_POSITION",1);
-            shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
-            if(USER_INFO_AUTH.equals("0")){
-                notificationIntent = new Intent(this, MainFragment.class);
-            }else{
-                notificationIntent = new Intent(this, MainFragment2.class);
-            }
-        }else if(click_action.equals("TaskApprovalFragment")){
-            shardpref.putInt("SELECT_POSITION",Integer.parseInt(message0));
-            notificationIntent = new Intent(this, TaskApprovalFragment.class);
-        }else if(click_action.equals("PlaceListActivity")){
+        if(click_action.equals("PlaceList0") || click_action.equals("PlaceList1")){
+            //점주 매장리스트 //근로자 매장리스트
             notificationIntent = new Intent(this, PlaceListActivity.class);
+        }else if(click_action.equals("TaskList0")){
+            shardpref.putInt("SELECT_POSITION",1);
+            notificationIntent = new Intent(this, MainFragment.class);
+        }else if(click_action.equals("TaskList1")){
+            shardpref.putInt("SELECT_POSITION",1);
+            notificationIntent = new Intent(this, MainFragment2.class);
+        }else if(click_action.equals("Member0") || click_action.equals("Member1")){
+            notificationIntent = new Intent(this, MemberManagement.class);
+        }else if(click_action.equals("contract0") || click_action.equals("contract1")){
+            notificationIntent = new Intent(this, ContractFragmentActivity.class);
+        }else if(click_action.equals("Payment0") || click_action.equals("Payment1")){
+            notificationIntent = new Intent(this, PayManagementActivity.class);
         }
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //        notificationIntent = new Intent(this, IntroActivity.class);
@@ -196,26 +193,21 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Log.i(TAG, "intent : " + intent);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
-        if(click_action.equals("MainActivity")){
-            shardpref.putInt("SELECT_POSITION",0);
-            if(USER_INFO_AUTH.equals("0")){
-                intent = new Intent(this, MainFragment.class);
-            }else{
-                intent = new Intent(this, MainFragment2.class);
-            }
-        }else if(click_action.equals("PlaceWorkFragment")){
-            shardpref.putInt("SELECT_POSITION",1);
-            shardpref.putInt("SELECT_POSITION_sub", Integer.parseInt(message0));
-            if(USER_INFO_AUTH.equals("0")){
-                intent = new Intent(this, MainFragment.class);
-            }else{
-                intent = new Intent(this, MainFragment2.class);
-            }
-        }else if(click_action.equals("TaskApprovalFragment")){
-            shardpref.putInt("SELECT_POSITION", Integer.parseInt(message0));
-            intent = new Intent(this, TaskApprovalFragment.class);
-        }else if(click_action.equals("PlaceListActivity")){
+        if(click_action.equals("PlaceList0") || click_action.equals("PlaceList1")){
+            //점주 매장리스트 //근로자 매장리스트
             intent = new Intent(this, PlaceListActivity.class);
+        }else if(click_action.equals("TaskList0")){
+            shardpref.putInt("SELECT_POSITION",1);
+            intent = new Intent(this, MainFragment.class);
+        }else if(click_action.equals("TaskList1")){
+            shardpref.putInt("SELECT_POSITION",1);
+            intent = new Intent(this, MainFragment2.class);
+        }else if(click_action.equals("Member0") || click_action.equals("Member1")){
+            intent = new Intent(this, MemberManagement.class);
+        }else if(click_action.equals("contract0") || click_action.equals("contract1")){
+            intent = new Intent(this, ContractFragmentActivity.class);
+        }else if(click_action.equals("Payment0") || click_action.equals("Payment1")){
+            intent = new Intent(this, PayManagementActivity.class);
         }
 //        Intent intent = new Intent(this, IntroActivity.class);
 //        intent.putExtra("click_action", click_action);

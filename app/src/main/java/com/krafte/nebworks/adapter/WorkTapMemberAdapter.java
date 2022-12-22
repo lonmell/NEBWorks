@@ -45,7 +45,9 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
     String place_id = "";
     String place_owner_id = "";
     String state = "";
-    public String USER_INFO_ID = "";
+    String USER_INFO_ID = "";
+    String USER_INFO_EMAIL = "";
+
     Activity activity;
     PageMoveClass pm = new PageMoveClass();
     int lastpos = -99;
@@ -162,9 +164,16 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             place_id = shardpref.getString("place_id", "");
             place_owner_id = shardpref.getString("place_owner_id", "");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
+                    WorkStatusTapData.WorkStatusTapData_list item = mData.get(pos);
+                    shardpref.putString("stub_place_id", item.getPlace_id());
+                    shardpref.putString("stub_user_id", item.getUser_id());
+                    shardpref.putString("stub_user_account", item.getAccount());
+                    shardpref.putString("change_place_name", item.getPlace_name());
+                    pm.MemberDetail(mContext);
                 }
             });
 

@@ -424,11 +424,11 @@ public class InviteMemberActivity extends AppCompatActivity {
         });
     }
 
-    String click_action = "";
+    String click_action = "";//점주 > 근로자
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceListActivity";
+            click_action = "PlaceList1";//PlaceListActivity0은 점주권한 매장리스트, PlaceListActivity1은 근로자 권한 매장 리스트
             dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);

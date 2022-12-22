@@ -3,7 +3,9 @@ package com.krafte.nebworks.ui.worksite;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -11,11 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceListAdapter;
 import com.krafte.nebworks.bottomsheet.StoreListBottomSheet;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
@@ -104,6 +110,15 @@ public class PlaceListActivity extends AppCompatActivity {
             setBtnEvent();
             LoginCheck(USER_INFO_EMAIL);
 
+            //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
+            FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
+                String msg = getString(R.string.msg_subscribed);
+                if (!task.isSuccessful()) {
+                    msg = getString(R.string.msg_subscribe_failed);
+                }
+                dlog.i("msg : " + msg);
+            });
+            getFCMToken();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -514,6 +529,193 @@ public class PlaceListActivity extends AppCompatActivity {
         }
     }
 
+
+    String user_id = "";
+    String type = "";
+    String get_token = "";
+    String channel1 = "1";
+    String channel2 = "1";
+    String channel3 = "1";
+    String channel4 = "1";
+
+
+    //본인 토큰 생성
+    @SuppressLint("LongLogTag")
+    public void getFCMToken() {
+        type = USER_INFO_AUTH;
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+//                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+
+                    // Log and toast
+                    String msg = getString(R.string.msg_token_fmt, token);
+                    Log.d("TAG", msg);
+                    dlog.i("getFCMToken token : " + token);
+                    FcmStateSelect(token);
+                });
+
+    }
+
+    private void FcmStateSelect(String token) {
+        //메인페이지 처음 들어왔을때 생성 - 본인
+
+        dlog.i("-----FcmStateSelect-----");
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("type : " + type);
+        dlog.i("-----FcmStateSelect-----");
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(USER_INFO_ID, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("FcmStateSelect jsonResponse length : " + response.body().length());
+                            dlog.i("FcmStateSelect jsonResponse : " + response.body());
+                            try {
+
+                                if (response.body().replace("[", "").replace("]", "").length() == 0) {
+                                    id = "";
+                                    user_id = USER_INFO_ID;
+                                    get_token = "";
+                                    type = USER_INFO_AUTH;
+                                    channel1 = "1";
+                                    channel2 = "1";
+                                    channel3 = "1";
+                                    channel4 = "1";
+                                } else {
+                                    JSONArray Response = new JSONArray(response.body());
+                                    id = Response.getJSONObject(0).getString("id");
+                                    user_id = Response.getJSONObject(0).getString("user_id");
+                                    type = Response.getJSONObject(0).getString("type");
+                                    get_token = Response.getJSONObject(0).getString("token");
+                                    channel1 = Response.getJSONObject(0).getString("channel1");
+                                    channel2 = Response.getJSONObject(0).getString("channel2");
+                                    channel3 = Response.getJSONObject(0).getString("channel3");
+                                    channel4 = Response.getJSONObject(0).getString("channel4");
+
+                                    shardpref.putString("token", token);
+                                    shardpref.putString("type", type);
+                                    shardpref.putBoolean("channelId1", channel1.equals("1"));
+                                    shardpref.putBoolean("channelId2", channel2.equals("1"));
+                                    shardpref.putBoolean("channelId3", channel3.equals("1"));
+                                    shardpref.putBoolean("channelId4", channel4.equals("1"));
+
+                                    dlog.i("channel1 : " + channel1);
+                                    dlog.i("channel2 : " + channel2);
+                                    dlog.i("channel3 : " + channel3);
+                                    dlog.i("channel4 : " + channel4);
+                                }
+                                if (get_token.isEmpty()) {
+                                    dlog.i("getFCMToken FcmTokenCreate");
+                                    FcmTokenCreate(token);
+                                } else {
+                                    dlog.i("getFCMToken FcmTokenUpdate");
+                                    FcmTokenUpdate(token);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+    private void FcmTokenCreate(String token) {
+        //메인페이지 처음 들어왔을때 생성 - 본인
+        dlog.i("------FcmTokenCreate-------");
+        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
+        dlog.i("type :" + type);
+        dlog.i("token :" + token);
+        dlog.i("channel1 :" + channel1);
+        dlog.i("channel2 :" + channel2);
+        dlog.i("channel3 :" + channel3);
+        dlog.i("channel4 :" + channel4);
+        dlog.i("------FcmTokenCreate-------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMCrerateInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMCrerateInterface api = retrofit.create(FCMCrerateInterface.class);
+        Call<String> call = api.getData(USER_INFO_ID, type, token, channel1, channel2, channel3, channel4);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("FcmTokenCreate jsonResponse length : " + response.body().length());
+                            dlog.i("FcmTokenCreate jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void FcmTokenUpdate(String token) {
+        dlog.i("------FcmTokenUpdate-------");
+        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
+        dlog.i("type :" + type);
+        dlog.i("token :" + token);
+        dlog.i("channel1 :" + channel1);
+        dlog.i("channel2 :" + channel2);
+        dlog.i("channel3 :" + channel3);
+        dlog.i("channel4 :" + channel4);
+        dlog.i("------FcmTokenUpdate-------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMUpdateInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMUpdateInterface api = retrofit.create(FCMUpdateInterface.class);
+        Call<String> call = api.getData(id, token, channel1, channel2, channel3, channel4);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("Response Result : " + response.body());
+                if (response.body().replace("\"", "").equals("success")) {
+                    dlog.i("FcmTokenUpdate jsonResponse length : " + response.body().length());
+                    dlog.i("FcmTokenUpdate jsonResponse : " + response.body());
+                } else {
+                    Toast.makeText(mContext, "네트워크가 정상적이지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

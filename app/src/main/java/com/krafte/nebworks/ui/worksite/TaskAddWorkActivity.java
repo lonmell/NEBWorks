@@ -1171,7 +1171,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceWorkFragment";
+            click_action = "TaskList1";
             dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
             runOnUiThread(() -> {
             });

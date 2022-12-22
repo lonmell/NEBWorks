@@ -1,15 +1,12 @@
 package com.krafte.nebworks.ui.naviFragment;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,8 +25,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.MainMemberLAdapter;
 import com.krafte.nebworks.adapter.MainNotiLAdapter;
 import com.krafte.nebworks.adapter.MainTaskLAdapter;
+import com.krafte.nebworks.data.MainMemberLData;
 import com.krafte.nebworks.data.MainNotiData;
 import com.krafte.nebworks.data.MainTaskData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
@@ -43,7 +42,6 @@ import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
-import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -62,7 +60,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,10 +73,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class HomeFragment2 extends Fragment {
     private final static String TAG = "HomeFragment2";
     private Homefragment2Binding binding;
-
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     Context mContext;
     Activity activity;
@@ -138,16 +131,10 @@ public class HomeFragment2 extends Fragment {
     Dlog dlog = new Dlog();
     PreferenceHelper shardpref;
     DateCurrent dc = new DateCurrent();
-    Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
-    MainFragment2 mainFragment2 = new MainFragment2();
-    LocationManager locationManager;
-    Timer timer;
     GpsTracker gpsTracker;
     double latitude = 0;
     double longitude = 0;
-    int getDistance = 0;
-    int location_cnt = 0;
 
     long now = System.currentTimeMillis();
     Date mDate = new Date(now);
@@ -160,15 +147,14 @@ public class HomeFragment2 extends Fragment {
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat simpleDate_time = new SimpleDateFormat("HH:mm:ss");
 
-    String GET_DAY = simpleDate.format(mDate) + " " + simpleDate_time.format(mDate);
-    String GET_TIME_AGE = simpleDate_age.format(mDate);
-    String GET_TIME = simpleDate_time.format(mDate);
-
     ArrayList<MainTaskData.MainTaskData_list> mList;
     MainTaskLAdapter mAdapter = null;
 
     ArrayList<MainNotiData.MainNotiData_list> mList2;
     MainNotiLAdapter mAdapter2 = null;
+
+    ArrayList<MainMemberLData.MainMemberLData_list> mList3;
+    MainMemberLAdapter mAdapter3 = null;
 
     public static HomeFragment2 newInstance(int number) {
         HomeFragment2 fragment = new HomeFragment2();
@@ -222,7 +208,7 @@ public class HomeFragment2 extends Fragment {
             in_time = shardpref.getString("in_time", "");
 
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
-            FirebaseMessaging.getInstance().subscribeToTopic("P" + place_id).addOnCompleteListener(task -> {
+            FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);
                 if (!task.isSuccessful()) {
                     msg = getString(R.string.msg_subscribe_failed);
@@ -247,6 +233,14 @@ public class HomeFragment2 extends Fragment {
             binding.ioMytime.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
             binding.todayWorkdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
             binding.inTime.setText(in_time);
+
+            binding.cardview02.setOnClickListener(v -> {
+                shardpref.putString("stub_place_id", place_id);
+                shardpref.putString("stub_user_id", USER_INFO_ID);
+                shardpref.putString("stub_user_account", USER_INFO_EMAIL);
+                shardpref.putString("change_place_name", place_name);
+                pm.MemberDetail(mContext);
+            });
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -282,6 +276,7 @@ public class HomeFragment2 extends Fragment {
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
         InOutLogMember();
     }
 
@@ -605,7 +600,7 @@ public class HomeFragment2 extends Fragment {
                                 }
                                 shardpref.putString("mem_name",mem_name);
                                 binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
-                                getFCMToken();
+//                                getFCMToken();
                             } catch (Exception e) {
                                 dlog.i("UserCheck Exception : " + e);
                             }
@@ -647,7 +642,7 @@ public class HomeFragment2 extends Fragment {
                             dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
                             dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!jsonResponse.equals("[]")) {
+                                if (!jsonResponse.equals("[]") && !jsonResponse.equals("null")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     try {
                                         if (kind.equals("0")) {
@@ -731,6 +726,42 @@ public class HomeFragment2 extends Fragment {
                                             DecimalFormat myFormatter = new DecimalFormat("###,###");
                                             binding.paynum.setText(myFormatter.format(allPay) + "원");
                                             dlog.i("allPay : " + myFormatter.format(allPay));
+                                        } else if(kind.equals("4")){
+                                            dlog.i("kind 4 Result : " + jsonResponse);
+
+                                            mList3 = new ArrayList<>();
+                                            mAdapter3 = new MainMemberLAdapter(mContext, mList3);
+                                            binding.importantList.setAdapter(mAdapter3);
+                                            binding.importantList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                            dlog.i("SIZE : " + Response.length());
+                                            if (Response.length() == 0) {
+                                                dlog.i("SetNoticeListview Thread run! ");
+                                                dlog.i("GET SIZE : " + Response.length());
+                                                binding.importantList.setVisibility(View.GONE);
+                                                binding.emptyPayarea.setVisibility(View.VISIBLE);
+                                            } else {
+                                                binding.importantList.setVisibility(View.VISIBLE);
+                                                binding.emptyPayarea.setVisibility(View.GONE);
+                                                for (int i = 0; i < Response.length(); i++) {
+                                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                                    mAdapter3.addItem(new MainMemberLData.MainMemberLData_list(
+                                                            jsonObject.getString("id"),
+                                                            jsonObject.getString("join_date"),
+                                                            jsonObject.getString("user_id"),
+                                                            jsonObject.getString("user_name"),
+                                                            jsonObject.getString("user_img"),
+                                                            jsonObject.getString("recent_pay")
+                                                    ));
+                                                }
+                                                mAdapter3.setOnItemClickListener(new MainMemberLAdapter.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(View v, int position) {
+
+                                                    }
+                                                });
+
+                                            }
+                                            mAdapter3.notifyDataSetChanged();
                                         }
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -990,7 +1021,7 @@ public class HomeFragment2 extends Fragment {
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "PlaceListActivity";
+            click_action = "PlaceList1";
             dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);
@@ -1086,10 +1117,6 @@ public class HomeFragment2 extends Fragment {
                 dlog.e("에러 = " + t.getMessage());
             }
         });
-    }
-
-    private void CountingSubscribeTopic() {
-
     }
 
     private void MoveMyLocation() {

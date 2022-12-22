@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
 
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
-            FirebaseMessaging.getInstance().subscribeToTopic("P" + place_id).addOnCompleteListener(task -> {
+            FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);
                 if (!task.isSuccessful()) {
                     msg = getString(R.string.msg_subscribe_failed);
