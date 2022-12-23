@@ -4,34 +4,26 @@ public class WorkPlaceEmloyeeNotifyData {
     private static final String TAG = "WorkPlaceEmloyeeNotifyData";
 
     public static class WorkPlaceEmloyeeNotifyData_list {
-        String id = "";
-        String kind = "";
-        String title = "";
-        String contents = "";
-        String read_yn = "";
-        String sender_id = "";
-        String sender_name = "";
+        String id        = "";
         String push_date = "";
+        String push_time = "";
+        String user_id   = "";
+        String img_path  = "";
+        String title     = "";
+        String contents  = "";
+        String read_yn   = "";
 
-        public WorkPlaceEmloyeeNotifyData_list(
-                String id,
-                String kind,
-                String title,
-                String contents,
-                String read_yn,
-                String sender_id,
-                String sender_name,
-                String push_date
-        ) {
+        public WorkPlaceEmloyeeNotifyData_list(String id, String push_date, String push_time, String user_id,
+                String img_path, String title, String contents, String read_yn) {
             super();
             this.id = id;
-            this.kind = kind;
+            this.push_date = push_date;
+            this.push_time = push_time;
+            this.user_id = user_id;
+            this.img_path = img_path;
             this.title = title;
             this.contents = contents;
             this.read_yn = read_yn;
-            this.sender_id = sender_id;
-            this.sender_name = sender_name;
-            this.push_date = push_date;
         }
 
         public String getId() {
@@ -42,12 +34,36 @@ public class WorkPlaceEmloyeeNotifyData {
             this.id = id;
         }
 
-        public String getKind() {
-            return kind;
+        public String getPush_date() {
+            return push_date;
         }
 
-        public void setKind(String kind) {
-            this.kind = kind;
+        public void setPush_date(String push_date) {
+            this.push_date = push_date;
+        }
+
+        public String getPush_time() {
+            return push_time;
+        }
+
+        public void setPush_time(String push_time) {
+            this.push_time = push_time;
+        }
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
+        }
+
+        public String getImg_path() {
+            return img_path;
+        }
+
+        public void setImg_path(String img_path) {
+            this.img_path = img_path;
         }
 
         public String getTitle() {
@@ -72,30 +88,6 @@ public class WorkPlaceEmloyeeNotifyData {
 
         public void setRead_yn(String read_yn) {
             this.read_yn = read_yn;
-        }
-
-        public String getSender_id() {
-            return sender_id;
-        }
-
-        public void setSender_id(String sender_id) {
-            this.sender_id = sender_id;
-        }
-
-        public String getSender_name() {
-            return sender_name;
-        }
-
-        public void setSender_name(String sender_name) {
-            this.sender_name = sender_name;
-        }
-
-        public String getPush_date() {
-            return push_date;
-        }
-
-        public void setPush_date(String push_date) {
-            this.push_date = push_date;
         }
     }
 

@@ -16,12 +16,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.MorefragmentBinding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MoreFragment extends Fragment {
     private final static String TAG = "MoreFragment";
@@ -39,7 +54,7 @@ public class MoreFragment extends Fragment {
 
     ImageView more_icon;
     TextView more_tv;
-
+    String USER_INFO_ID = "";
 
     //shared
     String place_id = "";
@@ -92,28 +107,27 @@ public class MoreFragment extends Fragment {
 //        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.morefragment, container, false);
         binding = MorefragmentBinding.inflate(inflater);
         mContext = inflater.getContext();
-
-        dlog.DlogContext(mContext);
-        shardpref = new PreferenceHelper(mContext);
-
-        setBtnEvent();
-
         //UI 데이터 세팅
         try {
-            place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            place_owner_name = shardpref.getString("place_owner_name", "0");
-            place_management_office = shardpref.getString("place_management_office", "0");
-            place_address = shardpref.getString("place_address", "0");
-            place_latitude = shardpref.getString("place_latitude", "0");
-            place_longitude = shardpref.getString("place_longitude", "0");
-            place_start_time = shardpref.getString("place_start_time", "0");
-            place_end_time = shardpref.getString("place_end_time", "0");
-            place_img_path = shardpref.getString("place_img_path", "0");
-            place_start_date = shardpref.getString("place_start_date", "0");
-            place_created_at = shardpref.getString("place_created_at", "0");
+            dlog.DlogContext(mContext);
+            shardpref = new PreferenceHelper(mContext);
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
+            setBtnEvent();
 
+            place_id            = shardpref.getString("place_id", "0");
+            place_name          = shardpref.getString("place_name", "0");
+            place_owner_id      = shardpref.getString("place_owner_id", "0");
+            place_owner_name    = shardpref.getString("place_owner_name", "0");
+            place_management_office = shardpref.getString("place_management_office", "0");
+            place_address       = shardpref.getString("place_address", "0");
+            place_latitude      = shardpref.getString("place_latitude", "0");
+            place_longitude     = shardpref.getString("place_longitude", "0");
+            place_start_time    = shardpref.getString("place_start_time", "0");
+            place_end_time      = shardpref.getString("place_end_time", "0");
+            place_img_path      = shardpref.getString("place_img_path", "0");
+            place_start_date    = shardpref.getString("place_start_date", "0");
+            place_created_at    = shardpref.getString("place_created_at", "0");
+            USER_INFO_ID        = shardpref.getString("USER_INFO_ID","");
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -136,6 +150,18 @@ public class MoreFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //5초마다 실행
+                if(!USER_INFO_ID.isEmpty() && !place_id.isEmpty()){
+                    SetAllMemberList();
+                    timer.cancel();
+                }
+            }
+        };
+        timer.schedule(timerTask,0,1000);
     }
 
     public void setBtnEvent() {
@@ -145,7 +171,7 @@ public class MoreFragment extends Fragment {
             pm.ProfileEdit(mContext);
         });
         binding.settingList02Txt.setOnClickListener(v -> {
-//            pm.PushLog(mContext);
+            pm.NotifyList(mContext);
         });
         binding.settingList03Txt.setOnClickListener(v -> {
             pm.Push(mContext);
@@ -154,5 +180,56 @@ public class MoreFragment extends Fragment {
         binding.settingList04Txt.setOnClickListener(v -> {
             pm.UserDel(mContext);
         });
+    }
+
+    public void SetAllMemberList() {
+        dlog.i("-----SetAllMemberList-----");
+        dlog.i("place_id : " + place_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("-----SetAllMemberList-----");
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(AllMemberInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+            Call<String> call = api.getData(place_id, USER_INFO_ID);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        Log.e("SetAllMemberList onSuccess : ", jsonResponse);
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(jsonResponse);
+                            String name = Response.getJSONObject(0).getString("name");
+                            String img_path = Response.getJSONObject(0).getString("img_path");
+                            String getjikgup = Response.getJSONObject(0).getString("jikgup");
+
+                            binding.userName.setText(name);
+                            binding.jikgup.setText(getjikgup);
+                            Glide.with(mContext).load(img_path)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                                    .into(binding.userProfile);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -265,6 +265,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
             }
         });
+
         binding.userName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -297,6 +298,10 @@ public class ProfileEditActivity extends AppCompatActivity {
                 phone = s.toString();
             }
         });
+
+        binding.clearNick.setOnClickListener(v -> {
+            binding.userNick.setText("");
+        });
         binding.userNick.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -316,24 +321,20 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         binding.selectMan.setOnClickListener(v -> {
             USER_INFO_GENDER = "1";
-            binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
-            binding.manTxt.setBackgroundColor(Color.parseColor("#ffffff"));
-            binding.selectMan.setBackgroundColor(Color.parseColor("#1E90FF"));
+            binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+            binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
 
             binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-            binding.womanTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.selectWoman.setBackgroundColor(Color.parseColor("#a9a9a9"));
+            binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
         });
 
         binding.selectWoman.setOnClickListener(v -> {
             USER_INFO_GENDER = "2";
             binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-            binding.manTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.selectMan.setBackgroundColor(Color.parseColor("#a9a9a9"));
+            binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
 
-            binding.womanTxt.setTextColor(Color.parseColor("#1E90FF"));
-            binding.womanTxt.setBackgroundColor(Color.parseColor("#ffffff"));
-            binding.selectWoman.setBackgroundColor(Color.parseColor("#1E90FF"));
+            binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+            binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
         });
 
         binding.userPhone.addTextChangedListener(new TextWatcher() {
@@ -569,25 +570,20 @@ public class ProfileEditActivity extends AppCompatActivity {
                                     ProfileUrl = mem_img_path;
                                 }
 
-
                                 if(mem_gender.equals("1")){
                                     USER_INFO_GENDER = "1";
-                                    binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
-                                    binding.manTxt.setBackgroundColor(Color.parseColor("#ffffff"));
-                                    binding.selectMan.setBackgroundColor(Color.parseColor("#1E90FF"));
+                                    binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+                                    binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
 
                                     binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-                                    binding.womanTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                                    binding.selectWoman.setBackgroundColor(Color.parseColor("#a9a9a9"));
+                                    binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
                                 }else{
                                     USER_INFO_GENDER = "2";
                                     binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-                                    binding.manTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
-                                    binding.selectMan.setBackgroundColor(Color.parseColor("#a9a9a9"));
+                                    binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
 
-                                    binding.womanTxt.setTextColor(Color.parseColor("#1E90FF"));
-                                    binding.womanTxt.setBackgroundColor(Color.parseColor("#ffffff"));
-                                    binding.selectWoman.setBackgroundColor(Color.parseColor("#1E90FF"));
+                                    binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+                                    binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
                                 }
 
                             } catch (Exception e) {

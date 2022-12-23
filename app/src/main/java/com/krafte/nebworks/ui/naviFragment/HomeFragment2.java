@@ -60,6 +60,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -270,14 +272,25 @@ public class HomeFragment2 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        UserCheck();
-        getPlaceData();
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
-        InOutLogMember();
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //5초마다 실행
+                if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !place_id.isEmpty() && !USER_INFO_AUTH.isEmpty()){
+                    UserCheck();
+                    getPlaceData();
+                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
+                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
+                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
+                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
+                    InOutLogMember();
+                    timer.cancel();
+                }
+            }
+        };
+        timer.schedule(timerTask,0,1000);
     }
 
     public void InOutLogMember() {//출퇴근상황 / 날짜가 변경됬을때는 퇴근중이 아닌 미출근 / 휴무날에는 휴무로 표시해야함

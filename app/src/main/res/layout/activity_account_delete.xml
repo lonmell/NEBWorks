@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f2f2"
+    android:background="@color/white"
     android:orientation="vertical"
-    tools:ignore="HardcodedText,SmallSp"
-    tools:context=".ui.user.DeleteUserActivity">
+    tools:context=".ui.user.DeleteUserActivity"
+    tools:ignore="HardcodedText,SmallSp">
 
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="59dp"
-        android:orientation="horizontal"
         android:background="@color/white"
+        android:orientation="horizontal"
         tools:ignore="RtlSymmetry">
 
         <LinearLayout
@@ -49,41 +49,25 @@
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/pagetv01"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp">
-
-        <TextView
-            android:id="@+id/pagetv01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/inter_regular"
-            android:text="탈퇴 전 확인하세요"
-            android:textColor="#696969"
-            android:textSize="20sp"
-            tools:ignore="HardcodedText" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_below="@+id/pagetv01"
-            android:layout_alignStart="@+id/pagetv01"
-            android:layout_alignEnd="@+id/pagetv01"
-            android:background="#696969" />
-    </RelativeLayout>
+        android:layout_margin="20dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="탈퇴 전 확인하세요"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/pagetv02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
         android:fontFamily="@font/inter_regular"
-        android:gravity="center"
         android:text="탈퇴하시면 이용 중인 모든 매장에서 탈퇴되며,\n모든 데이터는 복구가 불가능 합니다."
-        android:textColor="#696969"
+        android:textColor="@color/black"
         android:textSize="15sp"
         tools:ignore="HardcodedText" />
 
@@ -91,17 +75,14 @@
         android:id="@+id/guide_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="30dp"
-        app:cardBackgroundColor="#ffffff"
+        android:layout_margin="20dp"
+        app:cardBackgroundColor="#F5F6F8"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
             android:orientation="vertical">
 
             <LinearLayout
@@ -111,15 +92,13 @@
                 android:layout_alignTop="@+id/pagetv03"
                 android:layout_alignBottom="@+id/pagetv03"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp">
+                android:layout_marginStart="25dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:cardBackgroundColor="#696969"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="0dp" />
+                    android:background="@drawable/ic_gray_check" />
             </LinearLayout>
 
 
@@ -128,14 +107,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="13dp"
                 android:layout_marginTop="15dp"
                 android:layout_toEndOf="@+id/dot01"
-                android:fontFamily="@font/inter_regular"
-                android:text="출퇴근 데이터, 예상급여, 커리어 등 저장해둔 모든 데이터가 삭제됩니다."
-                android:textColor="#696969"
-                android:textSize="10sp"
+                android:fontFamily="@font/inter_bold"
+                android:text="출퇴근 데이터, 예상급여, 커리어 등\n저장해둔 모든 데이터가 삭제됩니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
                 tools:ignore="HardcodedText,SmallSp" />
+
+            <LinearLayout
+                android:id="@+id/middle_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/pagetv03"
+                android:layout_margin="15dp"
+                android:background="#D9D9D9" />
 
             <LinearLayout
                 android:id="@+id/dot02"
@@ -144,105 +131,92 @@
                 android:layout_alignTop="@+id/pagetv04"
                 android:layout_alignBottom="@+id/pagetv04"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp">
+                android:layout_marginStart="25dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:cardBackgroundColor="#696969"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="0dp" />
+                    android:background="@drawable/ic_gray_check" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/pagetv04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/pagetv03"
+                android:layout_below="@+id/middle_line"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginStart="13dp"
                 android:layout_marginBottom="15dp"
                 android:layout_toEndOf="@+id/dot02"
-                android:fontFamily="@font/inter_regular"
-                android:text="타인의 글의 댓글은 삭제되지 않으니 미리 확인하세요."
-                android:textColor="#696969"
-                android:textSize="10sp"
+                android:fontFamily="@font/inter_bold"
+                android:text="타인의 글의 댓글은 삭제되지 않으니\n미리 확인하세요."
+                android:textColor="@color/black"
+                android:textSize="14sp"
                 tools:ignore="HardcodedText,SmallSp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/accept_del_area"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:layout_height="52dp"
+        android:layout_margin="20dp"
+        android:orientation="horizontal"
+        app:cardBackgroundColor="#E0EAFB"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/accept_del_area"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp"
-            app:cardBackgroundColor="#ffffff"
-            app:cardCornerRadius="2dp"
-            app:cardElevation="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/accept_del"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/checkbox_off"/>
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/resize_service_off" />
 
-        </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/pagetv05"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/inter_bold"
+                android:text="안내사항을 모두 확인하였으며, 이에 동의합니다."
+                android:textColor="#6395EC"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText,SmallSp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/pagetv05"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/inter_regular"
-            android:text="안내사항을 모두 확인하였으며, 이에 동의합니다."
-            android:textColor="#696969"
-            android:textSize="10sp"
-            tools:ignore="HardcodedText,SmallSp" />
-    </LinearLayout>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
-        android:background="#D9D9D9"
-        android:layout_marginEnd="30dp"/>
+        android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/del_user"
-        android:layout_width="120dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="15dp"
-        app:cardBackgroundColor="#ACACAC"
-        app:cardCornerRadius="60dp"
-        app:cardElevation="0dp"
-        android:layout_gravity="center">
         <androidx.cardview.widget.CardView
+            android:id="@+id/del_user"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="1dp"
-            app:cardBackgroundColor="#f2f2f2"
-            app:cardCornerRadius="60dp"
-            app:cardElevation="0dp"
-            android:layout_gravity="center">
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="23dp"
+            app:cardBackgroundColor="#C3C3C3"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="0dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/inter_bold"
                 android:text="탈퇴하기"
-                android:textColor="#ACACAC"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText,SmallSp" />
         </androidx.cardview.widget.CardView>
-    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 </LinearLayout>

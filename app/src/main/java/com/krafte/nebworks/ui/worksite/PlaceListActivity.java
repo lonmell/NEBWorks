@@ -39,6 +39,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -98,10 +100,10 @@ public class PlaceListActivity extends AppCompatActivity {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
 
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-99");// 0:점주 / 1:근로자
+            USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", "");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "-99");// 0:점주 / 1:근로자
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
@@ -133,8 +135,20 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        GetPlaceList();
-        getNotReadFeedcnt();
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //5초마다 실행
+                if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !USER_INFO_NAME.isEmpty() && !USER_INFO_AUTH.isEmpty()){
+                    GetPlaceList();
+                    getNotReadFeedcnt();
+                    timer.cancel();
+                }
+            }
+        };
+        timer.schedule(timerTask,0,1000);
+
     }
 
     @Override

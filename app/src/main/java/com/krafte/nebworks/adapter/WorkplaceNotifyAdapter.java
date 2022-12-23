@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkPlaceEmloyeeNotifyData;
@@ -65,29 +68,30 @@ public class WorkplaceNotifyAdapter extends RecyclerView.Adapter<WorkplaceNotify
         WorkPlaceEmloyeeNotifyData.WorkPlaceEmloyeeNotifyData_list item = mData.get(position);
 
         try{
-            holder.item_notify_name.setText(place_management_office);
-            holder.item_notify_contents.setText(item.getTitle());
             holder.item_notify_date.setText(item.getPush_date());
+            holder.item_notify_name.setText(item.getTitle());
+            holder.item_notify_contents.setText(item.getContents());
+            holder.item_notify_time.setText(item.getPush_time());
 
-
-            // 0:출퇴근, 1:할일, 2:결재, 3:공지사항
-            String noti_mothod = "";
-            switch(item.getKind()){
-                case "0" :
-                    noti_mothod = "출퇴근";
-                    break;
-                case "1" :
-                    noti_mothod = "할일";
-                    break;
-                case "2" :
-                    noti_mothod = "결재";
-                    break;
-                case "3" :
-                    noti_mothod = "공지사항";
-                    break;
+            if(position != 0){
+                if(mData.get(position-1).getPush_date().equals(mData.get(position).getPush_date())){
+                    holder.date_line.setVisibility(View.GONE);
+                }else{
+                    holder.date_line.setVisibility(View.VISIBLE);
+                }
             }
 
-            holder.item_notify_readyn.setText(noti_mothod);
+            Glide.with(mContext).load(item.getImg_path())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .placeholder(R.drawable.identificon)
+                    .skipMemoryCache(true)
+                    .into(holder.profile_setimg);
+
+            if(item.getRead_yn().equals("n")){
+                holder.read_yn.setVisibility(View.VISIBLE);
+            }else{
+                holder.read_yn.setVisibility(View.GONE);
+            }
             if(loadlist == 0){
                 //--아이템에 나타나기 애니메이션 줌
                 holder.item_total.setTranslationY(150);
@@ -119,19 +123,22 @@ public class WorkplaceNotifyAdapter extends RecyclerView.Adapter<WorkplaceNotify
 
         TextView item_notify_name;
         TextView item_notify_contents;
-        TextView item_notify_date;
-        TextView item_notify_readyn;
-        RelativeLayout item_total;
+        TextView item_notify_time,item_notify_date;
+        LinearLayout item_total,date_line,read_yn;
+        ImageView profile_setimg;
 
         @SuppressLint("LongLogTag")
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            item_notify_name = itemView.findViewById(R.id.item_notify_name);
+            item_notify_name     = itemView.findViewById(R.id.item_notify_name);
             item_notify_contents = itemView.findViewById(R.id.item_notify_contents);
-            item_notify_date = itemView.findViewById(R.id.item_notify_date);
-            item_notify_readyn = itemView.findViewById(R.id.item_notify_readyn);
-            item_total = itemView.findViewById(R.id.item_total);
+            item_notify_date     = itemView.findViewById(R.id.item_notify_date);
+            item_notify_time     = itemView.findViewById(R.id.item_notify_time);
+            item_total           = itemView.findViewById(R.id.item_total);
+            profile_setimg       = itemView.findViewById(R.id.profile_setimg);
+            date_line            = itemView.findViewById(R.id.date_line);
+            read_yn              = itemView.findViewById(R.id.read_yn);
             dlog.DlogContext(mContext);
 
             shardpref = new PreferenceHelper(mContext);

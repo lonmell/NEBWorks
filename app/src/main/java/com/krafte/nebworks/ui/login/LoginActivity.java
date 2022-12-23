@@ -151,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
         permissionCheck();
         KakaoSetting();
         GoogleSetting();
+        NaverSetting();
         if (!GET_ACCOUNT_EMAIL.isEmpty()) {
             binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
         }
@@ -209,8 +210,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void NaverSetting(){
         try{
-//            NaverIdLoginSDK.initialize(mContext, {OAUTH_CLIENT_ID}, {OAUTH_CLIENT_SECRET}, {OAUTH_CLIENT_NAME});
-//            NaverIdLoginSDK.INSTANCE.initialize(mContext, {OAUTH_CLIENT_ID}, {OAUTH_CLIENT_SECRET}, {OAUTH_CLIENT_NAME});
+//            NaverIdLoginSDK.INSTANCE.initialize(mContext, {OAUTH_CLIENT_ID}, {OAUTH_CLIENT_SECRET}, {OAUTH_CLIENT_NAME})
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -594,7 +594,8 @@ public class LoginActivity extends AppCompatActivity {
                             shardpref.remove("USER_INFO_NAME");
                             shardpref.remove("USER_INFO_PHONE");
                             shardpref.remove("USER_INFO_PW");
-                            pm.AuthSelect(mContext);
+//                            pm.AuthSelect(mContext);
+                            UserCheck(USER_INFO_EMAIL);
                         }
                     } catch (Exception e) {
                         dlog.i("Exception : " + e);

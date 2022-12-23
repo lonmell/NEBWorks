@@ -485,8 +485,6 @@ public class HomeFragment extends Fragment {
                                             dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
                                             dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
                                             dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
-
-
                                             int allPay = 0;
                                             for (int i = 0; i < Response.length(); i++) {
                                                 allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",",""));
@@ -495,6 +493,7 @@ public class HomeFragment extends Fragment {
                                             binding.paynum.setText(myFormatter.format(allPay) + "원");
                                             dlog.i("allPay : " + myFormatter.format(allPay));
                                             dlog.i("-----MainData-----");
+
                                             mList = new ArrayList<>();
                                             mAdapter = new MainMemberLAdapter(mContext, mList);
                                             binding.importantList.setAdapter(mAdapter);
@@ -515,7 +514,7 @@ public class HomeFragment extends Fragment {
                                                             jsonObject.getString("recent_pay")
                                                     ));
                                                 }
-
+                                                dlog.i("mList : " + mList.get(0).getUser_name());
                                                 mAdapter.setOnItemClickListener(new MainMemberLAdapter.OnItemClickListener() {
                                                     @Override
                                                     public void onItemClick(View v, int position) {

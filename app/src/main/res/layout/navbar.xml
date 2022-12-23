@@ -197,7 +197,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="26dp"
                         android:layout_marginEnd="15dp"
-                        android:drawableStart="@drawable/ic_gray_check"
+                        android:drawableStart="@drawable/ic_circle_gray_check"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="center"
                         android:text="  매장관리"
@@ -273,7 +273,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="26dp"
                         android:layout_marginEnd="15dp"
-                        android:drawableStart="@drawable/ic_gray_check"
+                        android:drawableStart="@drawable/ic_circle_gray_check"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="center"
                         android:text="  직원관리"
@@ -366,14 +366,14 @@
 
                         <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
-                            android:layout_height="90dp"
+                            android:layout_height="wrap_content"
                             app:cardBackgroundColor="#F5F6F8"
                             app:cardCornerRadius="5dp"
                             app:cardElevation="0dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -653,7 +653,7 @@
 
                         <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
-                            android:layout_height="90dp"
+                            android:layout_height="wrap_content"
                             app:cardBackgroundColor="#F5F6F8"
                             app:cardCornerRadius="5dp"
                             app:cardElevation="0dp">
@@ -688,6 +688,7 @@
                                     android:onClick="btnOnclick"
                                     android:paddingStart="20dp"
                                     android:paddingEnd="20dp"
+                                    android:visibility="gone"
                                     android:text="근로계약 작성"
                                     android:textColor="@color/black"
                                     android:textSize="13sp"

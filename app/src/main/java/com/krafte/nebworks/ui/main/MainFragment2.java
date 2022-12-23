@@ -22,8 +22,13 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
@@ -49,6 +54,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,13 +79,14 @@ public class MainFragment2 extends AppCompatActivity {
     // shared 저장값
     PreferenceHelper shardpref;
     ApprovalAdapter mAdapter = null;
-    String USER_INFO_ID = "";
-    String USER_INFO_NAME = "";
-    String USER_INFO_AUTH = "";
-    String USER_INFO_EMAIL = "";
-    String place_id = "";
-    String place_name = "";
-    String place_imgpath = "";
+    String USER_INFO_ID      = "";
+    String USER_INFO_NAME    = "";
+    String USER_INFO_AUTH    = "";
+    String USER_INFO_EMAIL   = "";
+    String USER_LOGIN_METHOD = "";
+    String place_id          = "";
+    String place_name        = "";
+    String place_imgpath     = "";
 
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
@@ -96,6 +104,10 @@ public class MainFragment2 extends AppCompatActivity {
     Dlog dlog = new Dlog();
     String return_page = "";
 
+    // [START declare_auth]
+    private FirebaseAuth mAuth;
+    // [END declare_auth]
+    private GoogleSignInClient mGoogleSignInClient;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
@@ -116,19 +128,20 @@ public class MainFragment2 extends AppCompatActivity {
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
+            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", "");
+            USER_INFO_NAME      = shardpref.getString("USER_INFO_NAME", "");
+            USER_INFO_EMAIL     = shardpref.getString("USER_INFO_EMAIL", "");
+            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
+            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            place_id = shardpref.getString("place_id", "");
-            place_name = shardpref.getString("place_name", "");
-            place_imgpath = shardpref.getString("place_imgpath", "");
-            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
-            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-            return_page = shardpref.getString("return_page", "");
-            store_no = shardpref.getString("store_no", "");
+            USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD", "");
+            place_id            = shardpref.getString("place_id", "");
+            place_name          = shardpref.getString("place_name", "");
+            place_imgpath       = shardpref.getString("place_imgpath", "");
+            wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
+            return_page         = shardpref.getString("return_page", "");
+            store_no            = shardpref.getString("store_no", "");
             shardpref.putString("returnPage", "BusinessApprovalActivity");
 
 
@@ -227,6 +240,14 @@ public class MainFragment2 extends AppCompatActivity {
 
             drawerLayout.addDrawerListener(listener);
             drawerView.setOnTouchListener((v, event) -> false);
+
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            mAuth = FirebaseAuth.getInstance();
 
             binding.notiArea.setOnClickListener(v -> {
                 pm.FeedList(mContext);
@@ -331,25 +352,27 @@ public class MainFragment2 extends AppCompatActivity {
     View drawerView;
     LinearLayout area03, area04, area06;
     ImageView close_btn, user_profile, my_setting;
-    TextView user_name, jikgup, store_name,select_nav09;
+    TextView user_name, jikgup, store_name,select_nav09,select_nav05;
 
     @SuppressLint("LongLogTag")
     public void setNavBarBtnEvent() {
-        drawerView = findViewById(R.id.drawer2);
-        close_btn = findViewById(R.id.close_btn);
-        user_profile = findViewById(R.id.user_profile);
-        my_setting = findViewById(R.id.my_setting);
-        user_name = findViewById(R.id.user_name);
-        jikgup = findViewById(R.id.jikgup);
-        store_name = findViewById(R.id.store_name);
-        area03 = findViewById(R.id.area03);
-        area04 = findViewById(R.id.area04);
-        area06 = findViewById(R.id.area06);
-        select_nav09 = findViewById(R.id.select_nav09);
+        drawerView      = findViewById(R.id.drawer2);
+        close_btn       = findViewById(R.id.close_btn);
+        user_profile    = findViewById(R.id.user_profile);
+        my_setting      = findViewById(R.id.my_setting);
+        user_name       = findViewById(R.id.user_name);
+        jikgup          = findViewById(R.id.jikgup);
+        store_name      = findViewById(R.id.store_name);
+        area03          = findViewById(R.id.area03);
+        area04          = findViewById(R.id.area04);
+        area06          = findViewById(R.id.area06);
+        select_nav09    = findViewById(R.id.select_nav09);
+        select_nav05    = findViewById(R.id.select_nav05);
 
         area04.setVisibility(View.VISIBLE);
         area06.setVisibility(View.GONE);
         select_nav09.setVisibility(View.GONE);
+        select_nav05.setVisibility(View.GONE);
 
         store_name.setText(place_name);
         close_btn.setOnClickListener(v -> {
@@ -364,6 +387,8 @@ public class MainFragment2 extends AppCompatActivity {
         setNavBarBtnEvent();
         SetAllMemberList();
     }
+
+
 
     public void btnOnclick(View view) {
         if (view.getId() == R.id.menu) {
@@ -421,9 +446,7 @@ public class MainFragment2 extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav06) {
             shardpref.putInt("Tap", 1);
             binding.title.setText("급여관리");
-            binding.tabLayout.getTabAt(1).select();
-            shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
+            pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 0);
@@ -440,6 +463,31 @@ public class MainFragment2 extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav10) {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
+        } else if (view.getId() == R.id.select_nav14) {
+            shardpref.clear();
+            shardpref.remove("ALARM_ONOFF");
+            shardpref.remove("USER_LOGIN_METHOD");
+            shardpref.putBoolean("isFirstLogin", true);
+
+            if (USER_LOGIN_METHOD.equals("Google")) {
+                mGoogleSignInClient.signOut()
+                        .addOnCompleteListener(this, task -> {
+                            pm.Login(mContext);
+                        });
+            } else if(USER_LOGIN_METHOD.equals("Kakao")){
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                    UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
+                        @Override
+                        public Unit invoke(Throwable throwable) {
+                            pm.Login(mContext);
+                            return null;
+                        }
+                    });
+                }, 100); //0.5초 후 인트로 실행
+            }else{
+                pm.Login(mContext);
+            }
         }
     }
 

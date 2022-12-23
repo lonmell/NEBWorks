@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -52,25 +57,25 @@ public class DeleteUserActivity extends AppCompatActivity {
         Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
         Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
         Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
-        binding.acceptDel.setBackgroundResource(R.drawable.checkbox_off);
+        binding.acceptDel.setBackgroundResource(R.drawable.resize_service_off);
     }
 
 
     private void setBtnEvent(){
 
-        binding.acceptDel.setOnClickListener(v -> {
+        binding.acceptDelArea.setOnClickListener(v -> {
             if(!check){
                 check = true;
-                binding.acceptDel.setBackgroundResource(R.drawable.checkbox_on);
+                binding.acceptDel.setBackgroundResource(R.drawable.resize_service_on);
             }else{
                 check = false;
-                binding.acceptDel.setBackgroundResource(R.drawable.checkbox_off);
+                binding.acceptDel.setBackgroundResource(R.drawable.resize_service_off);
             }
         });
 
         binding.delUser.setOnClickListener(v -> {
             if(!check){
-                Toast.makeText(mContext,"안내사항 확인 동의에 체크해주세요.",Toast.LENGTH_SHORT).show();
+                Toast_Nomal("안내사항 확인 동의에 체크해주세요.");
             }else{
                 Intent intent = new Intent(this, TwoButtonPopActivity.class);
                 intent.putExtra("data", "회원탈퇴 하시겠습니까?\n 모든 정보가 삭제됩니다.");
@@ -81,5 +86,18 @@ public class DeleteUserActivity extends AppCompatActivity {
             }
 
         });
+    }
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) binding.getRoot().findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(mContext);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }

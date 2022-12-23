@@ -301,7 +301,16 @@ public class PlaceAddActivity extends AppCompatActivity {
             dlog.i("area03 click!");
             StoreDivisionPopActivity storedivi = new StoreDivisionPopActivity();
             storedivi.show(getSupportFragmentManager(), "StoreDivisionPopActivity");
-            storedivi.setOnItemClickListener((v1, category) -> binding.inputbox03.setText(category));
+            storedivi.setOnItemClickListener((v1, category) -> {
+                binding.inputbox03.setText(category);
+                if(category.isEmpty()){
+                    binding.inputbox03.setBackgroundResource(R.drawable.default_input_round);
+                    binding.inputbox03.setTextColor(Color.parseColor("#696969"));
+                }else{
+                    binding.inputbox03.setBackgroundResource(R.drawable.default_select_on_round);
+                    binding.inputbox03.setTextColor(Color.parseColor("#000000"));
+                }
+            });
         });
 
         //급여정산일
