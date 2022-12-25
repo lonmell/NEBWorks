@@ -47,7 +47,7 @@ import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityAddplaceBinding;
-import com.krafte.nebworks.pop.WorkTimePicker;
+import com.krafte.nebworks.bottomsheet.WorkTimePicker;
 import com.krafte.nebworks.ui.PinSelectLocationActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.GpsTracker;
@@ -160,6 +160,7 @@ public class PlaceEditActivity extends AppCompatActivity {
     String img_path = "";
     String start_date = "";
     String SSIDName = "";
+    String GetTime = "";
 
     List<String> boheom = new ArrayList<>();
     //--매장 정보 수정할때
@@ -212,6 +213,8 @@ public class PlaceEditActivity extends AppCompatActivity {
     boolean boheom01TF = false;
     boolean boheom02TF = false;
     boolean boheom03TF = false;
+    String Time01 = "-99";
+    String Time02 = "-99";
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
@@ -332,16 +335,52 @@ public class PlaceEditActivity extends AppCompatActivity {
         });
 
         binding.inputbox08.setOnClickListener(v -> {
-            Intent intent = new Intent(this, WorkTimePicker.class);
-            intent.putExtra("timeSelect_flag", 4);
-            startActivity(intent);
-            overridePendingTransition(R.anim.translate_up, 0);
+            WorkTimePicker wtp = new WorkTimePicker();
+            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+                @Override
+                public void onClick(View v, String hour, String min) {
+                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+                    shardpref.remove("timeSelect_flag");
+                    shardpref.remove("hourOfDay");
+                    shardpref.remove("minute");
+                    GetTime = Time01 + ":" + Time02;
+                    shardpref.putString("input_pop_time",GetTime);
+                    if (!hour.equals("0")) {
+                        binding.inputbox08.setText(GetTime);
+                    }
+                }
+            });
+//            Intent intent = new Intent(this, WorkTimePicker.class);
+//            intent.putExtra("timeSelect_flag", 4);
+//            startActivity(intent);
+//            overridePendingTransition(R.anim.translate_up, 0);
+
         });
         binding.inputbox09.setOnClickListener(v -> {
-            Intent intent = new Intent(this, WorkTimePicker.class);
-            intent.putExtra("timeSelect_flag", 5);
-            startActivity(intent);
-            overridePendingTransition(R.anim.translate_up, 0);
+            WorkTimePicker wtp = new WorkTimePicker();
+            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+                @Override
+                public void onClick(View v, String hour, String min) {
+                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+                    shardpref.remove("timeSelect_flag");
+                    shardpref.remove("hourOfDay");
+                    shardpref.remove("minute");
+                    GetTime = Time01 + ":" + Time02;
+                    shardpref.putString("input_pop_time",GetTime);
+                    if (!hour.equals("0")) {
+                        binding.inputbox09.setText(GetTime);
+                    }
+                }
+            });
+//            Intent intent = new Intent(this, WorkTimePicker.class);
+//            intent.putExtra("timeSelect_flag", 5);
+//            startActivity(intent);
+//            overridePendingTransition(R.anim.translate_up, 0);
+
         });
     }
 
@@ -800,57 +839,6 @@ public class PlaceEditActivity extends AppCompatActivity {
         super.onResume();
 
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-//
-//        ImgfileMaker = ImageNameMaker();
-//
-        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
-        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
-        dlog.i("Min : " + shardpref.getInt("Min", 0));
-        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-        int hourOfDay = shardpref.getInt("Hour", 0);
-        int minute = shardpref.getInt("Min", 0);
-
-        dlog.i("timeSelect_flag : " + timeSelect_flag);
-        if (timeSelect_flag == 4) {
-            StartTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-            shardpref.remove("timeSelect_flag");
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
-            if (hourOfDay != 0) {
-                String ampm = "";
-                if (Integer.parseInt(StartTime01) < 12) {
-                    ampm = " AM";
-                    SelectStartTime = 1;
-                } else {
-                    ampm = " PM";
-                    SelectStartTime = 2;
-                }
-                binding.inputbox08.setText(StartTime01 + ":" + StartTime02 + ampm);
-                place_starttime = StartTime01 + ":" + StartTime02;
-                imm.hideSoftInputFromWindow(binding.inputbox08.getWindowToken(), 0);
-            }
-        } else if (timeSelect_flag == 5) {
-            EndTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-            shardpref.remove("timeSelect_flag");
-            shardpref.remove("Hour");
-            shardpref.remove("Min");
-            if (hourOfDay != 0) {
-                String ampm = "";
-                if (Integer.parseInt(EndTime01) < 12) {
-                    ampm = " AM";
-                    SelectEndTime = 1;
-                } else {
-                    ampm = " PM";
-                    SelectEndTime = 2;
-                }
-                binding.inputbox09.setText(EndTime01 + ":" + EndTime02 + ampm);
-                place_endtime = EndTime01 + ":" + EndTime02;
-                imm.hideSoftInputFromWindow(binding.inputbox09.getWindowToken(), 0);
-            }
-
-        }
 
         dlog.i("onResume Area");
         String getlatitude = shardpref.getString("pin_latitude", "0.0");

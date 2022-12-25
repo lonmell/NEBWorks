@@ -221,15 +221,24 @@
         <activity android:name=".ui.contract.ContractAllDataActivity"/>
 
         <!--관리자-->
-        <activity android:name=".ui.contract.AddContractPage01"/>
-        <activity android:name=".ui.contract.AddContractPage02"/>
-        <activity android:name=".ui.contract.AddContractPage03"/>
-        <activity android:name=".ui.contract.AddContractPage04"/>
-        <activity android:name=".ui.contract.AddContractPage05"/>
-        <activity android:name=".ui.contract.AddContractPage06"/>
-        <activity android:name=".ui.contract.AddContractPage07"/>
-        <activity android:name=".ui.contract.AddContractPage08"/>
-        <activity android:name=".ui.contract.AddContractPage09"/>
+        <activity android:name=".ui.contract.AddContractPage01"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.contract.AddContractPage02"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.contract.AddContractPage03"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.contract.AddContractPage04"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.contract.AddContractPage05"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.contract.AddContractPage06"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.contract.AddContractPage07"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.contract.AddContractPage08"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.contract.AddContractPage09"
+            android:windowSoftInputMode="adjustPan"/>
 
         <!--근로자-->
         <activity android:name=".ui.contract.ContractWorkerAccept"/>
@@ -245,9 +254,16 @@
         <activity
             android:name=".pop.OneButtonPopActivity"
             android:theme="@android:style/Theme.Dialog" />
+
         <activity
-            android:name=".pop.WorkTimePicker"
-            android:theme="@android:style/Theme.Dialog" />
+            android:name=".bottomsheet.WorkTimePicker"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".pop.WorkTimePickerPop"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".pop.DatePickerActivity"
             android:theme="@android:style/Theme.Dialog" />
@@ -298,7 +314,8 @@
 
         <activity
             android:name=".pop.DatePickerYearActivity"
-            android:theme="@android:style/Theme.Dialog" />
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".pop.JoinPopActivity"

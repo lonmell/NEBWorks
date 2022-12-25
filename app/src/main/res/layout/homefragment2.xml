@@ -456,7 +456,6 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-
                     <TextView
                         android:id="@+id/limit_tasktv"
                         android:layout_width="match_parent"

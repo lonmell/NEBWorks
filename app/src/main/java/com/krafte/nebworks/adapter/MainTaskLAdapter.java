@@ -89,8 +89,7 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
                 holder.itemline.setVisibility(View.VISIBLE);
             }
             holder.report_btn.setOnClickListener(v -> {
-
-                pm.Main2(mContext);
+                pm.TaskList(mContext);
             });
         }catch (Exception e){
             dlog.i("Exception : " + e);

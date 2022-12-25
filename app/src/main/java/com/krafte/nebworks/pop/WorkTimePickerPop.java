@@ -13,7 +13,7 @@ import com.krafte.nebworks.databinding.ActivityTimepickerPopBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 
-public class WorkTimePicker extends Activity {
+public class WorkTimePickerPop extends Activity {
     private ActivityTimepickerPopBinding binding;
     Context mContext;
 
@@ -37,9 +37,9 @@ public class WorkTimePicker extends Activity {
 //        setContentView(R.layout.activity_timepicker_pop);
         binding = ActivityTimepickerPopBinding.inflate(getLayoutInflater()); // 1
         setContentView(binding.getRoot()); // 2
-        
+
         mContext = this;
-        
+
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
 
@@ -52,17 +52,25 @@ public class WorkTimePicker extends Activity {
 
         binding.timeSetpicker.setIs24HourView(false);
     }
-   
+
     //확인 버튼 클릭
     @SuppressLint("ObsoleteSdkInt")
     private void setBtnEvent() {
         binding.saveBtn.setOnClickListener(v -> {
             binding.timeSetpicker.clearFocus();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Hour = binding.timeSetpicker.getHour();
+                if(binding.timeSetpicker.getHour() == 0){
+                    Hour = 12;
+                }else{
+                    Hour = binding.timeSetpicker.getHour();
+                }
                 Min = binding.timeSetpicker.getMinute();
             }else{
-                Hour = binding.timeSetpicker.getCurrentHour();
+                if(binding.timeSetpicker.getCurrentHour() == 0){
+                    Hour = 12;
+                }else{
+                    Hour = binding.timeSetpicker.getCurrentHour();
+                }
                 Min = binding.timeSetpicker.getCurrentMinute();
             }
 //            if(Hour > 12){

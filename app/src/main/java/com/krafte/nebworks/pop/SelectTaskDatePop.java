@@ -78,6 +78,8 @@ public class SelectTaskDatePop extends Activity {
     String getYoil = "";
     String USER_INFO_ID = "";
     String SET_TASK_TIME_VALUE = "";
+    String GetTime = "";
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     @Override
@@ -182,7 +184,7 @@ public class SelectTaskDatePop extends Activity {
         });
 
         binding.selectTimetv.setOnClickListener(v -> {
-            Intent intent = new Intent(this, WorkTimePicker.class);
+            Intent intent = new Intent(this, WorkTimePickerPop.class);
             intent.putExtra("timeSelect_flag", 1);
             startActivity(intent);
             overridePendingTransition(R.anim.translate_up, 0);

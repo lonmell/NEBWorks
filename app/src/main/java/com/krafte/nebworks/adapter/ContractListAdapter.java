@@ -126,6 +126,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                     shardpref.putString("contract_id",item.getContract_id());
                     /* item.getContract_id()
                     *   현재 진행중인 페이지
+                        0 -
                         1 - 사업장 기본사항
                         2 - 근무 기본사항
                         3 - 급여 기본사항
