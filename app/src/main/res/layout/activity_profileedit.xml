@@ -52,15 +52,15 @@
 
             <RelativeLayout
                 android:id="@+id/profile_img_area"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="20dp">
 
                 <RelativeLayout
                     android:id="@+id/profile_img"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerInParent="true">
 
@@ -112,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_toEndOf="@+id/profile_img_area"
                 android:orientation="horizontal">
@@ -229,19 +230,21 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/default_gray_round">
+
             <EditText
                 android:id="@+id/user_nick"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_toStartOf="@+id/clear_nick"
                 android:background="@color/white"
                 android:fontFamily="@font/inter_regular"
-                android:layout_toStartOf="@+id/clear_nick"
                 android:hint="닉네임을 자유롭게 입력해주세요"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="#000000"
                 android:textColorHint="#a9a9a9"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
             <LinearLayout
                 android:id="@+id/clear_nick"
                 android:layout_width="45dp"

@@ -82,7 +82,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
     int confirm_cnt = 0;
     List<String> confirm_member = new ArrayList<>();
-    String page_state = "";
+    String event = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +104,7 @@ public class PlaceListActivity extends AppCompatActivity {
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
             USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", "");
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "-99");// 0:점주 / 1:근로자
+            event           = shardpref.getString("event", "");
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
@@ -135,6 +136,7 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        shardpref.remove("page_state");
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -158,7 +160,11 @@ public class PlaceListActivity extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            super.onBackPressed();
+            if(event.equals("out_store")){
+                super.onBackPressed();
+            }else{
+                pm.AuthSelect(mContext);
+            }
         });
         binding.addPlace.setOnClickListener(v -> {
             onStartAuth();
@@ -167,6 +173,7 @@ public class PlaceListActivity extends AppCompatActivity {
             onStartAuth();
         });
         binding.notiArea.setOnClickListener(v -> {
+            shardpref.putString("returnPage","PlaceListActivity");
             pm.FeedList(mContext);
         });
     }
@@ -243,7 +250,6 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
     int store_cnt = 0;
-
     public void GetPlaceList() {
         dlog.i("------GetPlaceList------");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -733,14 +739,10 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-//        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-//        intent.putExtra("data", "로그아웃하시겠습니까?");
-//        intent.putExtra("flag", "로그아웃");
-//        intent.putExtra("left_btn_txt", "닫기");
-//        intent.putExtra("right_btn_txt", "로그아웃");
-//        mContext.startActivity(intent);
-//        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        pm.AuthSelect(mContext);
+        if(event.equals("out_store")){
+            super.onBackPressed();
+        }else{
+            pm.AuthSelect(mContext);
+        }
     }
 }

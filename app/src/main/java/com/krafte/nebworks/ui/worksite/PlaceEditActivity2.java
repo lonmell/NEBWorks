@@ -132,36 +132,38 @@ public class PlaceEditActivity2 extends AppCompatActivity {
                             dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
                             dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
                             try {
-                                //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(jsonResponse);
-                                name = Response.getJSONObject(0).getString("name");
-                                registr_num = Response.getJSONObject(0).getString("registr_num");
-                                store_kind = Response.getJSONObject(0).getString("store_kind");
-                                address = Response.getJSONObject(0).getString("address");
-                                address_detail = Response.getJSONObject(0).getString("address_detail");
-                                latitude = Response.getJSONObject(0).getString("latitude");
-                                longitude = Response.getJSONObject(0).getString("longitude");
-                                pay_day = Response.getJSONObject(0).getString("pay_day");
-                                test_period = Response.getJSONObject(0).getString("test_period");
-                                vacation_select = Response.getJSONObject(0).getString("vacation_select");
-                                insurance = Response.getJSONObject(0).getString("insurance");
-                                start_time = Response.getJSONObject(0).getString("start_time");
-                                end_time = Response.getJSONObject(0).getString("end_time");
-                                save_kind = Response.getJSONObject(0).getString("save_kind");
-                                img_path = Response.getJSONObject(0).getString("img_path").equals("null")?"":Response.getJSONObject(0).getString("img_path");
-                                start_date = Response.getJSONObject(0).getString("start_date");
-                                SSIDName = Response.getJSONObject(0).getString("wifi_name");
+                                if(!jsonResponse.equals("[]")){
+                                    //Array데이터를 받아올 때
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    name = Response.getJSONObject(0).getString("name");
+                                    registr_num = Response.getJSONObject(0).getString("registr_num");
+                                    store_kind = Response.getJSONObject(0).getString("store_kind");
+                                    address = Response.getJSONObject(0).getString("address");
+                                    address_detail = Response.getJSONObject(0).getString("address_detail");
+                                    latitude = Response.getJSONObject(0).getString("latitude");
+                                    longitude = Response.getJSONObject(0).getString("longitude");
+                                    pay_day = Response.getJSONObject(0).getString("pay_day");
+                                    test_period = Response.getJSONObject(0).getString("test_period");
+                                    vacation_select = Response.getJSONObject(0).getString("vacation_select");
+                                    insurance = Response.getJSONObject(0).getString("insurance");
+                                    start_time = Response.getJSONObject(0).getString("start_time");
+                                    end_time = Response.getJSONObject(0).getString("end_time");
+                                    save_kind = Response.getJSONObject(0).getString("save_kind");
+                                    img_path = Response.getJSONObject(0).getString("img_path").equals("null")?"":Response.getJSONObject(0).getString("img_path");
+                                    start_date = Response.getJSONObject(0).getString("start_date");
+                                    SSIDName = Response.getJSONObject(0).getString("wifi_name");
 
-                                binding.updateWifi01.setVisibility(View.VISIBLE);
-                                binding.updateWifi02.setVisibility(View.VISIBLE);
-                                binding.wifiName.setText(SSIDName);
+                                    binding.updateWifi01.setVisibility(View.VISIBLE);
+                                    binding.updateWifi02.setVisibility(View.VISIBLE);
+                                    binding.wifiName.setText(SSIDName);
 
-                                binding.save2btn.setOnClickListener(v -> {
-                                    UpdatePlace(0);
-                                });
-                                binding.addPlaceBtn.setOnClickListener(v -> {
-                                    UpdatePlace(1);
-                                });
+                                    binding.save2btn.setOnClickListener(v -> {
+                                        UpdatePlace(0);
+                                    });
+                                    binding.addPlaceBtn.setOnClickListener(v -> {
+                                        UpdatePlace(1);
+                                    });
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

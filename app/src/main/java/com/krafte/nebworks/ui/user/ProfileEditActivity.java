@@ -359,13 +359,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             }
         });
         binding.getAuthResult.setOnClickListener(v -> {
-            if (user_name.isEmpty()) {
-                Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-                intent.putExtra("data", "이름을 입력해 주세요.");
-                intent.putExtra("left_btn_txt", "닫기");
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
-            } else if (phone.isEmpty()) {
+            if (phone.isEmpty()) {
                 Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                 intent.putExtra("data", "전화번호를 입력해주세요.");
                 intent.putExtra("left_btn_txt", "닫기");
@@ -375,6 +369,14 @@ public class ProfileEditActivity extends AppCompatActivity {
                 binding.confirmNumCounting.setVisibility(View.VISIBLE);
                 SendConfirmMessage();
             }
+
+//            if (user_name.isEmpty()) {
+//                Intent intent = new Intent(mContext, OneButtonPopActivity.class);
+//                intent.putExtra("data", "이름을 입력해 주세요.");
+//                intent.putExtra("left_btn_txt", "닫기");
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.translate_up, 0);
+//            } else
         });
         binding.confirmPhoneBtn.setOnClickListener(view -> {
             if (binding.editConfirmNum.getText().toString().isEmpty()) {
@@ -617,10 +619,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         dlog.i("전화번호 : " + phone);
         dlog.i("------CheckData-------");
 
-        if (user_name.isEmpty()) {
-            Toast.makeText(mContext, "성명을 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (user_nickname.isEmpty()) {
+        if (user_nickname.isEmpty()) {
             Toast.makeText(mContext, "부서를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (phone.isEmpty()) {
@@ -654,7 +653,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             UserUpdateInterface api = retrofit.create(UserUpdateInterface.class);
-            Call<String> call = api.getData(USER_INFO_ID, user_name, user_nickname, phone, USER_INFO_GENDER, ProfileUrl);
+            Call<String> call = api.getData(USER_INFO_ID, (user_name.isEmpty()?user_nickname:user_name), user_nickname, phone, USER_INFO_GENDER, ProfileUrl);
             call.enqueue(new Callback<String>() {
                 @SuppressLint("LongLogTag")
                 @Override
@@ -1066,6 +1065,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 if (SND_NUM.equals(Sms_receiver.receiverNum)) {
                     Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
                     binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#6395EC"));
+                    binding.confirmPhoneBtn.setTextColor(Color.parseColor("#000000"));
                     binding.editConfirmNum.setText(Sms_receiver.receiverNum);
                     binding.confirmNumCounting.setVisibility(View.GONE);
                     binding.getAuthResult.setEnabled(false);

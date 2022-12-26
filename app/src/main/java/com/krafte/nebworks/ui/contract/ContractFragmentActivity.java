@@ -102,7 +102,14 @@ public class ContractFragmentActivity extends AppCompatActivity {
                 }
             });
 
-
+            binding.backBtn.setOnClickListener(v -> {
+                shardpref.putInt("SELECT_POSITION",0);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.Main(mContext);
+                }else{
+                    pm.Main2(mContext);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

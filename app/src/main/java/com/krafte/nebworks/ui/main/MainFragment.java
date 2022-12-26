@@ -1,16 +1,22 @@
 package com.krafte.nebworks.ui.main;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -29,6 +35,7 @@ import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.ActivityMainfragmentBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.naviFragment.CommunityFragment;
 import com.krafte.nebworks.ui.naviFragment.HomeFragment;
 import com.krafte.nebworks.ui.naviFragment.MoreFragment;
@@ -220,10 +227,11 @@ public class MainFragment extends AppCompatActivity {
                         public void run() {
                             binding.tabLayout.getTabAt(SELECT_POSITION).select();
                         }
-                    }, 100);
+                    }, 500);
 
             if (SELECT_POSITION != -99) {
                 binding.viewPager.setCurrentItem(SELECT_POSITION);
+                binding.tabLayout.getTabAt(SELECT_POSITION).select();
             }
 
             drawerLayout.addDrawerListener(listener);
@@ -263,6 +271,7 @@ public class MainFragment extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
         if (paging_position == 0) {
+            shardpref.putString("event","backpressed");
             pm.PlaceList(mContext);
         } else {
             binding.tabLayout.getTabAt(0).select();
@@ -374,59 +383,88 @@ public class MainFragment extends AppCompatActivity {
             drawerLayout.openDrawer(drawerView);
         } else if (view.getId() == R.id.out_store) {
             pm.PlaceList(mContext);
+            drawerLayout.closeDrawer(drawerView);
+            shardpref.putString("event","out_store");
         } else if (view.getId() == R.id.bottom_navigation01) {
+            drawerLayout.closeDrawer(drawerView);
             dlog.i("메인 Click!");
             binding.title.setText("");
             binding.tabLayout.getTabAt(0).select();
+            shardpref.putInt("SELECT_POSITION",0);
         } else if (view.getId() == R.id.bottom_navigation02) {
             dlog.i("할일 Click!");
             binding.title.setText("");
             binding.tabLayout.getTabAt(1).select();
-            shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
+            shardpref.putInt("SELECT_POSITION",1);
         } else if (view.getId() == R.id.bottom_navigation03) {
             dlog.i("근무현황 Click!");
             binding.title.setText("근무현황");
             binding.tabLayout.getTabAt(2).select();
+            shardpref.putInt("SELECT_POSITION",2);
         } else if (view.getId() == R.id.bottom_navigation04) {
             dlog.i("커뮤니티 Click!");
             binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
+            shardpref.putInt("SELECT_POSITION",3);
         } else if (view.getId() == R.id.bottom_navigation05) {
             dlog.i("더보기 Click!");
             binding.title.setText("더보기");
             binding.tabLayout.getTabAt(4).select();
+            shardpref.putInt("SELECT_POSITION",4);
         } else if (view.getId() == R.id.select_nav01) {
+            drawerLayout.closeDrawer(drawerView);
             pm.PlaceList(mContext);
         } else if (view.getId() == R.id.select_nav02) {
+            drawerLayout.closeDrawer(drawerView);
             pm.PlaceAddGo(mContext);
         } else if (view.getId() == R.id.select_nav03) {
+            drawerLayout.closeDrawer(drawerView);
             pm.MemberManagement(mContext);
         } else if (view.getId() == R.id.select_nav04) {
-            shardpref.putInt("SELECT_POSITION", 2);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
+            drawerLayout.closeDrawer(drawerView);
             pm.Main(mContext);
         } else if (view.getId() == R.id.select_nav05) {
+            drawerLayout.closeDrawer(drawerView);
             shardpref.putString("Tap", "0");
             pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav06) {
+            drawerLayout.closeDrawer(drawerView);
             shardpref.putString("Tap", "1");
             pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
-            shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
+            drawerLayout.closeDrawer(drawerView);
             pm.Main(mContext);
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
+            drawerLayout.closeDrawer(drawerView);
             pm.addWorkGo(mContext);
         } else if (view.getId() == R.id.select_nav09) {
+            drawerLayout.closeDrawer(drawerView);
             pm.Approval(mContext);
         } else if (view.getId() == R.id.select_nav12) {
             dlog.i("커뮤니티 Click!");
             binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
+            shardpref.putInt("SELECT_POSITION",3);
         } else if (view.getId() == R.id.select_nav10) {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
+        } else if (view.getId() == R.id.select_nav13){
+            //고객센터1877-1979
+            Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:1877-1979"));
+            mContext.startActivity(mIntent);
+        }else if (view.getId() == R.id.select_nav14){
+            //로그아웃
+            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+            intent.putExtra("data", "로그아웃하시겠습니까?");
+            intent.putExtra("flag", "로그아웃");
+            intent.putExtra("left_btn_txt", "닫기");
+            intent.putExtra("right_btn_txt", "로그아웃");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        } else if (view.getId() == R.id.select_nav15){
+            //탈퇴하기
+            pm.UserDel(mContext);
         }
 
     }
@@ -504,6 +542,20 @@ public class MainFragment extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 
 //    //-------몰입화면 설정

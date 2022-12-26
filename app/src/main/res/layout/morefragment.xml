@@ -88,7 +88,6 @@
                 android:layout_marginEnd="15dp"
                 android:fontFamily="@font/applesdgothicneo"
                 android:gravity="center|start"
-                android:paddingTop="5dp"
                 android:text="프로필 설정"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -110,7 +109,6 @@
                 android:layout_marginEnd="15dp"
                 android:fontFamily="@font/applesdgothicneo"
                 android:gravity="center|start"
-                android:paddingTop="5dp"
                 android:text="알림 내역"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -131,7 +129,6 @@
                 android:layout_marginEnd="15dp"
                 android:fontFamily="@font/applesdgothicneo"
                 android:gravity="center|start"
-                android:paddingTop="5dp"
                 android:text="알림 설정"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -144,21 +141,46 @@
                 android:background="#f2f2f2"
                 android:orientation="vertical" />
 
-
-            <TextView
-                android:id="@+id/setting_list04_txt"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:fontFamily="@font/applesdgothicneo"
-                android:gravity="center|start"
-                android:paddingTop="5dp"
-                android:text="회원탈퇴"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                app:drawableEndCompat="@drawable/ic_page_move_arrow"
-                tools:ignore="HardcodedText" />
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/login_method_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:visibility="gone"
+                    android:background="@drawable/naver_icon"/>
+                <TextView
+                    android:id="@+id/setting_list04_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/applesdgothicneo"
+                    android:gravity="center|start"
+                    android:text="회원탈퇴"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:drawableEndCompat="@drawable/ic_page_move_arrow"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+<!--            <TextView-->
+<!--                android:id="@+id/setting_list04_txt"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="45dp"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                android:fontFamily="@font/applesdgothicneo"-->
+<!--                android:gravity="center|start"-->
+<!--                android:paddingTop="5dp"-->
+<!--                android:text="회원탈퇴"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="15sp"-->
+<!--                app:drawableEndCompat="@drawable/ic_page_move_arrow"-->
+<!--                tools:ignore="HardcodedText" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"

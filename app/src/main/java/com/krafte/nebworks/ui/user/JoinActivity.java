@@ -138,7 +138,6 @@ public class JoinActivity extends AppCompatActivity {
         setBtnEvent();
         NetworkStates();
 
-        binding.inputUserName.setText(USER_INFO_NAME);
         binding.inputUserEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -167,23 +166,49 @@ public class JoinActivity extends AppCompatActivity {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //입력란에 변화가 있을때
-                PWChangeText(charSequence.toString());
+                //입력하기 전에
+                PWChangeText(charSequence.toString(),0);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //입력이 끝났을때
+
+                //입력란에 변화가 있을때
                 if (charSequence.length() == 0) {
                     binding.checkValidationTxt1.setVisibility(View.GONE);
                 } else {
-                    PWChangeText(charSequence.toString());
+                    PWChangeText(charSequence.toString(),0);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        binding.editPwConfirm.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //입력하기 전에
+                PWChangeText(charSequence.toString(),1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                //입력란에 변화가 있을때
+                if (charSequence.length() == 0) {
+                    binding.checkValidationTxt1.setVisibility(View.GONE);
+                } else {
+                    PWChangeText(charSequence.toString(),1);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
             }
         });
     }
@@ -592,7 +617,7 @@ public class JoinActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void PWChangeText(String password) {
+    private void PWChangeText(String password, int pos) {
         // 비밀번호 유효성 검사식1 : 숫자, 특수문자가 포함되어야 한다.
         String val_symbol = "([0-9].*[!,@,#,^,&,*,(,)])|([!,@,#,^,&,*,(,)].*[0-9])";
         // 비밀번호 유효성 검사식2 : 영문자 대소문자가 적어도 하나씩은 포함되어야 한다.
@@ -605,13 +630,49 @@ public class JoinActivity extends AppCompatActivity {
 //        Matcher matcher_alpha = pattern_alpha.matcher(password);
 
         if (8 > password.length() || 16 < password.length()) {
-            binding.checkValidationTxt1.setVisibility(View.VISIBLE);
-            binding.checkValidationTxt1.setText("비밀번호 글자 수는 8~16자내로 입력해야 합니다.");
+            if(pos == 0){
+                binding.checkValidationTxt1.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt1.setText("비밀번호 글자 수는 8~16자내로 입력해야 합니다.");
+            }else{
+                binding.checkValidationTxt3.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt3.setText("비밀번호 글자 수는 8~16자내로 입력해야 합니다.");
+            }
         } else if (!matcher_symbol.find()) {
-            binding.checkValidationTxt1.setVisibility(View.VISIBLE);
-            binding.checkValidationTxt1.setText("숫자,특수문자가 포함되어야 합니다.");
+            if(pos == 0){
+                binding.checkValidationTxt1.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt1.setText("숫자,특수문자가 포함되어야 합니다.");
+            }else{
+                binding.checkValidationTxt3.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt3.setText("숫자,특수문자가 포함되어야 합니다.");
+            }
         } else {
-            binding.checkValidationTxt1.setVisibility(View.GONE);
+            if(pos == 0){
+                //입력이 끝났을때
+                String pw1 = binding.editPw.getText().toString();
+                String pw2 = binding.editPwConfirm.getText().toString();
+                if(pw1.equals(pw2)){
+                    binding.checkValidationTxt1.setVisibility(View.VISIBLE);
+                    binding.checkValidationTxt1.setTextColor(Color.parseColor("#6395EC"));
+                    binding.checkValidationTxt1.setText("비밀번호가 동일합니다.");
+                }else{
+                    binding.checkValidationTxt1.setVisibility(View.VISIBLE);
+                    binding.checkValidationTxt1.setTextColor(Color.parseColor("#FF0000"));
+                    binding.checkValidationTxt1.setText("비밀번호가 동일하지 않습니다.");
+                }
+            }else{
+                //입력이 끝났을때
+                String pw1 = binding.editPw.getText().toString();
+                String pw2 = binding.editPwConfirm.getText().toString();
+                if(pw1.equals(pw2)){
+                    binding.checkValidationTxt3.setVisibility(View.VISIBLE);
+                    binding.checkValidationTxt3.setTextColor(Color.parseColor("#6395EC"));
+                    binding.checkValidationTxt3.setText("비밀번호가 동일합니다.");
+                }else{
+                    binding.checkValidationTxt3.setVisibility(View.VISIBLE);
+                    binding.checkValidationTxt3.setTextColor(Color.parseColor("#FF0000"));
+                    binding.checkValidationTxt3.setText("비밀번호가 동일하지 않습니다.");
+                }
+            }
         }
 
     }

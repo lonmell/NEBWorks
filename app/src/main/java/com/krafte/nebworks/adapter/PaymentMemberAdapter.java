@@ -145,7 +145,7 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
                         holder.progress_tvarea.setVisibility(View.GONE);
                     }
                 }else if(Tap.equals("1")){
-                    dlog.i("("+position + ") item.getGongjeynpay() : " + item.getGongjeynpay());
+                        dlog.i("("+position + ") item.getGongjeynpay() : " + item.getGongjeynpay());
                         dlog.i("AllPayment : " + AllPayment);
                         holder.gongje_box.setVisibility(View.VISIBLE);
                         holder.send_user_state.setVisibility(View.VISIBLE);
@@ -248,6 +248,10 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
 
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1");
             place_id = shardpref.getString("place_id","-1");
+            dlog.i("------ViewHolder------");
+            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+            dlog.i("place_id : " + place_id);
+            dlog.i("------ViewHolder------");
 
             itemView.setOnClickListener(v -> {
                 int pos = getBindingAdapterPosition();

@@ -16,7 +16,7 @@ public class PlaceAddCompletion extends AppCompatActivity {
 
     PageMoveClass pm = new PageMoveClass();
     PreferenceHelper shardpref;
-    String USER_INFO_AUTO = "";
+    String USER_INFO_AUTH = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class PlaceAddCompletion extends AppCompatActivity {
         try {
             mContext = this;
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_AUTO = shardpref.getString("USER_INFO_AUTO","0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
             setBtnEvent();
 
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class PlaceAddCompletion extends AppCompatActivity {
         });
 
         binding.goThisPlace.setOnClickListener(v -> {
-            if(USER_INFO_AUTO.equals("0")){
+            if(USER_INFO_AUTH.equals("0")){
                 pm.Main(mContext);
             }else{
                 pm.Main2(mContext);

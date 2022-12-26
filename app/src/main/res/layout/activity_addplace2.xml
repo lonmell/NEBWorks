@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="59dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -162,6 +162,7 @@
             android:layout_alignParentTop="true"
             android:background="#f2f2f2"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
         <RelativeLayout
             android:id="@+id/no_data"
             android:layout_width="match_parent"
@@ -181,7 +182,6 @@
             android:id="@+id/addPlaceBtn"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="78dp"

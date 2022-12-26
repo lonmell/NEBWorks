@@ -102,7 +102,7 @@ public class SelectStringBottomSheet extends BottomSheetDialogFragment {
     }
 
     public void SetAllMemberList(int kind) {
-        // kind == 0 : 게시판 종류 // 1 : 카테고리
+        // kind == 0 : 게시판 종류 // 1 : 카테고리 // 4 : 휴가선택
         if(kind == 0){
             setItem.add("자유게시판");
             setItem.add("사장님페이지");
@@ -139,6 +139,11 @@ public class SelectStringBottomSheet extends BottomSheetDialogFragment {
             setItem.add("제주특별자치도");
             setItem.add("충청남도");
             setItem.add("충청북도");
+        }else if(kind == 4){
+            setItem.add("없음");
+            setItem.add("자유");
+            setItem.add("월차");
+            setItem.add("연차");
         }
 
         mList = new ArrayList<>();

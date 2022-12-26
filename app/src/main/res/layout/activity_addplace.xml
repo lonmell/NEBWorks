@@ -578,22 +578,19 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/default_input_round">
 
-
-
-                    <Spinner
-                        android:id="@+id/inputbox07_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_toStartOf="@+id/down_arrow"
-                        android:background="@color/white"
-                        android:paddingStart="15dp"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+<!--                    <Spinner-->
+<!--                        android:id="@+id/inputbox07_spinner"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_toStartOf="@+id/down_arrow"-->
+<!--                        android:background="@color/white"-->
+<!--                        android:paddingStart="15dp"-->
+<!--                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />-->
 
                     <TextView
                         android:id="@+id/inputbox07"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_toStartOf="@+id/down_arrow"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
                         android:background="@color/white"
@@ -806,8 +803,9 @@
                         android:layout_centerInParent="true"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:gravity="center"
+                        android:alpha="0.4"
                         android:background="@drawable/left_arrow_resize"
+                        android:gravity="center"
                         android:rotation="180"
                         android:textColor="#000000" />
 
@@ -830,12 +828,6 @@
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#dbdbdb" />
-
                 <TimePicker
                     android:id="@+id/time_setpicker"
                     android:layout_width="match_parent"
@@ -844,13 +836,9 @@
                     android:numbersSelectorColor="#6395EC"
                     android:numbersTextColor="@color/black"
                     android:theme="@style/NumberPicker"
+                    android:visibility="gone"
                     android:timePickerMode="spinner" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#dbdbdb" />
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
@@ -858,10 +846,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="124dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="78dp"
+                android:layout_margin="20dp"
                 app:cardBackgroundColor="#6395EC"
                 app:cardCornerRadius="5dp">
 

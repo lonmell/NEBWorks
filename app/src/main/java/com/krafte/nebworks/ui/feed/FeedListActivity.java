@@ -52,6 +52,8 @@ public class FeedListActivity extends AppCompatActivity {
     PreferenceHelper shardpref;
     String USER_INFO_ID, USER_INFO_NAME, USER_INFO_AUTH;
     String place_id = "";
+    String returnPage = "";
+    int SELECT_POSITION = 0;
 
     //Other
     DBConnection dbConnection = new DBConnection();
@@ -82,11 +84,19 @@ public class FeedListActivity extends AppCompatActivity {
         setBtnEvent();
 
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-        place_id = shardpref.getString("place_id", "");
-        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
+        USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", "");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
+        place_id        = shardpref.getString("place_id", "");
+        returnPage      = shardpref.getString("returnPage", "");
+        SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
+
+        dlog.i("------FeedListActivity------");
+        dlog.i("USER_INFO_AUTH : "      + USER_INFO_AUTH);
+        dlog.i("returnPage : "          + returnPage);
+        dlog.i("SELECT_POSITION : "     + SELECT_POSITION);
+        dlog.i("------FeedListActivity------");
+
         ArrayList<String> stringCategory1 = new ArrayList<>();
         stringCategory1.add("정렬순서");
         stringCategory1.add("오름차순");
@@ -127,12 +137,16 @@ public class FeedListActivity extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            if(USER_INFO_AUTH.equals("0")){
-                shardpref.putInt("SELECT_POSITION", 0);
-                pm.Main(mContext);
+            if(returnPage.equals("PlaceListActivity")){
+                pm.PlaceList(mContext);
             }else{
-                shardpref.putInt("SELECT_POSITION", 0);
-                pm.Main2(mContext);
+                if(USER_INFO_AUTH.equals("0")){
+                    shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+                    pm.Main(mContext);
+                }else{
+                    shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+                    pm.Main2(mContext);
+                }
             }
         });
 
@@ -219,12 +233,16 @@ public class FeedListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-        shardpref.putInt("SELECT_POSITION",0);
-        if(USER_INFO_AUTH.equals("0")){
-            pm.Main(mContext);
+        if(returnPage.equals("PlaceListActivity")){
+            pm.PlaceList(mContext);
         }else{
-            pm.Main2(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+                pm.Main(mContext);
+            }else{
+                shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+                pm.Main2(mContext);
+            }
         }
     }
 

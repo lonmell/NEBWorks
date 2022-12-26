@@ -158,6 +158,10 @@ public class MemberDetailActivity extends AppCompatActivity {
             drawerLayout.addDrawerListener(listener);
             drawerView.setOnTouchListener((v, event) -> false);
             setAddBtnSetting();
+
+            if(USER_INFO_AUTH.equals("1")){
+                binding.addBtn.getRoot().setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

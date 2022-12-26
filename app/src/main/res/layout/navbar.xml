@@ -555,7 +555,7 @@
                                     android:text="결재처리"
                                     android:textColor="@color/black"
                                     android:textSize="13sp"
-                                    tools:ignore="HardcodedText" />
+                                    tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
                     </LinearLayout>
@@ -676,7 +676,7 @@
                                     android:text="전체 근로계약관리"
                                     android:textColor="@color/black"
                                     android:textSize="13sp"
-                                    tools:ignore="HardcodedText" />
+                                    tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                                 <TextView
                                     android:id="@+id/select_nav11"

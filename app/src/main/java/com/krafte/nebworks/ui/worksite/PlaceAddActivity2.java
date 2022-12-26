@@ -307,6 +307,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                                 if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
                                     shardpref.putString("place_id", place_id);
                                     shardpref.putString("place_owner_id", USER_INFO_ID);
+                                    shardpref.remove("page_state");
                                     if(i == 0){
                                         Toast_Nomal("임시저장 완료되었습니다.");
                                     }else{

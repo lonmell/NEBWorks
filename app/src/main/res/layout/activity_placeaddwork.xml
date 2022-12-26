@@ -410,13 +410,6 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#dbdbdb" />
-
                 <TimePicker
                     android:id="@+id/time_setpicker"
                     android:layout_width="match_parent"

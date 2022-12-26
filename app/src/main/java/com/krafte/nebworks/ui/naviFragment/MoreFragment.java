@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.MorefragmentBinding;
 import com.krafte.nebworks.util.DateCurrent;
@@ -55,6 +56,7 @@ public class MoreFragment extends Fragment {
     ImageView more_icon;
     TextView more_tv;
     String USER_INFO_ID = "";
+    String USER_LOGIN_METHOD = "";
 
     //shared
     String place_id = "";
@@ -127,7 +129,21 @@ public class MoreFragment extends Fragment {
             place_img_path      = shardpref.getString("place_img_path", "0");
             place_start_date    = shardpref.getString("place_start_date", "0");
             place_created_at    = shardpref.getString("place_created_at", "0");
+
             USER_INFO_ID        = shardpref.getString("USER_INFO_ID","");
+            USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");
+
+            if(!USER_LOGIN_METHOD.equals("NEB")){
+                binding.settingList04Txt.setText("연결해제");
+                binding.loginMethodIcon.setVisibility(View.VISIBLE);
+                if(USER_LOGIN_METHOD.equals("Google")){
+                    binding.loginMethodIcon.setBackgroundResource(R.drawable.google);
+                } else if(USER_LOGIN_METHOD.equals("Kakao")){
+                    binding.loginMethodIcon.setBackgroundResource(R.drawable.kakao);
+                } else if(USER_LOGIN_METHOD.equals("Naver")){
+                    binding.loginMethodIcon.setBackgroundResource(R.drawable.naver_icon);
+                }
+            }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -208,7 +224,7 @@ public class MoreFragment extends Fragment {
                             String getjikgup = Response.getJSONObject(0).getString("jikgup");
 
                             binding.userName.setText(name);
-                            binding.jikgup.setText(getjikgup);
+                            binding.jikgup.setText((getjikgup.equals("null")?"미정":getjikgup));
                             Glide.with(mContext).load(img_path)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true)

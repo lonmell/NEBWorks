@@ -148,8 +148,11 @@ public class WorkstatusFragment extends Fragment {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
 
             if(USER_INFO_AUTH.equals("1")){
-                binding.addBtn.getRoot().setVisibility(View.GONE);
+                if (!place_owner_id.equals(USER_INFO_ID)){
+                    binding.addBtn.getRoot().setVisibility(View.GONE);
+                }
             }
+            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             fg = WorkStatusSubFragment1.newInstance();
             PlaceWorkCheck(place_id);
             setAddBtnSetting();

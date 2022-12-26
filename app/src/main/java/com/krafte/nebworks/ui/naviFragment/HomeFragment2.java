@@ -221,8 +221,8 @@ public class HomeFragment2 extends Fragment {
             //0-관리자 / 1- 근로자
             dlog.i("gotoplace location view USER_INFO_AUTH : " + USER_INFO_AUTH);
             //USER_INFO_AUTH 가 -1일때
-            USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
-            shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
+//            USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
+//            shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
 
             if (accept_state == 3) {
                 //승인 대기중
@@ -517,23 +517,11 @@ public class HomeFragment2 extends Fragment {
                                     place_ocnt = Response.getJSONObject(0).getString("o_cnt");
                                     place_totalcnt = Response.getJSONObject(0).getString("total_cnt");
 
-                                    if (place_owner_id.equals(USER_INFO_ID)) {
-                                        USER_INFO_AUTH = "0";
-                                    } else {
-                                        USER_INFO_AUTH = "1";
-                                    }
-
                                     Glide.with(mContext).load(place_img_path)
                                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.no_image)
                                             .skipMemoryCache(true)
                                             .into(binding.storeThumnail);
-
-                                    if (USER_INFO_ID.equals(place_owner_id)) {
-                                        USER_INFO_AUTH = "0";
-                                    } else {
-                                        USER_INFO_AUTH = "1";
-                                    }
 
                                     dlog.i("place_owner_id : " + place_owner_id);
                                     dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -606,11 +594,6 @@ public class HomeFragment2 extends Fragment {
                                 dlog.i("급여 : " + mem_pay);
                                 dlog.i("------UserCheck-------");
 
-                                if (place_owner_id.equals(id)) {
-                                    USER_INFO_AUTH = "0";
-                                } else {
-                                    USER_INFO_AUTH = "1";
-                                }
                                 shardpref.putString("mem_name",mem_name);
                                 binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
 //                                getFCMToken();

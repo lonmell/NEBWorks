@@ -43,6 +43,11 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.navercorp.nid.NaverIdLoginSDK;
+import com.navercorp.nid.oauth.NidOAuthLogin;
+import com.navercorp.nid.oauth.OAuthLoginCallback;
+import com.navercorp.nid.profile.NidProfileCallback;
+import com.navercorp.nid.profile.data.NidProfileResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,6 +100,12 @@ public class TwoButtonPopActivity extends Activity {
     // [END declare_auth]
     private GoogleSignInClient mGoogleSignInClient;
 
+    //Naver
+    String ClientID = "cN1sIOhyOshPLKgNL4Sj";
+    String ClientSecret = "iFS5etlgYt";
+    String ClientName = "넵";
+    NaverIdLoginSDK naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     @Override
@@ -121,6 +132,7 @@ public class TwoButtonPopActivity extends Activity {
         left_btn_txt = intent.getStringExtra("left_btn_txt");
         right_btn_txt = intent.getStringExtra("right_btn_txt");
 
+        //Google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -128,6 +140,11 @@ public class TwoButtonPopActivity extends Activity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
+
+        //Naver
+        naverIdLoginSDK.initialize(TwoButtonPopActivity.this, ClientID, ClientSecret, ClientName);
+        naverIdLoginSDK.setShowMarketLink(true);
+        naverIdLoginSDK.setShowBottomTab(true);
 
         setBtnEvent();
 
@@ -182,6 +199,10 @@ public class TwoButtonPopActivity extends Activity {
                             }
                         });
                     }, 100); //0.5초 후 인트로 실행
+                } else if(USER_LOGIN_METHOD.equals("Naver")) {
+                    // naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
+                    naverIdLoginSDK.logout();
+                    pm.Login(mContext);
                 }else{
                     pm.Login(mContext);
                 }
@@ -245,6 +266,72 @@ public class TwoButtonPopActivity extends Activity {
         return null;
     };
 
+    OAuthLoginCallback oAuthLoginCallback = new OAuthLoginCallback() {
+        @Override
+        public void onSuccess() {
+            NidOAuthLogin nidOAuthLogin = new NidOAuthLogin();
+
+            nidOAuthLogin.callProfileApi(new NidProfileCallback<NidProfileResponse>() {
+
+                @Override
+                public void onSuccess(NidProfileResponse nidProfileResponse) {
+                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+                    dlog.i("NaverSetting onSuccess");
+                    dlog.i("NaverSetting getAccessToken: " + naverIdLoginSDK.getAccessToken());
+                    dlog.i("NaverSetting getRefreshToken: " + naverIdLoginSDK.getRefreshToken());
+
+//                    Toast.makeText(getApplicationContext(),"$response",Toast.LENGTH_SHORT).show();
+
+                    // 토큰 삭제 및 로그아웃 코드
+                    nidOAuthLogin.callDeleteTokenApi(getApplicationContext(), new OAuthLoginCallback() {
+
+                        @Override
+                        public void onSuccess() {
+                            //서버에서 토큰 삭제에 성공한 상태입니다.
+                            pm.Login(mContext);
+                        }
+
+                        @Override
+                        public void onFailure(int i, @NonNull String s) {
+                            // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+                            // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+                            Log.d("TAG", "errorCode: ${NaverIdLoginSDK.getLastErrorCode().code}");
+                            Log.d("TAG", "errorDesc: ${NaverIdLoginSDK.getLastErrorDescription()}");
+                        }
+
+                        @Override
+                        public void onError(int i, @NonNull String s) {
+                            onFailure(i, s);
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onFailure(int i, @NonNull String s) {
+                    String errorCode = naverIdLoginSDK.getLastErrorCode().getCode();
+                    String errorDescription = naverIdLoginSDK.getLastErrorDescription();
+                    Toast.makeText(getApplicationContext(), "errorCode: $errorCode, errorDesc: $errorDesc", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(int i, @NonNull String s) {
+
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(int i, @NonNull String s) {
+
+        }
+
+        @Override
+        public void onError(int i, @NonNull String s) {
+
+        }
+    };
+
     private void ClosePop(){
         runOnUiThread(() -> {
             if(flag.equals("공지삭제2")){
@@ -306,6 +393,9 @@ public class TwoButtonPopActivity extends Activity {
                             try {
                                 if(response.body().replace("\"","").equals("success")){
                                     Toast_Nomal("회원 탈퇴가 완료되었습니다.");
+                                    if(USER_LOGIN_METHOD.equals("Naver")){
+                                        naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
+                                    }
                                     pm.Login(mContext);
                                 }
                             } catch (Exception e) {

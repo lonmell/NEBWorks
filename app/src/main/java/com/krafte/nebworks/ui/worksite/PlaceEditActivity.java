@@ -22,8 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +37,9 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.bottomsheet.SelectStringBottomSheet;
 import com.krafte.nebworks.bottomsheet.StoreDivisionPopActivity;
+import com.krafte.nebworks.bottomsheet.WorkTimePicker;
 import com.krafte.nebworks.dataInterface.ConfrimNumInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.PlaceEditInterface;
@@ -47,7 +47,6 @@ import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityAddplaceBinding;
-import com.krafte.nebworks.bottomsheet.WorkTimePicker;
 import com.krafte.nebworks.ui.PinSelectLocationActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.GpsTracker;
@@ -523,39 +522,61 @@ public class PlaceEditActivity extends AppCompatActivity {
 
 
         /*휴가*/
-        ArrayList<String> stringCategory5 = new ArrayList<>();
-        stringCategory5.add("휴가");
-        stringCategory5.add("없음");
-        stringCategory5.add("자유");
-        stringCategory5.add("월차");
-        stringCategory5.add("연차");
-
-        ArrayAdapter<String> select_filter5 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory5);
-        binding.inputbox07Spinner.setAdapter(select_filter5);
-        if (!vacation_select.isEmpty()) {
-            for (int a = 0; a < stringCategory5.size(); a++) {
-                if (stringCategory5.get(a).equals(vacation_select)) {
-                    binding.inputbox07.setText(stringCategory5.get(a));
-                    binding.inputbox07Spinner.setSelection(a);
+//        ArrayList<String> stringCategory5 = new ArrayList<>();
+//        stringCategory5.add("휴가");
+//        stringCategory5.add("없음");
+//        stringCategory5.add("자유");
+//        stringCategory5.add("월차");
+//        stringCategory5.add("연차");
+//
+//        ArrayAdapter<String> select_filter5 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory5);
+//        binding.inputbox07Spinner.setAdapter(select_filter5);
+//        if (!vacation_select.isEmpty()) {
+//            for (int a = 0; a < stringCategory5.size(); a++) {
+//                if (stringCategory5.get(a).equals(vacation_select)) {
+//                    binding.inputbox07.setText(stringCategory5.get(a));
+//                    binding.inputbox07Spinner.setSelection(a);
+//                }
+//            }
+//        }
+//        binding.inputbox07Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                binding.inputbox07.setText(stringCategory5.get(i));
+//                dlog.i("i : " + stringCategory5.get(i));
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//                if (!vacation_select.isEmpty()) {
+//                    binding.inputbox07.setText(vacation_select);
+//                } else {
+//                    binding.inputbox07.setText("없음");
+//                }
+//            }
+//        });
+        binding.inputbox07.setOnClickListener(v -> {
+            shardpref.putInt("SelectKind", 4);
+            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
+            ssb.show(getSupportFragmentManager(), "selectVacation");
+            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, String category) {
+                    binding.inputbox07.setText(category);
                 }
-            }
-        }
-        binding.inputbox07Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                binding.inputbox07.setText(stringCategory5.get(i));
-                dlog.i("i : " + stringCategory5.get(i));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                if (!vacation_select.isEmpty()) {
-                    binding.inputbox07.setText(vacation_select);
-                } else {
-                    binding.inputbox07.setText("없음");
+            });
+        });
+        binding.downArrow.setOnClickListener(v -> {
+            shardpref.putInt("SelectKind", 4);
+            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
+            ssb.show(getSupportFragmentManager(), "selectVacation");
+            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, String category) {
+                    binding.inputbox07.setText(category);
                 }
-            }
+            });
         });
     }
 

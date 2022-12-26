@@ -236,6 +236,7 @@ public class MainFragment2 extends AppCompatActivity {
 
             if (SELECT_POSITION != -99) {
                 binding.viewPager.setCurrentItem(SELECT_POSITION);
+                binding.tabLayout.getTabAt(SELECT_POSITION).select();
             }
 
             drawerLayout.addDrawerListener(listener);
@@ -400,6 +401,7 @@ public class MainFragment2 extends AppCompatActivity {
             dlog.i("메인 Click!");
             binding.title.setText("");
             binding.tabLayout.getTabAt(0).select();
+            shardpref.putInt("SELECT_POSITION",0);
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation02) {
             dlog.i("급여관리 Click!");
@@ -407,22 +409,24 @@ public class MainFragment2 extends AppCompatActivity {
             binding.title.setText("할일");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation03) {
             dlog.i("캘린더 Click!");
             binding.title.setText("근무현황");
             binding.tabLayout.getTabAt(2).select();
+            shardpref.putInt("SELECT_POSITION", 2);
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation04) {
             dlog.i("커뮤니티 Click!");
             binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
+            shardpref.putInt("SELECT_POSITION", 3);
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation05) {
             dlog.i("더보기 Click!");
             binding.title.setText("더보기");
             binding.tabLayout.getTabAt(4).select();
+            shardpref.putInt("SELECT_POSITION", 4);
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav01) {
             pm.PlaceList(mContext);
@@ -442,16 +446,18 @@ public class MainFragment2 extends AppCompatActivity {
             binding.title.setText("급여관리");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
         } else if (view.getId() == R.id.select_nav06) {
             shardpref.putInt("Tap", 1);
             binding.title.setText("급여관리");
             pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
-            shardpref.putInt("SELECT_POSITION", 1);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
-            pm.Main2(mContext);
+//            pm.Main2(mContext);
             drawerLayout.closeDrawer(drawerView);
+            shardpref.putInt("Tap", 0);
+            binding.title.setText("할일");
+            binding.tabLayout.getTabAt(1).select();
+            shardpref.putInt("SELECT_POSITION", 1);
+            shardpref.putInt("SELECT_POSITION_sub", 1);
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
             pm.addWorkGo(mContext);
         } else if (view.getId() == R.id.select_nav09) {
@@ -460,6 +466,7 @@ public class MainFragment2 extends AppCompatActivity {
             dlog.i("커뮤니티 Click!");
             binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
+            shardpref.putInt("SELECT_POSITION", 3);
         } else if (view.getId() == R.id.select_nav10) {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);

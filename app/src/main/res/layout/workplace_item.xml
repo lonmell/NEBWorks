@@ -38,6 +38,7 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5dp"
                 android:elevation="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/blue"
                 app:cardCornerRadius="60dp"
                 app:cardElevation="0dp">
@@ -55,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/i_o_btn"
-                android:layout_marginStart="10dp"
+                android:layout_alignParentStart="true"
                 android:layout_marginEnd="10dp"
                 android:layout_toStartOf="@+id/place_state"
                 android:layout_toEndOf="@+id/i_o_btn"

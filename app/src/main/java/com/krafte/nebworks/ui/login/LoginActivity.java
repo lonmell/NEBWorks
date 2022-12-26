@@ -52,6 +52,11 @@ import com.krafte.nebworks.util.HashCode;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
+import com.navercorp.nid.NaverIdLoginSDK;
+import com.navercorp.nid.oauth.NidOAuthLogin;
+import com.navercorp.nid.oauth.OAuthLoginCallback;
+import com.navercorp.nid.profile.NidProfileCallback;
+import com.navercorp.nid.profile.data.NidProfileResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -127,6 +132,12 @@ public class LoginActivity extends AppCompatActivity {
     boolean GET_JOIN_CONFIRM = false;
     String USER_INFO_PW = "";
 
+    //Naver
+    String ClientID = "cN1sIOhyOshPLKgNL4Sj";
+    String ClientSecret = "iFS5etlgYt";
+    String ClientName = "넵";
+    NaverIdLoginSDK naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
             if (!GET_ACCOUNT_EMAIL.equals("-99") && !USER_INFO_PW.equals("-99")) {
                 LoginCheck(GET_ACCOUNT_EMAIL, USER_INFO_PW, "NEB");
             }
-        }else{
+        } else {
             shardpref.clear();
         }
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -208,14 +219,148 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void NaverSetting(){
-        try{
-//            NaverIdLoginSDK.INSTANCE.initialize(mContext, {OAUTH_CLIENT_ID}, {OAUTH_CLIENT_SECRET}, {OAUTH_CLIENT_NAME})
-        }catch (Exception e){
+
+    private void NaverSetting() {
+        try {
+            naverIdLoginSDK.initialize(LoginActivity.this, ClientID, ClientSecret, ClientName);
+            naverIdLoginSDK.logout();
+            naverIdLoginSDK.setShowMarketLink(true);
+            naverIdLoginSDK.setShowBottomTab(true);
+
+            binding.buttonOAuthLoginImg.setOnClickListener(v -> {
+                naverIdLoginSDK.authenticate(LoginActivity.this, oAuthLoginCallback);
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+
+    OAuthLoginCallback oAuthLoginCallback = new OAuthLoginCallback() {
+        @Override
+        public void onSuccess() {
+            NidOAuthLogin nidOAuthLogin = new NidOAuthLogin();
+
+            nidOAuthLogin.callProfileApi(new NidProfileCallback<NidProfileResponse>() {
+
+                @Override
+                public void onSuccess(NidProfileResponse nidProfileResponse) {
+                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+                    dlog.i("NaverSetting onSuccess");
+                    dlog.i("NaverSetting getAccessToken: " + naverIdLoginSDK.getAccessToken());
+                    dlog.i("NaverSetting getRefreshToken: " + naverIdLoginSDK.getRefreshToken());
+
+//                    Toast.makeText(getApplicationContext(),"$response",Toast.LENGTH_SHORT).show();
+
+//                    // 토큰 삭제 및 로그아웃 코드
+//                    nidOAuthLogin.callDeleteTokenApi(getApplicationContext(), new OAuthLoginCallback() {
+//
+//                        @Override
+//                        public void onSuccess() {
+//                            //서버에서 토큰 삭제에 성공한 상태입니다.
+//                        }
+//
+//                        @Override
+//                        public void onFailure(int i, @NonNull String s) {
+//                            // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+//                            // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+//                            Log.d("TAG", "errorCode: ${NaverIdLoginSDK.getLastErrorCode().code}")
+//                            Log.d("TAG", "errorDesc: ${NaverIdLoginSDK.getLastErrorDescription()}")
+//                        }
+//
+//                        @Override
+//                        public void onError(int i, @NonNull String s) {
+//                            onFailure(i, s);
+//                        }
+//                    });
+
+                    //프로필 가져오는 코드
+                    NidProfileCallback<NidProfileResponse> profileCallback = new NidProfileCallback<NidProfileResponse>() {
+                        @Override
+                        public void onSuccess(NidProfileResponse nidProfileResponse) {
+//                            Toast.makeText(getApplicationContext(), "$response", Toast.LENGTH_SHORT).show();
+                            Handler handler = new Handler();
+                            handler.postDelayed(() -> {
+                                GET_NAME = nidProfileResponse.getProfile().getNickname();
+                                GET_ACCOUNT_EMAIL = nidProfileResponse.getProfile().getEmail();
+                                GET_PROFILE_URL = nidProfileResponse.getProfile().getProfileImage();
+                                GET_USER_PHONE = "";
+                                GET_USER_AGENCY = "";
+                                GET_USER_BIRTH = "";
+                                GET_USER_AGEROUNGE = "";
+                                GET_USER_SEX = nidProfileResponse.getProfile().getGender();
+                                GET_USER_PW = "";
+                                GET_USER_JOIN_DATE = dc.GET_TIME;
+                                GET_USER_AUTH = "9";
+                                GET_USER_SERVICE = "S";
+                                USER_LOGIN_METHOD = "Naver";
+                                GET_JOIN_CONFIRM = !String.valueOf(nidProfileResponse.getProfile().getId()).isEmpty();
+
+                                shardpref.putString("USER_LOGIN_METHOD", USER_LOGIN_METHOD);
+                                shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
+
+                                dlog.i( "Kakao id =" + nidProfileResponse.getProfile().getId());
+                                dlog.i( "GET_NAME =" + GET_NAME);
+                                dlog.i( "GET_ACCOUNT_EMAIL =" + GET_ACCOUNT_EMAIL);
+
+                                dlog.i( "GET_PROFILE_URL =" + GET_PROFILE_URL);
+                                dlog.i( "GET_USER_PHONE =" + GET_USER_PHONE);
+                                dlog.i( "GET_USER_BIRTH =" + GET_USER_BIRTH);
+                                dlog.i( "GET_USER_AGEROUNGE =" + GET_USER_AGEROUNGE);
+                                dlog.i( "GET_USER_SEX =" + GET_USER_SEX);
+                                dlog.i( "GET_JOIN_CONFIRM = " + GET_JOIN_CONFIRM);
+                                dlog.i( "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+
+                                if (GET_ACCOUNT_EMAIL.isEmpty()) {
+                                    Toast.makeText(mContext, "네트워크 통신연결이 불안정 합니다.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    LoginCheck(GET_ACCOUNT_EMAIL, "", USER_LOGIN_METHOD);
+                                }
+
+                            }, 1000); //1초 후 인트로 실행
+                        }
+
+                        @Override
+                        public void onFailure(int i, @NonNull String s) {
+                            String errorCode = naverIdLoginSDK.getLastErrorCode().getCode();
+                            String errorDescription = naverIdLoginSDK.getLastErrorDescription();
+                            Toast.makeText(getApplicationContext(), "errorCode: $errorCode, errorDesc: $errorDesc", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(int i, @NonNull String s) {
+                            onFailure(i, s);
+                        }
+                    };
+
+
+                    nidOAuthLogin.callProfileApi(profileCallback);
+                }
+
+                @Override
+                public void onFailure(int i, @NonNull String s) {
+                    String errorCode = naverIdLoginSDK.getLastErrorCode().getCode();
+                    String errorDescription = naverIdLoginSDK.getLastErrorDescription();
+                    Toast.makeText(getApplicationContext(), "errorCode: $errorCode, errorDesc: $errorDesc", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(int i, @NonNull String s) {
+
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(int i, @NonNull String s) {
+
+        }
+
+        @Override
+        public void onError(int i, @NonNull String s) {
+
+        }
+    };
+
     private void GoogleSetting() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -285,12 +430,13 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.ltdTv.setOnClickListener(v -> {
             clickcnt++;
-            if(clickcnt == 3){
+            if (clickcnt == 3) {
                 clickcnt = 0;
 
             }
         });
     }
+
     int clickcnt = 0;
 
     private void LockTost() {
@@ -318,17 +464,17 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-                                    if(Response.length() != 0){
+                                    if (Response.length() != 0) {
                                         String name = Response.getJSONObject(0).getString("name");
                                         String phone = Response.getJSONObject(0).getString("phone");
                                         String platform = Response.getJSONObject(0).getString("platform");
-                                        if(name.isEmpty() || phone.isEmpty()){
+                                        if (name.isEmpty() || phone.isEmpty()) {
                                             pm.ProfileEdit(mContext);
-                                        }else{
+                                        } else {
                                             pm.AuthSelect(mContext);
                                         }
                                     }
-                                }else{
+                                } else {
 //                                    shardpref.putString("editstate","insert");
 //                                    pm.ProfileEdit(mContext);
                                     Toast_Nomal("계정을 찾을수 없습니다.");
@@ -372,32 +518,31 @@ public class LoginActivity extends AppCompatActivity {
                     USER_LOGIN_METHOD = "Kakao";
                     GET_JOIN_CONFIRM = !String.valueOf(user.getId()).isEmpty();
 
-                    shardpref.putString("USER_LOGIN_METHOD", "Kakao");
+                    shardpref.putString("USER_LOGIN_METHOD", USER_LOGIN_METHOD);
                     shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
 
-                    Log.i("Kakao", "Kakao id =" + user.getId());
-                    Log.i("Kakao", "GET_NAME =" + GET_NAME);
-                    Log.i("Kakao", "GET_ACCOUNT_EMAIL =" + GET_ACCOUNT_EMAIL);
-
-                    Log.i("Kakao", "GET_PROFILE_URL =" + GET_PROFILE_URL);
-                    Log.i("Kakao", "GET_USER_PHONE =" + GET_USER_PHONE);
-                    Log.i("Kakao", "GET_USER_BIRTH =" + GET_USER_BIRTH);
-                    Log.i("Kakao", "GET_USER_AGEROUNGE =" + GET_USER_AGEROUNGE);
-                    Log.i("Kakao", "GET_USER_SEX =" + GET_USER_SEX);
-                    Log.i("Kakao", "GET_JOIN_CONFIRM = " + GET_JOIN_CONFIRM);
-                    Log.i("Kakao", "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+                    dlog.i( "Kakao id =" + user.getId());
+                    dlog.i( "GET_NAME =" + GET_NAME);
+                    dlog.i( "GET_ACCOUNT_EMAIL =" + GET_ACCOUNT_EMAIL);
+                    dlog.i( "GET_PROFILE_URL =" + GET_PROFILE_URL);
+                    dlog.i( "GET_USER_PHONE =" + GET_USER_PHONE);
+                    dlog.i( "GET_USER_BIRTH =" + GET_USER_BIRTH);
+                    dlog.i( "GET_USER_AGEROUNGE =" + GET_USER_AGEROUNGE);
+                    dlog.i( "GET_USER_SEX =" + GET_USER_SEX);
+                    dlog.i( "GET_JOIN_CONFIRM = " + GET_JOIN_CONFIRM);
+                    dlog.i( "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
 
                     if (GET_ACCOUNT_EMAIL.isEmpty()) {
                         Toast.makeText(mContext, "네트워크 통신연결이 불안정 합니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        LoginCheck(GET_ACCOUNT_EMAIL, "", "Kakao");
+                        LoginCheck(GET_ACCOUNT_EMAIL, "", USER_LOGIN_METHOD);
                     }
 
                 }, 1000); //1초 후 인트로 실행
             }
 
             if (throwable != null) {
-                Log.i("Kakao", "invoke: " + throwable.getLocalizedMessage());
+                dlog.i( "invoke: " + throwable.getLocalizedMessage());
             }
             return null;
         });
@@ -427,8 +572,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void LoginCheck(String account, String pw, String platform) {
-        shardpref.putString("USER_INFO_EMAIL",account);
-        shardpref.putString("platform",platform);
+        shardpref.putString("USER_INFO_EMAIL", account);
+        shardpref.putString("platform", platform);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UserSelectInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -475,7 +620,7 @@ public class LoginActivity extends AppCompatActivity {
 //                                            }
                                             String repalcekey0 = "kraftmysecretkey";
                                             String replacekey1 = "nrkwl3nkv54";
-                                            decodePw = aes256Util.decode(getPassword).replace(repalcekey0,"").replace(replacekey1,"");
+                                            decodePw = aes256Util.decode(getPassword).replace(repalcekey0, "").replace(replacekey1, "");
                                             shardpref.putString("USER_INFO_ID", getid);
                                             shardpref.putString("USER_INFO_NAME", getname);
                                             shardpref.putString("USER_INFO_EMAIL", getaccount);
@@ -483,7 +628,6 @@ public class LoginActivity extends AppCompatActivity {
                                             shardpref.putString("USER_INFO_PHONE", getphone);
                                             shardpref.putString("USER_INFO_GENDER", getgender);
                                             shardpref.putString("USER_INFO_PROFILE", getimg_path);
-                                            shardpref.putString("USER_INFO_METHOD", getimg_path);
                                             shardpref.putString("USER_LOGIN_METHOD", getPlatform);
                                         } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
                                                 | NoSuchPaddingException | IllegalBlockSizeException
@@ -500,7 +644,7 @@ public class LoginActivity extends AppCompatActivity {
 //                                                shardpref.putInt("SELECT_POSITION_sub", 0);
 //                                                pm.PlaceList(mContext);
                                                 pm.AuthSelect(mContext);
-                                            }else{
+                                            } else {
                                                 Toast_Nomal("이메일 혹은 비밀번호를 확인해주세요.");
                                             }
                                         } else {
@@ -527,7 +671,7 @@ public class LoginActivity extends AppCompatActivity {
                                         if (!platform.equals("NEB")) {
                                             UserCheck(GET_ACCOUNT_EMAIL);
                                             INPUT_JOIN_DATA(GET_ACCOUNT_EMAIL, GET_NAME, GET_PROFILE_URL, platform);
-                                        }else{
+                                        } else {
                                             Toast_Nomal("아이디 혹은 비밀번호를 확인하세요");
                                             shardpref.remove("USER_INFO_ID");
                                             shardpref.remove("USER_INFO_NAME");
@@ -559,7 +703,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void INPUT_JOIN_DATA(String USER_INFO_EMAIL,String USER_INFO_NAME, String imgpath, String platform) {
+    public void INPUT_JOIN_DATA(String USER_INFO_EMAIL, String USER_INFO_NAME, String imgpath, String platform) {
         try {
             USER_INFO_PW = aes256Util.encode("kraftmysecretkey" + USER_INFO_PW + "nrkwl3nkv54");
 //            USER_INFO_PW = aes256Util.encode(USER_INFO_PW);
@@ -580,7 +724,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserInsertInterface api = retrofit.create(UserInsertInterface.class);
-        Call<String> call = api.getData(USER_INFO_EMAIL, USER_INFO_NAME, "",USER_INFO_PW, "", "", imgpath, platform);
+        Call<String> call = api.getData(USER_INFO_EMAIL, USER_INFO_NAME, "", USER_INFO_PW, "", "", imgpath, platform);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -677,7 +821,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         if (throwable != null) {
             dlog.i("kakaoCallback throwable not null");
-            Log.i("Kakao", "Message : " + throwable.getLocalizedMessage());
+            dlog.i( "Message : " + throwable.getLocalizedMessage());
 
             if (Objects.equals(throwable.getLocalizedMessage(), "user cancelled.")) {
                 binding.loginAlertText.setVisibility(View.GONE);

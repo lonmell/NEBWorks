@@ -53,6 +53,7 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="15dp"
                             android:elevation="10dp"
+                            android:visibility="gone"
                             app:cardBackgroundColor="@color/blue"
                             app:cardCornerRadius="60dp"
                             app:cardElevation="5dp">
@@ -294,8 +295,9 @@
                         android:id="@+id/important_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="10dp"
                         android:visibility="gone" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

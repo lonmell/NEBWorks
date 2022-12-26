@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="naver_app_key">NEBWorksAPPKey</string>
-    <string name="naver_client_id">cN1sIOhyOshPLKgNL4Sj</string>
+    <string name="client_id">cN1sIOhyOshPLKgNL4Sj</string>
+    <string name="client_secret">iFS5etlgYt</string>
+    <string name="client_name">넵</string>
 </resources>

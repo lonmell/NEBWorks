@@ -173,10 +173,10 @@ public class HomeFragment extends Fragment {
             //0-관리자 / 1- 근로자
             dlog.i("gotoplace location view USER_INFO_AUTH : " + USER_INFO_AUTH);
             //USER_INFO_AUTH 가 -1일때
-            if (USER_INFO_AUTH.equals("-1")) {
-                USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
-                shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-            }
+//            if (USER_INFO_AUTH.equals("-1")) {
+//                USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
+//                shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
+//            }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -222,7 +222,7 @@ public class HomeFragment extends Fragment {
             pm.MemberManagement(mContext);
         });
 
-        binding.addMemberBtn.setOnClickListener(v -> {
+        binding.addMemberArea.setOnClickListener(v -> {
             MemberOption mo = new MemberOption();
             mo.show(getChildFragmentManager(), "MemberOption");
         });
@@ -524,6 +524,13 @@ public class HomeFragment extends Fragment {
 
                                             }
                                             mAdapter.notifyDataSetChanged();
+                                            mAdapter.setOnItemClickListener(new MainMemberLAdapter.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(View v, int position) {
+                                                    shardpref.putString("Tap", "1");
+                                                    pm.PayManagement(mContext);
+                                                }
+                                            });
                                         } else {
                                             mList2 = new ArrayList<>();
                                             mAdapter2 = new MainNotiLAdapter(mContext, mList2);

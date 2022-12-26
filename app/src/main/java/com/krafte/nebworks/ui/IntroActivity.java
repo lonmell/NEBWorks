@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -59,6 +60,11 @@ import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 import com.krafte.nebworks.util.disconnectHandler;
+import com.navercorp.nid.NaverIdLoginSDK;
+import com.navercorp.nid.oauth.NidOAuthLogin;
+import com.navercorp.nid.oauth.OAuthLoginCallback;
+import com.navercorp.nid.profile.NidProfileCallback;
+import com.navercorp.nid.profile.data.NidProfileResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -119,6 +125,12 @@ public class IntroActivity extends AppCompatActivity {
     String versionName = "";
     String LastVersion = "";
     DBConnection dbConnection = new DBConnection();
+
+    //Naver
+    String ClientID = "cN1sIOhyOshPLKgNL4Sj";
+    String ClientSecret = "iFS5etlgYt";
+    String ClientName = "넵";
+    NaverIdLoginSDK naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -196,6 +208,19 @@ public class IntroActivity extends AppCompatActivity {
         shardpref.putString("USER_LOGIN_METHOD", "Google");
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void NaverSetting() {
+        try {
+            naverIdLoginSDK.initialize(IntroActivity.this, ClientID, ClientSecret, ClientName);
+            naverIdLoginSDK.logout();
+            naverIdLoginSDK.setShowMarketLink(true);
+            naverIdLoginSDK.setShowBottomTab(true);
+
+            naverIdLoginSDK.authenticate(IntroActivity.this, oAuthLoginCallback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //----콜백 영역 START
@@ -353,6 +378,85 @@ public class IntroActivity extends AppCompatActivity {
         });
     }
 
+    OAuthLoginCallback oAuthLoginCallback = new OAuthLoginCallback() {
+        @Override
+        public void onSuccess() {
+            NidOAuthLogin nidOAuthLogin = new NidOAuthLogin();
+
+            nidOAuthLogin.callProfileApi(new NidProfileCallback<NidProfileResponse>() {
+
+                @Override
+                public void onSuccess(NidProfileResponse nidProfileResponse) {
+                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+                    dlog.i("NaverSetting onSuccess");
+                    dlog.i("NaverSetting getAccessToken: " + naverIdLoginSDK.getAccessToken());
+                    dlog.i("NaverSetting getRefreshToken: " + naverIdLoginSDK.getRefreshToken());
+
+                    //프로필 가져오는 코드
+                    NidProfileCallback<NidProfileResponse> profileCallback = new NidProfileCallback<NidProfileResponse>() {
+                        @Override
+                        public void onSuccess(NidProfileResponse nidProfileResponse) {
+//                            Toast.makeText(getApplicationContext(), "$response", Toast.LENGTH_SHORT).show();
+                            Handler handler = new Handler();
+                            handler.postDelayed(() -> {
+                                USER_LOGIN_METHOD = "Naver";
+                                GET_JOIN_CONFIRM = !String.valueOf(nidProfileResponse.getProfile().getId()).isEmpty();
+
+                                shardpref.putString("USER_LOGIN_METHOD", USER_LOGIN_METHOD);
+                                shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
+
+                                if (nidProfileResponse.getProfile().getEmail().isEmpty()){
+                                    pm.Login(mContext);
+                                }else{
+                                    UserCheck(nidProfileResponse.getProfile().getEmail());
+                                }
+
+
+                            }, 1000); //1초 후 인트로 실행
+                        }
+
+                        @Override
+                        public void onFailure(int i, @NonNull String s) {
+                            String errorCode = naverIdLoginSDK.getLastErrorCode().getCode();
+                            String errorDescription = naverIdLoginSDK.getLastErrorDescription();
+                            Toast.makeText(getApplicationContext(), "errorCode: $errorCode, errorDesc: $errorDesc", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(int i, @NonNull String s) {
+                            onFailure(i, s);
+                        }
+                    };
+
+
+                    nidOAuthLogin.callProfileApi(profileCallback);
+                }
+
+                @Override
+                public void onFailure(int i, @NonNull String s) {
+                    String errorCode = naverIdLoginSDK.getLastErrorCode().getCode();
+                    String errorDescription = naverIdLoginSDK.getLastErrorDescription();
+                    Toast.makeText(getApplicationContext(), "errorCode: $errorCode, errorDesc: $errorDesc", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(int i, @NonNull String s) {
+
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(int i, @NonNull String s) {
+
+        }
+
+        @Override
+        public void onError(int i, @NonNull String s) {
+
+        }
+    };
+
     private void updateUI(FirebaseUser user) {
         dlog.i("----------Success Google Login Data----------");
         dlog.i("getEmail : " + user.getEmail());
@@ -449,6 +553,8 @@ public class IntroActivity extends AppCompatActivity {
                 KakaoSetting();
             } else if (USER_LOGIN_METHOD.equals("Google")) {
                 GoogleSetting();
+            } else if (USER_LOGIN_METHOD.equals("Naver")) {
+                NaverSetting();
             } else {
                 handler = new Handler();
                 handler.postDelayed(() -> {
@@ -475,8 +581,16 @@ public class IntroActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         createNotificationChannel();
+        getReleaseHashKey();
         Handler handler = new Handler();
         handler.postDelayed(this::getLastVersion,100); //0.5초 후 인트로 실행
+    }
+
+    private void getReleaseHashKey() {
+        byte[] sha1 = {
+                (byte) 0xB1,0x1E,0x2B,(byte) 0x9C,(byte) 0x97,(byte) 0xDA,(byte) 0xCD,(byte) 0xA2,(byte) 0xE1,(byte) 0x9B,0x40,0x72,(byte) 0xAF,(byte) 0xA8,0x55,0x7E,0x37,0x62,(byte) 0xE0,0x42
+        };
+        dlog.i("getReleaseHashKey : " + Base64.encodeToString(sha1, Base64.NO_WRAP));
     }
 
     private void createNotificationChannel() {
@@ -518,11 +632,13 @@ public class IntroActivity extends AppCompatActivity {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     binding.loginAlertText.setVisibility(View.GONE);
-//                                    shardpref.putString("USER_INFO_AUTH", "0");
-//                                    shardpref.putInt("SELECT_POSITION", 0);
-//                                    shardpref.putInt("SELECT_POSITION_sub", 0);
-//                                    pm.PlaceList(mContext);
-                                    pm.AuthSelect(mContext);
+                                    String name = Response.getJSONObject(0).getString("name");
+                                    String phone = Response.getJSONObject(0).getString("phone");
+                                    if (name.isEmpty() || phone.isEmpty()) {
+                                        pm.ProfileEdit(mContext);
+                                    } else {
+                                        pm.AuthSelect(mContext);
+                                    }
                                 }else{
                                     binding.loginAlertText.setVisibility(View.GONE);
                                     pm.Login(mContext);

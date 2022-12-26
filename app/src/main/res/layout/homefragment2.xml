@@ -50,6 +50,7 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="15dp"
                             android:elevation="10dp"
+                            android:visibility="gone"
                             app:cardBackgroundColor="@color/blue"
                             app:cardCornerRadius="60dp"
                             app:cardElevation="5dp">
@@ -70,6 +71,7 @@
                             android:layout_alignBottom="@+id/i_o_btn"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
+                            android:layout_alignParentStart="true"
                             android:layout_toStartOf="@+id/state"
                             android:layout_toEndOf="@+id/i_o_btn"
                             android:fontFamily="@font/inter_bold"
@@ -358,10 +360,12 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="center"
                         android:text="이번달 급여"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
                         android:textSize="16sp"
                         android:layout_marginStart="19dp"
                         android:textColor="@color/black" />
@@ -370,7 +374,6 @@
                         android:id="@+id/empty_payarea"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:visibility="gone">
@@ -413,8 +416,10 @@
                         android:id="@+id/important_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:visibility="gone" />
+                        android:layout_marginStart="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:visibility="visible" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
