@@ -18,10 +18,12 @@ public class WorkPlaceMemberListData {
         String jikgup;
         String pay;
         String worktime;
+        String contract_cnt;
 
 
         public WorkPlaceMemberListData_list( String id, String place_name, String account, String name, String phone,
-                  String gender, String img_path, String jumin, String kind, String join_date, String state, String jikgup, String pay, String worktime){
+                  String gender, String img_path, String jumin, String kind, String join_date, String state, String jikgup
+                , String pay, String worktime, String contract_cnt){
             this.id = id;
             this.place_name = place_name;
             this.account = account;
@@ -36,6 +38,7 @@ public class WorkPlaceMemberListData {
             this.jikgup = jikgup;
             this.pay = pay;
             this.worktime = worktime;
+            this.contract_cnt = contract_cnt;
         }
 
         public String getId() {
@@ -148,6 +151,14 @@ public class WorkPlaceMemberListData {
 
         public void setWorktime(String worktime) {
             this.worktime = worktime;
+        }
+
+        public String getContract_cnt() {
+            return contract_cnt;
+        }
+
+        public void setContract_cnt(String contract_cnt) {
+            this.contract_cnt = contract_cnt;
         }
     }
 }

@@ -139,6 +139,15 @@ public class MemberManagement extends AppCompatActivity {
             binding.notiArea.setOnClickListener(v -> {
                 pm.FeedList(mContext);
             });
+            binding.backBtn.setOnClickListener(v -> {
+                shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+                shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.Main(mContext);
+                }else{
+                    pm.Main2(mContext);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,7 +157,8 @@ public class MemberManagement extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        shardpref.putInt("SELECT_POSITION", 0);
+        shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+        shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
         if(USER_INFO_AUTH.equals("0")){
             pm.Main(mContext);
         }else{
@@ -267,7 +277,8 @@ public class MemberManagement extends AppCompatActivity {
                                                 jsonObject.getString("state"),
                                                 jsonObject.getString("jikgup"),
                                                 jsonObject.getString("pay"),
-                                                jsonObject.getString("worktime")
+                                                jsonObject.getString("worktime"),
+                                                jsonObject.getString("contract_cnt")
                                         ));
                                     }
                                 }

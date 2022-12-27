@@ -39,16 +39,11 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
     GetResultData resultData = new GetResultData();
     Dlog dlog = new Dlog();
 
-    boolean option_visible = true;
-    int before_pos = 0;
-    String item_worktime = "";
-    String item_hourpay = "";
-    String item_status = "";
     String place_id = "";
     String place_owner_id = "";
-    String employment_name = "";
 
-    public String USER_INFO_ID = "";
+    String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
     Activity activity;
     PageMoveClass pm = new PageMoveClass();
 
@@ -188,6 +183,10 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     }else{
                         holder.jikgup.setText(item.getJikgup());
                     }
+                    if(item.getContract_cnt().equals("1")){
+                        holder.contract_state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
+                        holder.contract_state_tv.setTextColor(Color.parseColor("#000000"));
+                    }
                 }
 
 
@@ -204,7 +203,8 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     shardpref.putString("mem_pay",item.getPay());
                     pm.AddMemberDetail(mContext);
                 });
-                if(item.getId().equals(place_owner_id)){
+
+                if(USER_INFO_AUTH.equals("0")){
                     holder.list_setting.setVisibility(View.VISIBLE);
                 }else{
                     holder.list_setting.setVisibility(View.INVISIBLE);
@@ -247,7 +247,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name,jikgup,pay,state_tv,jejik,contract_area_tv,add_detail_tv;
+        TextView name,jikgup,pay,state_tv,jejik,contract_area_tv,add_detail_tv,contract_state_tv;
         CardView add_detail,state,contract_state,contract_area;
         RelativeLayout list_setting;
         LinearLayout linear01,linear02,linear03,linear04;
@@ -274,12 +274,14 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
             contract_area       = itemView.findViewById(R.id.contract_area);
             contract_area_tv    = itemView.findViewById(R.id.contract_area_tv);
+            contract_state_tv   = itemView.findViewById(R.id.contract_state_tv);
 
-
-            shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            place_id = shardpref.getString("place_id", "");
+            shardpref      = new PreferenceHelper(mContext);
+            USER_INFO_ID   = shardpref.getString("USER_INFO_ID", "");
+            place_id       = shardpref.getString("place_id", "");
             place_owner_id = shardpref.getString("place_owner_id", "");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {

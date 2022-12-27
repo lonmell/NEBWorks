@@ -403,7 +403,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         binding.contractState.setTextColor(Color.parseColor("#DD6540"));
                                         binding.contractState.setText("작성중");
                                     }
-                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
+//                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
                                 }
                             }
                         } catch (JSONException e) {

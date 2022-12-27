@@ -190,6 +190,12 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
         return mData.size();
     } // 아이템 뷰를 저장하는 뷰홀더 클래스
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterList(ArrayList<ContractData.ContractData_list> filteredList) {
+        mData = filteredList;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, address, phone, profile_tv;
         CardView item_total,profile_img;
@@ -210,7 +216,6 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
             dlog.DlogContext(mContext);
-            dlog.i("mData : " + mData.size());
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
@@ -220,7 +225,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                         shardpref.putString("contract_id", item.getContract_id());
                         pm.ContractAll(mContext);
                     }else{
-                        Toast.makeText(mContext,"근로계약서 작성이 완료되지 않았습니다.",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(mContext,"근로계약서 작성이 완료되지 않았습니다.",Toast.LENGTH_SHORT).show();
                     }
                 }
             });

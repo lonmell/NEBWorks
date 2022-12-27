@@ -326,6 +326,7 @@ public class TaskDetailActivity extends AppCompatActivity {
                         "",
                         item_user_jikgup.get(i).trim(),
                         "",
+                        "",
                         ""
                 ));
             }

@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,7 +63,10 @@ public class ContractFragment1 extends Fragment {
     Dlog dlog = new Dlog();
 
     ArrayList<ContractData.ContractData_list> mList = new ArrayList<>();
+    ArrayList<ContractData.ContractData_list> searchmList = new ArrayList<>();
     ContractListAdapter mAdapter;
+
+    Timer timer;
 
     public static ContractFragment1 newInstance(int number) {
         ContractFragment1 fragment = new ContractFragment1();
@@ -105,7 +112,7 @@ public class ContractFragment1 extends Fragment {
 
         dlog.DlogContext(mContext);
         setBtnEvent();
-
+        timer = new Timer();
         return binding.getRoot();
     }
 
@@ -113,12 +120,54 @@ public class ContractFragment1 extends Fragment {
 
     }
 
+
+    String searchNmae = "";
+    Handler mHandler;
+    int Cnt = 0;
+    int Cnt1 = 0;
     @Override
     public void onResume() {
         super.onResume();
-        SetContractList();
+        mList = new ArrayList<>();
+        searchmList = new ArrayList<>();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //5초마다 실행
+                searchNmae = shardpref.getString("searchName","");
+                if(!searchNmae.isEmpty() && !mList.isEmpty()){
+                    Cnt = 0;
+                    dlog.i("searchName : " + searchNmae);
+                    mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.postDelayed(() -> {
+                        Cnt1 ++;
+                        searchFilter(searchNmae);
+                    }, 0);
+                }else{
+                    if(Cnt == 0){
+                        Cnt1 = 0;
+                        Cnt++;
+                        SetContractList();
+                        shardpref.remove("searchName");
+                    }
+                }
+            }
+        };
+        timer.schedule(timerTask,0,1000);
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        timer.cancel();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        timer.cancel();
+        shardpref.remove("searchName");
+    }
 
     public void SetContractList() {
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
@@ -206,6 +255,29 @@ public class ContractFragment1 extends Fragment {
             th.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void searchFilter(String searchText) {
+        if(searchText.length() != 0 && mList.size() != 0){
+            searchmList.clear();
+            dlog.i("searchFilter 1");
+            dlog.i("mList.size() : " + mList.size());
+            for (int i = 0; i < mList.size(); i++) {
+                if (mList.get(i).getName().toLowerCase().contains(searchText.toLowerCase())) {
+                    dlog.i("searchFilter contain : " + mList.get(i).getName() + "/" + mList.get(i).getName().toLowerCase().contains(searchText.toLowerCase()));
+//                    mList.clear();
+                    searchmList.add(mList.get(i));
+//                    break;
+                }
+            }
+            mAdapter.filterList(searchmList);
+            mAdapter.notifyDataSetChanged();
+        }else{
+            dlog.i("searchFilter 2");
+            mAdapter.filterList(mList);
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

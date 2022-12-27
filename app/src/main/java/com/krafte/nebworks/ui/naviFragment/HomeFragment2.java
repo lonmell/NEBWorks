@@ -208,7 +208,7 @@ public class HomeFragment2 extends Fragment {
             accept_state = shardpref.getInt("accept_state", -99);
             input_date = shardpref.getString("input_date", "-1");
             in_time = shardpref.getString("in_time", "");
-
+            shardpref.putInt("SELECT_POSITION",0);
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);

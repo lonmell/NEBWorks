@@ -141,7 +141,8 @@ public class MemberListPop extends Activity {
                                                 jsonObject.getString("state"),
                                                 jsonObject.getString("jikgup"),
                                                 jsonObject.getString("pay"),
-                                                jsonObject.getString("worktime")
+                                                jsonObject.getString("worktime"),
+                                                jsonObject.getString("contract_cnt")
                                         ));
                                     }
                                 }

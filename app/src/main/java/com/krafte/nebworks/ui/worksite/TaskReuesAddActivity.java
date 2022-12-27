@@ -502,6 +502,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                                 "",
                                 item_user_jikgup.get(i).trim(),
                                 "",
+                                "",
                                 ""
                         ));
                     }
@@ -644,6 +645,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                     "",
                     "",
                     item_user_jikgup.get(i).trim(),
+                    "",
                     "",
                     ""
             ));

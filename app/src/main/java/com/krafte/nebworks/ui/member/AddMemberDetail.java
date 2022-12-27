@@ -550,15 +550,15 @@ public class AddMemberDetail extends AppCompatActivity {
         binding.select01time.setBackgroundResource(R.drawable.select_empty_round);
         binding.select02time.setBackgroundResource(R.drawable.select_empty_round);
         binding.select03time.setBackgroundResource(R.drawable.select_empty_round);
-        binding.select04time.setBackgroundResource(R.drawable.select_empty_round);
-        binding.select05time.setBackgroundResource(R.drawable.select_empty_round);
-        binding.worktime.setBackgroundResource(R.drawable.grayback_gray_round);
+//        binding.select04time.setBackgroundResource(R.drawable.select_empty_round);
+//        binding.select05time.setBackgroundResource(R.drawable.select_empty_round);
+//        binding.worktime.setBackgroundResource(R.drawable.grayback_gray_round);
 
         binding.selectArea01.setBackgroundResource(R.drawable.default_gray_round);
         binding.selectArea02.setBackgroundResource(R.drawable.default_gray_round);
         binding.selectArea03.setBackgroundResource(R.drawable.default_gray_round);
-        binding.selectArea04.setBackgroundResource(R.drawable.default_gray_round);
-        binding.selectArea05.setBackgroundResource(R.drawable.default_gray_round);
+//        binding.selectArea04.setBackgroundResource(R.drawable.default_gray_round);
+//        binding.selectArea05.setBackgroundResource(R.drawable.default_gray_round);
 
         binding.worktime.setClickable(false);
         binding.worktime.setEnabled(false);
@@ -571,16 +571,17 @@ public class AddMemberDetail extends AppCompatActivity {
         }else if(i == 3){
             binding.selectArea03.setBackgroundResource(R.drawable.default_select_round);
             binding.select03time.setBackgroundResource(R.drawable.select_full_round);
-        }else if(i == 4){
-            binding.selectArea04.setBackgroundResource(R.drawable.default_select_round);
-            binding.select04time.setBackgroundResource(R.drawable.select_full_round);
-        }else if(i == 5){
-            binding.selectArea05.setBackgroundResource(R.drawable.default_select_round);
-            binding.select05time.setBackgroundResource(R.drawable.select_full_round);
-            binding.worktime.setBackgroundResource(R.drawable.default_input_round);
-            binding.worktime.setClickable(true);
-            binding.worktime.setEnabled(true);
         }
+//        else if(i == 4){
+//            binding.selectArea04.setBackgroundResource(R.drawable.default_select_round);
+//            binding.select04time.setBackgroundResource(R.drawable.select_full_round);
+//        }else if(i == 5){
+//            binding.selectArea05.setBackgroundResource(R.drawable.default_select_round);
+//            binding.select05time.setBackgroundResource(R.drawable.select_full_round);
+//            binding.worktime.setBackgroundResource(R.drawable.default_input_round);
+//            binding.worktime.setClickable(true);
+//            binding.worktime.setEnabled(true);
+//        }
 
     }
 
@@ -841,12 +842,12 @@ public class AddMemberDetail extends AppCompatActivity {
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
-                                    String state    = Response.getJSONObject(0).getString("state");
-                                    String jikgup   = Response.getJSONObject(0).getString("jikgup");
-                                    String paykind  = Response.getJSONObject(0).getString("paykind");
-                                    String pay      = Response.getJSONObject(0).getString("pay");
-                                    String worktime = Response.getJSONObject(0).getString("worktime");
-                                    String task     = Response.getJSONObject(0).getString("task");
+                                    String state    = Response.getJSONObject(0).getString("state").trim();
+                                    String jikgup   = Response.getJSONObject(0).getString("jikgup").trim();
+                                    String paykind  = Response.getJSONObject(0).getString("paykind").trim();
+                                    String pay      = Response.getJSONObject(0).getString("pay").trim();
+                                    String worktime = Response.getJSONObject(0).getString("worktime").trim();
+                                    String task     = Response.getJSONObject(0).getString("task").trim();
 
                                     dlog.i("GetDetailInfo state : " + state);
                                     dlog.i("GetDetailInfo jikgup : " + jikgup);
@@ -856,12 +857,14 @@ public class AddMemberDetail extends AppCompatActivity {
                                     dlog.i("GetDetailInfo task : " + task);
                                     if(state.equals("1")){
                                         mem_state = "1";
+                                        select01TF = false;
                                         binding.select01.setBackgroundResource(R.drawable.select_full_round);
                                         binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
                                     }else if(state.equals("2")){
                                         mem_state = "2";
+                                        select02TF = false;
                                         binding.select02.setBackgroundResource(R.drawable.select_full_round);
-                                        binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
+                                        binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
                                     }
 
                                     switch (jikgup){
@@ -891,21 +894,14 @@ public class AddMemberDetail extends AppCompatActivity {
                                     binding.inputbox05.setText(pay);
 
                                     switch (worktime){
-                                        case "오전" :
+                                        case "주간" :
                                             ChangeSelectTime(1);
                                             break;
-                                        case "주간" :
+                                        case "야간" :
                                             ChangeSelectTime(2);
                                             break;
-                                        case "야간" :
+                                        case "종일" :
                                             ChangeSelectTime(3);
-                                            break;
-                                        case "주말" :
-                                            ChangeSelectTime(4);
-                                            break;
-                                        default:
-                                            ChangeSelectTime(5);
-                                            binding.worktime.setText(worktime);
                                             break;
                                     }
                                     binding.inputbox06.setText(task);

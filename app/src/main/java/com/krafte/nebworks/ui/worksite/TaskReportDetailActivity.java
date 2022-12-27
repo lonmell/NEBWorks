@@ -289,6 +289,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                             "",
                             item_user_jikgup.get(i).trim(),
                             "",
+                            "",
                             ""
                     ));
                 }
