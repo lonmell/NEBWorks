@@ -139,7 +139,7 @@ public class FeedDetailActivity extends AppCompatActivity {
             if(USER_INFO_AUTH.equals("1")){
                 UpdateWorkNotifyReadYn();
             }
-            getWorkNotifyReadYn();
+            getCommentList();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -351,7 +351,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     }
 
     @SuppressLint("LongLogTag")
-    private void getWorkNotifyReadYn() {
+    private void getCommentList() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedConfrimlistInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())

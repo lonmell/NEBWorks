@@ -170,7 +170,7 @@ public class WorkCommentListAdapter extends RecyclerView.Adapter<WorkCommentList
             }
             holder.edit_bottom.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position,item.getComment_id(),item.getComment(), item.getWriter_name()
+                    mListener.onItemClick(v, position,item.getId(),item.getComment(), item.getWriter_name()
                             ,item.getFeed_id(), item.getWrite_id(), "", "", item.getComment(), item.getCreated_at());
                 }
 //                setUpdateWorktodo(position);

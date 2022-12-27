@@ -243,6 +243,11 @@ public class HomeFragment extends Fragment {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
         });
+
+        binding.detailInout.setOnClickListener(v -> {
+            shardpref.putInt("SELECT_POSITION", 2);
+            pm.Main(mContext);
+        });
     }
 
     public void SetAllMemberList() {

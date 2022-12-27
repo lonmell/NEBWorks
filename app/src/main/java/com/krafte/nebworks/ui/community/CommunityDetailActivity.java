@@ -572,6 +572,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                                 ,String feed_id,String write_id, String title, String contents, String comment_contents,String write_date) {
                                             binding.addCommentTxt.clearFocus();
                                             imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
+                                            dlog.i("delete comment_id : " + comment_id);
                                             shardpref.putString("comment_id", comment_id);
                                             Intent intent = new Intent(mContext, CommunityOptionActivity.class);
                                             WriteName = writer_name;

@@ -416,6 +416,7 @@ public class TwoButtonPopActivity extends Activity {
 
     //댓글삭제
     public void CommentDelete(String id) {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedCommentDelInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -429,12 +430,11 @@ public class TwoButtonPopActivity extends Activity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                            dlog.i("LoginCheck jsonResponse : " + response.body());
+                            dlog.i("CommentDelete jsonResponse length : " + response.body().length());
+                            dlog.i("CommentDelete jsonResponse : " + response.body());
                             try {
                                 if(response.body().replace("\"","").equals("")){
                                     shardpref.putString("editstate","DelComment");
-
                                     ClosePop();
                                 }
                             } catch (Exception e) {

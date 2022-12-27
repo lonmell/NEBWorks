@@ -179,6 +179,7 @@ dependencies {
 
     //# groovy
     //네이버 로그인
+//    implementation 'com.navercorp.nid:oauth:5.3.0' // jdk 11
     implementation files('libs/oauth-5.3.0.aar')
     implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
     implementation 'androidx.browser:browser:1.0.0'
