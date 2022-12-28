@@ -610,6 +610,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     private boolean CheckData() {
         user_name = binding.userName.getText().toString();
         user_nickname = binding.userNick.getText().toString();
+        Log.d("user_nickname", user_nickname);
+        shardpref.putString("USER_INFO_NICKNAME", user_nickname);
         phone = binding.userPhone.getText().toString();
 
         dlog.i("------CheckData-------");
@@ -619,10 +621,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         dlog.i("전화번호 : " + phone);
         dlog.i("------CheckData-------");
 
-        if (user_nickname.isEmpty()) {
-            Toast.makeText(mContext, "부서를 입력해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (phone.isEmpty()) {
+        if (phone.isEmpty()) {
             Toast.makeText(mContext, "전화번호을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (ProfileUrl.isEmpty()) {
