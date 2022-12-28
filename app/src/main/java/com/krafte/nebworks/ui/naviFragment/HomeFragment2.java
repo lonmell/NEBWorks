@@ -407,6 +407,11 @@ public class HomeFragment2 extends Fragment {
         binding.cardview01.setOnClickListener(v -> {
             pm.FeedList(mContext);
         });
+
+        binding.todoMore.setOnClickListener(v -> {
+            shardpref.putInt("SELECT_POSITION", 1);
+            pm.Main2(mContext);
+        });
     }
 
     private void InOutInsert(String kind) {
