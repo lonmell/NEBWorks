@@ -199,6 +199,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        shardpref.remove("item_user_id");
+        shardpref.remove("item_user_name");
         UserCheck(USER_INFO_EMAIL);
         getPlaceData();
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");

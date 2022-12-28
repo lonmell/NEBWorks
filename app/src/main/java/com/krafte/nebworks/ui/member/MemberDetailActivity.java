@@ -431,7 +431,7 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     /*직원 전체 리스트 START*/
     String workpay = "";
-
+    String CallNum = "";
     public void SetAllMemberList(String place_id, String user_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
         dlog.i("SetAllMemberList user_id : " + user_id);
@@ -490,17 +490,23 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 if (phone.isEmpty() || phone.equals("null")) {
                                     phone = "미입력";
                                 }
-                                if (owner_phone.equals("null") || owner_phone.isEmpty()) {
+                                if (owner_phone.isEmpty()) {
                                     owner_phone = "미입력";
                                 }
                                 if (USER_INFO_AUTH.equals("0")) {
                                     binding.callNumber.setText("전화걸기");
                                     binding.userPhone.setText(phone);
+                                    CallNum = phone;
                                 } else {
                                     binding.callNumber.setText("사장님께 전화걸기");
                                     binding.userPhone.setText(owner_phone);
+                                    CallNum = owner_phone;
                                 }
 
+                                binding.userPhone.setOnClickListener(v -> {
+                                    Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:"+ CallNum));
+                                    mContext.startActivity(mIntent);
+                                });
                                 setNavBarBtnEvent();
                                 PlaceWorkCheck(stub_place_id, "1", "3");
                             }

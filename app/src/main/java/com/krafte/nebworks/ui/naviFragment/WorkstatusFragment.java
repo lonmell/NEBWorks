@@ -251,6 +251,8 @@ public class WorkstatusFragment extends Fragment {
 //            binding.addWorktimeBtn.setOnClickListener(v -> {
 //                pm.AddWorkPart(mContext);
 //            });
+            binding.taskMore.setVisibility(View.INVISIBLE);
+            binding.inoutName.setText(place_name + " 출퇴근");
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }

@@ -204,9 +204,9 @@ public class AddMemberDetail extends AppCompatActivity {
                 binding.inputbox09.setEnabled(false);
                 binding.inputbox09.setClickable(false);
                 //자기소개
-                binding.inputbox10.setBackgroundResource(R.drawable.grayback_gray_round);
-                binding.inputbox10.setEnabled(false);
-                binding.inputbox10.setClickable(false);
+                binding.inputbox101.setBackgroundResource(R.drawable.grayback_gray_round);
+                binding.inputbox101.setEnabled(false);
+                binding.inputbox101.setClickable(false);
                 //경력및학력
                 binding.inputbox11.setBackgroundResource(R.drawable.grayback_gray_round);
                 binding.inputbox11.setEnabled(false);
@@ -225,9 +225,9 @@ public class AddMemberDetail extends AppCompatActivity {
                 binding.inputbox09.setEnabled(true);
                 binding.inputbox09.setClickable(true);
                 //자기소개
-                binding.inputbox10.setBackgroundResource(R.drawable.default_gray_round);
-                binding.inputbox10.setEnabled(true);
-                binding.inputbox10.setClickable(true);
+                binding.inputbox101.setBackgroundResource(R.drawable.default_gray_round);
+                binding.inputbox101.setEnabled(true);
+                binding.inputbox101.setClickable(true);
                 //경력및학력
                 binding.inputbox11.setBackgroundResource(R.drawable.default_gray_round);
                 binding.inputbox11.setEnabled(true);

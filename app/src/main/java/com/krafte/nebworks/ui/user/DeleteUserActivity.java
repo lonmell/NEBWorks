@@ -62,7 +62,9 @@ public class DeleteUserActivity extends AppCompatActivity {
 
 
     private void setBtnEvent(){
-
+        binding.backBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
         binding.acceptDelArea.setOnClickListener(v -> {
             if(!check){
                 check = true;

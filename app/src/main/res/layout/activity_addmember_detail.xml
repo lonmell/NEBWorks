@@ -932,6 +932,7 @@
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
                     <LinearLayout
+                        android:id="@+id/inputbox10_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/default_gray_round">
