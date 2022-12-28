@@ -35,7 +35,9 @@ import com.krafte.nebworks.util.RetrofitConnect;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -173,6 +175,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
     boolean SELECTTIME01 = false; // 근무시간 false - 시작시간 / true - 종료시간
     boolean SELECTTIME02 = false; // 휴식시간 false - 시작시간 / true - 종료시간
     String GetTime = "";
+    List<String> resultYoil = new ArrayList<>();
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
@@ -183,9 +186,67 @@ public class AddWorkPartActivity extends AppCompatActivity {
             sya.setOnItemClickListener(new SelectYoilActivity.OnItemClickListener() {
                 @Override
                 public void onItemClick(View v, String category) {
-                    binding.yoilTv.setText(category.replace("[", "").replace("]", ""));
+//                    binding.yoilTv.setText(category.replace("[", "").replace("]", ""));
                     setYoil = category.replace("요일", "").replace(" ", "");
                     dlog.i("setYoil : " + setYoil);
+                    List<Integer> listYoil = new ArrayList<>();
+                    for(String str : setYoil.replace("[", "").replace("]", "").split(",")){
+                        dlog.i("str : " + str);
+                        switch (str) {
+                            case "월":
+                                listYoil.add(1);
+                                break;
+                            case "화":
+                                listYoil.add(2);
+                                break;
+                            case "수":
+                                listYoil.add(3);
+                                break;
+                            case "목":
+                                listYoil.add(4);
+                                break;
+                            case "금":
+                                listYoil.add(5);
+                                break;
+                            case "토":
+                                listYoil.add(6);
+                                break;
+                            case "일":
+                                listYoil.add(7);
+                                break;
+                        }
+                    }
+
+                    Collections.sort(listYoil);
+                    dlog.i("listYoil : " + listYoil);
+                    for(String str : String.valueOf(listYoil).replace("[", "").replace("]", "").replace(" ","").split(",")){
+                        switch (str) {
+                            case "1":
+                                resultYoil.add("월");
+                                break;
+                            case "2":
+                                resultYoil.add("화");
+                                break;
+                            case "3":
+                                resultYoil.add("수");
+                                break;
+                            case "4":
+                                resultYoil.add("목");
+                                break;
+                            case "5":
+                                resultYoil.add("금");
+                                break;
+                            case "6":
+                                resultYoil.add("토");
+                                break;
+                            case "7":
+                                resultYoil.add("일");
+                                break;
+                        }
+                    }
+                    dlog.i("resultYoil : " + String.valueOf(resultYoil).replace("[", "").replace("]", "").replace(" ",""));
+                    setYoil = String.valueOf(resultYoil).replace("[", "").replace("]", "").replace(" ","");
+                    binding.yoilTv.setText(setYoil);
                 }
             });
         });
