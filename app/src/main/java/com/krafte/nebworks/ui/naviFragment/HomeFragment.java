@@ -248,6 +248,11 @@ public class HomeFragment extends Fragment {
             shardpref.putInt("SELECT_POSITION", 2);
             pm.Main(mContext);
         });
+
+        binding.addMemberBtn.setOnClickListener(v-> {
+            MemberOption mo = new MemberOption();
+            mo.show(getChildFragmentManager(),"MemberOption");
+        });
     }
 
     public void SetAllMemberList() {
