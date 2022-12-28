@@ -198,6 +198,11 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        ImgfileMaker = ImageNameMaker();
+    }
+    @Override
     public void onResume() {
         super.onResume();
         SmsRetrieverClient client = SmsRetriever.getClient(this);   // this = context
@@ -209,12 +214,9 @@ public class ProfileEditActivity extends AppCompatActivity {
             registerReceiver(smsReceiver, intentFilter);
             Log.i(TAG, "smsReceiver : " + Sms_receiver.receiverNum);
         });
-
         task.addOnFailureListener(e -> {
             // retriever 실패
         });
-
-        ImgfileMaker = ImageNameMaker();
     }
 
     private void setBtnEvent() {
@@ -499,13 +501,13 @@ public class ProfileEditActivity extends AppCompatActivity {
                     th.join();
                     Thread th2 = new Thread(() -> {
                         dbConnection.ConfrimNumSave(phone, SND_NUM, "insert");
-
                         String getMessage = resultData.getRESULT().replaceAll("\"", "");
                         Log.i(TAG, "getMessage = " + getMessage);
                         if (getMessage.equals("success")) {
                             dbConnection.ConfrimNumSelect(phone, SND_NUM, "select");
                             CertiNum = certiNumData.getCerti_num();
                             binding.tv03.setText("인증번호 재발송");
+                            binding.editConfirmNum.setText("");
                             Log.i(TAG, "CertiNum : " + CertiNum);
                         }
                     });
@@ -1075,6 +1077,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             binding.confirmNumCounting.setVisibility(View.VISIBLE);
 
             if (!Sms_receiver.receiverNum.isEmpty()) {
+                Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
                 if (SND_NUM.equals(Sms_receiver.receiverNum)) {
                     Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
                     binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#6395EC"));

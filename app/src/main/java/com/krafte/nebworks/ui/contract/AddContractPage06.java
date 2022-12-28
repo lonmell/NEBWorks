@@ -173,6 +173,15 @@ public class AddContractPage06 extends AppCompatActivity {
         binding.next.setOnClickListener(v -> {
             UpdatePagePos();
         });
+
+        binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("progress_pos");
+            if(!shardpref.getString("progress_pos","").isEmpty()){
+                pm.ContractFragment(mContext);
+            }else{
+                super.onBackPressed();
+            }
+        });
     }
 
     private void InputTerm(String write_term){
@@ -302,6 +311,17 @@ public class AddContractPage06 extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed(){
+        shardpref.remove("progress_pos");
+        if(!shardpref.getString("progress_pos","").isEmpty()){
+            pm.ContractFragment(mContext);
+        }else{
+            super.onBackPressed();
+        }
+    }
+
     public void Toast_Nomal(String message){
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));

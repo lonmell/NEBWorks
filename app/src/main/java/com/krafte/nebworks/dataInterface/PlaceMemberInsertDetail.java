@@ -19,6 +19,7 @@ public interface PlaceMemberInsertDetail
             @Field("paykind") String paykind,
             @Field("pay") String pay,
             @Field("worktime") String worktime,
+            @Field("workhour") String workhour,
             @Field("task") String task
     );
 }

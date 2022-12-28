@@ -181,6 +181,14 @@ public class AddContractPage03 extends AppCompatActivity {
                 SaveContractBasic();
             }
         });
+        binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("progress_pos");
+            if(!shardpref.getString("progress_pos","").isEmpty()){
+                pm.ContractFragment(mContext);
+            }else{
+                super.onBackPressed();
+            }
+        });
     }
 
     private void ChangeSelect0102(int i){
@@ -460,8 +468,8 @@ public class AddContractPage03 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("SaveWorkPartTime jsonResponse length : " + response.body().length());
-                            dlog.i("SaveWorkPartTime jsonResponse : " + response.body());
+                            dlog.i("SaveContractBasic jsonResponse length : " + response.body().length());
+                            dlog.i("SaveContractBasic jsonResponse : " + response.body());
                             try {
                                     String contract_id = response.body();
                                     shardpref.putString("contract_id",contract_id);
@@ -480,6 +488,16 @@ public class AddContractPage03 extends AppCompatActivity {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        shardpref.remove("progress_pos");
+        if(!shardpref.getString("progress_pos","").isEmpty()){
+            pm.ContractFragment(mContext);
+        }else{
+            super.onBackPressed();
+        }
     }
 
     public void Toast_Nomal(String message) {

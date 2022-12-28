@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/loginbox_round"
     android:orientation="vertical"
     tools:context=".bottomsheet.PlaceListBottomSheet">
@@ -25,13 +25,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/title">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/place_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_above="@+id/add_place" />
 
         <RelativeLayout

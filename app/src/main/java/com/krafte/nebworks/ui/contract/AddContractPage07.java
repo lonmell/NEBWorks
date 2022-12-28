@@ -113,6 +113,14 @@ public class AddContractPage07 extends AppCompatActivity {
             Intent i = new Intent(this, WebViewActivity.class);
             startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
         });
+        binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("progress_pos");
+            if(!shardpref.getString("progress_pos","").isEmpty()){
+                pm.ContractFragment(mContext);
+            }else{
+                super.onBackPressed();
+            }
+        });
     }
 
     //이미지 업로드에 필요한 소스 START
@@ -261,6 +269,15 @@ public class AddContractPage07 extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed(){
+        shardpref.remove("progress_pos");
+        if(!shardpref.getString("progress_pos","").isEmpty()){
+            pm.ContractFragment(mContext);
+        }else{
+            super.onBackPressed();
+        }
+    }
 
     public void Toast_Nomal(String message){
         LayoutInflater inflater = getLayoutInflater();

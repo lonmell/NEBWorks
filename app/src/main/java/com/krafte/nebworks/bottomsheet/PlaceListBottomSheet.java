@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.adapter.WorkplaceListAdapter;
+import com.krafte.nebworks.adapter.PlaceNameListAdapter;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.databinding.ActivityPlacelistBinding;
@@ -62,7 +62,7 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
     Dlog dlog = new Dlog();
     PageMoveClass pm = new PageMoveClass();
     ArrayList<PlaceListData.PlaceListData_list> mList;
-    WorkplaceListAdapter mAdapter = null;
+    PlaceNameListAdapter mAdapter = null;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -133,7 +133,7 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
                                 //Array데이터를 받아올 때
                                 JSONArray Response = new JSONArray(jsonResponse);
                                 mList = new ArrayList<>();
-                                mAdapter = new WorkplaceListAdapter(binding.getRoot().getContext(), mList);
+                                mAdapter = new PlaceNameListAdapter(binding.getRoot().getContext(), mList);
                                 binding.placeList.setAdapter(mAdapter);
                                 binding.placeList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                 dlog.i("SIZE : " + Response.length());
@@ -175,7 +175,7 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
                                 }
 
                                 mAdapter.notifyDataSetChanged();
-                                mAdapter.setOnItemClickListener(new WorkplaceListAdapter.OnItemClickListener() {
+                                mAdapter.setOnItemClickListener(new PlaceNameListAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(View v, int pos) {
                                         try {

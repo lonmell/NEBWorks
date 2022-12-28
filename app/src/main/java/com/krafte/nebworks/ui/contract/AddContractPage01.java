@@ -78,5 +78,23 @@ public class AddContractPage01 extends AppCompatActivity {
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
+        binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("progress_pos");
+            if(!shardpref.getString("progress_pos","").isEmpty()){
+                pm.ContractFragment(mContext);
+            }else{
+                super.onBackPressed();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed(){
+        shardpref.remove("progress_pos");
+        if(!shardpref.getString("progress_pos","").isEmpty()){
+            pm.ContractFragment(mContext);
+        }else{
+            super.onBackPressed();
+        }
     }
 }

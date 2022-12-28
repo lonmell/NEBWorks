@@ -79,6 +79,7 @@ public class AddMemberDetail extends AppCompatActivity {
     //Parameter
     //--BasicInfo
     String mem_id = "";
+    String mem_account = "";
     String mem_name = "";
     String mem_phone = "";
     String mem_gender = "";
@@ -92,6 +93,7 @@ public class AddMemberDetail extends AppCompatActivity {
     String mem_paykind = "";
     String mem_pay = "";
     String mem_worktime = "";
+    String mem_workhour = "0";
     String mem_task = "";
     String mem_age = "";
     String mem_email = "";
@@ -128,6 +130,7 @@ public class AddMemberDetail extends AppCompatActivity {
 
         mem_id = shardpref.getString("mem_id", "");
         mem_name = shardpref.getString("mem_name", "");
+        mem_account = shardpref.getString("mem_account", "");
         mem_phone = shardpref.getString("mem_phone", "");
         mem_gender = shardpref.getString("mem_gender", "");
         mem_jumin = shardpref.getString("mem_jumin", "");
@@ -138,14 +141,15 @@ public class AddMemberDetail extends AppCompatActivity {
         mem_pay = shardpref.getString("mem_pay", "");
 
         dlog.i("mem_phone : " + mem_phone);
-        if (mem_id.equals(mem_phone)) {
+        dlog.i("mem_account : " + mem_account);
+        if (mem_account.equals(mem_phone)) {
             //직접추가한 직원
             input_kind = 0;
         } else {
             //초대로 추가한 회원인 직원
             input_kind = 1;
-            setInputSetting();
         }
+        setInputSetting();
         GetDetailInfo();
         GetOtherInfo();
         setBasicInfo();
@@ -169,7 +173,6 @@ public class AddMemberDetail extends AppCompatActivity {
             binding.inputbox03.setEnabled(true);
             binding.inputbox03.setClickable(true);
         }else{
-            //--초대로 추가한 회원인 직원의 경우 개인정보는 수정할 수 없도록 입력을 막는다
             //이름
             binding.inputbox01.setBackgroundResource(R.drawable.grayback_gray_round);
             binding.inputbox01.setEnabled(false);
@@ -186,26 +189,51 @@ public class AddMemberDetail extends AppCompatActivity {
             binding.inputbox04.setBackgroundResource(R.drawable.grayback_gray_round);
             binding.inputbox04.setEnabled(false);
             binding.inputbox04.setClickable(false);
-            //나이
-            binding.inputbox07.setBackgroundResource(R.drawable.grayback_gray_round);
-            binding.inputbox07.setEnabled(false);
-            binding.inputbox07.setClickable(false);
-            //이메일
-            binding.inputbox08.setBackgroundResource(R.drawable.grayback_gray_round);
-            binding.inputbox08.setEnabled(false);
-            binding.inputbox08.setClickable(false);
-            //주소
-            binding.inputbox09.setBackgroundResource(R.drawable.grayback_gray_round);
-            binding.inputbox09.setEnabled(false);
-            binding.inputbox09.setClickable(false);
-            //자기소개
-            binding.inputbox10.setBackgroundResource(R.drawable.grayback_gray_round);
-            binding.inputbox10.setEnabled(false);
-            binding.inputbox10.setClickable(false);
-            //경력및학력
-            binding.inputbox11.setBackgroundResource(R.drawable.grayback_gray_round);
-            binding.inputbox11.setEnabled(false);
-            binding.inputbox11.setClickable(false);
+            if(input_kind == 1){
+                //--초대로 추가한 회원인 직원의 경우 개인정보는 수정할 수 없도록 입력을 막는다
+                //나이
+                binding.inputbox07.setBackgroundResource(R.drawable.grayback_gray_round);
+                binding.inputbox07.setEnabled(false);
+                binding.inputbox07.setClickable(false);
+                //이메일
+                binding.inputbox08.setBackgroundResource(R.drawable.grayback_gray_round);
+                binding.inputbox08.setEnabled(false);
+                binding.inputbox08.setClickable(false);
+                //주소
+                binding.inputbox09.setBackgroundResource(R.drawable.grayback_gray_round);
+                binding.inputbox09.setEnabled(false);
+                binding.inputbox09.setClickable(false);
+                //자기소개
+                binding.inputbox10.setBackgroundResource(R.drawable.grayback_gray_round);
+                binding.inputbox10.setEnabled(false);
+                binding.inputbox10.setClickable(false);
+                //경력및학력
+                binding.inputbox11.setBackgroundResource(R.drawable.grayback_gray_round);
+                binding.inputbox11.setEnabled(false);
+                binding.inputbox11.setClickable(false);
+            }else{
+                //나이
+                binding.inputbox07.setBackgroundResource(R.drawable.default_gray_round);
+                binding.inputbox07.setEnabled(true);
+                binding.inputbox07.setClickable(true);
+                //이메일
+                binding.inputbox08.setBackgroundResource(R.drawable.default_gray_round);
+                binding.inputbox08.setEnabled(true);
+                binding.inputbox08.setClickable(true);
+                //주소
+                binding.inputbox09.setBackgroundResource(R.drawable.default_gray_round);
+                binding.inputbox09.setEnabled(true);
+                binding.inputbox09.setClickable(true);
+                //자기소개
+                binding.inputbox10.setBackgroundResource(R.drawable.default_gray_round);
+                binding.inputbox10.setEnabled(true);
+                binding.inputbox10.setClickable(true);
+                //경력및학력
+                binding.inputbox11.setBackgroundResource(R.drawable.default_gray_round);
+                binding.inputbox11.setEnabled(true);
+                binding.inputbox11.setClickable(true);
+            }
+
         }
     }
 
@@ -341,8 +369,10 @@ public class AddMemberDetail extends AppCompatActivity {
 
         /*급여 지급방식*/
         ArrayList<String> stringCategory2 = new ArrayList<>();
-        stringCategory2.add("근로자에게 직접지급");
-        stringCategory2.add("근로자명의 예금통장에 입금");
+        stringCategory2.add("일급");
+        stringCategory2.add("시급");
+        stringCategory2.add("주급");
+        stringCategory2.add("월급");
 
         ArrayAdapter<String> select_filter2 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory2);
         binding.paySpinner.setAdapter(select_filter2);
@@ -358,7 +388,7 @@ public class AddMemberDetail extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 //                binding.pay.setText("근로자에게 직접지급");
-                mem_paykind = "근로자에게 직접지급";
+                mem_paykind = "선택";
             }
         });
 
@@ -384,9 +414,6 @@ public class AddMemberDetail extends AppCompatActivity {
         });
 
         /*근무시간*/
-        binding.worktime.setBackgroundResource(R.drawable.grayback_gray_round);
-        binding.worktime.setClickable(false);
-        binding.worktime.setEnabled(false);
         binding.selectArea01.setOnClickListener(v -> {
             mem_worktime = binding.select01tvtime.getText().toString();
             ChangeSelectTime(1);
@@ -399,30 +426,6 @@ public class AddMemberDetail extends AppCompatActivity {
             mem_worktime = binding.select03tvtime.getText().toString();
             ChangeSelectTime(3);
         });
-        binding.selectArea04.setOnClickListener(v -> {
-            mem_worktime = binding.select04tvtime.getText().toString();
-            ChangeSelectTime(4);
-        });
-        binding.selectArea05.setOnClickListener(v -> {
-            mem_worktime = "";
-            ChangeSelectTime(5);
-        });
-        binding.worktime.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                mem_worktime = s.toString();
-            }
-        });
-
-
 
         /*주요직무*/
         binding.inputbox06.addTextChangedListener(new TextWatcher() {
@@ -550,18 +553,11 @@ public class AddMemberDetail extends AppCompatActivity {
         binding.select01time.setBackgroundResource(R.drawable.select_empty_round);
         binding.select02time.setBackgroundResource(R.drawable.select_empty_round);
         binding.select03time.setBackgroundResource(R.drawable.select_empty_round);
-//        binding.select04time.setBackgroundResource(R.drawable.select_empty_round);
-//        binding.select05time.setBackgroundResource(R.drawable.select_empty_round);
-//        binding.worktime.setBackgroundResource(R.drawable.grayback_gray_round);
 
         binding.selectArea01.setBackgroundResource(R.drawable.default_gray_round);
         binding.selectArea02.setBackgroundResource(R.drawable.default_gray_round);
         binding.selectArea03.setBackgroundResource(R.drawable.default_gray_round);
-//        binding.selectArea04.setBackgroundResource(R.drawable.default_gray_round);
-//        binding.selectArea05.setBackgroundResource(R.drawable.default_gray_round);
 
-        binding.worktime.setClickable(false);
-        binding.worktime.setEnabled(false);
         if(i == 1){
             binding.selectArea01.setBackgroundResource(R.drawable.default_select_round);
             binding.select01time.setBackgroundResource(R.drawable.select_full_round);
@@ -572,17 +568,6 @@ public class AddMemberDetail extends AppCompatActivity {
             binding.selectArea03.setBackgroundResource(R.drawable.default_select_round);
             binding.select03time.setBackgroundResource(R.drawable.select_full_round);
         }
-//        else if(i == 4){
-//            binding.selectArea04.setBackgroundResource(R.drawable.default_select_round);
-//            binding.select04time.setBackgroundResource(R.drawable.select_full_round);
-//        }else if(i == 5){
-//            binding.selectArea05.setBackgroundResource(R.drawable.default_select_round);
-//            binding.select05time.setBackgroundResource(R.drawable.select_full_round);
-//            binding.worktime.setBackgroundResource(R.drawable.default_input_round);
-//            binding.worktime.setClickable(true);
-//            binding.worktime.setEnabled(true);
-//        }
-
     }
 
     private void setBtnEvent() {
@@ -592,14 +577,16 @@ public class AddMemberDetail extends AppCompatActivity {
 
         binding.addMemberTopBtn.setOnClickListener(v -> {
             if(input_kind == 0){
+                dlog.i("mem_id.equals(USER_INFO_ID)2 : " + mem_id.equals(USER_INFO_ID));
                 if (SaveCheck() && SaveCheckOtherInfo()) {
-                    dlog.i("addMemberBtn SaveCheck" + SaveCheck());
+                    dlog.i("addMemberBtn SaveCheck 1 : " + SaveCheck());
                     UpdateDirectMemberBasic();
                 }
             }else{
+                dlog.i("mem_id.equals(USER_INFO_ID) : " + mem_id.equals(USER_INFO_ID));
                 if(mem_id.equals(USER_INFO_ID)){
                     if (SaveCheck() && SaveCheckOtherInfo()) {
-                        dlog.i("addMemberBtn SaveCheck" + SaveCheck());
+                        dlog.i("addMemberBtn SaveCheck 2 : " + SaveCheck());
                         UpdateDirectMemberBasic();
                     }
                 }else{
@@ -614,13 +601,13 @@ public class AddMemberDetail extends AppCompatActivity {
         binding.addMemberBtn.setOnClickListener(v -> {
             if(input_kind == 0){
                 if (SaveCheck() && SaveCheckOtherInfo()) {
-                    dlog.i("addMemberBtn SaveCheck" + SaveCheck());
+                    dlog.i("addMemberBtn SaveCheck 1 : " + SaveCheck());
                     UpdateDirectMemberBasic();
                 }
             }else{
                 if(mem_id.equals(USER_INFO_ID)){
                     if (SaveCheck() && SaveCheckOtherInfo()) {
-                        dlog.i("addMemberBtn SaveCheck" + SaveCheck());
+                        dlog.i("addMemberBtn SaveCheck 2 : " + SaveCheck());
                         UpdateDirectMemberBasic();
                     }
                 }else{
@@ -693,17 +680,29 @@ public class AddMemberDetail extends AppCompatActivity {
         return true;
     }
     private boolean SaveCheckDetail() {
+        mem_workhour = binding.inputbox12.getText().toString();
         dlog.i("------SaveCheckDetail------");
         dlog.i("매장ID : " + place_id);
         dlog.i("재직상태 : " + mem_state);
         dlog.i("직급 : " + mem_jikgup);
         dlog.i("급여지급방식 : " + mem_paykind);
         dlog.i("급여액 : " + mem_pay);
-        dlog.i("근무시간 : " + mem_worktime);
-        dlog.i("주요직무 : " + mem_task);
+        dlog.i("주야간 : " + mem_worktime);
+        dlog.i("근무시간 : " + mem_workhour);
         dlog.i("주요직무 : " + mem_task);
         dlog.i("------SaveCheckDetail------");
-        return true;
+        if(mem_paykind.equals("선택")){
+            Toast_Nomal("급여지급 방식을 선택해주세요.");
+            return false;
+        } else if(mem_worktime.isEmpty()){
+            Toast_Nomal("주야간을 입력해주세요.");
+            return false;
+        } else if(mem_workhour.equals("0")){
+            Toast_Nomal("근무시간을 입력해주세요.");
+            return false;
+        } else{
+            return true;
+        }
     }
     private void UpdateDirectMemberBasic(){
         //직접 입력직원 기본정보 업데이트
@@ -721,8 +720,8 @@ public class AddMemberDetail extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
 //                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
-                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
+                            dlog.i("UpdateDirectMemberBasic jsonResponse length : " + response.body().length());
+                            dlog.i("UpdateDirectMemberBasic jsonResponse : " + response.body());
                             if (response.body().replace("\"", "").equals("success")) {
                                 if(!mem_id.equals(USER_INFO_ID)){
                                     AddDirectMemberOther();
@@ -750,13 +749,6 @@ public class AddMemberDetail extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberInsertOther api = retrofit.create(PlaceMemberInsertOther.class);
-//        @Field("place_id") String place_id,
-//        @Field("user_id") String user_id,
-//        @Field("age") String age,
-//        @Field("email") String email,
-//        @Field("address") String address,
-//        @Field("introduce") String introduce,
-//        @Field("career") String career
         Call<String> call = api.getData(place_id, mem_id, mem_age, mem_email, mem_address, mem_introduce, mem_career);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
@@ -769,7 +761,9 @@ public class AddMemberDetail extends AppCompatActivity {
                             dlog.i("AddDirectMemberOther jsonResponse length : " + response.body().length());
                             dlog.i("AddDirectMemberOther jsonResponse : " + response.body());
                             if (response.body().replace("\"", "").equals("success")) {
-                                AddMemberDetail();
+                                if(SaveCheckDetail()){
+                                    AddMemberDetail();
+                                }
                             }
                         }
                     });
@@ -785,12 +779,23 @@ public class AddMemberDetail extends AppCompatActivity {
     }
 
     private void AddMemberDetail() {
+        dlog.i("-----AddMemberDetail------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("mem_id : " + mem_id);
+        dlog.i("mem_state : " + mem_state);
+        dlog.i("mem_jikgup : " + mem_jikgup);
+        dlog.i("mem_paykind : " + mem_paykind);
+        dlog.i("mem_pay : " + mem_pay);
+        dlog.i("mem_worktime : " + mem_worktime);
+        dlog.i("mem_workhour : " + mem_workhour);
+        dlog.i("mem_task : " + mem_task);
+        dlog.i("-----AddMemberDetail------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceMemberInsertDetail.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberInsertDetail api = retrofit.create(PlaceMemberInsertDetail.class);
-        Call<String> call = api.getData(place_id, mem_id, mem_state, mem_jikgup, mem_paykind, mem_pay, mem_worktime, mem_task);
+        Call<String> call = api.getData(place_id, mem_id, mem_state, mem_jikgup, mem_paykind, mem_pay, mem_worktime, mem_workhour, mem_task);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -799,8 +804,8 @@ public class AddMemberDetail extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
 //                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
-                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
+                            dlog.i("AddMemberDetail jsonResponse length : " + response.body().length());
+                            dlog.i("AddMemberDetail jsonResponse : " + response.body());
                             if (response.body().replace("\"", "").equals("success")) {
                                 Toast_Nomal("직원정보가 업데이트 되었습니다.");
                                 pm.MemberManagement(mContext);
@@ -847,6 +852,7 @@ public class AddMemberDetail extends AppCompatActivity {
                                     String paykind  = Response.getJSONObject(0).getString("paykind").trim();
                                     String pay      = Response.getJSONObject(0).getString("pay").trim();
                                     String worktime = Response.getJSONObject(0).getString("worktime").trim();
+                                    String workhour = Response.getJSONObject(0).getString("workhour").trim();
                                     String task     = Response.getJSONObject(0).getString("task").trim();
 
                                     dlog.i("GetDetailInfo state : " + state);
@@ -854,6 +860,7 @@ public class AddMemberDetail extends AppCompatActivity {
                                     dlog.i("GetDetailInfo paykind : " + paykind);
                                     dlog.i("GetDetailInfo pay : " + pay);
                                     dlog.i("GetDetailInfo worktime : " + worktime);
+                                    dlog.i("GetDetailInfo workhour : " + workhour);
                                     dlog.i("GetDetailInfo task : " + task);
                                     if(state.equals("1")){
                                         mem_state = "1";
@@ -883,11 +890,17 @@ public class AddMemberDetail extends AppCompatActivity {
                                     }
 
                                     switch (paykind){
-                                        case "근로자에게 직접지급" :
+                                        case "일급" :
                                             binding.paySpinner.setSelection(0);
                                             break;
-                                        case "근로자명의 예금통장에 입금" :
+                                        case "시급" :
                                             binding.paySpinner.setSelection(1);
+                                            break;
+                                        case "주급" :
+                                            binding.paySpinner.setSelection(2);
+                                            break;
+                                        case "월급" :
+                                            binding.paySpinner.setSelection(3);
                                             break;
                                     }
 
@@ -895,16 +908,21 @@ public class AddMemberDetail extends AppCompatActivity {
 
                                     switch (worktime){
                                         case "주간" :
+                                            mem_worktime = "주간";
                                             ChangeSelectTime(1);
                                             break;
                                         case "야간" :
+                                            mem_worktime = "야간";
                                             ChangeSelectTime(2);
                                             break;
                                         case "종일" :
+                                            mem_worktime = "종일";
                                             ChangeSelectTime(3);
                                             break;
                                     }
                                     binding.inputbox06.setText(task);
+                                    mem_workhour = workhour;
+                                    binding.inputbox12.setText(workhour);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
