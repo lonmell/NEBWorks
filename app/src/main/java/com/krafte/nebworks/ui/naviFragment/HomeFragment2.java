@@ -366,6 +366,7 @@ public class HomeFragment2 extends Fragment {
         });
         binding.itemArea.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH", "1");
+            shardpref.putString("event", "out_store");
             pm.PlaceList(mContext);
         });
 

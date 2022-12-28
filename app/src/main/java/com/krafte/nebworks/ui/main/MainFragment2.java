@@ -284,6 +284,7 @@ public class MainFragment2 extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
         if (paging_position == 0) {
+            shardpref.putString("event","backpressed");
             pm.PlaceList(mContext);
         } else {
             binding.tabLayout.getTabAt(0).select();
@@ -397,6 +398,7 @@ public class MainFragment2 extends AppCompatActivity {
         } else if (view.getId() == R.id.out_store) {
             pm.PlaceList(mContext);
             drawerLayout.closeDrawer(drawerView);
+            shardpref.putString("event","out_store");
         } else if (view.getId() == R.id.bottom_navigation01) {
             dlog.i("메인 Click!");
             binding.title.setText("");
@@ -429,8 +431,9 @@ public class MainFragment2 extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION", 4);
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav01) {
-            pm.PlaceList(mContext);
             drawerLayout.closeDrawer(drawerView);
+            shardpref.putString("event", "out_store");
+            pm.PlaceList(mContext);
         } else if (view.getId() == R.id.select_nav02) {
             pm.PlaceAddGo(mContext);
             drawerLayout.closeDrawer(drawerView);
