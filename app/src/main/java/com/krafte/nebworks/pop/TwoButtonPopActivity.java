@@ -177,11 +177,11 @@ public class TwoButtonPopActivity extends Activity {
 //                FirebaseMessaging.getInstance().subscribeToTopic(USER_INFO_ID).isCanceled();
 //                FirebaseMessaging.getInstance().subscribeToTopic("TEST").isCanceled();
                 shardpref.clear();
-                shardpref.putBoolean("USER_LOGIN_CONFIRM", false);
-                shardpref.putString("USER_LOGIN_METHOD", USER_LOGIN_METHOD);
                 shardpref.remove("ALARM_ONOFF");
                 shardpref.remove("USER_LOGIN_METHOD");
+                shardpref.remove("USER_INFO_EMAIL");
                 shardpref.putBoolean("isFirstLogin", true);
+                shardpref.putBoolean("USER_LOGIN_CONFIRM", false);
 
                 if (USER_LOGIN_METHOD.equals("Google")) {
                     mGoogleSignInClient.signOut()
@@ -200,8 +200,8 @@ public class TwoButtonPopActivity extends Activity {
                         });
                     }, 100); //0.5초 후 인트로 실행
                 } else if(USER_LOGIN_METHOD.equals("Naver")) {
-                    // naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
                     naverIdLoginSDK.logout();
+                    naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
                     pm.Login(mContext);
                 }else{
                     pm.Login(mContext);

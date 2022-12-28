@@ -27,7 +27,7 @@
 #네이버 로그인 프로가드 ↓
 -keep public class com.nhn.android.naverlogin.** { public protected *; }
 
-#카카오 맵 프로가드
+#카카오 맵 프로가드 ↓
 -keep class net.daum.mf.map.n.** { *; }
 -keep class net.daum.mf.map.api.MapView { *; }
 -keep class net.daum.android.map.location.MapViewLocationManager { *; }
@@ -35,3 +35,6 @@
 -keep class net.daum.mf.map.api.MapPoint** { *; }
 -keep class net.daum.** { *; }
 -keep class android.opengl.** { *; }
+
+#네이버 로그인 프로가드 ↓
+-keep public class com.navercorp.nid.** { public *; }

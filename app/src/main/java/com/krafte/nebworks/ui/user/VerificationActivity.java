@@ -492,7 +492,7 @@ public class VerificationActivity extends AppCompatActivity {
                         if (getMessage.equals("success")) {
                             dbConnection.ConfrimNumSelect(UPhone, SND_NUM, "select");
                             CertiNum = certiNumData.getCerti_num();
-                            binding.getAuthResult.setEnabled(false);
+                            binding.tv03.setText("인증번호 재발송");
                             Log.i(TAG, "CertiNum : " + CertiNum);
                         }
                     });
@@ -531,7 +531,6 @@ public class VerificationActivity extends AppCompatActivity {
                     binding.confirmPhoneBtn.setTextColor(Color.parseColor("#000000"));
                     binding.editConfirmNum.setText(Sms_receiver.receiverNum);
                     binding.confirmNumCounting.setVisibility(View.GONE);
-                    binding.getAuthResult.setEnabled(false);
                     myTimer.cancel();
                 }
             } else {
