@@ -420,15 +420,15 @@ public class TaskListActivity extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
-                Log.e(TAG, "SetCalenderData function START");
-                Log.e(TAG, "response 1: " + response2.isSuccessful());
-                Log.e(TAG, "response 2: " + (response2.body() != null ? response2.body().length() : 0));
-                Log.e(TAG, "response 3: " + response2.body());
+                String jsonResponse = rc.getBase64decode(response2.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+
                 runOnUiThread(() -> {
                     //캘린더 내용 (업무가) 있을때
-                    if (response2.isSuccessful() && response2.body() != null) {
+                    if (response2.isSuccessful() && jsonResponse != null) {
                         try {
-                            JSONArray Response2 = new JSONArray(response2.body());
+                            JSONArray Response2 = new JSONArray(jsonResponse);
                             if (Response2.length() == 0) {
                                 dlog.i("GET SIZE : " + Response2.length());
                                 GetCalenderList(Year, Month, mList2,getYMPicker.substring(0,7));

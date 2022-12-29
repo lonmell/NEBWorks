@@ -233,7 +233,16 @@
                 android:text="근무시간"
                 android:textColor="#000000"
                 android:textSize="16sp" />
-
+            <TimePicker
+                android:id="@+id/time_setpicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numbersBackgroundColor="#ffffff"
+                android:numbersSelectorColor="#6395EC"
+                android:numbersTextColor="@color/black"
+                android:theme="@style/NumberPicker"
+                android:visibility="gone"
+                android:timePickerMode="spinner" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

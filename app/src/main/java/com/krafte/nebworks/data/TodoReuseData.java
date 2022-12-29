@@ -16,10 +16,11 @@ public class TodoReuseData {
         String thu;
         String fri;
         String sat;
+        String task_overdate;
 
         public TodoReuseData_list(String id, String writer_id, String title, String contents,
                                   String complete_kind, String start_time, String end_time,
-                                  String sun, String mon, String tue, String wed, String thu,String fri, String sat) {
+                                  String sun, String mon, String tue, String wed, String thu,String fri, String sat,String task_overdate) {
             this.id = id;
             this.writer_id = writer_id;
             this.title = title;
@@ -34,6 +35,7 @@ public class TodoReuseData {
             this.thu = thu;
             this.fri = fri;
             this.sat = sat;
+            this.task_overdate = task_overdate;
         }
 
 
@@ -147,6 +149,14 @@ public class TodoReuseData {
 
         public void setSat(String sat) {
             this.sat = sat;
+        }
+
+        public String getTask_overdate() {
+            return task_overdate;
+        }
+
+        public void setTask_overdate(String task_overdate) {
+            this.task_overdate = task_overdate;
         }
     }
 }

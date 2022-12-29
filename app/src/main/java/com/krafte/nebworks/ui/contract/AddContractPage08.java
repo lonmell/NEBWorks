@@ -276,9 +276,9 @@ public class AddContractPage08 extends AppCompatActivity {
                         String token = Response.getJSONObject(0).getString("token");
                         dlog.i("-----getManagerToken-----");
                         place_owner_id = shardpref.getString("place_owner_id","");
-                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId1) {
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, "2", place_id);
                         }
                     }
                 } catch (JSONException e) {

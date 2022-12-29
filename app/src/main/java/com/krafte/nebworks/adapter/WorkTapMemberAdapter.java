@@ -52,7 +52,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
     PageMoveClass pm = new PageMoveClass();
     int lastpos = -99;
     List<String> yoil = new ArrayList<>();
-
+    String Tap = "";
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
@@ -66,9 +66,10 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
         this.mListener = listener;
     }
 
-    public WorkTapMemberAdapter(Context context, ArrayList<WorkStatusTapData.WorkStatusTapData_list> data, FragmentManager fragmentManager) {
+    public WorkTapMemberAdapter(Context context, ArrayList<WorkStatusTapData.WorkStatusTapData_list> data, String Tap, FragmentManager fragmentManager) {
         this.mData = data;
         this.mContext = context;
+        this.Tap = Tap;
         this.fragmentManager = fragmentManager;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
@@ -121,15 +122,22 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             holder.outTime.setText(item.getOut_time().equals("null")?"":item.getOut_time());
             holder.state_tv.setText(state);
 
-            if(USER_INFO_AUTH.equals("0")){
-                holder.list_setting.setVisibility(View.VISIBLE);
-                holder.list_setting.setClickable(true);
-                holder.list_setting.setEnabled(true);
-            }else{
+            if(Tap.equals("99")){
                 holder.list_setting.setVisibility(View.INVISIBLE);
                 holder.list_setting.setClickable(false);
                 holder.list_setting.setEnabled(false);
+            }else{
+                if(USER_INFO_AUTH.equals("0")){
+                    holder.list_setting.setVisibility(View.VISIBLE);
+                    holder.list_setting.setClickable(true);
+                    holder.list_setting.setEnabled(true);
+                }else{
+                    holder.list_setting.setVisibility(View.INVISIBLE);
+                    holder.list_setting.setClickable(false);
+                    holder.list_setting.setEnabled(false);
+                }
             }
+
             holder.list_setting.setOnClickListener(v -> {
                 if (mListener != null) {
                     mListener.onItemClick(v, position);

@@ -1124,7 +1124,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     public void onBackPressed(){
 //        super.onBackPressed();
         shardpref.remove("editstate");
-        if(editstate.equals("insert") || editstate.equals("edit")){
+        if(editstate.equals("insert") || editstate.equals("newPro")){
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
             intent.putExtra("data", "로그아웃하시겠습니까?");
             intent.putExtra("flag", "로그아웃");

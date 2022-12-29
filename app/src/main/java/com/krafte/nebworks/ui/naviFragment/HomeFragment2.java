@@ -310,14 +310,15 @@ public class HomeFragment2 extends Fragment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
-                        if (response.body().replace("[", "").replace("]", "").length() == 0) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
                             //그날 최초 출근
                             kind = "-1";
 //                            InOutInsert("0");
                             binding.oArea.setVisibility(View.GONE);
                             binding.ioArea.setVisibility(View.VISIBLE);
-                        } else if (response.body().replace("[", "").replace("]", "").length() > 0) {
-                            if (response.isSuccessful() && response.body() != null) {
+                        } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
+                            if (response.isSuccessful() && jsonResponse != null) {
                                 dlog.i("InOutLogMember jsonResponse length : " + response.body().length());
                                 dlog.i("InOutLogMember jsonResponse : " + response.body());
                                 try {
@@ -975,9 +976,9 @@ public class HomeFragment2 extends Fragment {
                         String id = Response.getJSONObject(0).getString("id");
                         String token = Response.getJSONObject(0).getString("token");
                         dlog.i("-----getManagerToken-----");
-                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel4").equals("1");
                         if (!token.isEmpty() && channelId1) {
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, "4", place_id);
                         }
                     }
                 } catch (JSONException e) {

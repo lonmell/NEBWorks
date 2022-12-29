@@ -593,9 +593,14 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
                             android:layout_marginBottom="15dp"
-                            app:cardBackgroundColor="#dbdbdb"
+                            app:cardBackgroundColor="#F5F6F8"
+                            app:cardElevation="0dp"
                             app:cardCornerRadius="60dp">
-
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_member_on"/>
                         </androidx.cardview.widget.CardView>
 
                         <TextView
@@ -635,9 +640,14 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
                             android:layout_marginBottom="15dp"
-                            app:cardBackgroundColor="#dbdbdb"
+                            app:cardBackgroundColor="#F5F6F8"
+                            app:cardElevation="0dp"
                             app:cardCornerRadius="60dp">
-
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_task_on"/>
                         </androidx.cardview.widget.CardView>
 
                         <TextView
@@ -677,9 +687,14 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
                             android:layout_marginBottom="15dp"
-                            app:cardBackgroundColor="#dbdbdb"
+                            app:cardBackgroundColor="#F5F6F8"
+                            app:cardElevation="0dp"
                             app:cardCornerRadius="60dp">
-
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_wallet" />
                         </androidx.cardview.widget.CardView>
 
                         <TextView
@@ -719,9 +734,14 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
                             android:layout_marginBottom="15dp"
-                            app:cardBackgroundColor="#dbdbdb"
+                            app:cardBackgroundColor="#F5F6F8"
+                            app:cardElevation="0dp"
                             app:cardCornerRadius="60dp">
-
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_penceil"/>
                         </androidx.cardview.widget.CardView>
 
                         <TextView

@@ -167,7 +167,7 @@ public class WorkStatusSubFragment2 extends Fragment {
                             JSONArray Response = new JSONArray(jsonResponse);
 
                             mList = new ArrayList<>();
-                            mAdapter = new WorkTapMemberAdapter(mContext, mList, getParentFragmentManager());
+                            mAdapter = new WorkTapMemberAdapter(mContext, mList, "1",getParentFragmentManager());
                             binding.allMemberlist.setAdapter(mAdapter);
                             binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
 

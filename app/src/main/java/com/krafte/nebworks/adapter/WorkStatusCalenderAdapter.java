@@ -330,38 +330,38 @@ public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusC
             //--기본세팅  END
             holder.sun_box.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getSun(), "일", item.getYm() + "-" + item.getSun());
+                    mListener.onItemClick(v, position, item.getSun(), "일", item.getYm().substring(0,4) + "-" + item.getYm().substring(4,6) + "-" + item.getSun());
                 }
             });
 
             holder.mon_box.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getMon(), "월", item.getYm() + "-" + item.getMon());
+                    mListener.onItemClick(v, position, item.getMon(), "월", item.getYm().substring(0,4) + "-" + item.getYm().substring(4,6) + "-" + item.getMon());
                 }
             });
             holder.tue_box.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getTue(), "화", item.getYm() + "-" + item.getTue());
+                    mListener.onItemClick(v, position, item.getTue(), "화", item.getYm().substring(0,4) + "-" + item.getYm().substring(4,6) + "-" + item.getTue());
                 }
             });
             holder.wed_box.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getWed(), "수", item.getYm() + "-" + item.getWed());
+                    mListener.onItemClick(v, position, item.getWed(), "수", item.getYm().substring(0,4) + "-" + item.getYm().substring(4,6) + "-" + item.getWed());
                 }
             });
             holder.thu_box.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getThu(), "목", item.getYm() + "-" + item.getThu());
+                    mListener.onItemClick(v, position, item.getThu(), "목", item.getYm().substring(0,4) + "-" + item.getYm().substring(4,6) + "-" + item.getThu());
                 }
             });
             holder.fri_box.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getFri(), "금", item.getYm() + "-" + item.getFri());
+                    mListener.onItemClick(v, position, item.getFri(), "금", item.getYm().substring(0,4) + "-" + item.getYm().substring(4,6) + "-" + item.getFri());
                 }
             });
             holder.sat_box.setOnClickListener(v -> {
                 if (mListener != null) {
-                    mListener.onItemClick(v, position, item.getSat(), "토", item.getYm() + "-" + item.getSat());
+                    mListener.onItemClick(v, position, item.getSat(), "토", item.getYm().substring(0,4) + "-" + item.getYm().substring(4,6) + "-" + item.getSat());
                 }
             });
         } catch (Exception e) {

@@ -635,7 +635,7 @@ public class IntroActivity extends AppCompatActivity {
                                     String name = Response.getJSONObject(0).getString("name");
                                     String phone = Response.getJSONObject(0).getString("phone");
                                     if (name.isEmpty() || phone.isEmpty()) {
-                                        shardpref.putString("editstate","edit");
+                                        shardpref.putString("editstate","newPro");
                                         pm.ProfileEdit(mContext);
                                     } else {
                                         pm.AuthSelect(mContext);

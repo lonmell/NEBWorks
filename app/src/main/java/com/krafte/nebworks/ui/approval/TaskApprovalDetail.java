@@ -610,10 +610,10 @@ public class TaskApprovalDetail extends AppCompatActivity {
                         String position = shardpref.getString("USER_INFO_JIKGUP", "");
                         String name = shardpref.getString("USER_INFO_NAME", "");
                         dlog.i("-----getManagerToken-----");
-                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId1) {
                             message = "[" + place_name + "]" + "결재가 변동된 업무보고가 있습니다.";
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, "2", place_id);
                         }
                     }
                 } catch (JSONException e) {

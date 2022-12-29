@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/loginbox_round"
     android:orientation="vertical"
+    android:paddingBottom="40dp"
     tools:context=".bottomsheet.PlaceListBottomSheet">
 
     <TextView

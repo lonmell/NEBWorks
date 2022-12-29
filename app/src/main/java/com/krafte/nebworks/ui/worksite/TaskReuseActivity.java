@@ -97,6 +97,7 @@ public class TaskReuseActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        RemoveShared();
     }
 
     @Override
@@ -137,14 +138,18 @@ public class TaskReuseActivity extends AppCompatActivity {
                 Log.e(TAG,"response 1: " + response.isSuccessful());
                 Log.e(TAG,"response 2: " + response.body());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
+                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + jsonResponse);
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(jsonResponse);
                             mList = new ArrayList<>();
                             mAdapter = new Tap3ListAdapter(mContext,mList);
                             binding.reuseList.setAdapter(mAdapter);
                             binding.reuseList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+
                             Log.i(TAG, "SetNoticeListview Thread run! ");
                             Log.i(TAG, "GET SIZE : " + rc.placeNotiData_lists.size());
                             if(Response.length() == 0){
@@ -168,7 +173,8 @@ public class TaskReuseActivity extends AppCompatActivity {
                                             jsonObject.getString("wed"),
                                             jsonObject.getString("thu"),
                                             jsonObject.getString("fri"),
-                                            jsonObject.getString("sat")
+                                            jsonObject.getString("sat"),
+                                            jsonObject.getString("task_overdate")
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();
@@ -200,6 +206,35 @@ public class TaskReuseActivity extends AppCompatActivity {
             shardpref.putInt("make_kind",2);
             pm.TaskReuesAdd(mContext);
         });
+    }
+
+    private void RemoveShared() {
+        shardpref.remove("task_no");
+        shardpref.remove("writer_id");
+        shardpref.remove("kind");
+        shardpref.remove("title");
+        shardpref.remove("contents");
+        shardpref.remove("complete_kind");       // 0:체크, 1:사진
+        shardpref.remove("users");
+        shardpref.remove("usersn");
+        shardpref.remove("usersimg");
+        shardpref.remove("usersjikgup");
+        shardpref.remove("task_date");
+        shardpref.remove("start_time");
+        shardpref.remove("end_time");
+        shardpref.remove("sun");
+        shardpref.remove("mon");
+        shardpref.remove("tue");
+        shardpref.remove("wed");
+        shardpref.remove("thu");
+        shardpref.remove("fri");
+        shardpref.remove("sat");
+        shardpref.remove("img_path");
+        shardpref.remove("complete_yn");
+        shardpref.remove("incomplete_reason");
+        shardpref.remove("approval_state");
+        shardpref.remove("overdate");
+        shardpref.remove("make_kind");
     }
 
     @Override

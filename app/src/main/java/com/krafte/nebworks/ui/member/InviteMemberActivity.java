@@ -374,9 +374,9 @@ public class InviteMemberActivity extends AppCompatActivity {
                         String id = Response.getJSONObject(0).getString("id");
                         String token = Response.getJSONObject(0).getString("token");
                         dlog.i("-----getManagerToken-----");
-                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel4").equals("1");
                         if (!token.isEmpty() && channelId1) {
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, "4", place_id);
                         }
 
                     }

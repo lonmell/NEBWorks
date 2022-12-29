@@ -204,6 +204,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
                     setYoil = category.replace("요일", "").replace(" ", "");
                     dlog.i("setYoil : " + setYoil);
                     List<Integer> listYoil = new ArrayList<>();
+                    resultYoil.clear();
                     for(String str : setYoil.replace("[", "").replace("]", "").split(",")){
                         dlog.i("str : " + str);
                         switch (str) {
@@ -303,109 +304,6 @@ public class AddWorkPartActivity extends AppCompatActivity {
             binding.timeSetpicker1.setVisibility(View.GONE);
             binding.timeSetpicker2.setVisibility(View.VISIBLE);
         });
-
-//
-//        binding.inputbox01box.setOnClickListener(v -> {
-////            SELECTTIME01 = false;
-//            binding.inputbox01box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-//            binding.inputbox02box.setCardBackgroundColor(Color.parseColor("#ffffff"));
-////            binding.timeSetpicker1.setVisibility(View.VISIBLE);
-////            binding.timeSetpicker2.setVisibility(View.GONE);
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    sieob_get = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.selectTime01.setText(GetTime);
-//                    }
-//                }
-//            });
-//        });
-//        binding.inputbox02box.setOnClickListener(v -> {
-////            SELECTTIME01 = true;
-//            binding.inputbox01box.setCardBackgroundColor(Color.parseColor("#ffffff"));
-//            binding.inputbox02box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-////            binding.timeSetpicker1.setVisibility(View.VISIBLE);
-////            binding.timeSetpicker2.setVisibility(View.GONE);
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    jong_eob_get = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.selectTime02.setText(GetTime);
-//                    }
-//                }
-//            });
-//        });
-//
-//        binding.inputbox03box.setOnClickListener(v -> {
-////            SELECTTIME02 = false;
-//            binding.inputbox03box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-//            binding.inputbox04box.setCardBackgroundColor(Color.parseColor("#ffffff"));
-////            binding.timeSetpicker1.setVisibility(View.GONE);
-////            binding.timeSetpicker2.setVisibility(View.VISIBLE);
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    break_time_get01 = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.selectTime03.setText(GetTime);
-//                    }
-//                }
-//            });
-//        });
-//        binding.inputbox04box.setOnClickListener(v -> {
-////            SELECTTIME02 = true;
-//            binding.inputbox03box.setCardBackgroundColor(Color.parseColor("#ffffff"));
-//            binding.inputbox04box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-////            binding.timeSetpicker1.setVisibility(View.GONE);
-////            binding.timeSetpicker2.setVisibility(View.VISIBLE);
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    break_time_get02 = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.selectTime04.setText(GetTime);
-//                    }
-//                }
-//            });
-//        });
 
 
         binding.timeSetpicker1.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {

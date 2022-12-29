@@ -492,12 +492,13 @@ public class AddContractPage03 extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        shardpref.remove("progress_pos");
+
         if(!shardpref.getString("progress_pos","").isEmpty()){
             pm.ContractFragment(mContext);
         }else{
             super.onBackPressed();
         }
+        shardpref.remove("progress_pos");
     }
 
     public void Toast_Nomal(String message) {

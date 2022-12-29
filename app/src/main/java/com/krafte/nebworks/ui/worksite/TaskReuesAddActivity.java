@@ -175,6 +175,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             dlog.i("task_no : " + task_no);
             setBtnEvent();
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+            dlog.i("TaskReuesAddActivity toDay : " + toDay);
             WorkDay = toDay;
             binding.storeName.setText(place_name);
             binding.memberSelectArea.setVisibility(View.GONE);
@@ -232,7 +233,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                 binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
                 binding.reportVisible.setVisibility(View.VISIBLE);
                 TaskKind = "1";
-                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
                 binding.select01.setTextColor(Color.parseColor("#ffffff"));
             } else {
                 NeedReportTF = false;
@@ -245,17 +246,17 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         binding.select01Box.setOnClickListener(v -> {
             TaskKind = "1";
             dlog.i("select01Box click [TaskKind : " + TaskKind + "]");
-            binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
             binding.select01.setTextColor(Color.parseColor("#ffffff"));
-            binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
             binding.select02.setTextColor(Color.parseColor("#000000"));
         });
         binding.select02Box.setOnClickListener(v -> {
             TaskKind = "0";
             dlog.i("select02Box click [TaskKind : " + TaskKind + "]");
-            binding.select01Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
             binding.select01.setTextColor(Color.parseColor("#000000"));
-            binding.select02Box.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round);
             binding.select02.setTextColor(Color.parseColor("#ffffff"));
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
@@ -732,7 +733,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                         dlog.i("------------------SaveAddWork12------------------");
                         Call<String> call = api.getData(place_id, USER_INFO_ID, WorkTitle, WorkContents, TaskKind
                                 , toDay, start_time, end_time
-                                , Sun, Mon, Tue, Wed, Thu, Fri, Sat);
+                                , Sun, Mon, Tue, Wed, Thu, Fri, Sat,overdate);
                         call.enqueue(new Callback<String>() {
                             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
                             @Override

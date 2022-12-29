@@ -426,10 +426,10 @@ public class WorkAssigmentContentsPop extends Activity {
                         String position = shardpref.getString("USER_INFO_JIKGUP","");
                         String name = shardpref.getString("USER_INFO_NAME","");
                         dlog.i("-----getManagerToken-----");
-                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId1) {
                             String message = department + " " + position + " " + name + " 님 " + place_name + "에서 업무가 배정되었습니다.";
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, "2", place_id);
                         }
                     }
                 } catch (JSONException e) {

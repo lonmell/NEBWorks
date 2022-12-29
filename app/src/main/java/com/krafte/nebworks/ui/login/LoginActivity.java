@@ -472,7 +472,7 @@ public class LoginActivity extends AppCompatActivity {
                                         String platform = Response.getJSONObject(0).getString("platform");
                                         binding.loginAlertText.setVisibility(View.GONE);
                                         if (name.isEmpty() || phone.isEmpty()) {
-                                            shardpref.putString("editstate","edit");
+                                            shardpref.putString("editstate","newPro");
                                             pm.ProfileEdit(mContext);
                                         } else {
                                             pm.AuthSelect(mContext);

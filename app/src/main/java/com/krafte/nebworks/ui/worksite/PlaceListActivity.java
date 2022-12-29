@@ -512,10 +512,10 @@ public class PlaceListActivity extends AppCompatActivity {
                     id = Response.getJSONObject(0).getString("id");
 
                     String token = Response.getJSONObject(0).getString("token");
-                    boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                    boolean channelId1 = Response.getJSONObject(0).getString("channel4").equals("1");
                     if (!token.isEmpty() && channelId1) {
                         String message = name + " 님이 " + place_name + " 매장에 참여하셨습니다";
-                        PushFcmSend(id, "", message, token, "1", place_id);
+                        PushFcmSend(id, "", message, token, "4", place_id);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

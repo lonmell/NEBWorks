@@ -131,6 +131,7 @@ public class Tap3ListAdapter extends RecyclerView.Adapter<Tap3ListAdapter.ViewHo
                 shardpref.putString("thu" ,item.getThu());
                 shardpref.putString("fri" ,item.getFri());
                 shardpref.putString("sat" ,item.getSat());
+                shardpref.putString("overdate" ,item.getTask_overdate());
                 Intent intent = new Intent(mContext, Tap3OptionActivity.class);
                 mContext.startActivity(intent);
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
@@ -162,6 +163,7 @@ public class Tap3ListAdapter extends RecyclerView.Adapter<Tap3ListAdapter.ViewHo
                 shardpref.putString("thu" ,item.getThu());
                 shardpref.putString("fri" ,item.getFri());
                 shardpref.putString("sat" ,item.getSat());
+                shardpref.putString("overdate" ,item.getTask_overdate());
                 shardpref.putString("return_page","task_reuse");
                 shardpref.putInt("make_kind",1);
                 pm.addWorkGo(mContext);

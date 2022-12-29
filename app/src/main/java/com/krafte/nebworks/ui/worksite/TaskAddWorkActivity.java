@@ -394,8 +394,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
     Calendar cal;
     String format = "yyyy-MM";
+    String format2 = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
-
+    SimpleDateFormat sdf2 = new SimpleDateFormat(format2);
     @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
@@ -552,7 +553,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     private void getTaskContents() {
         dlog.i("-----getTaskContents START-----");
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        task_no = shardpref.getString("task_no", "");
+        task_no = shardpref.getString("task_no", "0");
         writer_id = shardpref.getString("writer_id", "");
         WorkTitle = shardpref.getString("title", "");
         WorkContents = shardpref.getString("contents", "");
@@ -773,6 +774,15 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         dlog.i("sat : " + Sat);
         dlog.i("users : " + user_id);
         dlog.i("overdate : " + overdate);
+        if(overdate.isEmpty()){
+            cal.add(Calendar.DATE, +1);
+            String toDay = sdf.format(cal.getTime());
+            String Year = toDay.substring(0,4);
+            String Month = toDay.substring(5,7);
+            String Day = toDay.substring(8,10);
+            overdate = Year + "-" + Month + "-" + Day;
+            dlog.i("overdate 2 : " + overdate);
+        }
         if (USER_INFO_AUTH.equals("1")) {
             user_id = USER_INFO_ID;
         }
@@ -982,6 +992,10 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
     private boolean SaveCheck() {
         String getYoil = shardpref.getString("yoillist", "").replace("  ", "").replace("[", "").replace("]", "");
+        if(WorkDay.isEmpty()){
+            WorkDay = toDay;
+        }
+        dlog.i("WorkDay : " + WorkDay);
         dlog.i("yoillist : " + yoillist);
         Sun = "0";
         Mon = "0";
@@ -1148,10 +1162,10 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                         String id = Response.getJSONObject(0).getString("id");
                         String token = Response.getJSONObject(0).getString("token");
                         dlog.i("-----getManagerToken-----");
-                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId1) {
                             String message = "[" + user_name + "] 님 " + place_name + "에서 업무가 배정되었습니다.";
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, "2", place_id);
                         }
                     }
                 } catch (JSONException e) {

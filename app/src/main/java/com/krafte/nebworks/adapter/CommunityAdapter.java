@@ -127,6 +127,11 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
                 holder.like_icon.setBackgroundResource(R.drawable.ic_like_on);
             }
 
+            if(USER_INFO_ID.equals(item.getWriter_id())){
+                holder.list_setting.setVisibility(View.VISIBLE);
+            }else{
+                holder.list_setting.setVisibility(View.GONE);
+            }
             holder.list_setting.setOnClickListener(v -> {
                 shardpref.putString("feed_id",item.getId());
                 shardpref.putString("place_id",item.getPlace_id());

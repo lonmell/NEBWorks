@@ -525,12 +525,12 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetCommentList jsonResponse length : " + response.body().length());
-                            dlog.i("GetCommentList jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetCommentList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetCommentList jsonResponse : " + jsonResponse);
                             try {
                                 //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(response.body());
+                                JSONArray Response = new JSONArray(jsonResponse);
 
                                 mList = new ArrayList<>();
                                 mAdapter = new WorkCommentListAdapter(mContext, mList, mem_id, opnclo);

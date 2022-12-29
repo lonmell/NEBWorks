@@ -130,12 +130,13 @@ public class AddContractPage09 extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        shardpref.remove("progress_pos");
+
         if(!shardpref.getString("progress_pos","").isEmpty()){
             pm.ContractFragment(mContext);
         }else{
             super.onBackPressed();
         }
+        shardpref.remove("progress_pos");
     }
 
     private void RemoveShared(){
@@ -228,9 +229,9 @@ public class AddContractPage09 extends AppCompatActivity {
                         String id = Response.getJSONObject(0).getString("id");
                         String token = Response.getJSONObject(0).getString("token");
                         dlog.i("-----getManagerToken-----");
-                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId1) {
-                            PushFcmSend(id, "", message, token, "1", place_id);
+                            PushFcmSend(id, "", message, token, "2", place_id);
                         }
                     }
                 } catch (JSONException e) {

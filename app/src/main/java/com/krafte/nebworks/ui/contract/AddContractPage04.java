@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.YoilStringAdapter;
-import com.krafte.nebworks.bottomsheet.WorkTimePicker;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.StringData;
 import com.krafte.nebworks.dataInterface.ContractWorkInterface;
@@ -217,6 +217,8 @@ public class AddContractPage04 extends AppCompatActivity {
     String restendtime = "";
     String work_contents = "";
     String GetTime = "";
+    int SELECT_POS = -1;
+
     private void setBtnEvent(){
         Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
@@ -237,6 +239,7 @@ public class AddContractPage04 extends AppCompatActivity {
         }, mYear, mMonth, mDay);
 
         binding.select01date.setOnClickListener(v -> {
+            binding.timeSetpicker.setVisibility(View.GONE);
             if(binding.select01date.getText().toString().length() == 0){
                 binding.select01date.setText(mYear + "-" + (String.valueOf(mMonth).length() == 1?"0"+mMonth:mMonth) + "-"
                         + (String.valueOf(mDay).length() == 1?"0"+String.valueOf(mDay):String.valueOf(mDay)));
@@ -259,6 +262,7 @@ public class AddContractPage04 extends AppCompatActivity {
         }, mYear, mMonth, mDay);
 
         binding.select02date.setOnClickListener(v -> {
+            binding.timeSetpicker.setVisibility(View.GONE);
             if(binding.select02date.getText().toString().length() == 0){
                 binding.select02date.setText(mYear + "-" + (String.valueOf(mMonth).length() == 1?"0"+mMonth:mMonth) + "-"
                         + (String.valueOf(mDay).length() == 1?"0"+String.valueOf(mDay):String.valueOf(mDay)));
@@ -268,6 +272,7 @@ public class AddContractPage04 extends AppCompatActivity {
         });
 
         binding.select03.setOnClickListener(v -> {
+            binding.timeSetpicker.setVisibility(View.GONE);
             if(contract_type.equals("0")){
                 contract_type = "1";
                 binding.select03Round.setBackgroundResource(R.drawable.resize_service_on);
@@ -278,105 +283,137 @@ public class AddContractPage04 extends AppCompatActivity {
         });
 
         binding.wtime01time.setOnClickListener(v -> {
-            WorkTimePicker wtp = new WorkTimePicker();
-            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-                @Override
-                public void onClick(View v, String hour, String min) {
-                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-                    shardpref.remove("timeSelect_flag");
-                    shardpref.remove("hourOfDay");
-                    shardpref.remove("minute");
-                    GetTime = Time01 + ":" + Time02;
-                    shardpref.putString("input_pop_time",GetTime);
-                    if (!hour.equals("0")) {
-                        binding.wtime01time.setText(GetTime);
-                    }
-                }
-            });
+            SELECT_POS = 0;
+            binding.timeSetpicker.setVisibility(View.VISIBLE);
+//            WorkTimePicker wtp = new WorkTimePicker();
+//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+//                @Override
+//                public void onClick(View v, String hour, String min) {
+//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("hourOfDay");
+//                    shardpref.remove("minute");
+//                    GetTime = Time01 + ":" + Time02;
+//                    shardpref.putString("input_pop_time",GetTime);
+//                    if (!hour.equals("0")) {
+//                        binding.wtime01time.setText(GetTime);
+//                    }
+//                }
+//            });
 //            Intent intent = new Intent(this, WorkTimePicker.class);
 //            intent.putExtra("timeSelect_flag", 1);
 //            startActivity(intent);
 //            overridePendingTransition(R.anim.translate_up, 0);
         });
         binding.wtime02time.setOnClickListener(v -> {
-            WorkTimePicker wtp = new WorkTimePicker();
-            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-                @Override
-                public void onClick(View v, String hour, String min) {
-                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-                    shardpref.remove("timeSelect_flag");
-                    shardpref.remove("hourOfDay");
-                    shardpref.remove("minute");
-                    GetTime = Time01 + ":" + Time02;
-                    shardpref.putString("input_pop_time",GetTime);
-                    if (!hour.equals("0")) {
-                        binding.wtime02time.setText(GetTime);
-                    }
-                }
-            });
+            SELECT_POS = 1;
+            binding.timeSetpicker.setVisibility(View.VISIBLE);
+//            WorkTimePicker wtp = new WorkTimePicker();
+//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+//                @Override
+//                public void onClick(View v, String hour, String min) {
+//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("hourOfDay");
+//                    shardpref.remove("minute");
+//                    GetTime = Time01 + ":" + Time02;
+//                    shardpref.putString("input_pop_time",GetTime);
+//                    if (!hour.equals("0")) {
+//                        binding.wtime02time.setText(GetTime);
+//                    }
+//                }
+//            });
 //            Intent intent = new Intent(this, WorkTimePicker.class);
 //            intent.putExtra("timeSelect_flag", 2);
 //            startActivity(intent);
 //            overridePendingTransition(R.anim.translate_up, 0);
         });
         binding.resttime01time.setOnClickListener(v -> {
-            WorkTimePicker wtp = new WorkTimePicker();
-            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-                @Override
-                public void onClick(View v, String hour, String min) {
-                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-                    shardpref.remove("timeSelect_flag");
-                    shardpref.remove("hourOfDay");
-                    shardpref.remove("minute");
-                    GetTime = Time01 + ":" + Time02;
-                    shardpref.putString("input_pop_time",GetTime);
-                    if (!hour.equals("0")) {
-                        binding.resttime01time.setText(GetTime);
-                    }
-                }
-            });
+            SELECT_POS = 2;
+            binding.timeSetpicker.setVisibility(View.VISIBLE);
+//            WorkTimePicker wtp = new WorkTimePicker();
+//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+//                @Override
+//                public void onClick(View v, String hour, String min) {
+//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("hourOfDay");
+//                    shardpref.remove("minute");
+//                    GetTime = Time01 + ":" + Time02;
+//                    shardpref.putString("input_pop_time",GetTime);
+//                    if (!hour.equals("0")) {
+//                        binding.resttime01time.setText(GetTime);
+//                    }
+//                }
+//            });
 //            Intent intent = new Intent(this, WorkTimePicker.class);
 //            intent.putExtra("timeSelect_flag", 3);
 //            startActivity(intent);
 //            overridePendingTransition(R.anim.translate_up, 0);
         });
         binding.resttime02time.setOnClickListener(v -> {
-            WorkTimePicker wtp = new WorkTimePicker();
-            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-                @Override
-                public void onClick(View v, String hour, String min) {
-                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-                    shardpref.remove("timeSelect_flag");
-                    shardpref.remove("hourOfDay");
-                    shardpref.remove("minute");
-                    GetTime = Time01 + ":" + Time02;
-                    shardpref.putString("input_pop_time",GetTime);
-                    if (!hour.equals("0")) {
-                        binding.resttime02time.setText(GetTime);
-                    }
-                }
-            });
+            SELECT_POS = 4;
+            binding.timeSetpicker.setVisibility(View.VISIBLE);
+//            WorkTimePicker wtp = new WorkTimePicker();
+//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+//                @Override
+//                public void onClick(View v, String hour, String min) {
+//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("hourOfDay");
+//                    shardpref.remove("minute");
+//                    GetTime = Time01 + ":" + Time02;
+//                    shardpref.putString("input_pop_time",GetTime);
+//                    if (!hour.equals("0")) {
+//                        binding.resttime02time.setText(GetTime);
+//                    }
+//                }
+//            });
 //            Intent intent = new Intent(this, WorkTimePicker.class);
 //            intent.putExtra("timeSelect_flag", 4);
 //            startActivity(intent);
 //            overridePendingTransition(R.anim.translate_up, 0);
         });
 
+        binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                String HOUR = String.valueOf(hourOfDay);
+                String MIN = String.valueOf(minute);
+                binding.timeSetpicker.clearFocus();
+                if (SELECT_POS == 0) {
+                    //근무시작시간
+                    binding.wtime01time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
+                } else if (SELECT_POS == 1) {
+                    //근무종료시간
+                    binding.wtime02time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
+                } else if (SELECT_POS == 3) {
+                    //근무종료시간
+                    binding.resttime01time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
+                } else if (SELECT_POS == 4) {
+                    //근무종료시간
+                    binding.resttime02time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
+                }
+            }
+        });
+
         binding.next.setOnClickListener(v -> {
+            binding.timeSetpicker.setVisibility(View.GONE);
             if(DataCheck()){
                 SaveContractWork();
             }
         });
 
         binding.backBtn.setOnClickListener(v -> {
+            binding.timeSetpicker.setVisibility(View.GONE);
             shardpref.remove("progress_pos");
             if(!shardpref.getString("progress_pos","").isEmpty()){
                 pm.ContractFragment(mContext);
@@ -479,12 +516,13 @@ public class AddContractPage04 extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
-        shardpref.remove("progress_pos");
+
         if(!shardpref.getString("progress_pos","").isEmpty()){
             pm.ContractFragment(mContext);
         }else{
             super.onBackPressed();
         }
+        shardpref.remove("progress_pos");
     }
 
     public void Toast_Nomal(String message) {

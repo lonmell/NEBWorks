@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
+import com.krafte.nebworks.bottomsheet.WorkstatusBottomSheet;
 import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
@@ -349,12 +350,6 @@ public class WorkstatusFragment extends Fragment {
         });
     }
 
-    ArrayList<String> user_id = new ArrayList<>();
-    ArrayList<String> user_name = new ArrayList<>();
-    ArrayList<String> img_path = new ArrayList<>();
-    ArrayList<String> jikgup = new ArrayList<>();
-    ArrayList<String> worktime = new ArrayList<>();
-    ArrayList<String> workyoil = new ArrayList<>();
     public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList2) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalenderInterface.URL)
@@ -401,6 +396,20 @@ public class WorkstatusFragment extends Fragment {
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();
+                                mAdapter.setOnItemClickListener(new WorkStatusCalenderAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                                        try{
+                                            dlog.i("onItemClick WorkDay :" + WorkDay);
+                                            shardpref.putString("FtoDay",WorkDay);
+                                            WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
+                                            wsb.show(getChildFragmentManager(),"WorkstatusBottomSheet");
+                                        }catch (Exception e){
+                                            dlog.i("onItemClick Exception :" + e);
+                                        }
+
+                                    }
+                                });
                             }
                         }catch (JSONException e){
                             dlog.i("JSONException :" + e);

@@ -435,10 +435,10 @@ public class MainFragment extends AppCompatActivity {
             pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
             drawerLayout.closeDrawer(drawerView);
+            binding.title.setText("할일");
             shardpref.putString("Tap", "1");
             shardpref.putInt("SELECT_POSITION",1);
             binding.tabLayout.getTabAt(1).select();
-            shardpref.putInt("SELECT_POSITION",1);
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
             drawerLayout.closeDrawer(drawerView);
             pm.addWorkGo(mContext);

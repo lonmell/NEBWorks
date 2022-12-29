@@ -137,7 +137,9 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                         7 - 완료
                     * */
                     if(USER_INFO_AUTH.equals("0")){
-                        if(item.getProgress_pos().equals("1")){
+                        if(item.getProgress_pos().equals("0")){
+                            pm.AddContractPage03(mContext);
+                        }else if(item.getProgress_pos().equals("1")){
                             //근무 기본사항 부터
                             pm.AddContractPage04(mContext);
                         }else if(item.getProgress_pos().equals("2")){
