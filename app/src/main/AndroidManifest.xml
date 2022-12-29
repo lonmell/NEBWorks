@@ -246,6 +246,7 @@
 
         <!-- workstatus-->
         <activity android:name=".ui.workstatus.AddWorkPartActivity" />
+        <activity android:name=".ui.workstatus.AddDatePartActivity" />
 
         <!-- 팝업 영역 -->
         <activity
