@@ -503,7 +503,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                     CallNum = owner_phone;
                                 }
 
-                                binding.userPhone.setOnClickListener(v -> {
+                                binding.userCall.setOnClickListener(v -> {
                                     Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:"+ CallNum));
                                     mContext.startActivity(mIntent);
                                 });

@@ -73,11 +73,11 @@
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
             android:padding="5dp"
-            android:text="직급"
+            android:text="근무시간"
             android:textColor="#696969"
             android:textSize="13sp" />
         <TextView
-            android:id="@+id/jikgup"
+            android:id="@+id/worktime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -105,11 +105,43 @@
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
             android:padding="5dp"
-            android:text="근무일"
+            android:text="출근시간"
             android:textColor="#696969"
             android:textSize="13sp" />
         <TextView
-            android:id="@+id/pay"
+            android:id="@+id/inTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/member_thumnail"
+        android:layout_below="@+id/linear02">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="퇴근시간"
+            android:textColor="#696969"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/outTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"

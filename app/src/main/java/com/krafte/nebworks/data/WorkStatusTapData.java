@@ -15,11 +15,15 @@ public class WorkStatusTapData {
         String yoil             = "";
         String io_date          = "";
         String io_time          = "";
+        String in_time          = "";
+        String out_time         = "";
+        String worktime         = "";
         String commuting        = "";
 
 
         public WorkStatusTapData_list(String id, String place_id, String place_name, String user_id, String name, String account, String img_path, String kind
-                , String jikgup, String join_date, String yoil, String io_date, String io_time, String commuting) {
+                , String jikgup, String join_date, String yoil, String io_date, String io_time
+                , String in_time, String out_time, String worktime, String commuting) {
             this.id         = id;
             this.place_id   = place_id;
             this.place_name = place_name;
@@ -33,6 +37,9 @@ public class WorkStatusTapData {
             this.yoil       = yoil;
             this.io_date    = io_date;
             this.io_time    = io_time;
+            this.in_time    = in_time;
+            this.out_time   = out_time;
+            this.worktime   = worktime;
             this.commuting  = commuting;
         }
 
@@ -138,6 +145,30 @@ public class WorkStatusTapData {
 
         public void setIo_time(String io_time) {
             this.io_time = io_time;
+        }
+
+        public String getIn_time() {
+            return in_time;
+        }
+
+        public void setIn_time(String in_time) {
+            this.in_time = in_time;
+        }
+
+        public String getOut_time() {
+            return out_time;
+        }
+
+        public void setOut_time(String out_time) {
+            this.out_time = out_time;
+        }
+
+        public String getWorktime() {
+            return worktime;
+        }
+
+        public void setWorktime(String worktime) {
+            this.worktime = worktime;
         }
 
         public String getCommuting() {

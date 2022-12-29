@@ -99,7 +99,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
                     .skipMemoryCache(true)
                     .into(holder.user_thumnail);
 
-            holder.jikgup.setText(item.getJikgup().equals("null") ? "미정" : item.getJikgup());
+            holder.worktime.setText(item.getWorktime().equals("null")?"":item.getWorktime());
 
             yoil.addAll(Arrays.asList(item.getYoil().split(",")));
 
@@ -117,7 +117,8 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
                 holder.state_tv.setTextColor(Color.parseColor("#DD6540"));
                 holder.state.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
             }
-            holder.pay.setText(item.getYoil().isEmpty() ? "" : item.getYoil());
+            holder.inTime.setText(item.getIn_time().equals("null")?"":item.getIn_time());
+            holder.outTime.setText(item.getOut_time().equals("null")?"":item.getOut_time());
             holder.state_tv.setText(state);
 
             if(USER_INFO_AUTH.equals("0")){
@@ -147,7 +148,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, jikgup, pay, state_tv;
+        TextView name, worktime, inTime, outTime, state_tv;
         CardView add_detail, state, edit_linear;
         RelativeLayout list_setting, item_total;
         LinearLayout linear01, linear02;
@@ -158,8 +159,9 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             // 뷰 객체에 대한 참조
             item_total = itemView.findViewById(R.id.item_total);
             name = itemView.findViewById(R.id.name);
-            jikgup = itemView.findViewById(R.id.jikgup);
-            pay = itemView.findViewById(R.id.pay);
+            worktime = itemView.findViewById(R.id.worktime);
+            inTime = itemView.findViewById(R.id.inTime);
+            outTime = itemView.findViewById(R.id.outTime);
             state_tv = itemView.findViewById(R.id.state_tv);
             add_detail = itemView.findViewById(R.id.add_detail);
             state = itemView.findViewById(R.id.state);

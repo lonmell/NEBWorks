@@ -197,6 +197,9 @@ public class WorkStatusSubFragment4 extends Fragment {
                                                 jsonObject.getString("yoil"),
                                                 jsonObject.getString("io_date"),
                                                 jsonObject.getString("io_time"),
+                                                jsonObject.getString("in_time"),
+                                                jsonObject.getString("out_time"),
+                                                jsonObject.getString("worktime"),
                                                 jsonObject.getString("commuting")
                                         ));
                                     }
