@@ -457,13 +457,13 @@ public class WorkgotoFragment extends Fragment {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
-                String jsonResponse = rc.getBase64decode(response2.body());
-                dlog.i("jsonResponse length : " + jsonResponse.length());
-                dlog.i("jsonResponse : " + jsonResponse);
-                dlog.i( "SetCalenderData function START");
                 activity.runOnUiThread(() -> {
                     //캘린더 내용 (업무가) 있을때
-                    if (response2.isSuccessful() && jsonResponse != null) {
+                    if (response2.isSuccessful() && response2.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response2.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
+                        dlog.i( "SetCalenderData function START");
                         try {
                             JSONArray Response2 = new JSONArray(jsonResponse);
                             if (Response2.length() == 0) {

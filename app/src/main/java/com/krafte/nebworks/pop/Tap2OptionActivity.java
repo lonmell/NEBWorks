@@ -22,6 +22,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.text.DecimalFormat;
 
@@ -144,7 +145,7 @@ public class Tap2OptionActivity extends Activity {
         });
     }
 
-
+    RetrofitConnect rc = new RetrofitConnect();
     public void TaskDel(String id) {
         dlog.i("TaskDel id : " + id);
         Retrofit retrofit = new Retrofit.Builder()
@@ -160,8 +161,9 @@ public class Tap2OptionActivity extends Activity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
-                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 if(response.body().replace("\"","").equals("success")){
                                     Toast.makeText(mContext,"해당 업무가 삭제완료되었습니다.",Toast.LENGTH_SHORT).show();

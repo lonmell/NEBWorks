@@ -104,19 +104,24 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             }
             holder.rank_tv.setText(String.valueOf(position+1));
 
-            holder.title.setText(item.getTitle());
+            holder.title.setText(item.getTitle().equals("null")?"":item.getTitle());
 
-            holder.write_date.setText(item.getCreated_at());
+            holder.write_date.setText(item.getCreated_at().equals("null")?"":item.getCreated_at());
 
             Glide.with(mContext).load(item.getWriter_img_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .placeholder(R.drawable.identificon)
                     .skipMemoryCache(true)
                     .into(holder.profile_img);
-            holder.name.setText(item.getWriter_name());
+            holder.name.setText(item.getWriter_name().equals("null")?"":item.getWriter_name());
 
-            holder.contents.setText(item.getContents());
-            holder.categorytv.setText("#" + item.getCategory());
+            holder.contents.setText(item.getContents().equals("null")?"":item.getContents());
+            if(!item.getCategory().isEmpty()){
+                holder.categorytv.setText("#" + item.getCategory());
+            }else{
+                holder.category_box.setVisibility(View.GONE);
+            }
+
             holder.view_com.setText("조회수 " + item.getView_cnt() + " / 댓글 " + item.getComment_cnt());
 
             holder.like_cnt.setText(item.getLike_cnt());
@@ -129,8 +134,12 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
             if(USER_INFO_ID.equals(item.getWriter_id())){
                 holder.list_setting.setVisibility(View.VISIBLE);
+                holder.list_setting.setClickable(true);
+                holder.list_setting.setEnabled(true);
             }else{
-                holder.list_setting.setVisibility(View.GONE);
+                holder.list_setting.setVisibility(View.INVISIBLE);
+                holder.list_setting.setClickable(false);
+                holder.list_setting.setEnabled(false);
             }
             holder.list_setting.setOnClickListener(v -> {
                 shardpref.putString("feed_id",item.getId());

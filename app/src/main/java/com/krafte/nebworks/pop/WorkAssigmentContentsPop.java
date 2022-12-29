@@ -234,10 +234,12 @@ public class WorkAssigmentContentsPop extends Activity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.e("onSuccess : ", response.body());
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
 
                             mList = new ArrayList<>();
                             mAdapter = new AssignmentMemberAdapter(mContext, mList);
@@ -339,11 +341,10 @@ public class WorkAssigmentContentsPop extends Activity {
                         @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
                         @Override
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                            dlog.e("setRecyclerView function START");
-                            dlog.e("response 1: " + response.isSuccessful());
-                            dlog.e("response 2: " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             if (response.isSuccessful() && response.body() != null) {
-                                String jsonResponse = response.body();
                                 if (jsonResponse.replace("\"", "").equals("success")) {
 //                                            getEmployeeToken(SelectEmployeeid);
 //                                            message = "업무가 배정되었습니다.";
@@ -413,9 +414,11 @@ public class WorkAssigmentContentsPop extends Activity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 try {
-                    JSONArray Response = new JSONArray(response.body());
+                    JSONArray Response = new JSONArray(jsonResponse);
                     if(Response.length() > 0){
                         dlog.i("-----getManagerToken-----");
                         dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));

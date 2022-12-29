@@ -113,6 +113,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
+                        android:visibility="invisible"
+                        android:clickable="false"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -120,6 +122,7 @@
                             android:id="@+id/refresh_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:clickable="false"
                             android:background="@drawable/ic_refresh_btn"
                             android:scaleType="fitXY" />
                     </LinearLayout>

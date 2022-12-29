@@ -319,10 +319,10 @@ public class HomeFragment2 extends Fragment {
                             binding.ioArea.setVisibility(View.VISIBLE);
                         } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
                             if (response.isSuccessful() && jsonResponse != null) {
-                                dlog.i("InOutLogMember jsonResponse length : " + response.body().length());
-                                dlog.i("InOutLogMember jsonResponse : " + response.body());
+                                dlog.i("InOutLogMember jsonResponse length : " + jsonResponse.length());
+                                dlog.i("InOutLogMember jsonResponse : " + jsonResponse);
                                 try {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     kind = Response.getJSONObject(0).getString("kind");
                                     dlog.i("InOutLogMember kind : " + kind);
                                     if (kind.equals("1")) {

@@ -655,12 +655,12 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("FcmStateSelect jsonResponse length : " + response.body().length());
-                            dlog.i("FcmStateSelect jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
 
-                                if (response.body().replace("[", "").replace("]", "").length() == 0) {
+                                if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
                                     id = place_id;
                                     user_id = USER_INFO_ID;
                                     get_token = "";
@@ -670,7 +670,7 @@ public class HomeFragment extends Fragment {
                                     channel3 = "1";
                                     channel4 = "1";
                                 } else {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     id = Response.getJSONObject(0).getString("id");
                                     user_id = Response.getJSONObject(0).getString("user_id");
                                     type = Response.getJSONObject(0).getString("type");

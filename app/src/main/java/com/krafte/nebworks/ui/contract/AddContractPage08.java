@@ -170,10 +170,10 @@ public class AddContractPage08 extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-//                    String jsonResponse = rc.getBase64decode(response.body());
+                    String jsonResponse = rc.getBase64decode(response.body());
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(jsonResponse);
                         if (!Response.toString().equals("[]")) {
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
@@ -215,11 +215,11 @@ public class AddContractPage08 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UpdatePagePos jsonResponse length : " + response.body().length());
-                            dlog.i("UpdatePagePos jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UpdatePagePos jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UpdatePagePos jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     saveBitmapAndGetURI();
                                     if(USER_INFO_AUTH.equals("0")){
                                         //fcm으로 알림 메세지 보내기
@@ -265,9 +265,11 @@ public class AddContractPage08 extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 try {
-                    JSONArray Response = new JSONArray(response.body());
+                    JSONArray Response = new JSONArray(jsonResponse);
                     if (Response.length() > 0) {
                         dlog.i("-----getManagerToken-----");
                         dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
@@ -308,8 +310,9 @@ public class AddContractPage08 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
-                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                         }
                     });
                 }

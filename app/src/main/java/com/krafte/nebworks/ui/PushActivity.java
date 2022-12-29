@@ -20,6 +20,7 @@ import com.krafte.nebworks.databinding.ActivityPushBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -150,6 +151,7 @@ public class PushActivity extends AppCompatActivity {
     String channel3 = "";
     String channel4 = "";
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void getPushBoolean() {
         type = USER_INFO_ID.equals(place_owner_id)?"0":"1";
 
@@ -163,7 +165,9 @@ public class PushActivity extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 try {
                     JSONArray Response = new JSONArray(response.body());
                     Log.i(TAG, "user_id : " + Response.getJSONObject(0).getString("user_id"));
@@ -212,8 +216,10 @@ public class PushActivity extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
-                if (response.body().replace("\"", "").equals("success")) {
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+                if (jsonResponse.replace("\"", "").equals("success")) {
                     Log.i(TAG, "channelId1 : " + channel1);
                     Log.i(TAG, "channelId2 : " + channel2);
                     Log.i(TAG, "channelId3 : " + channel3);

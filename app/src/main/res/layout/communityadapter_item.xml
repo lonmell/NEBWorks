@@ -40,14 +40,14 @@
         android:gravity="start|center"
         android:text="0"
         android:textColor="@color/black"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:id="@+id/list_setting"
         android:layout_width="35dp"
         android:layout_height="30dp"
-        android:layout_marginTop="25dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="15dp">
 
         <ImageView
@@ -113,14 +113,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_area"
         android:layout_alignStart="@+id/profile_area"
-        android:layout_alignEnd="@+id/list_setting"
+        android:layout_toStartOf="@+id/list_setting"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/inter_regular"
         android:gravity="start|center"
         android:maxLines="4"
         android:text="contents"
         android:textColor="@color/black"
-        android:textSize="13sp" />
+        android:textSize="14sp" />
     <LinearLayout
         android:id="@+id/category_box"
         android:layout_width="wrap_content"
@@ -141,7 +141,10 @@
             android:gravity="start|top"
             android:textSize="15sp"
             android:text="#category"
-            android:padding="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:textColor="@color/blue" />
     </LinearLayout>
 

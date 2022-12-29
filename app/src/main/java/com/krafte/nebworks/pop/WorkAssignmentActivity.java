@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.security.identity.ResultData;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -19,11 +18,11 @@ import androidx.fragment.app.FragmentManager;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.TaskDelInterface;
-import com.krafte.nebworks.dataInterface.UserDelInterface;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.text.DecimalFormat;
 
@@ -146,7 +145,7 @@ public class WorkAssignmentActivity extends Activity {
         });
     }
 
-
+    RetrofitConnect rc = new RetrofitConnect();
     public void TaskDel(String id) {
         dlog.i("TaskDel id : " + id);
         Retrofit retrofit = new Retrofit.Builder()
@@ -160,12 +159,14 @@ public class WorkAssignmentActivity extends Activity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
+
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
-                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     Toast.makeText(mContext,"해당 업무가 삭제완료되었습니다.",Toast.LENGTH_SHORT).show();
                                     finish();
                                     Intent intent = new Intent();

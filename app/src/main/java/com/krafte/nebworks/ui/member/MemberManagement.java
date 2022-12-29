@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -194,10 +193,12 @@ public class MemberManagement extends AppCompatActivity {
                 dlog.e( "WorkTapListFragment1 / setRecyclerView");
                 dlog.e( "response 1: " + response.isSuccessful());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    dlog.e( "GetWorkStateInfo function onSuccess : " + response.body());
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(jsonResponse);
                         if(!response.body().equals("[]")){
                             String NotRead = Response.getJSONObject(0).getString("notread_feed");
                             if(NotRead.equals("0")){
@@ -244,7 +245,6 @@ public class MemberManagement extends AppCompatActivity {
                         dlog.e("GetInsurancePercent function START");
                         dlog.e("response 1: " + response.isSuccessful());
                         dlog.e("response 2: " + rc.getBase64decode(response.body()));
-                        Log.e("onSuccess : ", response.body());
                         try {
                             String jsonResponse = rc.getBase64decode(response.body());
                             //Array데이터를 받아올 때
