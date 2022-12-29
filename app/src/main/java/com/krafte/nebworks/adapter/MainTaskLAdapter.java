@@ -75,13 +75,14 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
             holder.title.setText(item.getTitle());
             String endhour = "";
             String endmin = "";
-            if(!item.getEnd_hour().isEmpty()){
+            if (!item.getEnd_hour().isEmpty() && !item.getEnd_min().isEmpty()) {
                 endhour = item.getEnd_hour() + "시";
-            }
-            if(!item.getEnd_min().isEmpty()){
                 endmin = item.getEnd_min() + "분";
+                holder.date.setText(item.getEnd_date() + " | " + endhour + endmin);
+            } else {
+                String date = item.getEnd_date().replace("년 월 일", "");
+                holder.date.setText("[반복할일] " + date + "까지");
             }
-            holder.date.setText(item.getEnd_date() + " | " + endhour + endmin);
 
             if(position == 0){
                 holder.itemline.setVisibility(View.GONE);
