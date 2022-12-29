@@ -184,7 +184,7 @@
 <!--                android:background="@drawable/addmemberbtn" />-->
             <include
                 android:id="@+id/add_btn"
-                layout="@layout/addbtn"/>
+                layout="@layout/addbtn" />
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

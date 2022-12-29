@@ -88,6 +88,10 @@ public class DeleteUserActivity extends AppCompatActivity {
             }
 
         });
+
+        binding.backBtn.setOnClickListener( v-> {
+            onBackPressed();
+        });
     }
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
@@ -101,5 +105,10 @@ public class DeleteUserActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

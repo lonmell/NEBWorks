@@ -158,6 +158,8 @@ public class TaskReportDetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        binding.title.setText("결재 상세");
     }
 
 

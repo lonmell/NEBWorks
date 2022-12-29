@@ -413,6 +413,7 @@ public class MainFragment extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION",4);
         } else if (view.getId() == R.id.select_nav01) {
             drawerLayout.closeDrawer(drawerView);
+            shardpref.putString("event", "out_store");
             pm.PlaceList(mContext);
         } else if (view.getId() == R.id.select_nav02) {
             drawerLayout.closeDrawer(drawerView);

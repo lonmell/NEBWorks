@@ -366,6 +366,7 @@ public class HomeFragment2 extends Fragment {
         });
         binding.itemArea.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH", "1");
+            shardpref.putString("event", "out_store");
             pm.PlaceList(mContext);
         });
 
@@ -405,6 +406,11 @@ public class HomeFragment2 extends Fragment {
 
         binding.cardview01.setOnClickListener(v -> {
             pm.FeedList(mContext);
+        });
+
+        binding.todoMore.setOnClickListener(v -> {
+            shardpref.putInt("SELECT_POSITION", 1);
+            pm.Main2(mContext);
         });
     }
 

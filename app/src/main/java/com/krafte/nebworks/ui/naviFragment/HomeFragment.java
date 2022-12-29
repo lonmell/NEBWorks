@@ -216,6 +216,7 @@ public class HomeFragment extends Fragment {
 
         binding.itemArea.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH", "0");
+            shardpref.putString("event", "out_store");
             pm.PlaceList(mContext);
         });
 
@@ -253,6 +254,11 @@ public class HomeFragment extends Fragment {
         binding.detailInout.setOnClickListener(v -> {
             shardpref.putInt("SELECT_POSITION", 2);
             pm.Main(mContext);
+        });
+
+        binding.addMemberBtn.setOnClickListener(v-> {
+            MemberOption mo = new MemberOption();
+            mo.show(getChildFragmentManager(),"MemberOption");
         });
     }
 
