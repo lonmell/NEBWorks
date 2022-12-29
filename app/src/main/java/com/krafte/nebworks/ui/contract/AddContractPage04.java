@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.contract;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.YoilStringAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.StringData;
+import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractWorkInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd04Binding;
 import com.krafte.nebworks.util.DBConnection;
@@ -31,6 +33,9 @@ import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -124,6 +129,7 @@ public class AddContractPage04 extends AppCompatActivity {
         workmAdapter.notifyDataSetChanged();
         workmAdapter.setOnItemClickListener((v, position, yoil) -> {
             dlog.i("Get onItem : " + yoil);
+            binding.cvCalendar.setVisibility(View.GONE);
             workYoil = yoil;
         });
 
@@ -140,6 +146,7 @@ public class AddContractPage04 extends AppCompatActivity {
         restmAdapter.notifyDataSetChanged();
         restmAdapter.setOnItemClickListener((v, position, yoil) -> {
             dlog.i("Get onItem : " + restmList.get(position));
+            binding.cvCalendar.setVisibility(View.GONE);
             restYoil = yoil;
         });
     }
@@ -151,61 +158,6 @@ public class AddContractPage04 extends AppCompatActivity {
     public void onResume(){
         super.onResume();
 
-//        //반복요일 세팅
-//        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-//        int hourOfDay = shardpref.getInt("Hour", 0);
-//        int minute = shardpref.getInt("Min", 0);
-//        String GetTime = "";
-//        dlog.i("------------------Data Check onResume------------------");
-//        dlog.i("timeSelect_flag : " + timeSelect_flag);
-//        dlog.i("GetTime : " + GetTime);
-//        dlog.i("------------------Data Check onResume------------------");
-//
-//        if (timeSelect_flag == 1) {
-//            Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-//            shardpref.remove("timeSelect_flag");
-//            shardpref.remove("hourOfDay");
-//            shardpref.remove("minute");
-//            GetTime = Time01 + ":" + Time02;
-//            shardpref.putString("input_pop_time",GetTime);
-//            if (hourOfDay != 0) {
-//                binding.wtime01time.setText(GetTime);
-//            }
-//        } else if (timeSelect_flag == 2) {
-//            Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-//            shardpref.remove("timeSelect_flag");
-//            shardpref.remove("hourOfDay");
-//            shardpref.remove("minute");
-//            GetTime = Time01 + ":" + Time02;
-//            shardpref.putString("input_pop_time",GetTime);
-//            if (hourOfDay != 0) {
-//                binding.wtime02time.setText(GetTime);
-//            }
-//        } else if (timeSelect_flag == 3) {
-//            Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-//            shardpref.remove("timeSelect_flag");
-//            shardpref.remove("hourOfDay");
-//            shardpref.remove("minute");
-//            GetTime = Time01 + ":" + Time02;
-//            shardpref.putString("input_pop_time",GetTime);
-//            if (hourOfDay != 0) {
-//                binding.resttime01time.setText(GetTime);
-//            }
-//        } else if (timeSelect_flag == 4) {
-//            Time01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            Time02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-//            shardpref.remove("timeSelect_flag");
-//            shardpref.remove("hourOfDay");
-//            shardpref.remove("minute");
-//            GetTime = Time01 + ":" + Time02;
-//            shardpref.putString("input_pop_time",GetTime);
-//            if (hourOfDay != 0) {
-//                binding.resttime02time.setText(GetTime);
-//            }
-//        }
     }
 
     String contract_start = "";
@@ -218,6 +170,10 @@ public class AddContractPage04 extends AppCompatActivity {
     String work_contents = "";
     String GetTime = "";
     int SELECT_POS = -1;
+    boolean SELECT_DATE_TF = false;
+    Calendar cal;
+    String format = "yyyy-MM";
+    SimpleDateFormat sdf = new SimpleDateFormat(format);
 
     private void setBtnEvent(){
         Calendar c = Calendar.getInstance();
@@ -238,15 +194,7 @@ public class AddContractPage04 extends AppCompatActivity {
             }
         }, mYear, mMonth, mDay);
 
-        binding.select01date.setOnClickListener(v -> {
-            binding.timeSetpicker.setVisibility(View.GONE);
-            if(binding.select01date.getText().toString().length() == 0){
-                binding.select01date.setText(mYear + "-" + (String.valueOf(mMonth).length() == 1?"0"+mMonth:mMonth) + "-"
-                        + (String.valueOf(mDay).length() == 1?"0"+String.valueOf(mDay):String.valueOf(mDay)));
-            }else{
-                datePickerDialog.show();
-            }
-        });
+
 
         datePickerDialog2 = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -261,13 +209,42 @@ public class AddContractPage04 extends AppCompatActivity {
             }
         }, mYear, mMonth, mDay);
 
+        cal = Calendar.getInstance();
+        SimpleDateFormat getThisYear = new SimpleDateFormat("yyyy년");
+        String getYear = getThisYear.format(cal.getTime());
+
+        binding.select01date.setOnClickListener(v -> {
+            SELECT_DATE_TF = false;
+            ChangeInputDate(0);
+            binding.cvCalendar.setVisibility(View.VISIBLE);
+        });
+
         binding.select02date.setOnClickListener(v -> {
-            binding.timeSetpicker.setVisibility(View.GONE);
-            if(binding.select02date.getText().toString().length() == 0){
-                binding.select02date.setText(mYear + "-" + (String.valueOf(mMonth).length() == 1?"0"+mMonth:mMonth) + "-"
-                        + (String.valueOf(mDay).length() == 1?"0"+String.valueOf(mDay):String.valueOf(mDay)));
-            }else{
-                datePickerDialog2.show();
+            SELECT_DATE_TF = true;
+            ChangeInputDate(1);
+            binding.cvCalendar.setVisibility(View.VISIBLE);
+        });
+
+        binding.cvCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                cal = Calendar.getInstance();
+                SimpleDateFormat calendar_get_format_year = new SimpleDateFormat("yyyy");
+                SimpleDateFormat calendar_get_format_month = new SimpleDateFormat("MM-dd");
+                SimpleDateFormat calendar_get_yoil = new SimpleDateFormat("EE");
+                SimpleDateFormat save_date = new SimpleDateFormat("yyyy-MM-dd");
+                String Year = calendar_get_format_year.format(date.getDate());
+                String month = calendar_get_format_month.format(date.getDate());
+                String yoil = calendar_get_yoil.format(date.getDate());
+
+                if(!SELECT_DATE_TF){
+                    binding.select01date.setText(Year + "-" + month + " " + "(" + yoil + ")");
+                    contract_start  = Year + "-" + month;
+                }else{
+                    binding.select02date.setText(Year + "-" + month + " " + "(" + yoil + ")");
+                    contract_end    = Year + "-" + month;
+                }
+                dlog.i("binding.cvCalendar CalendarDay : " + Year + "\n" + month + "," + yoil);
             }
         });
 
@@ -284,109 +261,29 @@ public class AddContractPage04 extends AppCompatActivity {
 
         binding.wtime01time.setOnClickListener(v -> {
             SELECT_POS = 0;
+            ChangeInputTime(SELECT_POS);
             binding.timeSetpicker.setVisibility(View.VISIBLE);
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = Time01 + ":" + Time02;
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.wtime01time.setText(GetTime);
-//                    }
-//                }
-//            });
-//            Intent intent = new Intent(this, WorkTimePicker.class);
-//            intent.putExtra("timeSelect_flag", 1);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.translate_up, 0);
         });
         binding.wtime02time.setOnClickListener(v -> {
             SELECT_POS = 1;
+            ChangeInputTime(SELECT_POS);
             binding.timeSetpicker.setVisibility(View.VISIBLE);
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = Time01 + ":" + Time02;
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.wtime02time.setText(GetTime);
-//                    }
-//                }
-//            });
-//            Intent intent = new Intent(this, WorkTimePicker.class);
-//            intent.putExtra("timeSelect_flag", 2);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.translate_up, 0);
         });
         binding.resttime01time.setOnClickListener(v -> {
             SELECT_POS = 2;
+            ChangeInputTime(SELECT_POS);
             binding.timeSetpicker.setVisibility(View.VISIBLE);
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = Time01 + ":" + Time02;
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.resttime01time.setText(GetTime);
-//                    }
-//                }
-//            });
-//            Intent intent = new Intent(this, WorkTimePicker.class);
-//            intent.putExtra("timeSelect_flag", 3);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.translate_up, 0);
         });
         binding.resttime02time.setOnClickListener(v -> {
-            SELECT_POS = 4;
+            SELECT_POS = 3;
+            ChangeInputTime(SELECT_POS);
             binding.timeSetpicker.setVisibility(View.VISIBLE);
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = Time01 + ":" + Time02;
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.resttime02time.setText(GetTime);
-//                    }
-//                }
-//            });
-//            Intent intent = new Intent(this, WorkTimePicker.class);
-//            intent.putExtra("timeSelect_flag", 4);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.translate_up, 0);
         });
 
         binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                String HOUR = String.valueOf(hourOfDay);
+                String HOUR = String.valueOf(hourOfDay == 0?12:hourOfDay);
                 String MIN = String.valueOf(minute);
                 binding.timeSetpicker.clearFocus();
                 if (SELECT_POS == 0) {
@@ -395,10 +292,10 @@ public class AddContractPage04 extends AppCompatActivity {
                 } else if (SELECT_POS == 1) {
                     //근무종료시간
                     binding.wtime02time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
-                } else if (SELECT_POS == 3) {
+                } else if (SELECT_POS == 2) {
                     //근무종료시간
                     binding.resttime01time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
-                } else if (SELECT_POS == 4) {
+                } else if (SELECT_POS == 3) {
                     //근무종료시간
                     binding.resttime02time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
                 }
@@ -423,9 +320,33 @@ public class AddContractPage04 extends AppCompatActivity {
         });
     }
 
+    private void ChangeInputDate(int i){
+        binding.select01date.setBackgroundResource(R.drawable.grayback_gray_round);
+        binding.select02date.setBackgroundResource(R.drawable.grayback_gray_round);
+        if(i == 0){
+            binding.select01date.setBackgroundResource(R.drawable.default_select_on_round);
+        }else if(i == 1){
+            binding.select02date.setBackgroundResource(R.drawable.default_select_on_round);
+        }
+    }
+    private void ChangeInputTime(int i){
+        binding.wtime01time.setBackgroundResource(R.drawable.default_gray_round);
+        binding.wtime02time.setBackgroundResource(R.drawable.default_gray_round);
+        binding.resttime01time.setBackgroundResource(R.drawable.default_gray_round);
+        binding.resttime02time.setBackgroundResource(R.drawable.default_gray_round);
+        if(i == 0){
+            binding.wtime01time.setBackgroundResource(R.drawable.default_select_on_round);
+        }else if(i == 1){
+            binding.wtime02time.setBackgroundResource(R.drawable.default_select_on_round);
+        }else if(i == 2){
+            binding.resttime01time.setBackgroundResource(R.drawable.default_select_on_round);
+        }else if(i == 3){
+            binding.resttime02time.setBackgroundResource(R.drawable.default_select_on_round);
+        }
+    }
     private boolean DataCheck(){
-        contract_start  = binding.select01date.getText().toString();
-        contract_end    = binding.select02date.getText().toString();
+//        contract_start  = binding.select01date.getText().toString();
+//        contract_end    = binding.select02date.getText().toString();
         workYoil        = workYoil.replace("[","").replace("]","").replace(" ","");
         restYoil        = restYoil.replace("[","").replace("]","").replace(" ","");
         wstarttime      = binding.wtime01time.getText().toString();
@@ -483,7 +404,8 @@ public class AddContractPage04 extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         ContractWorkInterface api = retrofit.create(ContractWorkInterface.class);
-        Call<String> call = api.getData(contract_id, contract_start, contract_end, contract_type, workYoil, restYoil, wstarttime, wendtime, reststarttime, restendtime, work_contents);
+        Call<String> call = api.getData(contract_id, contract_start, contract_end, contract_type, workYoil, restYoil
+                , wstarttime, wendtime, reststarttime, restendtime, work_contents);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -492,13 +414,13 @@ public class AddContractPage04 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("SaveWorkPartTime jsonResponse length : " + response.body().length());
-                            dlog.i("SaveWorkPartTime jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
-                                    Toast_Nomal("근무 기본사항이 업데이트 완료되었습니다.");
-                                    pm.AddContractPage05(mContext);
-                                }
+                                Toast_Nomal("근무 기본사항이 업데이트 완료되었습니다.");
+                                UpdatePagePos(jsonResponse);
+                                pm.AddContractPage05(mContext);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -537,5 +459,34 @@ public class AddContractPage04 extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void UpdatePagePos(String contract_id){
+        dlog.i("------UpdatePagePos------");
+        dlog.i("contract_id : " + contract_id);
+        dlog.i("------UpdatePagePos------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractPagePosUp.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
+        Call<String> call = api.getData(contract_id,"2");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                            shardpref.putString("contract_id",contract_id);
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 }

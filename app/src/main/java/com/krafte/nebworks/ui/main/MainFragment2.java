@@ -318,16 +318,18 @@ public class MainFragment2 extends AppCompatActivity {
                         try {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
-                            name = Response.getJSONObject(0).getString("name");
-                            img_path = Response.getJSONObject(0).getString("img_path");
-                            getjikgup = Response.getJSONObject(0).getString("jikgup");
+                            if(Response.length() != 0){
+                                name = Response.getJSONObject(0).getString("name");
+                                img_path = Response.getJSONObject(0).getString("img_path");
+                                getjikgup = Response.getJSONObject(0).getString("jikgup");
 
-                            user_name.setText(name);
-                            jikgup.setText(getjikgup);
-                            Glide.with(mContext).load(img_path)
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true)
-                                    .into(user_profile);
+                                user_name.setText(name);
+                                jikgup.setText(getjikgup);
+                                Glide.with(mContext).load(img_path)
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .skipMemoryCache(true)
+                                        .into(user_profile);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -462,15 +464,20 @@ public class MainFragment2 extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 1);
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
+            drawerLayout.closeDrawer(drawerView);
+            shardpref.putInt("make_kind", 1);
             pm.addWorkGo(mContext);
         } else if (view.getId() == R.id.select_nav09) {
+            drawerLayout.closeDrawer(drawerView);
             pm.Approval(mContext);
         } else if (view.getId() == R.id.select_nav12) {
+            drawerLayout.closeDrawer(drawerView);
             dlog.i("커뮤니티 Click!");
             binding.title.setText("커뮤니티");
             binding.tabLayout.getTabAt(3).select();
             shardpref.putInt("SELECT_POSITION", 3);
         } else if (view.getId() == R.id.select_nav10) {
+            drawerLayout.closeDrawer(drawerView);
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
         } else if (view.getId() == R.id.select_nav14) {
@@ -515,10 +522,12 @@ public class MainFragment2 extends AppCompatActivity {
                 dlog.e( "WorkTapListFragment1 / setRecyclerView");
                 dlog.e( "response 1: " + response.isSuccessful());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    dlog.e( "GetWorkStateInfo function onSuccess : " + response.body());
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(jsonResponse);
                         if(!response.body().equals("[]")){
                             String NotRead = Response.getJSONObject(0).getString("notread_feed");
                             if(NotRead.equals("0")){

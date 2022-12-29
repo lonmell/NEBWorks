@@ -34,6 +34,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -359,6 +360,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
 
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void setUpdateWorktodo(String kind, String task_no, String user_id, String reject_reason) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApprovalUpdateInterface.URL)
@@ -375,6 +377,9 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                 Log.e(TAG, "response 1: " + response.isSuccessful());
                 Log.e(TAG, "response 2: " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     if (response.body().replace("\"", "").equals("success")) {
                         Intent intent = new Intent(mContext, OneButtonTItlePopActivity.class);
                         if (kind.equals("1")) {

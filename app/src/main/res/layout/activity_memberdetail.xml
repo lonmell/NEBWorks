@@ -615,8 +615,9 @@
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="118dp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
+                                android:paddingBottom="15dp"
                                 android:orientation="horizontal">
 
                                 <SeekBar
@@ -656,6 +657,7 @@
                                     tools:ignore="HardcodedText" />
 
                                 <LinearLayout
+                                    android:id="@+id/contract_phone_info"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/now_pay_tv"

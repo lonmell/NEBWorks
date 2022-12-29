@@ -199,6 +199,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        shardpref.remove("Tap");
         shardpref.remove("item_user_id");
         shardpref.remove("item_user_name");
         UserCheck(USER_INFO_EMAIL);
@@ -739,9 +740,9 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("FcmTokenCreate jsonResponse length : " + response.body().length());
-                            dlog.i("FcmTokenCreate jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                         }
                     });
                 }
@@ -775,10 +776,12 @@ public class HomeFragment extends Fragment {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
-                if (response.body().replace("\"", "").equals("success")) {
-                    dlog.i("FcmTokenUpdate jsonResponse length : " + response.body().length());
-                    dlog.i("FcmTokenUpdate jsonResponse : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+                if (jsonResponse.replace("\"", "").equals("success")) {
+                    dlog.i("FcmTokenUpdate jsonResponse length : " + jsonResponse.length());
+                    dlog.i("FcmTokenUpdate jsonResponse : " + jsonResponse);
                 } else {
                     Toast.makeText(mContext, "네트워크가 정상적이지 않습니다.", Toast.LENGTH_SHORT).show();
                 }

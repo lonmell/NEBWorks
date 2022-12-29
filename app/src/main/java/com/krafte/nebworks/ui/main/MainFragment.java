@@ -441,6 +441,7 @@ public class MainFragment extends AppCompatActivity {
             binding.tabLayout.getTabAt(1).select();
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
             drawerLayout.closeDrawer(drawerView);
+            shardpref.putInt("make_kind", 1);
             pm.addWorkGo(mContext);
         } else if (view.getId() == R.id.select_nav09) {
             drawerLayout.closeDrawer(drawerView);

@@ -675,12 +675,12 @@ public class ProfileEditActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         runOnUiThread(() -> {
                             if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                                dlog.i("SaveUser jsonResponse length : " + response.body().length());
-                                dlog.i("SaveUser jsonResponse : " + response.body());
+                                String jsonResponse = rc.getBase64decode(response.body());
+                                dlog.i("jsonResponse length : " + jsonResponse.length());
+                                dlog.i("jsonResponse : " + jsonResponse);
                                 try {
 
-                                    if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                    if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                         if (!ProfileUrl.isEmpty() && saveBitmap != null) {
                                             saveBitmapAndGetURI();
                                         }

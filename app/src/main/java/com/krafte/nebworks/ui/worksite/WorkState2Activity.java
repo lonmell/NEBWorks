@@ -452,11 +452,11 @@ public class WorkState2Activity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
+                                if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
                                     String task_total_cnt = Response.getJSONObject(0).getString("task_total_cnt");
                                     String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
@@ -520,17 +520,17 @@ public class WorkState2Activity extends AppCompatActivity {
                 @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    dlog.e("SetGotoWorkDayList function START");
-                    dlog.e("response 1: " + response.isSuccessful());
-                    dlog.e("response 2: " + response.body());
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     runOnUiThread(() -> {
-                        if (response.body().equals("[]")) {
+                        if (jsonResponse.equals("[]")) {
                             no_data_txt.setVisibility(View.VISIBLE);
                         } else {
                             no_data_txt.setVisibility(View.GONE);
                             if (response.isSuccessful() && response.body() != null) {
                                 try {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     mList = new ArrayList<>();
                                     mAdapter = new WorkgotoListAdapter(mContext, mList);
                                     weekend_gotolist.setAdapter(mAdapter);

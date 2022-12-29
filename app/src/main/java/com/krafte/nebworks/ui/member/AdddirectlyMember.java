@@ -25,6 +25,7 @@ import com.krafte.nebworks.databinding.ActivityAdddirectlyMemberBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.util.Calendar;
 
@@ -248,6 +249,7 @@ public class AdddirectlyMember extends AppCompatActivity {
         }
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void AddPlaceMember() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceMemberAddDirectlyInterface.URL)
@@ -262,10 +264,10 @@ public class AdddirectlyMember extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
-                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
-                            if (response.body().replace("\"", "").equals("success")) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 dlog.i("매장 멤버 추가 완료");
                                 Toast_Nomal("직원이 정상적으로 등록되었습니다.");
                                 pm.MemberManagement(mContext);

@@ -128,6 +128,7 @@ public class CommunityFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        sharedRemove();
     }
 
     @Override
@@ -207,8 +208,27 @@ public class CommunityFragment extends Fragment {
     }
 
 
+    private void sharedRemove(){
+        shardpref.remove("writer_name");
+        shardpref.remove("write_nickname");
+        shardpref.remove("title");
+        shardpref.remove("contents");
+        shardpref.remove("write_date");
+        shardpref.remove("view_cnt");
+        shardpref.remove("like_cnt");
+        shardpref.remove("categoryItem");
+        shardpref.remove("TopFeed");
 
-    //position 0
+        shardpref.remove("title");
+        shardpref.remove("contents");
+        shardpref.remove("writer_id");
+        shardpref.remove("writer_img_path");
+        shardpref.remove("feed_img_path");
+        shardpref.remove("jikgup");
+        shardpref.remove("view_cnt");
+        shardpref.remove("comment_cnt");
+        shardpref.remove("category");
+    }
 
 
     public void Toast_Nomal(String message) {

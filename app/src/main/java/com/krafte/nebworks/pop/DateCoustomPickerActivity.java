@@ -27,6 +27,7 @@ import com.krafte.nebworks.databinding.ActivityDatecoustompickerBinding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -213,6 +214,7 @@ public class DateCoustomPickerActivity extends Activity {
 
     DatePickerAdapter mAdapter;
     ArrayList<WorkCalenderData.WorkCalenderData_list> mList;
+    RetrofitConnect rc = new RetrofitConnect();
     public void GetCalenderList(String Year, String Month) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalenderInterface.URL)
@@ -224,16 +226,16 @@ public class DateCoustomPickerActivity extends Activity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.e(TAG, "GetCalenderList function START");
-                Log.e(TAG, "response 1: " + response.isSuccessful());
-                Log.e(TAG, "response 2: " + response.body());
                 runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
                         dlog.i("onResume getYMPicker :" + getYMPicker);
                         try{
                             String select_date = Year + "-" + Month;
-                            JSONArray Response = new JSONArray(response.body());
+                            JSONArray Response = new JSONArray(jsonResponse);
                             mList = new ArrayList<>();
                             mAdapter = new DatePickerAdapter(mContext, mList);
                             binding.createCalender.setAdapter(mAdapter);

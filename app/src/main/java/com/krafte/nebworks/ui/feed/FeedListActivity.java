@@ -173,10 +173,12 @@ public class FeedListActivity extends AppCompatActivity {
                 Log.e(TAG, "WorkTapListFragment1 / setRecyclerView");
                 Log.e(TAG, "response 1: " + response.isSuccessful());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(jsonResponse);
                         mList = new ArrayList<>();
                         mAdapter = new PlaceNotiAdapter(mContext, mList);
                         binding.feedList.setAdapter(mAdapter);

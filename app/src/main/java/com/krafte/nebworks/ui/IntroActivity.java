@@ -156,7 +156,7 @@ public class IntroActivity extends AppCompatActivity {
         notificationManager.createNotificationChannel(new NotificationChannel("3", "근무시간 알림", NotificationManager.IMPORTANCE_DEFAULT));
         notificationManager.createNotificationChannel(new NotificationChannel("4", "이력서/면접", NotificationManager.IMPORTANCE_DEFAULT));
 
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "null");
+        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
         dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
@@ -537,6 +537,7 @@ public class IntroActivity extends AppCompatActivity {
     }
     boolean updateconfirm = false;
     public void getUpdateConfirm(String lastVersion){
+        dlog.i("lastVersion : " + lastVersion);
         PackageInfo pi;
         try {
             pi = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -545,7 +546,10 @@ public class IntroActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
+        dlog.i("versionCode == Integer.parseInt(lastVersion) : " + (versionCode == Integer.parseInt(lastVersion)));
+        dlog.i("versionCode < Integer.parseInt(lastVersion) : " + (versionCode < Integer.parseInt(lastVersion)));
+        dlog.i("versionCode : " + versionCode);
+        dlog.i("lastVersion : " + lastVersion);
         if(versionCode == Integer.parseInt(lastVersion)){
             updateconfirm = true;
             Log.i(TAG,"업데이트 필요 X");
@@ -563,7 +567,7 @@ public class IntroActivity extends AppCompatActivity {
                     finish();
                 }, 1000); //1초 후 인트로 실행
             }
-        }else if(versionCode < Integer.parseInt(lastVersion)){
+        }else if(versionCode != Integer.parseInt(lastVersion)){
             updateconfirm = false;
             Log.i(TAG, "업데이트 필요 0");
             Intent intent = new Intent(mContext, OneButtonPopActivity.class);

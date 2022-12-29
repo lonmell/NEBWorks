@@ -63,6 +63,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
 
     String Time01 = "-99";
     String Time02 = "-99";
+    String i_cnt = "";
 
     //Shared
     String USER_INFO_EMAIL = "";
@@ -97,11 +98,12 @@ public class AddWorkPartActivity extends AppCompatActivity {
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "0");
+            USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", "");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "0");
+            place_owner_id  = shardpref.getString("place_owner_id", "0");
+            i_cnt           = shardpref.getString("i_cnt", "0");
 
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
@@ -110,6 +112,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
             place_name = shardpref.getString("place_name", "0");
 
             binding.storeName.setText(place_name);
+            binding.memCnt.setText("총 " + i_cnt + "명 근무 중");
             setBtnEvent();
 
         } catch (Exception e) {
@@ -134,8 +137,8 @@ public class AddWorkPartActivity extends AppCompatActivity {
         dlog.i("place_owner_id : " + place_owner_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
 
-        if(!place_owner_id.equals(USER_INFO_ID)){
-            //근로자가 추가할때
+        if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+            //근로자가 본인것 추가할때
             binding.memName.setVisibility(View.VISIBLE);
             binding.memCnt.setVisibility(View.GONE);
             binding.memSelect.setVisibility(View.GONE);
@@ -144,7 +147,8 @@ public class AddWorkPartActivity extends AppCompatActivity {
             dlog.i("item_user_id : " + item_user_id);
             dlog.i("item_user_name : " + item_user_name);
             binding.memName.setText(item_user_name);
-        }else{
+            binding.selectMem.setClickable(false);
+        }else if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")){
             //점주가 추가할때
             //부여할 사용자 가져오기
             binding.memName.setVisibility(View.GONE);
@@ -162,20 +166,11 @@ public class AddWorkPartActivity extends AppCompatActivity {
                 binding.memCnt.setVisibility(View.VISIBLE);
                 binding.memSelect.setVisibility(View.VISIBLE);
             }
+            binding.selectMem.setClickable(true);
         }
 
         //시간 지정하기
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
-        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-        int hourOfDay = shardpref.getInt("Hour", 0);
-        int minute = shardpref.getInt("Min", 0);
-        String GetTime = "";
-        dlog.i("------------------Data Check onResume------------------");
-        dlog.i("timeSelect_flag : " + timeSelect_flag);
-        dlog.i("GetTime : " + GetTime);
-        dlog.i("------------------Data Check onResume------------------");
-
 
         dlog.i("-----onResume-----");
     }
@@ -313,10 +308,10 @@ public class AddWorkPartActivity extends AppCompatActivity {
                     String MIN = String.valueOf(minute);
                     binding.timeSetpicker1.clearFocus();
                     if(!SELECTTIME01){
-                        sieob_get = HOUR + ":" + MIN;
+                        sieob_get = (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN);
                         binding.selectTime01.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
                     }else{
-                        jong_eob_get = HOUR + ":" + MIN;
+                        jong_eob_get = (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN);
                         binding.selectTime02.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
                     }
             }
@@ -329,10 +324,10 @@ public class AddWorkPartActivity extends AppCompatActivity {
                 String MIN = String.valueOf(minute);
                 binding.timeSetpicker2.clearFocus();
                 if(!SELECTTIME02){
-                    break_time_get01 = HOUR + ":" + MIN;
+                    break_time_get01 = (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN);
                     binding.selectTime03.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
                 }else{
-                    break_time_get02 = HOUR + ":" + MIN;
+                    break_time_get02 = (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN);
                     binding.selectTime04.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
                 }
             }
@@ -444,15 +439,20 @@ public class AddWorkPartActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("SaveWorkPartTime jsonResponse length : " + response.body().length());
-                            dlog.i("SaveWorkPartTime jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     Toast_Nomal("근무시간이 업데이트 되었습니다.");
                                     shardpref.remove("item_user_id");
                                     shardpref.remove("item_user_name");
                                     shardpref.putInt("SELECT_POSITION", 2);
-                                    pm.Main(mContext);
+                                    if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+                                        pm.Main2(mContext);
+                                    }else if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")){
+                                        pm.Main(mContext);
+                                    }
 //                                    getPartTimeYoil(setYoil);
                                 }
                             } catch (Exception e) {

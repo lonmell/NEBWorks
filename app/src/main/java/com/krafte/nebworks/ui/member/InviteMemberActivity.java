@@ -41,6 +41,7 @@ import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -143,6 +144,7 @@ public class InviteMemberActivity extends AppCompatActivity {
         });
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void UserCheck() {
         dlog.i("------UserCheck------");
         dlog.i("INPUT_NAME : " + INPUT_NAME);
@@ -161,11 +163,11 @@ public class InviteMemberActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
+                                if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
                                     String id = Response.getJSONObject(0).getString("id");
                                     String name = Response.getJSONObject(0).getString("name");
@@ -280,11 +282,11 @@ public class InviteMemberActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
+                                if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
                                     cnt = Integer.parseInt(Response.getJSONObject(0).getString("cnt"));
                                 }
@@ -320,10 +322,10 @@ public class InviteMemberActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
-                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
-                            if (response.body().replace("\"", "").equals("success")) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 dlog.i("매장 멤버 추가 완료");
                                 Toast_Nomal("직원 초대가 완료되었습니다[승인 대기 중]");
                                 shardpref.putInt("SELECT_POSITION", 2);
@@ -364,9 +366,11 @@ public class InviteMemberActivity extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 try {
-                    JSONArray Response = new JSONArray(response.body());
+                    JSONArray Response = new JSONArray(jsonResponse);
                     if (Response.length() > 0) {
                         dlog.i("-----getManagerToken-----");
                         dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
@@ -409,8 +413,9 @@ public class InviteMemberActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
-                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                         }
                     });
                 }
@@ -465,10 +470,10 @@ public class InviteMemberActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
-                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
-                            if (response.body().replace("\"", "").equals("success")) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
                                     kakaoLink();
                                 } else {

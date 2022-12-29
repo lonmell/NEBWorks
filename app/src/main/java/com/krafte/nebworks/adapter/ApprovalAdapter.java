@@ -31,6 +31,7 @@ import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -316,7 +317,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         void onItemClick(View v, int position);
     }
 
-
+    RetrofitConnect rc = new RetrofitConnect();
     public void setUpdateWorktodo(String kind, String task_no, String user_id) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApprovalUpdateInterface.URL)
@@ -333,7 +334,10 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                 Log.e(TAG, "response 1: " + response.isSuccessful());
                 Log.e(TAG, "response 2: " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
-                    if (response.body().replace("\"", "").equals("success")) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
+                    if (jsonResponse.replace("\"", "").equals("success")) {
                         Intent intent = new Intent(mContext, OneButtonTItlePopActivity.class);
                         if (kind.equals("1")) {
                             intent.putExtra("title", "승인 완료");
@@ -373,9 +377,11 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 try {
-                    JSONArray Response = new JSONArray(response.body());
+                    JSONArray Response = new JSONArray(jsonResponse);
                     if (Response.length() > 0) {
                         dlog.i("-----getManagerToken-----");
                         dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
@@ -413,7 +419,9 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("AddStroeNoti Callback : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 if (response.isSuccessful() && response.body() != null) {
 
                 }

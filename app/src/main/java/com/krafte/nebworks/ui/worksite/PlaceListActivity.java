@@ -137,6 +137,12 @@ public class PlaceListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         shardpref.remove("page_state");
+        dlog.i("-----onResume-----");
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+        dlog.i("USER_INFO_NAME : " + USER_INFO_NAME);
+        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+        dlog.i("-----onResume-----");
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -723,10 +729,12 @@ public class PlaceListActivity extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
-                if (response.body().replace("\"", "").equals("success")) {
-                    dlog.i("FcmTokenUpdate jsonResponse length : " + response.body().length());
-                    dlog.i("FcmTokenUpdate jsonResponse : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+                if (jsonResponse.replace("\"", "").equals("success")) {
+                    dlog.i("FcmTokenUpdate jsonResponse length : " + jsonResponse.length());
+                    dlog.i("FcmTokenUpdate jsonResponse : " + jsonResponse);
                 } else {
                     Toast.makeText(mContext, "네트워크가 정상적이지 않습니다.", Toast.LENGTH_SHORT).show();
                 }

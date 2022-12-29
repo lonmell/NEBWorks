@@ -64,6 +64,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String USER_INFO_AUTH = "";
     int SELECTED_POSITION = 0;
     String USER_INFO_NICKNAME = "";
+    String USER_INFO_PROFILE = "";
     String place_id = "";
     String USER_INFO_EMAIL = "";
     String state = "";
@@ -84,6 +85,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String category = "";
     String updated_at = "";
     String mylikeyn = "";
+    String feed_img_path = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -133,6 +135,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
+        USER_INFO_PROFILE = shardpref.getString("USER_INFO_PROFILE", "");
 
         feed_id = shardpref.getString("feed_id", "");
         title = shardpref.getString("title", "");
@@ -147,7 +150,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
         category = shardpref.getString("category", "");
         updated_at = shardpref.getString("updated_at", "");
         mylikeyn = shardpref.getString("mylikeyn", "");
+        feed_img_path = shardpref.getString("feed_img_path", "");
 
+        dlog.i("feed_img_path : " + feed_img_path);
         setBtnEvent();
         DataCheck();
         UpdateView(feed_id);
@@ -157,6 +162,11 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 .placeholder(R.drawable.certi01)
                 .skipMemoryCache(true)
                 .into(binding.profileImg);
+
+        Glide.with(mContext).load(feed_img_path)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.feedImg);
         binding.writerName.setText(writer_name);
         binding.date.setText(updated_at);
         binding.contents.setText(contents);
@@ -204,7 +214,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         super.onResume();
         //UI 데이터 세팅
         try {
-            UserCheck();
+
             dlog.i("onResume state : " + shardpref.getString("editstate", ""));
             if (shardpref.getString("editstate", "").equals("EditComment")) {
                 dlog.i("----------댓글 수정의 경우----------");
@@ -225,6 +235,11 @@ public class CommunityDetailActivity extends AppCompatActivity {
             }
 
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+            UserCheck();
+            Glide.with(mContext).load(USER_INFO_PROFILE)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.myprofileImg);
 
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -303,8 +318,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("UpdateView jsonResponse length : " + response.body().length());
-                            dlog.i("UpdateView jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                         }
                     });
                 }
@@ -337,9 +353,10 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("UpdateView jsonResponse length : " + response.body().length());
-                            dlog.i("UpdateView jsonResponse : " + response.body());
-                            like_cnt = response.body().replace("\"", "");
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            like_cnt = jsonResponse.replace("\"", "");
                             binding.likeCnt.setText(like_cnt);
                         }
                     });
@@ -376,10 +393,11 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
-                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     dlog.i("Comment insert success");
                                     binding.addCommentTxt.setText("");
                                     binding.addCommentTxt.clearFocus();
@@ -410,12 +428,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String comment = "";
 
     private void setBtnEvent() {
-        Glide.with(mContext).load(writer_img_path)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .placeholder(R.drawable.certi01)
-                .skipMemoryCache(true)
-                .into(binding.myprofileImg);
-
         binding.addCommentBtn.setOnClickListener(v -> {
             comment = binding.addCommentTxt.getText().toString();
             if(comment_id.isEmpty()){
@@ -443,6 +455,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     public void UserCheck() {
         dlog.i("---------UserCheck---------");
+        dlog.i("place_id : " + place_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
         dlog.i("---------UserCheck---------");
@@ -485,12 +498,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                 dlog.i("성명 : " + mem_name);
                                 dlog.i("부서 : " + mem_jikgup);
                                 dlog.i("급여 : " + mem_pay);
+                                dlog.i("USER_INFO_PROFILE : " + USER_INFO_PROFILE);
                                 dlog.i("------UserCheck-------");
 
-                                Glide.with(mContext).load(mem_img_path)
-                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                        .skipMemoryCache(true)
-                                        .into(binding.myprofileImg);
 
                             } catch (Exception e) {
                                 dlog.i("UserCheck Exception : " + e);

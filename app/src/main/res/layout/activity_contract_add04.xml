@@ -129,15 +129,15 @@
                         android:id="@+id/select02date"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/grayback_gray_round"
                         android:layout_alignParentStart="true"
                         android:layout_toStartOf="@+id/select02tv"
+                        android:background="@drawable/grayback_gray_round"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
                         android:hint="날짜를 입력해주세요"
                         android:paddingStart="15dp"
-                        android:textColorHint="@color/black"
                         android:textColor="@color/black"
+                        android:textColorHint="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
@@ -152,6 +152,16 @@
                         android:textColor="@color/black"
                         android:textSize="16sp" />
                 </RelativeLayout>
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/cv_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:mcv_calendarMode="month"
+                    app:mcv_selectionColor="#f79256" />
+
                 <LinearLayout
                     android:id="@+id/select03"
                     android:layout_width="match_parent"

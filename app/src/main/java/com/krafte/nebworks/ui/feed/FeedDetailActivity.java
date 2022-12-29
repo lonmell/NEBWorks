@@ -74,11 +74,9 @@ public class FeedDetailActivity extends AppCompatActivity {
     String place_name = "";
     String employee_no = "";
     String place_owner_id = "";
+    String writer_id = "";
 
     int listitemsize = 0;
-    String click_htn = "";
-    String comment_txt = "";
-    String WriteName = "";
 
     Drawable icon_off;
     Drawable icon_on;
@@ -104,14 +102,14 @@ public class FeedDetailActivity extends AppCompatActivity {
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            place_id = shardpref.getString("place_id", "0");
-            feed_id = shardpref.getString("feed_id", "0");
-            state = shardpref.getString("editstate", "");
-            place_owner_id = shardpref.getString("place_owner_id", "");
-
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
+            place_id        = shardpref.getString("place_id", "0");
+            feed_id         = shardpref.getString("feed_id", "0");
+            state           = shardpref.getString("editstate", "");
+            place_owner_id  = shardpref.getString("place_owner_id", "");
+            writer_id       = shardpref.getString("writer_id", "");
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("place_id : " + place_id);
             dlog.i("feed_id : " + feed_id);
@@ -136,7 +134,7 @@ public class FeedDetailActivity extends AppCompatActivity {
         super.onResume();
         //UI 데이터 세팅
         try {
-            if(USER_INFO_AUTH.equals("1")){
+            if(!USER_INFO_ID.equals(writer_id)){
                 UpdateWorkNotifyReadYn();
             }
             getCommentList();
@@ -173,12 +171,9 @@ public class FeedDetailActivity extends AppCompatActivity {
 
     }
 
-
     String id = "";
     String title = "";
-    String kind = "";
     String contents = "";
-    String writer_id = "";
     String writer_name = "";
     String writer_img_path = "";
 
@@ -207,12 +202,12 @@ public class FeedDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     if(Response.length() != 0){
                                         id = Response.getJSONObject(0).getString("id");
                                         place_id = Response.getJSONObject(0).getString("place_id");
@@ -330,10 +325,10 @@ public class FeedDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
                             try {
-                                dlog.i("UpdateWorkNotifyReadYn jsonResponse length : " + response.body().length());
-                                dlog.i("UpdateWorkNotifyReadYn jsonResponse : " + response.body());
+                                String jsonResponse = rc.getBase64decode(response.body());
+                                dlog.i("jsonResponse length : " + jsonResponse.length());
+                                dlog.i("jsonResponse : " + jsonResponse);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -365,12 +360,12 @@ public class FeedDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetCommentList jsonResponse length : " + response.body().length());
-                            dlog.i("GetCommentList jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(response.body());
+                                JSONArray Response = new JSONArray(jsonResponse);
 
                                 mList = new ArrayList<>();
                                 mAdapter = new FeedConfrimLogAdapter(mContext, mList);

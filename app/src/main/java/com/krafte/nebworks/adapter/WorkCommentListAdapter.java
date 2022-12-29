@@ -29,6 +29,7 @@ import com.krafte.nebworks.pop.CommunityOptionActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 
@@ -433,6 +434,7 @@ public class WorkCommentListAdapter extends RecyclerView.Adapter<WorkCommentList
     }
 
     String like_cnt = "0";
+    RetrofitConnect rc = new RetrofitConnect();
     public void AddLike(String feed_id,String comment_id,ViewHolder holder) {
         dlog.i("-----UpdateView Check-----");
         dlog.i("feed_id : " + feed_id);
@@ -447,13 +449,15 @@ public class WorkCommentListAdapter extends RecyclerView.Adapter<WorkCommentList
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("UpdateView Callback : " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("UpdateView jsonResponse length : " + response.body().length());
-                            dlog.i("UpdateView jsonResponse : " + response.body());
-                            like_cnt = response.body().replace("\"", "");
+                            dlog.i("UpdateView jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UpdateView jsonResponse : " + jsonResponse);
+                            like_cnt = jsonResponse.replace("\"", "");
                             holder.like_cnt.setText(like_cnt);
                         }
                     });

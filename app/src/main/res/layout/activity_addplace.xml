@@ -578,22 +578,13 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/default_input_round">
 
-<!--                    <Spinner-->
-<!--                        android:id="@+id/inputbox07_spinner"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:layout_toStartOf="@+id/down_arrow"-->
-<!--                        android:background="@color/white"-->
-<!--                        android:paddingStart="15dp"-->
-<!--                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />-->
-
                     <TextView
                         android:id="@+id/inputbox07"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
+                        android:background="@color/white"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
-                        android:background="@color/white"
                         android:hint="휴가기간 선택(ex.월차,연차)"
                         android:importantForAutofill="no"
                         android:paddingStart="16dp"

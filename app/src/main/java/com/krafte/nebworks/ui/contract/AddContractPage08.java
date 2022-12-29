@@ -28,6 +28,7 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.ContractOwnerSignInterface;
+import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -219,7 +220,7 @@ public class AddContractPage08 extends AppCompatActivity {
                             dlog.i("UpdatePagePos jsonResponse length : " + jsonResponse.length());
                             dlog.i("UpdatePagePos jsonResponse : " + jsonResponse);
                             try {
-                                if(jsonResponse.replace("\"","").equals("success")){
+                                if(!jsonResponse.equals("null") || !jsonResponse.equals("[]") || !jsonResponse.isEmpty()){
                                     saveBitmapAndGetURI();
                                     if(USER_INFO_AUTH.equals("0")){
                                         //fcm으로 알림 메세지 보내기
@@ -227,6 +228,7 @@ public class AddContractPage08 extends AppCompatActivity {
                                         getUserToken(worker_id,"1",message);
                                         AddPush("근로계약서",message,worker_id);
                                         pm.ContractFragment(mContext);
+                                        UpdatePagePos();
                                         RemoveShared();
                                     }else{
                                         pm.AddContractPage09(mContext);
@@ -580,5 +582,34 @@ public class AddContractPage08 extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void UpdatePagePos(){
+        dlog.i("------UpdatePagePos------");
+        dlog.i("contract_id : " + contract_id);
+        dlog.i("------UpdatePagePos------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractPagePosUp.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
+        Call<String> call = api.getData(contract_id,"6");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 }

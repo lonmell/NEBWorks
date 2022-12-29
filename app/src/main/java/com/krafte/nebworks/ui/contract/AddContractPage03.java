@@ -24,6 +24,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.ContractBasicInterface;
+import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd03Binding;
@@ -85,12 +86,12 @@ public class AddContractPage03 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-        shardpref           = new PreferenceHelper(mContext);
-        place_id            = shardpref.getString("place_id","0");
-        USER_INFO_ID        = shardpref.getString("USER_INFO_ID","0");
-        worker_id           = shardpref.getString("worker_id","0");
-        contract_place_id   = shardpref.getString("contract_place_id","0");
-        contract_user_id    = shardpref.getString("contract_user_id","0");
+        shardpref = new PreferenceHelper(mContext);
+        place_id = shardpref.getString("place_id", "0");
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+        worker_id = shardpref.getString("worker_id", "0");
+        contract_place_id = shardpref.getString("contract_place_id", "0");
+        contract_user_id = shardpref.getString("contract_user_id", "0");
 
         setBtnEvent();
         dlog.i("contract_place_id : " + contract_place_id);
@@ -116,7 +117,7 @@ public class AddContractPage03 extends AppCompatActivity {
     String owner_email = "";
     int textlength01 = 0;
 
-    private void setBtnEvent(){
+    private void setBtnEvent() {
         //사업자 구분
         binding.select01.setOnClickListener(v -> {
             ChangeSelect0102(1);
@@ -150,21 +151,21 @@ public class AddContractPage03 extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(binding.input02.isFocusable() && !s.toString().equals("")) {
-                    try{
+                if (binding.input02.isFocusable() && !s.toString().equals("")) {
+                    try {
                         textlength01 = binding.input02.getText().toString().length();
-                    }catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         e.printStackTrace();
                         return;
                     }
                     if (textlength01 == 3 && before != 1) {
-                        binding.input02.setText(binding.input02.getText().toString()+"-");
+                        binding.input02.setText(binding.input02.getText().toString() + "-");
                         binding.input02.setSelection(binding.input02.getText().length());
-                    }else if (textlength01 == 6 && before != 1){
-                        binding.input02.setText(binding.input02.getText().toString()+"-");
+                    } else if (textlength01 == 6 && before != 1) {
+                        binding.input02.setText(binding.input02.getText().toString() + "-");
                         binding.input02.setSelection(binding.input02.getText().length());
-                    }else if(textlength01 == 10 && !binding.input02.getText().toString().contains("-")){
-                        binding.input02.setText(binding.input02.getText().toString().substring(0,3)+"-"+binding.input02.getText().toString().substring(4,6)+"-"+binding.input02.getText().toString().substring(6,10));
+                    } else if (textlength01 == 10 && !binding.input02.getText().toString().contains("-")) {
+                        binding.input02.setText(binding.input02.getText().toString().substring(0, 3) + "-" + binding.input02.getText().toString().substring(4, 6) + "-" + binding.input02.getText().toString().substring(6, 10));
                         binding.input02.setSelection(binding.input02.getText().length());
                     }
                 }
@@ -177,21 +178,21 @@ public class AddContractPage03 extends AppCompatActivity {
         });
 
         binding.next.setOnClickListener(v -> {
-            if(DataCheck()){
+            if (DataCheck()) {
                 SaveContractBasic();
             }
         });
         binding.backBtn.setOnClickListener(v -> {
             shardpref.remove("progress_pos");
-            if(!shardpref.getString("progress_pos","").isEmpty()){
+            if (!shardpref.getString("progress_pos", "").isEmpty()) {
                 pm.ContractFragment(mContext);
-            }else{
+            } else {
                 super.onBackPressed();
             }
         });
     }
 
-    private void ChangeSelect0102(int i){
+    private void ChangeSelect0102(int i) {
         binding.select01.setBackgroundResource(R.drawable.default_gray_round);
         binding.select01Round.setBackgroundResource(R.drawable.select_empty_round);
         binding.select01tv.setTextColor(Color.parseColor("#000000"));
@@ -200,18 +201,19 @@ public class AddContractPage03 extends AppCompatActivity {
         binding.select02Round.setBackgroundResource(R.drawable.select_empty_round);
         binding.select02tv.setTextColor(Color.parseColor("#000000"));
         select0102 = i;
-        if(i == 1){
+        if (i == 1) {
             binding.select01.setBackgroundResource(R.drawable.default_select_round);
             binding.select01Round.setBackgroundResource(R.drawable.ic_full_round);
             binding.select01tv.setTextColor(Color.parseColor("#6395EC"));
-        }else if(i == 2){
+        } else if (i == 2) {
             binding.select02.setBackgroundResource(R.drawable.default_select_round);
             binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
             binding.select02tv.setTextColor(Color.parseColor("#6395EC"));
 
         }
     }
-    private void ChangeSize010203(int i){
+
+    private void ChangeSize010203(int i) {
         binding.sizeBox01.setBackgroundResource(R.drawable.default_gray_round);
         binding.sizeRound01.setBackgroundResource(R.drawable.select_empty_round);
         binding.sizetv01.setTextColor(Color.parseColor("#000000"));
@@ -224,20 +226,21 @@ public class AddContractPage03 extends AppCompatActivity {
         binding.sizeRound03.setBackgroundResource(R.drawable.select_empty_round);
         binding.sizetv03.setTextColor(Color.parseColor("#000000"));
         size010203 = i;
-        if(i == 1){
+        if (i == 1) {
             binding.sizeBox01.setBackgroundResource(R.drawable.default_select_round);
             binding.sizeRound01.setBackgroundResource(R.drawable.ic_full_round);
             binding.sizetv01.setTextColor(Color.parseColor("#6395EC"));
-        }else if(i == 2){
+        } else if (i == 2) {
             binding.sizeBox02.setBackgroundResource(R.drawable.default_select_round);
             binding.sizeRound02.setBackgroundResource(R.drawable.ic_full_round);
             binding.sizetv02.setTextColor(Color.parseColor("#6395EC"));
-        }else if(i == 3){
+        } else if (i == 3) {
             binding.sizeBox03.setBackgroundResource(R.drawable.default_select_round);
             binding.sizeRound03.setBackgroundResource(R.drawable.ic_full_round);
             binding.sizetv03.setTextColor(Color.parseColor("#6395EC"));
         }
     }
+
     //이미지 업로드에 필요한 소스 START
     @SuppressLint("LongLogTag")
     @Override
@@ -279,11 +282,11 @@ public class AddContractPage03 extends AppCompatActivity {
                             try {
                                 //Array데이터를 받아올 때
                                 JSONArray Response = new JSONArray(jsonResponse);
-                                if(Response.length() != 0){
-                                    String owner_name       = Response.getJSONObject(0).getString("owner_name");
-                                    String registr_num      = Response.getJSONObject(0).getString("registr_num");
-                                    String address          = Response.getJSONObject(0).getString("address");
-                                    String address_detail   = Response.getJSONObject(0).getString("address_detail");
+                                if (Response.length() != 0) {
+                                    String owner_name = Response.getJSONObject(0).getString("owner_name");
+                                    String registr_num = Response.getJSONObject(0).getString("registr_num");
+                                    String address = Response.getJSONObject(0).getString("address");
+                                    String address_detail = Response.getJSONObject(0).getString("address_detail");
 
                                     binding.input01.setText(owner_name);
                                     binding.input02.setText(registr_num);
@@ -314,7 +317,7 @@ public class AddContractPage03 extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-        Call<String> call = api.getData(contract_place_id,USER_INFO_ID);
+        Call<String> call = api.getData(contract_place_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -330,7 +333,7 @@ public class AddContractPage03 extends AppCompatActivity {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
                             try {
-                                if(Response.length() != 0){
+                                if (Response.length() != 0) {
                                     String phone = Response.getJSONObject(0).getString("phone");
                                     String account = Response.getJSONObject(0).getString("account");
                                     binding.input06.setText(phone);
@@ -355,7 +358,7 @@ public class AddContractPage03 extends AppCompatActivity {
         });
     }
 
-    private boolean DataCheck(){
+    private boolean DataCheck() {
         owner_name = binding.input01.getText().toString();
         owner_registrnum = binding.input02.getText().toString();
         owner_address = binding.input04.getText().toString();
@@ -363,38 +366,39 @@ public class AddContractPage03 extends AppCompatActivity {
         owner_phone = binding.input06.getText().toString();
         owner_email = binding.input07.getText().toString();
         dlog.i("-----DataCheck-----");
-        dlog.i("select0102 : "          + select0102);
-        dlog.i("owner_name : "          + owner_name);
-        dlog.i("owner_registrnum : "    + owner_registrnum);
-        dlog.i("zipcode : "             + zipcode);
-        dlog.i("owner_address : "       + owner_address);
-        dlog.i("owner_address_detail : "+ owner_address_detail);
-        dlog.i("owner_phone : "         + owner_phone);
-        dlog.i("owner_email : "         + owner_email);
+        dlog.i("select0102 : " + select0102);
+        dlog.i("owner_name : " + owner_name);
+        dlog.i("owner_registrnum : " + owner_registrnum);
+        dlog.i("zipcode : " + zipcode);
+        dlog.i("owner_address : " + owner_address);
+        dlog.i("owner_address_detail : " + owner_address_detail);
+        dlog.i("owner_phone : " + owner_phone);
+        dlog.i("owner_email : " + owner_email);
         dlog.i("-----DataCheck-----");
-        if(owner_name.isEmpty()){
+        if (owner_name.isEmpty()) {
             Toast_Nomal("사업주 명을 입력해주세요");
             return false;
-        }else if(owner_registrnum.isEmpty()){
+        } else if (owner_registrnum.isEmpty()) {
             Toast_Nomal("사업자번호를 입력해주세요");
             return false;
-        }else if(owner_address.isEmpty()){
+        } else if (owner_address.isEmpty()) {
             Toast_Nomal("주소를 입력해주세요");
             return false;
-        }else if(owner_phone.isEmpty()){
+        } else if (owner_phone.isEmpty()) {
             Toast_Nomal("전화번호를 입력해주세요");
             return false;
-        }else if(owner_email.isEmpty()){
+        } else if (owner_email.isEmpty()) {
             Toast_Nomal("이메일을 입력해주세요");
             return false;
-        }else {
-            return SearchRestrnum(owner_registrnum.replace("-",""));
+        } else {
+            return SearchRestrnum(owner_registrnum.replace("-", ""));
         }
     }
 
     String b_stt = "";
     String tax_type = "";
     boolean registrTF = false;
+
     private boolean SearchRestrnum(String registr_num) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RegistrSearchInterface.URL)
@@ -432,7 +436,7 @@ public class AddContractPage03 extends AppCompatActivity {
                             binding.registrNumState.setText("국세청에 등록되지 않은 사업자등록번호입니다.");
                             binding.registrNumState.setTextColor(R.color.red);
                             registrTF = true;//--테스트 후 false로
-                        }else{
+                        } else {
                             registrTF = true;
                         }
                     } catch (JSONException e) {
@@ -468,12 +472,13 @@ public class AddContractPage03 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("SaveContractBasic jsonResponse length : " + response.body().length());
-                            dlog.i("SaveContractBasic jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                    String contract_id = response.body();
-                                    shardpref.putString("contract_id",contract_id);
-                                    pm.AddContractPage04(mContext);
+                                shardpref.putString("contract_id", jsonResponse);
+                                UpdatePagePos(jsonResponse);
+                                pm.AddContractPage04(mContext);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -491,11 +496,11 @@ public class AddContractPage03 extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
 
-        if(!shardpref.getString("progress_pos","").isEmpty()){
+        if (!shardpref.getString("progress_pos", "").isEmpty()) {
             pm.ContractFragment(mContext);
-        }else{
+        } else {
             super.onBackPressed();
         }
         shardpref.remove("progress_pos");
@@ -515,4 +520,32 @@ public class AddContractPage03 extends AppCompatActivity {
         toast.show();
     }
 
+    private void UpdatePagePos(String contract_id) {
+        dlog.i("------UpdatePagePos------");
+        dlog.i("contract_id : " + contract_id);
+        dlog.i("------UpdatePagePos------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractPagePosUp.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
+        Call<String> call = api.getData(contract_id, "1");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 }

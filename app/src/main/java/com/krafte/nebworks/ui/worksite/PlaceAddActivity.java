@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,6 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.SelectStringBottomSheet;
 import com.krafte.nebworks.bottomsheet.StoreDivisionPopActivity;
-import com.krafte.nebworks.bottomsheet.WorkTimePicker;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.ConfrimNumInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
@@ -177,7 +177,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        try{
+        try {
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
@@ -192,22 +192,22 @@ public class PlaceAddActivity extends AppCompatActivity {
             geocoder = new Geocoder(mContext);
 
             setBtnEvent();
-            if(USER_INFO_AUTH.equals("1")){
+            if (USER_INFO_AUTH.equals("1")) {
                 binding.area02.setVisibility(View.GONE);
 
             }
-            String H = dc.GET_TIME.substring(0,2);
-            String M = dc.GET_TIME.substring(2,4);
+            String H = dc.GET_TIME.substring(0, 2);
+            String M = dc.GET_TIME.substring(2, 4);
 
-            String StartTime = (Integer.parseInt(H) < 12?"오전":"오후") + " " + (H.length() == 1?"0"+H:H) + ":" + (M.length()==1?"0"+M:M);
-            String EndTime   = ((Integer.parseInt(H) + 1) < 12?"오전":"오후") + " " + String.valueOf(Integer.parseInt((H.length()==1?"0"+H:H)) + 1) + ":" + (M.length()==1?"0"+M:M);
+            String StartTime = (Integer.parseInt(H) < 12 ? "오전" : "오후") + " " + (H.length() == 1 ? "0" + H : H) + ":" + (M.length() == 1 ? "0" + M : M);
+            String EndTime = ((Integer.parseInt(H) + 1) < 12 ? "오전" : "오후") + " " + String.valueOf(Integer.parseInt((H.length() == 1 ? "0" + H : H)) + 1) + ":" + (M.length() == 1 ? "0" + M : M);
             binding.inputbox08.setText(StartTime);
             binding.inputbox09.setText(EndTime);
-            place_starttime = (H.length() == 1?"0"+H:H) + ":" + (M.length()==1?"0"+M:M);
-            place_endtime = String.valueOf(Integer.parseInt((H.length()==1?"0"+H:H)) + 1) + ":" + (M.length()==1?"0"+M:M);
-            binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.inputbox09box.setCardBackgroundColor(Color.parseColor("#ffffff"));
-            binding.inputbox05.setFilters(new InputFilter[]{ new InputFilterMinMax("1", "31")});
+            place_starttime = (H.length() == 1 ? "0" + H : H) + ":" + (M.length() == 1 ? "0" + M : M);
+            place_endtime = String.valueOf(Integer.parseInt((H.length() == 1 ? "0" + H : H)) + 1) + ":" + (M.length() == 1 ? "0" + M : M);
+//            binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
+//            binding.inputbox09box.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            binding.inputbox05.setFilters(new InputFilter[]{new InputFilterMinMax("1", "31")});
 
             if (USER_INFO_EMAIL.equals("0")) {
                 Toast.makeText(mContext, "사용자 정보를 가져오지 못했습니다.\n다시 로그인하세요.", Toast.LENGTH_SHORT).show();
@@ -219,7 +219,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             binding.downArrow.setOnClickListener(v -> {
                 spinnerSetData();
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -267,9 +267,9 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         binding.addPlaceBtn.setOnClickListener(v -> {
             if (CheckData()) {
-                if(page_state.equals("0")){
+                if (page_state.equals("0")) {
                     AddPlace(1);
-                }else{
+                } else {
                     EidtPlace(1);
                 }
 
@@ -277,9 +277,9 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
         binding.save2btn.setOnClickListener(v -> {
             if (CheckData()) {
-                if(page_state.equals("0")){
+                if (page_state.equals("0")) {
                     AddPlace(0);
-                }else{
+                } else {
                     EidtPlace(0);
                 }
             }
@@ -293,10 +293,10 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         //사업자번호 체크
         binding.confirmRegistrnum.setOnClickListener(v -> {
-            if(binding.inputbox02.getText().toString().isEmpty() || binding.inputbox02.getText().toString().equals("")){
+            if (binding.inputbox02.getText().toString().isEmpty() || binding.inputbox02.getText().toString().equals("")) {
                 Toast_Nomal("사업자 번호가 입력되지 않았습니다.");
-            }else{
-                SearchRestrnum(binding.inputbox02.getText().toString().replace("-",""));
+            } else {
+                SearchRestrnum(binding.inputbox02.getText().toString().replace("-", ""));
             }
         });
 
@@ -307,10 +307,10 @@ public class PlaceAddActivity extends AppCompatActivity {
             storedivi.show(getSupportFragmentManager(), "StoreDivisionPopActivity");
             storedivi.setOnItemClickListener((v1, category) -> {
                 binding.inputbox03.setText(category);
-                if(category.isEmpty()){
+                if (category.isEmpty()) {
                     binding.inputbox03.setBackgroundResource(R.drawable.default_input_round);
                     binding.inputbox03.setTextColor(Color.parseColor("#696969"));
-                }else{
+                } else {
                     binding.inputbox03.setBackgroundResource(R.drawable.default_select_on_round);
                     binding.inputbox03.setTextColor(Color.parseColor("#000000"));
                 }
@@ -378,22 +378,22 @@ public class PlaceAddActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(binding.inputbox02.isFocusable() && !s.toString().equals("")) {
-                    try{
+                if (binding.inputbox02.isFocusable() && !s.toString().equals("")) {
+                    try {
                         textlength01 = binding.inputbox02.getText().toString().length();
-                    }catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         e.printStackTrace();
                         return;
                     }
 
                     if (textlength01 == 3 && before != 1) {
-                        binding.inputbox02.setText(binding.inputbox02.getText().toString()+"-");
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString() + "-");
                         binding.inputbox02.setSelection(binding.inputbox02.getText().length());
-                    }else if (textlength01 == 6 && before != 1){
-                        binding.inputbox02.setText(binding.inputbox02.getText().toString()+"-");
+                    } else if (textlength01 == 6 && before != 1) {
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString() + "-");
                         binding.inputbox02.setSelection(binding.inputbox02.getText().length());
-                    }else if(textlength01 == 10 && !binding.inputbox02.getText().toString().contains("-")){
-                        binding.inputbox02.setText(binding.inputbox02.getText().toString().substring(0,3)+"-"+binding.inputbox02.getText().toString().substring(4,6)+"-"+binding.inputbox02.getText().toString().substring(6,10));
+                    } else if (textlength01 == 10 && !binding.inputbox02.getText().toString().contains("-")) {
+                        binding.inputbox02.setText(binding.inputbox02.getText().toString().substring(0, 3) + "-" + binding.inputbox02.getText().toString().substring(4, 6) + "-" + binding.inputbox02.getText().toString().substring(6, 10));
                         binding.inputbox02.setSelection(binding.inputbox02.getText().length());
                     }
                 }
@@ -406,94 +406,82 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
 
         binding.inputbox08box.setOnClickListener(v -> {
-//            binding.inputbox09box.clearFocus();
-//            binding.timeSetpicker.clearFocus();
-//            if(timestart){
-//                timestart = false;
-//                binding.timeSetpicker.setVisibility(View.GONE);
-//            }else{
-//                timestart = true;
-//                binding.timeSetpicker.setVisibility(View.VISIBLE);
-//            }
-//            dlog.i("timestart : " + timestart);
+            binding.inputbox09box.clearFocus();
+            binding.timeSetpicker.clearFocus();
             SELECTTIME = false;
+            binding.timeSetpicker.setVisibility(View.VISIBLE);
+//            SELECTTIME = false;
             binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
             binding.inputbox09box.setCardBackgroundColor(Color.parseColor("#ffffff"));
-            WorkTimePicker wtp = new WorkTimePicker();
-            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-                @Override
-                public void onClick(View v, String hour, String min) {
-                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-                    shardpref.remove("timeSelect_flag");
-                    shardpref.remove("hourOfDay");
-                    shardpref.remove("minute");
-                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-
-                    place_starttime = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-                    shardpref.putString("input_pop_time",GetTime);
-                    if (!hour.equals("0")) {
-                        binding.inputbox08.setText(GetTime);
-                    }
-                }
-            });
+//            WorkTimePicker wtp = new WorkTimePicker();
+//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+//                @Override
+//                public void onClick(View v, String hour, String min) {
+//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("hourOfDay");
+//                    shardpref.remove("minute");
+//                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
+//
+//                    place_starttime = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
+//                    shardpref.putString("input_pop_time",GetTime);
+//                    if (!hour.equals("0")) {
+//                        binding.inputbox08.setText(GetTime);
+//                    }
+//                }
+//            });
         });
 
         binding.inputbox09box.setOnClickListener(v -> {
-//            binding.inputbox08box.clearFocus();
-//            binding.timeSetpicker.clearFocus();
-//            if(timeend){
-//                timeend = false;
-//                binding.timeSetpicker.setVisibility(View.GONE);
-//            }else{
-//                timeend = true;
-//                binding.timeSetpicker.setVisibility(View.GONE);
-//            }
-            //            binding.timeSetpicker.setVisibility(View.VISIBLE);
-//            dlog.i("timeend : " + timeend);
+            binding.inputbox08box.clearFocus();
+            binding.timeSetpicker.clearFocus();
             SELECTTIME = true;
+            binding.timeSetpicker.setVisibility(View.VISIBLE);
+//            SELECTTIME = true;
             binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#ffffff"));
             binding.inputbox09box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-            WorkTimePicker wtp = new WorkTimePicker();
-            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-                @Override
-                public void onClick(View v, String hour, String min) {
-                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-                    shardpref.remove("timeSelect_flag");
-                    shardpref.remove("hourOfDay");
-                    shardpref.remove("minute");
-                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-
-                    place_endtime = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-                    shardpref.putString("input_pop_time",GetTime);
-                    if (!hour.equals("0")) {
-                        binding.inputbox09.setText(GetTime);
-                    }
-                }
-            });
+//            WorkTimePicker wtp = new WorkTimePicker();
+//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+//                @Override
+//                public void onClick(View v, String hour, String min) {
+//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("hourOfDay");
+//                    shardpref.remove("minute");
+//                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
+//
+//                    place_endtime = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
+//                    shardpref.putString("input_pop_time",GetTime);
+//                    if (!hour.equals("0")) {
+//                        binding.inputbox09.setText(GetTime);
+//                    }
+//                }
+//            });
         });
 
-//        binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-//            @Override
-//            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-//                String HOUR = String.valueOf(hourOfDay);
-//                String MIN = String.valueOf(minute);
-//                if(!SELECTTIME){
-//                    place_starttime = HOUR + ":" + MIN;
-//                    binding.inputbox08.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
-//                }else{
-//                    place_endtime = HOUR + ":" + MIN;
-//                    binding.inputbox09.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
-//                }
-//            }
-//        });
+        binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                String HOUR = String.valueOf(hourOfDay);
+                String MIN = String.valueOf(minute);
+                if(!SELECTTIME){
+                    place_starttime = HOUR + ":" + MIN;
+                    binding.inputbox08.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
+                }else{
+                    place_endtime = HOUR + ":" + MIN;
+                    binding.inputbox09.setText((hourOfDay < 12?"오전":"오후") + " " + (HOUR.length() == 1?"0"+HOUR:HOUR) + ":" + (MIN.length() == 1?"0"+MIN:MIN));
+                }
+            }
+        });
 
     }
 
     int textlength01 = 0;
+
     private void spinnerSetData() {
 
         /*급여 정산날짜*/
@@ -543,28 +531,28 @@ public class PlaceAddActivity extends AppCompatActivity {
 //                binding.inputbox07.setText("월차");
 //            }
 //        });
-          binding.inputbox07.setOnClickListener(v -> {
-              shardpref.putInt("SelectKind", 4);
-              SelectStringBottomSheet ssb = new SelectStringBottomSheet();
-              ssb.show(getSupportFragmentManager(), "selectVacation");
-              ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
-                  @Override
-                  public void onItemClick(View v, String category) {
-                      binding.inputbox07.setText(category);
-                  }
-              });
-          });
-          binding.downArrow.setOnClickListener(v -> {
-              shardpref.putInt("SelectKind", 4);
-              SelectStringBottomSheet ssb = new SelectStringBottomSheet();
-              ssb.show(getSupportFragmentManager(), "selectVacation");
-              ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
-                  @Override
-                  public void onItemClick(View v, String category) {
-                      binding.inputbox07.setText(category);
-                  }
-              });
-          });
+        binding.inputbox07.setOnClickListener(v -> {
+            shardpref.putInt("SelectKind", 4);
+            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
+            ssb.show(getSupportFragmentManager(), "selectVacation");
+            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, String category) {
+                    binding.inputbox07.setText(category);
+                }
+            });
+        });
+        binding.downArrow.setOnClickListener(v -> {
+            shardpref.putInt("SelectKind", 4);
+            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
+            ssb.show(getSupportFragmentManager(), "selectVacation");
+            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, String category) {
+                    binding.inputbox07.setText(category);
+                }
+            });
+        });
 
 
     }
@@ -621,7 +609,6 @@ public class PlaceAddActivity extends AppCompatActivity {
     }
 
 
-
     public void Registrnum_Confirm(String num) {
         dlog.i("Registrnum_Confirm num : " + num);
         Retrofit retrofit = new Retrofit.Builder()
@@ -641,12 +628,12 @@ public class PlaceAddActivity extends AppCompatActivity {
                             dlog.i("UserCheck jsonResponse length : " + response.body().length());
                             dlog.i("UserCheck jsonResponse : " + response.body());
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if (response.body().replace("\"", "").equals("success")) {
                                     binding.registrNumState.setText("정상적으로 등록된 사업자 번호입니다.");
                                     binding.registrNumState.setTextColor(R.color.blue);
                                     registrTF = true;
                                     binding.inputbox02.setTextColor(R.color.blue);
-                                }else{
+                                } else {
                                     binding.registrNumState.setText("중복된 사업자 번호 입니다.");
                                     binding.registrNumState.setTextColor(R.color.red);
                                     registrTF = false;
@@ -733,11 +720,11 @@ public class PlaceAddActivity extends AppCompatActivity {
         payday = binding.inputbox05.getText().toString();
         test_day = binding.inputbox06.getText().toString();
         restday = binding.inputbox07.getText().toString();
-        registr_num = binding.inputbox02.getText().toString().replace("-","");
+        registr_num = binding.inputbox02.getText().toString().replace("-", "");
         accept_state = binding.inputbox03.getText().toString();
 
-        SearchRestrnum(binding.inputbox02.getText().toString().replace("-",""));
-        if(boheom.size() == 0){
+        SearchRestrnum(binding.inputbox02.getText().toString().replace("-", ""));
+        if (boheom.size() == 0) {
             boheom.add("없음");
         }
         dlog.i("매장이미지 : " + ProfileUrl);
@@ -793,7 +780,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                 .build();
         PlaceEditInterface api = retrofit.create(PlaceEditInterface.class);
         Call<String> call = api.getData(set_place_id, placeName, registr_num, accept_state, placeAddress, placeDtailAddress
-                , String.valueOf(latitude),String.valueOf(longitube), payday, test_day, restday
+                , String.valueOf(latitude), String.valueOf(longitube), payday, test_day, restday
                 , (String.valueOf(boheom).replace("[", "").replace("]", "")), place_starttime, place_endtime, ProfileUrl
                 , String.valueOf(i), "");
         call.enqueue(new Callback<String>() {
@@ -803,20 +790,21 @@ public class PlaceAddActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("EidtPlace jsonResponse length : " + response.body().length());
-                            dlog.i("EidtPlace jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
 //                                    if (saveBitmap != null) {
 //                                        saveBitmapAndGetURI();
 //                                    }
-                                    if(i == 0){
+                                    if (i == 0) {
                                         Toast_Nomal("임시저장 완료되었습니다.");
                                         pm.PlaceList(mContext);
-                                    }else{
+                                    } else {
                                         pm.PlaceEdit2Go(mContext);
                                     }
-                                } else if (!response.body().equals("[]") && response.body().replace("\"", "").equals("duplicate")) {
+                                } else if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("duplicate")) {
                                     Toast_Nomal("중복되는 데이터가 있습니다.");
                                 } else {
                                     Toast_Nomal("추가 매장을 생성하지 못했습니다.");
@@ -838,6 +826,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     }
 
     String set_place_id = "";
+
     public void AddPlace(int i) {
         //i = 0:임시저장 / 1:저장
         Retrofit retrofit = new Retrofit.Builder()
@@ -845,9 +834,9 @@ public class PlaceAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceAddInterface api = retrofit.create(PlaceAddInterface.class);
-        Call<String> call = api.getData(placeName,USER_INFO_ID,registr_num,accept_state,placeAddress,placeDtailAddress
-                ,String.valueOf(latitude),String.valueOf(longitube),payday,test_day,restday
-                ,(String.valueOf(boheom).replace("[","").replace("]","")),place_starttime,place_endtime,ProfileUrl,String.valueOf(i),USER_INFO_AUTH);
+        Call<String> call = api.getData(placeName, USER_INFO_ID, registr_num, accept_state, placeAddress, placeDtailAddress
+                , String.valueOf(latitude), String.valueOf(longitube), payday, test_day, restday
+                , (String.valueOf(boheom).replace("[", "").replace("]", "")), place_starttime, place_endtime, ProfileUrl, String.valueOf(i), USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -855,29 +844,30 @@ public class PlaceAddActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("AddPlace jsonResponse length : " + response.body().length());
-                            dlog.i("AddPlace jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                List<String> result = new ArrayList<>(Arrays.asList(response.body().replace("\"", "").split(",")));
+                                List<String> result = new ArrayList<>(Arrays.asList(jsonResponse.replace("\"", "").split(",")));
                                 dlog.i("result ; " + result);
-                                if (!response.body().equals("[]") && result.get(0).equals("success")) {
+                                if (!jsonResponse.equals("[]") && result.get(0).equals("success")) {
 //                                    if (saveBitmap != null) {
 //                                        saveBitmapAndGetURI();
 //                                    }
                                     set_place_id = result.get(1).toString();
-                                    if(i == 0){
+                                    if (i == 0) {
                                         Toast_Nomal("임시저장 완료되었습니다.");
                                         pm.PlaceList(mContext);
-                                    }else{
+                                    } else {
                                         shardpref.putString("place_name", placeName);
                                         shardpref.putString("place_owner_id", USER_INFO_ID);
-                                        shardpref.putString("page_state","1");//첫 입력
+                                        shardpref.putString("page_state", "1");//첫 입력
                                         pm.PlaceAdd2Go(mContext);
                                     }
 
-                                }else if(!response.body().equals("[]") && response.body().replace("\"", "").equals("duplicate")){
+                                } else if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("duplicate")) {
                                     Toast_Nomal("현재 계정에서 동일한 이름의 매장이 이미 존재합니다.");
-                                }else{
+                                } else {
                                     Toast_Nomal("추가 매장을 생성하지 못했습니다.");
                                 }
                             } catch (Exception e) {
@@ -1181,7 +1171,6 @@ public class PlaceAddActivity extends AppCompatActivity {
     }
 
 
-
     public static class ApiClient {
         private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
         private static Retrofit retrofit;
@@ -1291,10 +1280,10 @@ public class PlaceAddActivity extends AppCompatActivity {
     }
     /*지오 코딩용 소스 (예비용) - 주소 >> 위도,경도로 변경하는 소스  END*/
 
-    public void Toast_Nomal(String message){
+    public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
-        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
         toast_textview.setText(String.valueOf(message));
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)

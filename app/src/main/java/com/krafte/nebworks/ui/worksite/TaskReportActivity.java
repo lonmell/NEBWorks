@@ -47,6 +47,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -358,11 +359,12 @@ public class TaskReportActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             runOnUiThread(() -> {
                                 dlog.i("resultData : " + resultData.getRESULT());
-                                if (response.body().replace("\"", "").equals("success")) {
+                                if (jsonResponse.replace("\"", "").equals("success")) {
                                     dlog.i("ProfileUrl : " + ProfileUrl);
                                     dlog.i("saveBitmap : " + saveBitmap);
                                     if (!ProfileUrl.isEmpty() && saveBitmap != null) {
@@ -454,10 +456,10 @@ public class TaskReportActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("setUpdateWorktodo jsonResponse length : " + response.body().length());
-                            dlog.i("setUpdateWorktodo jsonResponse : " + response.body());
-//                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
-                            if (response.body().replace("\"", "").equals("success")) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("결재 요청이 완료되었습니다.");
                                 String message = "["+WorkTitle+"]의 결재 요청이 도착했습니다.";
                                 AddPush("업무보고",message,place_owner_id);
@@ -757,6 +759,7 @@ public class TaskReportActivity extends AppCompatActivity {
         }
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     private String ImageNameMaker() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MakeFileNameInterface.URL)
@@ -769,10 +772,12 @@ public class TaskReportActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-//                    String jsonResponse = rc.getBase64decode(response.body());
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(jsonResponse);
                         if (!Response.toString().equals("[]")) {
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);

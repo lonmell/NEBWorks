@@ -110,7 +110,7 @@ public class PayManagementActivity extends AppCompatActivity {
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-            Tap = USER_INFO_AUTH;
+            Tap = shardpref.getString("Tap", "0");
 
             binding.backBtn.setOnClickListener(v -> {
                 shardpref.putInt("SELECT_POSITION", 0);
@@ -121,19 +121,15 @@ public class PayManagementActivity extends AppCompatActivity {
                     pm.Main2(mContext);
                 }
             });
-            if (Tap.equals("0")) {
-                binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
-            } else {
-                binding.line01.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
-            }
+
             binding.select01.setOnClickListener(v -> {
+                shardpref.putString("Tap", "0");
                 binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
                 binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , "0");
             });
             binding.select02.setOnClickListener(v -> {
+                shardpref.putString("Tap", "1");
                 binding.line01.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , "1");
@@ -290,19 +286,25 @@ public class PayManagementActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        dlog.i("onResume Tap : " + shardpref.getString("Tap", "0"));
+        if (Tap.equals("0")) {
+            binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
+        } else {
+            binding.line01.setBackgroundColor(Color.parseColor("#ffffff"));
+            binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
+        }
         WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , Tap);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        shardpref.remove("Tap");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        shardpref.remove("Tap");
     }
 
     // 직원 급여 명세서 리스트

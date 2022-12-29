@@ -26,6 +26,7 @@ import com.krafte.nebworks.pop.CommunityOptionActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,9 +67,10 @@ public class ReplyCommentAdapter extends RecyclerView.Adapter<ReplyCommentAdapte
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position, String comment_id, String comment, String writer_name
-        ,String feed_id,String write_id, String title, String contents, String comment_contents,String write_date);
+                , String feed_id, String write_id, String title, String contents, String comment_contents, String write_date);
     }
-// intent.putExtra("feed_id", Response.getJSONObject(position).getString("feed_id"));
+
+    // intent.putExtra("feed_id", Response.getJSONObject(position).getString("feed_id"));
 //                                            intent.putExtra("comment_id", Response.getJSONObject(position).getString("id"));
 //                                            intent.putExtra("write_id", Response.getJSONObject(position).getString("writer_id"));
 //                                            intent.putExtra("writer_name", WriteName);
@@ -93,7 +95,7 @@ public class ReplyCommentAdapter extends RecyclerView.Adapter<ReplyCommentAdapte
         this.mListener2 = listener2;
     }
 
-    public ReplyCommentAdapter(Context context, ArrayList<WorkReplyCommentData.WorkReplyCommentData_list> data,String feedwriter_id) {
+    public ReplyCommentAdapter(Context context, ArrayList<WorkReplyCommentData.WorkReplyCommentData_list> data, String feedwriter_id) {
         this.mData = data;
         this.mContext = context;
         this.feedwriter_id = feedwriter_id;
@@ -169,7 +171,7 @@ public class ReplyCommentAdapter extends RecyclerView.Adapter<ReplyCommentAdapte
             holder.reply_edit_bottom.setOnClickListener(v -> {
                 if (mListener != null) {
                     mListener.onItemClick(v, position, item.getId(), item.getComment(), item.getWriter_name()
-                            ,item.getFeed_id(), item.getWrite_id(), "", "", item.getComment(), item.getCreated_at());
+                            , item.getFeed_id(), item.getWrite_id(), "", "", item.getComment(), item.getCreated_at());
                 }
             });
             dlog.i("----------원댓 작성자 구분----------");
@@ -240,22 +242,22 @@ public class ReplyCommentAdapter extends RecyclerView.Adapter<ReplyCommentAdapte
 
             //좋아요 영역
             holder.reply_like_cnt.setText(item.getLike_cnt());
-            if(item.getMylike_cnt().equals("0")){
+            if (item.getMylike_cnt().equals("0")) {
                 likeonof[position] = false;
                 holder.reply_like_icon.setBackgroundResource(R.drawable.ic_like_off);
-            }else {
+            } else {
                 likeonof[position] = true;
                 holder.reply_like_icon.setBackgroundResource(R.drawable.ic_like_on);
             }
             holder.reply_like_area.setOnClickListener(v -> {
-                if(!likeonof[position]){
+                if (!likeonof[position]) {
                     likeonof[position] = true;
                     holder.reply_like_icon.setBackgroundResource(R.drawable.ic_like_on);
-                }else{
+                } else {
                     likeonof[position] = false;
                     holder.reply_like_icon.setBackgroundResource(R.drawable.ic_like_off);
                 }
-                AddLike(item.getFeed_id(),item.getId(),holder);
+                AddLike(item.getFeed_id(), item.getId(), holder);
             });
         } catch (Exception e) {
             dlog.i("Exception : " + e);
@@ -281,23 +283,23 @@ public class ReplyCommentAdapter extends RecyclerView.Adapter<ReplyCommentAdapte
             super(itemView);
             // 뷰 객체에 대한 참조
 
-            reply_comment                   = itemView.findViewById(R.id.reply_comment);
-            reply_profile_img               = itemView.findViewById(R.id.reply_profile_img);
-            reply_comment_user_id           = itemView.findViewById(R.id.reply_comment_user_id);
-            reply_Writer_box                = itemView.findViewById(R.id.reply_Writer_box);
-            reply_comment_user_write_date   = itemView.findViewById(R.id.reply_comment_user_write_date);
-            reply_delete_comment            = itemView.findViewById(R.id.reply_delete_comment);
-            reply_comment_user_contents     = itemView.findViewById(R.id.reply_comment_user_contents);
-            reply_edit_comment              = itemView.findViewById(R.id.reply_edit_comment);
-            reply_edit_bottom               = itemView.findViewById(R.id.reply_edit_bottom);
-            reply_cnt                       = itemView.findViewById(R.id.reply_cnt);
-            reply_like_area                 = itemView.findViewById(R.id.reply_like_area);
-            reply_like_icon                 = itemView.findViewById(R.id.reply_like_icon);
-            reply_like_cnt                  = itemView.findViewById(R.id.reply_like_cnt);
+            reply_comment = itemView.findViewById(R.id.reply_comment);
+            reply_profile_img = itemView.findViewById(R.id.reply_profile_img);
+            reply_comment_user_id = itemView.findViewById(R.id.reply_comment_user_id);
+            reply_Writer_box = itemView.findViewById(R.id.reply_Writer_box);
+            reply_comment_user_write_date = itemView.findViewById(R.id.reply_comment_user_write_date);
+            reply_delete_comment = itemView.findViewById(R.id.reply_delete_comment);
+            reply_comment_user_contents = itemView.findViewById(R.id.reply_comment_user_contents);
+            reply_edit_comment = itemView.findViewById(R.id.reply_edit_comment);
+            reply_edit_bottom = itemView.findViewById(R.id.reply_edit_bottom);
+            reply_cnt = itemView.findViewById(R.id.reply_cnt);
+            reply_like_area = itemView.findViewById(R.id.reply_like_area);
+            reply_like_icon = itemView.findViewById(R.id.reply_like_icon);
+            reply_like_cnt = itemView.findViewById(R.id.reply_like_cnt);
 
             //likeonof false로 세팅
             likeonof = new boolean[mData.size()];
-            for(int a = 0; a < mData.size(); a++){
+            for (int a = 0; a < mData.size(); a++) {
                 likeonof[a] = false;
             }
 
@@ -326,30 +328,9 @@ public class ReplyCommentAdapter extends RecyclerView.Adapter<ReplyCommentAdapte
     }
 
 
-    private void UpdateView(String flag, String board_no, String comment_no) {
-//        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
-//            dbConnection.workCheckListData_lists.clear();
-//            dbConnection.WorkCommunityAddData(flag, board_no, comment_no, USER_INFO_ID, "","", "", "", "", "", "", "");
-//            dlog.i("(WorkCommunityDetailActivity)UpdateView flag : " + flag);
-//            activity.runOnUiThread(() -> {
-//                dlog.i("(WorkCommunityDetailActivity)resultData : " + resultData.getRESULT());
-//
-////                if (resultData.getRESULT().equals("success")) {
-////
-////                } else {
-////                    Log.i( "(setRecyclerAddComment)Error2 / flag:" + flag);
-////                }
-//            });
-//        });
-//        th.start();
-//        try {
-//            th.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-    }
-
     String like_cnt = "0";
+    RetrofitConnect rc = new RetrofitConnect();
+
     public void AddLike(String feed_id, String comment_id, ViewHolder holder) {
         dlog.i("-----UpdateView Check-----");
         dlog.i("feed_id : " + feed_id);
@@ -359,22 +340,23 @@ public class ReplyCommentAdapter extends RecyclerView.Adapter<ReplyCommentAdapte
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         AddLikeInterface api = retrofit.create(AddLikeInterface.class);
-        Call<String> call = api.getData(feed_id, comment_id,USER_INFO_ID,"1");
+        Call<String> call = api.getData(feed_id, comment_id, USER_INFO_ID, "1");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 dlog.i("UpdateView Callback : " + response.body());
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("UpdateView jsonResponse length : " + response.body().length());
-                            dlog.i("UpdateView jsonResponse : " + response.body());
-                            like_cnt = response.body().replace("\"", "");
-                            holder.reply_like_cnt.setText(like_cnt);
-                        }
-                    });
-                }
+                activity.runOnUiThread(() -> {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
+                        dlog.i("UpdateView jsonResponse length : " + jsonResponse.length());
+                        dlog.i("UpdateView jsonResponse : " + jsonResponse);
+                        like_cnt = jsonResponse.replace("\"", "");
+                        holder.reply_like_cnt.setText(like_cnt);
+                    }
+                });
             }
 
             @SuppressLint("LongLogTag")

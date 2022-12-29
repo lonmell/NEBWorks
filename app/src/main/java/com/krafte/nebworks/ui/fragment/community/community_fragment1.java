@@ -187,10 +187,12 @@ public class community_fragment1 extends Fragment {
                 Log.e(TAG, "position 0 WorkTapListFragment1 / setRecyclerView");
                 Log.e(TAG, "position 0 response 1: " + response.isSuccessful());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + response.body());
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(response.body());
+                        JSONArray Response = new JSONArray(jsonResponse);
                         BestmList = new ArrayList<>();
                         BestmAdapter = new CommunityAdapter(mContext, BestmList, 0);
                         binding.bestList.setAdapter(BestmAdapter);
@@ -255,6 +257,7 @@ public class community_fragment1 extends Fragment {
         });
     }
 
+    int total_cnt2 = 0;
     public void setRecyclerView2() {
         //전체
         mList.clear();
@@ -292,6 +295,7 @@ public class community_fragment1 extends Fragment {
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
                                 if (jsonObject.getString("boardkind").equals("자유게시판")) {
+                                    total_cnt2 ++;
                                     mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                             jsonObject.getString("id"),
                                             jsonObject.getString("place_id"),
@@ -317,6 +321,13 @@ public class community_fragment1 extends Fragment {
                                 }
                             }
                             mAdapter.notifyDataSetChanged();
+                            if(total_cnt2 == 0){
+                                binding.allList.setVisibility(View.GONE);
+                                binding.noDataTxt2.setVisibility(View.VISIBLE);
+                            }else{
+                                binding.allList.setVisibility(View.VISIBLE);
+                                binding.noDataTxt2.setVisibility(View.GONE);
+                            }
                             mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View v, int position) {
@@ -326,6 +337,7 @@ public class community_fragment1 extends Fragment {
                                     shardpref.putString("writer_id",mList.get(position).getWriter_id());
                                     shardpref.putString("writer_name",mList.get(position).getWriter_name());
                                     shardpref.putString("writer_img_path",mList.get(position).getWriter_img_path());
+                                    shardpref.putString("feed_img_path",mList.get(position).getFeed_img_path());
                                     shardpref.putString("jikgup",mList.get(position).getJikgup());
                                     shardpref.putString("view_cnt",mList.get(position).getView_cnt());
                                     shardpref.putString("comment_cnt",mList.get(position).getComment_cnt());

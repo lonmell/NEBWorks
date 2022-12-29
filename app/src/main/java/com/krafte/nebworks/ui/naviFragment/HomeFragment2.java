@@ -272,6 +272,7 @@ public class HomeFragment2 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        shardpref.remove("Tap");
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -440,15 +441,18 @@ public class HomeFragment2 extends Fragment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
-                        if (response.body().replace("[", "").replace("]", "").replace("\"", "").length() == 0) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
+                        if (jsonResponse.replace("[", "").replace("]", "").replace("\"", "").length() == 0) {
                             //최초 출근
 
-                        } else if (response.body().replace("[", "").replace("]", "").length() > 0) {
+                        } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
                             if (response.isSuccessful() && response.body() != null) {
-                                dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                                dlog.i("LoginCheck jsonResponse : " + response.body());
+                                dlog.i("LoginCheck jsonResponse length : " + jsonResponse.length());
+                                dlog.i("LoginCheck jsonResponse : " + jsonResponse);
                                 try {
-                                    if (response.body().replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
+                                    if (jsonResponse.replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
 //                                        timer.cancel();
 //                                        Intent intent = new Intent(mContext, InoutPopActivity.class);
 //                                        intent.putExtra("title", io_state + " 처리되었습니다.");
@@ -555,6 +559,7 @@ public class HomeFragment2 extends Fragment {
 
     public void UserCheck() {
         dlog.i("---------UserCheck---------");
+        dlog.i("place_id : " + place_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
         dlog.i("---------UserCheck---------");

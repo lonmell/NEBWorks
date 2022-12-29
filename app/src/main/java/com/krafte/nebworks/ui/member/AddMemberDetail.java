@@ -31,6 +31,7 @@ import com.krafte.nebworks.databinding.ActivityAddmemberDetailBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -158,7 +159,7 @@ public class AddMemberDetail extends AppCompatActivity {
     }
 
     private void setInputSetting() {
-        if(mem_id.equals(USER_INFO_ID)){
+        if (mem_id.equals(USER_INFO_ID)) {
             //작성할 데이터가 관리자 본인일 경우 - 상세,기타데이터 입력 필요 없음
             binding.detailInfoArea.setVisibility(View.GONE);
             binding.otherInfoArea.setVisibility(View.GONE);
@@ -172,7 +173,7 @@ public class AddMemberDetail extends AppCompatActivity {
             //주민등록번호
             binding.inputbox03.setEnabled(true);
             binding.inputbox03.setClickable(true);
-        }else{
+        } else {
             //이름
             binding.inputbox01.setBackgroundResource(R.drawable.grayback_gray_round);
             binding.inputbox01.setEnabled(false);
@@ -189,7 +190,7 @@ public class AddMemberDetail extends AppCompatActivity {
             binding.inputbox04.setBackgroundResource(R.drawable.grayback_gray_round);
             binding.inputbox04.setEnabled(false);
             binding.inputbox04.setClickable(false);
-            if(input_kind == 1){
+            if (input_kind == 1) {
                 //--초대로 추가한 회원인 직원의 경우 개인정보는 수정할 수 없도록 입력을 막는다
                 //나이
                 binding.inputbox07.setBackgroundResource(R.drawable.grayback_gray_round);
@@ -211,7 +212,7 @@ public class AddMemberDetail extends AppCompatActivity {
                 binding.inputbox11.setBackgroundResource(R.drawable.grayback_gray_round);
                 binding.inputbox11.setEnabled(false);
                 binding.inputbox11.setClickable(false);
-            }else{
+            } else {
                 //나이
                 binding.inputbox07.setBackgroundResource(R.drawable.default_gray_round);
                 binding.inputbox07.setEnabled(true);
@@ -286,7 +287,7 @@ public class AddMemberDetail extends AppCompatActivity {
             }
         });
 
-        binding.inputbox03.setText(mem_jumin.equals("null")?"":mem_jumin);
+        binding.inputbox03.setText(mem_jumin.equals("null") ? "" : mem_jumin);
         binding.inputbox03.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -549,7 +550,7 @@ public class AddMemberDetail extends AppCompatActivity {
         shardpref.remove("mem_pay");
     }
 
-    private void ChangeSelectTime(int i){
+    private void ChangeSelectTime(int i) {
         binding.select01time.setBackgroundResource(R.drawable.select_empty_round);
         binding.select02time.setBackgroundResource(R.drawable.select_empty_round);
         binding.select03time.setBackgroundResource(R.drawable.select_empty_round);
@@ -558,13 +559,13 @@ public class AddMemberDetail extends AppCompatActivity {
         binding.selectArea02.setBackgroundResource(R.drawable.default_gray_round);
         binding.selectArea03.setBackgroundResource(R.drawable.default_gray_round);
 
-        if(i == 1){
+        if (i == 1) {
             binding.selectArea01.setBackgroundResource(R.drawable.default_select_round);
             binding.select01time.setBackgroundResource(R.drawable.select_full_round);
-        }else if(i == 2){
+        } else if (i == 2) {
             binding.selectArea02.setBackgroundResource(R.drawable.default_select_round);
             binding.select02time.setBackgroundResource(R.drawable.select_full_round);
-        }else if(i == 3){
+        } else if (i == 3) {
             binding.selectArea03.setBackgroundResource(R.drawable.default_select_round);
             binding.select03time.setBackgroundResource(R.drawable.select_full_round);
         }
@@ -576,21 +577,21 @@ public class AddMemberDetail extends AppCompatActivity {
         });
 
         binding.addMemberTopBtn.setOnClickListener(v -> {
-            if(input_kind == 0){
+            if (input_kind == 0) {
                 dlog.i("mem_id.equals(USER_INFO_ID)2 : " + mem_id.equals(USER_INFO_ID));
                 if (SaveCheck() && SaveCheckOtherInfo()) {
                     dlog.i("addMemberBtn SaveCheck 1 : " + SaveCheck());
                     UpdateDirectMemberBasic();
                 }
-            }else{
+            } else {
                 dlog.i("mem_id.equals(USER_INFO_ID) : " + mem_id.equals(USER_INFO_ID));
-                if(mem_id.equals(USER_INFO_ID)){
+                if (mem_id.equals(USER_INFO_ID)) {
                     if (SaveCheck() && SaveCheckOtherInfo()) {
                         dlog.i("addMemberBtn SaveCheck 2 : " + SaveCheck());
                         UpdateDirectMemberBasic();
                     }
-                }else{
-                    if(SaveCheckDetail()){
+                } else {
+                    if (SaveCheckDetail()) {
                         AddMemberDetail();
                     }
                 }
@@ -599,19 +600,19 @@ public class AddMemberDetail extends AppCompatActivity {
         });
 
         binding.addMemberBtn.setOnClickListener(v -> {
-            if(input_kind == 0){
+            if (input_kind == 0) {
                 if (SaveCheck() && SaveCheckOtherInfo()) {
                     dlog.i("addMemberBtn SaveCheck 1 : " + SaveCheck());
                     UpdateDirectMemberBasic();
                 }
-            }else{
-                if(mem_id.equals(USER_INFO_ID)){
+            } else {
+                if (mem_id.equals(USER_INFO_ID)) {
                     if (SaveCheck() && SaveCheckOtherInfo()) {
                         dlog.i("addMemberBtn SaveCheck 2 : " + SaveCheck());
                         UpdateDirectMemberBasic();
                     }
-                }else{
-                    if(SaveCheckDetail()){
+                } else {
+                    if (SaveCheckDetail()) {
                         AddMemberDetail();
                     }
                 }
@@ -627,7 +628,7 @@ public class AddMemberDetail extends AppCompatActivity {
     private boolean SaveCheck() {
         //회원 기본정보 체크
         mem_join_date = binding.inputbox04.getText().toString();
-        if(mem_id.equals(USER_INFO_ID)){
+        if (mem_id.equals(USER_INFO_ID)) {
             //상세정보 체크
             dlog.i("------SaveCheck------");
             dlog.i("매장ID : " + place_id);
@@ -638,7 +639,7 @@ public class AddMemberDetail extends AppCompatActivity {
             dlog.i("입사날짜 : " + mem_join_date);
             dlog.i("------SaveCheck------");
             return true;
-        }else{
+        } else {
             if (place_id.isEmpty()) {
                 Toast.makeText(mContext, "매장 ID가 저장되어있지 않습니다, 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                 pm.PlaceList(mContext);
@@ -669,7 +670,8 @@ public class AddMemberDetail extends AppCompatActivity {
             }
         }
     }
-    private boolean SaveCheckOtherInfo(){
+
+    private boolean SaveCheckOtherInfo() {
         dlog.i("------SaveCheckOtherInfo------");
         dlog.i("나이 : " + mem_age);
         dlog.i("이메일 : " + mem_email);
@@ -679,39 +681,50 @@ public class AddMemberDetail extends AppCompatActivity {
         dlog.i("------SaveCheckOtherInfo------");
         return true;
     }
+
     private boolean SaveCheckDetail() {
-        mem_workhour = binding.inputbox12.getText().toString();
-        dlog.i("------SaveCheckDetail------");
-        dlog.i("매장ID : " + place_id);
-        dlog.i("재직상태 : " + mem_state);
-        dlog.i("직급 : " + mem_jikgup);
-        dlog.i("급여지급방식 : " + mem_paykind);
-        dlog.i("급여액 : " + mem_pay);
-        dlog.i("주야간 : " + mem_worktime);
-        dlog.i("근무시간 : " + mem_workhour);
-        dlog.i("주요직무 : " + mem_task);
-        dlog.i("------SaveCheckDetail------");
-        if(mem_paykind.equals("선택")){
+        if (mem_paykind.equals("선택")) {
             Toast_Nomal("급여지급 방식을 선택해주세요.");
             return false;
-        } else if(mem_worktime.isEmpty()){
+        } else if (mem_worktime.isEmpty()) {
             Toast_Nomal("주야간을 입력해주세요.");
             return false;
-        } else if(mem_workhour.equals("0")){
-            Toast_Nomal("근무시간을 입력해주세요.");
-            return false;
-        } else{
-            return true;
+        } else {
+            dlog.i("------SaveCheckDetail------");
+            dlog.i("매장ID : " + place_id);
+            dlog.i("재직상태 : " + mem_state);
+            dlog.i("직급 : " + mem_jikgup);
+            dlog.i("급여지급방식 : " + mem_paykind);
+            dlog.i("급여액 : " + mem_pay);
+            dlog.i("주야간 : " + mem_worktime);
+            dlog.i("근무시간 : " + mem_workhour);
+            dlog.i("주요직무 : " + mem_task);
+            dlog.i("------SaveCheckDetail------");
+            if (input_kind == 1) {
+                //--초대로 추가한 회원인 직원의 경우 개인정보는 수정할 수 없도록 입력을 막는다
+                return true;
+            } else {
+                mem_workhour = binding.inputbox12.getText().toString();
+                if (mem_workhour.equals("0")) {
+                    Toast_Nomal("근무시간을 입력해주세요.");
+                    return false;
+                }else{
+                    return true;
+                }
+            }
         }
     }
-    private void UpdateDirectMemberBasic(){
+
+    RetrofitConnect rc = new RetrofitConnect();
+
+    private void UpdateDirectMemberBasic() {
         //직접 입력직원 기본정보 업데이트
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceMemberUpdateBasic.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberUpdateBasic api = retrofit.create(PlaceMemberUpdateBasic.class);
-        Call<String> call = api.getData(place_id, mem_id, mem_name, mem_phone, mem_jumin,mem_kind, mem_join_date);
+        Call<String> call = api.getData(place_id, mem_id, mem_name, mem_phone, mem_jumin, mem_kind, mem_join_date);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -719,13 +732,13 @@ public class AddMemberDetail extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UpdateDirectMemberBasic jsonResponse length : " + response.body().length());
-                            dlog.i("UpdateDirectMemberBasic jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             if (response.body().replace("\"", "").equals("success")) {
-                                if(!mem_id.equals(USER_INFO_ID)){
+                                if (!mem_id.equals(USER_INFO_ID)) {
                                     AddDirectMemberOther();
-                                }else{
+                                } else {
                                     Toast_Nomal("관리자정보가 업데이트 되었습니다.");
                                     pm.MemberManagement(mContext);
                                 }
@@ -743,7 +756,7 @@ public class AddMemberDetail extends AppCompatActivity {
         });
     }
 
-    private void AddDirectMemberOther(){
+    private void AddDirectMemberOther() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceMemberInsertOther.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -757,11 +770,11 @@ public class AddMemberDetail extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddDirectMemberOther jsonResponse length : " + response.body().length());
-                            dlog.i("AddDirectMemberOther jsonResponse : " + response.body());
-                            if (response.body().replace("\"", "").equals("success")) {
-                                if(SaveCheckDetail()){
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            if (jsonResponse.replace("\"", "").equals("success")) {
+                                if (SaveCheckDetail()) {
                                     AddMemberDetail();
                                 }
                             }
@@ -803,10 +816,10 @@ public class AddMemberDetail extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddMemberDetail jsonResponse length : " + response.body().length());
-                            dlog.i("AddMemberDetail jsonResponse : " + response.body());
-                            if (response.body().replace("\"", "").equals("success")) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("직원정보가 업데이트 되었습니다.");
                                 pm.MemberManagement(mContext);
                             }
@@ -823,7 +836,7 @@ public class AddMemberDetail extends AppCompatActivity {
         });
     }
 
-    private void GetDetailInfo(){
+    private void GetDetailInfo() {
         dlog.i("------GetDetailInfo------");
         dlog.i("place_id : " + place_id);
         dlog.i("mem_id : " + mem_id);
@@ -833,7 +846,7 @@ public class AddMemberDetail extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         GetMemberDetailInterface api = retrofit.create(GetMemberDetailInterface.class);
-        Call<String> call = api.getData(place_id,mem_id);
+        Call<String> call = api.getData(place_id, mem_id);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -841,19 +854,19 @@ public class AddMemberDetail extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetDetailInfo jsonResponse length : " + response.body().length());
-                            dlog.i("GetDetailInfo jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
-                                    String state    = Response.getJSONObject(0).getString("state").trim();
-                                    String jikgup   = Response.getJSONObject(0).getString("jikgup").trim();
-                                    String paykind  = Response.getJSONObject(0).getString("paykind").trim();
-                                    String pay      = Response.getJSONObject(0).getString("pay").trim();
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    String state = Response.getJSONObject(0).getString("state").trim();
+                                    String jikgup = Response.getJSONObject(0).getString("jikgup").trim();
+                                    String paykind = Response.getJSONObject(0).getString("paykind").trim();
+                                    String pay = Response.getJSONObject(0).getString("pay").trim();
                                     String worktime = Response.getJSONObject(0).getString("worktime").trim();
                                     String workhour = Response.getJSONObject(0).getString("workhour").trim();
-                                    String task     = Response.getJSONObject(0).getString("task").trim();
+                                    String task = Response.getJSONObject(0).getString("task").trim();
 
                                     dlog.i("GetDetailInfo state : " + state);
                                     dlog.i("GetDetailInfo jikgup : " + jikgup);
@@ -862,60 +875,60 @@ public class AddMemberDetail extends AppCompatActivity {
                                     dlog.i("GetDetailInfo worktime : " + worktime);
                                     dlog.i("GetDetailInfo workhour : " + workhour);
                                     dlog.i("GetDetailInfo task : " + task);
-                                    if(state.equals("1")){
+                                    if (state.equals("1")) {
                                         mem_state = "1";
                                         select01TF = false;
                                         binding.select01.setBackgroundResource(R.drawable.select_full_round);
                                         binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
-                                    }else if(state.equals("2")){
+                                    } else if (state.equals("2")) {
                                         mem_state = "2";
                                         select02TF = false;
                                         binding.select02.setBackgroundResource(R.drawable.select_full_round);
                                         binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
                                     }
 
-                                    switch (jikgup){
-                                        case "알바" :
+                                    switch (jikgup) {
+                                        case "알바":
                                             binding.jikgupSpinner.setSelection(0);
                                             break;
-                                        case "정직원" :
+                                        case "정직원":
                                             binding.jikgupSpinner.setSelection(1);
                                             break;
-                                        case "매니저" :
+                                        case "매니저":
                                             binding.jikgupSpinner.setSelection(2);
                                             break;
-                                        case "기타" :
+                                        case "기타":
                                             binding.jikgupSpinner.setSelection(3);
                                             break;
                                     }
 
-                                    switch (paykind){
-                                        case "일급" :
+                                    switch (paykind) {
+                                        case "일급":
                                             binding.paySpinner.setSelection(0);
                                             break;
-                                        case "시급" :
+                                        case "시급":
                                             binding.paySpinner.setSelection(1);
                                             break;
-                                        case "주급" :
+                                        case "주급":
                                             binding.paySpinner.setSelection(2);
                                             break;
-                                        case "월급" :
+                                        case "월급":
                                             binding.paySpinner.setSelection(3);
                                             break;
                                     }
 
                                     binding.inputbox05.setText(pay);
 
-                                    switch (worktime){
-                                        case "주간" :
+                                    switch (worktime) {
+                                        case "주간":
                                             mem_worktime = "주간";
                                             ChangeSelectTime(1);
                                             break;
-                                        case "야간" :
+                                        case "야간":
                                             mem_worktime = "야간";
                                             ChangeSelectTime(2);
                                             break;
-                                        case "종일" :
+                                        case "종일":
                                             mem_worktime = "종일";
                                             ChangeSelectTime(3);
                                             break;
@@ -940,7 +953,7 @@ public class AddMemberDetail extends AppCompatActivity {
         });
     }
 
-    private void GetOtherInfo(){
+    private void GetOtherInfo() {
         dlog.i("------GetDetailInfo------");
         dlog.i("place_id : " + place_id);
         dlog.i("mem_id : " + mem_id);
@@ -950,7 +963,7 @@ public class AddMemberDetail extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         GetMemberOtherInterface api = retrofit.create(GetMemberOtherInterface.class);
-        Call<String> call = api.getData(place_id,mem_id);
+        Call<String> call = api.getData(place_id, mem_id);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -958,17 +971,17 @@ public class AddMemberDetail extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetDetailInfo jsonResponse length : " + response.body().length());
-                            dlog.i("GetDetailInfo jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
+                                if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(response.body());
-                                    String age          = Response.getJSONObject(0).getString("age");
-                                    String email        = Response.getJSONObject(0).getString("email");
-                                    String address      = Response.getJSONObject(0).getString("address");
-                                    String introduce    = Response.getJSONObject(0).getString("introduce");
-                                    String career       = Response.getJSONObject(0).getString("career");
+                                    String age = Response.getJSONObject(0).getString("age");
+                                    String email = Response.getJSONObject(0).getString("email");
+                                    String address = Response.getJSONObject(0).getString("address");
+                                    String introduce = Response.getJSONObject(0).getString("introduce");
+                                    String career = Response.getJSONObject(0).getString("career");
 
                                     binding.inputbox07.setText(age);
                                     binding.inputbox08.setText(email);

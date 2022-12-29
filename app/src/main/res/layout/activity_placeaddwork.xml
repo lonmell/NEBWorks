@@ -113,17 +113,17 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
-                        android:visibility="invisible"
                         android:clickable="false"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="invisible">
 
                         <ImageView
                             android:id="@+id/refresh_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:clickable="false"
                             android:background="@drawable/ic_refresh_btn"
+                            android:clickable="false"
                             android:scaleType="fitXY" />
                     </LinearLayout>
                 </RelativeLayout>
@@ -321,6 +321,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:layout_marginBottom="15dp"
+                            android:visibility="gone"
                             app:cardBackgroundColor="#ffffff"
                             app:cardCornerRadius="10dp"
                             app:cardElevation="0dp">
@@ -380,6 +381,7 @@
                             android:layout_height="45dp"
                             android:layout_marginBottom="15dp"
                             android:layout_toEndOf="@+id/datebox_inside"
+                            android:visibility="gone"
                             app:cardBackgroundColor="#ffffff"
                             app:cardCornerRadius="10dp"
                             app:cardElevation="0dp">

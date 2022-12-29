@@ -235,25 +235,11 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 Month = toDay.substring(5,7);
                 Day = toDay.substring(8,10);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                if(!Year.equals(bYear) || !Month.equals(bMonth) || !Day.equals(bDay)){
-                    dlog.i("Year : " + Year);
-                    dlog.i("bYear : " + bYear);
-                    dlog.i("Month : " + Month);
-                    dlog.i("bMonth : " + bMonth);
-                    dlog.i("Day : " + Day);
-                    dlog.i("bDay : " + bDay);
-                    bYear = Year;
-                    bMonth = Month;
-                    bDay = Day;
-//                    SetCalenderData();
-//                    setRecyclerView();
-                    select_date = Year + "-" + Month + "-" + Day;
-                    if(Tap.equals("")){
-                        GetApprovalList(Tap,"");
-                    }else{
-                        GetApprovalList(Tap,select_date);
-                    }
-
+                select_date = Year + "-" + Month + "-" + Day;
+                if(Tap.equals("")){
+                    GetApprovalList(Tap,"");
+                }else{
+                    GetApprovalList(Tap,select_date);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -271,24 +257,11 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 Month = toDay.substring(5,7);
                 Day = toDay.substring(8,10);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                if(!Year.equals(bYear) || !Month.equals(bMonth) || !Day.equals(bDay)){
-                    dlog.i("Year : " + Year);
-                    dlog.i("bYear : " + bYear);
-                    dlog.i("Month : " + Month);
-                    dlog.i("bMonth : " + bMonth);
-                    dlog.i("Day : " + Day);
-                    dlog.i("bDay : " + bDay);
-                    bYear = Year;
-                    bMonth = Month;
-                    bDay = Day;
-//                    SetCalenderData();
-//                    setRecyclerView();
-                    select_date = Year + "-" + Month + "-" + Day;
-                    if(Tap.equals("")){
-                        GetApprovalList(Tap,"");
-                    }else{
-                        GetApprovalList(Tap,select_date);
-                    }
+                select_date = Year + "-" + Month + "-" + Day;
+                if(Tap.equals("")){
+                    GetApprovalList(Tap,"");
+                }else{
+                    GetApprovalList(Tap,select_date);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -350,8 +323,11 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     }
                     dlog.i("change_place_id : " + change_place_id);
                     dlog.i("change_place_name : " + change_place_name);
-//                    SetCalenderData();
-//                    setRecyclerView();
+                    if(Tap.equals("")){
+                        GetApprovalList(Tap,"");
+                    }else{
+                        GetApprovalList(Tap,select_date);
+                    }
                 }
             });
         });
@@ -372,13 +348,18 @@ public class TaskApprovalFragment extends AppCompatActivity {
                         shardpref.putString("change_member_name", USER_INFO_ID);
                     } else {
                         binding.changeMemberTv.setText(user_name);
+                        change_member_id = user_id;
+                        change_member_name = user_name;
                         shardpref.putString("change_member_id", user_id);
                         shardpref.putString("change_member_name", user_name);
                     }
                     dlog.i("change_member_id : " + user_id);
                     dlog.i("change_member_name : " + user_name);
-//                    SetCalenderData();
-//                    setRecyclerView();
+                    if(Tap.equals("")){
+                        GetApprovalList(Tap,"");
+                    }else{
+                        GetApprovalList(Tap,select_date);
+                    }
                 }
             });
         });
@@ -402,6 +383,9 @@ public class TaskApprovalFragment extends AppCompatActivity {
 
     RetrofitConnect rc = new RetrofitConnect();
     public void GetApprovalList(String state,String approval_date) {
+        dlog.i("select_date : " + select_date);
+        dlog.i("change_place_id : " + change_place_id);
+        dlog.i("change_member_id : " + change_member_id);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TaskSapprovalInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -434,30 +418,56 @@ public class TaskApprovalFragment extends AppCompatActivity {
                             binding.noDataTxt.setVisibility(View.GONE);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
-                                mAdapter.addItem(new TaskCheckData.TaskCheckData_list(
-                                        jsonObject.getString("id"),
-                                        jsonObject.getString("state"),
-                                        jsonObject.getString("request_task_no"),
-                                        jsonObject.getString("requester_id"),
-                                        jsonObject.getString("requester_name"),
-                                        jsonObject.getString("requester_img_path"),
-                                        jsonObject.getString("title"),
-                                        jsonObject.getString("contents"),
-                                        jsonObject.getString("complete_kind"),
-                                        jsonObject.getString("start_time"),
-                                        jsonObject.getString("end_time"),
-                                        jsonObject.getString("complete_time"),
-                                        jsonObject.getString("task_img_path"),
-                                        jsonObject.getString("complete_yn"),
-                                        jsonObject.getString("incomplete_reason"),
-                                        jsonObject.getString("reject_reason"),
-                                        jsonObject.getString("task_date"),
-                                        jsonObject.getString("request_date"),
-                                        jsonObject.getString("approval_date"),
-                                        Collections.singletonList(jsonObject.getString("users"))
-                                ));
+                                if(!change_member_id.isEmpty()){
+                                    if(jsonObject.getString("requester_id").equals(change_member_id)){
+                                        mAdapter.addItem(new TaskCheckData.TaskCheckData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("state"),
+                                                jsonObject.getString("request_task_no"),
+                                                jsonObject.getString("requester_id"),
+                                                jsonObject.getString("requester_name"),
+                                                jsonObject.getString("requester_img_path"),
+                                                jsonObject.getString("title"),
+                                                jsonObject.getString("contents"),
+                                                jsonObject.getString("complete_kind"),
+                                                jsonObject.getString("start_time"),
+                                                jsonObject.getString("end_time"),
+                                                jsonObject.getString("complete_time"),
+                                                jsonObject.getString("task_img_path"),
+                                                jsonObject.getString("complete_yn"),
+                                                jsonObject.getString("incomplete_reason"),
+                                                jsonObject.getString("reject_reason"),
+                                                jsonObject.getString("task_date"),
+                                                jsonObject.getString("request_date"),
+                                                jsonObject.getString("approval_date"),
+                                                Collections.singletonList(jsonObject.getString("users"))
+                                        ));
+                                    }
+                                }else{
+                                    mAdapter.addItem(new TaskCheckData.TaskCheckData_list(
+                                            jsonObject.getString("id"),
+                                            jsonObject.getString("state"),
+                                            jsonObject.getString("request_task_no"),
+                                            jsonObject.getString("requester_id"),
+                                            jsonObject.getString("requester_name"),
+                                            jsonObject.getString("requester_img_path"),
+                                            jsonObject.getString("title"),
+                                            jsonObject.getString("contents"),
+                                            jsonObject.getString("complete_kind"),
+                                            jsonObject.getString("start_time"),
+                                            jsonObject.getString("end_time"),
+                                            jsonObject.getString("complete_time"),
+                                            jsonObject.getString("task_img_path"),
+                                            jsonObject.getString("complete_yn"),
+                                            jsonObject.getString("incomplete_reason"),
+                                            jsonObject.getString("reject_reason"),
+                                            jsonObject.getString("task_date"),
+                                            jsonObject.getString("request_date"),
+                                            jsonObject.getString("approval_date"),
+                                            Collections.singletonList(jsonObject.getString("users"))
+                                    ));
+                                }
                             }
-
                             mAdapter.notifyDataSetChanged();
                         }
 

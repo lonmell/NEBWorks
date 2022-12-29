@@ -165,13 +165,14 @@ public class AddContractPage06 extends AppCompatActivity {
 
     private void setBtnEvent(){
         binding.addTerm.setOnClickListener(v -> {
-            String write_term = binding.newTerm.getText().toString();
+            String write_term = "근로자가 무단 결근 2일 이상 하거나 월 2일 이상\n" +
+                    "결근하는 경우 근로계약을 해지 할 수 있음";
             InputTerm(write_term);
             binding.newTerm.setText("");
         });
 
         binding.next.setOnClickListener(v -> {
-            UpdatePagePos();
+            UpdatePagePos(contract_id);
         });
 
         binding.backBtn.setOnClickListener(v -> {
@@ -202,11 +203,11 @@ public class AddContractPage06 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("InputTerm jsonResponse length : " + response.body().length());
-                            dlog.i("InputTerm jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if(!jsonResponse.equals("null") || !jsonResponse.equals("[]") || !jsonResponse.isEmpty()){
                                     setTermList();
                                 }else{
                                     Toast_Nomal("특약이 저장되지 않았슶니다.");
@@ -245,11 +246,11 @@ public class AddContractPage06 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("DelTerm jsonResponse length : " + response.body().length());
-                            dlog.i("DelTerm jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     setTermList();
                                 }else{
                                     Toast_Nomal("특약이 삭제되지 않았습니다.");
@@ -271,10 +272,9 @@ public class AddContractPage06 extends AppCompatActivity {
     }
 
 
-    private void UpdatePagePos(){
+    private void UpdatePagePos(String contract_id){
         dlog.i("------UpdatePagePos------");
         dlog.i("contract_id : " + contract_id);
-        dlog.i("pos : 4");
         dlog.i("------UpdatePagePos------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractPagePosUp.URL)
@@ -288,18 +288,7 @@ public class AddContractPage06 extends AppCompatActivity {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UpdatePagePos jsonResponse length : " + response.body().length());
-                            dlog.i("UpdatePagePos jsonResponse : " + response.body());
-                            try {
-                                if(response.body().replace("\"","").equals("success")){
-                                    pm.AddContractPage07(mContext);
-                                }
-                            } catch(Exception e){
-                                e.printStackTrace();
-                            }
-                        }
+
                     });
                 }
             }

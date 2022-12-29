@@ -209,7 +209,7 @@ public class TaskDetailActivity extends AppCompatActivity {
             }else{
                 binding.acceptTv.setText("업무 보고하기");
                 int a = 0;
-                for(String str : user_id.split(",")){
+                for(String str : user_id.replace("[","").replace("]","").replace(" ","").split(",")){
                     dlog.i("acceptTv str : " + str);
                     dlog.i("USER_INFO_ID : " + USER_INFO_ID);
                     dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").equals(USER_INFO_ID));

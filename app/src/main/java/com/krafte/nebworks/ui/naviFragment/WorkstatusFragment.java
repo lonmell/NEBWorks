@@ -144,12 +144,12 @@ public class WorkstatusFragment extends Fragment {
             place_id = shardpref.getString("place_id", "0");
             place_name = shardpref.getString("place_name", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
-            SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub",0);
+            SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
 
-            if(USER_INFO_AUTH.equals("1")){
-                if (!place_owner_id.equals(USER_INFO_ID)){
+            if (USER_INFO_AUTH.equals("1")) {
+                if (!place_owner_id.equals(USER_INFO_ID)) {
                     binding.addBtn.getRoot().setVisibility(View.GONE);
                 }
             }
@@ -196,31 +196,32 @@ public class WorkstatusFragment extends Fragment {
             toDay = sdf.format(cal.getTime());
             dlog.i("오늘 :" + toDay);
             binding.setdate.setText(toDay);
-            shardpref.putString("FtoDay",toDay);
-            gYear = toDay.substring(0,4);
-            gMonth = toDay.substring(5,7);
-            SetCalenderData(gYear,gMonth);
+            shardpref.putString("FtoDay", toDay);
+            gYear = toDay.substring(0, 4);
+            gMonth = toDay.substring(5, 7);
+            getYMPicker = gYear + "-" + gMonth;
+            SetCalenderData(gYear, gMonth);
 
             binding.prevDate.setOnClickListener(v -> {
                 cal.add(Calendar.DATE, -1);
                 toDay = sdf.format(cal.getTime());
                 binding.setdate.setText(toDay);
-                shardpref.putString("FtoDay",toDay);
-                Year = toDay.substring(0,4);
-                Month = toDay.substring(5,7);
-                Day = toDay.substring(8,10);
-                SetCalenderData(Year,Month);
+                shardpref.putString("FtoDay", toDay);
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                SetCalenderData(Year, Month);
                 SendToday();
             });
             binding.nextDate.setOnClickListener(v -> {
                 cal.add(Calendar.DATE, +1);
                 toDay = sdf.format(cal.getTime());
                 binding.setdate.setText(toDay);
-                shardpref.putString("FtoDay",toDay);
-                Year = toDay.substring(0,4);
-                Month = toDay.substring(5,7);
-                Day = toDay.substring(8,10);
-                SetCalenderData(Year,Month);
+                shardpref.putString("FtoDay", toDay);
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                SetCalenderData(Year, Month);
                 SendToday();
             });
 
@@ -233,14 +234,14 @@ public class WorkstatusFragment extends Fragment {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     Year = String.valueOf(year);
-                    Month = String.valueOf(month+1);
+                    Month = String.valueOf(month + 1);
                     Day = String.valueOf(dayOfMonth);
-                    Day = Day.length()==1?"0"+Day:Day;
-                    Month = Month.length()==1?"0"+Month:Month;
-                    binding.setdate.setText(year +"-" + Month + "-" + Day);
-                    getYMPicker = binding.setdate.getText().toString().substring(0,7);
+                    Day = Day.length() == 1 ? "0" + Day : Day;
+                    Month = Month.length() == 1 ? "0" + Month : Month;
+                    binding.setdate.setText(year + "-" + Month + "-" + Day);
+                    getYMPicker = binding.setdate.getText().toString().substring(0, 7);
                     SendToday();
-                    SetCalenderData(String.valueOf(year),Month);
+                    SetCalenderData(String.valueOf(year), Month);
                 }
             }, mYear, mMonth, mDay);
 
@@ -261,31 +262,31 @@ public class WorkstatusFragment extends Fragment {
 //        return rootView;
     }
 
-    private void SendToday(){
-        shardpref.putString("FtoDay",toDay);
+    private void SendToday() {
+        shardpref.putString("FtoDay", toDay);
 
-        if(SELECT_POSITION_sub == 0){
+        if (SELECT_POSITION_sub == 0) {
             binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
             fg = WorkStatusSubFragment1.newInstance();
             setChildFragment(fg);
-        }else if(SELECT_POSITION_sub == 1){
+        } else if (SELECT_POSITION_sub == 1) {
             binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
             fg = WorkStatusSubFragment2.newInstance();
             setChildFragment(fg);
-        }else if(SELECT_POSITION_sub == 2){
+        } else if (SELECT_POSITION_sub == 2) {
             binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
             fg = WorkStatusSubFragment3.newInstance();
             setChildFragment(fg);
-        }else if(SELECT_POSITION_sub == 3){
+        } else if (SELECT_POSITION_sub == 3) {
             binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -294,7 +295,8 @@ public class WorkstatusFragment extends Fragment {
             setChildFragment(fg);
         }
     }
-    private void SetCalenderData(String Year,String Month){
+
+    private void SetCalenderData(String Year, String Month) {
         mList2.clear();
         dlog.i("------SetCalenderData------");
         dlog.i("place_id :" + place_id);
@@ -306,17 +308,17 @@ public class WorkstatusFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkstatusCalendersetData api = retrofit.create(WorkstatusCalendersetData.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, Year,Month);
+        Call<String> call2 = api.getData(place_id, USER_INFO_ID, Year, Month);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
-                String jsonResponse = rc.getBase64decode(response2.body());
-                dlog.i("jsonResponse length : " + jsonResponse.length());
-                dlog.i("jsonResponse : " + jsonResponse);
                 activity.runOnUiThread(() -> {
                     //캘린더 내용 (업무가) 있을때
-                    if (response2.isSuccessful() && jsonResponse != null) {
+                    if (response2.isSuccessful() && response2.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response2.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
                         try {
                             JSONArray Response2 = new JSONArray(jsonResponse);
                             if (Response2.length() == 0) {
@@ -355,7 +357,7 @@ public class WorkstatusFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkCalenderInterface api = retrofit.create(WorkCalenderInterface.class);
-        Call<String> call = api.getData(Year,Month);
+        Call<String> call = api.getData(Year, Month);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -365,11 +367,14 @@ public class WorkstatusFragment extends Fragment {
                 Log.e(TAG, "response 2: " + response.body());
                 activity.runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
+//                        String jsonResponse = rc.getBase64decode(response.body());
+//                        dlog.i("jsonResponse length : " + jsonResponse.length());
+//                        dlog.i("jsonResponse : " + jsonResponse);
                         dlog.i("onResume place_id :" + place_id);
                         dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
                         dlog.i("onResume getYMPicker :" + getYMPicker);
                         dlog.i("onResume mList2 :" + mList2);
-                        try{
+                        try {
                             String select_date = Year + "-" + Month;
                             JSONArray Response = new JSONArray(response.body());
                             mList = new ArrayList<>();
@@ -398,19 +403,19 @@ public class WorkstatusFragment extends Fragment {
                                 mAdapter.setOnItemClickListener(new WorkStatusCalenderAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                                        try{
+                                        try {
                                             dlog.i("onItemClick WorkDay :" + WorkDay);
-                                            shardpref.putString("FtoDay",WorkDay);
+                                            shardpref.putString("FtoDay", WorkDay);
                                             WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
-                                            wsb.show(getChildFragmentManager(),"WorkstatusBottomSheet");
-                                        }catch (Exception e){
+                                            wsb.show(getChildFragmentManager(), "WorkstatusBottomSheet");
+                                        } catch (Exception e) {
                                             dlog.i("onItemClick Exception :" + e);
                                         }
 
                                     }
                                 });
                             }
-                        }catch (JSONException e){
+                        } catch (JSONException e) {
                             dlog.i("JSONException :" + e);
                         }
                     }
@@ -445,18 +450,19 @@ public class WorkstatusFragment extends Fragment {
 
     public void setBtnEvent() {
         binding.changeIcon.setOnClickListener(v -> {
-            if(!chng_icon){
+            if (!chng_icon) {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
-                SetCalenderData(gYear,gMonth);
-            }else{
+                SetCalenderData(gYear, gMonth);
+            } else {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
             }
         });
     }
+
     private void setChildFragment(Fragment child) {
         FragmentTransaction childFt = getChildFragmentManager().beginTransaction();
 
@@ -500,6 +506,7 @@ public class WorkstatusFragment extends Fragment {
                                         dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
                                         dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
                                         dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
+                                        shardpref.putString("i_cnt", Response.getJSONObject(0).getString("i_cnt"));
                                         dlog.i("------PlaceWorkCheck-------");
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -523,6 +530,7 @@ public class WorkstatusFragment extends Fragment {
 
     CardView add_worktime_btn;
     TextView addbtn_tv;
+
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);

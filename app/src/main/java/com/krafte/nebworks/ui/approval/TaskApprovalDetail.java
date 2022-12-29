@@ -483,12 +483,11 @@ public class TaskApprovalDetail extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.e(TAG, "setUpdateWorktodo function START");
-                Log.e(TAG, "response 1: " + response.isSuccessful());
-                Log.e(TAG, "response 2: " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
-                    dlog.i( "resultData : " + resultData.getRESULT());
-                    if (response.body().replace("\"", "").equals("success")) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
+                    if (jsonResponse.replace("\"", "").equals("success")) {
                         for(int a = 0; a < user_id.size(); a++){
                             if(place_owner_id.equals(user_id.get(a))){
                                 getManagerToken(user_id.get(a), "0", place_id, place_name,state);
@@ -597,9 +596,11 @@ public class TaskApprovalDetail extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 try {
-                    JSONArray Response = new JSONArray(response.body());
+                    JSONArray Response = new JSONArray(jsonResponse);
                     if (Response.length() > 0) {
                         dlog.i("-----getManagerToken-----");
                         dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));

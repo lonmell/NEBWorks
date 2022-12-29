@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractPayInterface;
 import com.krafte.nebworks.dataInterface.TermInputInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd05Binding;
@@ -264,14 +265,14 @@ public class AddContractPage05 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("SaveWorkPartTime jsonResponse length : " + response.body().length());
-                            dlog.i("SaveWorkPartTime jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
-                                    Toast_Nomal("급여 기본사항이 업데이트 완료되었습니다.");
-                                    InputTerm("근로자가 무단 결근 2일 이상 하거나 월 2일 이상\n결근하는 경우 근로계약을 해지 할 수 있음");
-                                    pm.AddContractPage06(mContext);
-                                }
+                                Toast_Nomal("급여 기본사항이 업데이트 완료되었습니다.");
+                                InputTerm("근로자가 무단 결근 2일 이상 하거나 월 2일 이상\n결근하는 경우 근로계약을 해지 할 수 있음");
+                                UpdatePagePos(jsonResponse);
+                                pm.AddContractPage06(mContext);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -347,5 +348,34 @@ public class AddContractPage05 extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void UpdatePagePos(String contract_id){
+        dlog.i("------UpdatePagePos------");
+        dlog.i("contract_id : " + contract_id);
+        dlog.i("------UpdatePagePos------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractPagePosUp.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
+        Call<String> call = api.getData(contract_id,"3");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 }

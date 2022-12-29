@@ -220,33 +220,6 @@ public class PlaceEditActivity extends AppCompatActivity {
             pm.PlaceList(mContext);
         });
 
-        //------매장 이미지 등록 / 갤러리 열기
-//        binding.profileImg.setOnClickListener(v -> {
-//            Intent intent = new Intent();
-//            intent.setType("image/*");
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            startActivityForResult(intent, GALLEY_CODE);
-//        });
-//        if (saveBitmap != null) {
-//            binding.clearImg.setVisibility(View.VISIBLE);
-//            binding.imgPlus.setVisibility(View.GONE);
-//        } else {
-//            binding.clearImg.setVisibility(View.GONE);
-//            binding.imgPlus.setVisibility(View.VISIBLE);
-//        }
-//        binding.clearImg.setOnClickListener(v -> {
-//            try {
-//                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
-//                saveBitmap.eraseColor(Color.TRANSPARENT);
-//                binding.profileSetimg.setImageBitmap(saveBitmap);
-//                binding.profileSetimg.setBackgroundResource(R.drawable.img_box_round);
-//                ProfileUrl = "";
-//                binding.clearImg.setVisibility(View.GONE);
-//                binding.imgPlus.setVisibility(View.VISIBLE);
-//            } catch (Exception e) {
-//                dlog.i("clearImg Exception : " + e);
-//            }
-//        });
 
         binding.addPlaceBtn.setOnClickListener(v -> {
             if (CheckData()) {
@@ -375,10 +348,6 @@ public class PlaceEditActivity extends AppCompatActivity {
                     }
                 }
             });
-//            Intent intent = new Intent(this, WorkTimePicker.class);
-//            intent.putExtra("timeSelect_flag", 5);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.translate_up, 0);
 
         });
     }
@@ -439,7 +408,9 @@ public class PlaceEditActivity extends AppCompatActivity {
                                 binding.inputbox03.setText(store_kind);
                                 binding.inputbox04.setText(address);
                                 binding.inputbox041.setText(address_detail);
+                                binding.inputbox07.setText(vacation_select);
                                 dlog.i("insurance : " + insurance.replace(" ", ""));
+
                                 for (String str : insurance.replace(" ", "").split(",")) {
                                     boheom.add(str.replace(" ", ""));
                                     if (str.contains("4대보험")) {
@@ -522,40 +493,6 @@ public class PlaceEditActivity extends AppCompatActivity {
 
 
         /*휴가*/
-//        ArrayList<String> stringCategory5 = new ArrayList<>();
-//        stringCategory5.add("휴가");
-//        stringCategory5.add("없음");
-//        stringCategory5.add("자유");
-//        stringCategory5.add("월차");
-//        stringCategory5.add("연차");
-//
-//        ArrayAdapter<String> select_filter5 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory5);
-//        binding.inputbox07Spinner.setAdapter(select_filter5);
-//        if (!vacation_select.isEmpty()) {
-//            for (int a = 0; a < stringCategory5.size(); a++) {
-//                if (stringCategory5.get(a).equals(vacation_select)) {
-//                    binding.inputbox07.setText(stringCategory5.get(a));
-//                    binding.inputbox07Spinner.setSelection(a);
-//                }
-//            }
-//        }
-//        binding.inputbox07Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                binding.inputbox07.setText(stringCategory5.get(i));
-//                dlog.i("i : " + stringCategory5.get(i));
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//                if (!vacation_select.isEmpty()) {
-//                    binding.inputbox07.setText(vacation_select);
-//                } else {
-//                    binding.inputbox07.setText("없음");
-//                }
-//            }
-//        });
         binding.inputbox07.setOnClickListener(v -> {
             shardpref.putInt("SelectKind", 4);
             SelectStringBottomSheet ssb = new SelectStringBottomSheet();
@@ -646,11 +583,11 @@ public class PlaceEditActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     binding.registrNumState.setText("정상적으로 등록된 사업자 번호입니다.");
                                     binding.registrNumState.setTextColor(R.color.blue);
                                     registrTF = true;
@@ -821,11 +758,12 @@ public class PlaceEditActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                            dlog.i("LoginCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
 
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
 //                                    if (saveBitmap != null) {
 //                                        saveBitmapAndGetURI();
 //                                    }
@@ -834,7 +772,7 @@ public class PlaceEditActivity extends AppCompatActivity {
                                     }
                                     pm.PlaceEdit2Go(mContext);
 //                                    pm.PlaceList(mContext);
-                                } else if (!response.body().equals("[]") && response.body().replace("\"", "").equals("duplicate")) {
+                                } else if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("duplicate")) {
                                     Toast_Nomal("중복되는 데이터가 있습니다.");
                                 } else {
                                     Toast_Nomal("추가 매장을 생성하지 못했습니다.");

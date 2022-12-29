@@ -182,7 +182,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         String comment_cnt      = shardpref.getString("comment_cnt","");
         String category         = shardpref.getString("category","");
 
-        binding.selectCategoryTxt.setText(category);
+        binding.selectCategoryTxt.setText(category.isEmpty()?"키워드 선택":category);
         binding.writeTitle.setText(title);
         binding.writeContents.setText(contents);
         Glide.with(mContext).load(feed_img_path)
@@ -334,6 +334,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                             String jsonResponse = rc.getBase64decode(response.body());
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("ProfileUrl : " + ProfileUrl);
                             try {
                                 if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     if (!ProfileUrl.isEmpty()) {
@@ -396,6 +397,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                                     if (!ProfileUrl.isEmpty()) {
                                         saveBitmapAndGetURI();
                                     }
+                                    sharedRemove();
                                     Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     pm.FeedList(mContext);
                                 }
@@ -419,7 +421,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void BackMove() {
+    private void sharedRemove(){
         shardpref.remove("writer_name");
         shardpref.remove("write_nickname");
         shardpref.remove("title");
@@ -430,7 +432,6 @@ public class CommunityAddActivity extends AppCompatActivity {
         shardpref.remove("categoryItem");
         shardpref.remove("TopFeed");
 
-        shardpref.remove("place_id");
         shardpref.remove("title");
         shardpref.remove("contents");
         shardpref.remove("writer_id");
@@ -440,7 +441,9 @@ public class CommunityAddActivity extends AppCompatActivity {
         shardpref.remove("view_cnt");
         shardpref.remove("comment_cnt");
         shardpref.remove("category");
-
+    }
+    private void BackMove() {
+        sharedRemove();
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
         intent.putExtra("data", "작성을 종료하시겠습니까?\n편집한 내용이 저장되지 않습니다.");
         intent.putExtra("flag", "작성여부");
@@ -561,7 +564,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String inputDate = dc.GET_YEAR + dc.GET_MONTH + dc.GET_DAY;
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String file_name = USER_INFO_NO + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
         String fullFileName = BACKUP_PATH;
 
         dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
@@ -581,8 +584,8 @@ public class CommunityAddActivity extends AppCompatActivity {
             saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
 
 
-            ProfileUrl = "http://krafte.net/app_php/feedimg/" + file_name;
-            feed_thumnail_path = "http://krafte.net/app_php/feedimg/" + file_name;
+            ProfileUrl = "http://krafte.net/NEBWorks/image/feedimg/" + file_name;
+            feed_thumnail_path = "http://krafte.net/NEBWorks/image/feedimg/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("이미지 저장경로 : " + ProfileUrl);
@@ -625,7 +628,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     }
 
     public static class ApiClient {
-        private static final String BASE_URL = "http://krafte.net/app_php/";
+        private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
         private static Retrofit retrofit;
 
         public static Retrofit getApiClient() {
@@ -647,7 +650,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     public interface RetrofitInterface {
         //api를 관리해주는 인터페이스
         @Multipart
-        @POST("mobile_upload_file_feed2.php")
+        @POST("upload_feed_img.php")
         Call<String> request(@Part MultipartBody.Part file);
     }
 

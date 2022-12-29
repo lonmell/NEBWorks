@@ -162,6 +162,12 @@ public class MemberDetailActivity extends AppCompatActivity {
             if(USER_INFO_AUTH.equals("1")){
                 binding.addBtn.getRoot().setVisibility(View.GONE);
             }
+
+            if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+                    binding.contractPhoneInfo.setVisibility(View.GONE);
+            }else if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")){
+                binding.contractPhoneInfo.setVisibility(View.VISIBLE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

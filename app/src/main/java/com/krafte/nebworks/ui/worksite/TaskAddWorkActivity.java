@@ -36,6 +36,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -740,7 +741,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     //업무 저장(추가)
     String getStartDate = "";
     String getEndDate = "";
-
+    RetrofitConnect rc = new RetrofitConnect();
     private void SaveAddWork() {
         dlog.i("------------------SaveAddWork------------------");
         dlog.i("RepeatCheck : " + RepeatCheck);
@@ -774,15 +775,15 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         dlog.i("sat : " + Sat);
         dlog.i("users : " + user_id);
         dlog.i("overdate : " + overdate);
-        if(overdate.isEmpty()){
-            cal.add(Calendar.DATE, +1);
-            String toDay = sdf.format(cal.getTime());
-            String Year = toDay.substring(0,4);
-            String Month = toDay.substring(5,7);
-            String Day = toDay.substring(8,10);
-            overdate = Year + "-" + Month + "-" + Day;
-            dlog.i("overdate 2 : " + overdate);
-        }
+//        if(overdate.isEmpty()){
+//            cal.add(Calendar.DATE, +1);
+//            String toDay = sdf.format(cal.getTime());
+//            String Year = toDay.substring(0,4);
+//            String Month = toDay.substring(5,7);
+//            String Day = toDay.substring(8,10);
+//            overdate = Year + "-" + Month + "-" + Day;
+//            dlog.i("overdate 2 : " + overdate);
+//        }
         if (USER_INFO_AUTH.equals("1")) {
             user_id = USER_INFO_ID;
         }
@@ -810,7 +811,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                 dlog.e("response 1: " + response.isSuccessful());
                                 dlog.e("response 2: " + response.body());
                                 if (response.isSuccessful() && response.body() != null) {
-                                    String jsonResponse = response.body();
+                                    String jsonResponse = rc.getBase64decode(response.body());
+                                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                                    dlog.i("jsonResponse : " + jsonResponse);
                                     if (jsonResponse.replace("\"", "").equals("success") || response.body().replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         dlog.i("SelectEmployeeid : " + user_id);

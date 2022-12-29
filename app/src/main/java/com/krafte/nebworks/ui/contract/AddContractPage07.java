@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractWorkerInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd07Binding;
 import com.krafte.nebworks.ui.WebViewActivity;
@@ -246,11 +247,13 @@ public class AddContractPage07 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("SaveWorkerInfo jsonResponse length : " + response.body().length());
-                            dlog.i("SaveWorkerInfo jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                if(!jsonResponse.equals("null") || !jsonResponse.equals("[]") || !jsonResponse.isEmpty()){
                                     shardpref.putString("contract_email",email);
+                                    UpdatePagePos(contract_id);
                                     pm.AddContractPage08(mContext);
                                 }
                             } catch (Exception e) {
@@ -292,5 +295,34 @@ public class AddContractPage07 extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void UpdatePagePos(String contract_id){
+        dlog.i("------UpdatePagePos------");
+        dlog.i("contract_id : " + contract_id);
+        dlog.i("------UpdatePagePos------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractPagePosUp.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
+        Call<String> call = api.getData(contract_id,"5");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 }

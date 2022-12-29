@@ -48,11 +48,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -182,24 +180,24 @@ public class WorkgotoFragment extends Fragment {
             place_start_date = shardpref.getString("place_start_date", "0");
             place_created_at = shardpref.getString("place_created_at", "0");
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
-            SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub",0);
+            SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1"); //0-관리자 / 1- 근로자
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1"); //0-관리자 / 1- 근로자
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            return_page = shardpref.getString("return_page","");
+            return_page = shardpref.getString("return_page", "");
             setBtnEvent();
             change_place_id = place_id;
             change_member_id = "";
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
-            if(SELECT_POSITION_sub == 0){
+            if (SELECT_POSITION_sub == 0) {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                 binding.selectArea.setVisibility(View.VISIBLE);
                 setRecyclerView();
-            }else if(SELECT_POSITION_sub == 1){
+            } else if (SELECT_POSITION_sub == 1) {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
@@ -227,7 +225,7 @@ public class WorkgotoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        try{
+        try {
             //기존에 저장된 반복데이터 삭제
             shardpref.remove("return_page");
             shardpref.remove("SET_TASK_TIME_VALUE");
@@ -238,12 +236,12 @@ public class WorkgotoFragment extends Fragment {
             RemoveShared();
             setAddBtnSetting();
             setRecyclerView();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void RemoveShared(){
+    private void RemoveShared() {
         shardpref.remove("task_no");
         shardpref.remove("picker_year");
         shardpref.remove("picker_month");
@@ -265,78 +263,47 @@ public class WorkgotoFragment extends Fragment {
     public void setBtnEvent() {
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
-        dlog.i("오늘 :" + toDay);
-        binding.setdate.setText(toDay);
         Year = toDay.substring(0, 4);
         Month = toDay.substring(5, 7);
-        Day = toDay.substring(8,10);
+        Day = toDay.substring(8, 10);
         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
 
         binding.prevDate.setOnClickListener(v -> {
             try {
-                String getDate = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
-                // 문자열 -> Date
-                Date date = sdf.parse(getDate);
-                dlog.i("Calendar.DATE : " + sdf.format(date));
+//                String getDate = binding.setdate.getText().toString().replace("년 ", "-").replace("월 ", "-").replace("일", "");
+//                // 문자열 -> Date
+//                Date date = sdf.parse(getDate);
+//                dlog.i("Calendar.DATE : " + sdf.format(date));
                 cal.add(Calendar.DATE, -1);
                 toDay = sdf.format(cal.getTime());
-                Year = toDay.substring(0,4);
-                Month = toDay.substring(5,7);
-                Day = toDay.substring(8,10);
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                getYMPicker = Year + "-" + Month;
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-//                if(!Year.equals(bYear) || !Month.equals(bMonth) || !Day.equals(bDay)){
-//                    dlog.i("Year : " + Year);
-//                    dlog.i("bYear : " + bYear);
-//                    dlog.i("Month : " + Month);
-//                    dlog.i("bMonth : " + bMonth);
-//                    dlog.i("Day : " + Day);
-//                    dlog.i("bDay : " + bDay);
-//                    bYear = Year;
-//                    bMonth = Month;
-//                    bDay = Day;
-//                    SetCalenderData();
-//                    setRecyclerView();
-//                }
-                bYear = Year;
-                bMonth = Month;
-                bDay = Day;
+
                 SetCalenderData();
                 setRecyclerView();
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
         binding.nextDate.setOnClickListener(v -> {
             try {
-                String getDate = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
-                // 문자열 -> Date
-                Date date = sdf.parse(getDate);
-                dlog.i("Calendar.DATE : " + sdf.format(date));
+//                String getDate = binding.setdate.getText().toString().replace("년 ", "-").replace("월 ", "-").replace("일", "");
+//                // 문자열 -> Date
+//                Date date = sdf.parse(getDate);
+//                dlog.i("Calendar.DATE : " + sdf.format(date));
                 cal.add(Calendar.DATE, +1);
                 toDay = sdf.format(cal.getTime());
-                Year = toDay.substring(0,4);
-                Month = toDay.substring(5,7);
-                Day = toDay.substring(8,10);
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                getYMPicker = Year + "-" + Month;
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-//                if(!Year.equals(bYear) || !Month.equals(bMonth) || !Day.equals(bDay)){
-//                    dlog.i("Year : " + Year);
-//                    dlog.i("bYear : " + bYear);
-//                    dlog.i("Month : " + Month);
-//                    dlog.i("bMonth : " + bMonth);
-//                    dlog.i("Day : " + Day);
-//                    dlog.i("bDay : " + bDay);
-//                    bYear = Year;
-//                    bMonth = Month;
-//                    bDay = Day;
-//                    SetCalenderData();
-//                    setRecyclerView();
-//                }
-                bYear = Year;
-                bMonth = Month;
-                bDay = Day;
                 SetCalenderData();
                 setRecyclerView();
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -350,12 +317,12 @@ public class WorkgotoFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Year = String.valueOf(year);
-                Month = String.valueOf(month+1);
+                Month = String.valueOf(month + 1);
                 Day = String.valueOf(dayOfMonth);
-                Day = Day.length()==1?"0"+Day:Day;
-                Month = Month.length()==1?"0"+Month:Month;
+                Day = Day.length() == 1 ? "0" + Day : Day;
+                Month = Month.length() == 1 ? "0" + Month : Month;
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                getYMPicker = binding.setdate.getText().toString().substring(0,7);
+                getYMPicker = Year + "년 " + Month + "월 ";
                 SetCalenderData();
                 setRecyclerView();
             }
@@ -423,13 +390,13 @@ public class WorkgotoFragment extends Fragment {
         });
 
         binding.changeIcon.setOnClickListener(v -> {
-            if(!chng_icon){
+            if (!chng_icon) {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
                 binding.selectArea.setVisibility(View.GONE);
                 SetCalenderData();
-            }else{
+            } else {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
@@ -439,20 +406,20 @@ public class WorkgotoFragment extends Fragment {
         });
     }
 
-    private void SetCalenderData(){
-        getYMPicker = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
+
+    private void SetCalenderData() {
         mList2.clear();
         dlog.i("------SetCalenderData------");
         dlog.i("place_id : " + change_place_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("select_date : " + getYMPicker.substring(0,7));
+        dlog.i("select_date : " + getYMPicker);
         dlog.i("------SetCalenderData------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalendersetData.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkCalendersetData api = retrofit.create(WorkCalendersetData.class);
-        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMPicker.substring(0,7));
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMPicker);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -463,12 +430,12 @@ public class WorkgotoFragment extends Fragment {
                         String jsonResponse = rc.getBase64decode(response2.body());
                         dlog.i("jsonResponse length : " + jsonResponse.length());
                         dlog.i("jsonResponse : " + jsonResponse);
-                        dlog.i( "SetCalenderData function START");
+                        dlog.i("SetCalenderData function START");
                         try {
                             JSONArray Response2 = new JSONArray(jsonResponse);
                             if (Response2.length() == 0) {
                                 dlog.i("GET SIZE : " + Response2.length());
-                                GetCalenderList(Year, Month, mList2,getYMPicker.substring(0,7));
+                                GetCalenderList(Year, Month, mList2, getYMPicker);
                             } else {
                                 for (int i = 0; i < Response2.length(); i++) {
                                     JSONObject jsonObject = Response2.getJSONObject(i);
@@ -478,7 +445,7 @@ public class WorkgotoFragment extends Fragment {
                                             Collections.singletonList(jsonObject.getString("task"))
                                     ));
                                 }
-                                GetCalenderList(Year, Month, mList2,getYMPicker.substring(0,7));
+                                GetCalenderList(Year, Month, mList2, getYMPicker);
                             }
 
                         } catch (JSONException e) {
@@ -502,13 +469,14 @@ public class WorkgotoFragment extends Fragment {
 
     ArrayList<String> write_name = new ArrayList<>();
     ArrayList<String> end = new ArrayList<>();
-    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetData.CalendarSetData_list> mList2,String date) {
+
+    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetData.CalendarSetData_list> mList2, String date) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalenderInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkCalenderInterface api = retrofit.create(WorkCalenderInterface.class);
-        Call<String> call = api.getData(Year,Month);
+        Call<String> call = api.getData(Year, Month);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -520,9 +488,9 @@ public class WorkgotoFragment extends Fragment {
                     if (response.isSuccessful() && response.body() != null) {
                         dlog.i("onResume place_id :" + place_id);
                         dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
-                        dlog.i("onResume getYMPicker :" + getYMPicker.substring(0,7));
+                        dlog.i("onResume getYMPicker :" + getYMPicker);
                         dlog.i("onResume mList2 :" + mList2);
-                        try{
+                        try {
                             String select_date = Year + "-" + Month;
                             JSONArray Response = new JSONArray(response.body());
                             mList = new ArrayList<>();
@@ -552,11 +520,11 @@ public class WorkgotoFragment extends Fragment {
                                     @Override
                                     public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
                                         dlog.i("data :" + data);
-                                        try{
+                                        try {
                                             kind = new ArrayList<>();
                                             title = new ArrayList<>();
                                             for (int i = 0; i < mList2.size(); i++) {
-                                                if (data.equals(mList2.get(i).getDay().length() == 1?"0"+mList2.get(i).getDay():mList2.get(i).getDay())) {
+                                                if (data.equals(mList2.get(i).getDay().length() == 1 ? "0" + mList2.get(i).getDay() : mList2.get(i).getDay())) {
                                                     JSONArray Response = new JSONArray(mList2.get(i).getTask().toString().replace("[[", "[").replace("]]", "]"));
                                                     for (int i3 = 0; i3 < Response.length(); i3++) {
                                                         JSONObject jsonObject = Response.getJSONObject(i3);
@@ -565,11 +533,11 @@ public class WorkgotoFragment extends Fragment {
                                                     }
                                                 }
                                             }
-                                            shardpref.putString("task_date",WorkDay);
+                                            shardpref.putString("task_date", WorkDay);
                                             dlog.i("WorkDay :" + WorkDay);
 
-                                            shardpref.putString("change_place_id", change_place_id.isEmpty()?place_id:change_place_id);
-                                            shardpref.putString("change_member_id", change_member_id.isEmpty()?"":change_member_id);
+                                            shardpref.putString("change_place_id", change_place_id.isEmpty() ? place_id : change_place_id);
+                                            shardpref.putString("change_member_id", change_member_id.isEmpty() ? "" : change_member_id);
 //                                            Intent intent = new Intent(mContext, TaskListPopActivity.class);
 //                                            intent.putStringArrayListExtra("kind", kind);
 //                                            intent.putStringArrayListExtra("title", title);
@@ -579,8 +547,8 @@ public class WorkgotoFragment extends Fragment {
 //                                            startActivity(intent);
 //                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                                             WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
-                                            wgb.show(getChildFragmentManager(),"WorkgotoBottomSheet");
-                                        }catch (Exception e){
+                                            wgb.show(getChildFragmentManager(), "WorkgotoBottomSheet");
+                                        } catch (Exception e) {
                                             dlog.i("onItemClick Exception :" + e);
                                         }
 
@@ -594,7 +562,7 @@ public class WorkgotoFragment extends Fragment {
 //                                    binding.addWorkBtn.setVisibility(View.GONE);
 //                                }
                             }
-                        }catch (JSONException e){
+                        } catch (JSONException e) {
                             dlog.i("JSONException :" + e);
                         }
                     }
@@ -616,8 +584,8 @@ public class WorkgotoFragment extends Fragment {
     String writer_id = "";
 
     public void setRecyclerView() {
-        String select_date = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
-        if(change_member_id.isEmpty()){
+        String select_date = binding.setdate.getText().toString().replace("년 ", "-").replace("월 ", "-").replace("일", "");
+        if (change_member_id.isEmpty()) {
             change_member_id = USER_INFO_ID;
         }
         dlog.i("setTodoWList place_id : " + change_place_id);
@@ -630,7 +598,7 @@ public class WorkgotoFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         TaskSelectWInterface api = retrofit.create(TaskSelectWInterface.class);
-        Call<String> call = api.getData(change_place_id, change_member_id, select_date,USER_INFO_AUTH);
+        Call<String> call = api.getData(change_place_id, change_member_id, select_date, USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -660,7 +628,7 @@ public class WorkgotoFragment extends Fragment {
                             binding.nodataArea.setVisibility(View.GONE);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
-                                if(USER_INFO_AUTH.equals("0")){
+                                if (USER_INFO_AUTH.equals("0")) {
                                     Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
                                             jsonObject.getString("id"),
                                             jsonObject.getString("writer_id"),
@@ -687,8 +655,8 @@ public class WorkgotoFragment extends Fragment {
                                             jsonObject.getString("reject_reason"),
                                             jsonObject.getString("updated_at")
                                     ));
-                                }else{
-                                    if(!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")){
+                                } else {
+                                    if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
                                         Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("writer_id"),
@@ -722,7 +690,7 @@ public class WorkgotoFragment extends Fragment {
                                 dlog.i("approval_state 1 : " + Response.getJSONObject(a).getString("approval_state"));
                                 if (Response.getJSONObject(a).getString("approval_state").equals("3")
                                         || Response.getJSONObject(a).getString("approval_state").equals("null")) {
-                                    if(!Response.getJSONObject(a).getString("id").isEmpty() || !Response.getJSONObject(a).getString("id").equals("null")){
+                                    if (!Response.getJSONObject(a).getString("id").isEmpty() || !Response.getJSONObject(a).getString("id").equals("null")) {
                                         state_null++;
                                     }
                                 }
@@ -754,16 +722,18 @@ public class WorkgotoFragment extends Fragment {
 
     CardView add_worktime_btn;
     TextView addbtn_tv;
+
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("할일추가");
         add_worktime_btn.setOnClickListener(v -> {
             TaskAddOption to = new TaskAddOption();
-            to.show(getChildFragmentManager(),"TaskAddOption");
+            to.show(getChildFragmentManager(), "TaskAddOption");
         });
     }
-    public void Toast_Nomal(String message){
+
+    public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, null);
         TextView toast_textview = layout.findViewById(R.id.toast_textview);

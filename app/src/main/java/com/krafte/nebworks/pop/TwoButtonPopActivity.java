@@ -43,6 +43,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 import com.navercorp.nid.NaverIdLoginSDK;
 import com.navercorp.nid.oauth.NidOAuthLogin;
 import com.navercorp.nid.oauth.OAuthLoginCallback;
@@ -172,81 +173,86 @@ public class TwoButtonPopActivity extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setBtnEvent() {
         binding.popRightTxt.setOnClickListener(v -> {
-            //데이터 전달하기
-            if(flag.equals("로그아웃")){
+            try{
+                //데이터 전달하기
+                if(flag.equals("로그아웃")){
 //                FirebaseMessaging.getInstance().subscribeToTopic(USER_INFO_ID).isCanceled();
 //                FirebaseMessaging.getInstance().subscribeToTopic("TEST").isCanceled();
-                shardpref.clear();
-                shardpref.remove("ALARM_ONOFF");
-                shardpref.remove("USER_LOGIN_METHOD");
-                shardpref.remove("USER_INFO_EMAIL");
-                shardpref.putBoolean("isFirstLogin", true);
-                shardpref.putBoolean("USER_LOGIN_CONFIRM", false);
+                    shardpref.clear();
+                    shardpref.remove("ALARM_ONOFF");
+                    shardpref.remove("USER_LOGIN_METHOD");
+                    shardpref.remove("USER_INFO_EMAIL");
+                    shardpref.putBoolean("isFirstLogin", true);
+                    shardpref.putBoolean("USER_LOGIN_CONFIRM", false);
 
-                if (USER_LOGIN_METHOD.equals("Google")) {
-                    mGoogleSignInClient.signOut()
-                            .addOnCompleteListener(this, task -> {
-                                pm.Login(mContext);
+                    if (USER_LOGIN_METHOD.equals("Google")) {
+                        mGoogleSignInClient.signOut()
+                                .addOnCompleteListener(this, task -> {
+                                    pm.Login(mContext);
+                                });
+                    } else if(USER_LOGIN_METHOD.equals("Kakao")){
+                        Handler handler = new Handler();
+                        handler.postDelayed(() -> {
+                            UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
+                                @Override
+                                public Unit invoke(Throwable throwable) {
+                                    pm.Login(mContext);
+                                    return null;
+                                }
                             });
-                } else if(USER_LOGIN_METHOD.equals("Kakao")){
-                    Handler handler = new Handler();
-                    handler.postDelayed(() -> {
-                        UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
-                            @Override
-                            public Unit invoke(Throwable throwable) {
-                                pm.Login(mContext);
-                                return null;
-                            }
-                        });
-                    }, 100); //0.5초 후 인트로 실행
-                } else if(USER_LOGIN_METHOD.equals("Naver")) {
-                    naverIdLoginSDK.logout();
-                    naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
-                    pm.Login(mContext);
-                }else{
-                    pm.Login(mContext);
+                        }, 100); //0.5초 후 인트로 실행
+                    } else if(USER_LOGIN_METHOD.equals("Naver")) {
+                        naverIdLoginSDK.logout();
+                        naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
+                        pm.Login(mContext);
+                    }else{
+                        pm.Login(mContext);
+                    }
+                    finish();
+                }else if(flag.equals("회원탈퇴")){
+                    UserDelete(USER_INFO_ID);
+                }else if (flag.equals("댓글삭제")) {
+                    String comment_id = "0";
+                    comment_id = shardpref.getString("comment_id","");
+                    CommentDelete(comment_id);
+                    ClosePop();
+                } else if (flag.equals("공지삭제") || flag.equals("공지삭제2")) {
+                    String feed_id = "0";
+                    feed_id = shardpref.getString("edit_feed_id","");
+                    FeedDelete(feed_id);
+                } else if(flag.equals("종료")){
+                    finish();
+                    moveTaskToBack(true); // 태스크를 백그라운드로 이동
+                    finishAndRemoveTask(); // 액티비티 종료 + 태스크 리스트에서 지우기
+                    android.os.Process.killProcess(android.os.Process.myPid()); // 앱 프로세스 종료
+                } else if(flag.equals("매장삭제")){
+                    PlaceDel(place_id);
+                } else if(flag.equals("직원삭제")){
+                    TaskDel();
+                }  else if(flag.equals("근무정보삭제")){
+                    WorkHourDel();
+                } else if(flag.equals("그룹신청")){
+                    message = "새로운 근무지원 신청이 도착했습니다.";
+                    click_action = "MemberManagement";
+                    dlog.i(message);
+                    String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+                    AddPlaceMember(USER_INFO_ID, USER_INFO_NAME, USER_INFO_PHONE, "",today);
+                } else if (flag.equals("작성여부")) {
+                    shardpref.putInt("SELECT_POSITION",3);
+                    pm.Main(mContext);
+                    ClosePop();
+                } else if(flag.equals("닉네임없음")){
+                    pm.ProfileEdit(mContext);
+                    ClosePop();
+                } else if(flag.equals("게시글삭제")){
+                    String feed_id = "0";
+                    feed_id = shardpref.getString("feed_id","");
+                    FeedDelete(feed_id);
                 }
-                finish();
-            }else if(flag.equals("회원탈퇴")){
-                UserDelete(USER_INFO_ID);
-            }else if (flag.equals("댓글삭제")) {
-                String comment_id = "0";
-                comment_id = shardpref.getString("comment_id","");
-                CommentDelete(comment_id);
-                ClosePop();
-            } else if (flag.equals("공지삭제") || flag.equals("공지삭제2")) {
-                String feed_id = "0";
-                feed_id = shardpref.getString("edit_feed_id","");
-                FeedDelete(feed_id);
-            } else if(flag.equals("종료")){
-                finish();
-                moveTaskToBack(true); // 태스크를 백그라운드로 이동
-                finishAndRemoveTask(); // 액티비티 종료 + 태스크 리스트에서 지우기
-                android.os.Process.killProcess(android.os.Process.myPid()); // 앱 프로세스 종료
-            } else if(flag.equals("매장삭제")){
-                PlaceDel(place_id);
-            } else if(flag.equals("직원삭제")){
-                TaskDel();
-            }  else if(flag.equals("근무정보삭제")){
-                WorkHourDel();
-            } else if(flag.equals("그룹신청")){
-                message = "새로운 근무지원 신청이 도착했습니다.";
-                click_action = "MemberManagement";
-                dlog.i(message);
-                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-                AddPlaceMember(USER_INFO_ID, USER_INFO_NAME, USER_INFO_PHONE, "",today);
-            } else if (flag.equals("작성여부")) {
-                shardpref.putInt("SELECT_POSITION",3);
-                pm.Main(mContext);
-                ClosePop();
-            } else if(flag.equals("닉네임없음")){
-                pm.ProfileEdit(mContext);
-                ClosePop();
-            } else if(flag.equals("게시글삭제")){
-                String feed_id = "0";
-                feed_id = shardpref.getString("feed_id","");
-                FeedDelete(feed_id);
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         });
         binding.popLeftTxt.setOnClickListener(v -> {
             ClosePop();
@@ -373,6 +379,7 @@ public class TwoButtonPopActivity extends Activity {
 
 
     //--Rtrofit Area
+    RetrofitConnect rc = new RetrofitConnect();
     public void UserDelete(String id) {
         dlog.i("UserDelete id : " + id);
         Retrofit retrofit = new Retrofit.Builder()
@@ -388,10 +395,11 @@ public class TwoButtonPopActivity extends Activity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                            dlog.i("LoginCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     Toast_Nomal("회원 탈퇴가 완료되었습니다.");
                                     if(USER_LOGIN_METHOD.equals("Naver")){
                                         naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
@@ -430,10 +438,11 @@ public class TwoButtonPopActivity extends Activity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("CommentDelete jsonResponse length : " + response.body().length());
-                            dlog.i("CommentDelete jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("")){
+                                if(jsonResponse.replace("\"","").equals("")){
                                     shardpref.putString("editstate","DelComment");
                                     ClosePop();
                                 }
@@ -468,10 +477,11 @@ public class TwoButtonPopActivity extends Activity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("LoginCheck jsonResponse length : " + response.body().length());
-                            dlog.i("LoginCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     ClosePop();
                                 }
                             } catch (Exception e) {
@@ -504,10 +514,11 @@ public class TwoButtonPopActivity extends Activity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
-                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(response.body().replace("\"","").equals("success")){
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     Toast_Nomal("해당 매장이 삭제완료되었습니다.");
                                     ClosePop();
                                 }
@@ -543,10 +554,11 @@ public class TwoButtonPopActivity extends Activity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
-                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (response.body().replace("\"", "").equals("success")) {
+                                if (jsonResponse.replace("\"", "").equals("success")) {
                                     Toast_Nomal("해당 직원의 데이터 삭제가 완료되었습니다.");
                                     shardpref.remove("remote");
                                     ClosePop();
@@ -582,10 +594,11 @@ public class TwoButtonPopActivity extends Activity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("TaskDel jsonResponse length : " + response.body().length());
-                            dlog.i("TaskDel jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (response.body().replace("\"", "").equals("success")) {
+                                if (jsonResponse.replace("\"", "").equals("success")) {
                                     Toast_Nomal("해당 직원의 근무 데이터 삭제가 완료되었습니다.");
                                     shardpref.remove("remote");
                                     ClosePop();
@@ -619,13 +632,12 @@ public class TwoButtonPopActivity extends Activity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    //String jsonResponse = rc.getBase64decode(response.body());
-                    dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
-                    dlog.i("AddPlaceMember jsonResponse : " + response.body());
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-
-                            if (response.body().replace("\"", "").equals("success")) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("근무신청이 완료되었습니다.");
                                 String place_owner_id = shardpref.getString("place_owner_id", "");
                                 String message = "새로운 근무 신청이 도착했습니다.";
@@ -666,9 +678,11 @@ public class TwoButtonPopActivity extends Activity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 try {
-                    JSONArray Response = new JSONArray(response.body());
+                    JSONArray Response = new JSONArray(jsonResponse);
                     if (Response.length() > 0) {
                         dlog.i("-----getManagerToken-----");
                         dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
@@ -704,12 +718,14 @@ public class TwoButtonPopActivity extends Activity {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("AddStroeNoti Callback : " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
-                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                            dlog.i("AddStroeNoti jsonResponse length : " + jsonResponse.length());
+                            dlog.i("AddStroeNoti jsonResponse : " + jsonResponse);
                         }
                     });
                 }

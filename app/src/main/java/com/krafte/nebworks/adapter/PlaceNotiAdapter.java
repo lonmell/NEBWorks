@@ -116,6 +116,7 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
 
             holder.area_box.setOnClickListener(v -> {
                 shardpref.putString("feed_id",item.getId());
+                shardpref.putString("writer_id",item.getWriter_id());
                 pm.FeedDetailGo(mContext);
             });
 //            if (loadlist == 0) {
