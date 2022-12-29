@@ -117,6 +117,25 @@ public class AddContractPage09 extends AppCompatActivity {
             pm.ContractFragment(mContext);
             RemoveShared();
         });
+
+        binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("progress_pos");
+            if(!shardpref.getString("progress_pos","").isEmpty()){
+                pm.ContractFragment(mContext);
+            }else{
+                super.onBackPressed();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed(){
+        shardpref.remove("progress_pos");
+        if(!shardpref.getString("progress_pos","").isEmpty()){
+            pm.ContractFragment(mContext);
+        }else{
+            super.onBackPressed();
+        }
     }
 
     private void RemoveShared(){

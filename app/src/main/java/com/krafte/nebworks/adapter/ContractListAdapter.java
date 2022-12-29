@@ -124,15 +124,17 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
 //                        dlog.i("완료");
 //                    }
                     shardpref.putString("contract_id",item.getContract_id());
+                    shardpref.putString("progress_pos",item.getProgress_pos());
                     /* item.getContract_id()
                     *   현재 진행중인 페이지
-                        0 -
+                        0 or null - 작성안됨
                         1 - 사업장 기본사항
                         2 - 근무 기본사항
                         3 - 급여 기본사항
                         4 - 특약
                         5 - 근로자 인적사항
                         6 - 서명
+                        7 - 완료
                     * */
                     if(USER_INFO_AUTH.equals("0")){
                         if(item.getProgress_pos().equals("1")){
@@ -157,9 +159,14 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                         }
                     }else{
                         //근로자일경우
-                        pm.ContractWorkerAccept(mContext);
+                        if(item.getProgress_pos().equals("6")){
+                            pm.ContractWorkerAccept(mContext);
+                        }else if(item.getProgress_pos().equals("7")){
+                            //해당 근로계약서 전체 상세 페이지로
+                            shardpref.putString("contract_id", item.getContract_id());
+                            pm.ContractAll(mContext);
+                        }
                     }
-
                 }
             });
 

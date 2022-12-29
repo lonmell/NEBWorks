@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         KakaoSetting();
         GoogleSetting();
         NaverSetting();
-        if (!GET_ACCOUNT_EMAIL.isEmpty()) {
+        if (!GET_ACCOUNT_EMAIL.isEmpty() && (!USER_LOGIN_METHOD.isEmpty() && USER_LOGIN_METHOD.equals("NEB"))) {
             binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
         }
     }
@@ -176,7 +176,9 @@ public class LoginActivity extends AppCompatActivity {
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "-99");
         if (!USER_LOGIN_METHOD.equals("-99")) {
             if (!GET_ACCOUNT_EMAIL.equals("-99")) {
-                binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
+                if (!GET_ACCOUNT_EMAIL.isEmpty() && (!USER_LOGIN_METHOD.isEmpty() && USER_LOGIN_METHOD.equals("NEB"))) {
+                    binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
+                }
             }
             if (!USER_INFO_PW.equals("-99")) {
                 binding.pwdEdit.setText(USER_INFO_PW);
@@ -468,7 +470,9 @@ public class LoginActivity extends AppCompatActivity {
                                         String name = Response.getJSONObject(0).getString("name");
                                         String phone = Response.getJSONObject(0).getString("phone");
                                         String platform = Response.getJSONObject(0).getString("platform");
+                                        binding.loginAlertText.setVisibility(View.GONE);
                                         if (name.isEmpty() || phone.isEmpty()) {
+                                            shardpref.putString("editstate","edit");
                                             pm.ProfileEdit(mContext);
                                         } else {
                                             pm.AuthSelect(mContext);

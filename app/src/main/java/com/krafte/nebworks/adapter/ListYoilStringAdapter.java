@@ -36,7 +36,7 @@ public class ListYoilStringAdapter extends RecyclerView.Adapter<ListYoilStringAd
     String place_id = "";
     String USER_INFO_ID = "";
     Dlog dlog = new Dlog();
-    List<Integer> selectPos = new ArrayList<>();
+    List<String> selectPos = new ArrayList<>();
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
@@ -75,16 +75,17 @@ public class ListYoilStringAdapter extends RecyclerView.Adapter<ListYoilStringAd
             dlog.i("mData item : " + mData.get(position));
             holder.item_name.setText(item.getItem());
             holder.item_name.setOnClickListener(v -> {
-                if(selectPos.contains(position)){
-                    selectPos.remove(position);
+                if(selectPos.contains(item.getItem())){
+                    selectPos.remove(item.getItem());
                     holder.select_on.setVisibility(View.INVISIBLE);
                 }else{
-                    selectPos.add(position);
+                    selectPos.add(item.getItem());
                     holder.select_on.setVisibility(View.VISIBLE);
                 }
                 if (mListener != null) {
                     mListener.onItemClick(v,position);
                 }
+                dlog.i("selectPos : " + selectPos);
             });
         }catch (Exception e){
             dlog.i("Exception : " + e);

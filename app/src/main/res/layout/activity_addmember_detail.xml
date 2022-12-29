@@ -359,7 +359,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
-                        android:text="근무시간"
+                        android:text="주야간"
                         android:textColor="#949494"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -474,93 +474,7 @@
                                 tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                         </LinearLayout>
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="4dp"
-                        android:visibility="gone"
-                        android:weightSum="2">
-                        <LinearLayout
-                            android:id="@+id/select_area04"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="5dp"
-                            android:background="@drawable/default_gray_round"
-                            android:orientation="horizontal">
 
-                            <RelativeLayout
-                                android:layout_width="30dp"
-                                android:layout_height="match_parent">
-
-                                <ImageView
-                                    android:id="@+id/select04time"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_centerInParent="true"
-                                    android:background="@drawable/select_empty_round" />
-                            </RelativeLayout>
-
-                            <TextView
-                                android:id="@+id/select04tvtime"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:fontFamily="@font/inter_regular"
-                                android:gravity="start|center"
-                                android:paddingStart="8dp"
-                                android:paddingEnd="1dp"
-                                android:text="주말"
-                                android:textColor="#a9a9a9"
-                                android:textSize="16sp"
-                                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/select_area05"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:layout_marginStart="5dp"
-                            android:background="@drawable/default_gray_round"
-                            android:orientation="horizontal">
-
-                            <RelativeLayout
-                                android:layout_width="30dp"
-                                android:layout_height="match_parent">
-
-                                <ImageView
-                                    android:id="@+id/select05time"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_centerInParent="true"
-                                    android:background="@drawable/select_empty_round" />
-                            </RelativeLayout>
-
-                            <TextView
-                                android:id="@+id/select05tvtime"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:fontFamily="@font/inter_regular"
-                                android:gravity="start|center"
-                                android:paddingStart="8dp"
-                                android:paddingEnd="1dp"
-                                android:text="기타"
-                                android:textColor="#a9a9a9"
-                                android:textSize="16sp"
-                                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-                        </LinearLayout>
-                    </LinearLayout>
-                    <EditText
-                        android:id="@+id/worktime"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/default_gray_round"
-                        android:layout_marginTop="10dp"
-                        android:inputType="text"
-                        android:hint="기타 입력"
-                        android:visibility="gone"
-                        android:textColorHint="#a9a9a9"
-                        android:paddingStart="15dp"/>
                 </LinearLayout>
 
                 <!--직급-->
@@ -695,7 +609,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
-                        android:text="급여액"
+                        android:text="시급"
                         android:textColor="#949494"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -705,7 +619,6 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal"
-                        android:background="@drawable/default_gray_round"
                         android:weightSum="2">
 
                         <EditText
@@ -714,15 +627,89 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
+                            android:background="@drawable/default_gray_round"
+                            android:layout_toStartOf="@+id/tv01"
+                            android:layout_marginEnd="15dp"
                             android:layout_gravity="center"
-                            android:layout_marginStart="16dp"
-                            android:background="@color/white"
+                            android:paddingStart="15dp"
                             android:fontFamily="@font/inter_regular"
-                            android:hint="ex)3,000,000"
+                            android:hint="숫자만 입력"
                             android:inputType="numberSigned"
                             android:textColor="@color/black"
                             android:textColorHint="#949494"
                             android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/tv01"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/inter_regular"
+                            android:layout_alignParentEnd="true"
+                            android:gravity="start|center"
+                            android:text="시간"
+                            android:textColor="#949494"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <!--근무시간-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="start|center"
+                        android:text="근무시간"
+                        android:textColor="#949494"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/inputbox12"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:background="@drawable/default_gray_round"
+                            android:layout_centerVertical="true"
+                            android:paddingStart="15dp"
+                            android:layout_gravity="center"
+                            android:layout_toStartOf="@+id/tv02"
+                            android:layout_marginEnd="15dp"
+                            android:fontFamily="@font/inter_regular"
+                            android:hint="숫자만 입력"
+                            android:inputType="number"
+                            android:textColor="@color/black"
+                            android:textColorHint="#949494"
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/tv02"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/inter_regular"
+                            android:layout_alignParentEnd="true"
+                            android:gravity="start|center"
+                            android:text="시간"
+                            android:textColor="#949494"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
                             tools:ignore="HardcodedText" />
 
                     </RelativeLayout>
@@ -944,26 +931,30 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
-
-                    <EditText
-                        android:id="@+id/inputbox10"
+                    <LinearLayout
+                        android:id="@+id/inputbox10_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="150dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|top"
-                        android:hint="주소입력"
-                        android:importantForAutofill="no"
-                        android:inputType="textMultiLine"
-                        android:maxEms="200"
-                        android:maxLength="200"
-                        android:padding="10dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="#a9a9a9"
-                        android:textSize="17sp"
-                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                        android:background="@drawable/default_gray_round">
+                        <EditText
+                            android:id="@+id/inputbox10"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="150dp"
+                            android:layout_margin="15dp"
+                            android:background="@color/white"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|top"
+                            android:hint="자기소개"
+                            android:inputType="textMultiLine"
+                            android:maxEms="200"
+                            android:maxLength="200"
+                            android:textColor="@color/black"
+                            android:textColorHint="#a9a9a9"
+                            android:textSize="17sp"
+                            tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                    </LinearLayout>
+
 
                 </LinearLayout>
 

@@ -192,6 +192,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
                 holder.add_detail.setOnClickListener(v -> {
                     shardpref.putString("mem_id",item.getId());
+                    shardpref.putString("mem_account",item.getAccount());
                     shardpref.putString("mem_name",item.getName());
                     shardpref.putString("mem_phone",item.getPhone());
                     shardpref.putString("mem_gender",item.getGender());
@@ -213,6 +214,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 }
                 holder.list_setting.setOnClickListener(v -> {
                     shardpref.putString("mem_id",item.getId());
+                    shardpref.putString("mem_account",item.getAccount());
                     shardpref.putString("mem_name",item.getName());
                     shardpref.putString("mem_phone",item.getPhone());
                     shardpref.putString("mem_gender",item.getGender());

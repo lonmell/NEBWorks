@@ -1,6 +1,7 @@
 package com.krafte.nebworks.ui.user;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -59,6 +60,7 @@ import com.krafte.nebworks.dataInterface.UserUpdateInterface;
 import com.krafte.nebworks.databinding.ActivityProfileeditBinding;
 import com.krafte.nebworks.pop.AlertPopActivity;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -196,10 +198,13 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        ImgfileMaker = ImageNameMaker();
+    }
+    @Override
     public void onResume() {
         super.onResume();
-        ImgfileMaker = ImageNameMaker();
-
         SmsRetrieverClient client = SmsRetriever.getClient(this);   // this = context
         Task<Void> task = client.startSmsRetriever();
 
@@ -209,7 +214,6 @@ public class ProfileEditActivity extends AppCompatActivity {
             registerReceiver(smsReceiver, intentFilter);
             Log.i(TAG, "smsReceiver : " + Sms_receiver.receiverNum);
         });
-
         task.addOnFailureListener(e -> {
             // retriever 실패
         });
@@ -217,7 +221,19 @@ public class ProfileEditActivity extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            super.onBackPressed();
+            shardpref.remove("editstate");
+            if(editstate.equals("insert")){
+                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                intent.putExtra("data", "로그아웃하시겠습니까?");
+                intent.putExtra("flag", "로그아웃");
+                intent.putExtra("left_btn_txt", "닫기");
+                intent.putExtra("right_btn_txt", "로그아웃");
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }else{
+                super.onBackPressed();
+            }
         });
 
         if (saveBitmap != null) {
@@ -262,7 +278,6 @@ public class ProfileEditActivity extends AppCompatActivity {
                 }else{
                     SaveUser();
                 }
-
             }
         });
 
@@ -486,13 +501,13 @@ public class ProfileEditActivity extends AppCompatActivity {
                     th.join();
                     Thread th2 = new Thread(() -> {
                         dbConnection.ConfrimNumSave(phone, SND_NUM, "insert");
-
                         String getMessage = resultData.getRESULT().replaceAll("\"", "");
                         Log.i(TAG, "getMessage = " + getMessage);
                         if (getMessage.equals("success")) {
                             dbConnection.ConfrimNumSelect(phone, SND_NUM, "select");
                             CertiNum = certiNumData.getCerti_num();
-                            binding.getAuthResult.setEnabled(false);
+                            binding.tv03.setText("인증번호 재발송");
+                            binding.editConfirmNum.setText("");
                             Log.i(TAG, "CertiNum : " + CertiNum);
                         }
                     });
@@ -1061,13 +1076,13 @@ public class ProfileEditActivity extends AppCompatActivity {
             binding.confirmNumCounting.setVisibility(View.VISIBLE);
 
             if (!Sms_receiver.receiverNum.isEmpty()) {
+                Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
                 if (SND_NUM.equals(Sms_receiver.receiverNum)) {
                     Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
                     binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#6395EC"));
                     binding.confirmPhoneBtn.setTextColor(Color.parseColor("#000000"));
                     binding.editConfirmNum.setText(Sms_receiver.receiverNum);
                     binding.confirmNumCounting.setVisibility(View.GONE);
-                    binding.getAuthResult.setEnabled(false);
                     myTimer.cancel();
                 }
             } else {
@@ -1109,8 +1124,15 @@ public class ProfileEditActivity extends AppCompatActivity {
     public void onBackPressed(){
 //        super.onBackPressed();
         shardpref.remove("editstate");
-        if(editstate.equals("insert")){
-            pm.Login(mContext);
+        if(editstate.equals("insert") || editstate.equals("edit")){
+            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+            intent.putExtra("data", "로그아웃하시겠습니까?");
+            intent.putExtra("flag", "로그아웃");
+            intent.putExtra("left_btn_txt", "닫기");
+            intent.putExtra("right_btn_txt", "로그아웃");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         }else{
             super.onBackPressed();
         }

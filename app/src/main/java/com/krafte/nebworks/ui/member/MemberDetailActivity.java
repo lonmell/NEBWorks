@@ -322,6 +322,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        SetAllMemberList();
         SetAllMemberList(stub_place_id, stub_user_id);
         MainWorkCnt(stub_place_id, stub_user_id);
     }
@@ -430,7 +431,7 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     /*직원 전체 리스트 START*/
     String workpay = "";
-
+    String CallNum = "";
     public void SetAllMemberList(String place_id, String user_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
         dlog.i("SetAllMemberList user_id : " + user_id);
@@ -489,19 +490,23 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 if (phone.isEmpty() || phone.equals("null")) {
                                     phone = "미입력";
                                 }
-                                if (owner_phone.equals("null") || owner_phone.isEmpty()) {
+                                if (owner_phone.isEmpty()) {
                                     owner_phone = "미입력";
                                 }
                                 if (USER_INFO_AUTH.equals("0")) {
                                     binding.callNumber.setText("전화걸기");
                                     binding.userPhone.setText(phone);
+                                    CallNum = phone;
                                 } else {
                                     binding.callNumber.setText("사장님께 전화걸기");
                                     binding.userPhone.setText(owner_phone);
+                                    CallNum = owner_phone;
                                 }
-                                Navname = name;
-                                Navimg_path = img_path;
-                                Navgetjikgup = jikgup;
+
+                                binding.userPhone.setOnClickListener(v -> {
+                                    Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:"+ CallNum));
+                                    mContext.startActivity(mIntent);
+                                });
                                 setNavBarBtnEvent();
                                 PlaceWorkCheck(stub_place_id, "1", "3");
                             }
@@ -525,6 +530,50 @@ public class MemberDetailActivity extends AppCompatActivity {
         }
     }
     /*직원 전체 리스트 END*/
+
+    public void SetAllMemberList() {
+        dlog.i("-----SetAllMemberList-----");
+        dlog.i("place_id : " + place_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("-----SetAllMemberList-----");
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(AllMemberInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+            Call<String> call = api.getData(place_id, USER_INFO_ID);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        Log.e("SetAllMemberList onSuccess : ", jsonResponse);
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(jsonResponse);
+                            Navname = Response.getJSONObject(0).getString("name");
+                            Navimg_path = Response.getJSONObject(0).getString("img_path");
+                            Navgetjikgup = Response.getJSONObject(0).getString("jikgup");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     /*출퇴근 리스트 START*/
     public void SetGotoWorkDayList(String place_id, String user_id, String getYMdate) {
@@ -725,7 +774,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
-        addbtn_tv.setText("직원추가");
+        addbtn_tv.setText("근무추가");
         add_worktime_btn.setOnClickListener(v -> {
             pm.AddWorkPart(mContext);
         });

@@ -375,6 +375,15 @@ public class AddContractPage04 extends AppCompatActivity {
                 SaveContractWork();
             }
         });
+
+        binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("progress_pos");
+            if(!shardpref.getString("progress_pos","").isEmpty()){
+                pm.ContractFragment(mContext);
+            }else{
+                super.onBackPressed();
+            }
+        });
     }
 
     private boolean DataCheck(){
@@ -467,6 +476,15 @@ public class AddContractPage04 extends AppCompatActivity {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
+    }
+    @Override
+    public void onBackPressed(){
+        shardpref.remove("progress_pos");
+        if(!shardpref.getString("progress_pos","").isEmpty()){
+            pm.ContractFragment(mContext);
+        }else{
+            super.onBackPressed();
+        }
     }
 
     public void Toast_Nomal(String message) {

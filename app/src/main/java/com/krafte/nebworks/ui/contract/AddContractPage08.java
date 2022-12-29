@@ -82,6 +82,8 @@ public class AddContractPage08 extends AppCompatActivity {
     String contract_id = "";
     String place_name = "";
 
+    String progress_pos = "";
+
     //Other
     DateCurrent dc = new DateCurrent();
     DBConnection dbConnection = new DBConnection();
@@ -118,6 +120,7 @@ public class AddContractPage08 extends AppCompatActivity {
         worker_id       = shardpref.getString("worker_id","0");
         contract_id     = shardpref.getString("contract_id","0");
         place_name      = shardpref.getString("place_name","");
+        progress_pos    = shardpref.getString("progress_pos","");
 
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1");
         
@@ -142,6 +145,15 @@ public class AddContractPage08 extends AppCompatActivity {
                 Toast_Nomal("고용주 서명이 입력되지 않았습니다.");
             }else{
                 UpdateOwnerSign();
+            }
+        });
+
+        binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("progress_pos");
+            if(!progress_pos.isEmpty()){
+                pm.ContractFragment(mContext);
+            }else{
+                super.onBackPressed();
             }
         });
     }
@@ -536,6 +548,15 @@ public class AddContractPage08 extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        shardpref.remove("progress_pos");
+        if(!progress_pos.isEmpty()){
+            pm.ContractFragment(mContext);
+        }else{
+            super.onBackPressed();
+        }
+    }
 
     private void RemoveShared(){
         shardpref.remove("worker_id");

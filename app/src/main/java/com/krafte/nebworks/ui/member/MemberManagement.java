@@ -133,6 +133,7 @@ public class MemberManagement extends AppCompatActivity {
                     shardpref.putString("change_place_id",place_id);
                     dlog.i("change_place_id : " + place_id);
                     SetAllMemberList(place_id);
+                    binding.selectPlace.setText(place_name);
                     binding.changePlace.setTag(place_name);
                 });
             });
@@ -218,7 +219,7 @@ public class MemberManagement extends AppCompatActivity {
             }
         });
     }
-    
+
     /*직원 전체 리스트 START*/
     RetrofitConnect rc = new RetrofitConnect();
     public void SetAllMemberList(String place_id) {

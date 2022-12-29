@@ -199,6 +199,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        shardpref.remove("item_user_id");
+        shardpref.remove("item_user_name");
         UserCheck(USER_INFO_EMAIL);
         getPlaceData();
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
@@ -223,6 +225,10 @@ public class HomeFragment extends Fragment {
             pm.MemberManagement(mContext);
         });
 
+        binding.addMemberBtn.setOnClickListener(v -> {
+            MemberOption mo = new MemberOption();
+            mo.show(getChildFragmentManager(), "MemberOption");
+        });
         binding.addMemberArea.setOnClickListener(v -> {
             MemberOption mo = new MemberOption();
             mo.show(getChildFragmentManager(), "MemberOption");
@@ -462,6 +468,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
         dlog.i("PlaceWorkCheck place_id : " + place_id);

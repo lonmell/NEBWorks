@@ -112,7 +112,7 @@ public class ContractFragment1 extends Fragment {
 
         dlog.DlogContext(mContext);
         setBtnEvent();
-        timer = new Timer();
+
         return binding.getRoot();
     }
 
@@ -130,6 +130,7 @@ public class ContractFragment1 extends Fragment {
         super.onResume();
         mList = new ArrayList<>();
         searchmList = new ArrayList<>();
+        timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {

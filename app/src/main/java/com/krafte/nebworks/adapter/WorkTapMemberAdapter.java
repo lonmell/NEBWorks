@@ -47,7 +47,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
     String state = "";
     String USER_INFO_ID = "";
     String USER_INFO_EMAIL = "";
-
+    String USER_INFO_AUTH = "";
     Activity activity;
     PageMoveClass pm = new PageMoveClass();
     int lastpos = -99;
@@ -120,6 +120,15 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             holder.pay.setText(item.getYoil().isEmpty() ? "" : item.getYoil());
             holder.state_tv.setText(state);
 
+            if(USER_INFO_AUTH.equals("0")){
+                holder.list_setting.setVisibility(View.VISIBLE);
+                holder.list_setting.setClickable(true);
+                holder.list_setting.setEnabled(true);
+            }else{
+                holder.list_setting.setVisibility(View.INVISIBLE);
+                holder.list_setting.setClickable(false);
+                holder.list_setting.setEnabled(false);
+            }
             holder.list_setting.setOnClickListener(v -> {
                 if (mListener != null) {
                     mListener.onItemClick(v, position);
@@ -163,8 +172,10 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             place_id = shardpref.getString("place_id", "");
-            place_owner_id = shardpref.getString("place_owner_id", "");
+            place_owner_id  = shardpref.getString("place_owner_id", "");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
+
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {

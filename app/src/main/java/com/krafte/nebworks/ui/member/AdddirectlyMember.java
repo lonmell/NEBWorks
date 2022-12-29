@@ -254,7 +254,7 @@ public class AdddirectlyMember extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberAddDirectlyInterface api = retrofit.create(PlaceMemberAddDirectlyInterface.class);
-        Call<String> call = api.getData(place_id, "-99",name,phone,Jumin,"0",JoinDate);
+        Call<String> call = api.getData(place_id, "-99",name,phone,Jumin,"2",JoinDate);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
