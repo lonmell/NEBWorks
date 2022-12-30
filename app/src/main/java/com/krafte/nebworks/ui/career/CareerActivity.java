@@ -551,6 +551,7 @@ public class CareerActivity extends AppCompatActivity {
 //        });
     }
 
+
     private String ImageNameMaker() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MakeFileNameInterface.URL)
@@ -563,7 +564,6 @@ public class CareerActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-//                    String jsonResponse = rc.getBase64decode(response.body());
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(response.body());

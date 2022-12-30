@@ -49,6 +49,7 @@ public class AddContractPage01 extends AppCompatActivity {
             actionBar.hide();
         }
         mContext = this;
+        shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
         setBtnEvent();
         //LawPopActivity

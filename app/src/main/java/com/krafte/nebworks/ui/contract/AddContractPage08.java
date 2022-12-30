@@ -29,6 +29,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.ContractOwnerSignInterface;
 import com.krafte.nebworks.dataInterface.ContractPagePosUp;
+import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -80,7 +81,6 @@ public class AddContractPage08 extends AppCompatActivity {
     String worker_id = "";
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
-    String contract_id = "";
     String place_name = "";
 
     String progress_pos = "";
@@ -171,10 +171,10 @@ public class AddContractPage08 extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String jsonResponse = rc.getBase64decode(response.body());
+//                    String jsonResponse = rc.getBase64decode(response.body());
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(jsonResponse);
+                        JSONArray Response = new JSONArray(response.body());
                         if (!Response.toString().equals("[]")) {
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
@@ -228,7 +228,7 @@ public class AddContractPage08 extends AppCompatActivity {
                                         getUserToken(worker_id,"1",message);
                                         AddPush("근로계약서",message,worker_id);
                                         pm.ContractFragment(mContext);
-                                        UpdatePagePos();
+                                        getContractId();
                                         RemoveShared();
                                     }else{
                                         pm.AddContractPage09(mContext);
@@ -584,32 +584,37 @@ public class AddContractPage08 extends AppCompatActivity {
         toast.show();
     }
 
-    private void UpdatePagePos(){
-        dlog.i("------UpdatePagePos------");
-        dlog.i("contract_id : " + contract_id);
-        dlog.i("------UpdatePagePos------");
+    String contract_id = "";
+    public void getContractId() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ContractPagePosUp.URL)
+                .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
-        Call<String> call = api.getData(contract_id,"6");
+        ContractidInterface api = retrofit.create(ContractidInterface.class);
+        Call<String> call = api.getData(place_id, worker_id);
         call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("SaveWorkPartTime Callback : " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
-
+                        try {
+                            JSONArray Response = new JSONArray(response.body());
+                            contract_id = Response.getJSONObject(0).getString("id");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     });
                 }
             }
 
             @SuppressLint("LongLogTag")
             @Override
-            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
     }
+
 }

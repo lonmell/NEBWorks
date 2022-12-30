@@ -105,30 +105,9 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
             if(USER_INFO_AUTH.equals("1")){
                     holder.send_user_state.setVisibility(View.GONE);
                     holder.gongje_box.setVisibility(View.VISIBLE);
-                    holder.write_payment.setVisibility(View.VISIBLE);
+                    holder.write_payment.setVisibility(View.GONE);
                     holder.weekly_worktime_progress.setVisibility(View.GONE);
                     holder.progress_tvarea.setVisibility(View.GONE);
-
-//                    insurance1 = String.valueOf(Math.round((AllPayment * insurance01p)/100));
-//                    insurance2 = String.valueOf(Math.round((AllPayment * insurance02p)/100));
-//                    insurance3 = String.valueOf(Math.round((AllPayment * insurance03p)/100));
-//                    insurance4 = String.valueOf(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
-//                    dlog.i("insurance01p : " + insurance01p);
-//                    dlog.i("insurance02p : " + insurance02p);
-//                    dlog.i("insurance03p : " + insurance03p);
-//                    dlog.i("insurance04p : " + insurance04p);
-//                    dlog.i("insurance1 : " + insurance1);
-//                    dlog.i("insurance2 : " + insurance2);
-//                    dlog.i("insurance3 : " + insurance3);
-//                    dlog.i("insurance4 : " + insurance4);
-//                    dlog.i("result_pay : " + item.getPayment());
-//                    dlog.i("result_gongje : " + (insurance1+insurance2+insurance3+insurance4));
-//                    int result_gongje_int = Integer.parseInt(insurance1)+Integer.parseInt(insurance2)+Integer.parseInt(insurance3)+Integer.parseInt(insurance4);
-//                    String resultGonjeTv = myFormatter.format(result_gongje_int);
-//                    holder.result_pay.setText(item.getPayment() + "원");
-//                    holder.result_gongje.setText(resultGonjeTv + "원");
-//                    dlog.i("result_pay : " + item.getPayment());
-//                    dlog.i("result_gongje : " + resultGonjeTv);
             }else if(USER_INFO_AUTH.equals("0")){
                 if(Tap.equals("0")){
                     if(item.getGongjeynpay().equals("null")){

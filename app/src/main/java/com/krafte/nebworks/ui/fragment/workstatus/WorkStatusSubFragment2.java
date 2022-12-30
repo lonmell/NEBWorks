@@ -153,7 +153,7 @@ public class WorkStatusSubFragment2 extends Fragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             WorkStatusTapInterface api = retrofit.create(WorkStatusTapInterface.class);
-            Call<String> call = api.getData(place_id,USER_INFO_ID,"1",toDay);
+            Call<String> call = api.getData(place_id,USER_INFO_ID,"",toDay);
 
             call.enqueue(new Callback<String>() {
                 @Override

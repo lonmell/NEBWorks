@@ -59,6 +59,7 @@ public class AddContractPage02 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
+        shardpref = new PreferenceHelper(mContext);
         setBtnEvent();
     }
 

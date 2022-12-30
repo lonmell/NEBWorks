@@ -81,7 +81,6 @@ public class TaxListAdapter extends RecyclerView.Adapter<TaxListAdapter.ViewHold
             holder.name.setText(item.getName());
             holder.address.setText(item.getAddress());
             holder.phone.setText(item.getContact_num());
-            holder.item_total.setOnClickListener(v -> {});
             if (loadlist == 0) {
                 //--아이템에 나타나기 애니메이션 줌
                 holder.item_total.setTranslationY(150);

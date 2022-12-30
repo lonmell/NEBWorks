@@ -24,8 +24,8 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.YoilStringAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.StringData;
-import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractWorkInterface;
+import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd04Binding;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
@@ -36,6 +36,8 @@ import com.krafte.nebworks.util.RetrofitConnect;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,7 +61,6 @@ public class AddContractPage04 extends AppCompatActivity {
     String place_id = "";
     String worker_id = "";
     String USER_INFO_ID = "";
-    String contract_id = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -100,11 +101,10 @@ public class AddContractPage04 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-        shardpref       = new PreferenceHelper(mContext);
-        place_id        = shardpref.getString("place_id","0");
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
-        worker_id       = shardpref.getString("worker_id","0");
-        contract_id     = shardpref.getString("contract_id","0");
+        shardpref = new PreferenceHelper(mContext);
+        place_id = shardpref.getString("place_id", "0");
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+        worker_id = shardpref.getString("worker_id", "0");
 
         setBtnEvent();
 
@@ -155,9 +155,9 @@ public class AddContractPage04 extends AppCompatActivity {
     String Time02 = "-99";
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-
+        getContractId();
     }
 
     String contract_start = "";
@@ -175,10 +175,10 @@ public class AddContractPage04 extends AppCompatActivity {
     String format = "yyyy-MM";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
 
-    private void setBtnEvent(){
+    private void setBtnEvent() {
         Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
-        int mMonth = c.get(Calendar.MONTH)+1;
+        int mMonth = c.get(Calendar.MONTH) + 1;
         int mDay = c.get(Calendar.DAY_OF_MONTH);
 
         datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
@@ -193,7 +193,6 @@ public class AddContractPage04 extends AppCompatActivity {
                 getYMStart = binding.select01date.getText().toString().substring(0, 7);
             }
         }, mYear, mMonth, mDay);
-
 
 
         datePickerDialog2 = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
@@ -237,12 +236,12 @@ public class AddContractPage04 extends AppCompatActivity {
                 String month = calendar_get_format_month.format(date.getDate());
                 String yoil = calendar_get_yoil.format(date.getDate());
 
-                if(!SELECT_DATE_TF){
+                if (!SELECT_DATE_TF) {
                     binding.select01date.setText(Year + "-" + month + " " + "(" + yoil + ")");
-                    contract_start  = Year + "-" + month;
-                }else{
+                    contract_start = Year + "-" + month;
+                } else {
                     binding.select02date.setText(Year + "-" + month + " " + "(" + yoil + ")");
-                    contract_end    = Year + "-" + month;
+                    contract_end = Year + "-" + month;
                 }
                 dlog.i("binding.cvCalendar CalendarDay : " + Year + "\n" + month + "," + yoil);
             }
@@ -250,10 +249,10 @@ public class AddContractPage04 extends AppCompatActivity {
 
         binding.select03.setOnClickListener(v -> {
             binding.timeSetpicker.setVisibility(View.GONE);
-            if(contract_type.equals("0")){
+            if (contract_type.equals("0")) {
                 contract_type = "1";
                 binding.select03Round.setBackgroundResource(R.drawable.resize_service_on);
-            }else{
+            } else {
                 contract_type = "0";
                 binding.select03Round.setBackgroundResource(R.drawable.resize_service_off);
             }
@@ -283,20 +282,24 @@ public class AddContractPage04 extends AppCompatActivity {
         binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                String HOUR = String.valueOf(hourOfDay == 0?12:hourOfDay);
+                String HOUR = String.valueOf(hourOfDay == 0 ? 12 : hourOfDay);
                 String MIN = String.valueOf(minute);
                 binding.timeSetpicker.clearFocus();
                 if (SELECT_POS == 0) {
                     //근무시작시간
+                    wstarttime = (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN);
                     binding.wtime01time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
                 } else if (SELECT_POS == 1) {
                     //근무종료시간
+                    wendtime = (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN);
                     binding.wtime02time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
                 } else if (SELECT_POS == 2) {
                     //근무종료시간
+                    reststarttime = (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN);
                     binding.resttime01time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
                 } else if (SELECT_POS == 3) {
                     //근무종료시간
+                    restendtime = (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN);
                     binding.resttime02time.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
                 }
             }
@@ -304,7 +307,7 @@ public class AddContractPage04 extends AppCompatActivity {
 
         binding.next.setOnClickListener(v -> {
             binding.timeSetpicker.setVisibility(View.GONE);
-            if(DataCheck()){
+            if (DataCheck()) {
                 SaveContractWork();
             }
         });
@@ -312,88 +315,87 @@ public class AddContractPage04 extends AppCompatActivity {
         binding.backBtn.setOnClickListener(v -> {
             binding.timeSetpicker.setVisibility(View.GONE);
             shardpref.remove("progress_pos");
-            if(!shardpref.getString("progress_pos","").isEmpty()){
+            if (!shardpref.getString("progress_pos", "").isEmpty()) {
                 pm.ContractFragment(mContext);
-            }else{
+            } else {
                 super.onBackPressed();
             }
         });
     }
 
-    private void ChangeInputDate(int i){
+    private void ChangeInputDate(int i) {
         binding.select01date.setBackgroundResource(R.drawable.grayback_gray_round);
         binding.select02date.setBackgroundResource(R.drawable.grayback_gray_round);
-        if(i == 0){
+        if (i == 0) {
             binding.select01date.setBackgroundResource(R.drawable.default_select_on_round);
-        }else if(i == 1){
+        } else if (i == 1) {
             binding.select02date.setBackgroundResource(R.drawable.default_select_on_round);
         }
     }
-    private void ChangeInputTime(int i){
+
+    private void ChangeInputTime(int i) {
         binding.wtime01time.setBackgroundResource(R.drawable.default_gray_round);
         binding.wtime02time.setBackgroundResource(R.drawable.default_gray_round);
         binding.resttime01time.setBackgroundResource(R.drawable.default_gray_round);
         binding.resttime02time.setBackgroundResource(R.drawable.default_gray_round);
-        if(i == 0){
+        if (i == 0) {
             binding.wtime01time.setBackgroundResource(R.drawable.default_select_on_round);
-        }else if(i == 1){
+        } else if (i == 1) {
             binding.wtime02time.setBackgroundResource(R.drawable.default_select_on_round);
-        }else if(i == 2){
+        } else if (i == 2) {
             binding.resttime01time.setBackgroundResource(R.drawable.default_select_on_round);
-        }else if(i == 3){
+        } else if (i == 3) {
             binding.resttime02time.setBackgroundResource(R.drawable.default_select_on_round);
         }
     }
-    private boolean DataCheck(){
+
+    private boolean DataCheck() {
 //        contract_start  = binding.select01date.getText().toString();
 //        contract_end    = binding.select02date.getText().toString();
-        workYoil        = workYoil.replace("[","").replace("]","").replace(" ","");
-        restYoil        = restYoil.replace("[","").replace("]","").replace(" ","");
-        wstarttime      = binding.wtime01time.getText().toString();
-        wendtime        = binding.wtime02time.getText().toString();
-        reststarttime   = binding.resttime01time.getText().toString();
-        restendtime     = binding.resttime02time.getText().toString();
-        work_contents   = binding.input01.getText().toString();
+        workYoil = workYoil.replace("[", "").replace("]", "").replace(" ", "");
+        restYoil = restYoil.replace("[", "").replace("]", "").replace(" ", "");
+        work_contents = binding.input01.getText().toString();
         dlog.i("-----DataCheck-----");
-        dlog.i("contract_start : "      + contract_start);
-        dlog.i("contract_end : "        + contract_end);
-        dlog.i("contract_type : "       + contract_type);
-        dlog.i("workYoil : "            + workYoil);
-        dlog.i("restYoil : "            + restYoil);
-        dlog.i("wstarttime : "          + wstarttime);
-        dlog.i("wendtime : "            + wendtime);
-        dlog.i("reststarttime : "       + reststarttime);
-        dlog.i("restendtime : "         + restendtime);
-        dlog.i("work_contents : "       + work_contents);
+        dlog.i("contract_id : " + contract_id);
+        dlog.i("contract_start : " + contract_start);
+        dlog.i("contract_end : " + contract_end);
+        dlog.i("contract_type : " + contract_type);
+        dlog.i("workYoil : " + workYoil);
+        dlog.i("restYoil : " + restYoil);
+        dlog.i("wstarttime : " + wstarttime);
+        dlog.i("wendtime : " + wendtime);
+        dlog.i("reststarttime : " + reststarttime);
+        dlog.i("restendtime : " + restendtime);
+        dlog.i("work_contents : " + work_contents);
         dlog.i("-----DataCheck-----");
-        if(contract_start.isEmpty()){
+        if (contract_start.isEmpty()) {
             Toast_Nomal("계약 시작날짜를 입력해주세요");
             return false;
-        } else if(contract_end.isEmpty()){
+        } else if (contract_end.isEmpty()) {
             Toast_Nomal("계약 종료날짜를 입력해주세요");
             return false;
-        } else if(workYoil.isEmpty()){
+        } else if (workYoil.isEmpty()) {
             Toast_Nomal("근무요일을 선택하세요.");
             return false;
-        } else if(restYoil.isEmpty()){
+        } else if (restYoil.isEmpty()) {
             Toast_Nomal("휴무일을 선택하세요.");
             return false;
-        } else if(wstarttime.isEmpty()){
+        } else if (wstarttime.isEmpty()) {
             Toast_Nomal("근무시작시간을 입력해주세요.");
             return false;
-        } else if(wendtime.isEmpty()){
+        } else if (wendtime.isEmpty()) {
             Toast_Nomal("근무종료시간을 입력해주세요.");
             return false;
-        } else if(reststarttime.isEmpty()){
+        } else if (reststarttime.isEmpty()) {
             Toast_Nomal("휴게시작시간을 입력해주세요.");
             return false;
-        } else if(restendtime.isEmpty()){
+        } else if (restendtime.isEmpty()) {
             Toast_Nomal("휴게종료시간을 입력해주세요.");
             return false;
-        } else if(work_contents.isEmpty()){
+        } else if (work_contents.isEmpty()) {
             Toast_Nomal("업무내용을 입력해주세요.");
             return false;
-        } else{
+        } else {
             return true;
         }
     }
@@ -410,20 +412,18 @@ public class AddContractPage04 extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("SaveWorkPartTime Callback : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("SaveContractWorkjsonResponse length : " + jsonResponse.length());
+                dlog.i("SaveContractWorkjsonResponse : " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
-                            try {
+                        try {
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("근무 기본사항이 업데이트 완료되었습니다.");
-                                UpdatePagePos(jsonResponse);
                                 pm.AddContractPage05(mContext);
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     });
                 }
@@ -436,12 +436,12 @@ public class AddContractPage04 extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public void onBackPressed(){
 
-        if(!shardpref.getString("progress_pos","").isEmpty()){
+    @Override
+    public void onBackPressed() {
+        if (!shardpref.getString("progress_pos", "").isEmpty()) {
             pm.ContractFragment(mContext);
-        }else{
+        } else {
             super.onBackPressed();
         }
         shardpref.remove("progress_pos");
@@ -461,32 +461,38 @@ public class AddContractPage04 extends AppCompatActivity {
         toast.show();
     }
 
-    private void UpdatePagePos(String contract_id){
-        dlog.i("------UpdatePagePos------");
-        dlog.i("contract_id : " + contract_id);
-        dlog.i("------UpdatePagePos------");
+    String contract_id = "";
+
+    public void getContractId() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ContractPagePosUp.URL)
+                .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
-        Call<String> call = api.getData(contract_id,"2");
+        ContractidInterface api = retrofit.create(ContractidInterface.class);
+        Call<String> call = api.getData(place_id, worker_id);
         call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("SaveWorkPartTime Callback : " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
-                            shardpref.putString("contract_id",contract_id);
+                        try {
+                            JSONArray Response = new JSONArray(response.body());
+                            contract_id = Response.getJSONObject(0).getString("id");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     });
                 }
             }
 
             @SuppressLint("LongLogTag")
             @Override
-            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
     }
+
 }

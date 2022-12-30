@@ -772,12 +772,12 @@ public class TaskReportActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String jsonResponse = rc.getBase64decode(response.body());
-                    dlog.i("jsonResponse length : " + jsonResponse.length());
-                    dlog.i("jsonResponse : " + jsonResponse);
+//                    String jsonResponse = rc.getBase64decode(response.body());
+//                    dlog.i("jsonResponse length : " + jsonResponse.length());
+//                    dlog.i("jsonResponse : " + jsonResponse);
                     try {
                         //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(jsonResponse);
+                        JSONArray Response = new JSONArray(response.body());
                         if (!Response.toString().equals("[]")) {
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);

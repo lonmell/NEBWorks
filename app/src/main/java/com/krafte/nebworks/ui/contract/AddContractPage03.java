@@ -25,6 +25,7 @@ import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.ContractBasicInterface;
 import com.krafte.nebworks.dataInterface.ContractPagePosUp;
+import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd03Binding;
@@ -476,12 +477,44 @@ public class AddContractPage03 extends AppCompatActivity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                shardpref.putString("contract_id", jsonResponse);
-                                UpdatePagePos(jsonResponse);
+                                getContractId();
                                 pm.AddContractPage04(mContext);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    String contract_id = "";
+    public void getContractId() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractidInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractidInterface api = retrofit.create(ContractidInterface.class);
+        Call<String> call = api.getData(place_id, worker_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("SaveWorkPartTime Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        try {
+                            JSONArray Response = new JSONArray(response.body());
+                            contract_id = Response.getJSONObject(0).getString("id");
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     });
                 }
@@ -520,32 +553,4 @@ public class AddContractPage03 extends AppCompatActivity {
         toast.show();
     }
 
-    private void UpdatePagePos(String contract_id) {
-        dlog.i("------UpdatePagePos------");
-        dlog.i("contract_id : " + contract_id);
-        dlog.i("------UpdatePagePos------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ContractPagePosUp.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
-        Call<String> call = api.getData(contract_id, "1");
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
 }

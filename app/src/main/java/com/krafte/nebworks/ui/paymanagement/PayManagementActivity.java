@@ -286,7 +286,6 @@ public class PayManagementActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        dlog.i("onResume Tap : " + shardpref.getString("Tap", "0"));
         if (Tap.equals("0")) {
             binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
             binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
