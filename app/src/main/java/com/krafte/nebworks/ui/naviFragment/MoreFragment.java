@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.MorefragmentBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -57,6 +59,7 @@ public class MoreFragment extends Fragment {
     TextView more_tv;
     String USER_INFO_ID = "";
     String USER_LOGIN_METHOD = "";
+    String USER_INFO_AUTH = "";
 
     //shared
     String place_id = "";
@@ -132,6 +135,7 @@ public class MoreFragment extends Fragment {
 
             USER_INFO_ID        = shardpref.getString("USER_INFO_ID","");
             USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");
+            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
 
             if(!USER_LOGIN_METHOD.equals("NEB")){
                 binding.settingList04Txt.setText("연결해제");
@@ -182,19 +186,35 @@ public class MoreFragment extends Fragment {
 
     public void setBtnEvent() {
         binding.settingList01Txt.setOnClickListener(v -> {
-            shardpref.putString("retrun_page","MoreActivity");
-            shardpref.putString("editstate","edit");
-            pm.ProfileEdit(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putString("retrun_page", "MoreActivity");
+                shardpref.putString("editstate", "edit");
+                pm.ProfileEdit(mContext);
+            }
         });
         binding.settingList02Txt.setOnClickListener(v -> {
-            pm.NotifyList(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                pm.NotifyList(mContext);
+            }
         });
         binding.settingList03Txt.setOnClickListener(v -> {
-            pm.Push(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                pm.Push(mContext);
+            }
         });
 
         binding.settingList04Txt.setOnClickListener(v -> {
-            pm.UserDel(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                pm.UserDel(mContext);
+            }
         });
     }
 
@@ -247,5 +267,16 @@ public class MoreFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","매장등록");
+        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 }

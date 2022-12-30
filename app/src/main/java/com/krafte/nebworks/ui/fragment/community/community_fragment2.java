@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.fragment.community;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CateAdapter;
 import com.krafte.nebworks.adapter.OwnerCommunityAdapter;
 import com.krafte.nebworks.adapter.PagingAdapter;
@@ -24,6 +26,7 @@ import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.SecondTapCommunityData;
 import com.krafte.nebworks.data.StringData;
 import com.krafte.nebworks.databinding.CommunityFragment2Binding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -49,6 +52,7 @@ public class community_fragment2  extends Fragment {
     PreferenceHelper shardpref;
     String USER_INFO_ID = "";
     String USER_INFO_EMAIL = "";
+    String USER_INFO_AUTH = "";
     String place_id = "";
     String place_owner_id = "";
 
@@ -117,6 +121,7 @@ public class community_fragment2  extends Fragment {
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             place_id = shardpref.getString("place_id", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             shardpref.putInt("SELECT_POSITION", 0);
             //-- 날짜 세팅
             dlog.i("place_owner_id : " + place_owner_id);
@@ -144,11 +149,15 @@ public class community_fragment2  extends Fragment {
             subcateAdapter.setOnItemClickListener(new CateAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View v, int position) {
-                    subcateAdapter.notifyDataSetChanged();
-                    dlog.i("select item : " + subCate.get(position));
-                    category = subCate.get(position);
-                    binding.searchTv.setText("");
-                    setRecyclerViewpo2();
+                    if (USER_INFO_AUTH.isEmpty()) {
+                        isAuth();
+                    } else {
+                        subcateAdapter.notifyDataSetChanged();
+                        dlog.i("select item : " + subCate.get(position));
+                        category = subCate.get(position);
+                        binding.searchTv.setText("");
+                        setRecyclerViewpo2();
+                    }
                 }
             });
 
@@ -207,8 +216,12 @@ public class community_fragment2  extends Fragment {
     String search = "";
     private void setBtnEvent() {
         binding.searchBtn.setOnClickListener(v -> {
-            search = binding.searchTv.getText().toString();
-            searchFilter(search);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                search = binding.searchTv.getText().toString();
+                searchFilter(search);
+            }
         });
     }
 
@@ -303,10 +316,14 @@ public class community_fragment2  extends Fragment {
                     mPAdapter.setOnItemClickListener(new PagingAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View v, int position) {
-                            mPAdapter.notifyDataSetChanged();
-                            page_num = paging.get(position);
-                            dlog.i("page_num : " + page_num);
-                            GetCrawling();
+                            if (USER_INFO_AUTH.isEmpty()) {
+                                isAuth();
+                            } else {
+                                mPAdapter.notifyDataSetChanged();
+                                page_num = paging.get(position);
+                                dlog.i("page_num : " + page_num);
+                                GetCrawling();
+                            }
                         }
                     });
 
@@ -371,6 +388,14 @@ public class community_fragment2  extends Fragment {
         }
     }
 
-
-
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","매장등록");
+        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 }

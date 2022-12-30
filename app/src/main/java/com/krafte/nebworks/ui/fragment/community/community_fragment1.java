@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.fragment.community;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +17,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.dynamic.IFragmentWrapper;
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.CommunityFragment1Binding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -53,6 +57,7 @@ public class community_fragment1 extends Fragment {
     String USER_INFO_EMAIL = "";
     String place_id = "";
     String place_owner_id = "";
+    String USER_INFO_AUTH = "";
 
     //Other
     //position 0
@@ -113,6 +118,7 @@ public class community_fragment1 extends Fragment {
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             place_id = shardpref.getString("place_id", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             shardpref.putInt("SELECT_POSITION", 0);
             //-- 날짜 세팅
             dlog.i("place_owner_id : " + place_owner_id);
@@ -152,13 +158,21 @@ public class community_fragment1 extends Fragment {
         //position 0
         binding.more01.setOnClickListener(v -> {
             //인기게시글 전체보기
-            shardpref.putInt("com_kind", 0);
-            pm.MoreListCommunity(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putInt("com_kind", 0);
+                pm.MoreListCommunity(mContext);
+            }
         });
         binding.more02.setOnClickListener(v -> {
             //전체게시글 전체보기
-            shardpref.putInt("com_kind", 1);
-            pm.MoreListCommunity(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putInt("com_kind", 1);
+                pm.MoreListCommunity(mContext);
+            }
         });
     }
 
@@ -245,21 +259,25 @@ public class community_fragment1 extends Fragment {
                             BestmAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View v, int position) {
-                                    shardpref.putString("feed_id",mList.get(position).getId());
-                                    shardpref.putString("title",mList.get(position).getTitle());
-                                    shardpref.putString("contents",mList.get(position).getContents());
-                                    shardpref.putString("writer_id",mList.get(position).getWriter_id());
-                                    shardpref.putString("writer_name",mList.get(position).getWriter_name());
-                                    shardpref.putString("writer_img_path",mList.get(position).getWriter_img_path());
-                                    shardpref.putString("feed_img_path",mList.get(position).getFeed_img_path());
-                                    shardpref.putString("jikgup",mList.get(position).getJikgup());
-                                    shardpref.putString("view_cnt",mList.get(position).getView_cnt());
-                                    shardpref.putString("comment_cnt",mList.get(position).getComment_cnt());
-                                    shardpref.putString("like_cnt",mList.get(position).getLike_cnt());
-                                    shardpref.putString("category",mList.get(position).getCategory());
-                                    shardpref.putString("updated_at",mList.get(position).getUpdated_at());
-                                    shardpref.putString("mylikeyn",mList.get(position).getMylikeyn());
-                                    pm.CommunityDetail(mContext);
+                                    if (USER_INFO_AUTH.isEmpty()) {
+                                        isAuth();
+                                    } else {
+                                        shardpref.putString("feed_id", mList.get(position).getId());
+                                        shardpref.putString("title", mList.get(position).getTitle());
+                                        shardpref.putString("contents", mList.get(position).getContents());
+                                        shardpref.putString("writer_id", mList.get(position).getWriter_id());
+                                        shardpref.putString("writer_name", mList.get(position).getWriter_name());
+                                        shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
+                                        shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
+                                        shardpref.putString("jikgup", mList.get(position).getJikgup());
+                                        shardpref.putString("view_cnt", mList.get(position).getView_cnt());
+                                        shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
+                                        shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
+                                        shardpref.putString("category", mList.get(position).getCategory());
+                                        shardpref.putString("updated_at", mList.get(position).getUpdated_at());
+                                        shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
+                                        pm.CommunityDetail(mContext);
+                                    }
                                 }
                             });
                         }
@@ -351,21 +369,25 @@ public class community_fragment1 extends Fragment {
                             mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(View v, int position) {
-                                    shardpref.putString("feed_id",mList.get(position).getId());
-                                    shardpref.putString("title",mList.get(position).getTitle());
-                                    shardpref.putString("contents",mList.get(position).getContents());
-                                    shardpref.putString("writer_id",mList.get(position).getWriter_id());
-                                    shardpref.putString("writer_name",mList.get(position).getWriter_name());
-                                    shardpref.putString("writer_img_path",mList.get(position).getWriter_img_path());
-                                    shardpref.putString("feed_img_path",mList.get(position).getFeed_img_path());
-                                    shardpref.putString("jikgup",mList.get(position).getJikgup());
-                                    shardpref.putString("view_cnt",mList.get(position).getView_cnt());
-                                    shardpref.putString("comment_cnt",mList.get(position).getComment_cnt());
-                                    shardpref.putString("like_cnt",mList.get(position).getLike_cnt());
-                                    shardpref.putString("category",mList.get(position).getCategory());
-                                    shardpref.putString("updated_at",mList.get(position).getUpdated_at());
-                                    shardpref.putString("mylikeyn",mList.get(position).getMylikeyn());
-                                    pm.CommunityDetail(mContext);
+                                    if (USER_INFO_AUTH.isEmpty()) {
+                                        isAuth();
+                                    } else {
+                                        shardpref.putString("feed_id", mList.get(position).getId());
+                                        shardpref.putString("title", mList.get(position).getTitle());
+                                        shardpref.putString("contents", mList.get(position).getContents());
+                                        shardpref.putString("writer_id", mList.get(position).getWriter_id());
+                                        shardpref.putString("writer_name", mList.get(position).getWriter_name());
+                                        shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
+                                        shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
+                                        shardpref.putString("jikgup", mList.get(position).getJikgup());
+                                        shardpref.putString("view_cnt", mList.get(position).getView_cnt());
+                                        shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
+                                        shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
+                                        shardpref.putString("category", mList.get(position).getCategory());
+                                        shardpref.putString("updated_at", mList.get(position).getUpdated_at());
+                                        shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
+                                        pm.CommunityDetail(mContext);
+                                    }
                                 }
                             });
                         }
@@ -383,4 +405,14 @@ public class community_fragment1 extends Fragment {
         });
     }
 
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","매장등록");
+        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 }

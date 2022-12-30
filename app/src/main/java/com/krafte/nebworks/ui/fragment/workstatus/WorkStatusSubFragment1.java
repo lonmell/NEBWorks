@@ -23,6 +23,7 @@ import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkStatusTapData;
 import com.krafte.nebworks.dataInterface.WorkStatusTapInterface;
 import com.krafte.nebworks.databinding.MembersubFragment1Binding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.pop.WorkMemberOptionActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -53,6 +54,7 @@ public class WorkStatusSubFragment1 extends Fragment {
     PreferenceHelper shardpref;
     String USER_INFO_ID = "";
     String USER_INFO_EMAIL = "";
+    String USER_INFO_AUTH = "";
     String place_id = "";
     String place_owner_id = "";
 
@@ -114,6 +116,7 @@ public class WorkStatusSubFragment1 extends Fragment {
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             place_id = shardpref.getString("place_id", "0");
             place_owner_id = shardpref.getString("place_owner_id", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             shardpref.putInt("SELECT_POSITION", 0);
             FtoDay = shardpref.getString("FtoDay",FtoDay);
             //-- 날짜 세팅
@@ -209,6 +212,9 @@ public class WorkStatusSubFragment1 extends Fragment {
                                 mAdapter.setOnItemClickListener(new WorkTapMemberAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(View v, int position) {
+                                        if(USER_INFO_AUTH.isEmpty()) {
+                                            isAuth();
+                                        } else {
                                         shardpref.putString("status_id", mList.get(position).getId());
                                         shardpref.putString("mem_id", mList.get(position).getUser_id());
                                         shardpref.putString("mem_name", mList.get(position).getName());
@@ -219,6 +225,7 @@ public class WorkStatusSubFragment1 extends Fragment {
                                         mContext.startActivity(intent);
                                         ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    }
                                     }
                                 });
                             }
@@ -242,4 +249,14 @@ public class WorkStatusSubFragment1 extends Fragment {
         }
     }
     /*직원 전체 리스트 END*/
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag", "매장등록");
+        intent.putExtra("data", "먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 }

@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.databinding.CommunityfragmentBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.fragment.community.community_fragment1;
 import com.krafte.nebworks.ui.fragment.community.community_fragment2;
 import com.krafte.nebworks.ui.fragment.community.community_fragment3;
@@ -196,13 +198,17 @@ public class CommunityFragment extends Fragment {
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("게시글 작성");
         add_worktime_btn.setOnClickListener(v -> {
-            if (paging_position == 0) {
-                shardpref.putString("state","AddCommunity");
-                pm.CommunityAdd(mContext);
-            } else if (paging_position == 1) {
-                Toast_Nomal("사장님 게시글");
-            } else if (paging_position == 2) {
-                Toast_Nomal("세금/노무");
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                if (paging_position == 0) {
+                    shardpref.putString("state","AddCommunity");
+                    pm.CommunityAdd(mContext);
+                } else if (paging_position == 1) {
+                    Toast_Nomal("사장님 게시글");
+                } else if (paging_position == 2) {
+                    Toast_Nomal("세금/노무");
+                }
             }
         });
     }
@@ -243,6 +249,17 @@ public class CommunityFragment extends Fragment {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","매장등록");
+        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
 }

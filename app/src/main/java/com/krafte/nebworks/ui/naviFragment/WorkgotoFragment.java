@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.WorkCalendersetData;
 import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -182,7 +184,7 @@ public class WorkgotoFragment extends Fragment {
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1"); //0-관리자 / 1- 근로자
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", ""); //0-관리자 / 1- 근로자
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
             return_page = shardpref.getString("return_page", "");
             setBtnEvent();
@@ -274,16 +276,20 @@ public class WorkgotoFragment extends Fragment {
 //                // 문자열 -> Date
 //                Date date = sdf.parse(getDate);
 //                dlog.i("Calendar.DATE : " + sdf.format(date));
-                cal.add(Calendar.DATE, -1);
-                toDay = sdf.format(cal.getTime());
-                Year = toDay.substring(0, 4);
-                Month = toDay.substring(5, 7);
-                Day = toDay.substring(8, 10);
-                getYMPicker = Year + "-" + Month;
-                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                if (USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    cal.add(Calendar.DATE, -1);
+                    toDay = sdf.format(cal.getTime());
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    getYMPicker = Year + "-" + Month;
+                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
 
-                SetCalenderData();
-                setRecyclerView();
+                    SetCalenderData();
+                    setRecyclerView();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -294,15 +300,19 @@ public class WorkgotoFragment extends Fragment {
 //                // 문자열 -> Date
 //                Date date = sdf.parse(getDate);
 //                dlog.i("Calendar.DATE : " + sdf.format(date));
-                cal.add(Calendar.DATE, +1);
-                toDay = sdf.format(cal.getTime());
-                Year = toDay.substring(0, 4);
-                Month = toDay.substring(5, 7);
-                Day = toDay.substring(8, 10);
-                getYMPicker = Year + "-" + Month;
-                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                SetCalenderData();
-                setRecyclerView();
+                if (USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    cal.add(Calendar.DATE, +1);
+                    toDay = sdf.format(cal.getTime());
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    getYMPicker = Year + "-" + Month;
+                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                    SetCalenderData();
+                    setRecyclerView();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -329,64 +339,80 @@ public class WorkgotoFragment extends Fragment {
         }, mYear, mMonth, mDay);
 
         binding.setdate.setOnClickListener(view -> {
-            if (binding.setdate.isClickable()) {
-                datePickerDialog.show();
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                if (binding.setdate.isClickable()) {
+                    datePickerDialog.show();
+                }
             }
         });
         binding.changePlace.setOnClickListener(v -> {
-            PaySelectPlaceActivity psp = new PaySelectPlaceActivity();
-            psp.show(getChildFragmentManager(), "PaySelectPlaceActivity");
-            psp.setOnClickListener(new PaySelectPlaceActivity.OnClickListener() {
-                @Override
-                public void onClick(View v, String getplace_id, String getplace_name) {
-                    change_place_id = getplace_id;
-                    change_place_name = getplace_name;
-                    dlog.i("change_place_id : " + getplace_id);
-                    dlog.i("change_place_name : " + getplace_name);
-                    if (getplace_name.equals("전체매장")) {
-                        binding.changePlaceTv.setText("전체매장");
-                        change_place_id = place_id;
-                        change_place_name = USER_INFO_ID;
-                        shardpref.putString("change_place_id", place_id);
-                        shardpref.putString("change_place_name", USER_INFO_ID);
-                    } else {
-                        binding.changePlaceTv.setText(getplace_name);
-                        shardpref.putString("change_place_id", getplace_id);
-                        shardpref.putString("change_place_name", getplace_name);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                PaySelectPlaceActivity psp = new PaySelectPlaceActivity();
+                psp.show(getChildFragmentManager(), "PaySelectPlaceActivity");
+                psp.setOnClickListener(new PaySelectPlaceActivity.OnClickListener() {
+                    @Override
+                    public void onClick(View v, String getplace_id, String getplace_name) {
+                        if (USER_INFO_AUTH.isEmpty()) {
+                            isAuth();
+                        }
+                        change_place_id = getplace_id;
+                        change_place_name = getplace_name;
+                        dlog.i("change_place_id : " + getplace_id);
+                        dlog.i("change_place_name : " + getplace_name);
+                        if (getplace_name.equals("전체매장")) {
+                            binding.changePlaceTv.setText("전체매장");
+                            change_place_id = place_id;
+                            change_place_name = USER_INFO_ID;
+                            shardpref.putString("change_place_id", place_id);
+                            shardpref.putString("change_place_name", USER_INFO_ID);
+                        } else {
+                            binding.changePlaceTv.setText(getplace_name);
+                            shardpref.putString("change_place_id", getplace_id);
+                            shardpref.putString("change_place_name", getplace_name);
+                        }
+                        dlog.i("change_place_id : " + change_place_id);
+                        dlog.i("change_place_name : " + change_place_name);
+                        SetCalenderData();
+                        setRecyclerView();
+
                     }
-                    dlog.i("change_place_id : " + change_place_id);
-                    dlog.i("change_place_name : " + change_place_name);
-                    SetCalenderData();
-                    setRecyclerView();
-                }
-            });
+                });
+            }
         });
 
         binding.changeMember.setOnClickListener(v -> {
-            PaySelectMemberActivity psm = new PaySelectMemberActivity();
-            psm.show(getParentFragmentManager(), "PaySelectMemberActivity");
-            psm.setOnClickListener(new PaySelectMemberActivity.OnClickListener() {
-                @Override
-                public void onClick(View v, String user_id, String user_name) {
-                    change_member_id = user_id;
-                    change_member_name = user_name;
-                    if (user_name.equals("전체직원")) {
-                        binding.changeMemberTv.setText("전체직원");
-                        change_member_id = "";
-                        change_member_name = USER_INFO_NAME;
-                        shardpref.putString("change_member_id", place_id);
-                        shardpref.putString("change_member_name", USER_INFO_ID);
-                    } else {
-                        binding.changeMemberTv.setText(user_name);
-                        shardpref.putString("change_member_id", user_id);
-                        shardpref.putString("change_member_name", user_name);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                PaySelectMemberActivity psm = new PaySelectMemberActivity();
+                psm.show(getParentFragmentManager(), "PaySelectMemberActivity");
+                psm.setOnClickListener(new PaySelectMemberActivity.OnClickListener() {
+                    @Override
+                    public void onClick(View v, String user_id, String user_name) {
+                        change_member_id = user_id;
+                        change_member_name = user_name;
+                        if (user_name.equals("전체직원")) {
+                            binding.changeMemberTv.setText("전체직원");
+                            change_member_id = "";
+                            change_member_name = USER_INFO_NAME;
+                            shardpref.putString("change_member_id", place_id);
+                            shardpref.putString("change_member_name", USER_INFO_ID);
+                        } else {
+                            binding.changeMemberTv.setText(user_name);
+                            shardpref.putString("change_member_id", user_id);
+                            shardpref.putString("change_member_name", user_name);
+                        }
+                        dlog.i("change_member_id : " + user_id);
+                        dlog.i("change_member_name : " + user_name);
+                        SetCalenderData();
+                        setRecyclerView();
                     }
-                    dlog.i("change_member_id : " + user_id);
-                    dlog.i("change_member_name : " + user_name);
-                    SetCalenderData();
-                    setRecyclerView();
-                }
-            });
+                });
+            }
         });
 
         binding.changeIcon.setOnClickListener(v -> {
@@ -521,23 +547,26 @@ public class WorkgotoFragment extends Fragment {
                                     public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
                                         dlog.i("data :" + data);
                                         try {
-                                            kind = new ArrayList<>();
-                                            title = new ArrayList<>();
-                                            for (int i = 0; i < mList2.size(); i++) {
-                                                if (data.equals(mList2.get(i).getDay().length() == 1 ? "0" + mList2.get(i).getDay() : mList2.get(i).getDay())) {
-                                                    JSONArray Response = new JSONArray(mList2.get(i).getTask().toString().replace("[[", "[").replace("]]", "]"));
-                                                    for (int i3 = 0; i3 < Response.length(); i3++) {
-                                                        JSONObject jsonObject = Response.getJSONObject(i3);
-                                                        kind.add(jsonObject.getString("kind"));
-                                                        title.add(jsonObject.getString("title"));
+                                            if (USER_INFO_AUTH.isEmpty()) {
+                                                isAuth();
+                                            } else {
+                                                kind = new ArrayList<>();
+                                                title = new ArrayList<>();
+                                                for (int i = 0; i < mList2.size(); i++) {
+                                                    if (data.equals(mList2.get(i).getDay().length() == 1 ? "0" + mList2.get(i).getDay() : mList2.get(i).getDay())) {
+                                                        JSONArray Response = new JSONArray(mList2.get(i).getTask().toString().replace("[[", "[").replace("]]", "]"));
+                                                        for (int i3 = 0; i3 < Response.length(); i3++) {
+                                                            JSONObject jsonObject = Response.getJSONObject(i3);
+                                                            kind.add(jsonObject.getString("kind"));
+                                                            title.add(jsonObject.getString("title"));
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            shardpref.putString("task_date", WorkDay);
-                                            dlog.i("WorkDay :" + WorkDay);
+                                                shardpref.putString("task_date", WorkDay);
+                                                dlog.i("WorkDay :" + WorkDay);
 
-                                            shardpref.putString("change_place_id", change_place_id.isEmpty() ? place_id : change_place_id);
-                                            shardpref.putString("change_member_id", change_member_id.isEmpty() ? "" : change_member_id);
+                                                shardpref.putString("change_place_id", change_place_id.isEmpty() ? place_id : change_place_id);
+                                                shardpref.putString("change_member_id", change_member_id.isEmpty() ? "" : change_member_id);
 //                                            Intent intent = new Intent(mContext, TaskListPopActivity.class);
 //                                            intent.putStringArrayListExtra("kind", kind);
 //                                            intent.putStringArrayListExtra("title", title);
@@ -546,8 +575,9 @@ public class WorkgotoFragment extends Fragment {
 //                                            intent.putExtra("write_name","");
 //                                            startActivity(intent);
 //                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                                            WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
-                                            wgb.show(getChildFragmentManager(), "WorkgotoBottomSheet");
+                                                WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
+                                                wgb.show(getChildFragmentManager(), "WorkgotoBottomSheet");
+                                            }
                                         } catch (Exception e) {
                                             dlog.i("onItemClick Exception :" + e);
                                         }
@@ -728,8 +758,12 @@ public class WorkgotoFragment extends Fragment {
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("할일추가");
         add_worktime_btn.setOnClickListener(v -> {
-            TaskAddOption to = new TaskAddOption();
-            to.show(getChildFragmentManager(), "TaskAddOption");
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                TaskAddOption to = new TaskAddOption();
+                to.show(getChildFragmentManager(), "TaskAddOption");
+            }
         });
     }
 
@@ -745,5 +779,16 @@ public class WorkgotoFragment extends Fragment {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag", "매장등록");
+        intent.putExtra("data", "먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 }
