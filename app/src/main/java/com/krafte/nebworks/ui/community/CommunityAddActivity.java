@@ -104,7 +104,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     int like_state = 0;
     String CommTitle = "";
     String CommContnets = "";
-    int nickname_select = 0;
+    int nickname_select = 1;
 
     //--EditData
     String state_txt = "";
