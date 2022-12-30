@@ -373,7 +373,7 @@ public class MainFragment2 extends AppCompatActivity {
         select_nav09    = findViewById(R.id.select_nav09);
         select_nav05    = findViewById(R.id.select_nav05);
 
-        area04.setVisibility(View.VISIBLE);
+        area04.setVisibility(View.GONE);
         area06.setVisibility(View.GONE);
         select_nav09.setVisibility(View.GONE);
         select_nav05.setVisibility(View.GONE);
@@ -409,7 +409,7 @@ public class MainFragment2 extends AppCompatActivity {
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.bottom_navigation02) {
             dlog.i("급여관리 Click!");
-            shardpref.putInt("Tap", 0);
+            shardpref.putString("Tap", "0");
             binding.title.setText("할일");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
@@ -447,18 +447,18 @@ public class MainFragment2 extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav05) {
 //            shardpref.putString("Tap", "0");
 //            pm.PayManagement(mContext);
-            shardpref.putInt("Tap", 0);
+            shardpref.putString("Tap", "0");
             binding.title.setText("급여관리");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
         } else if (view.getId() == R.id.select_nav06) {
-            shardpref.putInt("Tap", 1);
+            shardpref.putString("Tap", "1");
             binding.title.setText("급여관리");
             pm.PayManagement(mContext);
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
 //            pm.Main2(mContext);
             drawerLayout.closeDrawer(drawerView);
-            shardpref.putInt("Tap", 0);
+            shardpref.putString("Tap", "0");
             binding.title.setText("할일");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
@@ -480,6 +480,10 @@ public class MainFragment2 extends AppCompatActivity {
             drawerLayout.closeDrawer(drawerView);
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
+        } else if (view.getId() == R.id.select_nav12_1) {
+            drawerLayout.closeDrawer(drawerView);
+            dlog.i("출결관리/근로자 상세");
+            pm.MemberDetail(mContext);
         } else if (view.getId() == R.id.select_nav14) {
             shardpref.clear();
             shardpref.remove("ALARM_ONOFF");

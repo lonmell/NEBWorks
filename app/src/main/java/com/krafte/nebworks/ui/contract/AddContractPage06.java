@@ -20,7 +20,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ContractTermAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.TermData;
-import com.krafte.nebworks.dataInterface.ContractPagePosUp;
+import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.dataInterface.TermDelInterface;
 import com.krafte.nebworks.dataInterface.TermGetInterface;
 import com.krafte.nebworks.dataInterface.TermInputInterface;
@@ -57,7 +57,6 @@ public class AddContractPage06 extends AppCompatActivity {
     String place_id = "";
     String worker_id = "";
     String USER_INFO_ID = "";
-    String contract_id = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -95,6 +94,7 @@ public class AddContractPage06 extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+
         setTermList();
     }
 
@@ -165,14 +165,13 @@ public class AddContractPage06 extends AppCompatActivity {
 
     private void setBtnEvent(){
         binding.addTerm.setOnClickListener(v -> {
-            String write_term = "근로자가 무단 결근 2일 이상 하거나 월 2일 이상\n" +
-                    "결근하는 경우 근로계약을 해지 할 수 있음";
+            String write_term = binding.newTerm.getText().toString();
             InputTerm(write_term);
             binding.newTerm.setText("");
         });
 
         binding.next.setOnClickListener(v -> {
-            UpdatePagePos(contract_id);
+            getContractId();
         });
 
         binding.backBtn.setOnClickListener(v -> {
@@ -271,35 +270,41 @@ public class AddContractPage06 extends AppCompatActivity {
         });
     }
 
-
-    private void UpdatePagePos(String contract_id){
-        dlog.i("------UpdatePagePos------");
-        dlog.i("contract_id : " + contract_id);
-        dlog.i("------UpdatePagePos------");
+    String contract_id = "";
+    public void getContractId() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ContractPagePosUp.URL)
+                .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
-        Call<String> call = api.getData(contract_id,"4");
+        ContractidInterface api = retrofit.create(ContractidInterface.class);
+        Call<String> call = api.getData(place_id, worker_id);
         call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("SaveWorkPartTime Callback : " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
-
+                        try {
+                            JSONArray Response = new JSONArray(response.body());
+                            contract_id = Response.getJSONObject(0).getString("id");
+                            pm.AddContractPage07(mContext);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     });
                 }
             }
 
             @SuppressLint("LongLogTag")
             @Override
-            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
     }
+
+
 
     @Override
     public void onBackPressed(){

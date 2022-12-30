@@ -362,12 +362,12 @@ public class VerificationActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = response.body();
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
-                            if (!response.body().equals("[]")) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            if (!jsonResponse.equals("[]")) {
                                 try {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
 
                                     String id = Response.getJSONObject(0).getString("id");
                                     String email = Response.getJSONObject(0).getString("account");
@@ -390,7 +390,7 @@ public class VerificationActivity extends AppCompatActivity {
                                 }
                             } else {
                                 if(i == 0){
-                                    dlog.i("Response 2: " + response.body().length());
+                                    dlog.i("Response 2: " + jsonResponse.length());
                                     shardpref.putString("USER_INFO_NAME", Uname);
                                     shardpref.putString("USER_INFO_PHONE", UPhone);
                                     shardpref.putString("USER_LOGIN_METHOD", "NEB");

@@ -22,6 +22,7 @@ import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractWorkerInterface;
+import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd07Binding;
 import com.krafte.nebworks.ui.WebViewActivity;
 import com.krafte.nebworks.util.DBConnection;
@@ -52,7 +53,6 @@ public class AddContractPage07 extends AppCompatActivity {
     String place_id = "";
     String worker_id = "";
     String USER_INFO_ID = "";
-    String contract_id = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -102,7 +102,9 @@ public class AddContractPage07 extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         UserCheck();
+        getContractId();
     }
+
 
     private void setBtnEvent(){
         binding.next.setOnClickListener(v -> {
@@ -251,9 +253,8 @@ public class AddContractPage07 extends AppCompatActivity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if(!jsonResponse.equals("null") || !jsonResponse.equals("[]") || !jsonResponse.isEmpty()){
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     shardpref.putString("contract_email",email);
-                                    UpdatePagePos(contract_id);
                                     pm.AddContractPage08(mContext);
                                 }
                             } catch (Exception e) {
@@ -297,32 +298,38 @@ public class AddContractPage07 extends AppCompatActivity {
         toast.show();
     }
 
-    private void UpdatePagePos(String contract_id){
-        dlog.i("------UpdatePagePos------");
-        dlog.i("contract_id : " + contract_id);
-        dlog.i("------UpdatePagePos------");
+    String contract_id = "";
+    public void getContractId() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ContractPagePosUp.URL)
+                .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
-        Call<String> call = api.getData(contract_id,"5");
+        ContractidInterface api = retrofit.create(ContractidInterface.class);
+        Call<String> call = api.getData(place_id, worker_id);
         call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("SaveWorkPartTime Callback : " + response.body());
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
-
+                        try {
+                            JSONArray Response = new JSONArray(response.body());
+                            contract_id = Response.getJSONObject(0).getString("id");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     });
                 }
             }
 
             @SuppressLint("LongLogTag")
             @Override
-            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
             }
         });
     }
+
+
 }

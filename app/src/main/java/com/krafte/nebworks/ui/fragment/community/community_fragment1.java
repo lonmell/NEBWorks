@@ -242,6 +242,26 @@ public class community_fragment1 extends Fragment {
                                 binding.bestList.setVisibility(View.GONE);
                             }
                             BestmAdapter.notifyDataSetChanged();
+                            BestmAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View v, int position) {
+                                    shardpref.putString("feed_id",mList.get(position).getId());
+                                    shardpref.putString("title",mList.get(position).getTitle());
+                                    shardpref.putString("contents",mList.get(position).getContents());
+                                    shardpref.putString("writer_id",mList.get(position).getWriter_id());
+                                    shardpref.putString("writer_name",mList.get(position).getWriter_name());
+                                    shardpref.putString("writer_img_path",mList.get(position).getWriter_img_path());
+                                    shardpref.putString("feed_img_path",mList.get(position).getFeed_img_path());
+                                    shardpref.putString("jikgup",mList.get(position).getJikgup());
+                                    shardpref.putString("view_cnt",mList.get(position).getView_cnt());
+                                    shardpref.putString("comment_cnt",mList.get(position).getComment_cnt());
+                                    shardpref.putString("like_cnt",mList.get(position).getLike_cnt());
+                                    shardpref.putString("category",mList.get(position).getCategory());
+                                    shardpref.putString("updated_at",mList.get(position).getUpdated_at());
+                                    shardpref.putString("mylikeyn",mList.get(position).getMylikeyn());
+                                    pm.CommunityDetail(mContext);
+                                }
+                            });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

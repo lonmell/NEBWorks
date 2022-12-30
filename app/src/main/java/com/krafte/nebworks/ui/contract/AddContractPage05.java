@@ -21,8 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractPayInterface;
+import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.dataInterface.TermInputInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd05Binding;
 import com.krafte.nebworks.util.DBConnection;
@@ -31,6 +31,8 @@ import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
+
+import org.json.JSONArray;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -54,7 +56,6 @@ public class AddContractPage05 extends AppCompatActivity {
     String place_id = "";
     String worker_id = "";
     String USER_INFO_ID = "";
-    String contract_id = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
@@ -81,9 +82,14 @@ public class AddContractPage05 extends AppCompatActivity {
         place_id        = shardpref.getString("place_id","0");
         USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
         worker_id       = shardpref.getString("worker_id","0");
-        contract_id     = shardpref.getString("contract_id","0");
 
         setBtnEvent();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        getContractId();
     }
 
     String paytype = "";
@@ -269,13 +275,47 @@ public class AddContractPage05 extends AppCompatActivity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                Toast_Nomal("급여 기본사항이 업데이트 완료되었습니다.");
-                                InputTerm("근로자가 무단 결근 2일 이상 하거나 월 2일 이상\n결근하는 경우 근로계약을 해지 할 수 있음");
-                                UpdatePagePos(jsonResponse);
-                                pm.AddContractPage06(mContext);
+                                if(jsonResponse.replace("\"","").equals("success")){
+                                    Toast_Nomal("급여 기본사항이 업데이트 완료되었습니다.");
+                                    InputTerm("근로자가 무단 결근 2일 이상 하거나 월 2일 이상\n결근하는 경우 근로계약을 해지 할 수 있음");
+                                    pm.AddContractPage06(mContext);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    String contract_id = "";
+    public void getContractId() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractidInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractidInterface api = retrofit.create(ContractidInterface.class);
+        Call<String> call = api.getData(place_id, worker_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("SaveWorkPartTime Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        try {
+                            JSONArray Response = new JSONArray(response.body());
+                            contract_id = Response.getJSONObject(0).getString("id");
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     });
                 }
@@ -350,32 +390,4 @@ public class AddContractPage05 extends AppCompatActivity {
         toast.show();
     }
 
-    private void UpdatePagePos(String contract_id){
-        dlog.i("------UpdatePagePos------");
-        dlog.i("contract_id : " + contract_id);
-        dlog.i("------UpdatePagePos------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ContractPagePosUp.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        ContractPagePosUp api = retrofit.create(ContractPagePosUp.class);
-        Call<String> call = api.getData(contract_id,"3");
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
 }
