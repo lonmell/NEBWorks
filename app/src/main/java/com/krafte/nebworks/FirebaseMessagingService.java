@@ -17,7 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
+import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
 import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
+import com.krafte.nebworks.ui.feed.FeedListActivity;
 import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.ui.member.MemberManagement;
@@ -166,7 +168,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             notificationIntent = new Intent(this, ContractFragmentActivity.class);
         }else if(click_action.equals("Payment0") || click_action.equals("Payment1")){
             notificationIntent = new Intent(this, PayManagementActivity.class);
+        }else if(click_action.equals("PlaceWorkFragment")){
+            notificationIntent = new Intent(this, FeedListActivity.class);
+        }else if(click_action.equals("TaskApprovalFragment")){
+            notificationIntent = new Intent(this, TaskApprovalFragment.class);
         }
+
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //        notificationIntent = new Intent(this, IntroActivity.class);
 //        notificationIntent.putExtra("click_action", click_action);
@@ -208,7 +215,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             intent = new Intent(this, ContractFragmentActivity.class);
         }else if(click_action.equals("Payment0") || click_action.equals("Payment1")){
             intent = new Intent(this, PayManagementActivity.class);
+        }else if(click_action.equals("PlaceWorkFragment")){
+            intent = new Intent(this, FeedListActivity.class);
+        }else if(click_action.equals("TaskApprovalFragment")){
+            intent = new Intent(this, TaskApprovalFragment.class);
         }
+
 //        Intent intent = new Intent(this, IntroActivity.class);
 //        intent.putExtra("click_action", click_action);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

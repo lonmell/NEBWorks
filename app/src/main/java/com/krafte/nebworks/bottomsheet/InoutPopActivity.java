@@ -531,7 +531,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                 dlog.i("jsonResponse length : " + jsonResponse.length());
                 dlog.i("jsonResponse : " + jsonResponse);
                 try {
-                    JSONArray Response = new JSONArray(response.body());
+                    JSONArray Response = new JSONArray(jsonResponse);
                     if (Response.length() > 0) {
                         dlog.i("-----getManagerToken-----");
                         dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));

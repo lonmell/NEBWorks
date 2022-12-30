@@ -28,7 +28,6 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.ContractOwnerSignInterface;
-import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
@@ -220,7 +219,7 @@ public class AddContractPage08 extends AppCompatActivity {
                             dlog.i("UpdatePagePos jsonResponse length : " + jsonResponse.length());
                             dlog.i("UpdatePagePos jsonResponse : " + jsonResponse);
                             try {
-                                if(!jsonResponse.equals("null") || !jsonResponse.equals("[]") || !jsonResponse.isEmpty()){
+                                if(!jsonResponse.equals("[]")){
                                     saveBitmapAndGetURI();
                                     if(USER_INFO_AUTH.equals("0")){
                                         //fcm으로 알림 메세지 보내기

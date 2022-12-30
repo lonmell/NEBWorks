@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.util.KakaoCustomTabsClient;
 import com.kakao.sdk.link.LinkClient;
 import com.kakao.sdk.link.WebSharerClient;
@@ -20,6 +21,7 @@ import com.kakao.sdk.template.model.ItemContent;
 import com.kakao.sdk.template.model.Link;
 import com.kakao.sdk.template.model.Social;
 import com.kakao.sdk.user.UserApiClient;
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -91,6 +93,8 @@ public class AddContractPage09 extends AppCompatActivity {
         place_owner_id  = shardpref.getString("place_owner_id", "");
         worker_name     = shardpref.getString("worker_name", "");
 
+        // Kakao SDK 객체 초기화
+        KakaoSdk.init(this, getString(R.string.kakao_native_key));
         setBtnEvent();
     }
 

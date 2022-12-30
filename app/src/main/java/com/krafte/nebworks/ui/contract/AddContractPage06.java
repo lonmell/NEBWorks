@@ -86,7 +86,6 @@ public class AddContractPage06 extends AppCompatActivity {
         place_id        = shardpref.getString("place_id","0");
         USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
         worker_id       = shardpref.getString("worker_id","0");
-        contract_id     = shardpref.getString("contract_id","0");
 
         setBtnEvent();
     }
@@ -94,8 +93,8 @@ public class AddContractPage06 extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+        getContractId();
 
-        setTermList();
     }
 
 
@@ -171,7 +170,7 @@ public class AddContractPage06 extends AppCompatActivity {
         });
 
         binding.next.setOnClickListener(v -> {
-            getContractId();
+            pm.AddContractPage07(mContext);
         });
 
         binding.backBtn.setOnClickListener(v -> {
@@ -288,7 +287,7 @@ public class AddContractPage06 extends AppCompatActivity {
                         try {
                             JSONArray Response = new JSONArray(response.body());
                             contract_id = Response.getJSONObject(0).getString("id");
-                            pm.AddContractPage07(mContext);
+                            setTermList();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

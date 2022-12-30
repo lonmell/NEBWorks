@@ -30,6 +30,7 @@ import com.krafte.nebworks.dataInterface.FeedCommentListInterface;
 import com.krafte.nebworks.dataInterface.UpdateViewInterfcae;
 import com.krafte.nebworks.databinding.ActivityCommunityDetailBinding;
 import com.krafte.nebworks.pop.CommunityOptionActivity;
+import com.krafte.nebworks.pop.PhotoPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -194,6 +195,14 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 binding.likeIcon.setBackgroundResource(R.drawable.ic_like_off);
             }
             AddLike(feed_id);
+        });
+
+        binding.feedImg.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, PhotoPopActivity.class);
+            intent.putExtra("data", feed_img_path);
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
     }
 

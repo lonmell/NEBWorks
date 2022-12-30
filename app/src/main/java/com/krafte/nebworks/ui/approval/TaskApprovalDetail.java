@@ -485,18 +485,12 @@ public class TaskApprovalDetail extends AppCompatActivity {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String jsonResponse = rc.getBase64decode(response.body());
-                    dlog.i("jsonResponse length : " + jsonResponse.length());
-                    dlog.i("jsonResponse : " + jsonResponse);
+                    dlog.i("setUpdateWorktodo jsonResponse length : " + jsonResponse.length());
+                    dlog.i("setUpdateWorktodo jsonResponse : " + jsonResponse);
                     if (jsonResponse.replace("\"", "").equals("success")) {
-                        for(int a = 0; a < user_id.size(); a++){
-                            if(place_owner_id.equals(user_id.get(a))){
-                                getManagerToken(user_id.get(a), "0", place_id, place_name,state);
-                            }else{
-                                getManagerToken(user_id.get(a), "1", place_id, place_name,state);
-                            }
-                        }
-
-                        dlog.i( "complete_kind : " + complete_kind);
+                        dlog.i("user_id : " + user_id);
+                        dlog.i("place_owner_id : " + place_owner_id);
+                        getManagerToken(requester_id, "1", place_id, place_name,state);
                         removeShared();
                         pm.Approval(mContext);
                     } else {
@@ -636,7 +630,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "TaskApprovalFragment";
+            click_action = "TaskList1";
             dlog.i("------FcmTestFunction------");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);
