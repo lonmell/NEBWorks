@@ -338,7 +338,7 @@ public class OwnerFeedAddActivity extends AppCompatActivity {
 ////                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
 ////                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
 ////                            try {
-////                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+////                                if (!response.body().equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
 ////                                    Toast_Nomal("게시글 저장이 완료되었습니다.");
 ////                                    pm.CommunityActivity(mContext);
 ////                                }
@@ -389,7 +389,7 @@ public class OwnerFeedAddActivity extends AppCompatActivity {
 ////                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
 ////                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
 ////                            try {
-////                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+////                                if (!response.body().equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
 ////                                    if (!ProfileUrl.isEmpty()) {
 ////                                        saveBitmapAndGetURI();
 ////                                    }

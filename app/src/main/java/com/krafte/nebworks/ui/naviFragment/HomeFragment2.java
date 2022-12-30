@@ -815,10 +815,10 @@ public class HomeFragment2 extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("AddPlaceMember jsonResponse length : " + response.body().length());
-                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
-                            if (response.body().replace("\"", "").equals("success")) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("AddPlaceMember jsonResponse length : " + jsonResponse.length());
+                            dlog.i("AddPlaceMember jsonResponse : " + jsonResponse);
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("초대 수락이 완료되었습니다.");
                                 binding.acceptArea.setVisibility(View.GONE);
                                 accept_state = 1;
@@ -1111,8 +1111,10 @@ public class HomeFragment2 extends Fragment {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
-                if (response.body().replace("\"", "").equals("success")) {
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+                if (jsonResponse.replace("\"", "").equals("success")) {
                     dlog.i("FcmTokenUpdate jsonResponse length : " + response.body().length());
                     dlog.i("FcmTokenUpdate jsonResponse : " + response.body());
                 } else {

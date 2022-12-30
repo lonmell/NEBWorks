@@ -814,7 +814,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                     String jsonResponse = rc.getBase64decode(response.body());
                                     dlog.i("jsonResponse length : " + jsonResponse.length());
                                     dlog.i("jsonResponse : " + jsonResponse);
-                                    if (jsonResponse.replace("\"", "").equals("success") || response.body().replace("\"", "").equals("success")) {
+                                    if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         dlog.i("SelectEmployeeid : " + user_id);
 
@@ -840,7 +840,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                         }
 
 
-                                    } else if (jsonResponse.replace("\"", "").equals("fail") || response.body().replace("\"", "").equals("fail")) {
+                                    } else if (jsonResponse.replace("\"", "").equals("fail") || jsonResponse.replace("\"", "").equals("fail")) {
                                         Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(mContext, "서버입력 오류! 데이터를 입력할 수 없습니다.", Toast.LENGTH_SHORT).show();
@@ -888,7 +888,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                 dlog.e("response 2: " + response.body());
                                 if (response.isSuccessful() && response.body() != null) {
                                     String jsonResponse = response.body();
-                                    if (jsonResponse.replace("\"", "").equals("success") || response.body().replace("\"", "").equals("success")) {
+                                    if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         dlog.i("SelectEmployeeid : " + user_id);
                                         String return_page = shardpref.getString("return_page", "");
@@ -912,7 +912,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                             RemoveShared();
                                         }
 
-                                    } else if (jsonResponse.replace("\"", "").equals("fail") || response.body().replace("\"", "").equals("fail")) {
+                                    } else if (jsonResponse.replace("\"", "").equals("fail") || jsonResponse.replace("\"", "").equals("fail")) {
                                         Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(mContext, "서버입력 오류! 데이터를 입력할 수 없습니다.", Toast.LENGTH_SHORT).show();
@@ -957,7 +957,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                             dlog.e("response 2: " + response.body());
                             if (response.isSuccessful() && response.body() != null) {
                                 String jsonResponse = response.body();
-                                if (jsonResponse.replace("\"", "").equals("success") || response.body().replace("\"", "").equals("success")) {
+                                if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                     dlog.i("assignment_kind : " + assignment_kind);
                                     dlog.i("SelectEmployeeid : " + user_id);
                                     if (!user_id.equals("")) {
@@ -967,7 +967,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                         dlog.i("EmployeeChannelId1 : " + EmployeeChannelId1);
                                     }
 
-                                } else if (jsonResponse.replace("\"", "").equals("fail") || response.body().replace("\"", "").equals("fail")) {
+                                } else if (jsonResponse.replace("\"", "").equals("fail") || jsonResponse.replace("\"", "").equals("fail")) {
                                     Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(mContext, "서버입력 오류! 데이터를 입력할 수 없습니다.", Toast.LENGTH_SHORT).show();

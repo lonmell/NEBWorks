@@ -48,6 +48,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -555,6 +556,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
 
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void setSaveTask(String task_id, String task_date, String img_path, String complete_yn, String reject_reason) {
         dlog.i("------setSaveTask------");
         dlog.i("task_id : " + task_id);
@@ -577,11 +579,12 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
                             runOnUiThread(() -> {
                                 Log.i(TAG, "resultData : " + resultData.getRESULT());
-                                if (response.body().replace("\"", "").equals("success")) {
+                                if (jsonResponse.replace("\"", "").equals("success")) {
                                     dlog.i("ProfileUrl : " + ProfileUrl);
                                     dlog.i("saveBitmap : " + saveBitmap);
                                     if (!ProfileUrl.isEmpty() && saveBitmap != null) {
@@ -628,10 +631,11 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-                            dlog.i("setUpdateWorktodo jsonResponse length : " + response.body().length());
-                            dlog.i("setUpdateWorktodo jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
 //                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
-                            if (response.body().replace("\"", "").equals("success")) {
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("결재 요청이 완료되었습니다.");
                                 shardpref.putInt("SELECT_POSITION",1);
                                 shardpref.putInt("SELECT_POSITION_sub", 1);

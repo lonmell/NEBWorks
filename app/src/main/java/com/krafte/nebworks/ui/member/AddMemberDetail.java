@@ -735,7 +735,7 @@ public class AddMemberDetail extends AppCompatActivity {
                             String jsonResponse = rc.getBase64decode(response.body());
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
-                            if (response.body().replace("\"", "").equals("success")) {
+                            if (jsonResponse.replace("\"", "").equals("success")) {
                                 if (!mem_id.equals(USER_INFO_ID)) {
                                     AddDirectMemberOther();
                                 } else {
@@ -976,7 +976,7 @@ public class AddMemberDetail extends AppCompatActivity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 if (!jsonResponse.equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     String age = Response.getJSONObject(0).getString("age");
                                     String email = Response.getJSONObject(0).getString("email");
                                     String address = Response.getJSONObject(0).getString("address");

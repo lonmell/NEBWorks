@@ -168,7 +168,7 @@ public class InviteMemberActivity extends AppCompatActivity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 if (!jsonResponse.equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
                                     String name = Response.getJSONObject(0).getString("name");
                                     String phone = Response.getJSONObject(0).getString("phone");
@@ -287,7 +287,7 @@ public class InviteMemberActivity extends AppCompatActivity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 if (!jsonResponse.equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     cnt = Integer.parseInt(Response.getJSONObject(0).getString("cnt"));
                                 }
                             } catch (JSONException e) {

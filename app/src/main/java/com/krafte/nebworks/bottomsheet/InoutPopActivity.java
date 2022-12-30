@@ -36,6 +36,7 @@ import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.GpsTracker;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -434,6 +435,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         return returntf;
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     private void InOutInsert() {
         String change_place_id = "";
         change_place_id = shardpref.getString("change_place_id", "");
@@ -452,15 +454,18 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
-                        if (response.body().replace("[", "").replace("]", "").replace("\"", "").length() == 0) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
+                        if (jsonResponse.replace("[", "").replace("]", "").replace("\"", "").length() == 0) {
                             //최초 출근
 
-                        } else if (response.body().replace("[", "").replace("]", "").length() > 0) {
+                        } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
                             if (response.isSuccessful() && response.body() != null) {
                                 dlog.i("LoginCheck jsonResponse length : " + response.body().length());
                                 dlog.i("LoginCheck jsonResponse : " + response.body());
                                 try {
-                                    if (response.body().replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
+                                    if (jsonResponse.replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
 //                                        if (!place_owner_id.equals(USER_INFO_ID)) {
 ////                                            getEmployerToken();
 //                                        }
@@ -522,7 +527,9 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.i("Response Result : " + response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
                 try {
                     JSONArray Response = new JSONArray(response.body());
                     if (Response.length() > 0) {

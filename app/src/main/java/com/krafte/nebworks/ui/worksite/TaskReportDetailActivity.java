@@ -380,7 +380,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                     String jsonResponse = rc.getBase64decode(response.body());
                     dlog.i("jsonResponse length : " + jsonResponse.length());
                     dlog.i("jsonResponse : " + jsonResponse);
-                    if (response.body().replace("\"", "").equals("success")) {
+                    if (jsonResponse.replace("\"", "").equals("success")) {
                         Intent intent = new Intent(mContext, OneButtonTItlePopActivity.class);
                         if (kind.equals("1")) {
                             intent.putExtra("title", "승인 완료");

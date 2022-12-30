@@ -725,9 +725,11 @@ public class ProfileEditActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    dlog.e("ConnectThread_UserInfo onSuccess not base64 : " + response.body().replace("\"", ""));
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
                     try {
-                        if (response.body().replace("\"", "").equals("success")) {
+                        if (jsonResponse.replace("\"", "").equals("success")) {
                             shardpref.putBoolean("USER_LOGIN_CONFIRM",true);
                             shardpref.putString("USER_INFO_EMAIL", USER_INFO_EMAIL);
                             shardpref.remove("editstate");

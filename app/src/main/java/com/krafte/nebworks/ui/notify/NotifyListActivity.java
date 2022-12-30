@@ -191,13 +191,13 @@ public class NotifyListActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 dlog.e("SetWorkplaceList function START");
-//                String jsonResponse = rc.getBase64decode(response.body());
+                String jsonResponse = rc.getBase64decode(response.body());
                 dlog.e("response 1: " + response.isSuccessful());
-                dlog.e("response 2: " + response.body());
+                dlog.e("response 2: " + jsonResponse);
                 if (response.isSuccessful() && response.body() != null) {
                     try {
 //                        JSONArray Response = new JSONArray(jsonResponse);
-                        if (response.body().replace("\"", "").equals("success")) {
+                        if (jsonResponse.replace("\"", "").equals("success")) {
 //                            Toast_Nomal("");
                             SetWorkplaceList();
                             mAdapter.notifyDataSetChanged();

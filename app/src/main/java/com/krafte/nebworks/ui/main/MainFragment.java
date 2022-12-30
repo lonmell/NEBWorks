@@ -525,7 +525,7 @@ public class MainFragment extends AppCompatActivity {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        if(!response.body().equals("[]")){
+                        if(!jsonResponse.equals("[]")){
                             String NotRead = Response.getJSONObject(0).getString("notread_feed");
                             if(NotRead.equals("0")){
                                 binding.notiRed.setVisibility(View.INVISIBLE);

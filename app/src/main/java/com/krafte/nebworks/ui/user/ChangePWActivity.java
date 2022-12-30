@@ -25,6 +25,7 @@ import com.krafte.nebworks.util.AES256Util;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -195,6 +196,7 @@ public class ChangePWActivity extends AppCompatActivity {
 
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
     public void SaveUser() {
         USER_INFO_PW = changePw2;
         try {
@@ -227,11 +229,11 @@ public class ChangePWActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
                             dlog.i("SaveUser jsonResponse length : " + response.body().length());
                             dlog.i("SaveUser jsonResponse : " + response.body());
                             try {
-                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+                                if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
 //                                    Toast_Nomal("비밀번호 변경이 완료되었습니다.");
 //                                    Toast.makeText(mContext, "비밀번호 변경이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     shardpref.remove("USER_INFO_NAME");

@@ -632,7 +632,7 @@ public class CareerActivity extends AppCompatActivity {
 //                            dlog.i("SaveUser jsonResponse length : " + response.body().length());
 //                            dlog.i("SaveUser jsonResponse : " + response.body());
 //                            try {
-//                                if (!response.body().equals("[]") && response.body().replace("\"", "").equals("success")) {
+//                                if (!response.body().equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
 //                                    if(!ProfileUrl.isEmpty()){
 //                                        saveBitmapAndGetURI();
 //                                        shardpref.putString("USER_INFO_PROFILE",ProfileUrl);

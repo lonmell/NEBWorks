@@ -624,11 +624,11 @@ public class PlaceAddActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (response.body().replace("\"", "").equals("success")) {
+                                if (jsonResponse.replace("\"", "").equals("success")) {
                                     binding.registrNumState.setText("정상적으로 등록된 사업자 번호입니다.");
                                     binding.registrNumState.setTextColor(R.color.blue);
                                     registrTF = true;
