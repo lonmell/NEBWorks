@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
-import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractWorkerInterface;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd07Binding;
@@ -101,8 +100,8 @@ public class AddContractPage07 extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        UserCheck();
         getContractId();
+        UserCheck();
     }
 
 

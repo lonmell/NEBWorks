@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.data.GetResultData;
@@ -407,10 +406,10 @@ public class community_fragment1 extends Fragment {
 
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("flag","매장등록");
+        intent.putExtra("flag","더미");
         intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
-        intent.putExtra("left_btn_txt", "매장관리");
-        intent.putExtra("right_btn_txt", "근무하기");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);
         activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

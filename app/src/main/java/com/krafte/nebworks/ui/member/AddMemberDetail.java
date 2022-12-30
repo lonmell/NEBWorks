@@ -573,7 +573,7 @@ public class AddMemberDetail extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            super.onBackPressed();
+           pm.MemberManagement(mContext);
         });
 
         binding.addMemberTopBtn.setOnClickListener(v -> {
@@ -1008,7 +1008,8 @@ public class AddMemberDetail extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+//        super.onBackPressed();
+        pm.MemberManagement(mContext);
     }
 
     public void Toast_Nomal(String message) {

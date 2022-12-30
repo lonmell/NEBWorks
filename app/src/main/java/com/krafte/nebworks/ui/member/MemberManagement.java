@@ -140,14 +140,14 @@ public class MemberManagement extends AppCompatActivity {
                 pm.FeedList(mContext);
             });
             binding.backBtn.setOnClickListener(v -> {
-                super.onBackPressed();
-//                shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
-//                shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
-//                if(USER_INFO_AUTH.equals("0")){
-//                    pm.Main(mContext);
-//                }else{
-//                    pm.Main2(mContext);
-//                }
+//                super.onBackPressed();
+                shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+                shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.Main(mContext);
+                }else{
+                    pm.Main2(mContext);
+                }
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,14 +157,14 @@ public class MemberManagement extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-//        shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
-//        shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
-//        if(USER_INFO_AUTH.equals("0")){
-//            pm.Main(mContext);
-//        }else{
-//            pm.Main2(mContext);
-//        }
+//        super.onBackPressed();
+        shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+        shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+        if(USER_INFO_AUTH.equals("0")){
+            pm.Main(mContext);
+        }else{
+            pm.Main2(mContext);
+        }
     }
 
     @Override
@@ -263,7 +263,6 @@ public class MemberManagement extends AppCompatActivity {
                             } else {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if(!place_owner_id.equals(jsonObject.getString("id"))){
                                         total_member_cnt ++;
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
@@ -282,7 +281,6 @@ public class MemberManagement extends AppCompatActivity {
                                                 jsonObject.getString("worktime"),
                                                 jsonObject.getString("contract_cnt")
                                         ));
-                                    }
                                 }
 
                                 if(total_member_cnt == 0){

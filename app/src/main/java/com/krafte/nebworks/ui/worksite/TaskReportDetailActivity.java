@@ -179,6 +179,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             super.onBackPressed();
         });
 
+        binding.goApproval.setVisibility(View.GONE);
         binding.goApproval.setOnClickListener(v -> {
             pm.Approval(mContext);
         });
@@ -312,7 +313,6 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true)
                             .into(binding.taskKind01);
-
                 }
             }
             if(!incomplete_reason.equals("null")){

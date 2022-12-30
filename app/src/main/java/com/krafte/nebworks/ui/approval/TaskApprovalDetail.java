@@ -1,7 +1,9 @@
 package com.krafte.nebworks.ui.approval;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.krafte.nebworks.dataInterface.ApprovalUpdateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.TaskSelectMInterface;
 import com.krafte.nebworks.databinding.ActivityTaskapprovalDetailBinding;
+import com.krafte.nebworks.pop.PhotoPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -338,6 +341,13 @@ public class TaskApprovalDetail extends AppCompatActivity {
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.taskKind01);
+                        binding.taskKind01.setOnClickListener(v -> {
+                            Intent intent = new Intent(mContext, PhotoPopActivity.class);
+                            intent.putExtra("data", task_img_path);
+                            mContext.startActivity(intent);
+                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        });
                     }
                 }
                 if(!incomplete_reason.equals("null")){

@@ -30,9 +30,7 @@ import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.ActivityAuthselectBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
-import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.naviFragment.CommunityFragment;
-import com.krafte.nebworks.ui.naviFragment.HomeFragment;
 import com.krafte.nebworks.ui.naviFragment.HomeFragment2;
 import com.krafte.nebworks.ui.naviFragment.MoreFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkgotoFragment;
@@ -338,10 +336,24 @@ public class AuthSelectActivity extends AppCompatActivity {
     }
 
 
+    String AuthState = "";
     @Override
     protected void onResume() {
         super.onResume();
+        AuthState = shardpref.getString("AuthState","");
         shardpref.remove("USER_INFO_AUTH");
+        if(AuthState.equals("더미")){
+            if(binding.viewPager.getVisibility() == View.VISIBLE){
+                binding.authScrollView.setVisibility(View.VISIBLE);
+                binding.viewPager.setVisibility(View.GONE);
+                binding.tabLayout.setVisibility(View.GONE);
+            }else{
+                binding.authScrollView.setVisibility(View.VISIBLE);
+                binding.viewPager.setVisibility(View.GONE);
+                binding.tabLayout.setVisibility(View.GONE);
+            }
+            shardpref.remove("AuthState");
+        }
     }
 
     public void btnOnclick(View view) {

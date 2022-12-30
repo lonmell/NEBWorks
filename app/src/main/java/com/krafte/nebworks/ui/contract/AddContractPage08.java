@@ -132,6 +132,7 @@ public class AddContractPage08 extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         ImgfileMaker = ImageNameMaker();
+        getContractId();
     }
 
     private void setBtnEvent(){
@@ -227,7 +228,6 @@ public class AddContractPage08 extends AppCompatActivity {
                                         getUserToken(worker_id,"1",message);
                                         AddPush("근로계약서",message,worker_id);
                                         pm.ContractFragment(mContext);
-                                        getContractId();
                                         RemoveShared();
                                     }else{
                                         pm.AddContractPage09(mContext);

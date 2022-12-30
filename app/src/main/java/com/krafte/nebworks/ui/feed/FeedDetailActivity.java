@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
@@ -90,7 +89,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//캡쳐막기
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//캡쳐막기
         binding = ActivityFeedDetailBinding.inflate(getLayoutInflater()); // 1
         setContentView(binding.getRoot()); // 2
         ActionBar actionBar = getSupportActionBar();
