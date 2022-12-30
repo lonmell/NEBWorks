@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,7 @@ import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.HomefragmentBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -107,6 +109,8 @@ public class HomeFragment extends Fragment {
     RetrofitConnect rc = new RetrofitConnect();
     RandomOut ro = new RandomOut();
 
+    int isAuth = 0;
+
     ArrayList<MainMemberLData.MainMemberLData_list> mList;
     MainMemberLAdapter mAdapter = null;
 
@@ -159,8 +163,9 @@ public class HomeFragment extends Fragment {
             place_owner_id = shardpref.getString("place_owner_id", "0");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             shardpref.putInt("SELECT_POSITION",0);
+            isAuth = shardpref.getInt("isAuth", 0);
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);
@@ -212,54 +217,98 @@ public class HomeFragment extends Fragment {
 
     public void setBtnEvent() {
         binding.cardview00.setOnClickListener(v -> {
-            pm.FeedList(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                pm.FeedList(mContext);
+            }
         });
 
         binding.itemArea.setOnClickListener(v -> {
-            shardpref.putString("USER_INFO_AUTH", "0");
-            shardpref.putString("event", "out_store");
-            pm.PlaceList(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putString("USER_INFO_AUTH", "0");
+                shardpref.putString("event", "out_store");
+                pm.PlaceList(mContext);
+            }
         });
 
         binding.allMemberGo.setOnClickListener(v -> {
-            shardpref.putInt("SELECT_POSITION", 1);
-            pm.MemberManagement(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putInt("SELECT_POSITION", 1);
+                pm.MemberManagement(mContext);
+            }
         });
 
         binding.addMemberBtn.setOnClickListener(v -> {
-            MemberOption mo = new MemberOption();
-            mo.show(getChildFragmentManager(), "MemberOption");
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                MemberOption mo = new MemberOption();
+                mo.show(getChildFragmentManager(), "MemberOption");
+            }
         });
         binding.addMemberArea.setOnClickListener(v -> {
-            MemberOption mo = new MemberOption();
-            mo.show(getChildFragmentManager(), "MemberOption");
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                MemberOption mo = new MemberOption();
+                mo.show(getChildFragmentManager(), "MemberOption");
+            }
         });
 
         binding.homeMenu01.setOnClickListener(v -> {
-            dlog.i("직원관리");
-            pm.MemberManagement(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                dlog.i("직원관리");
+                pm.MemberManagement(mContext);
+            }
         });
         binding.homeMenu02.setOnClickListener(v -> {
-            dlog.i("결재현황");
-            pm.Approval(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                dlog.i("결재현황");
+                pm.Approval(mContext);
+            }
         });
         binding.homeMenu03.setOnClickListener(v -> {
-            dlog.i("급여관리");
-            pm.PayManagement(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                dlog.i("급여관리");
+                pm.PayManagement(mContext);
+            }
         });
         binding.homeMenu04.setOnClickListener(v -> {
-            dlog.i("근로계약서 전체 관리");
-            pm.ContractFragment(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                dlog.i("근로계약서 전체 관리");
+                pm.ContractFragment(mContext);
+            }
         });
 
         binding.detailInout.setOnClickListener(v -> {
-            shardpref.putInt("SELECT_POSITION", 2);
-            pm.Main(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putInt("SELECT_POSITION", 2);
+                pm.Main(mContext);
+            }
         });
 
         binding.addMemberBtn.setOnClickListener(v-> {
-            MemberOption mo = new MemberOption();
-            mo.show(getChildFragmentManager(),"MemberOption");
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                MemberOption mo = new MemberOption();
+                mo.show(getChildFragmentManager(), "MemberOption");
+            }
         });
     }
 
@@ -537,7 +586,10 @@ public class HomeFragment extends Fragment {
                                                 mAdapter.setOnItemClickListener(new MainMemberLAdapter.OnItemClickListener() {
                                                     @Override
                                                     public void onItemClick(View v, int position) {
-
+                                                        if (USER_INFO_AUTH.isEmpty()) {
+                                                            isAuth();
+                                                        } else {
+                                                        }
                                                     }
                                                 });
 
@@ -545,9 +597,14 @@ public class HomeFragment extends Fragment {
                                             mAdapter.notifyDataSetChanged();
                                             mAdapter.setOnItemClickListener(new MainMemberLAdapter.OnItemClickListener() {
                                                 @Override
-                                                public void onItemClick(View v, int position) {
-                                                    shardpref.putString("Tap", "1");
-                                                    pm.PayManagement(mContext);
+                                                public void onItemClick(View v, int position)
+                                                {
+                                                    if (USER_INFO_AUTH.isEmpty()) {
+                                                        isAuth();
+                                                    } else {
+                                                        shardpref.putString("Tap", "1");
+                                                        pm.PayManagement(mContext);
+                                                    }
                                                 }
                                             });
                                         } else {
@@ -575,7 +632,11 @@ public class HomeFragment extends Fragment {
                                                 mAdapter2.setOnItemClickListener(new MainNotiLAdapter.OnItemClickListener() {
                                                     @Override
                                                     public void onItemClick(View v, int position) {
-                                                        pm.FeedList(mContext);
+                                                        if (isAuth == 1) {
+                                                            isAuth();
+                                                        } else {
+                                                            pm.FeedList(mContext);
+                                                        }
                                                     }
                                                 });
                                             }
@@ -796,5 +857,16 @@ public class HomeFragment extends Fragment {
 
     private void CountingSubscribeTopic() {
 
+    }
+
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","매장등록");
+        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 }

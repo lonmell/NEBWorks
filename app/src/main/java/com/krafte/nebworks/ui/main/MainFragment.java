@@ -86,6 +86,7 @@ public class MainFragment extends AppCompatActivity {
     String place_name = "";
     String place_imgpath = "";
 
+
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
     String store_no;

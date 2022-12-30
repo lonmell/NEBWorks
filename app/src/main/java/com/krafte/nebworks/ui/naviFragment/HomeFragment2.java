@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.naviFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -42,6 +43,7 @@ import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -204,7 +206,7 @@ public class HomeFragment2 extends Fragment {
             place_id = shardpref.getString("place_id", "0");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             accept_state = shardpref.getInt("accept_state", -99);
             input_date = shardpref.getString("input_date", "-1");
             in_time = shardpref.getString("in_time", "");
@@ -237,11 +239,15 @@ public class HomeFragment2 extends Fragment {
             binding.inTime.setText(in_time);
 
             binding.cardview02.setOnClickListener(v -> {
-                shardpref.putString("stub_place_id", place_id);
-                shardpref.putString("stub_user_id", USER_INFO_ID);
-                shardpref.putString("stub_user_account", USER_INFO_EMAIL);
-                shardpref.putString("change_place_name", place_name);
-                pm.MemberDetail(mContext);
+                if (USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    shardpref.putString("stub_place_id", place_id);
+                    shardpref.putString("stub_user_id", USER_INFO_ID);
+                    shardpref.putString("stub_user_account", USER_INFO_EMAIL);
+                    shardpref.putString("change_place_name", place_name);
+                    pm.MemberDetail(mContext);
+                }
             });
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -361,58 +367,98 @@ public class HomeFragment2 extends Fragment {
 
     public void setBtnEvent() {
         binding.approvalGo.setOnClickListener(v -> {
-            shardpref.putString("stub_place_id", place_id);
-            shardpref.putString("stub_user_id", USER_INFO_ID);
-            shardpref.putString("stub_user_account", USER_INFO_EMAIL);
-            pm.MemberDetail(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putString("stub_place_id", place_id);
+                shardpref.putString("stub_user_id", USER_INFO_ID);
+                shardpref.putString("stub_user_account", USER_INFO_EMAIL);
+                pm.MemberDetail(mContext);
+            }
         });
         binding.itemArea.setOnClickListener(v -> {
-            shardpref.putString("USER_INFO_AUTH", "1");
-            shardpref.putString("event", "out_store");
-            pm.PlaceList(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putString("USER_INFO_AUTH", "1");
+                shardpref.putString("event", "out_store");
+                pm.PlaceList(mContext);
+            }
         });
 
         binding.memberManagement01.setOnClickListener(v -> {
-            pm.MemberManagement(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                pm.MemberManagement(mContext);
+            }
         });
 
 
         binding.ioArea.setOnClickListener(v -> {
-            if (kind.equals("-1") || kind.equals("0")) {
-                if (kind.equals("-1")) {
-                    kind = "0";
-                } else {
-                    kind = "1";
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                if (kind.equals("-1") || kind.equals("0")) {
+                    if (kind.equals("-1")) {
+                        kind = "0";
+                    } else {
+                        kind = "1";
+                    }
+                    shardpref.putString("kind", kind);
+                    pm.EmployeeProcess(mContext);
                 }
-                shardpref.putString("kind", kind);
-                pm.EmployeeProcess(mContext);
             }
         });
         binding.oBtn.setOnClickListener(v -> {
-            shardpref.putString("kind", "1");
-            pm.EmployeeProcess(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putString("kind", "1");
+                pm.EmployeeProcess(mContext);
+            }
         });
         binding.acceptBtn.setOnClickListener(v -> {
-            UpdateDirectMemberBasic();
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                UpdateDirectMemberBasic();
+            }
         });
 
         binding.homeMenu03.setOnClickListener(v -> {
-            dlog.i("급여관리");
-            pm.PayManagement(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                dlog.i("급여관리");
+                pm.PayManagement(mContext);
+            }
         });
 
         binding.homeMenu04.setOnClickListener(v -> {
-            dlog.i("근로계약서 전체 관리");
-            pm.ContractFragment(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                dlog.i("근로계약서 전체 관리");
+                pm.ContractFragment(mContext);
+            }
         });
 
         binding.cardview01.setOnClickListener(v -> {
-            pm.FeedList(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                pm.FeedList(mContext);
+            }
         });
 
         binding.todoMore.setOnClickListener(v -> {
-            shardpref.putInt("SELECT_POSITION", 1);
-            pm.Main2(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putInt("SELECT_POSITION", 1);
+                pm.Main2(mContext);
+            }
         });
     }
 
@@ -680,7 +726,9 @@ public class HomeFragment2 extends Fragment {
                                                 mAdapter.setOnItemClickListener(new MainTaskLAdapter.OnItemClickListener() {
                                                     @Override
                                                     public void onItemClick(View v, int position) {
-
+                                                        if (USER_INFO_AUTH.isEmpty()) {
+                                                            isAuth();
+                                                        } else {}
                                                     }
                                                 });
 
@@ -711,7 +759,11 @@ public class HomeFragment2 extends Fragment {
                                                 mAdapter2.setOnItemClickListener(new MainNotiLAdapter.OnItemClickListener() {
                                                     @Override
                                                     public void onItemClick(View v, int position) {
-                                                        pm.FeedList(mContext);
+                                                        if (USER_INFO_AUTH.isEmpty()) {
+                                                            isAuth();
+                                                        } else {
+                                                            pm.FeedList(mContext);
+                                                        }
                                                     }
                                                 });
                                             }
@@ -764,7 +816,9 @@ public class HomeFragment2 extends Fragment {
                                                 mAdapter3.setOnItemClickListener(new MainMemberLAdapter.OnItemClickListener() {
                                                     @Override
                                                     public void onItemClick(View v, int position) {
-
+                                                        if (USER_INFO_AUTH.isEmpty()) {
+                                                            isAuth();
+                                                        } else {}
                                                     }
                                                 });
 
@@ -1249,5 +1303,16 @@ public class HomeFragment2 extends Fragment {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","매장등록");
+        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 }

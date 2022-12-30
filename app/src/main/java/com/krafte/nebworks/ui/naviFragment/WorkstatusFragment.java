@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.WorkstatusCalendersetData;
 import com.krafte.nebworks.databinding.WorkstatusfragmentBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment1;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment2;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment3;
@@ -146,7 +148,7 @@ public class WorkstatusFragment extends Fragment {
             place_owner_id = shardpref.getString("place_owner_id", "0");
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             if (USER_INFO_AUTH.equals("1")) {
                 if (!place_owner_id.equals(USER_INFO_ID)) {
@@ -160,36 +162,52 @@ public class WorkstatusFragment extends Fragment {
             SendToday();
 
             binding.statusFragmentbtn1.setOnClickListener(v -> {
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = WorkStatusSubFragment1.newInstance();
-                setChildFragment(fg);
+                if(USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                    binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                    fg = WorkStatusSubFragment1.newInstance();
+                    setChildFragment(fg);
+                }
             });
             binding.statusFragmentbtn2.setOnClickListener(v -> {
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = WorkStatusSubFragment2.newInstance();
-                setChildFragment(fg);
+                if(USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                    binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                    fg = WorkStatusSubFragment2.newInstance();
+                    setChildFragment(fg);
+                }
             });
             binding.statusFragmentbtn3.setOnClickListener(v -> {
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                fg = WorkStatusSubFragment3.newInstance();
-                setChildFragment(fg);
+                if(USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                    binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                    fg = WorkStatusSubFragment3.newInstance();
+                    setChildFragment(fg);
+                }
             });
             binding.statusFragmentbtn4.setOnClickListener(v -> {
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                fg = WorkStatusSubFragment4.newInstance();
-                setChildFragment(fg);
+                if(USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+                    binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                    fg = WorkStatusSubFragment4.newInstance();
+                    setChildFragment(fg);
+                }
             });
 
             cal = Calendar.getInstance();
@@ -203,26 +221,34 @@ public class WorkstatusFragment extends Fragment {
             SetCalenderData(gYear, gMonth);
 
             binding.prevDate.setOnClickListener(v -> {
-                cal.add(Calendar.DATE, -1);
-                toDay = sdf.format(cal.getTime());
-                binding.setdate.setText(toDay);
-                shardpref.putString("FtoDay", toDay);
-                Year = toDay.substring(0, 4);
-                Month = toDay.substring(5, 7);
-                Day = toDay.substring(8, 10);
-                SetCalenderData(Year, Month);
-                SendToday();
+                if(USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    cal.add(Calendar.DATE, -1);
+                    toDay = sdf.format(cal.getTime());
+                    binding.setdate.setText(toDay);
+                    shardpref.putString("FtoDay", toDay);
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    SetCalenderData(Year, Month);
+                    SendToday();
+                }
             });
             binding.nextDate.setOnClickListener(v -> {
-                cal.add(Calendar.DATE, +1);
-                toDay = sdf.format(cal.getTime());
-                binding.setdate.setText(toDay);
-                shardpref.putString("FtoDay", toDay);
-                Year = toDay.substring(0, 4);
-                Month = toDay.substring(5, 7);
-                Day = toDay.substring(8, 10);
-                SetCalenderData(Year, Month);
-                SendToday();
+                if(USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    cal.add(Calendar.DATE, +1);
+                    toDay = sdf.format(cal.getTime());
+                    binding.setdate.setText(toDay);
+                    shardpref.putString("FtoDay", toDay);
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    SetCalenderData(Year, Month);
+                    SendToday();
+                }
             });
 
             Calendar c = Calendar.getInstance();
@@ -246,8 +272,12 @@ public class WorkstatusFragment extends Fragment {
             }, mYear, mMonth, mDay);
 
             binding.setdate.setOnClickListener(view -> {
-                if (binding.setdate.isClickable()) {
-                    datePickerDialog.show();
+                if(USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    if (binding.setdate.isClickable()) {
+                        datePickerDialog.show();
+                    }
                 }
             });
 //            binding.addWorktimeBtn.setOnClickListener(v -> {
@@ -404,10 +434,14 @@ public class WorkstatusFragment extends Fragment {
                                     @Override
                                     public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
                                         try {
-                                            dlog.i("onItemClick WorkDay :" + WorkDay);
-                                            shardpref.putString("FtoDay", WorkDay);
-                                            WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
-                                            wsb.show(getChildFragmentManager(), "WorkstatusBottomSheet");
+                                            if(USER_INFO_AUTH.isEmpty()) {
+                                                isAuth();
+                                            } else {
+                                                dlog.i("onItemClick WorkDay :" + WorkDay);
+                                                shardpref.putString("FtoDay", WorkDay);
+                                                WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
+                                                wsb.show(getChildFragmentManager(), "WorkstatusBottomSheet");
+                                            }
                                         } catch (Exception e) {
                                             dlog.i("onItemClick Exception :" + e);
                                         }
@@ -536,7 +570,22 @@ public class WorkstatusFragment extends Fragment {
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("근무설정");
         add_worktime_btn.setOnClickListener(v -> {
-            pm.AddWorkPart(mContext);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                pm.AddWorkPart(mContext);
+            }
         });
+    }
+
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","매장등록");
+        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("left_btn_txt", "매장관리");
+        intent.putExtra("right_btn_txt", "근무하기");
+        startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 }

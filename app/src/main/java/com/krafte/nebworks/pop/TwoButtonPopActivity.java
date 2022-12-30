@@ -248,6 +248,11 @@ public class TwoButtonPopActivity extends Activity {
                     String feed_id = "0";
                     feed_id = shardpref.getString("feed_id","");
                     FeedDelete(feed_id);
+                } else if (flag.equals("매장등록")) {
+                    pm.PlaceList(mContext);
+                    shardpref.putString("USER_INFO_AUTH", "1");
+                    shardpref.putInt("SELECT_POSITION", 0);
+                    shardpref.putInt("SELECT_POSITION_sub", 0);
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -255,7 +260,14 @@ public class TwoButtonPopActivity extends Activity {
 
         });
         binding.popLeftTxt.setOnClickListener(v -> {
-            ClosePop();
+            if (flag.equals("매장등록")) {
+                pm.PlaceList(mContext);
+                shardpref.putString("USER_INFO_AUTH", "0");
+                shardpref.putInt("SELECT_POSITION", 0);
+                shardpref.putInt("SELECT_POSITION_sub", 0);
+            } else {
+                ClosePop();
+            }
         });
     }
     //카카오 로그인 콜백

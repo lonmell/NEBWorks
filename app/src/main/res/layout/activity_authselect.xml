@@ -7,6 +7,7 @@
     tools:context=".ui.member.AuthSelectActivity">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/auth_scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -311,7 +312,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/community_title"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="80dp"/>
 
                 <TextView
                     android:id="@+id/no_data"
@@ -335,5 +336,38 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <!-- TabLayout 을 배치한다. -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/top_bar"
+        android:background="#fff"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabTextColor="#696969"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <!-- ViewPager2: 이 위치에 Fragment 들이 노출된다. -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_bar"
+        android:visibility="gone"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="-1dp"
+        android:layout_marginBottom="70dp">
+    </androidx.viewpager2.widget.ViewPager2>
+
+    <include
+        android:id="@+id/bottom_navigation"
+        layout="@layout/bottom_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
