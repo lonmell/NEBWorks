@@ -200,7 +200,7 @@
                 android:background="@drawable/default_gray_round"
                 android:hint="@string/check_validation_String"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="@color/black"

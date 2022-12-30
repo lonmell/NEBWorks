@@ -118,8 +118,8 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
                 holder.state_tv.setTextColor(Color.parseColor("#DD6540"));
                 holder.state.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
             }
-            holder.inTime.setText(item.getIn_time().equals("null")?"":item.getIn_time());
-            holder.outTime.setText(item.getOut_time().equals("null")?"":item.getOut_time());
+            holder.inTime.setText(editTimeText(item.getIn_time()));
+            holder.outTime.setText(editTimeText(item.getOut_time()));
             holder.state_tv.setText(state);
 
             if(Tap.equals("99")){
@@ -148,6 +148,15 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
         }
 
     } // getItemCount : 전체 데이터의 개수를 리턴
+
+    private String editTimeText(String time) {
+        if (time.equals("null")) {
+            return "";
+        } else {
+            String[] splitTime = time.split(":");
+            return splitTime[0] + ":" + splitTime[1];
+        }
+    }
 
     @Override
     public int getItemCount() {

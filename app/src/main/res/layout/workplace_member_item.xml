@@ -165,7 +165,7 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/inter_bold"
             android:gravity="center"
-            android:text="근로계약서 진행"
+            android:text="근로계약서 미완료"
             android:textColor="#a9a9a9"
             android:textSize="10sp" />
     </androidx.cardview.widget.CardView>

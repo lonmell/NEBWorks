@@ -175,14 +175,14 @@
                 android:id="@+id/writer_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="#ffffff"
                 android:fontFamily="@font/applesdgothicneo"
                 android:padding="15dp"
                 android:text="   닉네임으로 작성 "
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:background="#ffffff"
-                tools:ignore="HardcodedText,RtlSymmetry"
-                app:drawableStartCompat="@drawable/resize_service_off" />
+                app:drawableStartCompat="@drawable/resize_service_on"
+                tools:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
                 android:id="@+id/addcommunity_btn"

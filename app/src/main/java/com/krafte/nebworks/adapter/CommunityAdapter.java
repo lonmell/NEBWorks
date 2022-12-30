@@ -52,12 +52,17 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     String token = "";
     Dlog dlog = new Dlog();
     int kind = 0;
+    Boolean isMain = false;
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
 
     private CommunityAdapter.OnItemClickListener mListener = null;
+
+    public void isMain(Boolean isMain) {
+        this.isMain = isMain;
+    }
 
     public void setOnItemClickListener(CommunityAdapter.OnItemClickListener listener) {
         this.mListener = listener;
@@ -169,7 +174,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return isMain? 3 : mData.size();
     } // 아이템 뷰를 저장하는 뷰홀더 클래스
 
     public class ViewHolder extends RecyclerView.ViewHolder {

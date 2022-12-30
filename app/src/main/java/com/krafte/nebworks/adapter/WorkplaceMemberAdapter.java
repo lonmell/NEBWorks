@@ -186,6 +186,9 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     if(item.getContract_cnt().equals("1")){
                         holder.contract_state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
                         holder.contract_state_tv.setTextColor(Color.parseColor("#000000"));
+                        holder.contract_state_tv.setText("근로계약서 완료");
+                    } else {
+                        holder.contract_state_tv.setText("근로계약서 미완료");
                     }
                 }
 

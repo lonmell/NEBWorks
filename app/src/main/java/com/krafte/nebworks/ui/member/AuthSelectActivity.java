@@ -164,6 +164,7 @@ public class AuthSelectActivity extends AppCompatActivity {
                                 JSONObject jsonObject = Response.getJSONObject(i);
                                 if(Integer.parseInt(jsonObject.getString("view_cnt")) > 50
                                         && jsonObject.getString("boardkind").equals("자유게시판")) {
+                                    mAdapter.isMain(true);
                                     mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                             jsonObject.getString("id"),
                                             jsonObject.getString("place_id"),
