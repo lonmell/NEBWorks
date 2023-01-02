@@ -30,6 +30,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.DelWorkhourInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.FcmTokenDelInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentDelInterface;
 import com.krafte.nebworks.dataInterface.FeedDelInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
@@ -84,6 +85,7 @@ public class TwoButtonPopActivity extends Activity {
     String USER_INFO_NAME = "";
     String USER_LOGIN_METHOD = "";
     String USER_INFO_PHONE = "";
+    String USER_INFO_AUTH = "";
     String place_id = "";
     String mem_id = "";
 
@@ -150,11 +152,12 @@ public class TwoButtonPopActivity extends Activity {
         setBtnEvent();
 
 
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","");
-        USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
-        place_id = shardpref.getString("place_id", "-1");
-        mem_id = shardpref.getString("mem_id","");
+        USER_INFO_ID        = shardpref.getString("USER_INFO_ID","");
+        USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");
+        USER_INFO_PHONE     = shardpref.getString("USER_INFO_PHONE", "");
+        place_id            = shardpref.getString("place_id", "-1");
+        mem_id              = shardpref.getString("mem_id","");
+        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
 
         if (title.equals("알림")) {
             binding.txtText.setVisibility(View.INVISIBLE);
@@ -208,9 +211,11 @@ public class TwoButtonPopActivity extends Activity {
                     }else{
                         pm.Login(mContext);
                     }
+                    FcmTokenDel();
                     finish();
                 }else if(flag.equals("회원탈퇴")){
                     UserDelete(USER_INFO_ID);
+                    FcmTokenDel();
                 }else if (flag.equals("댓글삭제")) {
                     String comment_id = "0";
                     comment_id = shardpref.getString("comment_id","");
@@ -773,6 +778,42 @@ public class TwoButtonPopActivity extends Activity {
         }
     }
 
+    //더이상 알람이 오지 않도록 로그아웃이나 회월탈퇴 했을때는 토큰을 지워준다.
+    private void FcmTokenDel(){
+        dlog.i("-----FcmTokenDel-----");
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+        dlog.i("-----FcmTokenDel-----");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FcmTokenDelInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FcmTokenDelInterface api = retrofit.create(FcmTokenDelInterface.class);
+        Call<String> call = api.getData(USER_INFO_ID,USER_INFO_AUTH);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("FcmTokenDel jsonResponse length : " + jsonResponse.length());
+                            dlog.i("FcmTokenDel jsonResponse : " + jsonResponse);
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
     public void Toast_Nomal(String message){
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));

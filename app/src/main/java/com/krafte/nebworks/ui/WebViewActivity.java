@@ -78,13 +78,10 @@ public class WebViewActivity  extends Activity {
 
     // SSL Error Tolerant Web View Client
     private static class SSLTolerentWebViewClient extends WebViewClient {
-
-        @SuppressLint("WebViewClientOnReceivedSslError")
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            handler.proceed(); // Ignore SSL certificate errors
+            handler.cancel(); // Ignore SSL certificate errors
         }
-
     }
 
 }

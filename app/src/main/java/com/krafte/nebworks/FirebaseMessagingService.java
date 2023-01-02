@@ -97,7 +97,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 Log.i(TAG, "1message0[0] : " + message0);
                 Log.i(TAG, "1message1[1] : " + message1);
                 Log.d(TAG, "1getData Notification TAG : " + message0);
-                Log.d(TAG, "1getData Notification store_no : " + message1);
+                Log.d(TAG, "1getData Notification place_id : " + message1);
+                shardpref.putString("place_id",message1);
             }
             Log.d(TAG, "1channelId1: " + channelId1);
             Log.d(TAG, "1channelId2: " + channelId2);
@@ -172,6 +173,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             notificationIntent = new Intent(this, FeedListActivity.class);
         }else if(click_action.equals("TaskApprovalFragment")){
             notificationIntent = new Intent(this, TaskApprovalFragment.class);
+        }else if(click_action.equals("EmployeeProcess")){
+            shardpref.putInt("SELECT_POSITION",0);
+            notificationIntent = new Intent(this, MainFragment2.class);
         }
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -219,6 +223,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             intent = new Intent(this, FeedListActivity.class);
         }else if(click_action.equals("TaskApprovalFragment")){
             intent = new Intent(this, TaskApprovalFragment.class);
+        }else if(click_action.equals("EmployeeProcess")){
+            shardpref.putInt("SELECT_POSITION",0);
+            intent = new Intent(this, MainFragment2.class);
         }
 
 //        Intent intent = new Intent(this, IntroActivity.class);

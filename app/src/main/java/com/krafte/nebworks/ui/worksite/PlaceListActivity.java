@@ -615,7 +615,7 @@ public class PlaceListActivity extends AppCompatActivity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
 
-                                if (response.body().replace("[", "").replace("]", "").length() == 0) {
+                                if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
                                     id = "";
                                     user_id = USER_INFO_ID;
                                     get_token = "";

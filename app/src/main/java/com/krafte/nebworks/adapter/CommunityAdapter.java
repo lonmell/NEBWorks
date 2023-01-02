@@ -91,9 +91,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CommunityAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        PlaceNotiData.PlaceNotiData_list item = mData.get(position);
-
         try{
+            PlaceNotiData.PlaceNotiData_list item = mData.get(position);
+
             if(kind == 0){
                 holder.rank_area.setVisibility(View.VISIBLE);
                 holder.profile_area.setVisibility(View.VISIBLE);
