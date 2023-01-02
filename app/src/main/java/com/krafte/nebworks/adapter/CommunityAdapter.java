@@ -174,7 +174,11 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
     @Override
     public int getItemCount() {
-        return isMain? 3 : mData.size();
+        if (mData.size() < 3) {
+            return mData.size();
+        } else {
+            return isMain? 3 : mData.size();
+        }
     } // 아이템 뷰를 저장하는 뷰홀더 클래스
 
     public class ViewHolder extends RecyclerView.ViewHolder {
