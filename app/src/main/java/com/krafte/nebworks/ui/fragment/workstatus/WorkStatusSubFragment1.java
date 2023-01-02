@@ -180,14 +180,37 @@ public class WorkStatusSubFragment1 extends Fragment {
                             binding.allMemberlist.setAdapter(mAdapter);
                             binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
 
-                            if (Response.length() == 0) {
-                                binding.nodataArea.setVisibility(View.VISIBLE);
-                                binding.allMemberlist.setVisibility(View.GONE);
-                            } else {
+                            if (USER_INFO_AUTH.isEmpty()) {
                                 binding.nodataArea.setVisibility(View.GONE);
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
-                                for (int i = 0; i < Response.length(); i++) {
-                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
+                                        "0",
+                                        "0",
+                                        "나의 매장",
+                                        "0",
+                                        "김이름",
+                                        "0",
+                                        "",
+                                        "0",
+                                        "미정",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        "9:20",
+                                        "18:32",
+                                        "9:30 ~ 18:30",
+                                        ""
+                                ));
+                            } else {
+                                if (Response.length() == 0) {
+                                    binding.nodataArea.setVisibility(View.VISIBLE);
+                                    binding.allMemberlist.setVisibility(View.GONE);
+                                } else {
+                                    binding.nodataArea.setVisibility(View.GONE);
+                                    binding.allMemberlist.setVisibility(View.VISIBLE);
+                                    for (int i = 0; i < Response.length(); i++) {
+                                        JSONObject jsonObject = Response.getJSONObject(i);
                                         mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_id"),
@@ -207,27 +230,28 @@ public class WorkStatusSubFragment1 extends Fragment {
                                                 jsonObject.getString("worktime"),
                                                 jsonObject.getString("commuting")
                                         ));
+                                    }
+                                    mAdapter.notifyDataSetChanged();
+                                    mAdapter.setOnItemClickListener(new WorkTapMemberAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View v, int position) {
+                                            if (USER_INFO_AUTH.isEmpty()) {
+                                                isAuth();
+                                            } else {
+                                                shardpref.putString("status_id", mList.get(position).getId());
+                                                shardpref.putString("mem_id", mList.get(position).getUser_id());
+                                                shardpref.putString("mem_name", mList.get(position).getName());
+                                                shardpref.putString("remote", "workhour");
+                                                Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
+                                                intent.putExtra("place_id", place_id);
+                                                intent.putExtra("user_id", mList.get(position).getId());
+                                                mContext.startActivity(intent);
+                                                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            }
+                                        }
+                                    });
                                 }
-                                mAdapter.notifyDataSetChanged();
-                                mAdapter.setOnItemClickListener(new WorkTapMemberAdapter.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View v, int position) {
-                                        if(USER_INFO_AUTH.isEmpty()) {
-                                            isAuth();
-                                        } else {
-                                        shardpref.putString("status_id", mList.get(position).getId());
-                                        shardpref.putString("mem_id", mList.get(position).getUser_id());
-                                        shardpref.putString("mem_name", mList.get(position).getName());
-                                        shardpref.putString("remote", "workhour");
-                                        Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
-                                        intent.putExtra("place_id", place_id);
-                                        intent.putExtra("user_id", mList.get(position).getId());
-                                        mContext.startActivity(intent);
-                                        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    }
-                                    }
-                                });
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

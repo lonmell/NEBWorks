@@ -140,13 +140,25 @@ public class CommunityFragment extends Fragment {
 
     public void setBtnEvent() {
         binding.selectFragmentbtn1.setOnClickListener(v -> {
-            ChangePage(0);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                ChangePage(0);
+            }
         });
         binding.selectFragmentbtn2.setOnClickListener(v -> {
-            ChangePage(1);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                ChangePage(1);
+            }
         });
         binding.selectFragmentbtn3.setOnClickListener(v -> {
-            ChangePage(2);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                ChangePage(2);
+            }
         });
     }
 

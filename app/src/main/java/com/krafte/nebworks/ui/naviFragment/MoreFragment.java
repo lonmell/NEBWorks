@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -137,17 +138,20 @@ public class MoreFragment extends Fragment {
             USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");
             USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
 
-            if(!USER_LOGIN_METHOD.equals("NEB")){
-                binding.settingList04Txt.setText("연결해제");
-                binding.loginMethodIcon.setVisibility(View.VISIBLE);
-                if(USER_LOGIN_METHOD.equals("Google")){
-                    binding.loginMethodIcon.setBackgroundResource(R.drawable.google);
-                } else if(USER_LOGIN_METHOD.equals("Kakao")){
-                    binding.loginMethodIcon.setBackgroundResource(R.drawable.kakao);
-                } else if(USER_LOGIN_METHOD.equals("Naver")){
-                    binding.loginMethodIcon.setBackgroundResource(R.drawable.naver_icon);
+            if (!USER_INFO_AUTH.isEmpty()) {
+                if(!USER_LOGIN_METHOD.equals("NEB")){
+                    binding.settingList04Txt.setText("연결해제");
+                    binding.loginMethodIcon.setVisibility(View.VISIBLE);
+                    if(USER_LOGIN_METHOD.equals("Google")){
+                        binding.loginMethodIcon.setBackgroundResource(R.drawable.google);
+                    } else if(USER_LOGIN_METHOD.equals("Kakao")){
+                        binding.loginMethodIcon.setBackgroundResource(R.drawable.kakao);
+                    } else if(USER_LOGIN_METHOD.equals("Naver")){
+                        binding.loginMethodIcon.setBackgroundResource(R.drawable.naver_icon);
+                    }
                 }
             }
+
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -243,12 +247,18 @@ public class MoreFragment extends Fragment {
                             String img_path = Response.getJSONObject(0).getString("img_path");
                             String getjikgup = Response.getJSONObject(0).getString("jikgup");
 
-                            binding.userName.setText(name);
-                            binding.jikgup.setText((getjikgup.equals("null")?"미정":getjikgup));
-                            Glide.with(mContext).load(img_path)
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true)
-                                    .into(binding.userProfile);
+                            if (USER_INFO_AUTH.isEmpty()) {
+                                binding.userName.setText("김이름");
+                                binding.jikgup.setText("미정");
+                                binding.userProfile.setBackgroundColor(Color.GRAY);
+                            } else {
+                                binding.userName.setText(name);
+                                binding.jikgup.setText((getjikgup.equals("null")?"미정":getjikgup));
+                                Glide.with(mContext).load(img_path)
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .skipMemoryCache(true)
+                                        .into(binding.userProfile);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
