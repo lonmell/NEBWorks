@@ -263,7 +263,6 @@ public class TwoButtonPopActivity extends Activity {
             }catch (Exception e){
                 e.printStackTrace();
             }
-
         });
         binding.popLeftTxt.setOnClickListener(v -> {
                 shardpref.remove("AuthState");
