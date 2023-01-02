@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
                     android:gravity="start|center"
-                    android:text="user_name"
+                    android:text="김이름"
                     android:textColor="@color/black"
                     android:textSize="17sp"
                     tools:ignore="HardcodedText" />
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="start|center"
-                    android:text="jikgup"
+                    android:text="미정"
                     android:textColor="@color/blue"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText" />

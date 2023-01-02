@@ -198,7 +198,11 @@ public class WorkgotoFragment extends Fragment {
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                 binding.selectArea.setVisibility(View.VISIBLE);
-                setRecyclerView();
+                if (USER_INFO_AUTH.isEmpty()) {
+                    setDummyData();
+                } else {
+                    setRecyclerView();
+                }
             } else if (SELECT_POSITION_sub == 1) {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
@@ -241,6 +245,24 @@ public class WorkgotoFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDummyData() {
+        binding.taskList.setVisibility(View.VISIBLE);
+        Todo_mList = new ArrayList<>();
+        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getParentFragmentManager(), 1);
+        binding.taskList.setAdapter(mAdapter);
+        binding.taskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+        mAdapter.addItem(new WorkCalenderData.WorkCalenderData_list(
+                "2023년 01월 02일",
+                "0",
+                "1",
+                "1",
+                "1",
+                "1",
+                "1",
+                "0"
+        ));
     }
 
     private void RemoveShared() {
@@ -648,45 +670,47 @@ public class WorkgotoFragment extends Fragment {
                         Log.i(TAG, "SetNoticeListview Thread run! ");
                         Log.i(TAG, "GET SIZE : " + Response.length());
 
-                        if (Response.length() == 0) {
-                            binding.nodataArea.setVisibility(View.VISIBLE);
-                            binding.line01.setVisibility(View.INVISIBLE);
-                            Log.i(TAG, "SetNoticeListview Thread run! ");
-                            Log.i(TAG, "GET SIZE : " + Response.length());
-                        } else {
+                        if (USER_INFO_AUTH.isEmpty()) {
                             binding.line01.setVisibility(View.VISIBLE);
                             binding.nodataArea.setVisibility(View.GONE);
-                            for (int i = 0; i < Response.length(); i++) {
-                                JSONObject jsonObject = Response.getJSONObject(i);
-                                if (USER_INFO_AUTH.equals("0")) {
-                                    Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("writer_id"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("title"),
-                                            jsonObject.getString("contents"),
-                                            jsonObject.getString("complete_kind"),
-                                            Collections.singletonList(jsonObject.getString("users")),
-                                            jsonObject.getString("task_date"),
-                                            jsonObject.getString("start_time"),
-                                            jsonObject.getString("end_time"),
-                                            jsonObject.getString("sun"),
-                                            jsonObject.getString("mon"),
-                                            jsonObject.getString("tue"),
-                                            jsonObject.getString("wed"),
-                                            jsonObject.getString("thu"),
-                                            jsonObject.getString("fri"),
-                                            jsonObject.getString("sat"),
-                                            jsonObject.getString("img_path"),
-                                            jsonObject.getString("complete_yn"),
-                                            jsonObject.getString("incomplete_reason"),
-                                            jsonObject.getString("approval_state"),
-                                            jsonObject.getString("task_overdate"),
-                                            jsonObject.getString("reject_reason"),
-                                            jsonObject.getString("updated_at")
-                                    ));
-                                } else {
-                                    if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
+                            Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
+                                    "121",
+                                    "143",
+                                    "1",
+                                    "할 일",
+                                    "할일에 대한 설명이에요",
+                                    "1",
+                                    new ArrayList<String>(Collections.singleton("김이름")),
+                                    "2023-01-01",
+                                    "2023-01-01 01:00",
+                                    "2023-01-01 23:00",
+                                    "0",
+                                    "1",
+                                    "1",
+                                    "1",
+                                    "1",
+                                    "1",
+                                    "0",
+                                    "",
+                                    "y",
+                                    "",
+                                    "0",
+                                    "2023-01-01",
+                                    "0",
+                                    "2023-01-01"
+                            ));
+                        } else {
+                            if (Response.length() == 0) {
+                                binding.nodataArea.setVisibility(View.VISIBLE);
+                                binding.line01.setVisibility(View.INVISIBLE);
+                                Log.i(TAG, "SetNoticeListview Thread run! ");
+                                Log.i(TAG, "GET SIZE : " + Response.length());
+                            } else {
+                                binding.line01.setVisibility(View.VISIBLE);
+                                binding.nodataArea.setVisibility(View.GONE);
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    if (USER_INFO_AUTH.equals("0")) {
                                         Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("writer_id"),
@@ -713,28 +737,57 @@ public class WorkgotoFragment extends Fragment {
                                                 jsonObject.getString("reject_reason"),
                                                 jsonObject.getString("updated_at")
                                         ));
+                                    } else {
+                                        if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
+                                            Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("writer_id"),
+                                                    jsonObject.getString("kind"),
+                                                    jsonObject.getString("title"),
+                                                    jsonObject.getString("contents"),
+                                                    jsonObject.getString("complete_kind"),
+                                                    Collections.singletonList(jsonObject.getString("users")),
+                                                    jsonObject.getString("task_date"),
+                                                    jsonObject.getString("start_time"),
+                                                    jsonObject.getString("end_time"),
+                                                    jsonObject.getString("sun"),
+                                                    jsonObject.getString("mon"),
+                                                    jsonObject.getString("tue"),
+                                                    jsonObject.getString("wed"),
+                                                    jsonObject.getString("thu"),
+                                                    jsonObject.getString("fri"),
+                                                    jsonObject.getString("sat"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("complete_yn"),
+                                                    jsonObject.getString("incomplete_reason"),
+                                                    jsonObject.getString("approval_state"),
+                                                    jsonObject.getString("task_overdate"),
+                                                    jsonObject.getString("reject_reason"),
+                                                    jsonObject.getString("updated_at")
+                                            ));
+                                        }
                                     }
                                 }
-                            }
-                            for (int a = 0; a < Response.length(); a++) {
-                                dlog.i("approval_state 1 : " + Response.getJSONObject(a).getString("approval_state"));
-                                if (Response.getJSONObject(a).getString("approval_state").equals("3")
-                                        || Response.getJSONObject(a).getString("approval_state").equals("null")) {
-                                    if (!Response.getJSONObject(a).getString("id").isEmpty() || !Response.getJSONObject(a).getString("id").equals("null")) {
-                                        state_null++;
+                                for (int a = 0; a < Response.length(); a++) {
+                                    dlog.i("approval_state 1 : " + Response.getJSONObject(a).getString("approval_state"));
+                                    if (Response.getJSONObject(a).getString("approval_state").equals("3")
+                                            || Response.getJSONObject(a).getString("approval_state").equals("null")) {
+                                        if (!Response.getJSONObject(a).getString("id").isEmpty() || !Response.getJSONObject(a).getString("id").equals("null")) {
+                                            state_null++;
+                                        }
                                     }
                                 }
-                            }
 
-                            dlog.i("state_null : " + state_null);
-                            Todo_mAdapter.setOnItemClickListener((v, position, Tcnt, Fcnt) -> {
-                                try {
-                                    writer_id = Response.getJSONObject(position).getString("writer_id");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            });
-                            Todo_mAdapter.notifyDataSetChanged();
+                                dlog.i("state_null : " + state_null);
+                                Todo_mAdapter.setOnItemClickListener((v, position, Tcnt, Fcnt) -> {
+                                    try {
+                                        writer_id = Response.getJSONObject(position).getString("writer_id");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+                                Todo_mAdapter.notifyDataSetChanged();
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -784,7 +837,7 @@ public class WorkgotoFragment extends Fragment {
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
         intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("data","먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);

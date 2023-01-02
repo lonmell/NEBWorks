@@ -211,6 +211,10 @@ public class HomeFragment2 extends Fragment {
             input_date = shardpref.getString("input_date", "-1");
             in_time = shardpref.getString("in_time", "");
             shardpref.putInt("SELECT_POSITION",0);
+            if (USER_INFO_AUTH.isEmpty()) {
+                setDummyData();
+            }
+
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);
@@ -299,6 +303,44 @@ public class HomeFragment2 extends Fragment {
             }
         };
         timer.schedule(timerTask,0,1000);
+    }
+
+    public void setDummyData() {
+        mList = new ArrayList<>();
+        binding.mainTaskList.setVisibility(View.VISIBLE);
+        mAdapter = new MainTaskLAdapter(mContext, mList);
+        binding.mainTaskList.setAdapter(mAdapter);
+        binding.mainTaskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+        mAdapter.addItem(new MainTaskData.MainTaskData_list(
+                "할 일",
+                "2023년 1월 1일",
+                "01",
+                "23"
+        ));
+
+        mList2 = new ArrayList<>();
+        binding.mainNotiList.setVisibility(View.VISIBLE);
+        mAdapter2 = new MainNotiLAdapter(mContext, mList2);
+        binding.mainNotiList.setAdapter(mAdapter2);
+        binding.mainNotiList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+        mAdapter2.addItem(new MainNotiData.MainNotiData_list(
+                "공지 사항",
+                "2022년 01월 01일"
+        ));
+
+        mList3 = new ArrayList<>();
+        binding.importantList.setVisibility(View.VISIBLE);
+        mAdapter3 = new MainMemberLAdapter(mContext, mList3);
+        binding.importantList.setAdapter(mAdapter3);
+        binding.importantList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+        mAdapter3.addItem(new MainMemberLData.MainMemberLData_list(
+                "0",
+                "2023년 01년 01일",
+                "1",
+                "김이름",
+                "",
+                "2,000,000"
+        ));
     }
 
     public void InOutLogMember() {//출퇴근상황 / 날짜가 변경됬을때는 퇴근중이 아닌 미출근 / 휴무날에는 휴무로 표시해야함
@@ -654,7 +696,11 @@ public class HomeFragment2 extends Fragment {
                                 dlog.i("------UserCheck-------");
 
                                 shardpref.putString("mem_name",mem_name);
-                                binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
+                                if (USER_INFO_AUTH.isEmpty()) {
+                                    binding.ioTime.setText("김이름님 오늘도 화이팅하세요!");
+                                } else {
+                                    binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
+                                }
 //                                getFCMToken();
                             } catch (Exception e) {
                                 dlog.i("UserCheck Exception : " + e);
@@ -1311,7 +1357,7 @@ public class HomeFragment2 extends Fragment {
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
         intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("data","먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);

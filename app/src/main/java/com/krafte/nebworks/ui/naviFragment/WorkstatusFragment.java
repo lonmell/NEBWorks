@@ -157,7 +157,15 @@ public class WorkstatusFragment extends Fragment {
             }
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             fg = WorkStatusSubFragment1.newInstance();
-            PlaceWorkCheck(place_id);
+
+            if (USER_INFO_AUTH.isEmpty()) {
+                binding.cnt01.setText("10");
+                binding.cnt02.setText("2");
+                binding.cnt03.setText("5");
+                binding.cnt04.setText("3");
+            } else {
+                PlaceWorkCheck(place_id);
+            }
             setAddBtnSetting();
             SendToday();
 
@@ -284,7 +292,12 @@ public class WorkstatusFragment extends Fragment {
 //                pm.AddWorkPart(mContext);
 //            });
             binding.taskMore.setVisibility(View.INVISIBLE);
-            binding.inoutName.setText(place_name + " 출퇴근");
+            if (USER_INFO_AUTH.isEmpty()) {
+                // dummy
+                binding.inoutName.setText("나의 매장 출퇴근");
+            } else {
+                binding.inoutName.setText(place_name + " 출퇴근");
+            }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -581,7 +594,7 @@ public class WorkstatusFragment extends Fragment {
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
         intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("data","먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);

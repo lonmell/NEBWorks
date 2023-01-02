@@ -146,7 +146,7 @@ public class community_fragment1 extends Fragment {
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);
-        toDay = shardpref.getString("FtoDay",toDay);
+        toDay = shardpref.getString("FtoDay", toDay);
 
         setRecyclerView();
         setRecyclerView2();
@@ -182,6 +182,7 @@ public class community_fragment1 extends Fragment {
     }
 
     int total_cnt = 0;
+
     public void setRecyclerView() {
         //Best List
         allClear();
@@ -192,7 +193,7 @@ public class community_fragment1 extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "3", "2",USER_INFO_ID);
+        Call<String> call = api.getData(place_id, "", "3", "2", USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -213,73 +214,99 @@ public class community_fragment1 extends Fragment {
                         Log.i(TAG, "SetNoticeListview Thread run! ");
                         listitemsize = Response.length();
 
-                        if (Response.length() == 0) {
-                            binding.bestListTitle.setVisibility(View.GONE);
-                            binding.bestList.setVisibility(View.GONE);
-                            Log.i(TAG, "GET SIZE : " + rc.placeNotiData_lists.size());
-                        } else {
+                        if (USER_INFO_AUTH.isEmpty()) {
                             binding.bestListTitle.setVisibility(View.VISIBLE);
                             binding.bestList.setVisibility(View.VISIBLE);
-                            for (int i = 0; i < Response.length(); i++) {
-                                JSONObject jsonObject = Response.getJSONObject(i);
-                                if(Integer.parseInt(jsonObject.getString("view_cnt")) > 50
-                                        && jsonObject.getString("boardkind").equals("자유게시판")){
-                                    total_cnt ++;
-                                    BestmAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("place_id"),
-                                            jsonObject.getString("title"),
-                                            jsonObject.getString("contents"),
-                                            jsonObject.getString("writer_id"),
-                                            jsonObject.getString("writer_name"),
-                                            jsonObject.getString("writer_img_path"),
-                                            jsonObject.getString("jikgup"),
-                                            jsonObject.getString("view_cnt"),
-                                            jsonObject.getString("comment_cnt"),
-                                            jsonObject.getString("like_cnt"),
-                                            jsonObject.getString("link"),
-                                            jsonObject.getString("feed_img_path"),
-                                            jsonObject.getString("created_at"),
-                                            jsonObject.getString("updated_at"),
-                                            jsonObject.getString("open_date"),
-                                            jsonObject.getString("close_date"),
-                                            jsonObject.getString("boardkind"),
-                                            jsonObject.getString("category"),
-                                            jsonObject.getString("mylikeyn")
-                                    ));
+                            BestmAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
+                                    "",
+                                    "",
+                                    "인기 게시글",
+                                    "인기 게시글의 내용",
+                                    "",
+                                    "김닉넴",
+                                    "",
+                                    "",
+                                    "20,300",
+                                    "1,300",
+                                    "12,000",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "n"
+                            ));
+                        } else {
+                            if (Response.length() == 0) {
+                                binding.bestListTitle.setVisibility(View.GONE);
+                                binding.bestList.setVisibility(View.GONE);
+                                Log.i(TAG, "GET SIZE : " + rc.placeNotiData_lists.size());
+                            } else {
+                                binding.bestListTitle.setVisibility(View.VISIBLE);
+                                binding.bestList.setVisibility(View.VISIBLE);
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    if (Integer.parseInt(jsonObject.getString("view_cnt")) > 50
+                                            && jsonObject.getString("boardkind").equals("자유게시판")) {
+                                        total_cnt++;
+                                        BestmAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("place_id"),
+                                                jsonObject.getString("title"),
+                                                jsonObject.getString("contents"),
+                                                jsonObject.getString("writer_id"),
+                                                jsonObject.getString("writer_name"),
+                                                jsonObject.getString("writer_img_path"),
+                                                jsonObject.getString("jikgup"),
+                                                jsonObject.getString("view_cnt"),
+                                                jsonObject.getString("comment_cnt"),
+                                                jsonObject.getString("like_cnt"),
+                                                jsonObject.getString("link"),
+                                                jsonObject.getString("feed_img_path"),
+                                                jsonObject.getString("created_at"),
+                                                jsonObject.getString("updated_at"),
+                                                jsonObject.getString("open_date"),
+                                                jsonObject.getString("close_date"),
+                                                jsonObject.getString("boardkind"),
+                                                jsonObject.getString("category"),
+                                                jsonObject.getString("mylikeyn")
+                                        ));
+                                    }
                                 }
-
                             }
-                            if(total_cnt == 0){
+                            if (total_cnt == 0) {
                                 binding.bestListTitle.setVisibility(View.GONE);
                                 binding.bestList.setVisibility(View.GONE);
                             }
                             BestmAdapter.notifyDataSetChanged();
-                            BestmAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View v, int position) {
-                                    if (USER_INFO_AUTH.isEmpty()) {
-                                        isAuth();
-                                    } else {
-                                        shardpref.putString("feed_id", mList.get(position).getId());
-                                        shardpref.putString("title", mList.get(position).getTitle());
-                                        shardpref.putString("contents", mList.get(position).getContents());
-                                        shardpref.putString("writer_id", mList.get(position).getWriter_id());
-                                        shardpref.putString("writer_name", mList.get(position).getWriter_name());
-                                        shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
-                                        shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
-                                        shardpref.putString("jikgup", mList.get(position).getJikgup());
-                                        shardpref.putString("view_cnt", mList.get(position).getView_cnt());
-                                        shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
-                                        shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
-                                        shardpref.putString("category", mList.get(position).getCategory());
-                                        shardpref.putString("updated_at", mList.get(position).getUpdated_at());
-                                        shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
-                                        pm.CommunityDetail(mContext);
-                                    }
-                                }
-                            });
                         }
+                        BestmAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View v, int position) {
+                                if (USER_INFO_AUTH.isEmpty()) {
+                                    isAuth();
+                                } else {
+                                    shardpref.putString("feed_id", mList.get(position).getId());
+                                    shardpref.putString("title", mList.get(position).getTitle());
+                                    shardpref.putString("contents", mList.get(position).getContents());
+                                    shardpref.putString("writer_id", mList.get(position).getWriter_id());
+                                    shardpref.putString("writer_name", mList.get(position).getWriter_name());
+                                    shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
+                                    shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
+                                    shardpref.putString("jikgup", mList.get(position).getJikgup());
+                                    shardpref.putString("view_cnt", mList.get(position).getView_cnt());
+                                    shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
+                                    shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
+                                    shardpref.putString("category", mList.get(position).getCategory());
+                                    shardpref.putString("updated_at", mList.get(position).getUpdated_at());
+                                    shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
+                                    pm.CommunityDetail(mContext);
+                                }
+                            }
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -295,6 +322,7 @@ public class community_fragment1 extends Fragment {
     }
 
     int total_cnt2 = 0;
+
     public void setRecyclerView2() {
         //전체
         mList.clear();
@@ -303,7 +331,7 @@ public class community_fragment1 extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "0", "2",USER_INFO_ID);
+        Call<String> call = api.getData(place_id, "", "0", "2", USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -324,72 +352,98 @@ public class community_fragment1 extends Fragment {
                         Log.i(TAG, "SetNoticeListview Thread run! ");
                         listitemsize = Response.length();
 
-                        if (Response.length() == 0) {
-                            binding.noDataTxt2.setVisibility(View.VISIBLE);
-                            Log.i(TAG, "GET SIZE : " + rc.placeNotiData_lists.size());
-                        } else {
+                        if (USER_INFO_AUTH.isEmpty()) {
                             binding.noDataTxt2.setVisibility(View.GONE);
-                            for (int i = 0; i < Response.length(); i++) {
-                                JSONObject jsonObject = Response.getJSONObject(i);
-                                if (jsonObject.getString("boardkind").equals("자유게시판")) {
-                                    total_cnt2 ++;
-                                    mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("place_id"),
-                                            jsonObject.getString("title"),
-                                            jsonObject.getString("contents"),
-                                            jsonObject.getString("writer_id"),
-                                            jsonObject.getString("writer_name"),
-                                            jsonObject.getString("writer_img_path"),
-                                            jsonObject.getString("jikgup"),
-                                            jsonObject.getString("view_cnt"),
-                                            jsonObject.getString("comment_cnt"),
-                                            jsonObject.getString("like_cnt"),
-                                            jsonObject.getString("link"),
-                                            jsonObject.getString("feed_img_path"),
-                                            jsonObject.getString("created_at"),
-                                            jsonObject.getString("updated_at"),
-                                            jsonObject.getString("open_date"),
-                                            jsonObject.getString("close_date"),
-                                            jsonObject.getString("boardkind"),
-                                            jsonObject.getString("category"),
-                                            jsonObject.getString("mylikeyn")
-                                    ));
+                            mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
+                                    "",
+                                    "",
+                                    "게시글",
+                                    "게시글의 내용",
+                                    "",
+                                    "김닉넴",
+                                    "",
+                                    "",
+                                    "300",
+                                    "12",
+                                    "34",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "n"
+                            ));
+                        } else {
+                            if (Response.length() == 0) {
+                                binding.noDataTxt2.setVisibility(View.VISIBLE);
+                                Log.i(TAG, "GET SIZE : " + rc.placeNotiData_lists.size());
+                            } else {
+                                binding.noDataTxt2.setVisibility(View.GONE);
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    if (jsonObject.getString("boardkind").equals("자유게시판")) {
+                                        total_cnt2++;
+                                        mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("place_id"),
+                                                jsonObject.getString("title"),
+                                                jsonObject.getString("contents"),
+                                                jsonObject.getString("writer_id"),
+                                                jsonObject.getString("writer_name"),
+                                                jsonObject.getString("writer_img_path"),
+                                                jsonObject.getString("jikgup"),
+                                                jsonObject.getString("view_cnt"),
+                                                jsonObject.getString("comment_cnt"),
+                                                jsonObject.getString("like_cnt"),
+                                                jsonObject.getString("link"),
+                                                jsonObject.getString("feed_img_path"),
+                                                jsonObject.getString("created_at"),
+                                                jsonObject.getString("updated_at"),
+                                                jsonObject.getString("open_date"),
+                                                jsonObject.getString("close_date"),
+                                                jsonObject.getString("boardkind"),
+                                                jsonObject.getString("category"),
+                                                jsonObject.getString("mylikeyn")
+                                        ));
+                                    }
                                 }
                             }
                             mAdapter.notifyDataSetChanged();
-                            if(total_cnt2 == 0){
+                            if (total_cnt2 == 0) {
                                 binding.allList.setVisibility(View.GONE);
                                 binding.noDataTxt2.setVisibility(View.VISIBLE);
-                            }else{
+                            } else {
                                 binding.allList.setVisibility(View.VISIBLE);
                                 binding.noDataTxt2.setVisibility(View.GONE);
                             }
-                            mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View v, int position) {
-                                    if (USER_INFO_AUTH.isEmpty()) {
-                                        isAuth();
-                                    } else {
-                                        shardpref.putString("feed_id", mList.get(position).getId());
-                                        shardpref.putString("title", mList.get(position).getTitle());
-                                        shardpref.putString("contents", mList.get(position).getContents());
-                                        shardpref.putString("writer_id", mList.get(position).getWriter_id());
-                                        shardpref.putString("writer_name", mList.get(position).getWriter_name());
-                                        shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
-                                        shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
-                                        shardpref.putString("jikgup", mList.get(position).getJikgup());
-                                        shardpref.putString("view_cnt", mList.get(position).getView_cnt());
-                                        shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
-                                        shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
-                                        shardpref.putString("category", mList.get(position).getCategory());
-                                        shardpref.putString("updated_at", mList.get(position).getUpdated_at());
-                                        shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
-                                        pm.CommunityDetail(mContext);
-                                    }
-                                }
-                            });
                         }
+                        mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View v, int position) {
+                                if (USER_INFO_AUTH.isEmpty()) {
+                                    isAuth();
+                                } else {
+                                    shardpref.putString("feed_id", mList.get(position).getId());
+                                    shardpref.putString("title", mList.get(position).getTitle());
+                                    shardpref.putString("contents", mList.get(position).getContents());
+                                    shardpref.putString("writer_id", mList.get(position).getWriter_id());
+                                    shardpref.putString("writer_name", mList.get(position).getWriter_name());
+                                    shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
+                                    shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
+                                    shardpref.putString("jikgup", mList.get(position).getJikgup());
+                                    shardpref.putString("view_cnt", mList.get(position).getView_cnt());
+                                    shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
+                                    shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
+                                    shardpref.putString("category", mList.get(position).getCategory());
+                                    shardpref.putString("updated_at", mList.get(position).getUpdated_at());
+                                    shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
+                                    pm.CommunityDetail(mContext);
+                                }
+                            }
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -406,8 +460,8 @@ public class community_fragment1 extends Fragment {
 
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("flag", "더미");
+        intent.putExtra("data", "먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);

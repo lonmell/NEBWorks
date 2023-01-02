@@ -3,6 +3,7 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.MainTaskData;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -35,6 +37,7 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
 
     String place_id = "";
     String USER_INFO_ID = "";
+    String USER_INFO_AUTH = "";
     Dlog dlog = new Dlog();
 
     public interface OnItemClickListener {
@@ -76,7 +79,7 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
             String endhour = "";
             String endmin = "";
             if (!item.getEnd_hour().isEmpty() && !item.getEnd_min().isEmpty()) {
-                endhour = item.getEnd_hour() + "시";
+                endhour = item.getEnd_hour() + "시 ";
                 endmin = item.getEnd_min() + "분";
                 holder.date.setText(item.getEnd_date() + " | " + endhour + endmin);
             } else {
@@ -90,7 +93,11 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
                 holder.itemline.setVisibility(View.VISIBLE);
             }
             holder.report_btn.setOnClickListener(v -> {
-                pm.TaskList(mContext);
+                if (USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    pm.TaskList(mContext);
+                }
             });
         }catch (Exception e){
             dlog.i("Exception : " + e);
@@ -119,6 +126,7 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             place_id = shardpref.getString("place_id","");
 
             dlog.DlogContext(mContext);
@@ -136,6 +144,7 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
 
     public void addItem(MainTaskData.MainTaskData_list data) {
         mData.add(data);
+        notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -150,5 +159,14 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
         return position;
     }
 
-
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","더미");
+        intent.putExtra("data","먼저 매장등록을 해주세요!");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "매장추가");
+        mContext.startActivity(intent);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 }

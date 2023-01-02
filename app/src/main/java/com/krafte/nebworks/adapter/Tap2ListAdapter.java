@@ -28,6 +28,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.data.UsersData;
 import com.krafte.nebworks.pop.Tap2OptionActivity;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -55,7 +56,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
 
     String[] yoil = new String[7];
     String setYoil = "";
-    String USER_INFO_AUTH = "0";
+    String USER_INFO_AUTH = "";
     String USER_INFO_ID = "";
     String AMPM = "";
     List<String> user_id = new ArrayList<>();
@@ -409,7 +410,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             approval_state      = itemView.findViewById(R.id.approval_state);
 
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
 
             shardpref.remove("task_no");
@@ -440,63 +441,67 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             checkareatf = new boolean[mData.size()];
 
             itemView.setOnClickListener(view -> {
-                int pos = getBindingAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION) {
-                    TodolistData.TodolistData_list item = mData.get(pos);
-                    try {
-                        JSONArray Response = new JSONArray(item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
-                        dlog.i("users : " + item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
-                        dlog.i("users Response : " + Response.length());
-                        if (Response.length() == 0) {
-                            Log.i(TAG, "GET SIZE : " + Response.length());
-                        } else {
-                            user_id.removeAll(user_id);
-                            user_name.removeAll(user_name);
-                            user_img_path.removeAll(user_img_path);
-                            user_img_jikgup.removeAll(user_img_jikgup);
-                            for (int i = 0; i < Response.length(); i++) {
-                                JSONObject jsonObject = Response.getJSONObject(i);
-                                if (!jsonObject.getString("user_name").equals("null")) {
-                                    user_id.add(jsonObject.getString("user_id"));
-                                    user_name.add(jsonObject.getString("user_name"));
-                                    user_img_path.add(jsonObject.getString("img_path"));
-                                    user_img_jikgup.add(jsonObject.getString("jikgup"));
+                if (USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    int pos = getBindingAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        TodolistData.TodolistData_list item = mData.get(pos);
+                        try {
+                            JSONArray Response = new JSONArray(item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
+                            dlog.i("users : " + item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
+                            dlog.i("users Response : " + Response.length());
+                            if (Response.length() == 0) {
+                                Log.i(TAG, "GET SIZE : " + Response.length());
+                            } else {
+                                user_id.removeAll(user_id);
+                                user_name.removeAll(user_name);
+                                user_img_path.removeAll(user_img_path);
+                                user_img_jikgup.removeAll(user_img_jikgup);
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    if (!jsonObject.getString("user_name").equals("null")) {
+                                        user_id.add(jsonObject.getString("user_id"));
+                                        user_name.add(jsonObject.getString("user_name"));
+                                        user_img_path.add(jsonObject.getString("img_path"));
+                                        user_img_jikgup.add(jsonObject.getString("jikgup"));
+                                    }
                                 }
                             }
-                        }
 //                        item.getApproval_state()
-                        shardpref.putString("task_no", item.getId());
-                        shardpref.putString("writer_id", item.getWriter_id());
-                        shardpref.putString("kind", item.getKind());
-                        shardpref.putString("title", item.getTitle());
-                        shardpref.putString("contents", item.getContents());
-                        shardpref.putString("complete_kind", item.getComplete_kind());
-                        shardpref.putString("users", user_id.toString());
-                        shardpref.putString("usersn", user_name.toString());
-                        shardpref.putString("usersimg", user_img_path.toString());
-                        shardpref.putString("usersjikgup", user_img_jikgup.toString());
-                        shardpref.putString("task_date", item.getTask_date());
-                        shardpref.putString("start_time", item.getStart_time());
-                        shardpref.putString("end_time", item.getEnd_time());
-                        shardpref.putString("sun", item.getSun());
-                        shardpref.putString("mon", item.getMon());
-                        shardpref.putString("tue", item.getTue());
-                        shardpref.putString("wed", item.getWed());
-                        shardpref.putString("thu", item.getThu());
-                        shardpref.putString("fri", item.getFri());
-                        shardpref.putString("sat", item.getSat());
-                        shardpref.putString("img_path", item.getImg_path());
-                        shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
-                        shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // n: 미완료 사요
-                        shardpref.putString("approval_state", item.getApproval_state());// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
-                        shardpref.putString("reject_reason", item.getReject_reason());
-                        shardpref.putString("updated_at", item.getUpdated_at());
-                        dlog.i("users : " + user_id.toString());
-                        dlog.i("usersn : " + user_name.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                            shardpref.putString("task_no", item.getId());
+                            shardpref.putString("writer_id", item.getWriter_id());
+                            shardpref.putString("kind", item.getKind());
+                            shardpref.putString("title", item.getTitle());
+                            shardpref.putString("contents", item.getContents());
+                            shardpref.putString("complete_kind", item.getComplete_kind());
+                            shardpref.putString("users", user_id.toString());
+                            shardpref.putString("usersn", user_name.toString());
+                            shardpref.putString("usersimg", user_img_path.toString());
+                            shardpref.putString("usersjikgup", user_img_jikgup.toString());
+                            shardpref.putString("task_date", item.getTask_date());
+                            shardpref.putString("start_time", item.getStart_time());
+                            shardpref.putString("end_time", item.getEnd_time());
+                            shardpref.putString("sun", item.getSun());
+                            shardpref.putString("mon", item.getMon());
+                            shardpref.putString("tue", item.getTue());
+                            shardpref.putString("wed", item.getWed());
+                            shardpref.putString("thu", item.getThu());
+                            shardpref.putString("fri", item.getFri());
+                            shardpref.putString("sat", item.getSat());
+                            shardpref.putString("img_path", item.getImg_path());
+                            shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
+                            shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // n: 미완료 사요
+                            shardpref.putString("approval_state", item.getApproval_state());// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
+                            shardpref.putString("reject_reason", item.getReject_reason());
+                            shardpref.putString("updated_at", item.getUpdated_at());
+                            dlog.i("users : " + user_id.toString());
+                            dlog.i("usersn : " + user_name.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        pm.TaskDetail(mContext);
                     }
-                    pm.TaskDetail(mContext);
                 }
             });
         }
@@ -511,5 +516,14 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
         return position;
     }
 
+    public void isAuth() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag","더미");
+        intent.putExtra("data","먼저 매장등록을 해주세요!");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "매장추가");
+        mContext.startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
 
 }
