@@ -862,7 +862,7 @@ public class HomeFragment extends Fragment {
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
         intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요! \n 사장님이라면 매장관리 \n 근로자라면 근무하기를 선택해주세요");
+        intent.putExtra("data","먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);
