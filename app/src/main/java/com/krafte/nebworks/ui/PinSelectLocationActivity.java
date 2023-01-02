@@ -71,6 +71,7 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
+    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     ArrayList<MapPOIItem> markerArray;
 
@@ -157,6 +158,11 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
             finish();
             overridePendingTransition(0, R.anim.translate_down);
         });
+
+        binding.writeAddress.setOnClickListener(v -> {
+            Intent i = new Intent(this, WebViewActivity.class);
+            startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+        });
     }
 
     private void MoveMyLocation() {
@@ -207,6 +213,18 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
                 if (checkLocationServicesStatus()) {
                     Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
                     checkRunTimePermission();
+                }
+            }
+        } else if (requestCode == SEARCH_ADDRESS_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
+                String getData = data.getExtras().getString("data");
+                if (getData != null) {
+                    String postalCode = getData.substring(0, 5);
+                    String address = getData.substring(7);
+                    shardpref.putString("pin_store_address",address);
+                    shardpref.putString("pin_store_addressdetail","");
+                    shardpref.putString("pin_zipcode",postalCode);
+                    finish();
                 }
             }
         }
