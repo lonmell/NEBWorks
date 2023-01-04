@@ -149,7 +149,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/default_gray_round"
-                android:hint="8~16자 영문/숫자 조합으로 입력"
+                android:hint="@string/password_editText_hint"
                 android:importantForAutofill="no"
                 android:inputType="textPassword"
                 android:paddingStart="10dp"
@@ -170,7 +170,7 @@
                 android:visibility="gone" />
             <TextView
                 android:id="@+id/check_validation_txt2"
-                android:layout_width="192dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
@@ -198,7 +198,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/default_gray_round"
-                android:hint="@string/check_validation_String"
+                android:hint="@string/password_editText_hint"
                 android:importantForAutofill="no"
                 android:inputType="textPassword"
                 android:paddingStart="10dp"
