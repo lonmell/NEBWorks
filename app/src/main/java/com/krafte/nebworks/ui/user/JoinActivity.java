@@ -86,6 +86,8 @@ public class JoinActivity extends AppCompatActivity {
     Intent intent;
     boolean confirmEmail = false;
 
+    boolean duplicateCheck = false;
+
     boolean allcheck = false;
     boolean Uservice01 = false;
     boolean Uservice02 = false;
@@ -417,6 +419,14 @@ public class JoinActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.translate_up, 0);
             return false;
+        } else if (!duplicateCheck) {
+            Intent intent = new Intent(this, JoinPopActivity.class);
+            intent.putExtra("data", "이메일 중복체크를 해주세요.");
+            intent.putExtra("left_btn_txt", "뒤로가기");
+            intent.putExtra("right_btn_txt", "닫기");
+            startActivity(intent);
+            overridePendingTransition(R.anim.translate_up, 0);
+            return false;
         }
         if (!check_validation(binding.editPw.getText().toString())) {
 //            Toast.makeText(this, "비밀번호로 부적절합니다", Toast.LENGTH_SHORT).show();
@@ -509,6 +519,7 @@ public class JoinActivity extends AppCompatActivity {
                                 binding.tv06.setEnabled(false);
                                 binding.emailCheck.setText("사용할 수 있습니다.");
                                 binding.emailCheck.setTextColor(Color.parseColor("#1483FE"));
+                                duplicateCheck = true;
                             }
                         }
                     });
@@ -595,8 +606,8 @@ public class JoinActivity extends AppCompatActivity {
 
     private Boolean check_validation(String password) {
         // 비밀번호 유효성 검사식1 : 숫자, 특수문자가 포함되어야 한다.
-//        String val_symbol = "([0-9].*[!,@,#,^,&,*,(,)])|([!,@,#,^,&,*,(,)].*[0-9])";
-        String val_symbol = "[a-zA-Z0-9]*$";
+        String val_symbol = "([0-9].*[!,@,#,^,&,*,(,)])|([!,@,#,^,&,*,(,)].*[0-9])";
+//        String val_symbol = "[a-zA-Z0-9]*$";
         // 비밀번호 유효성 검사식2 : 영문자 대소문자가 적어도 하나씩은 포함되어야 한다.
 //        String val_alpha = "([a-z].*[A-Z])|([A-Z].*[a-z])";
         // 정규표현식 컴파일
@@ -631,52 +642,34 @@ public class JoinActivity extends AppCompatActivity {
         Matcher matcher_symbol = pattern_symbol.matcher(password);
 //        Matcher matcher_alpha = pattern_alpha.matcher(password);
 
-        if (8 > password.length() || 16 < password.length()) {
-            if(pos == 0){
+        if (pos == 0) {
+            if (8 > password.length() || 16 < password.length()) {
                 binding.checkValidationTxt1.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt3.setTextColor(Color.parseColor("#FF0000"));
                 binding.checkValidationTxt1.setText("비밀번호 글자 수는 8~16자내로 입력해야 합니다.");
-            }else{
-                binding.checkValidationTxt3.setVisibility(View.VISIBLE);
-                binding.checkValidationTxt3.setText("비밀번호 글자 수는 8~16자내로 입력해야 합니다.");
-            }
-        } else if (!matcher_symbol.find()) {
-            if(pos == 0){
+            } else if (!matcher_symbol.find()) {
                 binding.checkValidationTxt1.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt3.setTextColor(Color.parseColor("#FF0000"));
                 binding.checkValidationTxt1.setText("숫자,특수문자가 포함되어야 합니다.");
-            }else{
-                binding.checkValidationTxt3.setVisibility(View.VISIBLE);
-                binding.checkValidationTxt3.setText("숫자,특수문자가 포함되어야 합니다.");
+            } else {
+                binding.checkValidationTxt1.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt1.setTextColor(Color.parseColor("#6395EC"));
+                binding.checkValidationTxt1.setText("규칙에 맞는 비밀번호 입니다.");
             }
-        } else {
-            if(pos == 0){
-                //입력이 끝났을때
-                String pw1 = binding.editPw.getText().toString();
-                String pw2 = binding.editPwConfirm.getText().toString();
-                if(pw1.equals(pw2)){
-                    binding.checkValidationTxt1.setVisibility(View.VISIBLE);
-                    binding.checkValidationTxt1.setTextColor(Color.parseColor("#6395EC"));
-                    binding.checkValidationTxt1.setText("비밀번호가 동일합니다.");
-                }else{
-                    binding.checkValidationTxt1.setVisibility(View.VISIBLE);
-                    binding.checkValidationTxt1.setTextColor(Color.parseColor("#FF0000"));
-                    binding.checkValidationTxt1.setText("비밀번호가 동일하지 않습니다.");
-                }
-            }else{
-                //입력이 끝났을때
-                String pw1 = binding.editPw.getText().toString();
-                String pw2 = binding.editPwConfirm.getText().toString();
-                if(pw1.equals(pw2)){
-                    binding.checkValidationTxt3.setVisibility(View.VISIBLE);
-                    binding.checkValidationTxt3.setTextColor(Color.parseColor("#6395EC"));
-                    binding.checkValidationTxt3.setText("비밀번호가 동일합니다.");
-                }else{
-                    binding.checkValidationTxt3.setVisibility(View.VISIBLE);
-                    binding.checkValidationTxt3.setTextColor(Color.parseColor("#FF0000"));
-                    binding.checkValidationTxt3.setText("비밀번호가 동일하지 않습니다.");
-                }
+        } else if (pos == 1) {
+            //입력이 끝났을때
+            String pw1 = binding.editPw.getText().toString();
+            String pw2 = binding.editPwConfirm.getText().toString();
+            if (pw1.equals(pw2)) {
+                binding.checkValidationTxt3.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt3.setTextColor(Color.parseColor("#6395EC"));
+                binding.checkValidationTxt3.setText("비밀번호가 동일합니다.");
+            } else {
+                binding.checkValidationTxt3.setVisibility(View.VISIBLE);
+                binding.checkValidationTxt3.setTextColor(Color.parseColor("#FF0000"));
+                binding.checkValidationTxt3.setText("비밀번호가 동일하지 않습니다.");
             }
         }
-
     }
 
     @Override
