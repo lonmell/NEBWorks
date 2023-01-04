@@ -111,8 +111,11 @@ public class SearchAccountActivity extends AppCompatActivity {
             findkind = shardpref.getString("findkind","");
 
             if(findkind.equals("email")){
+                binding.topBarTitle.setText("이메일 찾기");
+                binding.topBarTitle.setText("이메일 찾기");
                 binding.tv04.setText("이메일 찾기");
             }else if(findkind.equals("password")){
+                binding.topBarTitle.setText("비밀번호 재설정");
                 binding.tv04.setText("비밀번호 변경하기");
             }
             myTimer = new MyTimer(60000, 1000);
