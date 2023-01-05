@@ -317,6 +317,10 @@ public class MemberDetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        binding.todayTodo.setOnClickListener(v -> {
+            shardpref.putInt("SELECT_POSITION", 1);
+            pm.Main2(mContext);
+        });
     }
 
     @Override
