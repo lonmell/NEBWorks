@@ -233,7 +233,17 @@ public class CommunityAddActivity extends AppCompatActivity {
 
         binding.addcommunityBtn.setOnClickListener(v -> {
             dlog.i("3 state_txt : " + state_txt);
-            if (DataCheck()) {
+            if (nickname_select == 1 && USER_INFO_NICKNAME.isEmpty()) {
+                shardpref.putString("returnPage", TAG);
+                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");
+                intent.putExtra("flag", "닉네임없음");
+                intent.putExtra("left_btn_txt", "취소");
+                intent.putExtra("right_btn_txt", "확인");
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            } else if (DataCheck()) {
                 if (state_txt.equals("EditCommunity")) {
                     EditStroeNoti();
                 } else {
@@ -245,7 +255,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         });
 
         binding.writerName.setOnClickListener(v -> {
-            if (USER_INFO_NICKNAME.isEmpty()) {
+            if (USER_INFO_NICKNAME.isEmpty() && nickname_select == 0) {
                 shardpref.putString("returnPage", TAG);
                 Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
                 intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");

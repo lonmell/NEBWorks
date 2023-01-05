@@ -306,6 +306,8 @@ public class HomeFragment2 extends Fragment {
     }
 
     public void setDummyData() {
+        binding.paynum.setText("2,000,000원");
+
         mList = new ArrayList<>();
         binding.mainTaskList.setVisibility(View.VISIBLE);
         mAdapter = new MainTaskLAdapter(mContext, mList);

@@ -324,7 +324,11 @@ public class MainFragment2 extends AppCompatActivity {
                                 getjikgup = Response.getJSONObject(0).getString("jikgup");
 
                                 user_name.setText(name);
-                                jikgup.setText(getjikgup);
+                                if (!getjikgup.equals("null")) {
+                                    jikgup.setText(getjikgup);
+                                } else {
+                                    jikgup.setText("미정");
+                                }
                                 Glide.with(mContext).load(img_path)
                                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                                         .skipMemoryCache(true)
