@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">넵웍스</string>
+    <string name="app_name">사장님!넵</string>
 
     <string name="login_ltd">Copyright kraftm Ltd.All right reserved</string>
     <!--EmployerMainActivityTest String-->
@@ -53,7 +53,7 @@
     <string name="store_category09">피트니스</string>
     <string name="store_category10">패밀리레스토랑</string>
 
-    <string name="contract_tv01">매번 수기로 작성하던 근로계약서,\n시간이 지나면 어디있는지 찾기도 어려우셨죠.\n넵웍스에서 편리하게 작성하고\n언제든지 근무자에게 전달도 가능합니다.\n<b>온라인 근로계약은 종이계약서와 법적효력이 동일합니다.</b></string>
+    <string name="contract_tv01">매번 수기로 작성하던 근로계약서,\n시간이 지나면 어디있는지 찾기도 어려우셨죠.\n사장님!넵에서 편리하게 작성하고\n언제든지 근무자에게 전달도 가능합니다.\n<b>온라인 근로계약은 종이계약서와 법적효력이 동일합니다.</b></string>
     <string name="contract_tv02"><u>전문보기</u></string>
     <string name="close_txt"><u>닫기</u></string>
 </resources>

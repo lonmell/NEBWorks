@@ -188,7 +188,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = getNotificationBuilder(notificationManager, "chennal id", "첫번째 채널입니다");
 
-        builder.setContentTitle("넵 웍스")       // 콘솔에서 설정한 타이틀
+        builder.setContentTitle("사장님!넵")       // 콘솔에서 설정한 타이틀
                 .setContentText(message)         // 콘솔에서 설정한 내용
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setSmallIcon(R.drawable.ic_launcher)
@@ -289,7 +289,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
             mNotification =
                     new Notification.Builder(this,Channel)
-                            .setContentTitle("넵 웍스")
+                            .setContentTitle("사장님!넵")
                             .setContentText(message)
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setContentIntent(pendingIntent)
@@ -302,7 +302,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Log.i(TAG,"mNotification SHOW 2");
             mNotification =
                     new NotificationCompat.Builder(this,Channel)
-                            .setContentTitle("넵 웍스")
+                            .setContentTitle("사장님!넵")
                             .setContentText(message)
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setSound(defaultSoundUri)

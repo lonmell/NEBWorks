@@ -159,7 +159,7 @@ public class AddContractPage09 extends AppCompatActivity {
             ),
             new ItemContent("",
                     "",
-                    "넵 웍스",
+                    "사장님!넵",
                     "http://krafte.net/NEBWorks/identificon.png",
                     "협업 툴"
             ),

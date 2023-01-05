@@ -81,6 +81,7 @@ public class WebViewActivity  extends Activity {
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
             handler.cancel(); // Ignore SSL certificate errors
+//            handler.proceed();
         }
     }
 

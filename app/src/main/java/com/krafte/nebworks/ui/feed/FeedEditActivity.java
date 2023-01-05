@@ -38,7 +38,7 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
@@ -349,69 +349,95 @@ public class FeedEditActivity extends AppCompatActivity {
     String io_state = "";
 
     public void UserCheck() {
-        dlog.i("---------UserCheck---------");
-        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
-        dlog.i("---------UserCheck---------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(AllMemberInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.e("UserCheck function START");
-                dlog.e("response 1: " + response.isSuccessful());
-                runOnUiThread(() -> {
-                    if (response.isSuccessful() && response.body() != null) {
-                        try {
-                            //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(response.body());
+//        dlog.i("---------UserCheck---------");
+//        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+//        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
+//        dlog.i("---------UserCheck---------");
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(AllMemberInterface.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+//        Call<String> call = api.getData(place_id, USER_INFO_ID);
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                dlog.e("UserCheck function START");
+//                dlog.e("response 1: " + response.isSuccessful());
+//                runOnUiThread(() -> {
+//                    if (response.isSuccessful() && response.body() != null) {
+//                        try {
+//                            //Array데이터를 받아올 때
+//                            JSONArray Response = new JSONArray(response.body());
+//
+//                            try {
+//                                mem_id = Response.getJSONObject(0).getString("id");
+//                                mem_name = Response.getJSONObject(0).getString("name");
+//                                mem_phone = Response.getJSONObject(0).getString("phone");
+//                                mem_gender = Response.getJSONObject(0).getString("gender");
+//                                mem_img_path = Response.getJSONObject(0).getString("img_path");
+//                                mem_jumin = Response.getJSONObject(0).getString("jumin");
+//                                mem_kind = Response.getJSONObject(0).getString("kind");
+//                                mem_join_date = Response.getJSONObject(0).getString("join_date");
+//                                mem_state = Response.getJSONObject(0).getString("state");
+//                                mem_jikgup = Response.getJSONObject(0).getString("jikgup");
+//                                mem_pay = Response.getJSONObject(0).getString("pay");
+//
+//                                dlog.i("------UserCheck-------");
+//                                USER_INFO_ID = mem_id;
+//                                dlog.i("프로필 사진 url : " + mem_img_path);
+//                                dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
+//                                dlog.i("성명 : " + mem_name);
+//                                dlog.i("부서 : " + mem_jikgup);
+//                                dlog.i("급여 : " + mem_pay);
+//                                dlog.i("------UserCheck-------");
+//
+//                                binding.userName.setText(mem_name + "|" + mem_jikgup);
+//
+//                            } catch (Exception e) {
+//                                dlog.i("UserCheck Exception : " + e);
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//            }
+//
+//            @Override
+//            @SuppressLint("LongLogTag")
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e(TAG, "에러2 = " + t.getMessage());
+//            }
+//        });
+        try{
+            mem_id = UserCheckData.getInstance().getUser_id();
+            mem_name = UserCheckData.getInstance().getUser_name();
+            mem_phone = UserCheckData.getInstance().getUser_phone();
+            mem_gender = UserCheckData.getInstance().getUser_gender();
+            mem_img_path = UserCheckData.getInstance().getUser_img_path();
+            mem_jumin = UserCheckData.getInstance().getUser_jumin();
+            mem_kind = UserCheckData.getInstance().getUser_kind();
+            mem_join_date = UserCheckData.getInstance().getUser_join_date();
+            mem_state = UserCheckData.getInstance().getUser_state();
+            mem_jikgup = UserCheckData.getInstance().getUser_jikgup();
+            mem_pay = UserCheckData.getInstance().getUser_pay();
 
-                            try {
-                                mem_id = Response.getJSONObject(0).getString("id");
-                                mem_name = Response.getJSONObject(0).getString("name");
-                                mem_phone = Response.getJSONObject(0).getString("phone");
-                                mem_gender = Response.getJSONObject(0).getString("gender");
-                                mem_img_path = Response.getJSONObject(0).getString("img_path");
-                                mem_jumin = Response.getJSONObject(0).getString("jumin");
-                                mem_kind = Response.getJSONObject(0).getString("kind");
-                                mem_join_date = Response.getJSONObject(0).getString("join_date");
-                                mem_state = Response.getJSONObject(0).getString("state");
-                                mem_jikgup = Response.getJSONObject(0).getString("jikgup");
-                                mem_pay = Response.getJSONObject(0).getString("pay");
+            dlog.i("------UserCheck-------");
+            USER_INFO_ID = mem_id;
+            dlog.i("프로필 사진 url : " + mem_img_path);
+            dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
+            dlog.i("성명 : " + mem_name);
+            dlog.i("부서 : " + mem_jikgup);
+            dlog.i("급여 : " + mem_pay);
+            dlog.i("------UserCheck-------");
 
-                                dlog.i("------UserCheck-------");
-                                USER_INFO_ID = mem_id;
-                                dlog.i("프로필 사진 url : " + mem_img_path);
-                                dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
-                                dlog.i("성명 : " + mem_name);
-                                dlog.i("부서 : " + mem_jikgup);
-                                dlog.i("급여 : " + mem_pay);
-                                dlog.i("------UserCheck-------");
-
-                                binding.userName.setText(mem_name + "|" + mem_jikgup);
-
-                            } catch (Exception e) {
-                                dlog.i("UserCheck Exception : " + e);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-            }
-
-            @Override
-            @SuppressLint("LongLogTag")
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러2 = " + t.getMessage());
-            }
-        });
+            binding.userName.setText(mem_name + "|" + mem_jikgup);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void GETFeed() {

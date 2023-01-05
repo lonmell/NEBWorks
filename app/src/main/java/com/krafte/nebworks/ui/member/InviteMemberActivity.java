@@ -164,8 +164,8 @@ public class InviteMemberActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
@@ -176,12 +176,16 @@ public class InviteMemberActivity extends AppCompatActivity {
 
                                     Calendar c = Calendar.getInstance();
                                     int mYear = c.get(Calendar.YEAR);
-                                    int mMonth = c.get(Calendar.MONTH);
+                                    int mMonth = c.get(Calendar.MONTH) + 1;
                                     int mDay = c.get(Calendar.DAY_OF_MONTH);
 
+                                    dlog.i("mYear : " + mYear);
+                                    dlog.i("mMonth : " + mMonth);
+                                    dlog.i("mDay : " + mDay);
                                     join_date = mYear + "-" + (String.valueOf(mMonth).length() == 1 ? "0" + mMonth : mMonth) + "-"
                                             + (String.valueOf(mDay).length() == 1 ? "0" + String.valueOf(mDay) : String.valueOf(mDay));
 
+                                    dlog.i("ConfrimPlaceMember(id) : " + ConfrimPlaceMember(id));
                                     if (ConfrimPlaceMember(id)) {
                                         AddPlaceMember(id, name, phone, "", join_date);
                                     } else {
@@ -218,7 +222,7 @@ public class InviteMemberActivity extends AppCompatActivity {
             ),
             new ItemContent("",
                     "",
-                    "넵 웍스",
+                    "사장님!넵",
                     "http://krafte.net/NEBWorks/identificon.png",
                     "협업 툴"
             ),
@@ -268,6 +272,7 @@ public class InviteMemberActivity extends AppCompatActivity {
     }
 
     int cnt = 0;
+    boolean cnttf = false;
     private boolean ConfrimPlaceMember(String user_id) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(GetConfirmPlaceInterface.URL)
@@ -283,12 +288,13 @@ public class InviteMemberActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("ConfrimPlaceMember jsonResponse length : " + jsonResponse.length());
+                            dlog.i("ConfrimPlaceMember jsonResponse : " + jsonResponse);
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     cnt = Integer.parseInt(Response.getJSONObject(0).getString("cnt"));
+                                    cnttf = (cnt == 0);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -323,8 +329,8 @@ public class InviteMemberActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("AddPlaceMember jsonResponse length : " + jsonResponse.length());
+                            dlog.i("AddPlaceMember jsonResponse : " + response.body());
                             if (jsonResponse.replace("\"", "").equals("success")) {
                                 dlog.i("매장 멤버 추가 완료");
                                 Toast_Nomal("직원 초대가 완료되었습니다[승인 대기 중]");
@@ -367,8 +373,8 @@ public class InviteMemberActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 String jsonResponse = rc.getBase64decode(response.body());
-                dlog.i("jsonResponse length : " + jsonResponse.length());
-                dlog.i("jsonResponse : " + jsonResponse);
+                dlog.i("getUserToken jsonResponse length : " + jsonResponse.length());
+                dlog.i("getUserToken jsonResponse : " + jsonResponse);
                 try {
                     JSONArray Response = new JSONArray(jsonResponse);
                     if (Response.length() > 0) {
@@ -414,8 +420,8 @@ public class InviteMemberActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("AddPush jsonResponse length : " + jsonResponse.length());
+                            dlog.i("AddPush jsonResponse : " + jsonResponse);
                         }
                     });
                 }
@@ -471,8 +477,8 @@ public class InviteMemberActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("PostNonmember jsonResponse length : " + jsonResponse.length());
+                            dlog.i("PostNonmember jsonResponse : " + jsonResponse);
                             if (jsonResponse.replace("\"", "").equals("success")) {
                                 if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
                                     kakaoLink();

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractBasicInterface;
-import com.krafte.nebworks.dataInterface.ContractPagePosUp;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.RegistrSearchInterface;
@@ -311,52 +309,61 @@ public class AddContractPage03 extends AppCompatActivity {
     }
 
     public void UserCheck() {
-        dlog.i("---------UserCheck---------");
-        dlog.i("---------UserCheck---------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(AllMemberInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-        Call<String> call = api.getData(contract_place_id, USER_INFO_ID);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.e("UserCheck function START");
-                dlog.e("response 1: " + response.isSuccessful());
-                runOnUiThread(() -> {
-                    if (response.isSuccessful() && response.body() != null) {
-                        String jsonResponse = rc.getBase64decode(response.body());
-                        dlog.i("jsonResponse length : " + jsonResponse.length());
-                        dlog.i("jsonResponse : " + jsonResponse);
-                        try {
-                            //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(jsonResponse);
-                            try {
-                                if (Response.length() != 0) {
-                                    String phone = Response.getJSONObject(0).getString("phone");
-                                    String account = Response.getJSONObject(0).getString("account");
-                                    binding.input06.setText(phone);
-                                    binding.input07.setText(account);
-                                }
-                            } catch (Exception e) {
-                                dlog.i("UserCheck Exception : " + e);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-            }
-
-            @Override
-            @SuppressLint("LongLogTag")
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러2 = " + t.getMessage());
-            }
-        });
+//        dlog.i("---------UserCheck---------");
+//        dlog.i("---------UserCheck---------");
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(AllMemberInterface.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+//        Call<String> call = api.getData(contract_place_id, USER_INFO_ID);
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                dlog.e("UserCheck function START");
+//                dlog.e("response 1: " + response.isSuccessful());
+//                runOnUiThread(() -> {
+//                    if (response.isSuccessful() && response.body() != null) {
+//                        String jsonResponse = rc.getBase64decode(response.body());
+//                        dlog.i("jsonResponse length : " + jsonResponse.length());
+//                        dlog.i("jsonResponse : " + jsonResponse);
+//                        try {
+//                            //Array데이터를 받아올 때
+//                            JSONArray Response = new JSONArray(jsonResponse);
+//                            try {
+//                                if (Response.length() != 0) {
+//                                    String phone = Response.getJSONObject(0).getString("phone");
+//                                    String account = Response.getJSONObject(0).getString("account");
+//                                    binding.input06.setText(phone);
+//                                    binding.input07.setText(account);
+//                                }
+//                            } catch (Exception e) {
+//                                dlog.i("UserCheck Exception : " + e);
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//            }
+//
+//            @Override
+//            @SuppressLint("LongLogTag")
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e(TAG, "에러2 = " + t.getMessage());
+//            }
+//        });
+        //Array데이터를 받아올 때
+        try {
+            String phone = UserCheckData.getInstance().getUser_phone();
+            String account = UserCheckData.getInstance().getUser_account();
+            binding.input06.setText(phone);
+            binding.input07.setText(account);
+        } catch (Exception e) {
+            dlog.i("UserCheck Exception : " + e);
+        }
     }
 
     private boolean DataCheck() {

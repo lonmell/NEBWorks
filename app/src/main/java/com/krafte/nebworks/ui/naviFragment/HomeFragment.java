@@ -28,15 +28,16 @@ import com.krafte.nebworks.adapter.MainNotiLAdapter;
 import com.krafte.nebworks.bottomsheet.MemberOption;
 import com.krafte.nebworks.data.MainMemberLData;
 import com.krafte.nebworks.data.MainNotiData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
-import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
-import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.HomefragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -108,6 +109,7 @@ public class HomeFragment extends Fragment {
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
     RandomOut ro = new RandomOut();
+    DBConnection dbc = new DBConnection();
 
     int isAuth = 0;
 
@@ -164,7 +166,7 @@ public class HomeFragment extends Fragment {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            shardpref.putInt("SELECT_POSITION",0);
+            shardpref.putInt("SELECT_POSITION", 0);
             isAuth = shardpref.getInt("isAuth", 0);
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
@@ -207,8 +209,8 @@ public class HomeFragment extends Fragment {
         shardpref.remove("Tap");
         shardpref.remove("item_user_id");
         shardpref.remove("item_user_name");
-        UserCheck(USER_INFO_EMAIL);
-        getPlaceData();
+        UserCheck();
+//        getPlaceData();
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
         SetAllMemberList();
@@ -302,7 +304,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.addMemberBtn.setOnClickListener(v-> {
+        binding.addMemberBtn.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
@@ -366,159 +368,115 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void getPlaceData() {
-        dlog.i("PlaceCheck place_id : " + place_id);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceThisDataInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        PlaceThisDataInterface api = retrofit.create(PlaceThisDataInterface.class);
-        Call<String> call = api.getData(place_id);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
-                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
-                            try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(jsonResponse);
 
-                                    if(Response.length() != 0){
-                                        place_name = Response.getJSONObject(0).getString("name");
-                                        place_owner_id = Response.getJSONObject(0).getString("owner_id");
-                                        place_owner_name = Response.getJSONObject(0).getString("owner_name");
-                                        registr_num = Response.getJSONObject(0).getString("registr_num");
-                                        store_kind = Response.getJSONObject(0).getString("store_kind");
-                                        place_address = Response.getJSONObject(0).getString("address");
-                                        place_latitude = Response.getJSONObject(0).getString("latitude");
-                                        place_longitude = Response.getJSONObject(0).getString("longitude");
-                                        place_pay_day = Response.getJSONObject(0).getString("pay_day");
-                                        place_test_period = Response.getJSONObject(0).getString("test_period");
-                                        place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
-                                        place_insurance = Response.getJSONObject(0).getString("insurance");
-                                        place_start_time = Response.getJSONObject(0).getString("start_time");
-                                        place_end_time = Response.getJSONObject(0).getString("end_time");
-                                        place_save_kind = Response.getJSONObject(0).getString("save_kind");
-                                        place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
-                                        place_img_path = Response.getJSONObject(0).getString("img_path");
-                                        place_start_date = Response.getJSONObject(0).getString("start_date");
-                                        place_created_at = Response.getJSONObject(0).getString("created_at");
-                                        place_icnt = Response.getJSONObject(0).getString("i_cnt");
-                                        place_ocnt = Response.getJSONObject(0).getString("o_cnt");
-                                        place_totalcnt = Response.getJSONObject(0).getString("total_cnt");
+    /*
+    * 20230105 HomFragment에서만 한번 사용자 id , 매장 id를 사용해
+    * 사용자 정보를 체크, 이후 다른 페이지에서는 Singleton 전역변수로 사용
+    * */
+    public void UserCheck() {
+        Thread th = new Thread(() -> {
+            dbc.UserCheck(place_id, USER_INFO_ID);
+            activity.runOnUiThread(() -> {
+                String id = UserCheckData.getInstance().getUser_id();
+                String name = UserCheckData.getInstance().getUser_name();
+                String nick_name = UserCheckData.getInstance().getUser_nick_name();
+                String img_path = UserCheckData.getInstance().getUser_img_path();
 
-                                        Glide.with(mContext).load(place_img_path)
-                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                .placeholder(R.drawable.no_image)
-                                                .skipMemoryCache(true)
-                                                .into(binding.storeThumnail);
+                try {
+                    dlog.i("------UserCheck-------");
+                    dlog.i("프로필 사진 url : " + img_path);
+                    dlog.i("성명 : " + name);
+                    dlog.i("닉네임 : " + nick_name);
+                    dlog.i("------UserCheck-------");
 
-                                        if (USER_INFO_ID.equals(place_owner_id)) {
-                                            USER_INFO_AUTH = "0";
-                                        } else {
-                                            USER_INFO_AUTH = "1";
-                                        }
-
-                                        dlog.i("place_owner_id : " + place_owner_id);
-                                        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-                                        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-
-                                        shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-
-                                        binding.title.setText(place_name);
-                                        binding.memberCnt.setText(place_totalcnt + "명");
-                                    }
-
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    if (place_owner_id.equals(id)) {
+                        USER_INFO_AUTH = "0";
+                        binding.gotoPlace.setVisibility(View.VISIBLE);
+                    } else {
+                        USER_INFO_AUTH = "1";
+                        binding.gotoPlace.setVisibility(View.GONE);
+                    }
+                    shardpref.putString("USER_INFO_PROFILE", img_path);
+                    shardpref.putString("USER_INFO_NAME", name);
+                    shardpref.putString("USER_INFO_NICKNAME", nick_name);
+                    getFCMToken();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
+            });
         });
+        th.start();
+        try {
+            th.join(); // 작동한 스레드의 종료까지 대기 후 메인 스레드 실행
+            getPlaceData();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
+    PlaceCheckData pcd = new PlaceCheckData();
+    public void getPlaceData() {
+        Thread th = new Thread(() -> {
+            dbc.PlacegetData(place_id);
+            activity.runOnUiThread(() -> {
+                try {
+                    place_name = pcd.getPlace_name();
+                    place_owner_id = pcd.getPlace_owner_id();
+                    place_owner_name = pcd.getPlace_owner_name();
+                    registr_num = pcd.getRegistr_num();
+                    store_kind = pcd.getStore_kind();
+                    place_address = pcd.getPlace_address();
+                    place_latitude = pcd.getPlace_latitude();
+                    place_longitude = pcd.getPlace_longitude();
+                    place_pay_day = pcd.getPlace_pay_day();
+                    place_test_period = pcd.getPlace_test_period();
+                    place_vacation_select = pcd.getPlace_vacation_select();
+                    place_insurance = pcd.getPlace_insurance();
+                    place_start_time = pcd.getPlace_start_time();
+                    place_end_time = pcd.getPlace_end_time();
+                    place_save_kind = pcd.getPlace_save_kind();
+                    place_wifi_name = pcd.getPlace_wifi_name();
+                    place_img_path = pcd.getPlace_img_path();
+                    place_start_date = pcd.getPlace_start_date();
+                    place_created_at = pcd.getPlace_created_at();
+                    place_icnt = pcd.getPlace_icnt();
+                    place_ocnt = pcd.getPlace_ocnt();
+                    place_totalcnt = pcd.getPlace_totalcnt();
 
+                    dlog.i("getPlaceData place_name : " + place_name);
+                    Glide.with(mContext).load(place_img_path)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .placeholder(R.drawable.no_image)
+                            .skipMemoryCache(true)
+                            .into(binding.storeThumnail);
 
-    //    USER_INFO_NICKNAME
-    public void UserCheck(String account) {
-        dlog.i("UserCheck account : " + account);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserSelectInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
-        Call<String> call = api.getData(account);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
-                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
-                            try {
-                                if (!jsonResponse.equals("[]")) {
-                                    JSONArray Response = new JSONArray(jsonResponse);
-                                    String id = Response.getJSONObject(0).getString("id");
-                                    String name = Response.getJSONObject(0).getString("name");
-                                    String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
-                                    String nick_name = Response.getJSONObject(0).getString("nick_name");
-                                    String img_path = Response.getJSONObject(0).getString("img_path");
+                    if (USER_INFO_ID.equals(place_owner_id)) {
+                        USER_INFO_AUTH = "0";
+                    } else {
+                        USER_INFO_AUTH = "1";
+                    }
 
-                                    try {
-                                        dlog.i("------UserCheck-------");
-                                        dlog.i("프로필 사진 url : " + img_path);
-                                        dlog.i("성명 : " + name);
-                                        dlog.i("닉네임 : " + nick_name);
-                                        dlog.i("------UserCheck-------");
+                    dlog.i("place_owner_id : " + place_owner_id);
+                    dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+                    dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
 
-                                        if (place_owner_id.equals(id)) {
-                                            USER_INFO_AUTH = "0";
-                                            binding.gotoPlace.setVisibility(View.VISIBLE);
-                                        } else {
-                                            USER_INFO_AUTH = "1";
-                                            binding.gotoPlace.setVisibility(View.GONE);
-                                        }
-                                        shardpref.putString("USER_INFO_PROFILE", img_path);
-                                        shardpref.putString("USER_INFO_NAME", name);
-                                        shardpref.putString("USER_INFO_NICKNAME", nick_name);
-                                        getFCMToken();
-                                    } catch (Exception e) {
-                                        dlog.i("UserCheck Exception : " + e);
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
+
+                    binding.title.setText(place_name);
+                    binding.memberCnt.setText(place_totalcnt + "명");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
+            });
         });
-    }
+        th.start();
+        try {
+            th.join(); // 작동한 스레드의 종료까지 대기 후 메인 스레드 실행
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
         dlog.i("PlaceWorkCheck place_id : " + place_id);
@@ -555,7 +513,7 @@ public class HomeFragment extends Fragment {
                                             dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
                                             int allPay = 0;
                                             for (int i = 0; i < Response.length(); i++) {
-                                                allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",",""));
+                                                allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                             }
                                             DecimalFormat myFormatter = new DecimalFormat("###,###");
                                             binding.paynum.setText(myFormatter.format(allPay) + "원");
@@ -597,8 +555,7 @@ public class HomeFragment extends Fragment {
                                             mAdapter.notifyDataSetChanged();
                                             mAdapter.setOnItemClickListener(new MainMemberLAdapter.OnItemClickListener() {
                                                 @Override
-                                                public void onItemClick(View v, int position)
-                                                {
+                                                public void onItemClick(View v, int position) {
                                                     if (USER_INFO_AUTH.isEmpty()) {
                                                         isAuth();
                                                     } else {
@@ -861,8 +818,8 @@ public class HomeFragment extends Fragment {
 
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요!");
+        intent.putExtra("flag", "더미");
+        intent.putExtra("data", "먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);

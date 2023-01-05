@@ -97,8 +97,8 @@
 
                         <ImageView
                             android:id="@+id/item_peoplecnt_icon"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="3dp"
@@ -117,7 +117,7 @@
                             android:singleLine="true"
                             android:text="0"
                             android:textColor="#A9A9A9"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             tools:ignore="HardcodedText,TextContrastCheck" />
                     </RelativeLayout>
 
@@ -155,7 +155,7 @@
                     android:maxLines="1"
                     android:text="작업 중"
                     android:textColor="#54585A"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -181,7 +181,7 @@
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:textColor="#54585A"
-                    android:textSize="10sp"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText" />
             </androidx.cardview.widget.CardView>
 

@@ -53,9 +53,9 @@ import com.krafte.nebworks.adapter.WorkplaceListAdapter;
 import com.krafte.nebworks.data.CertiNumData;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceListData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.UserInsertInterface;
-import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.dataInterface.UserUpdateInterface;
 import com.krafte.nebworks.databinding.ActivityProfileeditBinding;
 import com.krafte.nebworks.pop.AlertPopActivity;
@@ -527,99 +527,153 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
     public void UserCheck(String account) {
-        dlog.i("---------UserCheck---------");
-        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
-        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
-        dlog.i("---------UserCheck---------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UserSelectInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
-        Call<String> call = api.getData(account);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.e("UserCheck function START");
-                dlog.e("response 1: " + response.isSuccessful());
-                runOnUiThread(() -> {
-                    if (response.isSuccessful() && response.body() != null) {
-                        String jsonResponse = rc.getBase64decode(response.body());
-                        dlog.i("jsonResponse length : " + jsonResponse.length());
-                        dlog.i("jsonResponse : " + jsonResponse);
-                        try {
-                            //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(jsonResponse);
+//        dlog.i("---------UserCheck---------");
+//        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+//        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
+//        dlog.i("---------UserCheck---------");
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(UserSelectInterface.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+//        Call<String> call = api.getData(account);
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                dlog.e("UserCheck function START");
+//                dlog.e("response 1: " + response.isSuccessful());
+//                runOnUiThread(() -> {
+//                    if (response.isSuccessful() && response.body() != null) {
+//                        String jsonResponse = rc.getBase64decode(response.body());
+//                        dlog.i("jsonResponse length : " + jsonResponse.length());
+//                        dlog.i("jsonResponse : " + jsonResponse);
+//                        try {
+//                            //Array데이터를 받아올 때
+//                            JSONArray Response = new JSONArray(jsonResponse);
+//
+//                            try {
+//                                mem_id = Response.getJSONObject(0).getString("id");
+//                                mem_name = Response.getJSONObject(0).getString("name");
+//                                mem_nick = Response.getJSONObject(0).getString("nick_name");
+//                                mem_phone = Response.getJSONObject(0).getString("phone");
+//                                mem_gender = Response.getJSONObject(0).getString("gender");
+//                                mem_img_path = Response.getJSONObject(0).getString("img_path");
+//
+//                                dlog.i("------UserCheck-------");
+//                                USER_INFO_ID = mem_id;
+//                                dlog.i("프로필 사진 url : " + mem_img_path);
+//                                dlog.i("성명 : "           + mem_name);
+//                                dlog.i("성별 : "           + mem_gender);
+//                                dlog.i("닉네임 : "          + mem_nick);
+//                                dlog.i("전화번호 : "        + mem_phone);
+//                                dlog.i("------UserCheck-------");
+//
+//                                if (!mem_phone.isEmpty()){
+//                                    CertiSuccessTF = true;
+//                                }
+//                                dlog.i("START profileSetimg1");
+//                                binding.userName.setText(mem_name);
+//                                binding.userNick.setText(mem_nick.equals("null")?"":mem_nick);
+//                                binding.userPhone.setText(mem_phone.equals("null")?"":mem_phone);
+//
+//                                if(mem_img_path != null){
+//                                    dlog.i("mem_img_path : " + mem_img_path.trim());
+//                                    Glide.with(mContext).load(mem_img_path.trim())
+//                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                                            .skipMemoryCache(true)
+//                                            .into(binding.profileSetimg);
+//                                    binding.imgPlus.setVisibility(View.GONE);
+//                                    ProfileUrl = mem_img_path;
+//                                }
+//
+//                                if(mem_gender.equals("1")){
+//                                    USER_INFO_GENDER = "1";
+//                                    binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+//                                    binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
+//
+//                                    binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+//                                    binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
+//                                }else{
+//                                    USER_INFO_GENDER = "2";
+//                                    binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+//                                    binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
+//
+//                                    binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+//                                    binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
+//                                }
+//
+//                            } catch (Exception e) {
+//                                dlog.i("UserCheck Exception : " + e);
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//            }
+//
+//            @Override
+//            @SuppressLint("LongLogTag")
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e(TAG, "에러2 = " + t.getMessage());
+//            }
+//        });
+        try {
+            mem_id = UserCheckData.getInstance().getUser_id();
+            mem_name = UserCheckData.getInstance().getUser_name();
+            mem_nick = UserCheckData.getInstance().getUser_nick_name();
+            mem_phone = UserCheckData.getInstance().getUser_phone();
+            mem_gender = UserCheckData.getInstance().getUser_gender();
+            mem_img_path = UserCheckData.getInstance().getUser_img_path();
 
-                            try {
-                                mem_id = Response.getJSONObject(0).getString("id");
-                                mem_name = Response.getJSONObject(0).getString("name");
-                                mem_nick = Response.getJSONObject(0).getString("nick_name");
-                                mem_phone = Response.getJSONObject(0).getString("phone");
-                                mem_gender = Response.getJSONObject(0).getString("gender");
-                                mem_img_path = Response.getJSONObject(0).getString("img_path");
+            dlog.i("------UserCheck-------");
+            USER_INFO_ID = mem_id;
+            dlog.i("프로필 사진 url : " + mem_img_path);
+            dlog.i("성명 : "           + mem_name);
+            dlog.i("성별 : "           + mem_gender);
+            dlog.i("닉네임 : "          + mem_nick);
+            dlog.i("전화번호 : "        + mem_phone);
+            dlog.i("------UserCheck-------");
 
-                                dlog.i("------UserCheck-------");
-                                USER_INFO_ID = mem_id;
-                                dlog.i("프로필 사진 url : " + mem_img_path);
-                                dlog.i("성명 : "           + mem_name);
-                                dlog.i("성별 : "           + mem_gender);
-                                dlog.i("닉네임 : "          + mem_nick);
-                                dlog.i("전화번호 : "        + mem_phone);
-                                dlog.i("------UserCheck-------");
+            if (!mem_phone.isEmpty()){
+                CertiSuccessTF = true;
+            }
+            dlog.i("START profileSetimg1");
+            binding.userName.setText(mem_name);
+            binding.userNick.setText(mem_nick.equals("null")?"":mem_nick);
+            binding.userPhone.setText(mem_phone.equals("null")?"":mem_phone);
 
-                                if (!mem_phone.isEmpty()){
-                                    CertiSuccessTF = true;
-                                }
-                                dlog.i("START profileSetimg1");
-                                binding.userName.setText(mem_name);
-                                binding.userNick.setText(mem_nick.equals("null")?"":mem_nick);
-                                binding.userPhone.setText(mem_phone.equals("null")?"":mem_phone);
-
-                                if(mem_img_path != null){
-                                    dlog.i("mem_img_path : " + mem_img_path.trim());
-                                    Glide.with(mContext).load(mem_img_path.trim())
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .skipMemoryCache(true)
-                                            .into(binding.profileSetimg);
-                                    binding.imgPlus.setVisibility(View.GONE);
-                                    ProfileUrl = mem_img_path;
-                                }
-
-                                if(mem_gender.equals("1")){
-                                    USER_INFO_GENDER = "1";
-                                    binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
-                                    binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
-
-                                    binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-                                    binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
-                                }else{
-                                    USER_INFO_GENDER = "2";
-                                    binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-                                    binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
-
-                                    binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
-                                    binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
-                                }
-
-                            } catch (Exception e) {
-                                dlog.i("UserCheck Exception : " + e);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
+            if(mem_img_path != null){
+                dlog.i("mem_img_path : " + mem_img_path.trim());
+                Glide.with(mContext).load(mem_img_path.trim())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(binding.profileSetimg);
+                binding.imgPlus.setVisibility(View.GONE);
+                ProfileUrl = mem_img_path;
             }
 
-            @Override
-            @SuppressLint("LongLogTag")
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러2 = " + t.getMessage());
+            if(mem_gender.equals("1")){
+                USER_INFO_GENDER = "1";
+                binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+                binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
+
+                binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+                binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
+            }else{
+                USER_INFO_GENDER = "2";
+                binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+                binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
+
+                binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+                binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
             }
-        });
+
+        } catch (Exception e) {
+            dlog.i("UserCheck Exception : " + e);
+        }
     }
 
     private boolean CheckData() {

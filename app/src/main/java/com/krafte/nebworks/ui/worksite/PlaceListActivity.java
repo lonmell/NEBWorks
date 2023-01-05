@@ -148,7 +148,7 @@ public class PlaceListActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //5초마다 실행
-                if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !USER_INFO_NAME.isEmpty() && !USER_INFO_AUTH.isEmpty()){
+                if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
                     GetPlaceList();
                     getNotReadFeedcnt();
                     timer.cancel();
