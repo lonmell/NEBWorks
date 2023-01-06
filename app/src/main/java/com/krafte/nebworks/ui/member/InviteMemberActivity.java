@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.member;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -147,6 +148,31 @@ public class InviteMemberActivity extends AppCompatActivity {
     private void setBtnEvent() {
         binding.addMemberBtn.setOnClickListener(v -> {
             UserCheck();
+        });
+
+        binding.addMemberNodata.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+
+            // String으로 받아서 넣기
+            String sendMessage = "["+place_name+"] 사장님과 즐겁게 근무해요.\n" +
+                    "\n" +
+                    "[매장근무하기]\n" +
+                    "\n" +
+                    "1.사장님넵 다운로드 \n" +
+                    "\n" +
+                    "Android: https://play.google.com/store/apps/details?id=com.krafte.nebworks\n" +
+                    "\n" +
+                    "IOS:  https://apps.apple.com/apps/details?id=com.krafte.nebworks\n" +
+                    "\n" +
+                    "2.앱 설치후 회원가입 > 로그인 > 근무자님! 으로 이동 후 매장추가 버튼 터치! \n" +
+                    "매장 찾기 후 사장님 번호로 매장 검색!\n" +
+                    "근무 신청 터치!\n" +
+                    "\n";
+            intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
+
+            Intent shareIntent = Intent.createChooser(intent, "share");
+            startActivity(shareIntent);
         });
     }
 

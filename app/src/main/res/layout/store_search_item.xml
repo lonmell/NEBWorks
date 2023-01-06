@@ -75,6 +75,7 @@
             android:singleLine="true"
             android:text="관리자 전화번호 : "
             android:textColor="#696969"
+            android:visibility="gone"
             android:textSize="14sp"
             tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
     </LinearLayout>

@@ -102,15 +102,16 @@ public class FeedDetailActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
+            shardpref = new PreferenceHelper(mContext);
             //Singleton Area
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
             place_id        = PlaceCheckData.getInstance().getPlace_id();
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
 
             //shardpref Area
-            shardpref = new PreferenceHelper(mContext);
+
             feed_id         = shardpref.getString("feed_id", "0");
             state           = shardpref.getString("editstate", "");
             writer_id       = shardpref.getString("writer_id", "");

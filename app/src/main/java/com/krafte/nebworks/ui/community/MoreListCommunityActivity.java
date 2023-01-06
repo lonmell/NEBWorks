@@ -78,15 +78,15 @@ public class MoreListCommunityActivity extends AppCompatActivity {
         mContext = this;
 
         setBtnEvent();
-
+        shardpref = new PreferenceHelper(mContext);
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
         returnPage      = ReturnPageData.getInstance().getPage();
         place_id        = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area
-        shardpref = new PreferenceHelper(mContext);
+
         returnPage      = shardpref.getString("returnPage", "");
     }
 

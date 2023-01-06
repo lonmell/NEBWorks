@@ -105,13 +105,13 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-
+        shardpref = new PreferenceHelper(mContext);
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
 
         //shardpref Area
-        shardpref = new PreferenceHelper(mContext);
+
         contract_id = shardpref.getString("contract_id","");
 
         setBtnEvent();

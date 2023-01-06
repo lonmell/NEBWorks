@@ -119,7 +119,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
         //Singleton Area
         USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
-        USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
         place_id            = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area

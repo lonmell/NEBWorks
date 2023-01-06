@@ -97,6 +97,7 @@ public class PayManagementActivity extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
+        shardpref = new PreferenceHelper(mContext);
 
         try {
             icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
@@ -107,10 +108,9 @@ public class PayManagementActivity extends AppCompatActivity {
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
 
             //shardpref Area
-            shardpref = new PreferenceHelper(mContext);
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);

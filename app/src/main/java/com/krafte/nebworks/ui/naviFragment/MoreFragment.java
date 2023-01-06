@@ -134,7 +134,7 @@ public class MoreFragment extends Fragment {
             place_created_at    = PlaceCheckData.getInstance().getPlace_created_at();
 
             USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-            USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
 
             //shardpref Area
             USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");

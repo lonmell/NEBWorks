@@ -123,6 +123,7 @@ public class AddPaystubActivity extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
+        shardpref = new PreferenceHelper(mContext);
 
         icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_empty_round);
         icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_full_round);
@@ -130,11 +131,10 @@ public class AddPaystubActivity extends AppCompatActivity {
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
         place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
 
         //shardpref Area
-        shardpref = new PreferenceHelper(mContext);
 
         //-------------------
         select_month = shardpref.getString("select_month","");

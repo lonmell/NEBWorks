@@ -138,7 +138,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             return_page         = ReturnPageData.getInstance().getPage();
 
             USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-            USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
 
             //shardpref Area
             shardpref = new PreferenceHelper(mContext);

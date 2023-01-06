@@ -52,6 +52,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceListAdapter;
 import com.krafte.nebworks.data.CertiNumData;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
@@ -169,15 +170,16 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         mContext = this;
         dlog.DlogContext(mContext);
+        shardpref = new PreferenceHelper(mContext);
+
         //Singleton Area
-        place_id        = shardpref.getString("place_id", "0");
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
         USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
         USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
 
         //shardpref Area
-        shardpref = new PreferenceHelper(mContext);
         USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","0");
         editstate           = shardpref.getString("editstate","");
         platform            = shardpref.getString("platform","");

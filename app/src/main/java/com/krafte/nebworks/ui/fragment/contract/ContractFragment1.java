@@ -106,15 +106,16 @@ public class ContractFragment1 extends Fragment {
         icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
         icon_on = mContext.getResources().getDrawable(R.drawable.resize_login_002);
 
+        dlog.DlogContext(mContext);
+        shardpref = new PreferenceHelper(mContext);
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
         place_id        = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area
-        shardpref = new PreferenceHelper(mContext);
 
-        dlog.DlogContext(mContext);
+
         setBtnEvent();
 
         return binding.getRoot();

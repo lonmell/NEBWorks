@@ -99,17 +99,18 @@ public class AddWorkPartActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
+            shardpref   = new PreferenceHelper(mContext);
+
             //Singleton Area
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
             USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
             place_id        = PlaceCheckData.getInstance().getPlace_id();
             place_name      = PlaceCheckData.getInstance().getPlace_name();
 
             //shardpref Area
-            shardpref       = new PreferenceHelper(mContext);
             i_cnt           = shardpref.getString("i_cnt", "0");
 
 

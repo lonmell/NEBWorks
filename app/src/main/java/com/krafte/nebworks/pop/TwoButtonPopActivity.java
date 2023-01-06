@@ -151,7 +151,6 @@ public class TwoButtonPopActivity extends Activity {
 
         setBtnEvent();
 
-
         USER_INFO_ID        = shardpref.getString("USER_INFO_ID","");
         USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");
         USER_INFO_PHONE     = shardpref.getString("USER_INFO_PHONE", "");
@@ -256,7 +255,7 @@ public class TwoButtonPopActivity extends Activity {
                 } else if (flag.equals("더미")) {
                     shardpref.putString("AuthState","더미");
                     pm.AuthSelect(mContext);
-                    shardpref.putString("USER_INFO_AUTH", "1");
+//                    shardpref.putString("USER_INFO_AUTH", "1");
                     shardpref.putInt("SELECT_POSITION", 0);
                     shardpref.putInt("SELECT_POSITION_sub", 0);
                 }

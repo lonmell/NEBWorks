@@ -116,15 +116,15 @@ public class AddContractPage08 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-
+        shardpref       = new PreferenceHelper(mContext);
         //Singleton Area
         place_id        = PlaceCheckData.getInstance().getPlace_id();
         place_name      = PlaceCheckData.getInstance().getPlace_name();
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
 
         //shardpref Area
-        shardpref       = new PreferenceHelper(mContext);
+
         worker_id       = shardpref.getString("worker_id","0");
         contract_id     = shardpref.getString("contract_id","0");
         progress_pos    = shardpref.getString("progress_pos","");

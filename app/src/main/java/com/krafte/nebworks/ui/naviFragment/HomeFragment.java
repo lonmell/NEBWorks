@@ -154,6 +154,7 @@ public class HomeFragment extends Fragment {
 //        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.homefragment, container, false);
         binding = HomefragmentBinding.inflate(inflater);
         mContext = inflater.getContext();
+        shardpref = new PreferenceHelper(mContext);
 
         //UI 데이터 세팅
         try {
@@ -163,10 +164,9 @@ public class HomeFragment extends Fragment {
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
 
             //shardpref Area
-            shardpref = new PreferenceHelper(mContext);
             shardpref.putInt("SELECT_POSITION", 0);
             isAuth    = shardpref.getInt("isAuth", 0);
 

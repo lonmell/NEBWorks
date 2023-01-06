@@ -157,6 +157,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
+        shardpref = new PreferenceHelper(mContext);
 
         icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
         icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
@@ -168,10 +169,9 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
         USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
 
         //shardpref Area
-        shardpref   = new PreferenceHelper(mContext);
         task_no     = shardpref.getString("task_no", "");
 
         shardpref.putInt("SELECT_POSITION", 0);

@@ -129,7 +129,7 @@ public class MemberDetailActivity extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-
+        shardpref = new PreferenceHelper(mContext);
         try {
             icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
@@ -139,10 +139,9 @@ public class MemberDetailActivity extends AppCompatActivity {
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
 
             //shardpref Area
-            shardpref           = new PreferenceHelper(mContext);
             stub_place_id       = shardpref.getString("stub_place_id", "0");
             stub_user_id        = shardpref.getString("stub_user_id", "0");
             stub_user_account   = shardpref.getString("stub_user_account", "");
