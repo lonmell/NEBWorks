@@ -219,8 +219,9 @@ public class CommunityAddActivity extends AppCompatActivity {
             ssb.show(getSupportFragmentManager(), "selectBoardkindTxt");
             ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
                 @Override
-                public void onItemClick(View v, String category) {
-                    binding.selectCategoryTxt.setText(category);
+                public void onItemClick(View v, String result) {
+                    binding.selectCategoryTxt.setText(result);
+                    category = result;
                 }
             });
         });
@@ -243,14 +244,20 @@ public class CommunityAddActivity extends AppCompatActivity {
                 mContext.startActivity(intent);
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            } else if (DataCheck()) {
+            } else if (DataCheck().equals("title")) {
+                Toast.makeText(this, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            } else if (DataCheck().equals("contents")) {
+                Toast.makeText(this, "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            } else if (DataCheck().equals("name")) {
+                Toast.makeText(this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            } else if (DataCheck().equals("category")) {
+                Toast.makeText(this, "카테고리을 선택해주세요.", Toast.LENGTH_SHORT).show();
+            } else if (DataCheck().equals("true")) {
                 if (state_txt.equals("EditCommunity")) {
                     EditStroeNoti();
                 } else {
                     AddFeedCommunity();
                 }
-            } else {
-                Toast.makeText(this, "입력되지 않은 값이 있습니다.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -289,7 +296,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     }
 
     @SuppressLint("LongLogTag")
-    private boolean DataCheck() {
+    private String DataCheck() {
 
         CommTitle = binding.writeTitle.getText().toString();
         CommContnets = binding.writeContents.getText().toString();
@@ -303,11 +310,24 @@ public class CommunityAddActivity extends AppCompatActivity {
         dlog.i("feed_thumnail_path : " + feed_thumnail_path);
         dlog.i("-----------------DataCheck------------------");
 
-        if (!CommTitle.isEmpty() && !CommContnets.isEmpty() && !user_input_name.isEmpty()) {
-            return true;
+
+        if (CommTitle.isEmpty()) {
+            return "title";
+        } else if (CommContnets.isEmpty()) {
+            return "contents";
+        } else if (user_input_name.isEmpty()) {
+            return "name";
+        } else if (category.isEmpty()) {
+            return "category";
         } else {
-            return false;
+            return "true";
         }
+
+        //if (!CommTitle.isEmpty() && !CommContnets.isEmpty() && !user_input_name.isEmpty() && !category.isEmpty()) {
+        //    return true;
+        //} else {
+        //  return false;
+        //}
 
     }
 
@@ -316,7 +336,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         String title = binding.writeTitle.getText().toString();
         String content = binding.writeContents.getText().toString();
         boardkind = binding.selectBoardkindTxt.getText().toString();
-        category = binding.selectCategoryTxt.getText().toString();
+        // category = binding.selectCategoryTxt.getText().toString();
 
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + title);

@@ -178,7 +178,7 @@ public class SelectStringBottomSheet extends BottomSheetDialogFragment {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View v, String category);
+        void onItemClick(View v, String result);
     }
 }
 
