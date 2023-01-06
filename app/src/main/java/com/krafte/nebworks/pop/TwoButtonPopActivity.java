@@ -214,7 +214,7 @@ public class TwoButtonPopActivity extends Activity {
                     FcmTokenDel();
                     finish();
                 }else if(flag.equals("회원탈퇴")){
-                    UserDelete(USER_INFO_ID);
+                    UserDelete();
                     FcmTokenDel();
                 }else if (flag.equals("댓글삭제")) {
                     String comment_id = "0";
@@ -231,7 +231,7 @@ public class TwoButtonPopActivity extends Activity {
                     finishAndRemoveTask(); // 액티비티 종료 + 태스크 리스트에서 지우기
                     android.os.Process.killProcess(android.os.Process.myPid()); // 앱 프로세스 종료
                 } else if(flag.equals("매장삭제")){
-                    PlaceDel(place_id);
+                    PlaceDel();
                 } else if(flag.equals("직원삭제")){
                     TaskDel();
                 }  else if(flag.equals("근무정보삭제")){
@@ -241,7 +241,7 @@ public class TwoButtonPopActivity extends Activity {
                     click_action = "MemberManagement";
                     dlog.i(message);
                     String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-                    AddPlaceMember(USER_INFO_ID, USER_INFO_NAME, USER_INFO_PHONE, "",today);
+                    AddPlaceMember("",today);
                 } else if (flag.equals("작성여부")) {
                     shardpref.putInt("SELECT_POSITION",3);
                     pm.Main(mContext);
@@ -391,14 +391,14 @@ public class TwoButtonPopActivity extends Activity {
 
     //--Rtrofit Area
     RetrofitConnect rc = new RetrofitConnect();
-    public void UserDelete(String id) {
-        dlog.i("UserDelete id : " + id);
+    public void UserDelete() {
+        dlog.i("UserDelete id : " + USER_INFO_ID);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UserDelInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserDelInterface api = retrofit.create(UserDelInterface.class);
-        Call<String> call = api.getData(id);
+        Call<String> call = api.getData(USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -510,14 +510,14 @@ public class TwoButtonPopActivity extends Activity {
             }
         });
     }
-    public void PlaceDel(String id) {
-        dlog.i("PlaceDel id : " + id);
+    public void PlaceDel() {
+        dlog.i("PlaceDel id : " + place_id);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceDelInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceDelInterface api = retrofit.create(PlaceDelInterface.class);
-        Call<String> call = api.getData(id);
+        Call<String> call = api.getData(place_id);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -631,13 +631,13 @@ public class TwoButtonPopActivity extends Activity {
     }
 
     /*지원한 매장의 점주에게 이력서 발송 + 지원요청할 지원자에게 점주가 매장정보 발송(스카우트)*/
-    public void AddPlaceMember(String user_id, String name, String phone, String Jumin, String JoinDate) {
+    public void AddPlaceMember(String Jumin, String JoinDate) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceMemberAddInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberAddInterface api = retrofit.create(PlaceMemberAddInterface.class);
-        Call<String> call = api.getData(place_id, user_id,Jumin,"0",JoinDate);
+        Call<String> call = api.getData(place_id, USER_INFO_ID ,Jumin,"0",JoinDate);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -703,7 +703,7 @@ public class TwoButtonPopActivity extends Activity {
                         dlog.i("-----getManagerToken-----");
                         boolean channelId1 = Response.getJSONObject(0).getString("channel4").equals("1");
                         if (!token.isEmpty() && channelId1) {
-                            PushFcmSend(id, "", message, token, "4", place_id);
+                            PushFcmSend(id, "", message, token, "4");
                         }
                     }
                 } catch (JSONException e) {
@@ -752,7 +752,7 @@ public class TwoButtonPopActivity extends Activity {
 
     DBConnection dbConnection = new DBConnection();
 
-    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+    private void PushFcmSend(String topic, String title, String message, String token, String tag) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
             click_action = "Member0";

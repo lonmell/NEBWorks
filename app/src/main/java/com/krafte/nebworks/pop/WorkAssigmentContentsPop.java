@@ -224,7 +224,7 @@ public class WorkAssigmentContentsPop extends Activity {
                     .baseUrl(AllMemberInterface.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
-            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+            AllMemberInterface api =  retrofit.create(AllMemberInterface.class);
             Call<String> call = api.getData(place_id,"");
 //            @Field("flag") int flag,
 //            @Field("place_id") String place_id,

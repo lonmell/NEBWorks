@@ -490,8 +490,8 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                                                 message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
                                             }
                                         }
-                                        getUserToken(place_owner_id,"0",message);
-                                        AddPush("출퇴근 알림",message,place_owner_id);
+                                        getUserToken("0",message);
+                                        AddPush("출퇴근 알림",message);
                                         ClosePop();
                                     }
                                 } catch (Exception e) {
@@ -513,16 +513,16 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
 
     String message = "";
     //근로자 > 점주 ( 초대수락 FCM )
-    public void getUserToken(String user_id, String type, String message) {
+    public void getUserToken(String type, String message) {
         dlog.i("-----getManagerToken-----");
-        dlog.i("user_id : " + user_id);
+        dlog.i("user_id : " + place_owner_id);
         dlog.i("type : " + type);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FCMSelectInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
-        Call<String> call = api.getData(user_id, type);
+        Call<String> call = api.getData(place_owner_id, type);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -557,13 +557,13 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         });
     }
 
-    public void AddPush(String title, String content, String user_id) {
+    public void AddPush(String title, String content) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PushLogInputInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
-        Call<String> call = api.getData(place_id, "", title, content, USER_INFO_ID, user_id);
+        Call<String> call = api.getData(place_id, "", title, content, USER_INFO_ID, place_owner_id);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

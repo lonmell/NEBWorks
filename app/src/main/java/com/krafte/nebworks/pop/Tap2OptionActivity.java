@@ -128,7 +128,7 @@ public class Tap2OptionActivity extends Activity {
             pm.addWorkGo(mContext);
         });
         list_settingitem02.setOnClickListener(v -> {
-            TaskDel(TaskNo);
+            TaskDel();
             finish();
             Intent intent = new Intent();
             intent.putExtra("result", "Close Popup");
@@ -146,14 +146,14 @@ public class Tap2OptionActivity extends Activity {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
-    public void TaskDel(String id) {
-        dlog.i("TaskDel id : " + id);
+    public void TaskDel() {
+        dlog.i("TaskDel id : " + TaskNo);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TaskDelInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         TaskDelInterface api = retrofit.create(TaskDelInterface.class);
-        Call<String> call = api.getData(id);
+        Call<String> call = api.getData(TaskNo);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
