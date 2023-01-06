@@ -423,30 +423,6 @@ public class DBConnection {
                         UserCheckData.getInstance().setUser_jongeob(jsonObject.getString("jongeob"));
                         UserCheckData.getInstance().setUser_platform(jsonObject.getString("platform"));
                         UserCheckData.getInstance().setUser_contract_cnt(jsonObject.getString("contract_cnt"));
-
-
-
-//                        ucd.setUser_id(jsonObject.getString("id"));
-//                        ucd.setUser_password(jsonObject.getString("password"));
-//                        ucd.setPlace_name(jsonObject.getString("place_name"));
-//                        ucd.setUser_account(jsonObject.getString("account"));
-//                        ucd.setUser_name(jsonObject.getString("name"));
-//                        ucd.setUser_nick_name(jsonObject.getString("nick_name"));
-//                        ucd.setUser_phone(jsonObject.getString("phone"));
-//                        ucd.setUser_gender(jsonObject.getString("gender"));
-//                        ucd.setUser_img_path(jsonObject.getString("img_path"));
-//                        ucd.setUser_jumin(jsonObject.getString("jumin"));
-//                        ucd.setUser_kind(jsonObject.getString("kind"));
-//                        ucd.setUser_join_date(jsonObject.getString("join_date"));
-//                        ucd.setUser_state(jsonObject.getString("state"));
-//                        ucd.setUser_jikgup(jsonObject.getString("jikgup"));
-//                        ucd.setUser_pay(jsonObject.getString("pay"));
-//                        ucd.setUser_worktime(jsonObject.getString("worktime"));
-//                        ucd.setUser_inoutstate(jsonObject.getString("inoutstate"));
-//                        ucd.setUser_sieob(jsonObject.getString("sieob"));
-//                        ucd.setUser_jongeob(jsonObject.getString("jongeob"));
-//                        ucd.setUser_platform(jsonObject.getString("platform"));
-//                        ucd.setUser_contract_cnt(jsonObject.getString("contract_cnt"));
                     }
                 }
                 // 연결 끊기
@@ -573,28 +549,28 @@ public class DBConnection {
                     JSONArray jsonResponse = new JSONArray(getBase64decode(sb.toString()));
                     for (int i = 0; i < jsonResponse.length(); i++) {
                         JSONObject jsonObject = jsonResponse.getJSONObject(i);
-                        pcd.setPlace_name(jsonObject.getString("name"));
-                        pcd.setPlace_owner_id(jsonObject.getString("owner_id"));
-                        pcd.setPlace_owner_name(jsonObject.getString("owner_name"));
-                        pcd.setRegistr_num(jsonObject.getString("registr_num"));
-                        pcd.setStore_kind(jsonObject.getString("store_kind"));
-                        pcd.setPlace_address(jsonObject.getString("address"));
-                        pcd.setPlace_latitude(jsonObject.getString("latitude"));
-                        pcd.setPlace_longitude(jsonObject.getString("longitude"));
-                        pcd.setPlace_pay_day(jsonObject.getString("pay_day"));
-                        pcd.setPlace_test_period(jsonObject.getString("test_period"));
-                        pcd.setPlace_vacation_select(jsonObject.getString("vacation_select"));
-                        pcd.setPlace_insurance(jsonObject.getString("insurance"));
-                        pcd.setPlace_start_time(jsonObject.getString("start_time"));
-                        pcd.setPlace_end_time(jsonObject.getString("end_time"));
-                        pcd.setPlace_save_kind(jsonObject.getString("save_kind"));
-                        pcd.setPlace_wifi_name(jsonObject.getString("wifi_name"));
-                        pcd.setPlace_img_path(jsonObject.getString("img_path"));
-                        pcd.setPlace_start_date(jsonObject.getString("start_date"));
-                        pcd.setPlace_created_at(jsonObject.getString("created_at"));
-                        pcd.setPlace_icnt(jsonObject.getString("i_cnt"));
-                        pcd.setPlace_ocnt(jsonObject.getString("o_cnt"));
-                        pcd.setPlace_totalcnt(jsonObject.getString("total_cnt"));
+                        PlaceCheckData.getInstance().setPlace_name(jsonObject.getString("name"));
+                        PlaceCheckData.getInstance().setPlace_owner_id(jsonObject.getString("owner_id"));
+                        PlaceCheckData.getInstance().setPlace_owner_name(jsonObject.getString("owner_name"));
+                        PlaceCheckData.getInstance().setRegistr_num(jsonObject.getString("registr_num"));
+                        PlaceCheckData.getInstance().setStore_kind(jsonObject.getString("store_kind"));
+                        PlaceCheckData.getInstance().setPlace_address(jsonObject.getString("address"));
+                        PlaceCheckData.getInstance().setPlace_latitude(jsonObject.getString("latitude"));
+                        PlaceCheckData.getInstance().setPlace_longitude(jsonObject.getString("longitude"));
+                        PlaceCheckData.getInstance().setPlace_pay_day(jsonObject.getString("pay_day"));
+                        PlaceCheckData.getInstance().setPlace_test_period(jsonObject.getString("test_period"));
+                        PlaceCheckData.getInstance().setPlace_vacation_select(jsonObject.getString("vacation_select"));
+                        PlaceCheckData.getInstance().setPlace_insurance(jsonObject.getString("insurance"));
+                        PlaceCheckData.getInstance().setPlace_start_time(jsonObject.getString("start_time"));
+                        PlaceCheckData.getInstance().setPlace_end_time(jsonObject.getString("end_time"));
+                        PlaceCheckData.getInstance().setPlace_save_kind(jsonObject.getString("save_kind"));
+                        PlaceCheckData.getInstance().setPlace_wifi_name(jsonObject.getString("wifi_name"));
+                        PlaceCheckData.getInstance().setPlace_img_path(jsonObject.getString("img_path"));
+                        PlaceCheckData.getInstance().setPlace_start_date(jsonObject.getString("start_date"));
+                        PlaceCheckData.getInstance().setPlace_created_at(jsonObject.getString("created_at"));
+                        PlaceCheckData.getInstance().setPlace_icnt(jsonObject.getString("i_cnt"));
+                        PlaceCheckData.getInstance().setPlace_ocnt(jsonObject.getString("o_cnt"));
+                        PlaceCheckData.getInstance().setPlace_totalcnt(jsonObject.getString("total_cnt"));
                     }
                 }
                 // 연결 끊기

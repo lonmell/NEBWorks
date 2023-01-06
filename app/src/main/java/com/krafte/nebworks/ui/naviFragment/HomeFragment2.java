@@ -32,15 +32,13 @@ import com.krafte.nebworks.adapter.MainTaskLAdapter;
 import com.krafte.nebworks.data.MainMemberLData;
 import com.krafte.nebworks.data.MainNotiData;
 import com.krafte.nebworks.data.MainTaskData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
-import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
-import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
 import com.krafte.nebworks.dataInterface.InOutInsertInterface;
 import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
-import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -58,9 +56,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -135,21 +131,9 @@ public class HomeFragment2 extends Fragment {
     PreferenceHelper shardpref;
     DateCurrent dc = new DateCurrent();
     RetrofitConnect rc = new RetrofitConnect();
-    DBConnection dbc = new DBConnection();
     GpsTracker gpsTracker;
     double latitude = 0;
     double longitude = 0;
-
-    long now = System.currentTimeMillis();
-    Date mDate = new Date(now);
-    @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
-
-    @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat simpleDate_age = new SimpleDateFormat("yyyy");
-
-    @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat simpleDate_time = new SimpleDateFormat("HH:mm:ss");
 
     ArrayList<MainTaskData.MainTaskData_list> mList;
     MainTaskLAdapter mAdapter = null;
@@ -573,80 +557,58 @@ public class HomeFragment2 extends Fragment {
             }
         });
     }
+    public void getPlaceData() {
+        Thread th = new Thread(() -> {
+            activity.runOnUiThread(() -> {
+                try {
+                    place_name = PlaceCheckData.getInstance().getPlace_name();
+                    place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
+                    place_owner_name = PlaceCheckData.getInstance().getPlace_owner_name();
+                    registr_num = PlaceCheckData.getInstance().getRegistr_num();
+                    store_kind = PlaceCheckData.getInstance().getStore_kind();
+                    place_address = PlaceCheckData.getInstance().getPlace_address();
+                    place_latitude = Double.parseDouble(PlaceCheckData.getInstance().getPlace_latitude());
+                    place_longitude = Double.parseDouble(PlaceCheckData.getInstance().getPlace_longitude());
+                    place_pay_day = PlaceCheckData.getInstance().getPlace_pay_day();
+                    place_test_period = PlaceCheckData.getInstance().getPlace_test_period();
+                    place_vacation_select = PlaceCheckData.getInstance().getPlace_vacation_select();
+                    place_insurance = PlaceCheckData.getInstance().getPlace_insurance();
+                    place_start_time = PlaceCheckData.getInstance().getPlace_start_time();
+                    place_end_time = PlaceCheckData.getInstance().getPlace_end_time();
+                    place_save_kind = PlaceCheckData.getInstance().getPlace_save_kind();
+                    place_wifi_name = PlaceCheckData.getInstance().getPlace_wifi_name();
+                    place_img_path = PlaceCheckData.getInstance().getPlace_img_path();
+                    place_start_date = PlaceCheckData.getInstance().getPlace_start_date();
+                    place_created_at = PlaceCheckData.getInstance().getPlace_created_at();
+                    place_icnt = PlaceCheckData.getInstance().getPlace_icnt();
+                    place_ocnt = PlaceCheckData.getInstance().getPlace_ocnt();
+                    place_totalcnt = PlaceCheckData.getInstance().getPlace_totalcnt();
 
-    private void getPlaceData() {
-        dlog.i("PlaceCheck place_id : " + place_id);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceThisDataInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        PlaceThisDataInterface api = retrofit.create(PlaceThisDataInterface.class);
-        Call<String> call = api.getData(place_id);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
-                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
-                            try {
-                                if (!jsonResponse.equals("[]")) {
-                                    JSONArray Response = new JSONArray(jsonResponse);
-                                    place_name = Response.getJSONObject(0).getString("name");
-                                    place_owner_id = Response.getJSONObject(0).getString("owner_id");
-                                    place_owner_name = Response.getJSONObject(0).getString("owner_name");
-                                    registr_num = Response.getJSONObject(0).getString("registr_num");
-                                    store_kind = Response.getJSONObject(0).getString("store_kind");
-                                    place_address = Response.getJSONObject(0).getString("address");
-                                    place_latitude = Double.parseDouble(Response.getJSONObject(0).getString("latitude"));
-                                    place_longitude = Double.parseDouble(Response.getJSONObject(0).getString("longitude"));
-                                    place_pay_day = Response.getJSONObject(0).getString("pay_day");
-                                    place_test_period = Response.getJSONObject(0).getString("test_period");
-                                    place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
-                                    place_insurance = Response.getJSONObject(0).getString("insurance");
-                                    place_start_time = Response.getJSONObject(0).getString("start_time");
-                                    place_end_time = Response.getJSONObject(0).getString("end_time");
-                                    place_save_kind = Response.getJSONObject(0).getString("save_kind");
-                                    place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
-                                    place_img_path = Response.getJSONObject(0).getString("img_path");
-                                    place_start_date = Response.getJSONObject(0).getString("start_date");
-                                    place_created_at = Response.getJSONObject(0).getString("created_at");
-                                    place_icnt = Response.getJSONObject(0).getString("i_cnt");
-                                    place_ocnt = Response.getJSONObject(0).getString("o_cnt");
-                                    place_totalcnt = Response.getJSONObject(0).getString("total_cnt");
+                    Glide.with(mContext).load(place_img_path)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .placeholder(R.drawable.no_image)
+                            .skipMemoryCache(true)
+                            .into(binding.storeThumnail);
 
-                                    Glide.with(mContext).load(place_img_path)
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .placeholder(R.drawable.no_image)
-                                            .skipMemoryCache(true)
-                                            .into(binding.storeThumnail);
-
-                                    dlog.i("place_owner_id : " + place_owner_id);
-                                    dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-                                    dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-                                    shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-                                    shardpref.putString("place_end_time",place_end_time);
-                                    binding.title.setText(place_name);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    dlog.i("place_owner_id : " + place_owner_id);
+                    dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+                    dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+                    shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
+                    shardpref.putString("place_end_time",place_end_time);
+                    binding.title.setText(place_name);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
+            });
         });
-    }
+        th.start();
+        try {
+            th.join(); // 작동한 스레드의 종료까지 대기 후 메인 스레드 실행
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     /*
      * 20230105 HomFragment2에서만 한번 사용자 id , 매장 id를 사용해
@@ -654,7 +616,6 @@ public class HomeFragment2 extends Fragment {
      * */
     public void UserCheck() {
         Thread th = new Thread(() -> {
-            dbc.UserCheck(place_id, USER_INFO_ID);
             activity.runOnUiThread(() -> {
                 try {
                     mem_id = UserCheckData.getInstance().getUser_id();
@@ -927,113 +888,6 @@ public class HomeFragment2 extends Fragment {
     String channel3 = "1";
     String channel4 = "1";
 
-
-    //본인 토큰 생성
-    @SuppressLint("LongLogTag")
-    public void getFCMToken() {
-        type = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
-
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-//                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-                    // Get new FCM registration token
-                    String token = task.getResult();
-
-                    // Log and toast
-                    String msg = getString(R.string.msg_token_fmt, token);
-                    Log.d("TAG", msg);
-                    dlog.i("getFCMToken token : " + token);
-                    FcmStateSelect(token);
-                });
-
-    }
-
-    private void FcmStateSelect(String token) {
-        //메인페이지 처음 들어왔을때 생성 - 본인
-
-        dlog.i("-----FcmStateSelect-----");
-        dlog.i("place_owner_id : " + place_owner_id);
-        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("type : " + type);
-        dlog.i("-----FcmStateSelect-----");
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FCMSelectInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
-        Call<String> call = api.getData(USER_INFO_ID, type);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("FcmStateSelect jsonResponse length : " + jsonResponse.length());
-                            dlog.i("FcmStateSelect jsonResponse : " + jsonResponse);
-                            try {
-
-                                if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
-                                    id = place_id;
-                                    user_id = USER_INFO_ID;
-                                    get_token = "";
-                                    type = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
-                                    channel1 = "1";
-                                    channel2 = "1";
-                                    channel3 = "1";
-                                    channel4 = "1";
-                                } else {
-                                    JSONArray Response = new JSONArray(jsonResponse);
-                                    id = Response.getJSONObject(0).getString("id");
-                                    user_id = Response.getJSONObject(0).getString("user_id");
-                                    type = Response.getJSONObject(0).getString("type");
-                                    get_token = Response.getJSONObject(0).getString("token");
-                                    channel1 = Response.getJSONObject(0).getString("channel1");
-                                    channel2 = Response.getJSONObject(0).getString("channel2");
-                                    channel3 = Response.getJSONObject(0).getString("channel3");
-                                    channel4 = Response.getJSONObject(0).getString("channel4");
-
-                                    shardpref.putString("token", token);
-                                    shardpref.putString("type", type);
-                                    shardpref.putBoolean("channelId1", channel1.equals("1"));
-                                    shardpref.putBoolean("channelId2", channel2.equals("1"));
-                                    shardpref.putBoolean("channelId3", channel3.equals("1"));
-                                    shardpref.putBoolean("channelId4", channel4.equals("1"));
-
-                                    dlog.i("channel1 : " + channel1);
-                                    dlog.i("channel2 : " + channel2);
-                                    dlog.i("channel3 : " + channel3);
-                                    dlog.i("channel4 : " + channel4);
-                                }
-                                if (get_token.isEmpty()) {
-                                    dlog.i("getFCMToken FcmTokenCreate");
-                                    FcmTokenCreate(token);
-                                } else {
-                                    dlog.i("getFCMToken FcmTokenUpdate");
-                                    FcmTokenUpdate(token);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
-
-    String message = "";
     //근로자 > 점주 ( 초대수락 FCM )
     public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");
@@ -1130,85 +984,6 @@ public class HomeFragment2 extends Fragment {
             e.printStackTrace();
         }
     }
-
-    private void FcmTokenCreate(String token) {
-        //메인페이지 처음 들어왔을때 생성 - 본인
-        dlog.i("------FcmTokenCreate-------");
-        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
-        dlog.i("type :" + type);
-        dlog.i("token :" + token);
-        dlog.i("channel1 :" + channel1);
-        dlog.i("channel2 :" + channel2);
-        dlog.i("channel3 :" + channel3);
-        dlog.i("channel4 :" + channel4);
-        dlog.i("------FcmTokenCreate-------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FCMCrerateInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        FCMCrerateInterface api = retrofit.create(FCMCrerateInterface.class);
-        Call<String> call = api.getData(USER_INFO_ID, type, token, channel1, channel2, channel3, channel4);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("FcmTokenCreate jsonResponse length : " + response.body().length());
-                            dlog.i("FcmTokenCreate jsonResponse : " + response.body());
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
-
-    public void FcmTokenUpdate(String token) {
-        dlog.i("------FcmTokenUpdate-------");
-        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
-        dlog.i("type :" + type);
-        dlog.i("token :" + token);
-        dlog.i("channel1 :" + channel1);
-        dlog.i("channel2 :" + channel2);
-        dlog.i("channel3 :" + channel3);
-        dlog.i("channel4 :" + channel4);
-        dlog.i("------FcmTokenUpdate-------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FCMUpdateInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        FCMUpdateInterface api = retrofit.create(FCMUpdateInterface.class);
-        Call<String> call = api.getData(id, token, channel1, channel2, channel3, channel4);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                String jsonResponse = rc.getBase64decode(response.body());
-                dlog.i("jsonResponse length : " + jsonResponse.length());
-                dlog.i("jsonResponse : " + jsonResponse);
-                if (jsonResponse.replace("\"", "").equals("success")) {
-                    dlog.i("FcmTokenUpdate jsonResponse length : " + response.body().length());
-                    dlog.i("FcmTokenUpdate jsonResponse : " + response.body());
-                } else {
-                    Toast.makeText(mContext, "네트워크가 정상적이지 않습니다.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러 = " + t.getMessage());
-            }
-        });
-    }
-
     private void MoveMyLocation() {
         try {
             gpsTracker = new GpsTracker(mContext);

@@ -145,6 +145,7 @@ public class InviteMemberActivity extends AppCompatActivity {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
+    //해당 사용자가 가입되어있는 회원인지 아닌지를 구분하기 위함.
     public void UserCheck() {
         dlog.i("------UserCheck------");
         dlog.i("INPUT_NAME : " + INPUT_NAME);

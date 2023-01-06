@@ -375,7 +375,7 @@ public class HomeFragment extends Fragment {
     * */
     public void UserCheck() {
         Thread th = new Thread(() -> {
-            dbc.UserCheck(place_id, USER_INFO_ID);
+//            dbc.UserCheck(place_id, USER_INFO_ID);
             activity.runOnUiThread(() -> {
                 String id = UserCheckData.getInstance().getUser_id();
                 String name = UserCheckData.getInstance().getUser_name();
@@ -414,34 +414,32 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    PlaceCheckData pcd = new PlaceCheckData();
     public void getPlaceData() {
         Thread th = new Thread(() -> {
-            dbc.PlacegetData(place_id);
             activity.runOnUiThread(() -> {
                 try {
-                    place_name = pcd.getPlace_name();
-                    place_owner_id = pcd.getPlace_owner_id();
-                    place_owner_name = pcd.getPlace_owner_name();
-                    registr_num = pcd.getRegistr_num();
-                    store_kind = pcd.getStore_kind();
-                    place_address = pcd.getPlace_address();
-                    place_latitude = pcd.getPlace_latitude();
-                    place_longitude = pcd.getPlace_longitude();
-                    place_pay_day = pcd.getPlace_pay_day();
-                    place_test_period = pcd.getPlace_test_period();
-                    place_vacation_select = pcd.getPlace_vacation_select();
-                    place_insurance = pcd.getPlace_insurance();
-                    place_start_time = pcd.getPlace_start_time();
-                    place_end_time = pcd.getPlace_end_time();
-                    place_save_kind = pcd.getPlace_save_kind();
-                    place_wifi_name = pcd.getPlace_wifi_name();
-                    place_img_path = pcd.getPlace_img_path();
-                    place_start_date = pcd.getPlace_start_date();
-                    place_created_at = pcd.getPlace_created_at();
-                    place_icnt = pcd.getPlace_icnt();
-                    place_ocnt = pcd.getPlace_ocnt();
-                    place_totalcnt = pcd.getPlace_totalcnt();
+                    place_name = PlaceCheckData.getInstance().getPlace_name();
+                    place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
+                    place_owner_name = PlaceCheckData.getInstance().getPlace_owner_name();
+                    registr_num = PlaceCheckData.getInstance().getRegistr_num();
+                    store_kind = PlaceCheckData.getInstance().getStore_kind();
+                    place_address = PlaceCheckData.getInstance().getPlace_address();
+                    place_latitude = PlaceCheckData.getInstance().getPlace_latitude();
+                    place_longitude = PlaceCheckData.getInstance().getPlace_longitude();
+                    place_pay_day = PlaceCheckData.getInstance().getPlace_pay_day();
+                    place_test_period = PlaceCheckData.getInstance().getPlace_test_period();
+                    place_vacation_select = PlaceCheckData.getInstance().getPlace_vacation_select();
+                    place_insurance = PlaceCheckData.getInstance().getPlace_insurance();
+                    place_start_time = PlaceCheckData.getInstance().getPlace_start_time();
+                    place_end_time = PlaceCheckData.getInstance().getPlace_end_time();
+                    place_save_kind = PlaceCheckData.getInstance().getPlace_save_kind();
+                    place_wifi_name = PlaceCheckData.getInstance().getPlace_wifi_name();
+                    place_img_path = PlaceCheckData.getInstance().getPlace_img_path();
+                    place_start_date = PlaceCheckData.getInstance().getPlace_start_date();
+                    place_created_at = PlaceCheckData.getInstance().getPlace_created_at();
+                    place_icnt = PlaceCheckData.getInstance().getPlace_icnt();
+                    place_ocnt = PlaceCheckData.getInstance().getPlace_ocnt();
+                    place_totalcnt = PlaceCheckData.getInstance().getPlace_totalcnt();
 
                     dlog.i("getPlaceData place_name : " + place_name);
                     Glide.with(mContext).load(place_img_path)
