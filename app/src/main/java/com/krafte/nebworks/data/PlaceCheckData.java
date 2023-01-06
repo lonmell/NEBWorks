@@ -199,4 +199,12 @@ public class PlaceCheckData {
     public void setPlace_totalcnt(String place_totalcnt) {
         this.place_totalcnt = place_totalcnt;
     }
+
+    private static PlaceCheckData instance = null;
+    public static synchronized PlaceCheckData getInstance(){
+        if(null == instance){
+            instance = new PlaceCheckData();
+        }
+        return instance;
+    }
 }
