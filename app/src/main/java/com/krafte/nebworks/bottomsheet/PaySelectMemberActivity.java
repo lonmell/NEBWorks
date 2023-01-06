@@ -86,7 +86,7 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
             dlog.i("place_id : " + place_id);
             dlog.i("change_place_id : " + change_place_id);
 
-            SetAllMemberList(change_place_id.equals("")?place_id:change_place_id);
+            SetAllMemberList();
 
             setBtnEvent();
         } catch (Exception e) {
@@ -126,7 +126,8 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
-    public void SetAllMemberList(String place_id) {
+    public void SetAllMemberList() {
+        String id = change_place_id.equals("") ? place_id : change_place_id;
         dlog.i("SetAllMemberList place_id : " + place_id);
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
@@ -134,7 +135,7 @@ public class PaySelectMemberActivity extends BottomSheetDialogFragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-            Call<String> call = api.getData(place_id,"");
+            Call<String> call = api.getData(id,"");
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

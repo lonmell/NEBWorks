@@ -185,7 +185,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                 if (mListener != null) {
                     mListener.onItemClick(v, position);
                 }
-                setUpdateWorktodo("1", item.getId(), USER_INFO_ID); //승인
+                setUpdateWorktodo("1", item.getId()); //승인
                 String message = "[" + item.getTitle() + "] 가 승인되었습니다.";
                 getUserToken(item.getRequester_id(), "1", message);
                 AddPush("업무결재",message,item.getRequester_id());
@@ -194,7 +194,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                 if (mListener != null) {
                     mListener.onItemClick(v, position);
                 }
-                setUpdateWorktodo("2", item.getId(), USER_INFO_ID); //반려
+                setUpdateWorktodo("2", item.getId()); //반려
                 String message = "[" + item.getTitle() + "] 가 반려되었습니다.";
                 getUserToken(item.getRequester_id(), "1", message);
                 AddPush("업무결재",message,item.getRequester_id());
@@ -318,14 +318,14 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
     }
 
     RetrofitConnect rc = new RetrofitConnect();
-    public void setUpdateWorktodo(String kind, String task_no, String user_id) {
+    public void setUpdateWorktodo(String kind, String task_no) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApprovalUpdateInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         ApprovalUpdateInterface api = retrofit.create(ApprovalUpdateInterface.class);
 //        task_no.replace(",","|")
-        Call<String> call = api.getData(task_no, user_id, kind, "");
+        Call<String> call = api.getData(task_no, USER_INFO_ID, kind, "");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
