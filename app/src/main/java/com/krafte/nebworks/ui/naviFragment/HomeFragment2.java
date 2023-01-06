@@ -658,7 +658,7 @@ public class HomeFragment2 extends Fragment {
             activity.runOnUiThread(() -> {
                 try {
                     mem_id = UserCheckData.getInstance().getUser_id();
-                    mem_name = UserCheckData.getInstance().getPlace_name();
+                    mem_name = UserCheckData.getInstance().getUser_name();
                     mem_phone = UserCheckData.getInstance().getUser_phone();
                     mem_gender = UserCheckData.getInstance().getUser_gender();
                     mem_img_path = UserCheckData.getInstance().getUser_img_path();
