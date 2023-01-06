@@ -145,6 +145,8 @@ public class TaskReportActivity extends AppCompatActivity {
     String BACKUP_PATH = "/sdcard/Download/nebworks/";
     String ProfileUrl = "";
     String return_page = "";
+    String imagePath = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,14 +304,12 @@ public class TaskReportActivity extends AppCompatActivity {
             if (TaskKind.equals("0")) {
                 setSaveTask(task_id, task_date, ProfileUrl, complete_yn, reject_reason);
             } else {
-                if (ProfileUrl != null) {
-                    setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
+                if (reject_reason.isEmpty()) {
+                    Toast.makeText(mContext, "보고사항을 추가해주세요.", Toast.LENGTH_SHORT).show();
+                }else if (imagePath.isEmpty()) {
+                    Toast.makeText(mContext, "매장 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (!reject_reason.isEmpty()) {
-                        setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
-                    } else {
-                        Toast.makeText(mContext, "매장 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
-                    }
+                    setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
                 }
             }
 
@@ -405,7 +405,6 @@ public class TaskReportActivity extends AppCompatActivity {
         if (requestCode == GALLEY_CODE) {
             if (resultCode == RESULT_OK) {
 
-                String imagePath = "";
                 try {
                     //1) data의 주소 사용하는 방법
                     imagePath = data.getDataString(); // "content://media/external/images/media/7215"
