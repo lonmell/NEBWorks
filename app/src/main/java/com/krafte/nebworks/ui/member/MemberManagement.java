@@ -24,6 +24,9 @@ import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.adapter.WorkplaceMemberAdapter;
 import com.krafte.nebworks.bottomsheet.MemberOption;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -107,23 +110,22 @@ public class MemberManagement extends AppCompatActivity {
             icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
-            shardpref = new PreferenceHelper(mContext);
-            place_id = shardpref.getString("place_id", "");
-            place_owner_id = shardpref.getString("place_owner_id", "");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
-            SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
-            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-            return_page = shardpref.getString("return_page", "");
-            shardpref.putString("returnPage", "BusinessApprovalActivity");
+            //Singleton Area
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            return_page     = ReturnPageData.getInstance().getPage();
+            ReturnPageData.getInstance().setPage("BusinessApprovalActivity");
 
-//            binding.addMemberBtn.setOnClickListener(v -> {
-//                MemberOption mo = new MemberOption();
-//                mo.show(getSupportFragmentManager(),"MemberOption");
-//            });
+            //shardpref Area
+            shardpref = new PreferenceHelper(mContext);
+            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
+            SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
+            wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
+
 
             binding.changePlace.setOnClickListener(v -> {
                 PlaceListBottomSheet plb = new PlaceListBottomSheet();

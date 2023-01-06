@@ -14,6 +14,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
 import com.krafte.nebworks.databinding.ActivityPushBinding;
@@ -69,7 +71,11 @@ public class PushActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
 
         setBtnEvent();
+        //Singleton Area
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
 
+        //shardpref Area
         shardpref = new PreferenceHelper(mContext);
         type = shardpref.getString("type", "");
         channelId1 = shardpref.getBoolean("channelId1", false);
@@ -77,11 +83,9 @@ public class PushActivity extends AppCompatActivity {
         channelId3 = shardpref.getBoolean("channelId3", false);
         channelId4 = shardpref.getBoolean("channelId4", false);
         token = shardpref.getString("token", "");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        place_owner_id = shardpref.getString("place_owner_id", "");
+
 
         getPushBoolean();
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -153,7 +157,7 @@ public class PushActivity extends AppCompatActivity {
 
     RetrofitConnect rc = new RetrofitConnect();
     public void getPushBoolean() {
-        type = USER_INFO_ID.equals(place_owner_id)?"0":"1";
+        type = USER_INFO_ID.equals(PlaceCheckData.getInstance().getPlace_owner_id())?"0":"1";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FCMSelectInterface.URL)

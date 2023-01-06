@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractWorkerInterface;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
@@ -82,17 +83,19 @@ public class AddContractPage07 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-        shardpref       = new PreferenceHelper(mContext);
-        place_id        = shardpref.getString("place_id","0");
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
-        worker_id       = shardpref.getString("worker_id","0");
-        contract_id     = shardpref.getString("contract_id","0");
+
+        //Singleton Area
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+
+        //shardpref Area
+        shardpref           = new PreferenceHelper(mContext);
+        worker_id           = shardpref.getString("worker_id","0");
+        contract_id         = shardpref.getString("contract_id","0");
         contract_place_id   = shardpref.getString("contract_place_id","0");
         contract_user_id    = shardpref.getString("contract_user_id","0");
 
         setBtnEvent();
-        dlog.i("contract_place_id : " + contract_place_id);
-        dlog.i("contract_user_id : " + contract_user_id);
     }
 
     @Override
@@ -145,54 +148,6 @@ public class AddContractPage07 extends AppCompatActivity {
     }
 
     public void UserCheck() {
-//        dlog.i("---------UserCheck---------");
-//        dlog.i("---------UserCheck---------");
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(AllMemberInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-//        Call<String> call = api.getData(contract_place_id,contract_user_id);
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                dlog.e("UserCheck function START");
-//                dlog.e("response 1: " + response.isSuccessful());
-//                runOnUiThread(() -> {
-//                    if (response.isSuccessful() && response.body() != null) {
-//                        String jsonResponse = rc.getBase64decode(response.body());
-//                        dlog.i("jsonResponse length : " + jsonResponse.length());
-//                        dlog.i("jsonResponse : " + jsonResponse);
-//                        try {
-//                            //Array데이터를 받아올 때
-//                            JSONArray Response = new JSONArray(jsonResponse);
-//                            try {
-//                                if(Response.length() != 0){
-//                                    String name     = Response.getJSONObject(0).getString("name");
-//                                    String phone    = Response.getJSONObject(0).getString("phone");
-//                                    String account  = Response.getJSONObject(0).getString("account");
-//                                    binding.input01.setText(name);
-//                                    binding.input05.setText(phone);
-//                                    binding.input06.setText(account);
-//                                }
-//                            } catch (Exception e) {
-//                                dlog.i("UserCheck Exception : " + e);
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//
-//            }
-//
-//            @Override
-//            @SuppressLint("LongLogTag")
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                Log.e(TAG, "에러2 = " + t.getMessage());
-//            }
-//        });
         try{
             String name     = UserCheckData.getInstance().getUser_name();
             String phone    = UserCheckData.getInstance().getUser_phone();

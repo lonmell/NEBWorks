@@ -22,6 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.ScheduleAddInterface;
@@ -76,7 +79,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     String place_name = "";
     String place_owner_id = "";
     String place_owner_name = "";
-    String place_management_office = "";
     String place_address = "";
     String place_latitude = "";
     String place_longitude = "";
@@ -152,25 +154,28 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
+            //Singleton Area
+            place_id            = PlaceCheckData.getInstance().getPlace_id();
+            place_name          = PlaceCheckData.getInstance().getPlace_name();
+            place_owner_id      = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_owner_name    = PlaceCheckData.getInstance().getPlace_owner_name();
+            place_address       = PlaceCheckData.getInstance().getPlace_address();
+            place_latitude      = PlaceCheckData.getInstance().getPlace_latitude();
+            place_longitude     = PlaceCheckData.getInstance().getPlace_longitude();
+            place_start_time    = PlaceCheckData.getInstance().getPlace_start_time();
+            place_end_time      = PlaceCheckData.getInstance().getPlace_end_time();
+            place_img_path      = PlaceCheckData.getInstance().getPlace_img_path();
+            place_start_date    = PlaceCheckData.getInstance().getPlace_start_date();
+            place_created_at    = PlaceCheckData.getInstance().getPlace_created_at();
+            return_page         = ReturnPageData.getInstance().getPage();
+
+            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
             shardpref.putInt("SELECT_POSITION_sub", 1);
-            place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            place_owner_name = shardpref.getString("place_owner_name", "0");
-            place_management_office = shardpref.getString("place_management_office", "0");
-            place_address = shardpref.getString("place_address", "0");
-            place_latitude = shardpref.getString("place_latitude", "0");
-            place_longitude = shardpref.getString("place_longitude", "0");
-            place_start_time = shardpref.getString("place_start_time", "0");
-            place_end_time = shardpref.getString("place_end_time", "0");
-            place_img_path = shardpref.getString("place_img_path", "0");
-            place_start_date = shardpref.getString("place_start_date", "0");
-            place_created_at = shardpref.getString("place_created_at", "0");
-            return_page = shardpref.getString("return_page", "0");
             make_kind = shardpref.getInt("make_kind", 0);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
 
             //캘린더에서 넘어온 경우 - 선택한 날짜를 가져옴
             searchDate = shardpref.getString("searchDate", "");
@@ -180,9 +185,10 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             WorkAddSecond = new String[7];
 
             //수정할때 필요
-            task_no = shardpref.getString("task_no", "0");
-            icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
-            icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+            task_no     = shardpref.getString("task_no", "0");
+            icon_off    = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
+            icon_on     = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+
             //--처음에는 공통임무로 설정된채로 시작
             if (task_no.equals("0")) {
                 user_id = "";

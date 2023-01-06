@@ -172,7 +172,6 @@
         <activity android:name=".ui.paymanagement.PaystuballActivity" />
 
         <!-- state -->
-        <activity android:name=".ui.worksite.WorkState2Activity" />
 
         <!-- worksite -->
         <activity android:name=".ui.worksite.PlaceListActivity" />
@@ -212,7 +211,6 @@
         <!-- community -->
         <activity android:name=".ui.community.CommunityAddActivity" />
         <activity android:name=".ui.community.MoreListCommunityActivity" />
-        <activity android:name=".ui.community.OwnerFeedAddActivity" />
         <activity android:name=".ui.community.OwnerFeedDetailActivity" />
         <activity android:name=".ui.community.CommunityDetailActivity" />
 

@@ -10,7 +10,6 @@ import com.krafte.nebworks.ui.career.CareerActivity;
 import com.krafte.nebworks.ui.community.CommunityAddActivity;
 import com.krafte.nebworks.ui.community.CommunityDetailActivity;
 import com.krafte.nebworks.ui.community.MoreListCommunityActivity;
-import com.krafte.nebworks.ui.community.OwnerFeedAddActivity;
 import com.krafte.nebworks.ui.community.OwnerFeedDetailActivity;
 import com.krafte.nebworks.ui.contract.AddContractPage01;
 import com.krafte.nebworks.ui.contract.AddContractPage02;
@@ -66,7 +65,6 @@ import com.krafte.nebworks.ui.worksite.TaskReportActivity;
 import com.krafte.nebworks.ui.worksite.TaskReportDetailActivity;
 import com.krafte.nebworks.ui.worksite.TaskReuesAddActivity;
 import com.krafte.nebworks.ui.worksite.TaskReuseActivity;
-import com.krafte.nebworks.ui.worksite.WorkState2Activity;
 import com.krafte.nebworks.ui.workstatus.AddWorkPartActivity;
 
 public class PageMoveClass implements MovePage {
@@ -182,21 +180,6 @@ public class PageMoveClass implements MovePage {
     @Override
     public void WorkStateListBack(Context context) {
         Intent intent = new Intent(context, MainFragment.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-
-    @Override
-    public void WorkStateDetailGo(Context context) {
-        Intent intent = new Intent(context, WorkState2Activity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-    @Override
-    public void WorkStateDetailBack(Context context) {
-        Intent intent = new Intent(context, WorkState2Activity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -491,15 +474,6 @@ public class PageMoveClass implements MovePage {
     @Override
     public void CommunityDetail(Context context) {
         Intent intent = new Intent(context, CommunityDetailActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-
-
-    @Override
-    public void OwnerFeedAdd(Context context) {
-        Intent intent = new Intent(context, OwnerFeedAddActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

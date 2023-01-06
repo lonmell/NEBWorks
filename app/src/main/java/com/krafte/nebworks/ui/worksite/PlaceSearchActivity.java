@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.adapter.PlaceSearchAdapter;
 import com.krafte.nebworks.data.PlaceListData;
-import com.krafte.nebworks.dataInterface.PlaceListInterface;
+import com.krafte.nebworks.dataInterface.PlaceSearchListInterface;
 import com.krafte.nebworks.databinding.ActivityPlaceSearchBinding;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
@@ -85,9 +85,10 @@ public class PlaceSearchActivity extends AppCompatActivity {
 
             setBtnEvent();
 
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_ID", "-99");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_ID", "-99");
 
             gpsTracker = new GpsTracker(this);
             latitude = gpsTracker.getLatitude();
@@ -120,8 +121,8 @@ public class PlaceSearchActivity extends AppCompatActivity {
             dlog.i("searchFilter 1");
             dlog.i("mList.size() : " + mList.size());
             for (int i = 0; i < mList.size(); i++) {
-                if (mList.get(i).getName().toLowerCase().contains(searchText.toLowerCase())) {
-                    dlog.i("searchFilter contain : " + mList.get(i).getName() + "/" + mList.get(i).getName().toLowerCase().contains(searchText.toLowerCase()));
+                if (mList.get(i).getOwner_phone().toLowerCase().contains(searchText.toLowerCase())) {
+                    dlog.i("searchFilter contain : " + mList.get(i).getOwner_phone() + "/" + mList.get(i).getOwner_phone().toLowerCase().contains(searchText.toLowerCase()));
 //                    mList.clear();
                     searchmList.add(mList.get(i));
 //                    break;
@@ -165,13 +166,12 @@ public class PlaceSearchActivity extends AppCompatActivity {
     }
 
     public void SetWorkplaceList() {
-//        login_alert_text.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceListInterface.URL)
+                .baseUrl(PlaceSearchListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        PlaceListInterface api = retrofit.create(PlaceListInterface.class);
-        Call<String> call = api.getData("-99","","0");
+        PlaceSearchListInterface api = retrofit.create(PlaceSearchListInterface.class);
+        Call<String> call = api.getData("-99",USER_INFO_ID,"0");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"NotifyDataSetChanged", "LongLogTag", "SetTextI18n"})
             @Override
@@ -183,23 +183,22 @@ public class PlaceSearchActivity extends AppCompatActivity {
                     dlog.e("response 1: " + response.isSuccessful());
                     dlog.e("response 2: " + rc.getBase64decode(response.body()));
                     try {
-
                         mList = new ArrayList<>();
                         searchmList = new ArrayList<>();
                         mAdapter = new PlaceSearchAdapter(mContext, mList,searchmList);
                         binding.addressList.setAdapter(mAdapter);
                         binding.addressList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-                        //Array데이터를 받아올 때
+
                         JSONArray Response = new JSONArray(jsonResponse);
                         binding.searchCnt.setText(String.valueOf(Response.length()));
                         for (int i = 0; i < Response.length(); i++) {
                             JSONObject jsonObject = Response.getJSONObject(i);
-
                             mAdapter.addItem(new PlaceListData.PlaceListData_list(
                                     jsonObject.getString("id"),
                                     jsonObject.getString("name"),
                                     jsonObject.getString("owner_id"),
                                     jsonObject.getString("owner_name"),
+                                    jsonObject.getString("owner_phone"),
                                     jsonObject.getString("registr_num"),
                                     jsonObject.getString("store_kind"),
                                     jsonObject.getString("address"),

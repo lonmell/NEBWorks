@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.adapter.TaxListAdapter;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.TaxMemberData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.TaxMemListInterface;
 import com.krafte.nebworks.databinding.CommunityFragment3Binding;
 import com.krafte.nebworks.util.DateCurrent;
@@ -108,13 +110,16 @@ public class community_fragment3 extends Fragment {
 
         //Shared
         try {
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            place_id = shardpref.getString("place_id", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
+            //Singleton Area
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+
+            //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);
+
             //-- 날짜 세팅
-            dlog.i("place_owner_id : " + place_owner_id);
             setBtnEvent();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);

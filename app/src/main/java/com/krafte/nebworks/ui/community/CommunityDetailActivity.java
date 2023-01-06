@@ -58,7 +58,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     // shared 저장값
     PreferenceHelper shardpref;
-    String USER_INFO_NO = "";
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
@@ -128,31 +127,31 @@ public class CommunityDetailActivity extends AppCompatActivity {
         icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
-        shardpref = new PreferenceHelper(mContext);
-        USER_INFO_NO = shardpref.getString("USER_INFO_NO", "");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-        SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
-        USER_INFO_PROFILE = shardpref.getString("USER_INFO_PROFILE", "");
+        //Singleton Area
+        USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
+        USER_INFO_NICKNAME  = UserCheckData.getInstance().getUser_nick_name();
+        USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_PROFILE   = UserCheckData.getInstance().getUser_img_path();
 
-        feed_id = shardpref.getString("feed_id", "");
-        title = shardpref.getString("title", "");
-        contents = shardpref.getString("contents", "");
-        writer_id = shardpref.getString("writer_id", "");
-        writer_name = shardpref.getString("writer_name", "");
-        writer_img_path = shardpref.getString("writer_img_path", "");
-        jikgup = shardpref.getString("jikgup", "");
-        view_cnt = shardpref.getString("view_cnt", "");
-        comment_cnt = shardpref.getString("comment_cnt", "");
-        like_cnt = shardpref.getString("like_cnt", "");
-        category = shardpref.getString("category", "");
-        updated_at = shardpref.getString("updated_at", "");
-        mylikeyn = shardpref.getString("mylikeyn", "");
-        feed_img_path = shardpref.getString("feed_img_path", "");
+        //shardpref Area
+        shardpref           = new PreferenceHelper(mContext);
+        SELECTED_POSITION   = shardpref.getInt("SELECTED_POSITION", 0);
+        feed_id             = shardpref.getString("feed_id", "");
+        title               = shardpref.getString("title", "");
+        contents            = shardpref.getString("contents", "");
+        writer_id           = shardpref.getString("writer_id", "");
+        writer_name         = shardpref.getString("writer_name", "");
+        writer_img_path     = shardpref.getString("writer_img_path", "");
+        jikgup              = shardpref.getString("jikgup", "");
+        view_cnt            = shardpref.getString("view_cnt", "");
+        comment_cnt         = shardpref.getString("comment_cnt", "");
+        like_cnt            = shardpref.getString("like_cnt", "");
+        category            = shardpref.getString("category", "");
+        updated_at          = shardpref.getString("updated_at", "");
+        mylikeyn            = shardpref.getString("mylikeyn", "");
+        feed_img_path       = shardpref.getString("feed_img_path", "");
 
-        dlog.i("feed_img_path : " + feed_img_path);
         setBtnEvent();
         DataCheck();
         UpdateView(feed_id);
@@ -462,71 +461,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String io_state = "";
 
     public void UserCheck() {
-//        dlog.i("---------UserCheck---------");
-//        dlog.i("place_id : " + place_id);
-//        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-//        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
-//        dlog.i("---------UserCheck---------");
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(AllMemberInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-//        Call<String> call = api.getData(place_id, USER_INFO_ID);
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                dlog.e("UserCheck function START");
-//                dlog.e("response 1: " + response.isSuccessful());
-//                runOnUiThread(() -> {
-//                    if (response.isSuccessful() && response.body() != null) {
-//                        String jsonResponse = rc.getBase64decode(response.body());
-//                        dlog.i("jsonResponse length : " + jsonResponse.length());
-//                        dlog.i("jsonResponse : " + jsonResponse);
-//                        try {
-//                            //Array데이터를 받아올 때
-//                            JSONArray Response = new JSONArray(jsonResponse);
-//                            try {
-//                                mem_id = Response.getJSONObject(0).getString("id");
-//                                mem_name = Response.getJSONObject(0).getString("name");
-//                                mem_phone = Response.getJSONObject(0).getString("phone");
-//                                mem_gender = Response.getJSONObject(0).getString("gender");
-//                                mem_img_path = Response.getJSONObject(0).getString("img_path");
-//                                mem_jumin = Response.getJSONObject(0).getString("jumin");
-//                                mem_kind = Response.getJSONObject(0).getString("kind");
-//                                mem_join_date = Response.getJSONObject(0).getString("join_date");
-//                                mem_state = Response.getJSONObject(0).getString("state");
-//                                mem_jikgup = Response.getJSONObject(0).getString("jikgup");
-//                                mem_pay = Response.getJSONObject(0).getString("pay");
-//
-//                                dlog.i("------UserCheck-------");
-//                                dlog.i("프로필 사진 url : " + mem_img_path);
-//                                dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
-//                                dlog.i("성명 : " + mem_name);
-//                                dlog.i("부서 : " + mem_jikgup);
-//                                dlog.i("급여 : " + mem_pay);
-//                                dlog.i("USER_INFO_PROFILE : " + USER_INFO_PROFILE);
-//                                dlog.i("------UserCheck-------");
-//
-//
-//                            } catch (Exception e) {
-//                                dlog.i("UserCheck Exception : " + e);
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//
-//            }
-//
-//            @Override
-//            @SuppressLint("LongLogTag")
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                Log.e(TAG, "에러2 = " + t.getMessage());
-//            }
-//        });
         try {
             mem_id = UserCheckData.getInstance().getUser_id();
             mem_name = UserCheckData.getInstance().getUser_name();
@@ -548,8 +482,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
             dlog.i("급여 : " + mem_pay);
             dlog.i("USER_INFO_PROFILE : " + USER_INFO_PROFILE);
             dlog.i("------UserCheck-------");
-
-
         } catch (Exception e) {
             dlog.i("UserCheck Exception : " + e);
         }

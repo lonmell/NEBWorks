@@ -28,6 +28,8 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.WorkstatusBottomSheet;
 import com.krafte.nebworks.data.CalendarSetStatusData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
@@ -143,12 +145,15 @@ public class WorkstatusFragment extends Fragment {
         setBtnEvent();
         //UI 데이터 세팅
         try {
-            place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
+            //Singleton Area
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_name      = PlaceCheckData.getInstance().getPlace_name();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+
+            //shardpref Area
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             if (USER_INFO_AUTH.equals("1")) {
                 if (!place_owner_id.equals(USER_INFO_ID)) {
@@ -288,9 +293,7 @@ public class WorkstatusFragment extends Fragment {
                     }
                 }
             });
-//            binding.addWorktimeBtn.setOnClickListener(v -> {
-//                pm.AddWorkPart(mContext);
-//            });
+
             binding.taskMore.setVisibility(View.INVISIBLE);
             if (USER_INFO_AUTH.isEmpty()) {
                 // dummy

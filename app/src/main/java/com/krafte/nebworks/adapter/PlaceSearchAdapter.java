@@ -94,6 +94,14 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
                 .into(holder.store_thumnail);
         holder.item_store_name.setText(item.getName());
         holder.item_store_address.setText(item.getAddress());
+        if(item.getOwner_phone().length() < 11){
+            holder.item_owner_phone.setText("관리자 전화번호 : " + (item.getOwner_phone().equals("null")?"":item.getOwner_phone()));
+        }else{
+            dlog.i("item.getOwner_phone() : " + item.getOwner_phone());
+            String ophone = item.getOwner_phone().substring(0,3) + "-" + item.getOwner_phone().substring(3,7) + "-" + item.getOwner_phone().substring(7,11);
+            holder.item_owner_phone.setText("관리자 전화번호 : " + ophone);
+        }
+
 
         holder.applicant_storegroup.setOnClickListener(v -> {
             shardpref.putString("guin_store_no", item.getId());
@@ -124,30 +132,27 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView store_thumnail;
-        TextView item_store_name, item_store_address;
+        TextView item_store_name, item_store_address,item_owner_phone;
         CardView applicant_storegroup;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
 
-            store_thumnail = itemView.findViewById(R.id.store_thumnail);
-            item_store_name = itemView.findViewById(R.id.item_store_name);
-            item_store_address = itemView.findViewById(R.id.item_store_address);
-            applicant_storegroup = itemView.findViewById(R.id.applicant_storegroup);
-
+            store_thumnail          = itemView.findViewById(R.id.store_thumnail);
+            item_store_name         = itemView.findViewById(R.id.item_store_name);
+            item_store_address      = itemView.findViewById(R.id.item_store_address);
+            applicant_storegroup    = itemView.findViewById(R.id.applicant_storegroup);
+            item_owner_phone        = itemView.findViewById(R.id.item_owner_phone);
             shardpref = new PreferenceHelper(mContext);
 
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     PlaceListData.PlaceListData_list item = mData.get(pos);
-
                     if (mListener != null) {
                         mListener.onItemClick(view, pos);
                     }
-
-//                    pm.EmployerStoreSetting(mContext);
                 }
             });
 

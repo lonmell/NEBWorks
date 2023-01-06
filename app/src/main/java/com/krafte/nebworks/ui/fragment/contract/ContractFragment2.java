@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ContractListAdapter;
 import com.krafte.nebworks.data.ContractData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractListInterface;
 import com.krafte.nebworks.databinding.ContractFragmentBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -103,11 +105,14 @@ public class ContractFragment2 extends Fragment {
         icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
         icon_on = mContext.getResources().getDrawable(R.drawable.resize_login_002);
 
-        //Shared
+        //Singleton Area
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+
+        //shardpref Area
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
-        place_id        = shardpref.getString("place_id", "");
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
+
         dlog.DlogContext(mContext);
         setBtnEvent();
 

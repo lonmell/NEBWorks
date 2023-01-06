@@ -35,6 +35,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -147,9 +148,9 @@ public class FeedAddActivity extends AppCompatActivity {
 
         //UI 데이터 세팅
         try {
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            place_id = shardpref.getString("place_id", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
@@ -870,9 +871,6 @@ public class FeedAddActivity extends AppCompatActivity {
                         dlog.i("token : " + Response.getJSONObject(0).getString("token"));
                         String id = Response.getJSONObject(0).getString("id");
                         String token = Response.getJSONObject(0).getString("token");
-                        String department = shardpref.getString("USER_INFO_SOSOK", "");
-                        String position = shardpref.getString("USER_INFO_JIKGUP", "");
-                        String name = shardpref.getString("USER_INFO_NAME", "");
                         dlog.i("-----getManagerToken-----");
                         boolean channelId = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId) {

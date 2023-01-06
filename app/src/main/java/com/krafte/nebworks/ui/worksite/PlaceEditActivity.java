@@ -179,10 +179,11 @@ public class PlaceEditActivity extends AppCompatActivity {
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
-            place_id = shardpref.getString("place_id", "-99");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "-99");
+            //shardpref Area
+            place_id        = shardpref.getString("place_id", "-99");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "-99");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "-99");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-99");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "-99");
 
             dlog.i("place_id : " + place_id);
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);

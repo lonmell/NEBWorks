@@ -21,6 +21,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FeedConfrimLogAdapter;
 import com.krafte.nebworks.data.FeedConfirmData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedConfrimInterface;
 import com.krafte.nebworks.dataInterface.FeedConfrimlistInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
@@ -100,19 +102,18 @@ public class FeedDetailActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
+            //Singleton Area
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
-            place_id        = shardpref.getString("place_id", "0");
             feed_id         = shardpref.getString("feed_id", "0");
             state           = shardpref.getString("editstate", "");
-            place_owner_id  = shardpref.getString("place_owner_id", "");
             writer_id       = shardpref.getString("writer_id", "");
-            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-            dlog.i("place_id : " + place_id);
-            dlog.i("feed_id : " + feed_id);
-            dlog.i("place_owner_id : " + place_owner_id);
 
             icon_on = mContext.getResources().getDrawable(R.drawable.resize_service_on);
             icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
@@ -183,7 +184,6 @@ public class FeedDetailActivity extends AppCompatActivity {
     String feed_img_path = "";
     String created_at = "";
     String updated_at = "";
-
 
     public void GETFeed() {
         dlog.i("GETFeed place_id : " + place_id);

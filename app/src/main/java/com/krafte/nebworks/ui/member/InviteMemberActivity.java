@@ -30,6 +30,8 @@ import com.kakao.sdk.template.model.Link;
 import com.kakao.sdk.template.model.Social;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.GetConfirmPlaceInterface;
 import com.krafte.nebworks.dataInterface.NonmemberInterface;
@@ -92,17 +94,21 @@ public class InviteMemberActivity extends AppCompatActivity {
             mContext = this;
             setBtnEvent();
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
-            place_id = shardpref.getString("place_id", "");
-            place_name = shardpref.getString("place_name","");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
-            USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
-            Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
-            Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
-            Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
-            Log.i(TAG, "place_name = " + place_name);
-
+            //Singleton Area
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_name      = PlaceCheckData.getInstance().getPlace_name();
+            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            USER_INFO_PHONE = UserCheckData.getInstance().getUser_phone();
+            
+            dlog.i("USER_INFO_NAME = " + USER_INFO_NAME);
+            dlog.i("USER_INFO_PHONE = " + USER_INFO_PHONE);
+            dlog.i("place_name = " + place_name);
+            
+            //shardpref Area
+            shardpref           = new PreferenceHelper(mContext);
+            USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD", "");
+            dlog.i("USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+            
             binding.inputbox01.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

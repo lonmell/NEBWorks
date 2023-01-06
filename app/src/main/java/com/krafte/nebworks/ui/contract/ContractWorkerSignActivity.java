@@ -28,13 +28,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractGetAllInterface;
 import com.krafte.nebworks.dataInterface.ContractWorkerSignInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.databinding.ActivityContractworkerSignBinding;
 import com.krafte.nebworks.pop.SignPopActivity;
-import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -75,23 +74,18 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
 
     // shared 저장값
     PreferenceHelper shardpref;
-    String place_id = "";
     String contract_id = "";
     String USER_INFO_AUTH = "";
     String USER_INFO_ID = "";
 
     //Other
     DateCurrent dc = new DateCurrent();
-    DBConnection dbConnection = new DBConnection();
-    GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     RetrofitConnect rc = new RetrofitConnect();
 
     private Bitmap saveBitmap;
     File file;
-    SimpleDateFormat dateFormat;
-    int GALLEY_CODE = 10;
     @SuppressLint("SdCardPath")
     String BACKUP_PATH = "/sdcard/Download/NEBWorks/";
     String worker_sign_url = "";
@@ -111,10 +105,14 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
+
+        //Singleton Area
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+
+        //shardpref Area
         shardpref = new PreferenceHelper(mContext);
         contract_id = shardpref.getString("contract_id","");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
 
         setBtnEvent();
 

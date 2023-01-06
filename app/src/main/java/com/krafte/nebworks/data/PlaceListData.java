@@ -8,6 +8,7 @@ public class PlaceListData {
         String name;
         String owner_id;
         String owner_name;
+        String owner_phone;
         String registr_num;
         String store_kind;
         String address;
@@ -28,7 +29,7 @@ public class PlaceListData {
         String created_at;
 
 
-        public PlaceListData_list(String id, String name, String owner_id, String owner_name, String registr_num,
+        public PlaceListData_list(String id, String name, String owner_id, String owner_name, String owner_phone, String registr_num,
                                     String store_kind, String address, String latitude, String longitude, String pay_day, String test_period,
                                     String vacation_select, String insurance, String start_time, String end_time, String save_kind,
                                     String img_path, String accept_state, String total_cnt, String i_cnt, String o_cnt, String created_at) {
@@ -36,6 +37,7 @@ public class PlaceListData {
             this.name = name;
             this.owner_id = owner_id;
             this.owner_name = owner_name;
+            this.owner_phone = owner_phone;
             this.registr_num = registr_num;
             this.store_kind = store_kind;
             this.address = address;
@@ -86,6 +88,14 @@ public class PlaceListData {
 
         public void setOwner_name(String owner_name) {
             this.owner_name = owner_name;
+        }
+
+        public String getOwner_phone() {
+            return owner_phone;
+        }
+
+        public void setOwner_phone(String owner_phone) {
+            this.owner_phone = owner_phone;
         }
 
         public String getRegistr_num() {

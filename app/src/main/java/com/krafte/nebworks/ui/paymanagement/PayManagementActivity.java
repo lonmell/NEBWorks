@@ -24,6 +24,8 @@ import com.krafte.nebworks.adapter.PaymentMemberAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectMemberActivity;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.data.PaymentData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.ActivityPaymanagementBinding;
 import com.krafte.nebworks.util.Dlog;
@@ -100,12 +102,15 @@ public class PayManagementActivity extends AppCompatActivity {
             icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
+            //Singleton Area
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
-            place_id = shardpref.getString("place_id", "");
-            place_owner_id = shardpref.getString("place_owner_id", "");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);

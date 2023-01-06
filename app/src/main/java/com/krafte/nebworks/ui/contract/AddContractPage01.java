@@ -10,15 +10,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.databinding.ActivityContractAdd01Binding;
 import com.krafte.nebworks.pop.LawPopActivity;
-import com.krafte.nebworks.util.DBConnection;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-import com.krafte.nebworks.util.RetrofitConnect;
 
 public class AddContractPage01 extends AppCompatActivity {
     private ActivityContractAdd01Binding binding;
@@ -27,15 +23,10 @@ public class AddContractPage01 extends AppCompatActivity {
 
     // shared 저장값
     PreferenceHelper shardpref;
-    String place_id = "";
 
     //Other
-    DateCurrent dc = new DateCurrent();
-    DBConnection dbConnection = new DBConnection();
-    GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
-    RetrofitConnect rc = new RetrofitConnect();
 
     @SuppressLint({"LongLogTag", "UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -52,7 +43,6 @@ public class AddContractPage01 extends AppCompatActivity {
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
         setBtnEvent();
-        //LawPopActivity
     }
 
     @Override

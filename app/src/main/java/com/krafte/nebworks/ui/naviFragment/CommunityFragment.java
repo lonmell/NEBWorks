@@ -23,6 +23,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.databinding.CommunityfragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.fragment.community.community_fragment1;
@@ -104,13 +107,17 @@ public class CommunityFragment extends Fragment {
 
         //UI 데이터 세팅
         try {
+            //Singleton Area
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            returnPage      = ReturnPageData.getInstance().getPage();
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             returnPage = shardpref.getString("returnPage", "");
-            place_id = shardpref.getString("place_id", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            Log.i(TAG, "USER_INFO_AUTH : " + USER_INFO_AUTH);
+
             ChangePage(0);
             setAddBtnSetting();
         } catch (Exception e) {

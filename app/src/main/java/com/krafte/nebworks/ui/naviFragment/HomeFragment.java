@@ -158,16 +158,21 @@ public class HomeFragment extends Fragment {
         //UI 데이터 세팅
         try {
             dlog.DlogContext(mContext);
+            //Singleton Area
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
+            shardpref.putInt("SELECT_POSITION", 0);
+            isAuth    = shardpref.getInt("isAuth", 0);
+
             setBtnEvent();
             dlog.i("HomeFragment START!");
-            place_id = shardpref.getString("place_id", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            shardpref.putInt("SELECT_POSITION", 0);
-            isAuth = shardpref.getInt("isAuth", 0);
+
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);

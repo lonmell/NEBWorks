@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,6 +35,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -85,14 +87,9 @@ public class TaskReportActivity extends AppCompatActivity {
     Context mContext;
 
     int GALLEY_CODE = 10;
-    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
-    private static final int PINSELECT_LOCATION_ACTIVITY = 20000;
 
     // shared 저장값
     PreferenceHelper shardpref;
-    boolean channelId1 = false;
-    boolean channelId2 = false;
-    boolean EmployeeChannelId1 = false;
 
     //shared
     String place_id = "";
@@ -132,15 +129,9 @@ public class TaskReportActivity extends AppCompatActivity {
     String end_time = "-99";
     String Sun = "0", Mon = "0", Tue = "0", Wed = "0", Thu = "0", Fri = "0", Sat = "0";
 
-    String message = "업무가 배정되었습니다.";
-    Drawable icon_on, icon_off;
-    String searchDate = "";
-
-    String fileName = "";
     private Bitmap saveBitmap;
     String ImgfileMaker = "";
     File file;
-    SimpleDateFormat dateFormat;
     @SuppressLint("SdCardPath")
     String BACKUP_PATH = "/sdcard/Download/nebworks/";
     String ProfileUrl = "";
@@ -160,36 +151,29 @@ public class TaskReportActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
+            //Singleton Area
+            place_id            = PlaceCheckData.getInstance().getPlace_id();
+            place_name          = PlaceCheckData.getInstance().getPlace_name();
+            place_owner_id      = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_owner_name    = PlaceCheckData.getInstance().getPlace_owner_name();
+            place_address       = PlaceCheckData.getInstance().getPlace_address();
+            place_latitude      = PlaceCheckData.getInstance().getPlace_latitude();
+            place_longitude     = PlaceCheckData.getInstance().getPlace_longitude();
+            place_start_time    = PlaceCheckData.getInstance().getPlace_start_time();
+            place_end_time      = PlaceCheckData.getInstance().getPlace_end_time();
+            place_img_path      = PlaceCheckData.getInstance().getPlace_img_path();
+            place_start_date    = PlaceCheckData.getInstance().getPlace_start_date();
+            place_created_at    = PlaceCheckData.getInstance().getPlace_created_at();
+            return_page         = ReturnPageData.getInstance().getPage();
 
-            mContext = this;
-            dlog.DlogContext(mContext);
+            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
-            shardpref.putInt("SELECT_POSITION_sub", 1);
-            place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            place_owner_name = shardpref.getString("place_owner_name", "0");
-            place_management_office = shardpref.getString("place_management_office", "0");
-            place_address = shardpref.getString("place_address", "0");
-            place_latitude = shardpref.getString("place_latitude", "0");
-            place_longitude = shardpref.getString("place_longitude", "0");
-            place_start_time = shardpref.getString("place_start_time", "0");
-            place_end_time = shardpref.getString("place_end_time", "0");
-            place_img_path = shardpref.getString("place_img_path", "0");
-            place_start_date = shardpref.getString("place_start_date", "0");
-            place_created_at = shardpref.getString("place_created_at", "0");
-            return_page = shardpref.getString("return_page", "0");
             make_kind = shardpref.getInt("make_kind", 0);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 1);
-
-            shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
-            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             setBtnEvent();
 
         } catch (Exception e) {

@@ -35,6 +35,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -410,7 +411,16 @@ public class MainFragment extends AppCompatActivity {
     public void getPlaceData() {
         Thread th = new Thread(() -> {
             dbc.PlacegetData(place_id);
-            runOnUiThread(this::getFCMToken);
+            runOnUiThread(() -> {
+                getFCMToken();
+                String user_id = UserCheckData.getInstance().getUser_id();
+                String owner_id = PlaceCheckData.getInstance().getPlace_id();
+                if(user_id.equals(owner_id)){
+                    UserCheckData.getInstance().setUser_auth("0");
+                }else{
+                    UserCheckData.getInstance().setUser_auth("1");
+                }
+            });
         });
         th.start();
         try {

@@ -27,6 +27,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractOwnerSignInterface;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -114,16 +116,19 @@ public class AddContractPage08 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
+
+        //Singleton Area
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        place_name      = PlaceCheckData.getInstance().getPlace_name();
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+
+        //shardpref Area
         shardpref       = new PreferenceHelper(mContext);
-        place_id        = shardpref.getString("place_id","0");
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
         worker_id       = shardpref.getString("worker_id","0");
         contract_id     = shardpref.getString("contract_id","0");
-        place_name      = shardpref.getString("place_name","");
         progress_pos    = shardpref.getString("progress_pos","");
 
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1");
-        
         MakeDirs();
         setBtnEvent();
     }

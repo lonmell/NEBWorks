@@ -23,7 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.YoilStringAdapter;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.StringData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractWorkInterface;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd04Binding;
@@ -101,10 +103,13 @@ public class AddContractPage04 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-        shardpref = new PreferenceHelper(mContext);
-        place_id = shardpref.getString("place_id", "0");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-        worker_id = shardpref.getString("worker_id", "0");
+        //Singleton Area
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+
+        //shardpref Area
+        shardpref       = new PreferenceHelper(mContext);
+        worker_id       = shardpref.getString("worker_id", "0");
 
         setBtnEvent();
 

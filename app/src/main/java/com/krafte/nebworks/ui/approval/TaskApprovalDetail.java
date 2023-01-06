@@ -26,6 +26,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.ApprovalUpdateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -156,35 +158,38 @@ public class TaskApprovalDetail extends AppCompatActivity {
 
         setBtnEvent();
 
+        //Singleton Area
+        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+        place_name      = PlaceCheckData.getInstance().getPlace_name();
+
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
-        place_id = shardpref.getString("place_id","0");
-        place_owner_id = shardpref.getString("place_owner_id", "");
-        place_name = shardpref.getString("place_name", "");
-        id = shardpref.getString("id", "");
-        state = shardpref.getString("state", "");
+        //shardpref Area
+        id              = shardpref.getString("id", "");
+        state           = shardpref.getString("state", "");
         request_task_no = shardpref.getString("request_task_no", "");
-        requester_id = shardpref.getString("requester_id",  "");
-        requester_name = shardpref.getString("requester_name",  "");
+        requester_id    = shardpref.getString("requester_id",  "");
+        requester_name  = shardpref.getString("requester_name",  "");
         requester_img_path = shardpref.getString("requester_img_path",  "");
-        title = shardpref.getString("title",  "");
-        contents = shardpref.getString("contents",  "");
-        complete_kind = shardpref.getString("complete_kind", "");
-        start_time = shardpref.getString("start_time",  "");
-        end_time = shardpref.getString("end_time",  "");
-        complete_time = shardpref.getString("complete_time", "");
-        task_img_path = shardpref.getString("task_img_path", "0");
-        complete_yn = shardpref.getString("complete_yn",  "");
+        title           = shardpref.getString("title",  "");
+        contents        = shardpref.getString("contents",  "");
+        complete_kind   = shardpref.getString("complete_kind", "");
+        start_time      = shardpref.getString("start_time",  "");
+        end_time        = shardpref.getString("end_time",  "");
+        complete_time   = shardpref.getString("complete_time", "");
+        task_img_path   = shardpref.getString("task_img_path", "0");
+        complete_yn     = shardpref.getString("complete_yn",  "");
         incomplete_reason = shardpref.getString("incomplete_reason",  "");
-        reject_reason = shardpref.getString("reject_reason",  "");
-        task_date = shardpref.getString("task_date",  "");
-        request_date = shardpref.getString("request_date", "");
-        approval_date = shardpref.getString("approval_date",  "");
-        users = shardpref.getString("users", "0");
-        usersn = shardpref.getString("usersn", "0");
-        usersimg = shardpref.getString("usersimg", "0");
-        usersjikgup = shardpref.getString("usersjikgup", "0");
+        reject_reason   = shardpref.getString("reject_reason",  "");
+        task_date       = shardpref.getString("task_date",  "");
+        request_date    = shardpref.getString("request_date", "");
+        approval_date   = shardpref.getString("approval_date",  "");
+        users           = shardpref.getString("users", "0");
+        usersn          = shardpref.getString("usersn", "0");
+        usersimg        = shardpref.getString("usersimg", "0");
+        usersjikgup     = shardpref.getString("usersjikgup", "0");
 
         fileName = USER_INFO_ID;
         dateFormat = new SimpleDateFormat("HH:mm:ss", getResources().getConfiguration().locale);
@@ -611,9 +616,6 @@ public class TaskApprovalDetail extends AppCompatActivity {
                         dlog.i("token : " + Response.getJSONObject(0).getString("token"));
                         String id = Response.getJSONObject(0).getString("id");
                         String token = Response.getJSONObject(0).getString("token");
-                        String department = shardpref.getString("USER_INFO_SOSOK", "");
-                        String position = shardpref.getString("USER_INFO_JIKGUP", "");
-                        String name = shardpref.getString("USER_INFO_NAME", "");
                         dlog.i("-----getManagerToken-----");
                         boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId1) {

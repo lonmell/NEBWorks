@@ -31,7 +31,10 @@ import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.bottomsheet.TaskAddOption;
 import com.krafte.nebworks.bottomsheet.WorkgotoBottomSheet;
 import com.krafte.nebworks.data.CalendarSetData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.TodolistData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
@@ -144,30 +147,32 @@ public class TaskListActivity extends AppCompatActivity {
         try{
             mContext = this;
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
+            //Singleton Area
+            place_id            = PlaceCheckData.getInstance().getPlace_id();
+            place_name          = PlaceCheckData.getInstance().getPlace_name();
+            place_owner_id      = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_owner_name    = PlaceCheckData.getInstance().getPlace_owner_name();
+            place_address       = PlaceCheckData.getInstance().getPlace_address();
+            place_latitude      = PlaceCheckData.getInstance().getPlace_latitude();
+            place_longitude     = PlaceCheckData.getInstance().getPlace_longitude();
+            place_start_time    = PlaceCheckData.getInstance().getPlace_start_time();
+            place_end_time      = PlaceCheckData.getInstance().getPlace_end_time();
+            place_img_path      = PlaceCheckData.getInstance().getPlace_img_path();
+            place_start_date    = PlaceCheckData.getInstance().getPlace_start_date();
+            place_created_at    = PlaceCheckData.getInstance().getPlace_created_at();
+            return_page         = ReturnPageData.getInstance().getPage();
 
-            place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            place_owner_name = shardpref.getString("place_owner_name", "0");
-            place_management_office = shardpref.getString("place_management_office", "0");
-            place_address = shardpref.getString("place_address", "0");
-            place_latitude = shardpref.getString("place_latitude", "0");
-            place_longitude = shardpref.getString("place_longitude", "0");
-            place_start_time = shardpref.getString("place_start_time", "0");
-            place_end_time = shardpref.getString("place_end_time", "0");
-            place_img_path = shardpref.getString("place_img_path", "0");
-            place_start_date = shardpref.getString("place_start_date", "0");
-            place_created_at = shardpref.getString("place_created_at", "0");
-            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
+            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+            USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
+
+            //shardpref Area
+            shardpref = new PreferenceHelper(mContext);
+            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub",0);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1"); //0-관리자 / 1- 근로자
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            return_page = shardpref.getString("return_page","");
+
 
             setBtnEvent();
-//            binding.topBar.setVisibility(View.VISIBLE);
             change_place_id = place_id;
             change_member_id = "";
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);

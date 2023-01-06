@@ -19,7 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.PlaceNotiAdapter;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.PlaceNotiData;
+import com.krafte.nebworks.data.ReturnPageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.ActivityFeedListBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -80,15 +83,16 @@ public class FeedListActivity extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-
         setBtnEvent();
+        //Singleton Area
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        returnPage      = ReturnPageData.getInstance().getPage();
 
+        //shardpref Area
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
-        place_id        = shardpref.getString("place_id", "");
-        returnPage      = shardpref.getString("returnPage", "");
         SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
 
         dlog.i("------FeedListActivity------");
@@ -150,9 +154,6 @@ public class FeedListActivity extends AppCompatActivity {
             }
         });
 
-//        binding.addWorkBtn.setOnClickListener(v -> {
-//            pm.addNotiGo(mContext);
-//        });
     }
 
 

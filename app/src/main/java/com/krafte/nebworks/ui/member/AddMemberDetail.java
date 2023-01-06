@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +21,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.GetMemberDetailInterface;
 import com.krafte.nebworks.dataInterface.GetMemberOtherInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberInsertDetail;
@@ -119,27 +120,30 @@ public class AddMemberDetail extends AppCompatActivity {
         dlog.DlogContext(mContext);
         setBtnEvent();
 
-        shardpref = new PreferenceHelper(mContext);
-        place_id = shardpref.getString("place_id", "");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
-        Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
-        Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
-        Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+        //Singleton Area
+        place_id            = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
+        USER_INFO_PHONE     = UserCheckData.getInstance().getUser_phone();
 
-        mem_id = shardpref.getString("mem_id", "");
-        mem_name = shardpref.getString("mem_name", "");
-        mem_account = shardpref.getString("mem_account", "");
-        mem_phone = shardpref.getString("mem_phone", "");
-        mem_gender = shardpref.getString("mem_gender", "");
-        mem_jumin = shardpref.getString("mem_jumin", "");
-        mem_kind = shardpref.getString("mem_kind", "");
-        mem_join_date = shardpref.getString("mem_join_date", "");
-        mem_state = shardpref.getString("mem_state", "");
-        mem_jikgup = shardpref.getString("mem_jikgup", "");
-        mem_pay = shardpref.getString("mem_pay", "");
+        dlog.i( "USER_INFO_NAME = " + USER_INFO_NAME);
+        dlog.i( "USER_INFO_PHONE = " + USER_INFO_PHONE);
+        dlog.i( "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+
+        //shardpref Area
+        shardpref = new PreferenceHelper(mContext);
+        USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD", "");
+        mem_id              = shardpref.getString("mem_id", "");
+        mem_name            = shardpref.getString("mem_name", "");
+        mem_account         = shardpref.getString("mem_account", "");
+        mem_phone           = shardpref.getString("mem_phone", "");
+        mem_gender          = shardpref.getString("mem_gender", "");
+        mem_jumin           = shardpref.getString("mem_jumin", "");
+        mem_kind            = shardpref.getString("mem_kind", "");
+        mem_join_date       = shardpref.getString("mem_join_date", "");
+        mem_state           = shardpref.getString("mem_state", "");
+        mem_jikgup          = shardpref.getString("mem_jikgup", "");
+        mem_pay             = shardpref.getString("mem_pay", "");
 
         dlog.i("mem_phone : " + mem_phone);
         dlog.i("mem_account : " + mem_account);

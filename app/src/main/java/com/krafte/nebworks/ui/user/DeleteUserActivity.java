@@ -3,7 +3,6 @@ package com.krafte.nebworks.ui.user;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.databinding.ActivityAccountDeleteBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
+import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 /*
@@ -37,6 +38,7 @@ public class DeleteUserActivity extends AppCompatActivity {
     //other
     boolean check = false;
 
+    Dlog dlog = new Dlog();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +51,18 @@ public class DeleteUserActivity extends AppCompatActivity {
         }
         mContext = this;
         setBtnEvent();
+        dlog.DlogContext(mContext);
 
+        //Singleton Area
+        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+        USER_INFO_PHONE = UserCheckData.getInstance().getUser_phone();
+        
+        //shardpref Area
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
-        Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
-        Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
-        Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+        dlog.i("USER_INFO_NAME = " + USER_INFO_NAME);
+        dlog.i("USER_INFO_PHONE = " + USER_INFO_PHONE);
+        dlog.i("USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
         binding.acceptDel.setBackgroundResource(R.drawable.resize_service_off);
     }
 

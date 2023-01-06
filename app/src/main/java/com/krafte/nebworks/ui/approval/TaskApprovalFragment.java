@@ -22,7 +22,10 @@ import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectMemberActivity;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.TaskCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.TaskSapprovalInterface;
 import com.krafte.nebworks.databinding.ActivityTaskApprovalBinding;
 import com.krafte.nebworks.util.Dlog;
@@ -112,16 +115,21 @@ public class TaskApprovalFragment extends AppCompatActivity {
         icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
         icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
-        shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-        SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
-        wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
-        gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-        return_page = shardpref.getString("return_page","");
-        place_id = shardpref.getString("place_id", "");
-        shardpref.putString("returnPage", "BusinessApprovalActivity");
+
+        //Singleton Area
+        USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
+        USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+        place_id            = PlaceCheckData.getInstance().getPlace_id();
+
+        //shardpref Area
+        shardpref           = new PreferenceHelper(mContext);
+        SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
+        wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
+        gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
+        return_page         = shardpref.getString("return_page","");
+        ReturnPageData.getInstance().setPage("BusinessApprovalActivity");
+//        shardpref.putString("returnPage", "BusinessApprovalActivity");
 
         change_place_id = place_id;
         change_member_id = "";

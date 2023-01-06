@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -87,7 +88,8 @@ public class CareerFragment3  extends Fragment {
 
         //Shared
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+//        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
         shardpref.remove("returnpage");

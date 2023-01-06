@@ -37,6 +37,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.TaskApprovalInterface;
@@ -160,15 +162,17 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
 
         setBtnEvent();
+        //Singleton Area
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        place_name      = PlaceCheckData.getInstance().getPlace_name();
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+        USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
 
-        shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        place_id = shardpref.getString("place_id", "0");
-        place_name = shardpref.getString("place_name", "0");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1"); //0-관리자 / 1- 근로자
-        task_no = shardpref.getString("task_no", "");
+        //shardpref Area
+        shardpref   = new PreferenceHelper(mContext);
+        task_no     = shardpref.getString("task_no", "");
 
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 1);

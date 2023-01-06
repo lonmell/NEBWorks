@@ -41,6 +41,7 @@ import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.UserInsertInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityLoginBinding;
@@ -156,7 +157,6 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        GET_ACCOUNT_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
         onEvent();
         permissionCheck();
         KakaoSetting();
@@ -170,9 +170,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        GET_ACCOUNT_EMAIL = shardpref.getString("USER_INFO_EMAIL", "-99");
-        USER_INFO_PW = shardpref.getString("USER_INFO_PW", "-99");
+        //Singleton Area
+        GET_ACCOUNT_EMAIL   = UserCheckData.getInstance().getUser_account();
+        USER_INFO_PW        = UserCheckData.getInstance().getUser_password();
+
+        //shardpref Area
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "-99");
+
         if (!USER_LOGIN_METHOD.equals("-99")) {
             if (!GET_ACCOUNT_EMAIL.equals("-99")) {
                 if (!GET_ACCOUNT_EMAIL.isEmpty() && (!USER_LOGIN_METHOD.isEmpty() && USER_LOGIN_METHOD.equals("NEB"))) {
@@ -249,30 +253,6 @@ public class LoginActivity extends AppCompatActivity {
                     dlog.i("NaverSetting onSuccess");
                     dlog.i("NaverSetting getAccessToken: " + naverIdLoginSDK.getAccessToken());
                     dlog.i("NaverSetting getRefreshToken: " + naverIdLoginSDK.getRefreshToken());
-
-//                    Toast.makeText(getApplicationContext(),"$response",Toast.LENGTH_SHORT).show();
-
-//                    // 토큰 삭제 및 로그아웃 코드
-//                    nidOAuthLogin.callDeleteTokenApi(getApplicationContext(), new OAuthLoginCallback() {
-//
-//                        @Override
-//                        public void onSuccess() {
-//                            //서버에서 토큰 삭제에 성공한 상태입니다.
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int i, @NonNull String s) {
-//                            // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
-//                            // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
-//                            Log.d("TAG", "errorCode: ${NaverIdLoginSDK.getLastErrorCode().code}")
-//                            Log.d("TAG", "errorDesc: ${NaverIdLoginSDK.getLastErrorDescription()}")
-//                        }
-//
-//                        @Override
-//                        public void onError(int i, @NonNull String s) {
-//                            onFailure(i, s);
-//                        }
-//                    });
 
                     //프로필 가져오는 코드
                     NidProfileCallback<NidProfileResponse> profileCallback = new NidProfileCallback<NidProfileResponse>() {
@@ -381,14 +361,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onEvent() {
-//        binding.deviceNumEdit.setOnClickListener(v -> {
-//            LockTost();
-//        });
-//
-//        binding.pwdEdit.setOnClickListener(v -> {
-//            LockTost();
-//        });
-
         binding.naverLogin.setOnClickListener(v -> {
             Toast_Nomal("준비중인 기능입니다.");
         });

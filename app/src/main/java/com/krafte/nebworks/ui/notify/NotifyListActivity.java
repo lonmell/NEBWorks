@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceNotifyAdapter;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkPlaceEmloyeeNotifyData;
 import com.krafte.nebworks.dataInterface.NotifyListInterface;
 import com.krafte.nebworks.dataInterface.NotifyReadyUInterface;
@@ -75,10 +77,15 @@ public class NotifyListActivity extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         setBtnEvent();
+
+        //Singleton Area
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+
+        //shardpref Area
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        place_id = shardpref.getString("place_id", "");
+
         SetWorkplaceList();
     }
 
@@ -148,18 +155,6 @@ public class NotifyListActivity extends AppCompatActivity {
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();
-
-//                                int MovePosition = shardpref.getInt("notify_pos", 0);
-//                                if(MovePosition != 0){
-//                                    RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(workplace_notify_list.getContext()) {
-//                                        @Override protected int getVerticalSnapPreference() {
-//                                            return LinearSmoothScroller.SNAP_TO_START;
-//                                        }
-//                                    };
-//
-//                                    smoothScroller.setTargetPosition( MovePosition ); //itemPosition - 이동시키고자 하는 Item의 Position
-//                                    workplace_notify_list.getLayoutManager().startSmoothScroll(smoothScroller);
-//                                }
                             }
                         }
 

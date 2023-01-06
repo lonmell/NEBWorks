@@ -1,27 +1,28 @@
 package com.krafte.nebworks.data;
 
 public class UserCheckData {
-    private static String user_id = "";
-    private static String user_password = "";
-    private static String place_name = "";
-    private static String user_account = "";
-    private static String user_name = "";
-    private static String user_nick_name = "";
-    private static String user_phone = "";
-    private static String user_gender = "";
-    private static String user_img_path = "";
-    private static String user_jumin = "";
-    private static String user_kind = "";
-    private static String user_join_date = "";
-    private static String user_state = "";
-    private static String user_jikgup = "";
-    private static String user_pay = "";
-    private static String user_worktime = "";
-    private static String user_inoutstate = "";
-    private static String user_sieob = "";
-    private static String user_jongeob = "";
-    private static String user_platform = "";
-    private static String user_contract_cnt = "";
+    private static String user_id = "0";
+    private static String user_password = "0";
+    private static String place_name = "0";
+    private static String user_account = "0";
+    private static String user_name = "0";
+    private static String user_nick_name = "0";
+    private static String user_phone = "0";
+    private static String user_gender = "0";
+    private static String user_img_path = "0";
+    private static String user_jumin = "0";
+    private static String user_kind = "0";
+    private static String user_join_date = "0";
+    private static String user_state = "0";
+    private static String user_jikgup = "0";
+    private static String user_pay = "0";
+    private static String user_worktime = "0";
+    private static String user_inoutstate = "0";
+    private static String user_sieob = "0";
+    private static String user_jongeob = "0";
+    private static String user_platform = "0";
+    private static String user_contract_cnt = "0";
+    private static String user_auth = "";
 
     public String getUser_id() {
         return user_id;
@@ -189,6 +190,14 @@ public class UserCheckData {
 
     public void setUser_contract_cnt(String user_contract_cnt) {
         this.user_contract_cnt = user_contract_cnt;
+    }
+
+    public String getUser_auth() {
+        return user_auth;
+    }
+
+    public void setUser_auth(String user_auth) {
+        this.user_auth = user_auth;
     }
 
     private static UserCheckData instance = null;

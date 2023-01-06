@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.databinding.ActivityTaskDetailBinding;
 import com.krafte.nebworks.util.Dlog;
@@ -98,36 +101,30 @@ public class TaskDetailActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
+            //Singleton Area
+            place_id            = PlaceCheckData.getInstance().getPlace_id();
+            place_name          = PlaceCheckData.getInstance().getPlace_name();
+            place_owner_id      = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_owner_name    = PlaceCheckData.getInstance().getPlace_owner_name();
+            place_address       = PlaceCheckData.getInstance().getPlace_address();
+            place_latitude      = PlaceCheckData.getInstance().getPlace_latitude();
+            place_longitude     = PlaceCheckData.getInstance().getPlace_longitude();
+            place_start_time    = PlaceCheckData.getInstance().getPlace_start_time();
+            place_end_time      = PlaceCheckData.getInstance().getPlace_end_time();
+            place_img_path      = PlaceCheckData.getInstance().getPlace_img_path();
+            place_start_date    = PlaceCheckData.getInstance().getPlace_start_date();
+            place_created_at    = PlaceCheckData.getInstance().getPlace_created_at();
+            return_page         = ReturnPageData.getInstance().getPage();
 
-            mContext = this;
-            dlog.DlogContext(mContext);
+            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
-            shardpref.putInt("SELECT_POSITION_sub", 1);
-            place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            place_owner_name = shardpref.getString("place_owner_name", "0");
-            place_management_office = shardpref.getString("place_management_office", "0");
-            place_address = shardpref.getString("place_address", "0");
-            place_latitude = shardpref.getString("place_latitude", "0");
-            place_longitude = shardpref.getString("place_longitude", "0");
-            place_start_time = shardpref.getString("place_start_time", "0");
-            place_end_time = shardpref.getString("place_end_time", "0");
-            place_img_path = shardpref.getString("place_img_path", "0");
-            place_start_date = shardpref.getString("place_start_date", "0");
-            place_created_at = shardpref.getString("place_created_at", "0");
-            return_page = shardpref.getString("return_page", "0");
             make_kind = shardpref.getInt("make_kind", 0);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-1");
-            shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub", 1);
 
             shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
-            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+            shardpref.putInt("SELECT_POSITION_sub", 1);
             setBtnEvent();
 
         } catch (Exception e) {
@@ -141,18 +138,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    String picker_year = "";
-    String picker_month = "";
-    String picker_day = "";
-    String input_pop_time = "";
-
-    String SET_TASK_TIME_VALUE = "";
-    List<String> yoillist = new ArrayList<>();
     String overdate = "";
-    boolean RepeatCheck = false;
-    String Time01 = "-99";
-    String Time02 = "-99";
-
     List<String> item_user_id;
     List<String> item_user_name;
     List<String> item_user_img;

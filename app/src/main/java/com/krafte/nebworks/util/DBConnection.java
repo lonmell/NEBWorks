@@ -404,7 +404,6 @@ public class DBConnection {
                         UserCheckData.getInstance().setUser_id(jsonObject.getString("id"));
                         UserCheckData.getInstance().setUser_password(jsonObject.getString("password"));
                         UserCheckData.getInstance().setPlace_name(jsonObject.getString("place_name"));
-
                         UserCheckData.getInstance().setUser_account(jsonObject.getString("account"));
                         UserCheckData.getInstance().setUser_name(jsonObject.getString("name"));
                         UserCheckData.getInstance().setUser_nick_name(jsonObject.getString("nick_name"));
@@ -423,73 +422,6 @@ public class DBConnection {
                         UserCheckData.getInstance().setUser_jongeob(jsonObject.getString("jongeob"));
                         UserCheckData.getInstance().setUser_platform(jsonObject.getString("platform"));
                         UserCheckData.getInstance().setUser_contract_cnt(jsonObject.getString("contract_cnt"));
-                    }
-                }
-                // 연결 끊기
-                conn.disconnect();
-                // // Log.i(TAG, "conn 연결 끊기");
-            }
-
-        } catch (Exception e) {
-            // Log.i(TAG, "error :" + e);
-        }
-    }
-
-    public void UserAccountCheck(String account){
-        // HttpUrlConnection
-        try {
-//            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-            String page = URL + "/NEBWorks/user/get.php";
-            // URL 객체 생성
-            URL url = new URL(page);
-            // 연결 객체 생성
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            // Post 파라미터
-            String params = "account=" + account;
-             Log.i(TAG, page + "?" + params);
-
-            // 결과값 저장 문자열
-            final StringBuilder sb = new StringBuilder();
-            // 연결되면
-            if (conn != null) {
-                // // Log.i(TAG, "conn 연결");
-                // 응답 타임아웃 설정
-                conn.setRequestProperty("Accept", "application/json");
-                conn.setConnectTimeout(10000);
-                // POST 요청방식
-                conn.setRequestMethod("POST");
-                // 포스트 파라미터 전달
-                conn.getOutputStream().write(params.getBytes(StandardCharsets.UTF_8));
-
-                // url에 접속 성공하면 (200)
-                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    // // // Log.i(TAG, "conn.getResponseCode() = " + conn.getResponseCode());
-                    // 결과 값 읽어오는 부분
-                    BufferedReader br = new BufferedReader(new InputStreamReader(
-                            conn.getInputStream(), StandardCharsets.UTF_8
-                    ));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-
-                    // 버퍼리더 종료
-                    br.close();
-                    // 응답 Json 타입일 경우
-//                    JSONArray jsonResponse = new JSONArray(sb.toString());
-                    JSONArray jsonResponse = new JSONArray(getBase64decode(sb.toString()));
-                    for (int i = 0; i < jsonResponse.length(); i++) {
-                        JSONObject jsonObject = jsonResponse.getJSONObject(i);
-                        ucd.setUser_id(jsonObject.getString("id"));
-                        ucd.setUser_password(jsonObject.getString("password"));
-                        ucd.setUser_account(jsonObject.getString("account"));
-                        ucd.setUser_name(jsonObject.getString("name"));
-                        ucd.setUser_nick_name(jsonObject.getString("nick_name"));
-                        ucd.setUser_phone(jsonObject.getString("phone"));
-                        ucd.setUser_gender(jsonObject.getString("gender"));
-                        ucd.setUser_img_path(jsonObject.getString("img_path"));
-                        ucd.setUser_platform(jsonObject.getString("platform"));
                     }
                 }
                 // 연결 끊기
@@ -549,6 +481,7 @@ public class DBConnection {
                     JSONArray jsonResponse = new JSONArray(getBase64decode(sb.toString()));
                     for (int i = 0; i < jsonResponse.length(); i++) {
                         JSONObject jsonObject = jsonResponse.getJSONObject(i);
+                        PlaceCheckData.getInstance().setPlace_id(jsonObject.getString("id"));
                         PlaceCheckData.getInstance().setPlace_name(jsonObject.getString("name"));
                         PlaceCheckData.getInstance().setPlace_owner_id(jsonObject.getString("owner_id"));
                         PlaceCheckData.getInstance().setPlace_owner_name(jsonObject.getString("owner_name"));

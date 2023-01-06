@@ -1,28 +1,37 @@
 package com.krafte.nebworks.data;
 
 public class PlaceCheckData {
-    private static String place_name = "";
-    private static String place_owner_id = "";
-    private static String place_owner_name = "";
-    private static String registr_num = "";
-    private static String store_kind = "";
-    private static String place_address = "";
-    private static String place_latitude = "";
-    private static String place_longitude = "";
-    private static String place_pay_day = "";
-    private static String place_test_period = "";
-    private static String place_vacation_select = "";
-    private static String place_insurance = "";
-    private static String place_start_time = "";
-    private static String place_end_time = "";
-    private static String place_save_kind = "";
-    private static String place_wifi_name = "";
-    private static String place_img_path = "";
-    private static String place_start_date = "";
-    private static String place_created_at = "";
-    private static String place_icnt = "";
-    private static String place_ocnt = "";
-    private static String place_totalcnt = "";
+    private static String place_id = "0";
+    private static String place_name = "0";
+    private static String place_owner_id = "0";
+    private static String place_owner_name = "0";
+    private static String registr_num = "0";
+    private static String store_kind = "0";
+    private static String place_address = "0";
+    private static String place_latitude = "0";
+    private static String place_longitude = "0";
+    private static String place_pay_day = "0";
+    private static String place_test_period = "0";
+    private static String place_vacation_select = "0";
+    private static String place_insurance = "0";
+    private static String place_start_time = "0";
+    private static String place_end_time = "0";
+    private static String place_save_kind = "0";
+    private static String place_wifi_name = "0";
+    private static String place_img_path = "0";
+    private static String place_start_date = "0";
+    private static String place_created_at = "0";
+    private static String place_icnt = "0";
+    private static String place_ocnt = "0";
+    private static String place_totalcnt = "0";
+
+    public String getPlace_id() {
+        return place_id;
+    }
+
+    public void setPlace_id(String place_id) {
+        this.place_id = place_id;
+    }
 
     public String getPlace_name() {
         return place_name;

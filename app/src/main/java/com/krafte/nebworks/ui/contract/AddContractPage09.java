@@ -23,6 +23,8 @@ import com.kakao.sdk.template.model.Social;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd09Binding;
@@ -84,13 +86,17 @@ public class AddContractPage09 extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
+
+        //Singleton Area
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+
+        //shardpref Area
         shardpref       = new PreferenceHelper(mContext);
-        place_id        = shardpref.getString("place_id","0");
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
         worker_id       = shardpref.getString("worker_id","0");
         contract_id     = shardpref.getString("contract_id","0");
         contract_email  = shardpref.getString("contract_email","0");
-        place_owner_id  = shardpref.getString("place_owner_id", "");
         worker_name     = shardpref.getString("worker_name", "");
 
         // Kakao SDK 객체 초기화
@@ -284,7 +290,6 @@ public class AddContractPage09 extends AppCompatActivity {
     }
 
     String click_action = "";
-
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {

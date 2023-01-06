@@ -125,7 +125,6 @@ public class ProfileEditActivity extends AppCompatActivity {
     String USER_INFO_ID = "";
     String USER_INFO_EMAIL = "";
     String USER_INFO_NAME = "";
-    String USER_INFO_KIND = "0";
     String USER_LOGIN_METHOD = "";
     String USER_INFO_GENDER = "0";
     String USER_INFO_AUTH = "";
@@ -170,17 +169,18 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         mContext = this;
         dlog.DlogContext(mContext);
-        shardpref = new PreferenceHelper(mContext);
+        //Singleton Area
+        place_id        = shardpref.getString("place_id", "0");
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
 
-        place_id = shardpref.getString("place_id", "0");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-        USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "0");
-        USER_INFO_KIND = shardpref.getString("USER_INFO_KIND","0");
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD","0");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
-        editstate = shardpref.getString("editstate","");
-        platform = shardpref.getString("platform","");
+        //shardpref Area
+        shardpref = new PreferenceHelper(mContext);
+        USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","0");
+        editstate           = shardpref.getString("editstate","");
+        platform            = shardpref.getString("platform","");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
 
@@ -709,7 +709,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         dlog.i("USER ID : " + USER_INFO_ID);
         dlog.i("프로필 사진 url : " + ProfileUrl);
         dlog.i("이전 프로필 사진 : " + ProfileUrl);
-        dlog.i("업체 분류 : " + USER_INFO_KIND);
         dlog.i("성명 : " + user_name);
         dlog.i("닉네임 : " + user_nickname);
         dlog.i("전화번호 : " + phone);

@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.InOutInsert2Interface;
 import com.krafte.nebworks.databinding.ActivityAddworkpartBinding;
 import com.krafte.nebworks.pop.SelectMemberPop;
@@ -95,20 +97,18 @@ public class AddDatePartActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
-            place_owner_id = shardpref.getString("place_owner_id", "0");
-            FtoDay  = shardpref.getString("FtoDay", "0");
+            //Singleton Area
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_name      = PlaceCheckData.getInstance().getPlace_name();
 
-            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
-            dlog.i("FtoDay : " + FtoDay);
-
-            place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
+            //shardpref Area
+            shardpref   = new PreferenceHelper(mContext);
+            FtoDay      = shardpref.getString("FtoDay", "0");
 
             binding.storeName.setText(place_name);
             binding.line01.setVisibility(View.GONE);

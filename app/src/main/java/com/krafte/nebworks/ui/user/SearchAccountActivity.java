@@ -30,6 +30,7 @@ import com.krafte.nebworks.adapter.WorkplaceListAdapter;
 import com.krafte.nebworks.data.CertiNumData;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceListData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.UserNumSelectInterface;
 import com.krafte.nebworks.databinding.ActivitySearchemailBinding;
 import com.krafte.nebworks.pop.AlertPopActivity;
@@ -105,10 +106,13 @@ public class SearchAccountActivity extends AppCompatActivity {
         shardpref = new PreferenceHelper(mContext);
 
         try {
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            findkind = shardpref.getString("findkind","");
+            //Singleton Area
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+
+            //shardpref Area
+            findkind        = shardpref.getString("findkind","");
 
             if(findkind.equals("email")){
                 binding.topBarTitle.setText("이메일 찾기");

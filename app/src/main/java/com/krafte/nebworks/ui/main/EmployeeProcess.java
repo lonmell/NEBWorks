@@ -26,6 +26,8 @@ import androidx.core.net.ParseException;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.InoutPopActivity;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.databinding.ActivityEmployeeProcessBinding;
 import com.krafte.nebworks.util.DateCurrent;
@@ -107,14 +109,16 @@ public class EmployeeProcess extends AppCompatActivity {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
         try {
-            place_id        = shardpref.getString("place_id", "0");
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "0");
+            //Singleton Area
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+
+            //shardpref Area
             kind            = shardpref.getString("kind", "0");
             jongeob         = shardpref.getString("jongeob", "");
             mem_name        = shardpref.getString("mem_name", "");
 
             onBtnEvent();
-
             if (kind.equals("0")) {
                 binding.ioBtn.setBackgroundResource(R.drawable.ic_in_btn_white);
             } else {

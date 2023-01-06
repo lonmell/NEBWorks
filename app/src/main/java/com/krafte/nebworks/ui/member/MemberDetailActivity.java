@@ -32,6 +32,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.MemberInoutAdapter;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkGotoListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
@@ -86,7 +88,6 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
-    String store_no;
     boolean wifi_certi_flag = false;
     boolean gps_certi_flag = false;
 
@@ -133,24 +134,25 @@ public class MemberDetailActivity extends AppCompatActivity {
             icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
-            shardpref = new PreferenceHelper(mContext);
-            stub_place_id = shardpref.getString("stub_place_id", "0");
-            stub_user_id = shardpref.getString("stub_user_id", "0");
-            stub_user_account = shardpref.getString("stub_user_account", "");
-            change_place_name = shardpref.getString("change_place_name", "");
+            //Singleton Area
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
 
-            place_id = shardpref.getString("place_id", "");
-            place_owner_id = shardpref.getString("place_owner_id", "");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
+            //shardpref Area
+            shardpref           = new PreferenceHelper(mContext);
+            stub_place_id       = shardpref.getString("stub_place_id", "0");
+            stub_user_id        = shardpref.getString("stub_user_id", "0");
+            stub_user_account   = shardpref.getString("stub_user_account", "");
+            change_place_name   = shardpref.getString("change_place_name", "");
+            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
-            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-            return_page = shardpref.getString("return_page", "");
-            store_no = shardpref.getString("store_no", "");
-            item_user_id = shardpref.getString("item_user_id", "");
+            wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
+            return_page         = shardpref.getString("return_page", "");
+            item_user_id        = shardpref.getString("item_user_id", "");
 
             setBtnEvent();
             drawerLayout = findViewById(R.id.drawer_layout);

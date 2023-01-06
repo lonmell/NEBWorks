@@ -95,11 +95,13 @@ public class PlaceEditActivity2 extends AppCompatActivity {
 //
         try {
             binding.noData.setVisibility(View.VISIBLE);
-            place_id = shardpref.getString("place_id", "-99");
-            place_name = shardpref.getString("place_name", "-99");
-            place_owner_id = shardpref.getString("place_owner_id", "-99");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "-99");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-99");
+            //shardpref Area
+            place_id        = shardpref.getString("place_id", "-99");
+            place_name      = shardpref.getString("place_name", "-99");
+            place_owner_id  = shardpref.getString("place_owner_id", "-99");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "-99");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "-99");
+
             getPlaceContents();
             wifiScan();
         } catch (Exception ignored) {

@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.databinding.ActivityCareerBinding;
 import com.krafte.nebworks.ui.fragment.career.CareerFragment1;
@@ -150,7 +151,8 @@ public class CareerActivity extends AppCompatActivity {
 
         shardpref = new PreferenceHelper(mContext);
         store_no = shardpref.getString("store_no","");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+//        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME","");
         USER_INFO_PW = shardpref.getString("USER_INFO_PW","");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
@@ -217,7 +219,6 @@ public class CareerActivity extends AppCompatActivity {
                 .skipMemoryCache(true).into(binding.profileImg);
 
         binding.viewPager.setCurrentItem(1);
-        GetStoreNewsCnt();
 
         ImgfileMaker = ImageNameMaker();
 
@@ -494,63 +495,6 @@ public class CareerActivity extends AppCompatActivity {
                 .into(user_profile);
 
     }
-
-    public void GetStoreNewsCnt() {
-//        runOnUiThread(() -> {
-//            login_alert_text.setVisibility(View.VISIBLE);
-//        });
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(StoreNewsInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        StoreNewsInterface api = retrofit.create(StoreNewsInterface.class);
-//        Call<String> call = api.getDate(USER_INFO_ID,store_no);
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                login_alert_text.setVisibility(View.GONE);
-//                if (response.isSuccessful() && response.body() != null) {
-//                    String jsonResponse = rc.getBase64decode(response.body());
-//                    dlog.e("ConnectThread_UserInfo onSuccess" + jsonResponse);
-//                    try {
-//                        //Array데이터를 받아올 때
-//                        JSONArray Response = new JSONArray(jsonResponse);
-//                        String newNotify = Response.getJSONObject(0).getString("newNotify");
-//                        String newMemberRequest = Response.getJSONObject(0).getString("newMemberRequest");
-//                        String newApproval = Response.getJSONObject(0).getString("newApproval");
-//                        String gujik_yn = Response.getJSONObject(0).getString("gujik_yn");
-//
-//                        if(newNotify.equals("0")){
-//                            notice_cnt_y.setVisibility(View.GONE);
-//                        }else{
-//                            notice_cnt_y.setVisibility(View.VISIBLE);
-//                        }
-//                        login_alert_text.setVisibility(View.GONE);
-//
-//                        if(gujik_yn.equals("1")){
-//                            gujik_yn_txt.setText("구직 중");
-//                            gujik_yn_txt.setTextColor(Color.parseColor("#1483FE"));
-//                        }else {
-//                            gujik_yn_txt.setText("");
-//                            gujik_yn_txt.setTextColor(Color.parseColor("#696969"));
-//                        }
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                login_alert_text.setVisibility(View.GONE);
-//                dlog.e("에러1 = " + t.getMessage());
-//            }
-//        });
-    }
-
 
     private String ImageNameMaker() {
         Retrofit retrofit = new Retrofit.Builder()

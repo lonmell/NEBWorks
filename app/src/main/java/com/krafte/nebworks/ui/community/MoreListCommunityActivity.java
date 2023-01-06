@@ -15,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.PlaceNotiData;
+import com.krafte.nebworks.data.ReturnPageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.ActivityCommunityAllBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -76,13 +79,15 @@ public class MoreListCommunityActivity extends AppCompatActivity {
 
         setBtnEvent();
 
-        shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
-        returnPage      = shardpref.getString("returnPage", "");
-        place_id        = shardpref.getString("place_id", "");
-        Log.i(TAG, "USER_INFO_AUTH : " + USER_INFO_AUTH);
+        //Singleton Area
+        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+        returnPage      = ReturnPageData.getInstance().getPage();
+        place_id        = PlaceCheckData.getInstance().getPlace_id();
 
+        //shardpref Area
+        shardpref = new PreferenceHelper(mContext);
+        returnPage      = shardpref.getString("returnPage", "");
     }
 
     @Override

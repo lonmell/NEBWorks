@@ -25,8 +25,6 @@ public interface MovePage {
 
     void CommunityDetail(Context context);
 
-    void OwnerFeedAdd(Context context);
-
     void OwnerFeedDetail(Context context);
 
     //--ui.contract
@@ -86,10 +84,6 @@ public interface MovePage {
     void WorkStateListGo(Context context);
 
     void WorkStateListBack(Context context);
-
-    void WorkStateDetailGo(Context context);
-
-    void WorkStateDetailBack(Context context);
 
     //--ui.calendar
     void CalenderGo(Context context);

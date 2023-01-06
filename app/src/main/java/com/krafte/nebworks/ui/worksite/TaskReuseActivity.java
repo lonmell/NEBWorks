@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.Tap3ListAdapter;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.TodoReuseData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.TaskreuseSInterface;
 import com.krafte.nebworks.databinding.ActivityTaskReuseBinding;
 import com.krafte.nebworks.util.DateCurrent;
@@ -75,16 +77,16 @@ public class TaskReuseActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
-            place_id = shardpref.getString("place_id", "");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
-            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-99");// 0:점주 / 1:근로자
+            //Singleton Area
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
 
-            dlog.i("place_id : " + place_id);
-            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+            //shardpref Area
+            shardpref = new PreferenceHelper(mContext);
+
 
             setBtnEvent();
             setTodoMList();

@@ -151,6 +151,7 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
                                                     jsonObject.getString("name"),
                                                     jsonObject.getString("owner_id"),
                                                     jsonObject.getString("owner_name"),
+                                                    jsonObject.getString("owner_phone"),
                                                     jsonObject.getString("registr_num"),
                                                     jsonObject.getString("store_kind"),
                                                     jsonObject.getString("address"),

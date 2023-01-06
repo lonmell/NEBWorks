@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.databinding.MorefragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -117,26 +119,25 @@ public class MoreFragment extends Fragment {
         try {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
-            setBtnEvent();
+            //Singleton Area
+            place_id            = PlaceCheckData.getInstance().getPlace_id();
+            place_name          = PlaceCheckData.getInstance().getPlace_name();
+            place_owner_id      = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_owner_name    = PlaceCheckData.getInstance().getPlace_owner_name();
+            place_address       = PlaceCheckData.getInstance().getPlace_address();
+            place_latitude      = PlaceCheckData.getInstance().getPlace_latitude();
+            place_longitude     = PlaceCheckData.getInstance().getPlace_longitude();
+            place_start_time    = PlaceCheckData.getInstance().getPlace_start_time();
+            place_end_time      = PlaceCheckData.getInstance().getPlace_end_time();
+            place_img_path      = PlaceCheckData.getInstance().getPlace_img_path();
+            place_start_date    = PlaceCheckData.getInstance().getPlace_start_date();
+            place_created_at    = PlaceCheckData.getInstance().getPlace_created_at();
 
-            place_id            = shardpref.getString("place_id", "0");
-            place_name          = shardpref.getString("place_name", "0");
-            place_owner_id      = shardpref.getString("place_owner_id", "0");
-            place_owner_name    = shardpref.getString("place_owner_name", "0");
-            place_management_office = shardpref.getString("place_management_office", "0");
-            place_address       = shardpref.getString("place_address", "0");
-            place_latitude      = shardpref.getString("place_latitude", "0");
-            place_longitude     = shardpref.getString("place_longitude", "0");
-            place_start_time    = shardpref.getString("place_start_time", "0");
-            place_end_time      = shardpref.getString("place_end_time", "0");
-            place_img_path      = shardpref.getString("place_img_path", "0");
-            place_start_date    = shardpref.getString("place_start_date", "0");
-            place_created_at    = shardpref.getString("place_created_at", "0");
+            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
 
-            USER_INFO_ID        = shardpref.getString("USER_INFO_ID","");
+            //shardpref Area
             USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");
-            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
 
             if (!USER_INFO_AUTH.isEmpty()) {
                 if(!USER_LOGIN_METHOD.equals("NEB")){
@@ -151,7 +152,7 @@ public class MoreFragment extends Fragment {
                     }
                 }
             }
-
+            setBtnEvent();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }

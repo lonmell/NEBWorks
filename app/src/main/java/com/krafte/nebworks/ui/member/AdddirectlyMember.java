@@ -20,6 +20,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddDirectlyInterface;
 import com.krafte.nebworks.databinding.ActivityAdddirectlyMemberBinding;
 import com.krafte.nebworks.util.Dlog;
@@ -91,11 +93,15 @@ public class AdddirectlyMember extends AppCompatActivity {
         dlog.DlogContext(mContext);
         setBtnEvent();
 
+        //Singleton Area
+        place_id            = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
+        USER_INFO_PHONE     = UserCheckData.getInstance().getUser_phone();
+
+        //shardpref Area
         shardpref = new PreferenceHelper(mContext);
-        place_id = shardpref.getString("place_id", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
+        USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD", "");
+
         Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
         Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
         Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);

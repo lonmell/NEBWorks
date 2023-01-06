@@ -36,6 +36,8 @@ import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.SelectStringBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiAddInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
@@ -144,22 +146,24 @@ public class CommunityAddActivity extends AppCompatActivity {
         icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
         icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
 
-        shardpref = new PreferenceHelper(mContext);
-        USER_INFO_NO = shardpref.getString("USER_INFO_NO", "");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-        SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
-        state = shardpref.getString("state", "");
 
-        place_id = shardpref.getString("place_id", "");
-        feed_id = shardpref.getString("place_id", "");
+        //Singleton Area
+        USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
+        USER_INFO_NICKNAME  = UserCheckData.getInstance().getUser_nick_name();
+        USER_INFO_AUTH      = UserCheckData.getInstance().getUser_auth();
+        place_id            = PlaceCheckData.getInstance().getPlace_id();
+
+        //shardpref Area
+        shardpref           = new PreferenceHelper(mContext);
+        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
+        SELECTED_POSITION   = shardpref.getInt("SELECTED_POSITION", 0);
+        state               = shardpref.getString("state", "");
 
         /*작성자가 수정 버튼을 눌렀을때 가져옴*/
-        state_txt = shardpref.getString("state", "");
-        write_id_txt = shardpref.getString("write_id", "");
-        write_nickname = shardpref.getString("write_nickname", "");
+        state_txt           = shardpref.getString("state", "");
+        write_id_txt        = shardpref.getString("write_id", "");
+        write_nickname      = shardpref.getString("write_nickname", "");
 
         user_input_name = USER_INFO_NAME;
         binding.addcommunityBtn.setText("등록");
@@ -169,17 +173,10 @@ public class CommunityAddActivity extends AppCompatActivity {
         dlog.i("state : " + state);
         //-------------------------------
         //-- 게시글 수정할때
-        feed_id          = shardpref.getString("feed_id","");
-        String place_id         = shardpref.getString("place_id","");
+        feed_id                 = shardpref.getString("feed_id","");
         String title            = shardpref.getString("title","");
         String contents         = shardpref.getString("contents","");
-        String writer_id        = shardpref.getString("writer_id","");
-        String writer_name      = shardpref.getString("writer_name","");
-        String writer_img_path  = shardpref.getString("writer_img_path","");
         String feed_img_path    = shardpref.getString("feed_img_path","");
-        String jikgup           = shardpref.getString("jikgup","");
-        String view_cnt         = shardpref.getString("view_cnt","");
-        String comment_cnt      = shardpref.getString("comment_cnt","");
         String category         = shardpref.getString("category","");
 
         binding.selectCategoryTxt.setText(category.isEmpty()?"키워드 선택":category);

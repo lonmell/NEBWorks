@@ -184,13 +184,13 @@ public class HomeFragment2 extends Fragment {
         try {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
+            //Singleton Area
+            place_id = PlaceCheckData.getInstance().getPlace_id();
+            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_AUTH = UserCheckData.getInstance().getUser_auth();
 
-            setBtnEvent();
-            dlog.i("HomeFragment 2 START!");
-            place_id = shardpref.getString("place_id", "0");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+            //shardpref Area
             accept_state = shardpref.getInt("accept_state", -99);
             input_date = shardpref.getString("input_date", "-1");
             in_time = shardpref.getString("in_time", "");
@@ -198,7 +198,7 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 setDummyData();
             }
-
+            setBtnEvent();
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);
@@ -209,7 +209,6 @@ public class HomeFragment2 extends Fragment {
             });
 
             //0-관리자 / 1- 근로자
-            dlog.i("gotoplace location view USER_INFO_AUTH : " + USER_INFO_AUTH);
             //USER_INFO_AUTH 가 -1일때
 //            USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
 //            shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
@@ -619,7 +618,7 @@ public class HomeFragment2 extends Fragment {
             activity.runOnUiThread(() -> {
                 try {
                     mem_id = UserCheckData.getInstance().getUser_id();
-                    mem_name = UserCheckData.getInstance().getPlace_name();
+                    mem_name = UserCheckData.getInstance().getUser_name();
                     mem_phone = UserCheckData.getInstance().getUser_phone();
                     mem_gender = UserCheckData.getInstance().getUser_gender();
                     mem_img_path = UserCheckData.getInstance().getUser_img_path();

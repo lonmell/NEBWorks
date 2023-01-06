@@ -180,11 +180,13 @@ public class PlaceAddActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
+
+            //shardpref Area
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
             page_state = shardpref.getString("page_state", "0");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "0");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "0");
 
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);

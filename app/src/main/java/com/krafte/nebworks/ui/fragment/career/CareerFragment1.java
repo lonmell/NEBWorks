@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.databinding.CareerFragment1Binding;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -74,7 +75,8 @@ public class CareerFragment1  extends Fragment {
 
         //Shared
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+//        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
 
         setBtnEvent();
         return binding.getRoot();

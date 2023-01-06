@@ -100,10 +100,13 @@ public class PlaceListActivity extends AppCompatActivity {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
 
+            //Singleton Area - not // 회원 정보 조회 전
             USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
             USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", "");
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "-99");// 0:점주 / 1:근로자
+
+            //shardpref Area
             event           = shardpref.getString("event", "");
 
             shardpref.putInt("SELECT_POSITION", 0);
@@ -307,6 +310,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                                 jsonObject.getString("name"),
                                                 jsonObject.getString("owner_id"),
                                                 jsonObject.getString("owner_name"),
+                                                jsonObject.getString("owner_phone"),
                                                 jsonObject.getString("registr_num"),
                                                 jsonObject.getString("store_kind"),
                                                 jsonObject.getString("address"),

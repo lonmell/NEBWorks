@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.databinding.CareerFragment2Binding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -100,7 +101,8 @@ public class CareerFragment2  extends Fragment {
 
         //Shared
         place_id = shardpref.getString("place_id","");
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+//        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
 
 //        career_txt03.setOnClickListener(v -> {

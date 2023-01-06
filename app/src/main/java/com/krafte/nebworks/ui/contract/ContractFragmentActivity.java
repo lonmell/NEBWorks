@@ -21,6 +21,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.databinding.ActivityContractFragmentBinding;
 import com.krafte.nebworks.ui.fragment.contract.ContractFragment1;
 import com.krafte.nebworks.ui.fragment.contract.ContractFragment2;
@@ -62,7 +63,7 @@ public class ContractFragmentActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
 
         try {
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+            USER_INFO_AUTH = UserCheckData.getInstance().getUser_auth();
 
             final List<String> tabElement = Arrays.asList("전체", "서명대기중", "완료", "미작성");
             //before 전체피드 / 랭킹 / 매장 / 구인구직

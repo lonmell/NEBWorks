@@ -97,11 +97,14 @@ public class PlaceAddActivity2 extends AppCompatActivity {
         dlog.DlogContext(mContext);
 //
         try {
+            //shardpref Area
+            place_name      = shardpref.getString("place_name", "-99");
+            place_owner_id  = shardpref.getString("place_owner_id", "-99");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "-99");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","-99");
+
             binding.noData.setVisibility(View.VISIBLE);
-            place_name = shardpref.getString("place_name", "-99");
-            place_owner_id = shardpref.getString("place_owner_id", "-99");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "-99");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-99");
+
             getPlaceId();
             wifiScan();
 

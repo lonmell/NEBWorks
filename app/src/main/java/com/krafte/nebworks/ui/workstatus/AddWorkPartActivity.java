@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.SelectYoilActivity;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.WorkPartSaveInterface;
 import com.krafte.nebworks.databinding.ActivityAddworkpartBinding;
 import com.krafte.nebworks.pop.SelectMemberPop;
@@ -97,19 +99,19 @@ public class AddWorkPartActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "0");
-            USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", "");
-            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "0");
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "0");
-            place_owner_id  = shardpref.getString("place_owner_id", "0");
+            //Singleton Area
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_AUTH  = UserCheckData.getInstance().getUser_auth();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            place_name      = PlaceCheckData.getInstance().getPlace_name();
+
+            //shardpref Area
+            shardpref       = new PreferenceHelper(mContext);
             i_cnt           = shardpref.getString("i_cnt", "0");
 
-            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
-
-            place_id = shardpref.getString("place_id", "0");
-            place_name = shardpref.getString("place_name", "0");
 
             binding.storeName.setText(place_name);
             binding.memCnt.setText("총 " + i_cnt + "명 근무 중");

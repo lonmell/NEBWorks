@@ -30,15 +30,10 @@ public class AddContractPage02 extends AppCompatActivity {
 
     // shared 저장값
     PreferenceHelper shardpref;
-    String place_id = "";
 
     //Other
-    DateCurrent dc = new DateCurrent();
-    DBConnection dbConnection = new DBConnection();
-    GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
-    RetrofitConnect rc = new RetrofitConnect();
 
     boolean select01tf = false;
     boolean select02tf = false;
