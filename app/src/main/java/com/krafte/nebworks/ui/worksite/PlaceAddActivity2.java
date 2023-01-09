@@ -119,6 +119,12 @@ public class PlaceAddActivity2 extends AppCompatActivity {
         }
     }
 
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("pin_store_address");
+        shardpref.remove("pin_store_addressdetail");
+        shardpref.remove("pin_zipcode");
+    }
     public void getPlaceId() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceGetId.URL)

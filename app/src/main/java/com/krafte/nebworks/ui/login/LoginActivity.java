@@ -48,6 +48,7 @@ import com.krafte.nebworks.databinding.ActivityLoginBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.AES256Util;
 import com.krafte.nebworks.util.DateCurrent;
+import com.krafte.nebworks.util.DeviceInfoUtil;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.HashCode;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     RetrofitConnect rc = new RetrofitConnect();
     PageMoveClass pm = new PageMoveClass();
     AES256Util aes256Util;
+    DeviceInfoUtil diu = new DeviceInfoUtil();
 
     //Other 변수
     int turnvisible = 0;
@@ -156,12 +158,11 @@ public class LoginActivity extends AppCompatActivity {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
-        onEvent();
         permissionCheck();
         KakaoSetting();
         GoogleSetting();
         NaverSetting();
+        onEvent();
         if (!GET_ACCOUNT_EMAIL.isEmpty() && (!USER_LOGIN_METHOD.isEmpty() && USER_LOGIN_METHOD.equals("NEB"))) {
             binding.deviceNumEdit.setText(GET_ACCOUNT_EMAIL);
         }
@@ -231,10 +232,6 @@ public class LoginActivity extends AppCompatActivity {
             naverIdLoginSDK.logout();
             naverIdLoginSDK.setShowMarketLink(true);
             naverIdLoginSDK.setShowBottomTab(true);
-
-            binding.buttonOAuthLoginImg.setOnClickListener(v -> {
-                naverIdLoginSDK.authenticate(LoginActivity.this, oAuthLoginCallback);
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -361,9 +358,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onEvent() {
-        binding.naverLogin.setOnClickListener(v -> {
-            Toast_Nomal("준비중인 기능입니다.");
+        binding.buttonOAuthLoginImg.setOnClickListener(v -> {
+            int sdkinfo = diu.getDeviceSdk();
+            if(sdkinfo > 31){
+                Toast_Nomal("현재 버전에서는 사용할 수 없는 기능입니다.");
+            }else{
+                naverIdLoginSDK.authenticate(LoginActivity.this, oAuthLoginCallback);
+            }
         });
+
         binding.loginBtn.setOnClickListener(v -> {
             String email = binding.deviceNumEdit.getText().toString();
             String pw = binding.pwdEdit.getText().toString();
@@ -399,7 +402,6 @@ public class LoginActivity extends AppCompatActivity {
             shardpref.putString("findkind", "password");
             pm.SearchEmail(mContext);
         });
-
 
         binding.ltdTv.setOnClickListener(v -> {
             clickcnt++;

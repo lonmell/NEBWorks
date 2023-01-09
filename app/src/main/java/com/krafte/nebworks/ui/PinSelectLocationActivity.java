@@ -2,6 +2,7 @@ package com.krafte.nebworks.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,6 +28,7 @@ import com.kakao.util.helper.Utility;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.databinding.ActivityPinselectBinding;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
+import com.krafte.nebworks.pop.WriteAddressActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.GpsTracker;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -160,11 +162,22 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
         });
 
         binding.writeAddress.setOnClickListener(v -> {
-            Intent i = new Intent(this, WebViewActivity.class);
-            startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+//            Intent i = new Intent(this, WebViewActivity.class);
+//            startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+            Intent intent = new Intent(mContext, WriteAddressActivity.class);
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
     }
-
+    public void onResume(){
+        super.onResume();
+        String pin_store_address = shardpref.getString("pin_store_address","");
+        String pin_store_addressdetail = shardpref.getString("pin_store_addressdetail","");
+        String pin_zipcode = shardpref.getString("pin_zipcode","");
+        binding.address01.setText(pin_store_address.isEmpty()?"":pin_store_address);
+        binding.address02.setText(pin_store_addressdetail.isEmpty()?"":pin_store_addressdetail);
+    }
     private void MoveMyLocation() {
         try {
             gpsTracker = new GpsTracker(this);
@@ -213,18 +226,6 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
                 if (checkLocationServicesStatus()) {
                     Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
                     checkRunTimePermission();
-                }
-            }
-        } else if (requestCode == SEARCH_ADDRESS_ACTIVITY) {
-            if (resultCode == RESULT_OK) {
-                String getData = data.getExtras().getString("data");
-                if (getData != null) {
-                    String postalCode = getData.substring(0, 5);
-                    String address = getData.substring(7);
-                    shardpref.putString("pin_store_address",address);
-                    shardpref.putString("pin_store_addressdetail","");
-                    shardpref.putString("pin_zipcode",postalCode);
-                    finish();
                 }
             }
         }

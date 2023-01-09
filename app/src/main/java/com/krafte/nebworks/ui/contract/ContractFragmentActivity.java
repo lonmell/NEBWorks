@@ -63,7 +63,7 @@ public class ContractFragmentActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
 
         try {
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
 
             final List<String> tabElement = Arrays.asList("전체", "서명대기중", "완료", "미작성");
             //before 전체피드 / 랭킹 / 매장 / 구인구직
