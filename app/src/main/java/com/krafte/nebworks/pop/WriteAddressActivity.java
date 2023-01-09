@@ -132,7 +132,7 @@ public class WriteAddressActivity extends Activity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         GuideSearchAPInterface api = retrofit.create(GuideSearchAPInterface.class);
-        Call<String> call = api.getData("1", "20", mSearchAddrStr, "devU01TX0FVVEgyMDIzMDEwOTE0MzA1ODExMzQxMTM=", "json");
+        Call<String> call = api.getData("1", "20", mSearchAddrStr, "U01TX0FVVEgyMDIzMDEwOTE2MjQxMDExMzQxMjE=", "json");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
