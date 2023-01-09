@@ -153,7 +153,6 @@ public class TaskReportActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
             //Singleton Area
             place_id            = PlaceCheckData.getInstance().getPlace_id();
             place_name          = PlaceCheckData.getInstance().getPlace_name();
@@ -173,7 +172,7 @@ public class TaskReportActivity extends AppCompatActivity {
             USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
 
             //shardpref Area
-
+            shardpref = new PreferenceHelper(mContext);
             make_kind = shardpref.getInt("make_kind", 0);
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 1);

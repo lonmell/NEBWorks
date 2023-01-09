@@ -1,97 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:alpha="0.87"
+    app:cardBackgroundColor="#ffffff"
+    android:orientation="vertical"
+    android:padding="0dp"
+    app:cardCornerRadius="8dp"
     tools:context=".pop.TwoButtonPopActivity">
-    <androidx.cardview.widget.CardView
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:alpha="0.87"
-        android:layout_centerInParent="true"
-        app:cardBackgroundColor="#ffffff"
-        android:orientation="vertical"
-        app:cardCornerRadius="8dp"
-        tools:context=".pop.TwoButtonPopActivity">
 
-        <RelativeLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:alpha="0.87"
+            android:gravity="center"
+            android:minHeight="120dp"
+            android:text="noti_text"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
 
-            <TextView
-                android:id="@+id/txtText"
+        <LinearLayout
+            android:id="@+id/underline"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/txtText"
+            android:background="#dcdcdc"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/underline"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:id="@+id/pop_left_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:alpha="0.87"
-                android:gravity="center"
-                android:minHeight="120dp"
-                android:text="noti_text"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                tools:ignore="HardcodedText" />
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
-            <LinearLayout
-                android:id="@+id/underline"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/txtText"
-                android:background="#dcdcdc"
-                android:orientation="vertical" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/underline"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <RelativeLayout
-                    android:id="@+id/pop_left_btn"
+                <TextView
+                    android:id="@+id/pop_left_txt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:text="팝업 왼쪽버튼"
+                    android:textColor="#696969"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="#dcdcdc"/>
+            <RelativeLayout
+                android:id="@+id/pop_right_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/pop_left_txt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="팝업 왼쪽버튼"
-                        android:textColor="#696969"
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText,TextContrastCheck" />
-                </RelativeLayout>
-                <LinearLayout
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="#dcdcdc"/>
-                <RelativeLayout
-                    android:id="@+id/pop_right_btn"
+                <TextView
+                    android:id="@+id/pop_right_txt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/pop_right_txt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="팝업 오른쪽버튼"
-                        android:textColor="@color/blue"
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText,TextContrastCheck" />
-                </RelativeLayout>
-            </LinearLayout>
-        </RelativeLayout>
+                    android:gravity="center"
+                    android:text="팝업 오른쪽버튼"
+                    android:textColor="@color/blue"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
 
-    </androidx.cardview.widget.CardView>
-</RelativeLayout>
-
+</androidx.cardview.widget.CardView>
 

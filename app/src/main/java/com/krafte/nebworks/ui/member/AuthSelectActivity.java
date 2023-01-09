@@ -27,6 +27,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.data.PlaceNotiData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.ActivityAuthselectBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -195,8 +196,8 @@ public class AuthSelectActivity extends AppCompatActivity {
         Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
 
         try {
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
-//            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+//            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }

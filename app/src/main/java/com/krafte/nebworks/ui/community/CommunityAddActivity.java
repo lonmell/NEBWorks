@@ -142,7 +142,8 @@ public class CommunityAddActivity extends AppCompatActivity {
         }
         mContext = this;
         dlog.DlogContext(mContext);
-        shardpref           = new PreferenceHelper(mContext);
+
+        shardpref = new PreferenceHelper(mContext);
         icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
         icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
 
@@ -155,7 +156,6 @@ public class CommunityAddActivity extends AppCompatActivity {
         place_id            = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area
-
         USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
         SELECTED_POSITION   = shardpref.getInt("SELECTED_POSITION", 0);
         state               = shardpref.getString("state", "");

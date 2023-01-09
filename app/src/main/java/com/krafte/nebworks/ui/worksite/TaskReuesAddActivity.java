@@ -144,7 +144,6 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         try {
             mContext = this;
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
             //Singleton Area
             place_id            = PlaceCheckData.getInstance().getPlace_id();
             place_name          = PlaceCheckData.getInstance().getPlace_name();
@@ -164,6 +163,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
 
             //shardpref Area
+            shardpref = new PreferenceHelper(mContext);
             shardpref.putInt("SELECT_POSITION_sub", 1);
             make_kind = shardpref.getInt("make_kind", 0);
 

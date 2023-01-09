@@ -70,12 +70,12 @@ public class TwoButtonPopActivity extends Activity {
     private static final String TAG = "TwoButtonPopActivity";
 
     Context mContext;
-    String flag = "";
-    String title = "";
-    String data = "";
-    String left_btn_txt = "";
-    String right_btn_txt = "";
-    String take_user_id = "";
+    private String flag = "";
+    private String title = "";
+    private String data = "";
+    private String left_btn_txt = "";
+    private String right_btn_txt = "";
+    private String take_user_id = "";
 
     Intent intent;
 
@@ -107,7 +107,7 @@ public class TwoButtonPopActivity extends Activity {
     String ClientID = "cN1sIOhyOshPLKgNL4Sj";
     String ClientSecret = "iFS5etlgYt";
     String ClientName = "넵";
-    NaverIdLoginSDK naverIdLoginSDK;
+    NaverIdLoginSDK naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -134,38 +134,29 @@ public class TwoButtonPopActivity extends Activity {
         take_user_id = intent.getStringExtra("take_user_id");
         left_btn_txt = intent.getStringExtra("left_btn_txt");
         right_btn_txt = intent.getStringExtra("right_btn_txt");
-        naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
 
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
-        if (USER_LOGIN_METHOD.equals("Google")) {
-            dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
-            //Google
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build();
+        //Google
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
-            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-            mAuth = FirebaseAuth.getInstance();
-        } else if (USER_LOGIN_METHOD.equals("Kakao")) {
-            dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
-        } else if (USER_LOGIN_METHOD.equals("Naver")) {
-            dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
-            //Naver
-            naverIdLoginSDK.initialize(TwoButtonPopActivity.this, ClientID, ClientSecret, ClientName);
-            naverIdLoginSDK.setShowMarketLink(true);
-            naverIdLoginSDK.setShowBottomTab(true);
-        }
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
 
+        //Naver
+        naverIdLoginSDK.initialize(TwoButtonPopActivity.this, ClientID, ClientSecret, ClientName);
+        naverIdLoginSDK.setShowMarketLink(true);
+        naverIdLoginSDK.setShowBottomTab(true);
 
         setBtnEvent();
 
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
-        USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
-        place_id = shardpref.getString("place_id", "-1");
-        mem_id = shardpref.getString("mem_id", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        USER_INFO_ID        = shardpref.getString("USER_INFO_ID","");
+        USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");
+        USER_INFO_PHONE     = shardpref.getString("USER_INFO_PHONE", "");
+        place_id            = shardpref.getString("place_id", "-1");
+        mem_id              = shardpref.getString("mem_id","");
+        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
 
         if (title.equals("알림")) {
             binding.txtText.setVisibility(View.INVISIBLE);
@@ -179,13 +170,14 @@ public class TwoButtonPopActivity extends Activity {
     }
 
 
+
     //확인 버튼 클릭
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setBtnEvent() {
         binding.popRightTxt.setOnClickListener(v -> {
-            try {
+            try{
                 //데이터 전달하기
-                if (flag.equals("로그아웃")) {
+                if(flag.equals("로그아웃")){
 //                FirebaseMessaging.getInstance().subscribeToTopic(USER_INFO_ID).isCanceled();
 //                FirebaseMessaging.getInstance().subscribeToTopic("TEST").isCanceled();
                     shardpref.clear();
@@ -200,7 +192,7 @@ public class TwoButtonPopActivity extends Activity {
                                 .addOnCompleteListener(this, task -> {
                                     pm.Login(mContext);
                                 });
-                    } else if (USER_LOGIN_METHOD.equals("Kakao")) {
+                    } else if(USER_LOGIN_METHOD.equals("Kakao")){
                         Handler handler = new Handler();
                         handler.postDelayed(() -> {
                             UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
@@ -211,72 +203,71 @@ public class TwoButtonPopActivity extends Activity {
                                 }
                             });
                         }, 100); //0.5초 후 인트로 실행
-                    } else if (USER_LOGIN_METHOD.equals("Naver")) {
+                    } else if(USER_LOGIN_METHOD.equals("Naver")) {
                         naverIdLoginSDK.logout();
                         naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
                         pm.Login(mContext);
-                    } else {
+                    }else{
                         pm.Login(mContext);
                     }
                     FcmTokenDel();
                     finish();
-                } else if (flag.equals("회원탈퇴")) {
+                }else if(flag.equals("회원탈퇴")){
                     UserDelete();
                     FcmTokenDel();
-                } else if (flag.equals("댓글삭제")) {
+                }else if (flag.equals("댓글삭제")) {
                     String comment_id = "0";
-                    comment_id = shardpref.getString("comment_id", "");
+                    comment_id = shardpref.getString("comment_id","");
                     CommentDelete(comment_id);
                     ClosePop();
                 } else if (flag.equals("공지삭제") || flag.equals("공지삭제2")) {
                     String feed_id = "0";
-                    feed_id = shardpref.getString("edit_feed_id", "");
+                    feed_id = shardpref.getString("edit_feed_id","");
                     FeedDelete(feed_id);
-                } else if (flag.equals("종료")) {
+                } else if(flag.equals("종료")){
                     finish();
                     moveTaskToBack(true); // 태스크를 백그라운드로 이동
                     finishAndRemoveTask(); // 액티비티 종료 + 태스크 리스트에서 지우기
                     android.os.Process.killProcess(android.os.Process.myPid()); // 앱 프로세스 종료
-                } else if (flag.equals("매장삭제")) {
+                } else if(flag.equals("매장삭제")){
                     PlaceDel();
-                } else if (flag.equals("직원삭제")) {
+                } else if(flag.equals("직원삭제")){
                     TaskDel();
-                } else if (flag.equals("근무정보삭제")) {
+                }  else if(flag.equals("근무정보삭제")){
                     WorkHourDel();
-                } else if (flag.equals("그룹신청")) {
+                } else if(flag.equals("그룹신청")){
                     message = "새로운 근무지원 신청이 도착했습니다.";
                     click_action = "MemberManagement";
                     dlog.i(message);
                     String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-                    AddPlaceMember("", today);
+                    AddPlaceMember("",today);
                 } else if (flag.equals("작성여부")) {
-                    shardpref.putInt("SELECT_POSITION", 3);
+                    shardpref.putInt("SELECT_POSITION",3);
                     pm.Main(mContext);
                     ClosePop();
-                } else if (flag.equals("닉네임없음")) {
+                } else if(flag.equals("닉네임없음")){
                     pm.ProfileEdit(mContext);
                     ClosePop();
-                } else if (flag.equals("게시글삭제")) {
+                } else if(flag.equals("게시글삭제")){
                     String feed_id = "0";
-                    feed_id = shardpref.getString("feed_id", "");
+                    feed_id = shardpref.getString("feed_id","");
                     FeedDelete(feed_id);
                 } else if (flag.equals("더미")) {
-                    shardpref.putString("AuthState", "더미");
+                    shardpref.putString("AuthState","더미");
                     pm.AuthSelect(mContext);
 //                    shardpref.putString("USER_INFO_AUTH", "1");
                     shardpref.putInt("SELECT_POSITION", 0);
                     shardpref.putInt("SELECT_POSITION_sub", 0);
                 }
-            } catch (Exception e) {
+            }catch (Exception e){
                 e.printStackTrace();
             }
         });
         binding.popLeftTxt.setOnClickListener(v -> {
-            shardpref.remove("AuthState");
-            ClosePop();
+                shardpref.remove("AuthState");
+                ClosePop();
         });
     }
-
     //카카오 로그인 콜백
     Function2<OAuthToken, Throwable, Unit> kakaoCallback = (oAuthToken, throwable) -> {
         if (oAuthToken != null) {
@@ -357,16 +348,16 @@ public class TwoButtonPopActivity extends Activity {
         }
     };
 
-    private void ClosePop() {
+    private void ClosePop(){
         runOnUiThread(() -> {
-            if (flag.equals("공지삭제2")) {
+            if(flag.equals("공지삭제2")){
                 finish();
                 Intent intent = new Intent();
                 intent.putExtra("result", "Close Popup");
                 setResult(RESULT_OK, intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 pm.FeedList(mContext);
-            } else {
+            }else{
                 finish();
                 Intent intent = new Intent();
                 intent.putExtra("result", "Close Popup");
@@ -399,7 +390,6 @@ public class TwoButtonPopActivity extends Activity {
 
     //--Rtrofit Area
     RetrofitConnect rc = new RetrofitConnect();
-
     public void UserDelete() {
         dlog.i("UserDelete id : " + USER_INFO_ID);
         Retrofit retrofit = new Retrofit.Builder()
@@ -419,9 +409,9 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (jsonResponse.replace("\"", "").equals("success")) {
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     Toast_Nomal("회원 탈퇴가 완료되었습니다.");
-                                    if (USER_LOGIN_METHOD.equals("Naver")) {
+                                    if(USER_LOGIN_METHOD.equals("Naver")){
                                         naverIdLoginSDK.authenticate(TwoButtonPopActivity.this, oAuthLoginCallback); //연결해제
                                     }
                                     pm.Login(mContext);
@@ -462,8 +452,8 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (jsonResponse.replace("\"", "").equals("")) {
-                                    shardpref.putString("editstate", "DelComment");
+                                if(jsonResponse.replace("\"","").equals("")){
+                                    shardpref.putString("editstate","DelComment");
                                     ClosePop();
                                 }
                             } catch (Exception e) {
@@ -501,7 +491,7 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (jsonResponse.replace("\"", "").equals("success")) {
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     ClosePop();
                                 }
                             } catch (Exception e) {
@@ -519,7 +509,6 @@ public class TwoButtonPopActivity extends Activity {
             }
         });
     }
-
     public void PlaceDel() {
         dlog.i("PlaceDel id : " + place_id);
         Retrofit retrofit = new Retrofit.Builder()
@@ -539,7 +528,7 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (jsonResponse.replace("\"", "").equals("success")) {
+                                if(jsonResponse.replace("\"","").equals("success")){
                                     Toast_Nomal("해당 매장이 삭제완료되었습니다.");
                                     ClosePop();
                                 }
@@ -607,7 +596,7 @@ public class TwoButtonPopActivity extends Activity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         DelWorkhourInterface api = retrofit.create(DelWorkhourInterface.class);
-        Call<String> call = api.getData(place_id, mem_id);
+        Call<String> call = api.getData(place_id,mem_id);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -647,7 +636,7 @@ public class TwoButtonPopActivity extends Activity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberAddInterface api = retrofit.create(PlaceMemberAddInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID, Jumin, "0", JoinDate);
+        Call<String> call = api.getData(place_id, USER_INFO_ID ,Jumin,"0",JoinDate);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -662,13 +651,13 @@ public class TwoButtonPopActivity extends Activity {
                                 Toast_Nomal("근무신청이 완료되었습니다.");
                                 String place_owner_id = shardpref.getString("place_owner_id", "");
                                 String message = "새로운 근무 신청이 도착했습니다.";
-                                getUserToken(place_owner_id, "0", message);
-                                AddPush("근무신청", message, place_owner_id);
+                                getUserToken(place_owner_id,"0",message);
+                                AddPush("근무신청",message,place_owner_id);
                                 ClosePop();
-                            } else {
+                            }else{
                                 Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");
                             }
-                        } else {
+                        }else{
                             dlog.i(response.body());
                         }
                     });
@@ -728,7 +717,6 @@ public class TwoButtonPopActivity extends Activity {
             }
         });
     }
-
     public void AddPush(String title, String content, String user_id) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PushLogInputInterface.URL)
@@ -789,7 +777,7 @@ public class TwoButtonPopActivity extends Activity {
     }
 
     //더이상 알람이 오지 않도록 로그아웃이나 회월탈퇴 했을때는 토큰을 지워준다.
-    private void FcmTokenDel() {
+    private void FcmTokenDel(){
         dlog.i("-----FcmTokenDel-----");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
@@ -799,7 +787,7 @@ public class TwoButtonPopActivity extends Activity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FcmTokenDelInterface api = retrofit.create(FcmTokenDelInterface.class);
-        Call<String> call = api.getData(USER_INFO_ID, USER_INFO_AUTH);
+        Call<String> call = api.getData(USER_INFO_ID,USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -824,11 +812,10 @@ public class TwoButtonPopActivity extends Activity {
             }
         });
     }
-
-    public void Toast_Nomal(String message) {
+    public void Toast_Nomal(String message){
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
-        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
+        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
         toast_textview.setText(String.valueOf(message));
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)

@@ -223,7 +223,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
 
             call_icon.setVisibility(View.GONE);
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
             dlog.DlogContext(mContext);
 
             itemView.setOnClickListener(view -> {

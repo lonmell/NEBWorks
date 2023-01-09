@@ -147,7 +147,7 @@ public class IntroActivity extends AppCompatActivity {
         mContext = this;
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
 
         anim_FadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_intro_fadein);
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -45,19 +45,18 @@
         android:directBootAware="true"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_main"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:launchMode="singleInstance"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_main"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kogas"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute"
-        tools:targetApi="31"
-        android:exported="true">
+        tools:targetApi="31">
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -191,7 +190,6 @@
         <activity android:name=".ui.worksite.TaskReportDetailActivity" />
         <activity android:name=".ui.worksite.TaskListActivity" />
 
-
         <!-- Other -->
         <activity android:name=".ui.PinSelectLocationActivity" />
 
@@ -276,8 +274,6 @@
         <activity
             android:name=".pop.Tap1OptionActivity"
             android:theme="@android:style/Theme.Dialog" />
-
-        <activity android:name=".pop.WriteAddressActivity" />
 
 <!--        <activity-->
 <!--            android:name=".pop.InoutPopActivity"-->

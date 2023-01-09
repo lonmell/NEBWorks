@@ -165,10 +165,10 @@ public class WorkgotoFragment extends Fragment {
 //        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.workgotofragment, container, false);
         binding = WorkgotofragmentBinding.inflate(inflater);
         mContext = inflater.getContext();
+        shardpref = new PreferenceHelper(mContext);
         //UI 데이터 세팅
         try {
             dlog.DlogContext(mContext);
-            shardpref = new PreferenceHelper(mContext);
             //Singleton Area
             place_id            = PlaceCheckData.getInstance().getPlace_id();
             place_name          = PlaceCheckData.getInstance().getPlace_name();
@@ -189,7 +189,6 @@ public class WorkgotoFragment extends Fragment {
             return_page         = ReturnPageData.getInstance().getPage();
 
             //shardpref Area
-
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
             setBtnEvent();
