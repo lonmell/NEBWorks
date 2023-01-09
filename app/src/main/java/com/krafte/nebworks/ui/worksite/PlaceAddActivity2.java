@@ -98,10 +98,10 @@ public class PlaceAddActivity2 extends AppCompatActivity {
 //
         try {
             //shardpref Area
-            place_name      = shardpref.getString("place_name", "-99");
-            place_owner_id  = shardpref.getString("place_owner_id", "-99");
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "-99");
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","-99");
+            place_name = shardpref.getString("place_name", "-99");
+            place_owner_id = shardpref.getString("place_owner_id", "-99");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "-99");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "-99");
 
             binding.noData.setVisibility(View.VISIBLE);
 
@@ -117,6 +117,13 @@ public class PlaceAddActivity2 extends AppCompatActivity {
         } catch (Exception ignored) {
             ignored.printStackTrace();
         }
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        shardpref.remove("pin_store_address");
+        shardpref.remove("pin_store_addressdetail");
+        shardpref.remove("pin_zipcode");
     }
 
     public void getPlaceId() {
@@ -157,6 +164,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
+
     private void getPlaceContents() {
         dlog.i("-----getPlaceContents-----");
         dlog.i("place_id : " + place_id);
@@ -173,12 +181,12 @@ public class PlaceAddActivity2 extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                        dlog.e("GetInsurancePercent function START");
-                        dlog.e("response 1: " + response.isSuccessful());
-                        dlog.e("response 2: " + rc.getBase64decode(response.body()));
-                        runOnUiThread(() -> {
-                            if (response.isSuccessful() && response.body() != null) {
-                                String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.e("GetInsurancePercent function START");
+                    dlog.e("response 1: " + response.isSuccessful());
+                    dlog.e("response 2: " + rc.getBase64decode(response.body()));
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
                             try {
                                 //Array데이터를 받아올 때
                                 JSONArray Response = new JSONArray(jsonResponse);
@@ -195,9 +203,8 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                                 start_time = Response.getJSONObject(0).getString("start_time");
                                 end_time = Response.getJSONObject(0).getString("end_time");
                                 save_kind = Response.getJSONObject(0).getString("save_kind");
-                                img_path = Response.getJSONObject(0).getString("img_path").equals("null")?"":Response.getJSONObject(0).getString("img_path");
+                                img_path = Response.getJSONObject(0).getString("img_path").equals("null") ? "" : Response.getJSONObject(0).getString("img_path");
                                 start_date = Response.getJSONObject(0).getString("start_date");
-
 
 
                             } catch (JSONException e) {
@@ -297,7 +304,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WifiUpdateInterface api = retrofit.create(WifiUpdateInterface.class);
-        Call<String> call = api.getData(place_id,String.valueOf(i),SSIDName);
+        Call<String> call = api.getData(place_id, String.valueOf(i), SSIDName);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -315,13 +322,13 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                                     shardpref.putString("place_id", place_id);
                                     shardpref.putString("place_owner_id", USER_INFO_ID);
                                     shardpref.remove("page_state");
-                                    if(i == 0){
+                                    if (i == 0) {
                                         Toast_Nomal("임시저장 완료되었습니다.");
-                                    }else{
+                                    } else {
                                         Toast_Nomal("매장 추가가 완료되었습니다.");
                                     }
                                     pm.workCompletion(mContext);
-                                }else{
+                                } else {
                                     Toast_Nomal("추가 매장을 생성하지 못했습니다. Error : " + response.body());
                                 }
                             } catch (Exception e) {

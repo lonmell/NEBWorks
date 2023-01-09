@@ -32,7 +32,7 @@ public class PlaceAddCompletion extends AppCompatActivity {
         try {
             mContext = this;
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
             setBtnEvent();
 
         } catch (Exception e) {

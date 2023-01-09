@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/roadAddrPart1tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="roadAddrPart1tv"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/roadAddrPart2tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="roadAddrPart2tv"
+            android:textColor="#696969"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/zipNotv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="zipNotv"
+            android:textColor="#a9a9a9"
+            android:textSize="13sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dbdbdb"/>
+</LinearLayout>

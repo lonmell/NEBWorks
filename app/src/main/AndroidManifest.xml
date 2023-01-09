@@ -361,6 +361,9 @@
         <activity
             android:name=".pop.LawPopActivity" />
 
+        <activity
+            android:name=".pop.WriteAddressActivity" />
+
     </application>
 
 </manifest>
