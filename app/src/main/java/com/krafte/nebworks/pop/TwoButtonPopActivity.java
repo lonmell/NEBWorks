@@ -107,7 +107,7 @@ public class TwoButtonPopActivity extends Activity {
     String ClientID = "cN1sIOhyOshPLKgNL4Sj";
     String ClientSecret = "iFS5etlgYt";
     String ClientName = "넵";
-    NaverIdLoginSDK naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
+    NaverIdLoginSDK naverIdLoginSDK;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -134,20 +134,28 @@ public class TwoButtonPopActivity extends Activity {
         take_user_id = intent.getStringExtra("take_user_id");
         left_btn_txt = intent.getStringExtra("left_btn_txt");
         right_btn_txt = intent.getStringExtra("right_btn_txt");
+        naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
 
-        //Google
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
+        if (USER_LOGIN_METHOD.equals("Google")) {
+            dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
+            //Google
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mAuth = FirebaseAuth.getInstance();
-
-        //Naver
-        naverIdLoginSDK.initialize(TwoButtonPopActivity.this, ClientID, ClientSecret, ClientName);
-        naverIdLoginSDK.setShowMarketLink(true);
-        naverIdLoginSDK.setShowBottomTab(true);
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            mAuth = FirebaseAuth.getInstance();
+        } else if (USER_LOGIN_METHOD.equals("Kakao")) {
+            dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
+        } else if (USER_LOGIN_METHOD.equals("Naver")) {
+            dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
+            //Naver
+            naverIdLoginSDK.initialize(TwoButtonPopActivity.this, ClientID, ClientSecret, ClientName);
+            naverIdLoginSDK.setShowMarketLink(true);
+            naverIdLoginSDK.setShowBottomTab(true);
+        }
 
         setBtnEvent();
 

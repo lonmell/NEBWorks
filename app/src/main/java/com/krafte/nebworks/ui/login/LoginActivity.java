@@ -600,12 +600,23 @@ public class LoginActivity extends AppCompatActivity {
                                             decodePw = aes256Util.decode(getPassword).replace(repalcekey0, "").replace(replacekey1, "");
                                             shardpref.putString("USER_INFO_ID", getid);
                                             shardpref.putString("USER_INFO_NAME", getname);
+                                            shardpref.putString("USER_INFO_NICKNAME", getname);
                                             shardpref.putString("USER_INFO_EMAIL", getaccount);
                                             shardpref.putString("USER_INFO_PW", decodePw);
                                             shardpref.putString("USER_INFO_PHONE", getphone);
                                             shardpref.putString("USER_INFO_GENDER", getgender);
                                             shardpref.putString("USER_INFO_PROFILE", getimg_path);
                                             shardpref.putString("USER_LOGIN_METHOD", getPlatform);
+                                            UserCheckData.getInstance().setUser_id(getid);
+                                            UserCheckData.getInstance().setUser_name(getname);
+                                            UserCheckData.getInstance().setUser_nick_name(getname);
+                                            UserCheckData.getInstance().setUser_account(getaccount);
+                                            UserCheckData.getInstance().setUser_password(decodePw);
+                                            UserCheckData.getInstance().setUser_gender(getgender);
+                                            UserCheckData.getInstance().setUser_phone(getphone);
+                                            UserCheckData.getInstance().setUser_img_path(getimg_path);
+                                            UserCheckData.getInstance().setUser_platform(getPlatform);
+
                                         } catch (UnsupportedEncodingException | InvalidAlgorithmParameterException
                                                 | NoSuchPaddingException | IllegalBlockSizeException
                                                 | NoSuchAlgorithmException | BadPaddingException

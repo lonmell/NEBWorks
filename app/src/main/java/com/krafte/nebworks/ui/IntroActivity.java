@@ -48,6 +48,7 @@ import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityIntroBinding;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
@@ -363,6 +364,13 @@ public class IntroActivity extends AppCompatActivity {
                     Log.i("Kakao", "GET_JOIN_CONFIRM = " + GET_JOIN_CONFIRM);
                     Log.i("Kakao", "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
 
+                    UserCheckData.getInstance().setUser_name(GET_KAKAO_NAME);
+                    UserCheckData.getInstance().setUser_nick_name(GET_KAKAO_NAME);
+                    UserCheckData.getInstance().setUser_account(GET_KAKAO_ACCOUNT_EMAIL);
+                    UserCheckData.getInstance().setUser_gender(GET_KAKAO_USER_SEX);
+                    UserCheckData.getInstance().setUser_img_path(GET_KAKAO_PROFILE_URL);
+                    UserCheckData.getInstance().setUser_phone(GET_KAKAO_USER_PHONE);
+                    UserCheckData.getInstance().setUser_platform("Kakao");
 //                    INPUT_JOIN_DATA("Kakao", GET_KAKAO_NAME, GET_KAKAO_USER_PHONE, GET_KAKAO_USER_AGENCY
 //                            , GET_KAKAO_USER_BIRTH, GET_KAKAO_USER_SEX, GET_KAKAO_USER_PW, "", GET_KAKAO_USER_JOIN_DATE
 //                            , "2", GET_KAKAO_USER_SERVICE, GET_KAKAO_ACCOUNT_EMAIL, GET_KAKAO_PROFILE_URL, "Kakao");
@@ -478,6 +486,10 @@ public class IntroActivity extends AppCompatActivity {
         shardpref.putString("USER_INFO_AGEROUNGE", "");
         shardpref.putString("USER_LOGIN_METHOD", "Google");
         shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
+        UserCheckData.getInstance().setUser_nick_name(user.getDisplayName());
+        UserCheckData.getInstance().setUser_account(user.getEmail());
+        UserCheckData.getInstance().setUser_img_path(String.valueOf(user.getPhotoUrl()));
+        UserCheckData.getInstance().setUser_platform("Google");
 
         UserCheck(user.getEmail());
 
