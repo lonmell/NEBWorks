@@ -150,7 +150,7 @@ public class WorkstatusFragment extends Fragment {
             place_name      = PlaceCheckData.getInstance().getPlace_name();
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
             //shardpref Area
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);

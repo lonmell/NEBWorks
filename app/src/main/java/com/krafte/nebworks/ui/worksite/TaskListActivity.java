@@ -163,7 +163,7 @@ public class TaskListActivity extends AppCompatActivity {
             return_page         = ReturnPageData.getInstance().getPage();
 
             USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
+            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
             USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
 
             //shardpref Area
