@@ -112,6 +112,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
 
+        shardpref = new PreferenceHelper(mContext);
         icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
         icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
@@ -123,7 +124,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
         place_id            = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area
-        shardpref           = new PreferenceHelper(mContext);
         SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
         wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
         gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);

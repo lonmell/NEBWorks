@@ -123,6 +123,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
 
+        shardpref = new PreferenceHelper(mContext);
         icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
         icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -135,7 +136,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
         USER_INFO_PROFILE   = UserCheckData.getInstance().getUser_img_path();
 
         //shardpref Area
-        shardpref           = new PreferenceHelper(mContext);
         SELECTED_POSITION   = shardpref.getInt("SELECTED_POSITION", 0);
         feed_id             = shardpref.getString("feed_id", "");
         title               = shardpref.getString("title", "");
