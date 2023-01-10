@@ -1,7 +1,9 @@
 package com.krafte.nebworks.ui.worksite;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityWorksiteBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -172,7 +175,7 @@ public class PlaceListActivity extends AppCompatActivity {
             if(event.equals("out_store")){
                 super.onBackPressed();
             }else{
-                pm.AuthSelect(mContext);
+                Logout();
             }
         });
         binding.addPlace.setOnClickListener(v -> {
@@ -750,13 +753,24 @@ public class PlaceListActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void Logout(){
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("data", "로그아웃하시겠습니까?");
+        intent.putExtra("flag", "로그아웃");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "로그아웃");
+        mContext.startActivity(intent);
+        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
         if(event.equals("out_store")){
             super.onBackPressed();
         }else{
-            pm.AuthSelect(mContext);
+            Logout();
         }
     }
 }

@@ -28,6 +28,7 @@ import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
+import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityAuthselectBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.naviFragment.CommunityFragment;
@@ -73,6 +74,7 @@ public class AuthSelectActivity extends AppCompatActivity {
     ArrayList<PlaceNotiData.PlaceNotiData_list> mList = new ArrayList<>();
 
     //Shared
+    String USER_INFO_EMAIL = "";
     String USER_INFO_NAME = "";
     String USER_INFO_PHONE = "";
     String USER_INFO_ID = "";
@@ -187,19 +189,22 @@ public class AuthSelectActivity extends AppCompatActivity {
 
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
-        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
-        USER_INFO_PHONE = shardpref.getString("USER_INFO_PHONE", "");
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
-        Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
-        Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
-        Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
-
         try {
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", "");
+            USER_INFO_NAME      = shardpref.getString("USER_INFO_NAME", "");
+            USER_INFO_PHONE     = shardpref.getString("USER_INFO_PHONE", "");
+            USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD", "");
+            USER_INFO_EMAIL     = shardpref.getString("USER_INFO_EMAIL", "");
+            Log.i(TAG, "USER_INFO_ID = " + USER_INFO_ID);
+            Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
+            Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
+            Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+            Log.i(TAG, "USER_INFO_EMAIL = " + USER_INFO_EMAIL);
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
 
+        //자유게시판 게시글 리스트
         setRecyclerView();
     }
 
@@ -335,7 +340,67 @@ public class AuthSelectActivity extends AppCompatActivity {
         });
     }
 
+    private void UserCheckAccount(String account){
+        dlog.i("UserCheck account : " + account);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(account);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
+                            try {
+                                if (!response.body().equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    String id = Response.getJSONObject(0).getString("id");
+                                    String name = Response.getJSONObject(0).getString("name");
+                                    String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
+                                    String img_path = Response.getJSONObject(0).getString("img_path");
+                                    String user_auth = Response.getJSONObject(0).getString("user_auth");
+                                    try {
+                                        dlog.i("------UserCheck-------");
+                                        dlog.i("프로필 사진 url : " + img_path);
+                                        dlog.i("성명 : " + name);
+                                        dlog.i("사용자 권한 : " + user_auth);
+                                        dlog.i("------UserCheck-------");
+                                        if(!user_auth.equals("-1")){
+                                            pm.PlaceList(mContext);
+                                            shardpref.putString("USER_INFO_AUTH",user_auth);
+                                        }
+                                    } catch (Exception e) {
+                                        dlog.i("UserCheck Exception : " + e);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        UserCheckAccount(USER_INFO_EMAIL);
+    }
     String AuthState = "";
     @Override
     protected void onResume() {
@@ -354,6 +419,7 @@ public class AuthSelectActivity extends AppCompatActivity {
             }
             shardpref.remove("AuthState");
         }
+
     }
 
     public void btnOnclick(View view) {
