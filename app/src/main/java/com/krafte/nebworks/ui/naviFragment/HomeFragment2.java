@@ -659,10 +659,12 @@ public class HomeFragment2 extends Fragment {
     }
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
+        dlog.i("----------PlaceWorkCheck----------");
         dlog.i("PlaceWorkCheck place_id : " + place_id);
         dlog.i("PlaceWorkCheck auth : " + auth);
         dlog.i("PlaceWorkCheck kind : " + kind);
         dlog.i("PlaceWorkCheck USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("----------PlaceWorkCheck----------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MainContentsInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())

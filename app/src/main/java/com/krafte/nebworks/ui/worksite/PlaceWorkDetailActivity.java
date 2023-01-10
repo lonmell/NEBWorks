@@ -259,8 +259,6 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                                     String id = Response.getJSONObject(0).getString("id");
                                     String name = Response.getJSONObject(0).getString("name");
                                     String account = Response.getJSONObject(0).getString("account"); //-- 가입할때의 게정
-                                    String employee_no = Response.getJSONObject(0).getString("employee_no"); //-- 사번
-                                    String department = Response.getJSONObject(0).getString("department");
                                     String position = Response.getJSONObject(0).getString("position");
                                     String img_path = Response.getJSONObject(0).getString("img_path");
 
@@ -268,9 +266,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                                         dlog.i("------UserCheck-------");
                                         dlog.i("프로필 사진 url : " + img_path);
                                         dlog.i("성명 : " + name);
-                                        dlog.i("부서 : " + department);
                                         dlog.i("직책 : " + position);
-                                        dlog.i("사번 : " + employee_no); //-- 사번이 없는 회사도 있을 수 있으니 필수X
                                         dlog.i("------UserCheck-------");
 
                                         Glide.with(mContext).load(img_path)
@@ -278,7 +274,6 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                                                 .skipMemoryCache(true)
                                                 .into(binding.workimg);
                                         binding.name.setText(name);
-                                        binding.department.setText(department + " " + position);
 
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);

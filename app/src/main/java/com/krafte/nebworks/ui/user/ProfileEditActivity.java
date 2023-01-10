@@ -47,8 +47,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kakao.sdk.auth.model.OAuthToken;
-import com.kakao.sdk.common.util.KakaoCustomTabsClient;
-import com.kakao.sdk.talk.TalkApiClient;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceListAdapter;
@@ -59,6 +57,7 @@ import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.dataInterface.UserInsertInterface;
+import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.dataInterface.UserUpdateInterface;
 import com.krafte.nebworks.databinding.ActivityProfileeditBinding;
 import com.krafte.nebworks.pop.AlertPopActivity;
@@ -138,7 +137,6 @@ public class ProfileEditActivity extends AppCompatActivity {
     String editstate = "";
 
 
-
     private Bitmap saveBitmap;
     String ImgfileMaker = "";
     File file;
@@ -174,22 +172,22 @@ public class ProfileEditActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
 
-        //Singleton Area
-        place_id        = PlaceCheckData.getInstance().getPlace_id();
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
-
         //shardpref Area
-        USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","0");
-        editstate           = shardpref.getString("editstate","");
-        platform            = shardpref.getString("platform","");
+        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "0");
+        editstate = shardpref.getString("editstate", "");
+        platform = shardpref.getString("platform", "");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+
+        //Singleton Area
+        place_id = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+        USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+        USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
 
         setBtnEvent();
-        if(USER_INFO_EMAIL.isEmpty() || USER_INFO_ID.isEmpty()){
+        if (USER_INFO_EMAIL.isEmpty() || USER_INFO_ID.isEmpty()) {
             Intent intent = new Intent(mContext, OneButtonPopActivity.class);
             intent.putExtra("data", "사용자정보를 찾을 수 없습니다, 다시 로그인해 주세요.");
             intent.putExtra("left_btn_txt", "닫기");
@@ -198,14 +196,15 @@ public class ProfileEditActivity extends AppCompatActivity {
         }
 
         myTimer = new MyTimer(60000, 1000);
-        UserCheck(USER_INFO_EMAIL);
+        UserCheck();
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         ImgfileMaker = ImageNameMaker();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -226,7 +225,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
             shardpref.remove("editstate");
-            if(editstate.equals("insert")){
+            if (editstate.equals("insert")) {
                 Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
                 intent.putExtra("data", "로그아웃하시겠습니까?");
                 intent.putExtra("flag", "로그아웃");
@@ -235,7 +234,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 mContext.startActivity(intent);
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            }else{
+            } else {
                 super.onBackPressed();
             }
         });
@@ -272,14 +271,14 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         binding.SaveUserBtn.setOnClickListener(v -> {
             if (CheckData()) {
-                if(editstate.equals("insert")){
-                    if(USER_INFO_EMAIL.equals("0")){
+                if (editstate.equals("insert")) {
+                    if (USER_INFO_EMAIL.equals("0")) {
                         Toast_Nomal("사용자 정보를 가져올 수 없습니다. 다시 시도해 주세요.");
                         pm.Login(mContext);
-                    }else{
+                    } else {
                         INPUT_JOIN_DATA();
                     }
-                }else{
+                } else {
                     SaveUser();
                 }
             }
@@ -334,7 +333,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                    user_nickname = s.toString();
+                user_nickname = s.toString();
             }
         });
 
@@ -368,10 +367,10 @@ public class ProfileEditActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 phone = s.toString();
-                if(mem_phone.equals(phone)){
+                if (mem_phone.equals(phone)) {
                     binding.getAuthResult.setVisibility(View.GONE);
                     binding.linear02.setVisibility(View.GONE);
-                }else{
+                } else {
                     binding.getAuthResult.setVisibility(View.VISIBLE);
                     binding.linear02.setVisibility(View.VISIBLE);
                 }
@@ -530,153 +529,157 @@ public class ProfileEditActivity extends AppCompatActivity {
         }
     }
 
-    public void UserCheck(String account) {
-//        dlog.i("---------UserCheck---------");
-//        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
-//        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
-//        dlog.i("---------UserCheck---------");
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(UserSelectInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
-//        Call<String> call = api.getData(account);
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                dlog.e("UserCheck function START");
-//                dlog.e("response 1: " + response.isSuccessful());
-//                runOnUiThread(() -> {
-//                    if (response.isSuccessful() && response.body() != null) {
-//                        String jsonResponse = rc.getBase64decode(response.body());
-//                        dlog.i("jsonResponse length : " + jsonResponse.length());
-//                        dlog.i("jsonResponse : " + jsonResponse);
-//                        try {
-//                            //Array데이터를 받아올 때
-//                            JSONArray Response = new JSONArray(jsonResponse);
-//
-//                            try {
-//                                mem_id = Response.getJSONObject(0).getString("id");
-//                                mem_name = Response.getJSONObject(0).getString("name");
-//                                mem_nick = Response.getJSONObject(0).getString("nick_name");
-//                                mem_phone = Response.getJSONObject(0).getString("phone");
-//                                mem_gender = Response.getJSONObject(0).getString("gender");
-//                                mem_img_path = Response.getJSONObject(0).getString("img_path");
-//
-//                                dlog.i("------UserCheck-------");
-//                                USER_INFO_ID = mem_id;
-//                                dlog.i("프로필 사진 url : " + mem_img_path);
-//                                dlog.i("성명 : "           + mem_name);
-//                                dlog.i("성별 : "           + mem_gender);
-//                                dlog.i("닉네임 : "          + mem_nick);
-//                                dlog.i("전화번호 : "        + mem_phone);
-//                                dlog.i("------UserCheck-------");
-//
-//                                if (!mem_phone.isEmpty()){
-//                                    CertiSuccessTF = true;
-//                                }
-//                                dlog.i("START profileSetimg1");
-//                                binding.userName.setText(mem_name);
-//                                binding.userNick.setText(mem_nick.equals("null")?"":mem_nick);
-//                                binding.userPhone.setText(mem_phone.equals("null")?"":mem_phone);
-//
-//                                if(mem_img_path != null){
-//                                    dlog.i("mem_img_path : " + mem_img_path.trim());
-//                                    Glide.with(mContext).load(mem_img_path.trim())
-//                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                                            .skipMemoryCache(true)
-//                                            .into(binding.profileSetimg);
-//                                    binding.imgPlus.setVisibility(View.GONE);
-//                                    ProfileUrl = mem_img_path;
-//                                }
-//
-//                                if(mem_gender.equals("1")){
-//                                    USER_INFO_GENDER = "1";
-//                                    binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
-//                                    binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
-//
-//                                    binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-//                                    binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
-//                                }else{
-//                                    USER_INFO_GENDER = "2";
-//                                    binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-//                                    binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
-//
-//                                    binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
-//                                    binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
-//                                }
-//
-//                            } catch (Exception e) {
-//                                dlog.i("UserCheck Exception : " + e);
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//
-//            }
-//
-//            @Override
-//            @SuppressLint("LongLogTag")
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                Log.e(TAG, "에러2 = " + t.getMessage());
-//            }
-//        });
-        try {
-            mem_id = UserCheckData.getInstance().getUser_id();
-            mem_name = UserCheckData.getInstance().getUser_name();
-            mem_nick = UserCheckData.getInstance().getUser_nick_name();
-            mem_phone = UserCheckData.getInstance().getUser_phone();
-            mem_gender = UserCheckData.getInstance().getUser_gender();
-            mem_img_path = UserCheckData.getInstance().getUser_img_path();
+    public void UserCheck() {
+        if(editstate.equals("newPro")){
+            String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
+            dlog.i("---------UserCheck---------");
+            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+            dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
+            dlog.i("---------UserCheck---------");
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(UserSelectInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+            Call<String> call = api.getData(USER_INFO_EMAIL);
+            call.enqueue(new Callback<String>() {
+                @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    dlog.e("UserCheck function START");
+                    dlog.e("response 1: " + response.isSuccessful());
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            try {
+                                //Array데이터를 받아올 때
+                                JSONArray Response = new JSONArray(jsonResponse);
 
-            dlog.i("------UserCheck-------");
-            USER_INFO_ID = mem_id;
-            dlog.i("프로필 사진 url : " + mem_img_path);
-            dlog.i("성명 : "           + mem_name);
-            dlog.i("성별 : "           + mem_gender);
-            dlog.i("닉네임 : "          + mem_nick);
-            dlog.i("전화번호 : "        + mem_phone);
-            dlog.i("------UserCheck-------");
+                                try {
+                                    mem_id = Response.getJSONObject(0).getString("id");
+                                    mem_name = Response.getJSONObject(0).getString("name");
+                                    mem_nick = Response.getJSONObject(0).getString("nick_name");
+                                    mem_phone = Response.getJSONObject(0).getString("phone");
+                                    mem_gender = Response.getJSONObject(0).getString("gender");
+                                    mem_img_path = Response.getJSONObject(0).getString("img_path");
 
-            if (!mem_phone.isEmpty()){
-                CertiSuccessTF = true;
+                                    dlog.i("------UserCheck-------");
+                                    USER_INFO_ID = mem_id;
+                                    dlog.i("프로필 사진 url : " + mem_img_path);
+                                    dlog.i("성명 : " + mem_name);
+                                    dlog.i("성별 : " + mem_gender);
+                                    dlog.i("닉네임 : " + mem_nick);
+                                    dlog.i("전화번호 : " + mem_phone);
+                                    dlog.i("------UserCheck-------");
+
+                                    if (!mem_phone.isEmpty()) {
+                                        CertiSuccessTF = true;
+                                    }
+                                    dlog.i("START profileSetimg1");
+                                    binding.userName.setText(mem_name);
+                                    binding.userNick.setText(mem_nick.isEmpty() ? mem_name : mem_nick);
+                                    binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
+
+                                    if (mem_img_path != null) {
+                                        dlog.i("mem_img_path : " + mem_img_path.trim());
+                                        Glide.with(mContext).load(mem_img_path.trim())
+                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                .skipMemoryCache(true)
+                                                .into(binding.profileSetimg);
+                                        binding.imgPlus.setVisibility(View.GONE);
+                                        ProfileUrl = mem_img_path;
+                                    }
+
+                                    if (mem_gender.equals("1")) {
+                                        USER_INFO_GENDER = "1";
+                                        binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+                                        binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
+
+                                        binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+                                        binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
+                                    } else {
+                                        USER_INFO_GENDER = "2";
+                                        binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+                                        binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
+
+                                        binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+                                        binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
+                                    }
+
+                                } catch (Exception e) {
+                                    dlog.i("UserCheck Exception : " + e);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                }
+
+                @Override
+                @SuppressLint("LongLogTag")
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    Log.e(TAG, "에러2 = " + t.getMessage());
+                }
+            });
+        }else{
+            try {
+                mem_id = UserCheckData.getInstance().getUser_id();
+                mem_name = UserCheckData.getInstance().getUser_name();
+                mem_nick = UserCheckData.getInstance().getUser_nick_name();
+                mem_phone = UserCheckData.getInstance().getUser_phone();
+                mem_gender = UserCheckData.getInstance().getUser_gender();
+                mem_img_path = UserCheckData.getInstance().getUser_img_path();
+
+                dlog.i("------UserCheck-------");
+                USER_INFO_ID = mem_id;
+                dlog.i("프로필 사진 url : " + mem_img_path);
+                dlog.i("성명 : " + mem_name);
+                dlog.i("성별 : " + mem_gender);
+                dlog.i("닉네임 : " + mem_nick);
+                dlog.i("전화번호 : " + mem_phone);
+                dlog.i("------UserCheck-------");
+
+                if (!mem_phone.isEmpty()) {
+                    CertiSuccessTF = true;
+                }
+                dlog.i("START profileSetimg1");
+                binding.userName.setText(mem_name);
+                binding.userNick.setText(mem_nick.isEmpty() ? mem_name : mem_nick);
+                binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
+
+                if (mem_img_path != null) {
+                    dlog.i("mem_img_path : " + mem_img_path.trim());
+                    Glide.with(mContext).load(mem_img_path.trim())
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .into(binding.profileSetimg);
+                    binding.imgPlus.setVisibility(View.GONE);
+                    ProfileUrl = mem_img_path;
+                }
+
+                if (mem_gender.equals("1")) {
+                    USER_INFO_GENDER = "1";
+                    binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+                    binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
+
+                    binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+                    binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
+                } else {
+                    USER_INFO_GENDER = "2";
+                    binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+                    binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
+
+                    binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+                    binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
+                }
+
+            } catch (Exception e) {
+                dlog.i("UserCheck Exception : " + e);
             }
-            dlog.i("START profileSetimg1");
-            binding.userName.setText(mem_name);
-            binding.userNick.setText(mem_nick.equals("null")?"":mem_nick);
-            binding.userPhone.setText(mem_phone.equals("null")?"":mem_phone);
-
-            if(mem_img_path != null){
-                dlog.i("mem_img_path : " + mem_img_path.trim());
-                Glide.with(mContext).load(mem_img_path.trim())
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(binding.profileSetimg);
-                binding.imgPlus.setVisibility(View.GONE);
-                ProfileUrl = mem_img_path;
-            }
-
-            if(mem_gender.equals("1")){
-                USER_INFO_GENDER = "1";
-                binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
-                binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
-
-                binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-                binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
-            }else{
-                USER_INFO_GENDER = "2";
-                binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-                binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
-
-                binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
-                binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
-            }
-
-        } catch (Exception e) {
-            dlog.i("UserCheck Exception : " + e);
         }
     }
 
@@ -700,10 +703,10 @@ public class ProfileEditActivity extends AppCompatActivity {
         } else if (ProfileUrl.isEmpty()) {
 //            Toast.makeText(mContext, "프로필 사진을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return true;
-        } else if(!CertiSuccessTF){
+        } else if (!CertiSuccessTF) {
             Toast.makeText(mContext, "번호 인증이 필요합니다.", Toast.LENGTH_SHORT).show();
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -716,15 +719,15 @@ public class ProfileEditActivity extends AppCompatActivity {
         dlog.i("성명 : " + user_name);
         dlog.i("닉네임 : " + user_nickname);
         dlog.i("전화번호 : " + phone);
-        shardpref.putString("name",user_name);
+        shardpref.putString("name", user_name);
         dlog.i("------SaveUser-------");
-        if(!USER_INFO_ID.equals("0")){
+        if (!USER_INFO_ID.equals("0")) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(UserUpdateInterface.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             UserUpdateInterface api = retrofit.create(UserUpdateInterface.class);
-            Call<String> call = api.getData(USER_INFO_ID, (user_name.isEmpty()?user_nickname:user_name), user_nickname, phone, USER_INFO_GENDER, ProfileUrl);
+            Call<String> call = api.getData(USER_INFO_ID, (user_name.isEmpty() ? user_nickname : user_name), user_nickname, phone, USER_INFO_GENDER, ProfileUrl);
             call.enqueue(new Callback<String>() {
                 @SuppressLint("LongLogTag")
                 @Override
@@ -742,11 +745,12 @@ public class ProfileEditActivity extends AppCompatActivity {
                                             saveBitmapAndGetURI();
                                         }
                                         Toast_Nomal("프로필 저장이 완료되었습니다.");
-                                        String return_page = shardpref.getString("retrun_page","");
-                                        if(return_page.equals("MoreActivity")){
+                                        String return_page = shardpref.getString("retrun_page", "");
+                                        if (return_page.equals("MoreActivity")) {
                                             pm.MoreBack(mContext);
-                                        }else{
-                                            pm.AuthSelect(mContext);
+                                        } else {
+                                            String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
+                                            UserCheck(USER_INFO_EMAIL);
                                         }
                                     }
                                 } catch (Exception e) {
@@ -763,8 +767,8 @@ public class ProfileEditActivity extends AppCompatActivity {
                     dlog.e("에러1 = " + t.getMessage());
                 }
             });
-        }else{
-            Toast.makeText(mContext,"사용자 정보를 가져 올수 없습니다.\n다시 로그인해주세요",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(mContext, "사용자 정보를 가져 올수 없습니다.\n다시 로그인해주세요", Toast.LENGTH_SHORT).show();
             DataAllRemove();
         }
 
@@ -776,7 +780,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserInsertInterface api = retrofit.create(UserInsertInterface.class);
-        Call<String> call = api.getData(USER_INFO_EMAIL, user_name, user_nickname,"", phone, USER_INFO_GENDER, ProfileUrl, platform);
+        Call<String> call = api.getData(USER_INFO_EMAIL, user_name, user_nickname, "", phone, USER_INFO_GENDER, ProfileUrl, platform);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -787,7 +791,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                     dlog.i("jsonResponse : " + jsonResponse);
                     try {
                         if (jsonResponse.replace("\"", "").equals("success")) {
-                            shardpref.putBoolean("USER_LOGIN_CONFIRM",true);
+                            shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
                             shardpref.putString("USER_INFO_EMAIL", USER_INFO_EMAIL);
                             shardpref.remove("editstate");
 //                            shardpref.putString("USER_INFO_AUTH", "0");
@@ -804,6 +808,67 @@ public class ProfileEditActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         dlog.i("Exception : " + e);
                     }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void UserCheck(String account) {
+        dlog.i("UserCheck account : " + account);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(account);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    if (Response.length() != 0) {
+                                        String id       = Response.getJSONObject(0).getString("id");
+                                        String name     = Response.getJSONObject(0).getString("name");
+                                        String phone    = Response.getJSONObject(0).getString("phone");
+                                        String platform = Response.getJSONObject(0).getString("platform");
+                                        String user_auth = Response.getJSONObject(0).getString("user_auth");
+                                        try {
+                                            dlog.i("------UserCheck-------");
+                                            dlog.i("성명 : " + name);
+                                            dlog.i("사용자 권한 : " + user_auth);
+                                            dlog.i("------UserCheck-------");
+                                            if(!user_auth.equals("-1")){
+                                                shardpref.putString("USER_INFO_AUTH",user_auth);
+                                                binding.loginAlertText.setVisibility(View.GONE);
+                                                pm.PlaceList(mContext);
+                                            }else{
+                                                binding.loginAlertText.setVisibility(View.GONE);
+                                                pm.AuthSelect(mContext);
+                                            }
+                                        } catch (Exception e) {
+                                            dlog.i("UserCheck Exception : " + e);
+                                        }
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
             }
 
@@ -832,7 +897,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         }
         return null;
     };
-    private void DataAllRemove(){
+
+    private void DataAllRemove() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -853,7 +919,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                     .addOnCompleteListener(this, task -> {
                         pm.Login(mContext);
                     });
-        } else if(USER_LOGIN_METHOD.equals("Kakao")){
+        } else if (USER_LOGIN_METHOD.equals("Kakao")) {
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
@@ -864,7 +930,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                     }
                 });
             }, 100); //0.5초 후 인트로 실행
-        }else{
+        } else {
             pm.Login(mContext);
         }
         finish();
@@ -1164,10 +1230,10 @@ public class ProfileEditActivity extends AppCompatActivity {
         }
     }
 
-    public void Toast_Nomal(String message){
+    public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
-        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
         toast_textview.setText(String.valueOf(message));
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
@@ -1179,15 +1245,16 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
 
     }
+
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
 //        super.onBackPressed();
         shardpref.remove("editstate");
-        if(editstate.equals("insert") || editstate.equals("newPro")){
+        if (editstate.equals("insert") || editstate.equals("newPro")) {
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
             intent.putExtra("data", "로그아웃하시겠습니까?");
             intent.putExtra("flag", "로그아웃");
@@ -1196,7 +1263,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             mContext.startActivity(intent);
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        }else{
+        } else {
             super.onBackPressed();
         }
     }

@@ -171,12 +171,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        //Singleton Area
-        GET_ACCOUNT_EMAIL   = UserCheckData.getInstance().getUser_account();
-        USER_INFO_PW        = UserCheckData.getInstance().getUser_password();
-
         //shardpref Area
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "-99");
+        GET_ACCOUNT_EMAIL   = shardpref.getString("USER_INFO_EMAIL","");
+        USER_INFO_PW        = shardpref.getString("USER_INFO_PW","");
+        USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD", "-99");
 
         if (!USER_LOGIN_METHOD.equals("-99")) {
             if (!GET_ACCOUNT_EMAIL.equals("-99")) {
@@ -291,6 +289,15 @@ public class LoginActivity extends AppCompatActivity {
                                 if (GET_ACCOUNT_EMAIL.isEmpty()) {
                                     Toast.makeText(mContext, "네트워크 통신연결이 불안정 합니다.", Toast.LENGTH_SHORT).show();
                                 } else {
+            //                        UserCheckData.getInstance().setUser_id(getid);
+                                    UserCheckData.getInstance().setUser_name(GET_NAME);
+                                    UserCheckData.getInstance().setUser_nick_name(GET_NAME);
+                                    UserCheckData.getInstance().setUser_account(GET_ACCOUNT_EMAIL);
+                                    UserCheckData.getInstance().setUser_password("");
+                                    UserCheckData.getInstance().setUser_gender(GET_USER_SEX);
+                                    UserCheckData.getInstance().setUser_phone(GET_USER_PHONE);
+                                    UserCheckData.getInstance().setUser_img_path(GET_PROFILE_URL);
+                                    UserCheckData.getInstance().setUser_platform(USER_LOGIN_METHOD);
                                     LoginCheck(GET_ACCOUNT_EMAIL, "", USER_LOGIN_METHOD);
                                 }
 
@@ -440,21 +447,39 @@ public class LoginActivity extends AppCompatActivity {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     if (Response.length() != 0) {
-                                        String name = Response.getJSONObject(0).getString("name");
-                                        String phone = Response.getJSONObject(0).getString("phone");
+                                        String id       = Response.getJSONObject(0).getString("id");
+                                        String name     = Response.getJSONObject(0).getString("name");
+                                        String phone    = Response.getJSONObject(0).getString("phone");
                                         String platform = Response.getJSONObject(0).getString("platform");
-                                        binding.loginAlertText.setVisibility(View.GONE);
-                                        if (name.isEmpty() || phone.isEmpty()) {
-                                            shardpref.putString("editstate","newPro");
-                                            pm.ProfileEdit(mContext);
-                                        } else {
-                                            pm.AuthSelect(mContext);
+                                        String user_auth = Response.getJSONObject(0).getString("user_auth");
+                                        try {
+                                            dlog.i("------UserCheck-------");
+                                            dlog.i("성명 : " + name);
+                                            dlog.i("사용자 권한 : " + user_auth);
+                                            dlog.i("------UserCheck-------");
+                                            if(!user_auth.equals("-1")){
+                                                shardpref.putString("USER_INFO_AUTH",user_auth);
+                                                UserCheckData.getInstance().setUser_id(id);
+                                                binding.loginAlertText.setVisibility(View.GONE);
+                                                if (name.isEmpty() || phone.isEmpty()) {
+                                                    shardpref.putString("editstate","newPro");
+                                                    pm.ProfileEdit(mContext);
+                                                } else {
+                                                    pm.PlaceList(mContext);
+                                                }
+                                            }else{
+                                                binding.loginAlertText.setVisibility(View.GONE);
+                                                if (name.isEmpty() || phone.isEmpty()) {
+                                                    shardpref.putString("editstate","newPro");
+                                                    pm.ProfileEdit(mContext);
+                                                } else {
+                                                    pm.AuthSelect(mContext);
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            dlog.i("UserCheck Exception : " + e);
                                         }
                                     }
-                                } else {
-//                                    shardpref.putString("editstate","insert");
-//                                    pm.ProfileEdit(mContext);
-                                    Toast_Nomal("계정을 찾을수 없습니다.");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -512,6 +537,15 @@ public class LoginActivity extends AppCompatActivity {
                     if (GET_ACCOUNT_EMAIL.isEmpty()) {
                         Toast.makeText(mContext, "네트워크 통신연결이 불안정 합니다.", Toast.LENGTH_SHORT).show();
                     } else {
+//                        UserCheckData.getInstance().setUser_id(getid);
+                        UserCheckData.getInstance().setUser_name(GET_NAME);
+                        UserCheckData.getInstance().setUser_nick_name(GET_NAME);
+                        UserCheckData.getInstance().setUser_account(GET_ACCOUNT_EMAIL);
+                        UserCheckData.getInstance().setUser_password("");
+                        UserCheckData.getInstance().setUser_gender(GET_USER_SEX);
+                        UserCheckData.getInstance().setUser_phone(GET_USER_PHONE);
+                        UserCheckData.getInstance().setUser_img_path(GET_PROFILE_URL);
+                        UserCheckData.getInstance().setUser_platform(USER_LOGIN_METHOD);
                         LoginCheck(GET_ACCOUNT_EMAIL, "", USER_LOGIN_METHOD);
                     }
 
@@ -541,6 +575,14 @@ public class LoginActivity extends AppCompatActivity {
         if (user.getEmail().isEmpty()) {
             Toast.makeText(mContext, "네트워크 통신연결이 불안정 합니다.", Toast.LENGTH_SHORT).show();
         } else {
+            UserCheckData.getInstance().setUser_name(user.getDisplayName());
+            UserCheckData.getInstance().setUser_nick_name(user.getDisplayName());
+            UserCheckData.getInstance().setUser_account(user.getEmail());
+            UserCheckData.getInstance().setUser_password("");
+            UserCheckData.getInstance().setUser_gender("");
+            UserCheckData.getInstance().setUser_phone(user.getPhoneNumber());
+            UserCheckData.getInstance().setUser_img_path(String.valueOf(user.getPhotoUrl()));
+            UserCheckData.getInstance().setUser_platform("Google");
             LoginCheck(user.getEmail(), "", "Google");
         }
         GET_ACCOUNT_EMAIL = user.getEmail();
@@ -627,16 +669,12 @@ public class LoginActivity extends AppCompatActivity {
                                         dlog.i("LoginCheck pw : " + pw);
                                         if (platform.equals("NEB")) {
                                             if (getaccount.equals(account) && decodePw.equals(pw)) {
-//                                                shardpref.putString("USER_INFO_AUTH", "0");
-//                                                shardpref.putInt("SELECT_POSITION", 0);
-//                                                shardpref.putInt("SELECT_POSITION_sub", 0);
-//                                                pm.PlaceList(mContext);
-                                                pm.AuthSelect(mContext);
+                                                UserCheck(getaccount);
                                             } else {
                                                 Toast_Nomal("이메일 혹은 비밀번호를 확인해주세요.");
                                             }
                                         } else {
-                                            UserCheck(GET_ACCOUNT_EMAIL);
+                                            UserCheck(getaccount);
                                         }
                                         binding.loginAlertText.setVisibility(View.GONE);
                                     } else {
@@ -728,7 +766,6 @@ public class LoginActivity extends AppCompatActivity {
                             shardpref.remove("USER_INFO_NAME");
                             shardpref.remove("USER_INFO_PHONE");
                             shardpref.remove("USER_INFO_PW");
-//                            pm.AuthSelect(mContext);
                             UserCheck(USER_INFO_EMAIL);
                         }
                     } catch (Exception e) {

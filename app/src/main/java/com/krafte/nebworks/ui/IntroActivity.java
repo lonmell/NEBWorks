@@ -647,18 +647,40 @@ public class IntroActivity extends AppCompatActivity {
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-                                    binding.loginAlertText.setVisibility(View.GONE);
-                                    String name = Response.getJSONObject(0).getString("name");
-                                    String phone = Response.getJSONObject(0).getString("phone");
-                                    if (name.isEmpty() || phone.isEmpty()) {
-                                        shardpref.putString("editstate","newPro");
-                                        pm.ProfileEdit(mContext);
-                                    } else {
-                                        pm.AuthSelect(mContext);
+                                    if (Response.length() != 0) {
+                                        String id       = Response.getJSONObject(0).getString("id");
+                                        String name     = Response.getJSONObject(0).getString("name");
+                                        String phone    = Response.getJSONObject(0).getString("phone");
+                                        String platform = Response.getJSONObject(0).getString("platform");
+                                        String user_auth = Response.getJSONObject(0).getString("user_auth");
+                                        try {
+                                            dlog.i("------UserCheck-------");
+                                            dlog.i("성명 : " + name);
+                                            dlog.i("사용자 권한 : " + user_auth);
+                                            dlog.i("------UserCheck-------");
+                                            if(!user_auth.equals("-1")){
+                                                shardpref.putString("USER_INFO_AUTH",user_auth);
+                                                UserCheckData.getInstance().setUser_id(id);
+                                                binding.loginAlertText.setVisibility(View.GONE);
+                                                if (name.isEmpty() || phone.isEmpty()) {
+                                                    shardpref.putString("editstate","newPro");
+                                                    pm.ProfileEdit(mContext);
+                                                } else {
+                                                    pm.PlaceList(mContext);
+                                                }
+                                            }else{
+                                                binding.loginAlertText.setVisibility(View.GONE);
+                                                if (name.isEmpty() || phone.isEmpty()) {
+                                                    shardpref.putString("editstate","newPro");
+                                                    pm.ProfileEdit(mContext);
+                                                } else {
+                                                    pm.AuthSelect(mContext);
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            dlog.i("UserCheck Exception : " + e);
+                                        }
                                     }
-                                }else{
-                                    binding.loginAlertText.setVisibility(View.GONE);
-                                    pm.Login(mContext);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
