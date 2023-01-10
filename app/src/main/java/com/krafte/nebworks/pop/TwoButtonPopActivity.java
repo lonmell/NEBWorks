@@ -25,12 +25,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.common.util.KakaoCustomTabsClient;
 import com.kakao.sdk.talk.TalkApiClient;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.DelWorkhourInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FcmTokenDelInterface;
@@ -57,11 +55,8 @@ import com.navercorp.nid.profile.data.NidProfileResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.Objects;
-
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
-import kotlin.jvm.functions.Function2;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,22 +65,20 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class TwoButtonPopActivity extends Activity {
     private ActivityTwobuttonPopBinding binding;
-    private static final String TAG = "TwoButtonPopActivity";
 
     Context mContext;
-    private String flag = "";
-    private String title = "";
-    private String data = "";
-    private String left_btn_txt = "";
-    private String right_btn_txt = "";
-    private String take_user_id = "";
+    String flag = "";
+    String title = "";
+    String data = "";
+    String left_btn_txt = "";
+    String right_btn_txt = "";
+    String take_user_id = "";
 
     Intent intent;
 
     //shared Data
     PreferenceHelper shardpref;
     String USER_INFO_ID = "";
-    String USER_INFO_NAME = "";
     String USER_LOGIN_METHOD = "";
     String USER_INFO_PHONE = "";
     String USER_INFO_AUTH = "";
@@ -93,7 +86,6 @@ public class TwoButtonPopActivity extends Activity {
     String mem_id = "";
 
     //Other
-    GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     String message = "";
@@ -189,8 +181,6 @@ public class TwoButtonPopActivity extends Activity {
             try{
                 //데이터 전달하기
                 if(flag.equals("로그아웃")){
-//                FirebaseMessaging.getInstance().subscribeToTopic(USER_INFO_ID).isCanceled();
-//                FirebaseMessaging.getInstance().subscribeToTopic("TEST").isCanceled();
                     shardpref.clear();
                     shardpref.remove("ALARM_ONOFF");
                     shardpref.remove("USER_LOGIN_METHOD");
@@ -221,7 +211,7 @@ public class TwoButtonPopActivity extends Activity {
                     }else{
                         pm.Login(mContext);
                     }
-                    FcmTokenDel();
+//                    FcmTokenDel();
                     finish();
                 }else if(flag.equals("회원탈퇴")){
                     UserDelete();
@@ -251,6 +241,14 @@ public class TwoButtonPopActivity extends Activity {
                     click_action = "MemberManagement";
                     dlog.i(message);
                     String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+                    dlog.i("-----그룹신청-----");
+                    dlog.i("today : " + today);
+                    dlog.i("take_user_id : " + take_user_id);
+                    dlog.i("type : 0");
+                    dlog.i("message : " + message);
+                    dlog.i("-----그룹신청-----");
+                    getUserToken(take_user_id,"0",message);
+                    AddPush("근무신청",message,take_user_id);
                     AddPlaceMember("",today);
                 } else if (flag.equals("작성여부")) {
                     shardpref.putInt("SELECT_POSITION",3);
@@ -284,19 +282,6 @@ public class TwoButtonPopActivity extends Activity {
                 ClosePop();
         });
     }
-    //카카오 로그인 콜백
-    Function2<OAuthToken, Throwable, Unit> kakaoCallback = (oAuthToken, throwable) -> {
-        if (oAuthToken != null) {
-            Log.i(TAG, "kakaoCallback oAuthToken not null");
-        }
-        if (throwable != null) {
-            Log.i(TAG, "kakaoCallback throwable not null");
-            Log.i("Kakao", "Message : " + throwable.getLocalizedMessage());
-            if (Objects.equals(throwable.getLocalizedMessage(), "user cancelled.")) {
-            }
-        }
-        return null;
-    };
 
     OAuthLoginCallback oAuthLoginCallback = new OAuthLoginCallback() {
         @Override
@@ -667,10 +652,6 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("근무신청이 완료되었습니다.");
-                                String place_owner_id = shardpref.getString("place_owner_id", "");
-                                String message = "새로운 근무 신청이 도착했습니다.";
-                                getUserToken(place_owner_id,"0",message);
-                                AddPush("근무신청",message,place_owner_id);
                                 ClosePop();
                             }else{
                                 Toast_Nomal("이미 직원으로 등록된 사용자 입니다.");

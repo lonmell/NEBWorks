@@ -41,7 +41,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PinSelectLocationActivity  extends AppCompatActivity implements MapView.MapViewEventListener {
+public class PinSelectLocationActivity extends AppCompatActivity implements MapView.MapViewEventListener {
     private static final String TAG = "EmployerAddStoreActivity";
     private ActivityPinselectBinding binding;
     Context mContext;
@@ -54,7 +54,7 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
     MapView mapView;
     String KakaoMap_url = "";
     ViewGroup mapViewContainer;
-    TextView address01,address02,sendAddress;
+    TextView address01, address02, sendAddress;
 
     // shared 저장값
     PreferenceHelper shardpref;
@@ -127,15 +127,16 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
             MoveMyLocation();
             mapView.setMapViewEventListener(this);
         } catch (Exception e) {
-            dlog.i( "Exception : " + e);
+            dlog.i("Exception : " + e);
         }
 
 
     }
 
-    public void setPOIItemEventListener(MapView.POIItemEventListener poiItemEventListener){
+    public void setPOIItemEventListener(MapView.POIItemEventListener poiItemEventListener) {
 
     }
+
     private void setContentLayout() {
         address01 = findViewById(R.id.address01);
         address02 = findViewById(R.id.address02);
@@ -170,14 +171,20 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
     }
-    public void onResume(){
+
+    public void onResume() {
         super.onResume();
-        String pin_store_address = shardpref.getString("pin_store_address","");
-        String pin_store_addressdetail = shardpref.getString("pin_store_addressdetail","");
-        String pin_zipcode = shardpref.getString("pin_zipcode","");
-        binding.address01.setText(pin_store_address.isEmpty()?"":pin_store_address);
-        binding.address02.setText(pin_store_addressdetail.isEmpty()?"":pin_store_addressdetail);
+        String pin_store_address = shardpref.getString("pin_store_address", "");
+        String pin_store_addressdetail = shardpref.getString("pin_store_addressdetail", "");
+        String pin_zipcode = shardpref.getString("pin_zipcode", "");
+        binding.address01.setText(pin_store_address.isEmpty() ? "" : pin_store_address);
+        binding.address02.setText(pin_store_addressdetail.isEmpty() ? "" : pin_store_addressdetail);
+        if(!pin_store_address.isEmpty()){
+            String location = pin_store_address + " " + pin_store_addressdetail;
+            GeoCoding(location);
+        }
     }
+
     private void MoveMyLocation() {
         try {
             gpsTracker = new GpsTracker(this);
@@ -332,6 +339,35 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
     }
     //--MapViewEventListener END
 
+    //지오코딩 ( 주소 >> 위도경도 )
+    List<Address> list = new ArrayList<>();
+    public void GeoCoding(String getLocation) {
+        Geocoder geocoder = new Geocoder(mContext);
+        try {
+            list = geocoder.getFromLocationName(getLocation, 10);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (list != null) {
+            String city = "";
+            String country = "";
+            Address address = list.get(0);
+            double lat = address.getLatitude();
+            double lon = address.getLongitude();
+            dlog.i("GeoCoding : lat["+lat+"] / lon["+lon+"]");
+
+            latitude = lat;
+            longitude = lon;
+
+            /*현재 내 위치로 지도 중앙을 이동, 위치 트래킹 기능 on*/
+            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 2, true);
+            mapView.setZoomLevel(0, true);
+            mapView.zoomIn(true);
+            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
+        }
+    }
+
     //역 지오코딩 ( 위,경도 >> 주소 ) START
     @SuppressLint({"SetTextI18n", "LongLogTag"})
     public void reverseCoding(double latitude, double longitube) { // 위도 경도 넣어서 역지오코딩 주소값 뽑아낸다
@@ -382,23 +418,28 @@ public class PinSelectLocationActivity  extends AppCompatActivity implements Map
 
                 //subAddress
                 address02.setText("[지번] " + subaddresslines);
-                shardpref.putString("pin_store_address",Setaddress);
-                shardpref.putString("pin_store_addressdetail",subaddresslines);
-                shardpref.putString("pin_zipcode",postalCode);
-                shardpref.putString("pin_latitude",String.valueOf(latitude));
-                shardpref.putString("pin_longitube",String.valueOf(longitube));
+                shardpref.putString("pin_store_address", Setaddress);
+                shardpref.putString("pin_store_addressdetail", subaddresslines);
+                shardpref.putString("pin_zipcode", postalCode);
+                shardpref.putString("pin_latitude", String.valueOf(latitude));
+                shardpref.putString("pin_longitube", String.valueOf(longitube));
             }
         }
     }
     //역 지오코딩 ( 위,경도 >> 주소 ) END
 
     @Override
-    public void onBackPressed(){
-        super.onBackPressed();
+    public void onDestroy() {
+        super.onDestroy();
         shardpref.remove("pin_store_address");
         shardpref.remove("pin_zipcode");
         shardpref.remove("pin_store_addressdetail");
         shardpref.remove("pin_latitude");
         shardpref.remove("pin_longitube");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

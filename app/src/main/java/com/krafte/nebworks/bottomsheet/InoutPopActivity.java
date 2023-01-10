@@ -27,6 +27,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.InOutInsertInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -103,12 +105,19 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             dlog.DlogContext(mContext);
             fragmentManager = getParentFragmentManager();
 
-            shardpref = new PreferenceHelper(mContext);
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            place_id = shardpref.getString("place_id", "");
-            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-            place_end_time = shardpref.getString("place_end_time", "");
-            mem_name    = shardpref.getString("mem_name", "");
+            shardpref           = new PreferenceHelper(mContext);
+//            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
+//            place_id            = shardpref.getString("place_id", "");
+//            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", "");
+//            place_end_time      = shardpref.getString("place_end_time", "");
+//            mem_name            = shardpref.getString("mem_name", "");
+            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
+
+            place_id            = PlaceCheckData.getInstance().getPlace_id();
+            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+            place_end_time      = shardpref.getString("place_end_time", "");
+            mem_name            = UserCheckData.getInstance().getUser_name();
+
             //데이터 가져오기
             time            = shardpref.getString("time", "");
             state           = shardpref.getString("state", "");
@@ -132,7 +141,6 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             time_area = view.findViewById(R.id.time_area);
 
             setBtnEvent();
-
 
             //state
             /*

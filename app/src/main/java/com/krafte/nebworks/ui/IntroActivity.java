@@ -27,8 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -50,8 +48,6 @@ import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.adapter.WorkplaceListAdapter;
-import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
@@ -74,9 +70,7 @@ import com.navercorp.nid.profile.data.NidProfileResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import kotlin.Unit;
@@ -710,7 +704,7 @@ public class IntroActivity extends AppCompatActivity {
     public void getPlaceList(String id, String user_auth) {
         dlog.i("------GetPlaceList------");
         dlog.i("USER_INFO_ID : " + id);
-        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+        dlog.i("USER_INFO_AUTH : " + user_auth);
         dlog.i("------GetPlaceList------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceListInterface.URL)

@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface GuideSearchAPInterface {
     String URL = "https://business.juso.go.kr/addrlink/";
-
+    //https://business.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=10&keyword=대구동구&confmKey=U01TX0FVVEgyMDIzMDEwOTE2MjQxMDExMzQxMjE=&resultType=json
     @FormUrlEncoded
     @POST("addrLinkApi.do")
     Call<String> getData(

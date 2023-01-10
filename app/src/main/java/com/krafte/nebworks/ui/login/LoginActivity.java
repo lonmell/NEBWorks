@@ -557,9 +557,6 @@ public class LoginActivity extends AppCompatActivity {
                                             pm.PlaceEditGo(mContext);
                                         } else {
                                             //저장된 매장
-//                                                    if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
-//                                                        pm.ProfileEditGo(mContext);
-//                                                    } else {
                                             if (accept_state.equals("null")) {
                                                 if (!owner_id.equals(id)) {
                                                     accept_state = "1";
