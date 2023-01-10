@@ -47,6 +47,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.common.util.KakaoCustomTabsClient;
+import com.kakao.sdk.talk.TalkApiClient;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceListAdapter;
@@ -792,7 +794,11 @@ public class ProfileEditActivity extends AppCompatActivity {
 //                            shardpref.putInt("SELECT_POSITION", 0);
 //                            shardpref.putInt("SELECT_POSITION_sub", 0);
 //                            pm.PlaceList(mContext);
-                            pm.AuthSelect(mContext);
+                             kakaoChannel();
+//                            Uri url = TalkApiClient.getInstance().channelChatUrl("_rTkJxj");
+//                            KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
+//                            instance.openWithDefault(mContext, url);
+//                            pm.AuthSelect(mContext);
                             binding.loginAlertText.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
@@ -1193,5 +1199,16 @@ public class ProfileEditActivity extends AppCompatActivity {
         }else{
             super.onBackPressed();
         }
+    }
+
+    public void kakaoChannel() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag", "채널");
+        intent.putExtra("data", "카카오톡 채널을 추가하여 \n 다양한 소식을 접해보세요!");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "추가하기");
+        startActivity(intent);
+        overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 }

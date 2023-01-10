@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,12 +23,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kakao.sdk.common.util.KakaoCustomTabsClient;
+import com.kakao.sdk.talk.TalkApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.dataInterface.UserInsertInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityJoinBinding;
 import com.krafte.nebworks.pop.JoinPopActivity;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.login.LoginActivity;
 import com.krafte.nebworks.util.AES256Util;
 import com.krafte.nebworks.util.DateCurrent;
@@ -583,7 +587,12 @@ public class JoinActivity extends AppCompatActivity {
 //                            shardpref.putInt("SELECT_POSITION", 0);
 //                            shardpref.putInt("SELECT_POSITION_sub", 0);
 //                            pm.PlaceList(mContext);
-                            pm.AuthSelect(mContext);
+//                            Uri url = TalkApiClient.getInstance().channelChatUrl("_rTkJxj");
+//                            KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
+//                            instance.openWithDefault(mContext, url);
+
+                             kakaoChannel();
+//                            pm.AuthSelect(mContext);
                         }
                     } catch (Exception e) {
                         dlog.i("Exception : " + e);
@@ -701,5 +710,16 @@ public class JoinActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    public void kakaoChannel() {
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("flag", "채널");
+        intent.putExtra("data", "카카오톡 채널을 추가하여 \n 다양한 소식을 접해보세요!");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "추가하기");
+        startActivity(intent);
+        overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 }

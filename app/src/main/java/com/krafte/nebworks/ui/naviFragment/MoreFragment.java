@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,6 +21,8 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.kakao.sdk.common.util.KakaoCustomTabsClient;
+import com.kakao.sdk.talk.TalkApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
@@ -141,7 +144,7 @@ public class MoreFragment extends Fragment {
 
             if (!USER_INFO_AUTH.isEmpty()) {
                 if(!USER_LOGIN_METHOD.equals("NEB")){
-                    binding.settingList04Txt.setText("연결해제");
+                    binding.settingList05Txt.setText("연결해제");
                     binding.loginMethodIcon.setVisibility(View.VISIBLE);
                     if(USER_LOGIN_METHOD.equals("Google")){
                         binding.loginMethodIcon.setBackgroundResource(R.drawable.google);
@@ -214,7 +217,15 @@ public class MoreFragment extends Fragment {
             }
         });
 
-        binding.settingList04Txt.setOnClickListener(v -> {
+        binding.settingList05Txt.setOnClickListener(v -> {
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                kakaoChannel();
+            }
+        });
+
+        binding.settingList05Txt.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
@@ -289,5 +300,11 @@ public class MoreFragment extends Fragment {
         startActivity(intent);
         activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    private void kakaoChannel() {
+        Uri url = TalkApiClient.getInstance().channelChatUrl("_rTkJxj");
+        KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
+        instance.openWithDefault(mContext, url);
     }
 }

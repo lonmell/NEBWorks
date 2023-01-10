@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.common.util.KakaoCustomTabsClient;
+import com.kakao.sdk.talk.TalkApiClient;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
@@ -266,6 +269,11 @@ public class TwoButtonPopActivity extends Activity {
 //                    shardpref.putString("USER_INFO_AUTH", "1");
                     shardpref.putInt("SELECT_POSITION", 0);
                     shardpref.putInt("SELECT_POSITION_sub", 0);
+                } else if (flag.equals("채널")) {
+                    Uri url = TalkApiClient.getInstance().channelChatUrl("_rTkJxj");
+                    KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
+                    instance.openWithDefault(mContext, url);
+                    pm.AuthSelect(mContext);
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -358,13 +366,15 @@ public class TwoButtonPopActivity extends Activity {
 
     private void ClosePop(){
         runOnUiThread(() -> {
-            if(flag.equals("공지삭제2")){
+            if(flag.equals("공지삭제2")) {
                 finish();
                 Intent intent = new Intent();
                 intent.putExtra("result", "Close Popup");
                 setResult(RESULT_OK, intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 pm.FeedList(mContext);
+            }else if (flag.equals("채널")) {
+                pm.AuthSelect(mContext);
             }else{
                 finish();
                 Intent intent = new Intent();
