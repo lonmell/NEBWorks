@@ -217,7 +217,7 @@ public class MoreFragment extends Fragment {
             }
         });
 
-        binding.settingList05Txt.setOnClickListener(v -> {
+        binding.settingList04Txt.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
