@@ -147,6 +147,7 @@ public class TaskListActivity extends AppCompatActivity {
         try{
             mContext = this;
             dlog.DlogContext(mContext);
+            shardpref = new PreferenceHelper(mContext);
             //Singleton Area
             place_id            = PlaceCheckData.getInstance().getPlace_id();
             place_name          = PlaceCheckData.getInstance().getPlace_name();
@@ -167,7 +168,6 @@ public class TaskListActivity extends AppCompatActivity {
             USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
 
             //shardpref Area
-            shardpref = new PreferenceHelper(mContext);
             SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub",0);
 
