@@ -677,7 +677,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center|bottom"
-                                android:text="20"
+                                android:text="0"
                                 android:textColor="@color/black" />
 
                             <TextView
@@ -688,7 +688,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center|bottom"
-                                android:text="2"
+                                android:text="0"
                                 android:textColor="@color/red" />
 
                             <LinearLayout
@@ -704,7 +704,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center|bottom"
-                                android:text="20"
+                                android:text="0"
                                 android:textColor="#dbdbdb" />
 
                             <TextView

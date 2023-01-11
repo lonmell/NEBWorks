@@ -253,7 +253,6 @@ public class AddContractPage04 extends AppCompatActivity {
         });
 
         binding.select03.setOnClickListener(v -> {
-            binding.timeSetpicker.setVisibility(View.GONE);
             if (contract_type.equals("0")) {
                 contract_type = "1";
                 binding.select03Round.setBackgroundResource(R.drawable.resize_service_on);
@@ -311,14 +310,12 @@ public class AddContractPage04 extends AppCompatActivity {
         });
 
         binding.next.setOnClickListener(v -> {
-            binding.timeSetpicker.setVisibility(View.GONE);
             if (DataCheck()) {
                 SaveContractWork();
             }
         });
 
         binding.backBtn.setOnClickListener(v -> {
-            binding.timeSetpicker.setVisibility(View.GONE);
             shardpref.remove("progress_pos");
             if (!shardpref.getString("progress_pos", "").isEmpty()) {
                 pm.ContractFragment(mContext);

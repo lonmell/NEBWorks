@@ -755,14 +755,18 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
     private void Logout(){
-        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("data", "로그아웃하시겠습니까?");
-        intent.putExtra("flag", "로그아웃");
-        intent.putExtra("left_btn_txt", "닫기");
-        intent.putExtra("right_btn_txt", "로그아웃");
-        mContext.startActivity(intent);
-        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        if(USER_INFO_AUTH.equals("-1")){
+            super.onBackPressed();
+        }else{
+            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+            intent.putExtra("data", "로그아웃하시겠습니까?");
+            intent.putExtra("flag", "로그아웃");
+            intent.putExtra("left_btn_txt", "닫기");
+            intent.putExtra("right_btn_txt", "로그아웃");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
     }
     @Override
     public void onBackPressed() {
