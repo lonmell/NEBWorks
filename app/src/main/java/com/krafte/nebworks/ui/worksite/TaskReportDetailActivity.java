@@ -31,7 +31,6 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -164,27 +163,18 @@ public class TaskReportDetailActivity extends AppCompatActivity {
     private void setBtnEvent() {
 
         binding.backBtn.setOnClickListener(v -> {
-//            shardpref.putInt("SELECT_POSITION", 1);
-//            shardpref.remove("SELECT_POSITION_sub");
-//            if(USER_INFO_AUTH.equals("0")){
-//                pm.Main(mContext);
-//            }else if(USER_INFO_AUTH.equals("1")){
-//                pm.TaskList(mContext);
-//            }
             super.onBackPressed();
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
-//            shardpref.putInt("SELECT_POSITION", 1);
-//            shardpref.remove("SELECT_POSITION_sub");
-//            if(USER_INFO_AUTH.equals("0")){
-//                pm.Main(mContext);
-//            }else if(USER_INFO_AUTH.equals("1")){
-//                pm.TaskList(mContext);
-//            }
-            super.onBackPressed();
+            shardpref.putInt("SELECT_POSITION", 1);
+            shardpref.remove("SELECT_POSITION_sub");
+            if(USER_INFO_AUTH.equals("0")){
+                pm.Main(mContext);
+            }else if(USER_INFO_AUTH.equals("1")){
+                pm.Main2(mContext);
+            }
         });
 
-        binding.goApproval.setVisibility(View.GONE);
         binding.goApproval.setOnClickListener(v -> {
             pm.Approval(mContext);
         });
@@ -245,6 +235,11 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             binding.endTime.setText(end_time);
             binding.reportTime.setText(updated_at);
 
+            if(USER_INFO_AUTH.equals("0")){
+                binding.bottomBtnBox2.setVisibility(View.VISIBLE);
+            }else{
+                binding.bottomBtnBox2.setVisibility(View.GONE);
+            }
             item_user_id = new ArrayList<>();
             item_user_name = new ArrayList<>();
             item_user_img = new ArrayList<>();
@@ -356,13 +351,8 @@ public class TaskReportDetailActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        RemoveShared();
     }
-
-    private void getTaskContents() {
-
-    }
-
-    RetrofitConnect rc = new RetrofitConnect();
 
     private void RemoveShared() {
         shardpref.remove("task_no");
@@ -417,7 +407,6 @@ public class TaskReportDetailActivity extends AppCompatActivity {
 //        super.onBackPressed();
         shardpref.putInt("SELECT_POSITION", 1);
         shardpref.remove("SELECT_POSITION_sub");
-        RemoveShared();
         if(USER_INFO_AUTH.equals("0")){
             pm.Main(mContext);
         }else if(USER_INFO_AUTH.equals("1")){

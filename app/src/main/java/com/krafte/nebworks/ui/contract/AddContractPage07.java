@@ -1,8 +1,11 @@
 package com.krafte.nebworks.ui.contract;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,7 +26,7 @@ import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractWorkerInterface;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd07Binding;
-import com.krafte.nebworks.ui.WebViewActivity;
+import com.krafte.nebworks.pop.WriteAddressActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -32,6 +35,10 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -98,13 +105,57 @@ public class AddContractPage07 extends AppCompatActivity {
         setBtnEvent();
     }
 
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("pin_store_address");
+        shardpref.remove("pin_zipcode");
+        shardpref.remove("pin_store_addressdetail");
+        shardpref.remove("pin_latitude");
+        shardpref.remove("pin_longitube");
+    }
+
     @Override
     public void onResume(){
         super.onResume();
         getContractId();
         UserCheck();
+        String pin_store_address = shardpref.getString("pin_store_address", "");
+        String pin_store_addressdetail = shardpref.getString("pin_store_addressdetail", "");
+        zipcode = shardpref.getString("pin_zipcode", "");
+        if(!pin_store_address.isEmpty()){
+            String location = pin_store_address + " " + pin_store_addressdetail;
+            GeoCoding(location);
+            dlog.i("RESULT_OK 1 : " + pin_store_address);
+            dlog.i("RESULT_OK 2 : " + pin_store_addressdetail);
+            binding.input03.setText(pin_store_address);
+            binding.input04.setText(pin_store_addressdetail);
+        }
     }
+    //지오코딩 ( 주소 >> 위도경도 )
+    List<Address> list = new ArrayList<>();
+    double latitude = 0;
+    double longitude = 0;
+    public void GeoCoding(String getLocation) {
+        Geocoder geocoder = new Geocoder(mContext);
+        try {
+            list = geocoder.getFromLocationName(getLocation, 10);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (list != null) {
+            String city = "";
+            String country = "";
+            Address address = list.get(0);
+            double lat = address.getLatitude();
+            double lon = address.getLongitude();
+            dlog.i("GeoCoding : lat["+lat+"] / lon["+lon+"]");
 
+            latitude = lat;
+            longitude = lon;
+        }
+    }
 
     private void setBtnEvent(){
         binding.next.setOnClickListener(v -> {
@@ -113,8 +164,12 @@ public class AddContractPage07 extends AppCompatActivity {
            }
         });
         binding.searchBtn.setOnClickListener(v -> {
-            Intent i = new Intent(this, WebViewActivity.class);
-            startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+//            Intent i = new Intent(this, WebViewActivity.class);
+//            startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+            Intent intent = new Intent(mContext, WriteAddressActivity.class);
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
         binding.backBtn.setOnClickListener(v -> {
             shardpref.remove("progress_pos");

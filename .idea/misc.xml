@@ -73,7 +73,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add04.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add05.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add06.xml" value="0.22" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add07.xml" value="0.25" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add07.xml" value="0.14" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add08.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add09.xml" value="0.2602564102564103" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_fragment.xml" value="0.24615384615384617" />
@@ -132,10 +132,10 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_task.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_task_approval.xml" value="0.2611111111111111" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_task_detail.xml" value="0.22" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_task_report.xml" value="0.22" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_task_report_detail.xml" value="0.18" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_task_report.xml" value="0.47659980897803245" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_task_report_detail.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_task_reuse.xml" value="0.2423076923076923" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_taskapproval_detail.xml" value="0.33" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_taskapproval_detail.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_tasklist_pop.xml" value="0.2611111111111111" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_termview.xml" value="0.2594017094017094" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_timepicker_pop.xml" value="0.2606837606837607" />

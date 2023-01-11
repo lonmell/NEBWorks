@@ -893,7 +893,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                 dlog.e("response 1: " + response.isSuccessful());
                                 dlog.e("response 2: " + response.body());
                                 if (response.isSuccessful() && response.body() != null) {
-                                    String jsonResponse = response.body();
+                                    String jsonResponse = rc.getBase64decode(response.body());
+                                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                                    dlog.i("jsonResponse : " + jsonResponse);
                                     if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         dlog.i("SelectEmployeeid : " + user_id);
@@ -962,7 +964,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                             dlog.e("response 1: " + response.isSuccessful());
                             dlog.e("response 2: " + response.body());
                             if (response.isSuccessful() && response.body() != null) {
-                                String jsonResponse = response.body();
+                                String jsonResponse = rc.getBase64decode(response.body());
+                                dlog.i("jsonResponse length : " + jsonResponse.length());
+                                dlog.i("jsonResponse : " + jsonResponse);
                                 if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                     dlog.i("assignment_kind : " + assignment_kind);
                                     dlog.i("SelectEmployeeid : " + user_id);

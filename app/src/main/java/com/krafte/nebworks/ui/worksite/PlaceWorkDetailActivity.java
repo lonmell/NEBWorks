@@ -570,7 +570,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         TaskSaveInterface api = retrofit.create(TaskSaveInterface.class);
-        Call<String> call = api.getData(task_id, task_date, img_path, complete_yn, reject_reason);
+        Call<String> call = api.getData(task_id, WorkTitle, task_date, img_path, complete_yn, reject_reason);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

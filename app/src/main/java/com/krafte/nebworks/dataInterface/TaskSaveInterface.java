@@ -14,6 +14,7 @@ public interface TaskSaveInterface
     @POST("post_update.php")
     Call<String> getData(
             @Field("task_id") String task_id,
+            @Field("task_title") String task_title,
             @Field("task_date") String task_date,
             @Field("img_path") String img_path,
             @Field("complete_yn") String complete_yn,

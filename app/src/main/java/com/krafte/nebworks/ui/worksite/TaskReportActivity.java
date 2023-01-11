@@ -106,6 +106,7 @@ public class TaskReportActivity extends AppCompatActivity {
     String place_start_date = "";
     String place_created_at = "";
     String task_no = "";
+    String reject_reason = "";
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
 
@@ -196,28 +197,29 @@ public class TaskReportActivity extends AppCompatActivity {
         super.onResume();
         dlog.i("-----getTaskContents START-----");
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        task_no = shardpref.getString("task_no", "0");
-        writer_id = shardpref.getString("writer_id", "0");
-        WorkTitle = shardpref.getString("title", "0");
-        WorkContents = shardpref.getString("contents", "0");
-        TaskKind = shardpref.getString("complete_kind", "0");            // 0:체크, 1:사진
-        user_id = shardpref.getString("users", "0");
-        usersn = shardpref.getString("usersn", "0");
-        usersimg = shardpref.getString("usersimg", "0");
-        usersjikgup = shardpref.getString("usersjikgup", "0");
-        WorkDay = shardpref.getString("task_date", "0");
-        start_time = shardpref.getString("start_time", "0");
-        end_time = shardpref.getString("end_time", "0");
-        Sun = shardpref.getString("sun", "0");
-        Mon = shardpref.getString("mon", "0");
-        Tue = shardpref.getString("tue", "0");
-        Wed = shardpref.getString("wed", "0");
-        Thu = shardpref.getString("thu", "0");
-        Fri = shardpref.getString("fri", "0");
-        Sat = shardpref.getString("sat", "0");
-        approval_state = shardpref.getString("approval_state", "0");// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
+        task_no         = shardpref.getString("task_no", "0");
+        reject_reason   = shardpref.getString("reject_reason", "0");
+        writer_id       = shardpref.getString("writer_id", "0");
+        WorkTitle       = shardpref.getString("title", "0");
+        WorkContents    = shardpref.getString("contents", "0");
+        TaskKind        = shardpref.getString("complete_kind", "0");            // 0:체크, 1:사진
+        user_id         = shardpref.getString("users", "0");
+        usersn          = shardpref.getString("usersn", "0");
+        usersimg        = shardpref.getString("usersimg", "0");
+        usersjikgup     = shardpref.getString("usersjikgup", "0");
+        WorkDay         = shardpref.getString("task_date", "0");
+        start_time      = shardpref.getString("start_time", "0");
+        end_time        = shardpref.getString("end_time", "0");
+        Sun             = shardpref.getString("sun", "0");
+        Mon             = shardpref.getString("mon", "0");
+        Tue             = shardpref.getString("tue", "0");
+        Wed             = shardpref.getString("wed", "0");
+        Thu             = shardpref.getString("thu", "0");
+        Fri             = shardpref.getString("fri", "0");
+        Sat             = shardpref.getString("sat", "0");
+        approval_state  = shardpref.getString("approval_state", "0");// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
 
-
+        dlog.i("getTaskContents task_no : " + task_no);
         dlog.i("getTaskContents users : " + user_id);
         dlog.i("getTaskContents usersn : " + usersn);
         dlog.i("getTaskContents usersimg : " + usersimg);
@@ -232,7 +234,14 @@ public class TaskReportActivity extends AppCompatActivity {
         dlog.i("getTaskContents start_time : " + start_time);
         dlog.i("getTaskContents end_time : " + end_time);
         dlog.i("getTaskContents approval_state : " + approval_state);// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
+        dlog.i("getTaskContents reject_reason : " + reject_reason);
 
+        if(approval_state.equals("2")){
+            binding.rejectStateArea.setVisibility(View.VISIBLE);
+            binding.rejectReasonTv.setText(reject_reason);
+        }else{
+            binding.rejectStateArea.setVisibility(View.GONE);
+        }
         if (end_time.length() >= 10) {
             //반복x ( 0000.00.00 00:00 )
             binding.writeTime.setText(dc.GET_TIME.substring(11, 16));
@@ -242,7 +251,9 @@ public class TaskReportActivity extends AppCompatActivity {
         }
         if (TaskKind.equals("0")) {
             binding.taskKind00.setVisibility(View.VISIBLE);
+            binding.taskKind01.setVisibility(View.GONE);
         } else {
+            binding.taskKind00.setVisibility(View.GONE);
             binding.taskKind01.setVisibility(View.VISIBLE);
         }
         ImgfileMaker = ImageNameMaker();
@@ -277,23 +288,26 @@ public class TaskReportActivity extends AppCompatActivity {
     String complete_yn = "y";
 
     private void setBtnEvent() {
-//        binding.bottomBtn.setOnClickListener(v -> {
-//            Toast_Nomal("업무보고");
-//        });
+
         binding.bottomBtn.setOnClickListener(v -> {
             String task_id = task_no;
             String task_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-            String reject_reason = binding.contents.getText().toString();
+            String incomplete_reason = binding.contents.getText().toString();
+            dlog.i("------binding.bottomBtn onClick Event------");
+            dlog.i("task_id : "             + task_id);
+            dlog.i("task_date : "           + task_date);
+            dlog.i("incomplete_reason : "   + incomplete_reason);
+            dlog.i("------binding.bottomBtn onClick Event------");
             //0:체크 1:사진
             if (TaskKind.equals("0")) {
-                setSaveTask(task_id, task_date, ProfileUrl, complete_yn, reject_reason);
+                setSaveTask(task_id, task_date, ProfileUrl, complete_yn, incomplete_reason);
             } else {
-                if (reject_reason.isEmpty()) {
+                if (incomplete_reason.isEmpty()) {
                     Toast.makeText(mContext, "보고사항을 추가해주세요.", Toast.LENGTH_SHORT).show();
                 }else if (imagePath.isEmpty()) {
-                    Toast.makeText(mContext, "매장 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "보고할 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    setSaveTask(task_id, task_date, ProfileUrl, "y", reject_reason);
+                    setSaveTask(task_id, task_date, ProfileUrl, "y", incomplete_reason);
                 }
             }
 
@@ -321,13 +335,14 @@ public class TaskReportActivity extends AppCompatActivity {
         });
     }
 
-    public void setSaveTask(String task_id, String task_date, String img_path, String complete_yn, String reject_reason) {
+    public void setSaveTask(String task_id, String task_date, String img_path, String complete_yn, String incomplete_reason) {
         dlog.i("------setSaveTask------");
         dlog.i("task_id : " + task_id);
+        dlog.i("task_title : " + WorkTitle);
         dlog.i("task_date : " + task_date);
         dlog.i("img_path : " + img_path);
         dlog.i("complete_yn : " + complete_yn);
-        dlog.i("reject_reason : " + reject_reason);
+        dlog.i("incomplete_reason : " + incomplete_reason);
         dlog.i("------setSaveTask------");
         img_path = img_path.equals("null") ? "" : img_path;
         Retrofit retrofit = new Retrofit.Builder()
@@ -335,7 +350,7 @@ public class TaskReportActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         TaskSaveInterface api = retrofit.create(TaskSaveInterface.class);
-        Call<String> call = api.getData(task_id, task_date, img_path, complete_yn, reject_reason);
+        Call<String> call = api.getData(task_id, WorkTitle, task_date, img_path, complete_yn, incomplete_reason);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
