@@ -161,22 +161,22 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                             holder.jejik.setTextColor(Color.parseColor("#000000"));
                         }
 
-                        if(item.getWorktime().equals("오전")) {
-                            holder.state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
-                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                        }else if(item.getWorktime().equals("주간")) {
-                            holder.state.setCardBackgroundColor(Color.parseColor("#44F905"));
-                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                        }else if(item.getWorktime().equals("야간")) {
-                            holder.state.setCardBackgroundColor(Color.parseColor("#1D1D1D"));
-                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                        }else if(item.getWorktime().equals("주말")) {
-                            holder.state.setCardBackgroundColor(Color.parseColor("#FF687A"));
-                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                        }else {
-                            holder.state.setCardBackgroundColor(Color.parseColor("#696969"));
-                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-                        }
+//                        if(item.getWorktime().equals("오전")) {
+//                            holder.state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
+//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+//                        }else if(item.getWorktime().equals("주간")) {
+//                            holder.state.setCardBackgroundColor(Color.parseColor("#44F905"));
+//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+//                        }else if(item.getWorktime().equals("야간")) {
+//                            holder.state.setCardBackgroundColor(Color.parseColor("#1D1D1D"));
+//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+//                        }else if(item.getWorktime().equals("주말")) {
+//                            holder.state.setCardBackgroundColor(Color.parseColor("#FF687A"));
+//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+//                        }else {
+//                            holder.state.setCardBackgroundColor(Color.parseColor("#696969"));
+//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
+//                        }
                         holder.state_tv.setText(item.getWorktime());
                     }
                     holder.add_detail.setVisibility(View.GONE);
