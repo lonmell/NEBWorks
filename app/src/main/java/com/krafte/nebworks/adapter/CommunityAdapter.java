@@ -1,5 +1,7 @@
 package com.krafte.nebworks.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -166,6 +169,23 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             });
+
+            if (loadlist == 0) {
+                //--아이템에 나타나기 애니메이션 줌
+                holder.item_total.setTranslationY(150);
+                holder.item_total.setAlpha(0.f);
+                holder.item_total.animate().translationY(0).alpha(1.f)
+                        .setStartDelay(delayEnterAnimation ? 20 * (position) : 0) // position 마다 시간차를 조금 주고..
+                        .setInterpolator(new DecelerateInterpolator(2.f))
+                        .setDuration(300)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                animationsLocked = true; // 진입시에만 animation 하도록 하기 위함
+                            }
+                        });
+                loadlist++;
+            }
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }
@@ -183,7 +203,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView rank_tv,title,name,write_date,contents,categorytv,view_com,like_cnt;
-        RelativeLayout list_setting;
+        RelativeLayout list_setting,item_total;
 
         LinearLayout rank_area;
         CardView profile_area;
@@ -207,6 +227,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             category_box    = itemView.findViewById(R.id.category_box);
             profile_img     = itemView.findViewById(R.id.profile_img);
             like_icon       = itemView.findViewById(R.id.like_icon);
+            item_total      = itemView.findViewById(R.id.item_total);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

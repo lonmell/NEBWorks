@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="10dp"
+    android:id="@+id/item_total"
     android:background="@drawable/default_gray_round"
     android:padding="0dp">
 

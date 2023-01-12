@@ -90,7 +90,7 @@ public class TaskReuseActivity extends AppCompatActivity {
 
 
             setBtnEvent();
-            setTodoMList();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,6 +106,7 @@ public class TaskReuseActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        setTodoMList();
         setIncludeSetting();
     }
 

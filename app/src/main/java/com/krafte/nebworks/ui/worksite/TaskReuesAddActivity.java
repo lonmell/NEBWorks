@@ -36,6 +36,7 @@ import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -320,6 +321,13 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         binding.inputDate01.setText(default_date.format(cal.getTime()));
         binding.inputDate02.setText(default_date.format(cal.getTime()));
 
+        String H = dc.GET_TIME.substring(0, 2);
+        String M = dc.GET_TIME.substring(2, 4);
+
+        starttime = (Integer.parseInt(H) < 12 ? "오전" : "오후") + " " + (H.trim().length() == 1 ? "0" + H : H) + ":" + (M.trim().length() == 1 ? "0" + M : M);
+        endtime = ((Integer.parseInt(H) + 1) < 12 ? "오전" : "오후") + " " + String.valueOf(Integer.parseInt((H.trim().length() == 1 ? "0" + H : H)) + 1) + ":" + (M.trim().length() == 1 ? "0" + M : M);
+        binding.inputTime01.setText(starttime);
+        binding.inputTime02.setText(endtime);
         binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -532,12 +540,6 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     private void getTaskContents() {
         dlog.i("-----getTaskContents START-----");
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -695,7 +697,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
     //업무 저장(추가)
     String getStartDate = "";
     String getEndDate = "";
-
+    RetrofitConnect rc = new RetrofitConnect();
     private void SaveAddWork() {
         dlog.i("------------------SaveAddWork------------------");
         if (RepeatCheck) {
@@ -746,10 +748,10 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 //반복되는 요일을 일시 초기화 해준다
                                 dlog.e("SaveAddWork function START");
-                                dlog.e("response 1: " + response.isSuccessful());
-                                dlog.e("response 2: " + response.body());
                                 if (response.isSuccessful() && response.body() != null) {
-                                    String jsonResponse = response.body();
+                                    String jsonResponse = rc.getBase64decode(response.body());
+                                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                                    dlog.i("jsonResponse : " + jsonResponse);
                                     if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         pm.TaskReuse(mContext);
@@ -797,10 +799,10 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 //반복되는 요일을 일시 초기화 해준다
                                 dlog.e("UpdateWork function START");
-                                dlog.e("response 1: " + response.isSuccessful());
-                                dlog.e("response 2: " + response.body());
                                 if (response.isSuccessful() && response.body() != null) {
-                                    String jsonResponse = response.body();
+                                    String jsonResponse = rc.getBase64decode(response.body());
+                                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                                    dlog.i("jsonResponse : " + jsonResponse);
                                     if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         pm.TaskReuse(mContext);
@@ -846,10 +848,10 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                             dlog.e("SaveAddWork function START make_kind =" + make_kind);
-                            dlog.e("response 1: " + response.isSuccessful());
-                            dlog.e("response 2: " + response.body());
                             if (response.isSuccessful() && response.body() != null) {
-                                String jsonResponse = response.body();
+                                String jsonResponse = rc.getBase64decode(response.body());
+                                dlog.i("jsonResponse length : " + jsonResponse.length());
+                                dlog.i("jsonResponse : " + jsonResponse);
                                 if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                     dlog.i("assignment_kind : " + assignment_kind);
                                     pm.CalenderBack(mContext);
@@ -989,6 +991,12 @@ public class TaskReuesAddActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        RemoveShared();
     }
 
     @Override

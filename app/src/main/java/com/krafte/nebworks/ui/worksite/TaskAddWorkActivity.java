@@ -337,6 +337,13 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         binding.inputDate01.setText(default_date.format(cal.getTime()));
         binding.inputDate02.setText(default_date.format(cal.getTime()));
 
+        String H = dc.GET_TIME.substring(0, 2);
+        String M = dc.GET_TIME.substring(2, 4);
+
+        starttime = (Integer.parseInt(H) < 12 ? "오전" : "오후") + " " + (H.trim().length() == 1 ? "0" + H : H) + ":" + (M.trim().length() == 1 ? "0" + M : M);
+        endtime = ((Integer.parseInt(H) + 1) < 12 ? "오전" : "오후") + " " + String.valueOf(Integer.parseInt((H.trim().length() == 1 ? "0" + H : H)) + 1) + ":" + (M.trim().length() == 1 ? "0" + M : M);
+        binding.inputTime01.setText(starttime);
+        binding.inputTime02.setText(endtime);
         binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {

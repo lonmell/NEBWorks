@@ -5,50 +5,33 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
-import android.widget.TextView;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.UserCheckData;
+import com.krafte.nebworks.databinding.ActivityCommunityOptionBinding;
 import com.krafte.nebworks.ui.community.CommunityAddActivity;
 import com.krafte.nebworks.ui.feed.FeedEditActivity;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 
-import java.text.DecimalFormat;
-
 public class CommunityOptionActivity extends Activity {
+    private ActivityCommunityOptionBinding binding;
     private static final String TAG = "CommunityOptionActivity";
     Context mContext;
-    private View view;
-
-    Activity activity;
-
-    //XML ID
-    TextView feed_edit, feed_delete, cancel;
-
 
     // shared 저장값
     PreferenceHelper shardpref;
-    String USER_INFO_NO = "";
     String USER_INFO_ID = "";
 
     String state = "";
-    String board_no = "";
     String click_htn = "";
     String comment_id = "";
     String comment_contents = "";
 
     //Other
-    private final DateCurrent dc = new DateCurrent();
-    private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
     Dlog dlog = new Dlog();
     Intent intent;
-
-    private String result = "";
-    GetResultData resultData = new GetResultData();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -58,44 +41,37 @@ public class CommunityOptionActivity extends Activity {
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_community_option);
+//        setContentView(R.layout.activity_community_option);
+        binding = ActivityCommunityOptionBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         mContext = this;
-
         dlog.DlogContext(mContext);
-
         shardpref = new PreferenceHelper(mContext);
-        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
-
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
 
         intent = getIntent();
         state = intent.getStringExtra("state");
         comment_id = intent.getStringExtra("comment_id");
         comment_contents = intent.getStringExtra("comment_contents");
 
-        setContentLayout();
         setBtnEvent();
 
         if(state.equals("EditComment")){
-            feed_edit.setText("댓글 수정");
-            feed_delete.setText("댓글 삭제");
+            binding.feedEdit.setText("댓글 수정");
+            binding.feedDelete.setText("댓글 삭제");
         }else if(state.equals("EditFeed")){
-            feed_edit.setText("공지 수정");
-            feed_delete.setText("공지 삭제");
+            binding.feedEdit.setText("공지 수정");
+            binding.feedDelete.setText("공지 삭제");
         }else if(state.equals("EditCommunity")){
-            feed_edit.setText("게시글 수정");
-            feed_delete.setText("게시글 삭제");
+            binding.feedEdit.setText("게시글 수정");
+            binding.feedDelete.setText("게시글 삭제");
         }
 
     }
 
-    private void setContentLayout() {
-        feed_edit = findViewById(R.id.feed_edit);
-        feed_delete = findViewById(R.id.feed_delete);
-        cancel = findViewById(R.id.cancel);
-    }
-
     private void setBtnEvent() {
-        feed_edit.setOnClickListener(v -> {
+        binding.feedEdit.setOnClickListener(v -> {
             if(state.equals("EditComment")){
                 shardpref.putString("editstate","EditComment");
                 shardpref.putString("comment_id",comment_id);
@@ -108,7 +84,7 @@ public class CommunityOptionActivity extends Activity {
             setUpdateWorktodo();
             closePop();
         });
-        feed_delete.setOnClickListener(v -> {
+        binding.feedDelete.setOnClickListener(v -> {
             click_htn = "icon_trash";
             Intent intent = new Intent(this, TwoButtonPopActivity.class);
             if(state.equals("EditComment")){
@@ -128,7 +104,7 @@ public class CommunityOptionActivity extends Activity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             closePop();
         });
-        cancel.setOnClickListener(v -> {
+        binding.cancel.setOnClickListener(v -> {
             closePop();
         });
     }

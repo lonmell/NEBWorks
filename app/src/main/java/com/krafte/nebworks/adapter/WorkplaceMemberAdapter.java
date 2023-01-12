@@ -18,10 +18,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.pop.WorkMemberOptionActivity;
-import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -93,6 +91,11 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
         WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(position);
 
         try{
+            /*
+             * 직급
+             * -- 대표님 : 점주가 생성
+             *  -- 관리자 : 근로자가 생성
+             */
             holder.name.setText(item.getName());
             if(item.getKind().equals("0")){
                 //승인대기상태
@@ -133,6 +136,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                         holder.linear03.setVisibility(View.GONE);
                         holder.linear04.setVisibility(View.GONE);
                         holder.contract_state.setVisibility(View.GONE);
+                        dlog.i("item.getJikgup() : " + item.getJikgup());
                     }else{
                         if((item.getPay().equals("null") || item.getPay().isEmpty())){
                             holder.pay.setText("상세정보 입력 전");

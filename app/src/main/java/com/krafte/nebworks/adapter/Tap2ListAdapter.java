@@ -253,6 +253,8 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 dlog.i("work_title : " + item.getTitle());
                 dlog.i("item.getStart_time() : " + item.getStart_time());
                 dlog.i("item.getEnd_time() : " + item.getEnd_time());
+                dlog.i("item.getApproval_state() : " + item.getApproval_state());
+                dlog.i("kind : " + kind);
                 holder.work_title.setText(item.getTitle());
                 if (item.getStart_time().length() > 5) {
                     String date = item.getStart_time().substring(0, 10);
@@ -272,7 +274,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
 
                 //0:대기, 1:승인, 2:반려
                 String state = "";
-                if(item.getApproval_state().equals("")){
+                if(item.getApproval_state().equals("") || item.getApproval_state().equals("3")){
                     state = "";
                 }else if(item.getApproval_state().equals("0")){
                     state = "승인대기";
@@ -354,6 +356,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 }
             });
+
             //--아이템에 나타나기 애니메이션 줌
             holder.item_total.setTranslationY(150);
             holder.item_total.setAlpha(0.f);
