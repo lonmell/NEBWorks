@@ -1,49 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:padding="0dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#3A3A3A"
     tools:ignore="HardcodedText">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
 
+    <LinearLayout
+        android:id="@+id/close_btn"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center">
         <ImageView
-            android:id="@+id/thumnail_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="35dp"
-            android:scaleType="center" />
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/close_gray" />
+    </LinearLayout>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/close_box"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            app:cardBackgroundColor="#ffffff"
-            app:cardCornerRadius="120dp"
-            app:cardElevation="5dp">
-
-            <TextView
-                android:id="@+id/close_btn"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:background="@drawable/close"
-                android:textSize="16sp" />
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
-
+    <ImageView
+        android:id="@+id/thumnail_in"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_centerInParent="true"
+        android:scaleType="center" />
 </RelativeLayout>

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.krafte.nebworks.R;
 
 public class AlertPopActivity extends Activity {
-
     private static final String TAG = "AlertPopActivity";
     Context mContext;
 

@@ -1,105 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="word1">간나</string>
-    <string name="word2">갈보</string>
-    <string name="word3">개돼지</string>
-    <string name="word4">개새끼</string>
-    <string name="word5">개새</string>
-    <string name="word6">개쓰레기</string>
-    <string name="word7">개씨발</string>
-    <string name="word8">개씹</string>
-    <string name="word9">개좆</string>
-    <string name="word10">개자식</string>
-    <string name="word11">기지랄</string>
-    <string name="word12">개차반</string>
-    <string name="word13">거지새끼</string>
-    <string name="word14">거렁뱅이</string>
-    <string name="word15">걸레</string>  /* 주의 */
-    <string name="word16">게이</string>
-    <string name="word17">고자</string>
-    <string name="word18">쥐랄</string>
-    <string name="word19">광녀</string>
-    <string name="word20">광년이</string>
-    <string name="word21">괴뢰</string>
-    <string name="word22">괴뢰군</string>
-    <string name="word23">그지깽깽이</string>
-    <string name="word24">근첩</string>
-    <string name="word25">급식충</string>
-    <string name="word26">깜둥이</string>
-    <string name="word27">꺼벙이</string>
-    <string name="word28">꺼져</string>
-    <string name="word29">꼬라</string>
-    <string name="word30">꼬붕</string>
-    <string name="word31">꼰대</string>
-    <string name="word32">꼴불견</string>
-    <string name="word33">꼴통</string>
-    <string name="word34">남창</string>
-    <string name="word35">놈</string>
-    <string name="word36">년</string>
-    <string name="word37">니애미</string>
-    <string name="word38">느금마</string>
-    <string name="word39">니미</string>
-    <string name="word40">니거</string>
-    <string name="word41">뒤져</string>
-    <string name="word42">닥쳐</string>
-    <string name="word43">등신</string>
-    <string name="word44">병신</string>
-    <string name="word45">따까리</string>
-    <string name="word46">멍청이</string>
-    <string name="word47">미친</string>
-    <string name="word48">보지</string>
-    <string name="word49">불알</string>
-    <string name="word50">부랄</string>
-    <string name="word51">새끼</string>
-    <string name="word52">싸가지</string>
-    <string name="word53">썅</string>
-    <string name="word54">썅놈</string>
-    <string name="word55">쌍년</string>
-    <string name="word56">씨발</string>
-    <string name="word57">ㅆㅂ</string>
-    <string name="word58">ㅅㅂ</string>
-    <string name="word59">열폭</string>
-    <string name="word60">뒤진</string>
-    <string name="word61">염병</string>
-    <string name="word62">옘병</string>
-    <string name="word63">육변기</string>
-    <string name="word64">운지</string>
-    <string name="word65">일베충</string>
-    <string name="word66">자지</string>
-    <string name="word67">좆밥</string>
-    <string name="word68">좆</string>
-    <string name="word69">젖</string>
-    <string name="word70">짱깨</string>
-    <string name="word71">찐따</string>
-    <string name="word72">틀딱</string>
-    <string name="word73">한남</string>
-    <string name="word74">한녀</string>
-    <string name="word75">호로</string>
-    <string name="word75">씹</string>
-    <string name="word76">정신병자</string>
-    <string name="word77">씌발</string>
-    <string name="word78">싀발</string>
-    <string name="word79">씨벌</string>
-    <string name="word80">시벌</string>
-    <string name="word81">씨방</string>
-    <string name="word82">시방</string>
-    <string name="word83">씨@발</string>
-    <string name="word84">시@발</string>
-    <string name="word85">씨1발</string>
-    <string name="word86">씨2발</string>
-    <string name="word87">시1발</string>
-    <string name="word88">시2발</string>
-    <string name="word89">후장</string>
-    <string name="word90">섹스</string>
-    <string name="word91">쌕스</string>
-    <string name="word92">니미</string>
-    <string name="word93">지1랄</string>
-    <string name="word94">지2랄</string>
-    <string name="word95">슨상</string>
-    <string name="word96">메갈</string>
-    <string name="word97">페미</string>
-    <string name="word98">창녀</string>
-    <string name="word99">창남</string>
-    <string name="word100">틀딱</string>
-
+    <string-array name="forbidden_word">
+        <item>간나</item>
+        <item>갈보</item>
+        <item>개돼지</item>
+        <item>개새끼</item>
+        <item>개새</item>
+        <item>개쓰레기</item>
+        <item>개씨발</item>
+        <item>개씹</item>
+        <item>개좆</item>
+        <item>개자식</item>
+        <item>기지랄</item>
+        <item>개차반</item>
+        <item>거지새끼</item>
+        <item>거렁뱅이</item>
+        <item>걸레</item>  /* 주의 */
+        <item>게이</item>
+        <item>고자</item>
+        <item>쥐랄</item>
+        <item>광녀</item>
+        <item>광년이</item>
+        <item>괴뢰</item>
+        <item>괴뢰군</item>
+        <item>그지깽깽이</item>
+        <item>근첩</item>
+        <item>급식충</item>
+        <item>깜둥이</item>
+        <item>꺼벙이</item>
+        <item>꼬라</item>
+        <item>꼬붕</item>
+        <item>꼰대</item>
+        <item>꼴통</item>
+        <item>남창</item>
+        <item>니애미</item>
+        <item>느금마</item>
+        <item>니미</item>
+        <item>니거</item>
+        <item>뒤져</item>
+        <item>닥쳐</item>
+        <item>등신</item>
+        <item>병신</item>
+        <item>따까리</item>
+        <item>멍청이</item>
+        <item>미친</item>
+        <item> 보지 </item>
+        <item>불알</item>
+        <item>부랄</item>
+        <item>새끼</item>
+        <item>싸가지</item>
+        <item>썅</item>
+        <item>썅놈</item>
+        <item>쌍년</item>
+        <item>씨발</item>
+        <item>ㅆㅂ</item>
+        <item>ㅅㅂ</item>
+        <item>열폭</item>
+        <item>뒤진</item>
+        <item>염병</item>
+        <item>옘병</item>
+        <item>육변기</item>
+        <item>운지</item>
+        <item>일베충</item>
+        <item>자지</item>
+        <item>좆밥</item>
+        <item>좆</item>
+        <item>젖</item>
+        <item>짱깨</item>
+        <item>찐따</item>
+        <item>틀딱</item>
+        <item>한남</item>
+        <item>한녀</item>
+        <item>호로</item>
+        <item>씹</item>
+        <item>정신병자</item>
+        <item>씌발</item>
+        <item>싀발</item>
+        <item>씨벌</item>
+        <item>시발</item>
+        <item>시벌</item>
+        <item>씨방</item>
+        <item>시방</item>
+        <item>씨@발</item>
+        <item>시@발</item>
+        <item>씨1발</item>
+        <item>씨2발</item>
+        <item>시1발</item>
+        <item>시2발</item>
+        <item>후장</item>
+        <item>섹스</item>
+        <item>쌕스</item>
+        <item>니미</item>
+        <item>지1랄</item>
+        <item>지2랄</item>
+        <item>슨상</item>
+        <item>메갈</item>
+        <item>페미</item>
+        <item>창녀</item>
+        <item>창남</item>
+        <item>틀딱</item>
+    </string-array>
 </resources>

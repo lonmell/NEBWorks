@@ -161,7 +161,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             return_page         = ReturnPageData.getInstance().getPage();
 
             USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
+            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
 
             //shardpref Area
             shardpref.putInt("SELECT_POSITION_sub", 1);

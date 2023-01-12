@@ -762,7 +762,7 @@ public class MainFragment extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.e( "WorkTapListFragment1 / setRecyclerView");
+                dlog.e("getNotReadFeedcnt");
                 dlog.e( "response 1: " + response.isSuccessful());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
                     String jsonResponse = rc.getBase64decode(response.body());
@@ -771,13 +771,15 @@ public class MainFragment extends AppCompatActivity {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        if(!jsonResponse.equals("[]")){
+                        if(!response.body().equals("[]") && Response.length() != 0){
                             String NotRead = Response.getJSONObject(0).getString("notread_feed");
-                            if(NotRead.equals("0")){
+                            if(NotRead.equals("0") || NotRead.isEmpty()){
                                 binding.notiRed.setVisibility(View.INVISIBLE);
                             }else{
                                 binding.notiRed.setVisibility(View.VISIBLE);
                             }
+                        }else{
+                            binding.notiRed.setVisibility(View.INVISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

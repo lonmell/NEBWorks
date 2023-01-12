@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 public interface FeedNotiInterface
 {
     String URL = "http://krafte.net/NEBWorks/feed/";
-    //http://krafte.net/NEBWorks/feed/get.php?place_id=96&feed_id=&sort=1&kind=2
+    //http://krafte.net/NEBWorks/feed/get.php?place_id=96&feed_id=&sort=1&kind=2&user_id=199
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(

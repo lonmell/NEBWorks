@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -61,7 +62,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -83,12 +87,10 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     // shared 저장값
     PreferenceHelper shardpref;
-    String USER_INFO_NO = "";
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
     int SELECTED_POSITION = 0;
-    String store_insurance = "";
     String USER_INFO_NICKNAME = "";
     String place_id = "";
     String feed_id = "";
@@ -152,7 +154,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
         USER_INFO_NICKNAME  = UserCheckData.getInstance().getUser_nick_name();
-        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
         place_id            = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area
@@ -230,32 +232,35 @@ public class CommunityAddActivity extends AppCompatActivity {
 
 
         binding.addcommunityBtn.setOnClickListener(v -> {
-            dlog.i("3 state_txt : " + state_txt);
-            if (nickname_select == 1 && USER_INFO_NICKNAME.isEmpty()) {
-                shardpref.putString("returnPage", TAG);
-                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-                intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");
-                intent.putExtra("flag", "닉네임없음");
-                intent.putExtra("left_btn_txt", "취소");
-                intent.putExtra("right_btn_txt", "확인");
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            } else if (DataCheck().equals("title")) {
-                Toast.makeText(this, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
-            } else if (DataCheck().equals("contents")) {
-                Toast.makeText(this, "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
-            } else if (DataCheck().equals("name")) {
-                Toast.makeText(this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
-            } else if (DataCheck().equals("category")) {
-                Toast.makeText(this, "카테고리을 선택해주세요.", Toast.LENGTH_SHORT).show();
-            } else if (DataCheck().equals("true")) {
-                if (state_txt.equals("EditCommunity")) {
-                    EditStroeNoti();
-                } else {
-                    AddFeedCommunity();
+            if(ForbiddenWordCheck()){
+                dlog.i("3 state_txt : " + state_txt);
+                if (nickname_select == 1 && USER_INFO_NICKNAME.isEmpty()) {
+                    shardpref.putString("returnPage", TAG);
+                    Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                    intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");
+                    intent.putExtra("flag", "닉네임없음");
+                    intent.putExtra("left_btn_txt", "취소");
+                    intent.putExtra("right_btn_txt", "확인");
+                    mContext.startActivity(intent);
+                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                } else if (DataCheck().equals("title")) {
+                    Toast.makeText(this, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                } else if (DataCheck().equals("contents")) {
+                    Toast.makeText(this, "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                } else if (DataCheck().equals("name")) {
+                    Toast.makeText(this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                } else if (DataCheck().equals("category")) {
+                    Toast.makeText(this, "카테고리을 선택해주세요.", Toast.LENGTH_SHORT).show();
+                } else if (DataCheck().equals("true")) {
+                    if (state_txt.equals("EditCommunity")) {
+                        EditStroeNoti();
+                    } else {
+                        AddFeedCommunity();
+                    }
                 }
             }
+
         });
 
         binding.writerName.setOnClickListener(v -> {
@@ -327,11 +332,31 @@ public class CommunityAddActivity extends AppCompatActivity {
         //}
 
     }
-
+    String title = "";
+    String content = "";
+    Resources res;
+    private boolean ForbiddenWordCheck(){
+        title = binding.writeTitle.getText().toString();
+        content = binding.writeContents.getText().toString();
+        res = getResources();
+        List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
+//        dlog.i("String xml Forbidden Word : " + forbiList);
+        for(int i = 0; i < forbiList.size(); i++){
+            if(title.contains(forbiList.get(i))){
+                title = title.replace(forbiList.get(i)," ○○○ ");
+            }
+            if(content.contains(forbiList.get(i))){
+                content = content.replace(forbiList.get(i)," ○○○ ");
+            }
+        }
+//        dlog.i("ForbiddenWordCheck title : " + title);
+//        dlog.i("ForbiddenWordCheck contents : " + content);
+        return true;
+    }
     //피드 게시글 업로드
     public void AddFeedCommunity() {
-        String title = binding.writeTitle.getText().toString();
-        String content = binding.writeContents.getText().toString();
+//        String title = binding.writeTitle.getText().toString();
+//        String content = binding.writeContents.getText().toString();
         boardkind = binding.selectBoardkindTxt.getText().toString();
         // category = binding.selectCategoryTxt.getText().toString();
 

@@ -8,22 +8,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.databinding.ActivityPhotopopBinding;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 public class PhotoPopActivity extends Activity {
-
+    private ActivityPhotopopBinding binding;
     private static final String TAG = "PhotoPopActivity";
     Context mContext;
-    TextView close_btn;
-    ImageView thumnail_in;
 
     String title            = "";
     String data             = "";
@@ -39,7 +36,9 @@ public class PhotoPopActivity extends Activity {
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_photopop);
+//        setContentView(R.layout.activity_photopop);
+        binding = ActivityPhotopopBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mContext = this;
         shardpref = new PreferenceHelper(mContext);
@@ -48,13 +47,12 @@ public class PhotoPopActivity extends Activity {
         intent = getIntent();
         data             = intent.getStringExtra("data");
         Log.i(TAG,"data : " + data);
-        setContentLayout();
 
         Glide.with(mContext).load(data)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(thumnail_in);
+                .skipMemoryCache(true).into(binding.thumnailIn);
 
-        close_btn.setOnClickListener(v -> {
+        binding.closeBtn.setOnClickListener(v -> {
             finish();
             Intent intent = new Intent();
             intent.putExtra("result", "Close Popup");
@@ -62,10 +60,5 @@ public class PhotoPopActivity extends Activity {
             overridePendingTransition(0, R.anim.translate_down);
         });
 
-    }
-    private void setContentLayout() {
-        //UI 객체생성
-        close_btn         = findViewById(R.id.close_btn);
-        thumnail_in    = findViewById(R.id.thumnail_in);
     }
 }

@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
-import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.databinding.ActivityWorkAssignmentBinding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -23,7 +22,7 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import java.text.DecimalFormat;
 
 public class PlaceBottomNaviActivity extends Activity {
-
+    private ActivityWorkAssignmentBinding binding;
     private static final String TAG = "EmployerOptionActivity";
     Context mContext;
     private View view;
@@ -32,8 +31,8 @@ public class PlaceBottomNaviActivity extends Activity {
     FragmentManager fragmentManager;
 
     //XML ID
-    TextView list_settingitem01,list_settingitem02;
-    CardView close_btn;
+//    TextView list_settingitem01,list_settingitem02;
+//    CardView close_btn;
 
     // shared 저장값
     PreferenceHelper shardpref;
@@ -62,7 +61,9 @@ public class PlaceBottomNaviActivity extends Activity {
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_work_assignment);
+//        setContentView(R.layout.activity_work_assignment);
+        binding = ActivityWorkAssignmentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         mContext = this;
 
         dlog.DlogContext(mContext);
@@ -76,13 +77,9 @@ public class PlaceBottomNaviActivity extends Activity {
         place_name = shardpref.getString("place_name", "-1");
         make_kind = shardpref.getInt("make_kind", 0);
 
-        list_settingitem01 = findViewById(R.id.list_settingitem01);
-        list_settingitem02 = findViewById(R.id.list_settingitem02);
+        binding.listSettingitem01.setText("매장 수정");
+        binding.listSettingitem02.setText("매장 삭제");
 
-        list_settingitem01.setText("매장 수정");
-        list_settingitem02.setText("매장 삭제");
-
-        close_btn = findViewById(R.id.close_btn);
         setBtnEvent();
     }
 
@@ -107,7 +104,7 @@ public class PlaceBottomNaviActivity extends Activity {
 
 
     private void setBtnEvent(){
-        list_settingitem01.setOnClickListener(v -> {
+        binding.listSettingitem01.setOnClickListener(v -> {
             finish();
             Intent intent = new Intent();
             intent.putExtra("result", "Close Popup");
@@ -116,7 +113,7 @@ public class PlaceBottomNaviActivity extends Activity {
             shardpref.getInt("make_kind",make_kind);
             pm.PlaceEditGo(mContext);
         });
-        list_settingitem02.setOnClickListener(v -> {
+        binding.listSettingitem02.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
             intent.putExtra("data", "[" + place_name + "]\n" + "매장을 삭제하시겠습니까?");
             intent.putExtra("flag", "매장삭제");
@@ -129,7 +126,7 @@ public class PlaceBottomNaviActivity extends Activity {
             ClosePop();
         });
 
-        close_btn.setOnClickListener(v -> {
+        binding.closeBtn.setOnClickListener(v -> {
             ClosePop();
         });
     }

@@ -106,7 +106,7 @@ public class FeedDetailActivity extends AppCompatActivity {
             //Singleton Area
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
             place_id        = PlaceCheckData.getInstance().getPlace_id();
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
 

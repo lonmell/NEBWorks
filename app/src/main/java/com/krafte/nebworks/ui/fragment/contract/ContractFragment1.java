@@ -110,7 +110,7 @@ public class ContractFragment1 extends Fragment {
         shardpref = new PreferenceHelper(mContext);
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
         place_id        = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area

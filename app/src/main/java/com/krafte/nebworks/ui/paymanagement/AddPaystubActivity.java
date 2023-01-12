@@ -131,7 +131,7 @@ public class AddPaystubActivity extends AppCompatActivity {
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
         place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
 
         //shardpref Area

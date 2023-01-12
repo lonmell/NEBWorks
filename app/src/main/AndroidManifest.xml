@@ -39,11 +39,13 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION " />
 
+<!--    android:fullBackupContent="@xml/backup_rules"-->
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        tools:replace="android:allowBackup"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:directBootAware="true"
-        android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -259,19 +261,6 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
-            android:name=".pop.WorkTimePickerPop"
-            android:theme="@android:style/Theme.Dialog"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity
-            android:name=".pop.DatePickerActivity"
-            android:theme="@android:style/Theme.Dialog" />
-
-        <activity
-            android:name=".pop.DatePickerymdActivity"
-            android:theme="@android:style/Theme.Dialog" />
-
-        <activity
             android:name=".pop.Tap1OptionActivity"
             android:theme="@android:style/Theme.Dialog" />
 
@@ -292,15 +281,10 @@
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
-            android:name=".pop.PhotoPopActivity"
-            android:theme="@android:style/Theme.Dialog" />
+            android:name=".pop.PhotoPopActivity"/>
 
         <activity
             android:name=".pop.PlaceBottomNaviActivity"
-            android:theme="@android:style/Theme.Dialog" />
-
-        <activity
-            android:name=".pop.WorkAssigmentContentsPop"
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
@@ -310,11 +294,6 @@
         <activity
             android:name=".pop.OneButtonTItlePopActivity"
             android:theme="@android:style/Theme.Dialog" />
-
-        <activity
-            android:name=".pop.DatePickerYearActivity"
-            android:theme="@android:style/Theme.Dialog"
-            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".pop.JoinPopActivity"
@@ -331,18 +310,11 @@
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
-            android:name=".pop.DateCoustomPickerActivity"
-            android:theme="@android:style/Theme.Dialog" />
-
-        <activity
             android:name=".pop.WorkMemberOptionActivity"
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
             android:name=".pop.SelectMemberPop" />
-
-        <activity
-            android:name=".pop.SelectTaskDatePop" />
 
         <activity
             android:name=".pop.RepeatSetPop" />

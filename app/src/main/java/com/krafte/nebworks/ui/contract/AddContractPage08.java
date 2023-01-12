@@ -121,7 +121,7 @@ public class AddContractPage08 extends AppCompatActivity {
         place_id        = PlaceCheckData.getInstance().getPlace_id();
         place_name      = PlaceCheckData.getInstance().getPlace_name();
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
         //shardpref Area
 

@@ -26,7 +26,7 @@ import java.util.List;
 
 public class RepeatSetPop extends Activity {
     private ActivityRepeatsetpopBinding binding;
-    private static final String TAG = "SelectTaskDatePop";
+    private static final String TAG = "RepeatSetPop";
     Context mContext;
 
     // shared 저장값

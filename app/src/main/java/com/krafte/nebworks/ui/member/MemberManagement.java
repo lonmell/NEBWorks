@@ -116,7 +116,7 @@ public class MemberManagement extends AppCompatActivity {
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
             return_page     = ReturnPageData.getInstance().getPage();
             ReturnPageData.getInstance().setPage("BusinessApprovalActivity");
 
@@ -193,7 +193,7 @@ public class MemberManagement extends AppCompatActivity {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.e( "WorkTapListFragment1 / setRecyclerView");
+                dlog.e("getNotReadFeedcnt");
                 dlog.e( "response 1: " + response.isSuccessful());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
                     String jsonResponse = rc.getBase64decode(response.body());
@@ -202,13 +202,15 @@ public class MemberManagement extends AppCompatActivity {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        if(!response.body().equals("[]")){
+                        if(!response.body().equals("[]") && Response.length() != 0){
                             String NotRead = Response.getJSONObject(0).getString("notread_feed");
-                            if(NotRead.equals("0")){
+                            if(NotRead.equals("0") || NotRead.isEmpty()){
                                 binding.notiRed.setVisibility(View.INVISIBLE);
                             }else{
                                 binding.notiRed.setVisibility(View.VISIBLE);
                             }
+                        }else{
+                            binding.notiRed.setVisibility(View.INVISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

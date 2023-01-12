@@ -121,7 +121,7 @@ public class PaystuballActivity extends AppCompatActivity {
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
         place_id        = PlaceCheckData.getInstance().getPlace_id();
         place_name      = PlaceCheckData.getInstance().getPlace_name();
 

@@ -169,7 +169,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
         USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
         //shardpref Area
         task_no     = shardpref.getString("task_no", "");

@@ -66,7 +66,6 @@ public class PlaceSearchActivity extends AppCompatActivity {
 
     //Sharedf
     String USER_INFO_ID = "";
-    String USER_INFO_AUTH = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +87,6 @@ public class PlaceSearchActivity extends AppCompatActivity {
             //shardpref Area
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_ID", "-99");
 
             gpsTracker = new GpsTracker(this);
             latitude = gpsTracker.getLatitude();

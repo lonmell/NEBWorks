@@ -324,6 +324,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     state = "1";
                     inout_insert.setText("확인");
                     time_area.setVisibility(View.VISIBLE);
+                    Setinout_tv2.setVisibility(View.GONE);
                     inout_icon.setBackgroundResource(R.drawable.ic_inout_ok);
                     inout_tv = "출근처리";
                     inout_tv2 = "";
@@ -332,6 +333,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     kind = "0";
                     inout_insert.setText("재시도");
                     Setinout_tv2.setVisibility(View.VISIBLE);
+                    time_area.setVisibility(View.GONE);
                     inout_icon.setBackgroundResource(R.drawable.ic_in_enable);
                     inout_tv = "출근처리 불가";
                     inout_tv2 = "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요";

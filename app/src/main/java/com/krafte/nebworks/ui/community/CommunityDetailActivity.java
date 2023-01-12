@@ -132,7 +132,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
         USER_INFO_NICKNAME  = UserCheckData.getInstance().getUser_nick_name();
-        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
         USER_INFO_PROFILE   = UserCheckData.getInstance().getUser_img_path();
 
         //shardpref Area

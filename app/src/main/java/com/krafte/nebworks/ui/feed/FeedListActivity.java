@@ -88,7 +88,7 @@ public class FeedListActivity extends AppCompatActivity {
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
         USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
         place_id        = PlaceCheckData.getInstance().getPlace_id();
         returnPage      = ReturnPageData.getInstance().getPage();
 
@@ -126,7 +126,9 @@ public class FeedListActivity extends AppCompatActivity {
         });
 
         if(USER_INFO_AUTH.equals("1")){
-            binding.addBtn.getRoot().setVisibility(View.GONE);
+            if(!USER_INFO_ID.equals(PlaceCheckData.getInstance().getPlace_owner_id())){
+                binding.addBtn.getRoot().setVisibility(View.GONE);
+            }
         }
     }
 

@@ -38,7 +38,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MemberListPop extends Activity {
     private ActivityMemberlistPopBinding binding;
-    private static final String TAG = "SelectTaskDatePop";
+    private static final String TAG = "MemberListPop";
     Context mContext;
 
     // shared 저장값

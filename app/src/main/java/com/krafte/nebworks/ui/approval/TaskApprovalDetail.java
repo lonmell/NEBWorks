@@ -159,7 +159,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
         setBtnEvent();
         shardpref = new PreferenceHelper(mContext);
         //Singleton Area
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
         place_id        = PlaceCheckData.getInstance().getPlace_id();
         place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();

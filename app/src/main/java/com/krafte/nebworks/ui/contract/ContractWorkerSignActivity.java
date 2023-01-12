@@ -108,7 +108,7 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
         shardpref = new PreferenceHelper(mContext);
         //Singleton Area
         USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","0");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
         //shardpref Area
 
