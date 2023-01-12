@@ -548,7 +548,7 @@
                     android:padding="5dp"
                     android:text="별도입력이 없는 경우 자동계산 그대로 발급됩니다"
                     android:textColor="#949494"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -733,7 +733,7 @@
             android:fontFamily="@font/inter_regular"
             android:text="기타"
             android:textColor="#949494"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
 
         <EditText

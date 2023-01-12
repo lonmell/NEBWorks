@@ -19,7 +19,7 @@
         android:gravity="center"
         android:text="날짜"
         android:textColor="#000"
-        android:textSize="13sp"
+        android:textSize="15sp"
         tools:ignore="HardcodedText" />
 
     <!--출근/결근-->
@@ -33,7 +33,7 @@
         android:gravity="center"
         android:text="출근"
         android:textColor="#000"
-        android:textSize="13sp"
+        android:textSize="15sp"
         tools:ignore="HardcodedText" />
 
     <!--출근시간-->
@@ -49,7 +49,7 @@
         android:gravity="start|center"
         android:text=" 00:00"
         android:textColor="#3498DB"
-        android:textSize="13sp"
+        android:textSize="15sp"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -62,7 +62,7 @@
         android:gravity="center"
         android:text="퇴근"
         android:textColor="#000"
-        android:textSize="13sp"
+        android:textSize="15sp"
         tools:ignore="HardcodedText" />
 
     <!--퇴근시간-->
@@ -76,7 +76,7 @@
         android:gravity="start|center"
         android:text=" 00:00"
         android:textColor="#3498DB"
-        android:textSize="13sp"
+        android:textSize="15sp"
         tools:ignore="HardcodedText" />
 
     <!--하루근로시간-->

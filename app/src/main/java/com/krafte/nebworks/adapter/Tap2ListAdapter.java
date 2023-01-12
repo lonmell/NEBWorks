@@ -147,24 +147,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 dlog.i("writer_id : "               + item.getWriter_id());
                 dlog.i("kind : "                    + item.getKind());
                 dlog.i("item.getApproval_state() : " + item.getApproval_state());
-                dlog.i("kind : " + kind);
-                dlog.i("work_title : " + item.getTitle());
-                dlog.i("item.getStart_time() : " + item.getStart_time());
-                dlog.i("item.getEnd_time() : " + item.getEnd_time());
-                dlog.i("item.getApproval_state() : " + item.getApproval_state());
-                dlog.i("kind : " + kind);
-                dlog.i("work_title : " + item.getTitle());
-                dlog.i("item.getStart_time() : " + item.getStart_time());
-                dlog.i("item.getEnd_time() : " + item.getEnd_time());
-                dlog.i("item.getApproval_state() : " + item.getApproval_state());
-                dlog.i("kind : " + kind);
-                dlog.i("work_title : " + item.getTitle());
-                dlog.i("item.getStart_time() : " + item.getStart_time());
-                dlog.i("item.getEnd_time() : " + item.getEnd_time());
-                dlog.i("item.getApproval_state() : " + item.getApproval_state());
-                dlog.i("kind : " + kind);
-                dlog.i("item.getApproval_state() : " + item.getApproval_state());
-                dlog.i("kind : " + kind);
                 dlog.i("------Tap2ListAdapter------");
                 if (item.getWriter_id().equals(USER_INFO_ID)) {
                     holder.list_setting.setVisibility(View.VISIBLE);
@@ -284,12 +266,12 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     holder.work_start_time.setText(item.getStart_time() + " 시작");
                 }
 
-                if (item.getEnd_time().length() > 5) {
+                if (item.getEnd_time().length() > 6) {
                     String date = item.getEnd_time().substring(0, 10);
                     String time = item.getEnd_time().substring(11);
                     holder.work_end_time.setText(date.replace("-", ".") + " | " + time + " 마감");
                 } else {
-                    holder.work_end_time.setText(item.getEnd_time() + " 마감");
+                    holder.work_end_time.setText("[반복할일] "+item.getEnd_time() + " 마감");
                 }
 
                 //0:대기, 1:승인, 2:반려

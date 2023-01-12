@@ -61,6 +61,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -400,15 +402,28 @@ public class MainFragment2 extends AppCompatActivity {
         });
     }
 
+    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
-        getNotReadFeedcnt();
         setNavBarBtnEvent();
-        SetAllMemberList();
         UserCheck();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //5초마다 실행
+                SetAllMemberList();
+                getNotReadFeedcnt();
+            }
+        };
+        timer = new Timer();
+        timer.schedule(timerTask,0,5000);
     }
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
+    }
     DBConnection dbc = new DBConnection();
     /*
      * 20230105 HomFragment에서만 한번 사용자 id , 매장 id를 사용해
@@ -804,10 +819,7 @@ public class MainFragment2 extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
+
 
     private void ChangePosition(int i) {
         bottom_icon01.setBackgroundResource(R.drawable.ic_main_off);

@@ -133,6 +133,7 @@
                                             android:fontFamily="@font/inter_bold"
                                             android:gravity="center"
                                             android:text="0000년 00월 00일"
+                                            android:textSize="15sp"
                                             android:textColor="@color/black" />
 
                                         <RelativeLayout
@@ -358,6 +359,7 @@
                                             android:fontFamily="@font/inter_bold"
                                             android:gravity="center"
                                             android:text="오늘의 출퇴근"
+                                            android:textSize="16sp"
                                             android:textColor="@color/black" />
 
                                         <TextView
@@ -394,6 +396,7 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center"
                                                 android:text="근무중"
+                                                android:textSize="15sp"
                                                 android:textColor="#696969" />
 
                                             <TextView
@@ -404,6 +407,7 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center"
                                                 android:text="미출근"
+                                                android:textSize="15sp"
                                                 android:textColor="#696969" />
 
                                             <LinearLayout
@@ -419,6 +423,7 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center"
                                                 android:text="퇴근"
+                                                android:textSize="15sp"
                                                 android:textColor="#696969" />
 
                                             <TextView
@@ -429,6 +434,7 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center"
                                                 android:text="휴무"
+                                                android:textSize="15sp"
                                                 android:textColor="#696969" />
                                         </LinearLayout>
 
@@ -448,6 +454,7 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center|bottom"
                                                 android:text="0"
+                                                android:textSize="15sp"
                                                 android:textColor="@color/black" />
 
                                             <TextView
@@ -459,6 +466,7 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center|bottom"
                                                 android:text="0"
+                                                android:textSize="15sp"
                                                 android:textColor="@color/red" />
 
                                             <LinearLayout
@@ -475,6 +483,7 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center|bottom"
                                                 android:text="0"
+                                                android:textSize="15sp"
                                                 android:textColor="#dbdbdb" />
 
                                             <TextView
@@ -486,6 +495,7 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center|bottom"
                                                 android:text="0"
+                                                android:textSize="15sp"
                                                 android:textColor="#dbdbdb" />
                                         </LinearLayout>
                                     </LinearLayout>

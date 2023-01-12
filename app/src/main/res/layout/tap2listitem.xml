@@ -32,7 +32,7 @@
                 android:singleLine="true"
                 android:text="제목"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
@@ -47,9 +47,9 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="start|center"
                 android:singleLine="true"
-                android:text="state"
+                android:text=""
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
@@ -69,7 +69,7 @@
                     android:singleLine="true"
                     android:text="0000.00.00 | 00:00 시작"
                     android:textColor="#696969"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
 
                 <TextView
@@ -81,7 +81,7 @@
                     android:singleLine="true"
                     android:text="0000.00.00 | 00:00 마감"
                     android:textColor="#696969"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
 
                 <TextView
@@ -93,7 +93,7 @@
                     android:fontFamily="@font/inter_regular"
                     android:text="000/000/000 외 3명"
                     android:textColor="#696969"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
             </LinearLayout>
 
@@ -251,14 +251,14 @@
 
             <RelativeLayout
                 android:id="@+id/list_setting"
-                android:layout_width="35dp"
-                android:layout_height="30dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_alignTop="@+id/name"
                 android:layout_alignParentEnd="true">
 
                 <ImageView
-                    android:layout_width="3dp"
-                    android:layout_height="15dp"
+                    android:layout_width="5dp"
+                    android:layout_height="23dp"
                     android:layout_centerInParent="true"
                     android:background="@drawable/list_setting" />
             </RelativeLayout>

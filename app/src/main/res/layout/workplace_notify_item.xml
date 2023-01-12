@@ -109,7 +109,7 @@
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center|start"
                     android:text="매장주소"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     android:textColor="#696969"
                     tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
 
@@ -125,7 +125,7 @@
                     android:gravity="center|end"
                     android:text="00:00"
                     android:textColor="#696969"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>

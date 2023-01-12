@@ -39,7 +39,7 @@
             android:gravity="center"
             android:text="할일 생성"
             android:textColor="#000"
-            android:textSize="20sp"
+            android:textSize="22sp"
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 
@@ -102,7 +102,7 @@
                             android:gravity="start|center"
                             android:text="현재 선택된 매장"
                             android:textColor="#696969"
-                            android:textSize="13sp"
+                            android:textSize="15sp"
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
 
@@ -220,7 +220,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:text="근무일정"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -279,7 +279,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:text="근무날짜"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -457,7 +457,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:text="직원 선택"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -505,7 +505,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="보고여부"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <LinearLayout

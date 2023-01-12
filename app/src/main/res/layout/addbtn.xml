@@ -45,7 +45,7 @@
                     android:gravity="center"
                     android:text="할일추가"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
             </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

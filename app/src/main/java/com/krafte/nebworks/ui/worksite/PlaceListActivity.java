@@ -149,6 +149,8 @@ public class PlaceListActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    Timer timer = new Timer();
+
     @Override
     public void onResume() {
         super.onResume();
@@ -159,7 +161,7 @@ public class PlaceListActivity extends AppCompatActivity {
         dlog.i("USER_INFO_NAME : " + USER_INFO_NAME);
         dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
         dlog.i("-----onResume-----");
-        Timer timer = new Timer();
+
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -167,10 +169,10 @@ public class PlaceListActivity extends AppCompatActivity {
                 if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
                     GetPlaceList();
                     getNotReadFeedcnt();
-                    timer.cancel();
                 }
             }
         };
+        timer = new Timer();
         timer.schedule(timerTask,0,1000);
 
     }

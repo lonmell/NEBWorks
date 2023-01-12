@@ -190,7 +190,7 @@
             android:gravity="center"
             android:text="답글달기"
             android:textColor="#54585A"
-            android:textSize="13sp"
+            android:textSize="15sp"
             tools:ignore="HardcodedText" />
         <LinearLayout
             android:id="@+id/reply_like_area"

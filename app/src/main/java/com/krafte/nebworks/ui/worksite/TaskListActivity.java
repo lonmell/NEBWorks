@@ -414,6 +414,7 @@ public class TaskListActivity extends AppCompatActivity {
         dlog.i("place_id : " + change_place_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("select_date : " + getYMPicker.substring(0,7));
+        dlog.i("select_date2 : " + binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일",""));
         dlog.i("------SetCalenderData------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalendersetData.URL)

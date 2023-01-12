@@ -21,8 +21,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
-import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.UserCheckData;
@@ -31,12 +29,9 @@ import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.fragment.community.community_fragment1;
 import com.krafte.nebworks.ui.fragment.community.community_fragment2;
 import com.krafte.nebworks.ui.fragment.community.community_fragment3;
-import com.krafte.nebworks.util.DBConnection;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-import com.krafte.nebworks.util.RetrofitConnect;
 
 public class CommunityFragment extends Fragment {
     private final static String TAG = "MoreFragment";
@@ -53,15 +48,9 @@ public class CommunityFragment extends Fragment {
     String place_owner_id = "";
 
     //Other
-    RetrofitConnect rc = new RetrofitConnect();
-    DateCurrent dc = new DateCurrent();
-    DBConnection dbConnection = new DBConnection();
-    GetResultData resultData = new GetResultData();
-    ViewPagerFregmentAdapter viewPagerFregmentAdapter;
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     int paging_position = 0;
-    int listitemsize = 0;
     Fragment fg;
 
     public static CommunityFragment newInstance(int number) {

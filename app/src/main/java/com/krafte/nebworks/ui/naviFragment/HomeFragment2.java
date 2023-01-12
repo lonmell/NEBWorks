@@ -256,17 +256,13 @@ public class HomeFragment2 extends Fragment {
 //        timer.cancel();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        timer.cancel();
-    }
 
+
+    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
         shardpref.remove("Tap");
-        Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -280,11 +276,16 @@ public class HomeFragment2 extends Fragment {
                     PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
                     InOutLogMember();
 //                    getFCMToken();
-                    timer.cancel();
                 }
             }
         };
-        timer.schedule(timerTask,0,1000);
+        timer = new Timer();
+        timer.schedule(timerTask,0,5000);
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
     }
 
     public void setDummyData() {

@@ -48,8 +48,8 @@
             android:layout_marginEnd="10dp">
 
             <ImageView
-                android:layout_width="4dp"
-                android:layout_height="16dp"
+                android:layout_width="5dp"
+                android:layout_height="23dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/list_setting" />
         </RelativeLayout>
@@ -67,7 +67,7 @@
             android:singleLine="true"
             android:text="title"
             android:textColor="#949494"
-            android:textSize="13sp"
+            android:textSize="15sp"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -83,7 +83,7 @@
             android:singleLine="true"
             android:text="직급"
             android:textColor="#949494"
-            android:textSize="13sp"
+            android:textSize="15sp"
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 </LinearLayout>

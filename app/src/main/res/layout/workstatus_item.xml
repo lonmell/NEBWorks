@@ -41,7 +41,7 @@
             android:text="user_name"
             android:gravity="start|center"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="15sp"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -52,7 +52,7 @@
             android:text="yoil"
             android:gravity="start|center"
             android:textColor="#696969"
-            android:textSize="14sp"
+            android:textSize="15sp"
             tools:ignore="HardcodedText,SmallSp" />
 
         <TextView
@@ -63,7 +63,7 @@
             android:text="status"
             android:gravity="start|center"
             android:textColor="#5B93FF"
-            android:textSize="14sp"
+            android:textSize="15sp"
             tools:ignore="HardcodedText,SmallSp" />
     </LinearLayout>
 

@@ -156,7 +156,7 @@
                         android:scaleType="center"
                         android:text="미완료"
                         android:textColor="#FF3636"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
                 </RelativeLayout>

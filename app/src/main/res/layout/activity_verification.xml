@@ -213,7 +213,7 @@
                 android:gravity="center|start"
                 android:text="00:00"
                 android:textColor="#d9d9d9"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@+id/linear03"
                 app:layout_constraintTop_toBottomOf="@+id/linear02"
                 tools:ignore="HardcodedText,TextContrastCheck" />
@@ -322,7 +322,7 @@
                     android:layout_toEndOf="@+id/service_radio01"
                     android:text="휴대폰 본인 인출 서비스 이용약관동의(필수)"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 
@@ -336,7 +336,7 @@
                 android:gravity="center"
                 android:text="@string/view_tv"
                 android:textColor="#696969"
-                android:textSize="13sp" />
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
@@ -372,7 +372,7 @@
                     android:layout_toEndOf="@+id/service_radio02"
                     android:text="휴대폰 통신사 이용약관 동의(필수)"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 
@@ -387,7 +387,7 @@
                 android:gravity="center"
                 android:text="@string/view_tv"
                 android:textColor="#696969"
-                android:textSize="13sp" />
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
@@ -422,7 +422,7 @@
                     android:layout_toEndOf="@+id/service_radio03"
                     android:text="개인정보 제공 및 이용동의(필수)"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 
@@ -436,7 +436,7 @@
                 android:gravity="center"
                 android:text="@string/view_tv"
                 android:textColor="#696969"
-                android:textSize="13sp" />
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
@@ -472,7 +472,7 @@
                     android:layout_toEndOf="@+id/service_radio04"
                     android:text="고유식별정보 처리(필수)"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
 
             </RelativeLayout>
@@ -487,7 +487,7 @@
                 android:gravity="center"
                 android:text="@string/view_tv"
                 android:textColor="#696969"
-                android:textSize="13sp" />
+                android:textSize="15sp" />
         </RelativeLayout>
     </LinearLayout>
 

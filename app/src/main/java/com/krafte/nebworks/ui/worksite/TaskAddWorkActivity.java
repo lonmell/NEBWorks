@@ -764,8 +764,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             start_time = starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime;
             end_time = endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime;
         } else {
-            start_time = (getStartDate.isEmpty()?today:getStartDate) + " " + (starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime);
-            end_time = (getEndDate.isEmpty()?today:getEndDate) + " " + (endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime);
+            start_time = (getStartDate.isEmpty()?today:getStartDate) + " " + (starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime.replace("오전","").replace("오후","").trim());
+            end_time = (getEndDate.isEmpty()?today:getEndDate) + " " + (endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime.replace("오전","").replace("오후","").trim());
         }
 
         dlog.i("make_kind : " + make_kind);

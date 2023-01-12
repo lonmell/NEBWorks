@@ -54,7 +54,7 @@
             android:gravity="center"
             android:text="직급"
             android:textColor="#696969"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
         <TextView
             android:id="@+id/jikgup"
             android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
             android:gravity="center"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/linear02"
@@ -86,7 +86,7 @@
             android:gravity="center"
             android:text="근무일"
             android:textColor="#696969"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
         <TextView
             android:id="@+id/workyoil"
             android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
             android:gravity="center"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </LinearLayout>
     <androidx.cardview.widget.CardView
         android:id="@+id/state"
@@ -120,21 +120,19 @@
             android:padding="3dp"
             android:text="휴직"
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </androidx.cardview.widget.CardView>
     <RelativeLayout
         android:id="@+id/list_setting"
-        android:layout_width="35dp"
-        android:layout_height="30dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignTop="@+id/name"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="15dp">
+        android:layout_alignParentEnd="true">
 
         <ImageView
-            android:layout_width="3dp"
-            android:layout_height="15dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:layout_width="5dp"
+            android:layout_height="23dp"
+            android:layout_centerInParent="true"
             android:background="@drawable/list_setting" />
     </RelativeLayout>
 </RelativeLayout>

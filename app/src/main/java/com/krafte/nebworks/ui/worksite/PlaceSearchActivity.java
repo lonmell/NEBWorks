@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.adapter.PlaceSearchAdapter;
 import com.krafte.nebworks.data.PlaceListData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.PlaceSearchListInterface;
 import com.krafte.nebworks.databinding.ActivityPlaceSearchBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -85,8 +86,8 @@ public class PlaceSearchActivity extends AppCompatActivity {
             setBtnEvent();
 
             //shardpref Area
-            shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
+            shardpref       = new PreferenceHelper(mContext);
+            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
 
             gpsTracker = new GpsTracker(this);
             latitude = gpsTracker.getLatitude();
@@ -164,12 +165,17 @@ public class PlaceSearchActivity extends AppCompatActivity {
     }
 
     public void SetWorkplaceList() {
+        dlog.i("-----SetWorkplaceList------");
+        dlog.i("place_id : -99");
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("auth : 1");
+        dlog.i("-----SetWorkplaceList------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceSearchListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceSearchListInterface api = retrofit.create(PlaceSearchListInterface.class);
-        Call<String> call = api.getData("-99",USER_INFO_ID,"0");
+        Call<String> call = api.getData("-99",USER_INFO_ID,"1");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"NotifyDataSetChanged", "LongLogTag", "SetTextI18n"})
             @Override

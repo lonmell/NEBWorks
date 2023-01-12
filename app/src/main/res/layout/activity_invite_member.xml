@@ -53,7 +53,7 @@
             android:fontFamily="@font/inter_bold"
             android:text="초대할 직원 정보 입력"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="22sp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

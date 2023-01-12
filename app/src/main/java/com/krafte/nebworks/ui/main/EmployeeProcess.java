@@ -110,13 +110,14 @@ public class EmployeeProcess extends AppCompatActivity {
         shardpref = new PreferenceHelper(mContext);
         try {
             //Singleton Area
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            place_id = PlaceCheckData.getInstance().getPlace_id();
+            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
 
             //shardpref Area
-            kind            = shardpref.getString("kind", "0");
-            jongeob         = shardpref.getString("jongeob", "");
-            mem_name        = shardpref.getString("mem_name", "");
+            kind = shardpref.getString("kind", "0");
+            jongeob = shardpref.getString("jongeob", "");
+            mem_name = shardpref.getString("mem_name", "");
+
 
             onBtnEvent();
             if (kind.equals("0")) {
@@ -140,8 +141,8 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("오늘 :" + today);
             dlog.i("jongeob :" + jongeob.substring(3));
 
-            getMySSID = getNetworkName(mContext).replace("\"","");
-            if(getMySSID.equals("<unknown ssid>")){
+            getMySSID = getNetworkName(mContext).replace("\"", "");
+            if (getMySSID.equals("<unknown ssid>")) {
                 getMySSID = "";
             }
         } catch (Exception e) {
@@ -167,13 +168,12 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("GET_TIME : " + simpleDate.format(mDate));
             dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
             dlog.i("거리 : " + getDistance);
-            if (getDistance <= 40) {
+            if (getDistance <= 10 && getMySSID.equals(place_wifi_name)) {
                 if (kind.equals("0")) {
                     title = "출근처리";
                 } else {
                     title = "퇴근처리";
                 }
-                binding.storeDistance.setText("매장과 " + getDistance + "m 떨어져있습니다.");
                 binding.inoutAble.setText(kind.equals("0") ? "출근처리가능" : "퇴근처리가능");
                 binding.inoutAble.setTextColor(Color.parseColor("#6395EC"));
                 dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
@@ -183,7 +183,6 @@ public class EmployeeProcess extends AppCompatActivity {
                 } else {
                     title = "퇴근근처리 불가";
                 }
-                binding.storeDistance.setText("매장과의 거리가 30미터 이상 입니다.");
                 binding.inoutAble.setText("출근처리불가");
                 binding.inoutAble.setTextColor(Color.parseColor("#DD6540"));
 //            Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
@@ -200,7 +199,7 @@ public class EmployeeProcess extends AppCompatActivity {
             System.out.println(sdf.format(date1));
             System.out.println(sdf.format(date2));
 
-            returntf =  date1.after(date2);
+            returntf = date1.after(date2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -229,33 +228,25 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("kind : " + kind);
 
             if (kind.equals("0")) {
-                if (getDistance <= 40) {
+                if (getDistance <= 10 && getMySSID.equals(place_wifi_name)) {
                     //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
-                    if(getMySSID.equals(place_wifi_name)){
-                        io_state = "출근처리";
-                        InOutPop(GET_TIME, "1", place_name, io_state, "","0");
-                    }else{
-                        InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요","0");
-                    }
+                    io_state = "출근처리";
+                    InOutPop(GET_TIME, "1", place_name, io_state, "", "0");
                 } else {
-                    InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.","0");
+                    InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.", "0");
                 }
             } else {
-                if (getDistance <= 40) {
+                if (getDistance <= 10 && getMySSID.equals(place_wifi_name)) {
                     io_state = "퇴근처리";
-                    dlog.i("compareDate2 :" +  compareDate2());
+                    dlog.i("compareDate2 :" + compareDate2());
                     //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
-                    if(getMySSID.equals(place_wifi_name)){
-                        if(compareDate2()){
-                            InOutPop(GET_TIME, "4", place_name, io_state, "","1");
-                        }else{
-                            InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.","1");//퇴근시간 전일때
-                        }
-                    }else{
-                        InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요","1");
+                    if (compareDate2()) {
+                        InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
+                    } else {
+                        InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.", "1");//퇴근시간 전일때
                     }
                 } else {
-                    InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.","1");
+                    InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.", "1");
                 }
             }
         });
@@ -319,9 +310,9 @@ public class EmployeeProcess extends AppCompatActivity {
                                     place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
                                     place_insurance = Response.getJSONObject(0).getString("insurance");
                                     place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
-                                    shardpref.putString("place_wifi_name",place_wifi_name);
-                                    shardpref.putString("place_latitude",String.valueOf(place_latitude));
-                                    shardpref.putString("place_longitude",String.valueOf(place_longitude));
+                                    shardpref.putString("place_wifi_name", place_wifi_name);
+                                    shardpref.putString("place_latitude", String.valueOf(place_latitude));
+                                    shardpref.putString("place_longitude", String.valueOf(place_longitude));
                                     binding.storeName.setText(place_name);
                                 }
                             } catch (JSONException e) {
@@ -348,9 +339,8 @@ public class EmployeeProcess extends AppCompatActivity {
         shardpref.putString("inout_tv", inout_tv);
         shardpref.putString("inout_tv2", inout_tv2);
         InoutPopActivity ipp = new InoutPopActivity();
-        ipp.show(getSupportFragmentManager(),"InoutPopActivity");
+        ipp.show(getSupportFragmentManager(), "InoutPopActivity");
     }
-
 
 
     GpsTracker gpsTracker;
@@ -447,6 +437,7 @@ public class EmployeeProcess extends AppCompatActivity {
         WifiInfo info = manager.getConnectionInfo();
         return info.getSSID();
     }
+
 
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();

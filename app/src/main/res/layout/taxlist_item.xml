@@ -72,7 +72,7 @@
                 android:gravity="start|center"
                 android:text="address"
                 android:textColor="#a9a9a9"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 tools:ignore="TextContrastCheck" />
 
             <TextView
@@ -84,7 +84,7 @@
                 android:gravity="start|center"
                 android:text="010"
                 android:textColor="#a9a9a9"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 tools:ignore="TextContrastCheck" />
         </LinearLayout>
 

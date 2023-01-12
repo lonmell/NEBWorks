@@ -51,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="직급  jikgup"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 android:gravity="center|start"
                 android:textColor="#54585A"
                 android:fontFamily="@font/inter_bold" />
@@ -62,7 +62,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="0000.00.00 확인"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:gravity="center|end"
             android:layout_toEndOf="@+id/user_info"
             android:textColor="#a9a9a9"

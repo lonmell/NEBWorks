@@ -104,7 +104,7 @@
                                 android:gravity="start|center"
                                 android:text="현재 선택된 매장"
                                 android:textColor="#696969"
-                                android:textSize="13sp"
+                                android:textSize="15sp"
                                 tools:ignore="HardcodedText" />
                         </LinearLayout>
 
@@ -217,7 +217,7 @@
                                 android:paddingStart="15dp"
                                 android:text="name"
                                 android:textColor="@color/black"
-                                android:textSize="14sp"
+                                android:textSize="15sp"
                                 android:visibility="gone" />
 
                             <TextView
@@ -230,7 +230,7 @@
                                 android:paddingStart="15dp"
                                 android:text="총 0명 근무 중"
                                 android:textColor="@color/blue"
-                                android:textSize="14sp"
+                                android:textSize="15sp"
                                 android:visibility="visible" />
 
                             <TextView
@@ -244,7 +244,7 @@
                                 android:paddingStart="15dp"
                                 android:text="근무자를 선택하세요 >"
                                 android:textColor="#949494"
-                                android:textSize="14sp"
+                                android:textSize="15sp"
                                 android:visibility="visible" />
                         </LinearLayout>
 
@@ -272,7 +272,7 @@
                         android:gravity="center"
                         android:text="근무시간"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
 
@@ -370,7 +370,7 @@
                         android:gravity="center"
                         android:text="휴게시간"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
 

@@ -63,7 +63,7 @@
                         android:gravity="center"
                         android:text="작성자이름"
                         android:textColor="#949494"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
@@ -96,8 +96,8 @@
                         android:scaleType="fitCenter">
 
                         <ImageView
-                            android:layout_width="3dp"
-                            android:layout_height="12dp"
+                            android:layout_width="5dp"
+                            android:layout_height="23dp"
                             android:layout_centerInParent="true"
                             android:background="@drawable/list_setting" />
                     </RelativeLayout>
@@ -173,7 +173,7 @@
                 android:gravity="center"
                 android:text="답글 0개"
                 android:textColor="#54585A"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 tools:ignore="HardcodedText" />
 
             <LinearLayout

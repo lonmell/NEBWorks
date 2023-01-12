@@ -30,7 +30,7 @@
                 android:gravity="center"
                 android:text="입력된 공지내용이 없습니다."
                 android:textColor="#dcdcdc"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 android:visibility="gone"
                 tools:ignore="HardcodedText" />
         </RelativeLayout>

@@ -48,6 +48,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -169,17 +171,28 @@ public class MemberManagement extends AppCompatActivity {
         }
     }
 
+
+    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
-        SetAllMemberList(place_id);
         setAddBtnSetting();
-        getNotReadFeedcnt();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //5초마다 실행
+                getNotReadFeedcnt();
+                SetAllMemberList(place_id);
+            }
+        };
+        timer = new Timer();
+        timer.schedule(timerTask,0,5000);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        timer.cancel();
     }
 
     public void getNotReadFeedcnt() {

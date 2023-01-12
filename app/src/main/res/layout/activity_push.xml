@@ -116,7 +116,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="start|center"
                 android:text="근무자 출근/퇴근 알림"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 tools:ignore="HardcodedText,SmallSp" />
@@ -171,7 +171,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="start|center"
                 android:text="할일 승인/완료 및 급여명세서 알림"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 tools:ignore="HardcodedText,SmallSp" />
@@ -225,7 +225,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="start|center"
                 android:text="근무자 근무시간 알림"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 tools:ignore="HardcodedText,SmallSp" />
@@ -279,7 +279,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="start|center"
                 android:text="근무신청 / 매장초대"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 tools:ignore="HardcodedText,SmallSp" />

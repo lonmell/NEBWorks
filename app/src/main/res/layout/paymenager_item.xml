@@ -62,7 +62,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="공제금액"
                         android:textColor="#000000"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
@@ -75,7 +75,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="급여"
                         android:textColor="#000000"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
@@ -88,7 +88,7 @@
                         android:fontFamily="@font/inter_bold"
                         android:text="원"
                         android:textColor="#000000"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
                 </RelativeLayout>

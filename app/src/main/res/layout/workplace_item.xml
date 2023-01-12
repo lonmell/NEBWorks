@@ -136,8 +136,8 @@
                             android:visibility="visible">
 
                             <ImageView
-                                android:layout_width="3dp"
-                                android:layout_height="15dp"
+                                android:layout_width="5dp"
+                                android:layout_height="23dp"
                                 android:layout_centerInParent="true"
                                 android:background="@drawable/list_setting" />
                         </RelativeLayout>
@@ -203,7 +203,7 @@
                     android:maxLines="1"
                     android:text="예상급여"
                     android:textColor="#54585A"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -216,7 +216,7 @@
                     android:maxLines="1"
                     android:text="0원"
                     android:textColor="#000000"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
         </RelativeLayout>

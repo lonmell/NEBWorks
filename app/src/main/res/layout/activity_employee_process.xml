@@ -98,7 +98,7 @@
                         android:gravity="start|center"
                         android:text="현재 선택된 매장"
                         android:textColor="#696969"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
 
@@ -131,28 +131,12 @@
             android:layout_margin="20dp">
 
             <TextView
-                android:id="@+id/store_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="15dp"
-                android:layout_toStartOf="@+id/inout_able"
-                android:fontFamily="@font/inter_bold"
-                android:gravity="start|center"
-                android:text="매장과 0m 떨어져 있습니다"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                tools:ignore="HardcodedText" />
-
-            <TextView
                 android:id="@+id/inout_able"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="15dp"
                 android:fontFamily="@font/inter_bold"
-                android:gravity="end|center"
-                android:text="출근처리가능"
+                android:gravity="center"
+                android:text="Loading..."
                 android:textColor="@color/blue"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText" />
@@ -169,7 +153,7 @@
             android:gravity="center"
             android:text="@string/close_txt"
             android:textColor="@color/white"
-            android:textSize="13sp"
+            android:textSize="15sp"
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 </LinearLayout>

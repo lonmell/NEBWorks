@@ -415,25 +415,6 @@ public class PlaceAddActivity extends AppCompatActivity {
 //            SELECTTIME = false;
             binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
             binding.inputbox09box.setCardBackgroundColor(Color.parseColor("#ffffff"));
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//
-//                    place_starttime = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.inputbox08.setText(GetTime);
-//                    }
-//                }
-//            });
         });
 
         binding.inputbox09box.setOnClickListener(v -> {
@@ -444,25 +425,6 @@ public class PlaceAddActivity extends AppCompatActivity {
 //            SELECTTIME = true;
             binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#ffffff"));
             binding.inputbox09box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
-//            WorkTimePicker wtp = new WorkTimePicker();
-//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
-//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
-//                @Override
-//                public void onClick(View v, String hour, String min) {
-//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
-//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
-//                    shardpref.remove("timeSelect_flag");
-//                    shardpref.remove("hourOfDay");
-//                    shardpref.remove("minute");
-//                    GetTime = (Integer.parseInt(Time01) < 12?"오전":"오후") + " " + (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//
-//                    place_endtime = (Time01.length() == 1?"0"+Time01:Time01) + ":" + (Time02.length()==1?"0"+Time02:Time02);
-//                    shardpref.putString("input_pop_time",GetTime);
-//                    if (!hour.equals("0")) {
-//                        binding.inputbox09.setText(GetTime);
-//                    }
-//                }
-//            });
         });
 
         binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
@@ -503,36 +465,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
             }
         });
-//      binding.inputbox05
 
-        /*수습기간*/
-//        binding.inputbox06
-
-
-        /*휴가*/
-//        ArrayList<String> stringCategory5 = new ArrayList<>();
-//        stringCategory5.add("휴가");
-//        stringCategory5.add("없음");
-//        stringCategory5.add("자유");
-//        stringCategory5.add("월차");
-//        stringCategory5.add("연차");
-//
-//        ArrayAdapter<String> select_filter5 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory5);
-//        binding.inputbox07Spinner.setAdapter(select_filter5);
-//
-//        binding.inputbox07Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                binding.inputbox07.setText(stringCategory5.get(i));
-//                dlog.i("i : " + stringCategory5.get(i));
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//                binding.inputbox07.setText("월차");
-//            }
-//        });
         binding.inputbox07.setOnClickListener(v -> {
             shardpref.putInt("SelectKind", 4);
             SelectStringBottomSheet ssb = new SelectStringBottomSheet();
@@ -894,55 +827,6 @@ public class PlaceAddActivity extends AppCompatActivity {
         page_state = shardpref.getString("page_state", "0");
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         ImgfileMaker = ImageNameMaker();
-//
-//        dlog.i("kind : " + shardpref.getInt("timeSelect_flag", 0));
-//        dlog.i("Hour : " + shardpref.getInt("Hour", 0));
-//        dlog.i("Min : " + shardpref.getInt("Min", 0));
-//        int timeSelect_flag = shardpref.getInt("timeSelect_flag", 0);
-//        int hourOfDay = shardpref.getInt("Hour", 0);
-//        int minute = shardpref.getInt("Min", 0);
-//
-//        dlog.i("timeSelect_flag : " + timeSelect_flag);
-//        if (timeSelect_flag == 4) {
-//            StartTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            StartTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-//            shardpref.remove("timeSelect_flag");
-//            shardpref.remove("Hour");
-//            shardpref.remove("Min");
-//            if (hourOfDay != 0) {
-//                String ampm = "";
-//                if (Integer.parseInt(StartTime01) < 12) {
-//                    ampm = " AM";
-//                    SelectStartTime = 1;
-//                } else {
-//                    ampm = " PM";
-//                    SelectStartTime = 2;
-//                }
-//                binding.inputbox08.setText(StartTime01 + ":" + StartTime02 + ampm);
-//                place_starttime = StartTime01 + ":" + StartTime02;
-//                imm.hideSoftInputFromWindow(binding.inputbox08.getWindowToken(), 0);
-//            }
-//        } else if (timeSelect_flag == 5) {
-//            EndTime01 = String.valueOf(hourOfDay).length() == 1 ? "0" + String.valueOf(hourOfDay) : String.valueOf(hourOfDay);
-//            EndTime02 = String.valueOf(minute).length() == 1 ? "0" + String.valueOf(minute) : String.valueOf(minute);
-//            shardpref.remove("timeSelect_flag");
-//            shardpref.remove("Hour");
-//            shardpref.remove("Min");
-//            if (hourOfDay != 0) {
-//                String ampm = "";
-//                if (Integer.parseInt(EndTime01) < 12) {
-//                    ampm = " AM";
-//                    SelectEndTime = 1;
-//                } else {
-//                    ampm = " PM";
-//                    SelectEndTime = 2;
-//                }
-//                binding.inputbox09.setText(EndTime01 + ":" + EndTime02 + ampm);
-//                place_endtime = EndTime01 + ":" + EndTime02;
-//                imm.hideSoftInputFromWindow(binding.inputbox09.getWindowToken(), 0);
-//            }
-//
-//        }
 
         dlog.i("onResume Area");
         String getlatitude = shardpref.getString("pin_latitude", "0.0");
@@ -968,6 +852,15 @@ public class PlaceAddActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("pin_store_address");
+        shardpref.remove("pin_zipcode");
+        shardpref.remove("pin_store_addressdetail");
+        shardpref.remove("pin_latitude");
+        shardpref.remove("pin_longitube");
+    }
 
     @Override
     public void onBackPressed() {

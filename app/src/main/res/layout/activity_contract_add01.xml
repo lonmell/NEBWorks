@@ -56,7 +56,7 @@
                 android:gravity="start|center"
                 android:text="근로계약서 작성하기"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 tools:ignore="HardcodedText" />
             <TextView
                 android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                 android:gravity="start|center"
                 android:text="@string/contract_tv01"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 tools:ignore="HardcodedText" />
             <RelativeLayout
                 android:id="@+id/select01"

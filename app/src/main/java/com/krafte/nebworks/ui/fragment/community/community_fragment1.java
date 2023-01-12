@@ -354,7 +354,7 @@ public class community_fragment1 extends Fragment {
                         mAdapter = new CommunityAdapter(mContext, mList, 1);
                         binding.allList.setAdapter(mAdapter);
                         binding.allList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-                        Log.i(TAG, "SetNoticeListview Thread run! ");
+                        dlog.i("SetNoticeListview Thread run! ");
                         listitemsize = Response.length();
 
                         if (USER_INFO_AUTH.isEmpty()) {
@@ -384,7 +384,7 @@ public class community_fragment1 extends Fragment {
                         } else {
                             if (Response.length() == 0) {
                                 binding.noDataTxt2.setVisibility(View.VISIBLE);
-                                Log.i(TAG, "GET SIZE : " + rc.placeNotiData_lists.size());
+                                dlog.i("GET SIZE : " + rc.placeNotiData_lists.size());
                             } else {
                                 binding.noDataTxt2.setVisibility(View.GONE);
                                 for (int i = 0; i < Response.length(); i++) {

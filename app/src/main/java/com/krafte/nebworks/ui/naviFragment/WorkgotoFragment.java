@@ -56,6 +56,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -228,11 +230,8 @@ public class WorkgotoFragment extends Fragment {
         super.onStart();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 
+    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
@@ -246,10 +245,23 @@ public class WorkgotoFragment extends Fragment {
             shardpref.remove("overdate");
             RemoveShared();
             setAddBtnSetting();
-            setRecyclerView();
+
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    //5초마다 실행
+                    setRecyclerView();
+                    timer.cancel();
+                }
+            };
+            timer.schedule(timerTask,0,5000);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     public void setDummyData() {
@@ -462,10 +474,12 @@ public class WorkgotoFragment extends Fragment {
 
     private void SetCalenderData() {
         mList2.clear();
+        getYMPicker = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","").substring(0,7);
         dlog.i("------SetCalenderData------");
         dlog.i("place_id : " + change_place_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("select_date : " + getYMPicker);
+        dlog.i("select_date : " + getYMPicker.substring(0,7));
+        dlog.i("select_date2 : " + binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","").substring(0,7));
         dlog.i("------SetCalenderData------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalendersetData.URL)

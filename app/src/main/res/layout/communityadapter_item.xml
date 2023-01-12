@@ -45,15 +45,14 @@
 
     <RelativeLayout
         android:id="@+id/list_setting"
-        android:layout_width="35dp"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="15dp">
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignTop="@+id/name"
+        android:layout_alignParentEnd="true">
 
         <ImageView
-            android:layout_width="3dp"
-            android:layout_height="15dp"
+            android:layout_width="5dp"
+            android:layout_height="23dp"
             android:layout_centerInParent="true"
             android:background="@drawable/list_setting" />
     </RelativeLayout>
@@ -121,7 +120,7 @@
         android:maxLines="4"
         android:text="contents"
         android:textColor="@color/black"
-        android:textSize="14sp" />
+        android:textSize="15sp" />
     <LinearLayout
         android:id="@+id/category_box"
         android:layout_width="wrap_content"

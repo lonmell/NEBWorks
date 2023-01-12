@@ -82,7 +82,7 @@
                     android:gravity="start|center"
                     android:text="jikgup"
                     android:textColor="@color/blue"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -150,7 +150,7 @@
                         android:gravity="start|center"
                         android:text="현재 선택된 매장"
                         android:textColor="#696969"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
 
@@ -237,7 +237,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="전체 매장 목록"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                                 <TextView
@@ -252,7 +252,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="신규 매장 등록"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -313,7 +313,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="전체 직원 목록"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                                 <TextView
@@ -328,7 +328,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="근무현황"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -388,7 +388,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="전체 급여관리"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="TouchTargetSizeCheck" />
 
                                 <TextView
@@ -403,7 +403,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="급여 명세서 관리"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -464,7 +464,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="출결관리"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -524,7 +524,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="캘린더"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                                 <TextView
@@ -539,7 +539,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="할일 추가하기"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                                 <TextView
@@ -554,7 +554,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="결재처리"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -615,7 +615,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="커뮤니티"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -675,7 +675,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="전체 근로계약관리"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                                 <TextView
@@ -691,7 +691,7 @@
                                     android:visibility="gone"
                                     android:text="근로계약 작성"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -751,7 +751,7 @@
                                     android:paddingEnd="20dp"
                                     android:text="고객센터"
                                     android:textColor="@color/black"
-                                    android:textSize="13sp"
+                                    android:textSize="15sp"
                                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>

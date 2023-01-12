@@ -40,21 +40,20 @@
         android:fontFamily="@font/inter_bold"
         android:text="name"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="22sp" />
 
 
     <RelativeLayout
         android:id="@+id/list_setting"
-        android:layout_width="35dp"
-        android:layout_height="30dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignTop="@+id/name"
         android:layout_alignParentEnd="true">
 
         <ImageView
-            android:layout_width="3dp"
-            android:layout_height="15dp"
+            android:layout_width="5dp"
+            android:layout_height="23dp"
             android:layout_centerInParent="true"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/list_setting" />
     </RelativeLayout>
     <LinearLayout
@@ -76,7 +75,7 @@
             android:padding="5dp"
             android:text="근무시간"
             android:textColor="#696969"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
         <TextView
             android:id="@+id/worktime"
             android:layout_width="wrap_content"
@@ -88,7 +87,7 @@
             android:padding="5dp"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/linear02"
@@ -108,7 +107,7 @@
             android:padding="5dp"
             android:text="출근시간"
             android:textColor="#696969"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
         <TextView
             android:id="@+id/inTime"
             android:layout_width="wrap_content"
@@ -120,7 +119,7 @@
             android:padding="5dp"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/linear03"
@@ -140,7 +139,7 @@
             android:padding="5dp"
             android:text="퇴근시간"
             android:textColor="#696969"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
         <TextView
             android:id="@+id/outTime"
             android:layout_width="wrap_content"
@@ -152,7 +151,7 @@
             android:padding="5dp"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </LinearLayout>
     <androidx.cardview.widget.CardView
         android:id="@+id/state"
@@ -179,6 +178,6 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

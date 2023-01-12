@@ -159,6 +159,7 @@ public class ContractFragment1 extends Fragment {
                 }
             }
         };
+        timer = new Timer();
         timer.schedule(timerTask,0,1000);
     }
 

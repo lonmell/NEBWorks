@@ -175,20 +175,21 @@ public class MoreFragment extends Fragment {
         super.onStop();
     }
 
+    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
-        Timer timer = new Timer();
+
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 //5초마다 실행
                 if(!USER_INFO_ID.isEmpty() && !place_id.isEmpty()){
                     SetAllMemberList();
-                    timer.cancel();
                 }
             }
         };
+        timer = new Timer();
         timer.schedule(timerTask,0,1000);
     }
 

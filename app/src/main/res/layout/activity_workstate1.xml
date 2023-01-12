@@ -27,7 +27,7 @@
                 android:text="NEBWorks"
                 android:fontFamily="@font/inter_bold"
                 android:textColor="#1483FE"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 tools:ignore="HardcodedText" />
 
             <RelativeLayout

@@ -484,7 +484,7 @@
                                         android:gravity="start|center"
                                         android:text="name"
                                         android:textColor="@color/white"
-                                        android:textSize="20sp"
+                                        android:textSize="22sp"
                                         android:textStyle="bold"
                                         tools:ignore="HardcodedText" />
 
@@ -500,7 +500,7 @@
                                         android:gravity="start|center"
                                         android:text="store_name"
                                         android:textColor="@color/white"
-                                        android:textSize="14sp"
+                                        android:textSize="15sp"
                                         android:textStyle="bold"
                                         tools:ignore="HardcodedText" />
 
@@ -515,7 +515,7 @@
                                         android:gravity="start|center"
                                         android:text="0000.00.00"
                                         android:textColor="@color/white"
-                                        android:textSize="13sp"
+                                        android:textSize="15sp"
                                         android:textStyle="bold"
                                         tools:ignore="HardcodedText" />
 
@@ -710,7 +710,7 @@
                                                     android:gravity="start|top"
                                                     android:text=""
                                                     android:textColor="@color/blue"
-                                                    android:textSize="13sp" />
+                                                    android:textSize="15sp" />
                                             </LinearLayout>
 
                                             <ImageView
@@ -764,7 +764,7 @@
                                                     android:gravity="start|top"
                                                     android:text=""
                                                     android:textColor="@color/red"
-                                                    android:textSize="13sp" />
+                                                    android:textSize="15sp" />
                                             </LinearLayout>
 
                                             <ImageView

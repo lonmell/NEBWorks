@@ -32,7 +32,7 @@
             android:layout_margin="15dp"
             android:text="noti_text"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="22sp"
             tools:ignore="HardcodedText" />
         <LinearLayout
             android:id="@+id/underline"
@@ -55,7 +55,7 @@
                 android:gravity="center"
                 android:text="pop_left_btn"
                 android:textColor="#2196F3"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 tools:ignore="HardcodedText" />
         </RelativeLayout>
 

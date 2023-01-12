@@ -58,7 +58,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="근무신청할 매장을 찾습니다."
                 android:textColor="#A9A9A9"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
@@ -116,7 +116,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="현재 근무 정보를 기록할 매장을 추가합니다."
                 android:textColor="#A9A9A9"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
@@ -172,7 +172,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="구직 정보를 입력하고 이력서를 생성합니다."
                 android:textColor="#A9A9A9"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
         </LinearLayout>

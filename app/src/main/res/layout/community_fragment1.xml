@@ -14,9 +14,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="100dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
 
             <LinearLayout
                 android:id="@+id/search_area"
@@ -83,7 +83,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/ad_img01" />
+                android:background="@drawable/ad_img01"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/best_list_title"
@@ -103,7 +104,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:text="인기게시글"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/more01"
@@ -149,7 +150,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:text="전체게시글"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/more02"
@@ -166,7 +167,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp">
@@ -174,19 +175,19 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/all_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
 
                 <TextView
                     android:id="@+id/no_data_txt2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/best_list"
-                    android:layout_alignBottom="@+id/best_list"
+                    android:layout_height="match_parent"
+                    android:layout_alignTop="@+id/all_list"
+                    android:layout_alignBottom="@+id/all_list"
                     android:background="#ffffff"
                     android:gravity="center"
                     android:text="게시글이 없습니다."
                     android:textColor="#dcdcdc"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:visibility="gone"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>

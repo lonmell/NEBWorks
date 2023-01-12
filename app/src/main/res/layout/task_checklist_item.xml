@@ -123,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:text="보고자"
                         android:textColor="#949494"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         android:layout_gravity="center"
                         android:fontFamily="@font/inter_bold"/>
                     <TextView
@@ -132,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="5dp"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         android:textColor="#949494"
                         android:text="홍길동"
                         android:fontFamily="@font/inter_regular"
@@ -153,7 +153,7 @@
                         android:singleLine="true"
                         android:text="0000.00.00 | 00:00 시작"
                         android:textColor="#696969"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText,RtlSymmetry" />
 
                     <TextView
@@ -165,7 +165,7 @@
                         android:text="0000.00.00 | 00:00 마감"
                         android:textColor="#696969"
                         android:layout_marginTop="5dp"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText,RtlSymmetry" />
 
                 </LinearLayout>

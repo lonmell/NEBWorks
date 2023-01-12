@@ -66,7 +66,7 @@
                     android:gravity="start|center"
                     android:text="미정"
                     android:textColor="@color/blue"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
         </RelativeLayout>

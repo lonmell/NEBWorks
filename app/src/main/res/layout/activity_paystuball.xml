@@ -79,7 +79,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="근로일수"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata10"
@@ -89,7 +89,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -106,7 +106,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="근로시간"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata11"
@@ -117,7 +117,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -133,7 +133,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="시급"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -143,7 +143,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="9,160원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -161,7 +161,7 @@
             android:fontFamily="@font/inter_bold"
             android:text="지급액"
             android:textColor="#54585A"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -177,7 +177,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="기본급"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata01"
@@ -187,7 +187,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -203,7 +203,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="성과급"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata02"
@@ -213,7 +213,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -228,7 +228,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="식대"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata03"
@@ -238,7 +238,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -254,7 +254,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="초과근무"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata05"
@@ -264,7 +264,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -283,7 +283,7 @@
             android:fontFamily="@font/inter_bold"
             android:text="공제 내역"
             android:textColor="#54585A"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -298,7 +298,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="국민연금"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata06"
@@ -308,7 +308,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -323,7 +323,7 @@
             android:fontFamily="@font/inter_bold"
             android:text="건강보험"
             android:textColor="#54585A"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/paydata07"
@@ -333,7 +333,7 @@
             android:fontFamily="@font/inter_regular"
             android:text="0원"
             android:textColor="#54585A"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
     </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -348,7 +348,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="고용보험"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata08"
@@ -358,7 +358,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -373,7 +373,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="장기요양보험"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/paydata09"
@@ -383,7 +383,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="0원"
                 android:textColor="#54585A"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -411,7 +411,7 @@
                 android:gravity="start"
                 android:layout_weight="1"
                 android:textColor="#54585A"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/paydata12"
@@ -423,7 +423,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="0원"
                 android:textColor="@color/blue"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
@@ -434,7 +434,7 @@
             android:textColor="@color/black"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

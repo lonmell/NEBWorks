@@ -68,7 +68,7 @@
         android:fontFamily="@font/inter_regular"
         android:text="탈퇴하시면 이용 중인 모든 매장에서 탈퇴되며,\n모든 데이터는 복구가 불가능 합니다."
         android:textColor="@color/black"
-        android:textSize="15sp"
+        android:textSize="17sp"
         tools:ignore="HardcodedText" />
 
     <androidx.cardview.widget.CardView
@@ -113,7 +113,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="출퇴근 데이터, 예상급여, 커리어 등\n저장해둔 모든 데이터가 삭제됩니다."
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 tools:ignore="HardcodedText,SmallSp" />
 
             <LinearLayout
@@ -152,7 +152,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="타인의 글의 댓글은 삭제되지 않으니\n미리 확인하세요."
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 tools:ignore="HardcodedText,SmallSp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
@@ -189,7 +189,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="안내사항을 모두 확인하였으며, 이에 동의합니다."
                 android:textColor="#6395EC"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 tools:ignore="HardcodedText,SmallSp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

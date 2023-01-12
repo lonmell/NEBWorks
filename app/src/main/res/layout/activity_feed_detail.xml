@@ -81,7 +81,7 @@
                         android:gravity="start|center"
                         android:text="0000-00-00"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
@@ -95,7 +95,7 @@
                         android:gravity="start|center"
                         android:text="feed_title"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+                        android:textSize="22sp"
                         tools:ignore="HardcodedText" />
 
 
@@ -344,7 +344,7 @@
                     android:gravity="center"
                     android:text="No Data"
                     android:textColor="#dcdcdc"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
         </LinearLayout>
