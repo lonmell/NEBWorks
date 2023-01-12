@@ -35,8 +35,6 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
     Context mContext;
     PreferenceHelper shardpref;
     FragmentManager fragmentManager;
-    DBConnection dbConnection = new DBConnection();
-    GetResultData resultData = new GetResultData();
     Dlog dlog = new Dlog();
 
     String place_id = "";
@@ -128,7 +126,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     holder.contract_state.setVisibility(View.GONE);
                     holder.state.setVisibility(View.GONE);
                 }else{
-                    if(item.getJikgup().equals("관리자")){
+                    if(item.getJikgup().equals("대표님") || item.getJikgup().equals("관리자")){
                         holder.add_detail.setVisibility(View.VISIBLE);
                         holder.state.setVisibility(View.GONE);
                         holder.linear02.setVisibility(View.GONE);
