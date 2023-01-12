@@ -268,7 +268,7 @@ public class MemberManagement extends AppCompatActivity {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
 //                                    if(USER_INFO_AUTH.equals("0")){
-//                                        if(!PlaceCheckData.getInstance().getPlace_owner_id().equals(USER_INFO_ID)){
+//                                        if(!PlaceCheckData.getInstance().getPlace_owner_id().equals(UserCheckData.getInstance().getUser_id())){
 //                                            total_member_cnt ++;
 //                                            mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
 //                                                    jsonObject.getString("id"),

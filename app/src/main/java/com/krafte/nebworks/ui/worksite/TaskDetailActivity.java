@@ -195,14 +195,16 @@ public class TaskDetailActivity extends AppCompatActivity {
             }else{
                 binding.acceptTv.setText("업무 보고하기");
                 int a = 0;
-                for(String str : user_id.replace("[","").replace("]","").replace(" ","").split(",")){
-                    dlog.i("acceptTv str : " + str);
-                    dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-                    dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").equals(USER_INFO_ID));
-                    if(str.replace("[","").replace("]","").equals(USER_INFO_ID)){
+                for(String str : user_id.replace("["," ").replace("]"," ").split(",")){
+                    dlog.i("acceptTv str : " + str.replace("["," ").replace("]"," "));
+                    USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+                    dlog.i("USER_INFO_ID : " + UserCheckData.getInstance().getUser_id());
+                    dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").contains(USER_INFO_ID));
+                    if(str.replace("[","").replace("]","").contains(USER_INFO_ID)){
                         //배정 아이디가 포함되는 직원이 한명이라도 있을때는 업무 보고하기 버튼 보이기
                         a++;
                     }
+                    dlog.i("a.size() : " + a);
                     if(a > 0){
                         binding.acceptBtnBox.setVisibility(View.VISIBLE);
                     }else{
@@ -213,14 +215,16 @@ public class TaskDetailActivity extends AppCompatActivity {
         }else if(approval_state.equals("2")){
             binding.acceptTv.setText("업무 보고하기");
             int a = 0;
-            for(String str : user_id.split(",")){
-                dlog.i("acceptTv str : " + str);
-                dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-                dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").equals(USER_INFO_ID));
-                if(str.replace("[","").replace("]","").equals(USER_INFO_ID)){
+            for(String str : user_id.replace("["," ").replace("]"," ").split(",")){
+                dlog.i("acceptTv str : " + str.replace("["," ").replace("]"," "));
+                USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+                dlog.i("USER_INFO_ID : " + UserCheckData.getInstance().getUser_id());
+                dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").contains(USER_INFO_ID));
+                if(str.replace("[","").replace("]","").contains(USER_INFO_ID)){
                     //배정 아이디가 포함되는 직원이 한명이라도 있을때는 업무 보고하기 버튼 보이기
                     a++;
                 }
+                dlog.i("a.size() : " + a);
                 if(a > 0){
                     binding.acceptBtnBox.setVisibility(View.VISIBLE);
                 }else{

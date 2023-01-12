@@ -1,7 +1,9 @@
 package com.krafte.nebworks.ui.worksite;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.databinding.ActivityTaskReportDetailBinding;
+import com.krafte.nebworks.pop.PhotoPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -152,6 +155,8 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             setBtnEvent();
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
             WorkDay = toDay;
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,6 +183,8 @@ public class TaskReportDetailActivity extends AppCompatActivity {
         binding.goApproval.setOnClickListener(v -> {
             pm.Approval(mContext);
         });
+
+
     }
 
 
@@ -340,6 +347,14 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                     binding.rejectTitle.setVisibility(View.GONE);
                 }
             }
+
+            binding.taskKind01.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, PhotoPopActivity.class);
+                intent.putExtra("data", img_path);
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            });
             dlog.i("-----getTaskContents END-----");
 
         } catch (Exception e) {

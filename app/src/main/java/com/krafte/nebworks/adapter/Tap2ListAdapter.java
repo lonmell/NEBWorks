@@ -142,6 +142,30 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
         2 = 체크
         */
             try {
+                dlog.i("------Tap2ListAdapter------");
+                dlog.i("id : "                      + item.getId());
+                dlog.i("writer_id : "               + item.getWriter_id());
+                dlog.i("kind : "                    + item.getKind());
+                dlog.i("item.getApproval_state() : " + item.getApproval_state());
+                dlog.i("kind : " + kind);
+                dlog.i("work_title : " + item.getTitle());
+                dlog.i("item.getStart_time() : " + item.getStart_time());
+                dlog.i("item.getEnd_time() : " + item.getEnd_time());
+                dlog.i("item.getApproval_state() : " + item.getApproval_state());
+                dlog.i("kind : " + kind);
+                dlog.i("work_title : " + item.getTitle());
+                dlog.i("item.getStart_time() : " + item.getStart_time());
+                dlog.i("item.getEnd_time() : " + item.getEnd_time());
+                dlog.i("item.getApproval_state() : " + item.getApproval_state());
+                dlog.i("kind : " + kind);
+                dlog.i("work_title : " + item.getTitle());
+                dlog.i("item.getStart_time() : " + item.getStart_time());
+                dlog.i("item.getEnd_time() : " + item.getEnd_time());
+                dlog.i("item.getApproval_state() : " + item.getApproval_state());
+                dlog.i("kind : " + kind);
+                dlog.i("item.getApproval_state() : " + item.getApproval_state());
+                dlog.i("kind : " + kind);
+                dlog.i("------Tap2ListAdapter------");
                 if (item.getWriter_id().equals(USER_INFO_ID)) {
                     holder.list_setting.setVisibility(View.VISIBLE);
                     holder.list_setting.setClickable(true);
@@ -250,11 +274,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     }
                 }
 
-                dlog.i("work_title : " + item.getTitle());
-                dlog.i("item.getStart_time() : " + item.getStart_time());
-                dlog.i("item.getEnd_time() : " + item.getEnd_time());
-                dlog.i("item.getApproval_state() : " + item.getApproval_state());
-                dlog.i("kind : " + kind);
+
                 holder.work_title.setText(item.getTitle());
                 if (item.getStart_time().length() > 5) {
                     String date = item.getStart_time().substring(0, 10);
