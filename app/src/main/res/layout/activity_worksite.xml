@@ -9,15 +9,16 @@
     tools:context=".ui.worksite.PlaceListActivity"
     tools:ignore="HardcodedText">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="59dp">
         <LinearLayout
             android:id="@+id/back_btn"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageView
                 android:layout_width="20dp"
@@ -30,7 +31,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:fontFamily="@font/inter_bold"
             android:text="매장관리"
             android:textColor="#000000"
@@ -40,8 +44,10 @@
             android:id="@+id/noti_area"
             android:layout_width="59dp"
             android:layout_height="59dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true">
+            app:layout_constraintEnd_toStartOf="@id/logout_area"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" >
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/noti_red"
                 android:layout_width="13dp"
@@ -60,9 +66,29 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="18dp"
                 android:background="@drawable/bell" />
+
         </RelativeLayout>
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/logout_area"
+            android:layout_width="59dp"
+            android:layout_height="59dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" >
+
+            <ImageView
+                android:id="@+id/logout"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="18dp"
+                android:background="@drawable/ic_logout" />
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

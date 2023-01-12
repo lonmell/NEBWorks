@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -72,6 +73,8 @@ public class AuthSelectActivity extends AppCompatActivity {
     ViewPagerFregmentAdapter viewPagerFregmentAdapter;
 
     ArrayList<PlaceNotiData.PlaceNotiData_list> mList = new ArrayList<>();
+
+    Long waitTime = 0L;
 
     //Shared
     String USER_INFO_EMAIL = "";
@@ -214,25 +217,32 @@ public class AuthSelectActivity extends AppCompatActivity {
             shardpref.putString("USER_INFO_AUTH", "0");
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
+            shardpref.putString("event", "auth_select");
             pm.PlaceList(mContext);
         });
         binding.ownerButton.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH", "0");
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
+            shardpref.putString("event", "auth_select");
             pm.PlaceList(mContext);
         });
         binding.goWorker.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH", "1");
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
+            shardpref.putString("event", "auth_select");
             pm.PlaceList(mContext);
         });
         binding.workerButton.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH", "1");
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
+            shardpref.putString("event", "auth_select");
             pm.PlaceList(mContext);
+        });
+        binding.logout.setOnClickListener(v -> {
+            Logout();
         });
     }
 
@@ -491,9 +501,7 @@ public class AuthSelectActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
+    private void Logout(){
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
         intent.putExtra("data", "로그아웃하시겠습니까?");
         intent.putExtra("flag", "로그아웃");
@@ -502,5 +510,24 @@ public class AuthSelectActivity extends AppCompatActivity {
         mContext.startActivity(intent);
         ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    private void quitApp() {
+        moveTaskToBack(true);
+        finish();
+        finishAffinity();
+        overridePendingTransition(0, 0);
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        if (System.currentTimeMillis() - waitTime >= 1500) {
+            waitTime = System.currentTimeMillis();
+            Toast.makeText(mContext, "뒤로가기 버튼을 한번 더 누르면 종료합니다.", Toast.LENGTH_SHORT).show();
+        } else {
+            quitApp();
+        }
     }
 }
