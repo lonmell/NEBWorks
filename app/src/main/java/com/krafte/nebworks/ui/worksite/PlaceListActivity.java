@@ -87,6 +87,8 @@ public class PlaceListActivity extends AppCompatActivity {
     List<String> confirm_member = new ArrayList<>();
     String event = "";
 
+    Long waitTime = 0L; // 뒤로가기 버튼 누른 시간 기록
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +118,14 @@ public class PlaceListActivity extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION_sub", 0);
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+
+            if (!event.isEmpty()) {
+                binding.logoutArea.setVisibility(View.GONE);
+            } else {
+                binding.logoutArea.setVisibility(View.VISIBLE);
+                binding.backBtn.setVisibility(View.GONE);
+            }
+
             setBtnEvent();
             LoginCheck(USER_INFO_EMAIL);
 
@@ -172,11 +182,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            if(event.equals("out_store")){
-                super.onBackPressed();
-            }else{
-                Logout();
-            }
+            super.onBackPressed();
         });
         binding.addPlace.setOnClickListener(v -> {
             onStartAuth();
@@ -187,6 +193,9 @@ public class PlaceListActivity extends AppCompatActivity {
         binding.notiArea.setOnClickListener(v -> {
             shardpref.putString("returnPage","PlaceListActivity");
             pm.FeedList(mContext);
+        });
+        binding.logoutArea.setOnClickListener(v -> {
+            Logout();
         });
     }
 
@@ -757,26 +766,37 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
     private void Logout(){
-        if(USER_INFO_AUTH.equals("-1")){
-            super.onBackPressed();
-        }else{
-            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-            intent.putExtra("data", "로그아웃하시겠습니까?");
-            intent.putExtra("flag", "로그아웃");
-            intent.putExtra("left_btn_txt", "닫기");
-            intent.putExtra("right_btn_txt", "로그아웃");
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        }
+        Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+        intent.putExtra("data", "로그아웃하시겠습니까?");
+        intent.putExtra("flag", "로그아웃");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "로그아웃");
+        mContext.startActivity(intent);
+        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
+    private void quitApp() {
+        moveTaskToBack(true);
+        finish();
+        finishAffinity();
+        overridePendingTransition(0, 0);
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        if(event.equals("out_store")){
+        Log.d("PlaceListActivity", "event: " + event);
+        if(!event.isEmpty()){
             super.onBackPressed();
         }else{
-            Logout();
+            if (System.currentTimeMillis() - waitTime >= 1500) {
+                waitTime = System.currentTimeMillis();
+                Toast.makeText(mContext, "뒤로가기 버튼을 한번 더 누르면 종료합니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                quitApp();
+            }
         }
     }
 }

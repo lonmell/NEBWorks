@@ -53,6 +53,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <ImageView
+                    android:id="@+id/logout"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/top_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/top_icon"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_logout"/>
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/go_owner"
                     android:layout_width="match_parent"

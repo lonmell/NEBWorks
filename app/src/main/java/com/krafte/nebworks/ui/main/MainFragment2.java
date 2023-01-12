@@ -294,7 +294,8 @@ public class MainFragment2 extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
         if (paging_position == 0) {
-            shardpref.putString("event","backpressed");
+//            shardpref.putString("event","backpressed");
+            shardpref.remove("event");
             pm.PlaceList(mContext);
         } else {
             binding.tabLayout.getTabAt(0).select();

@@ -782,6 +782,7 @@ public class IntroActivity extends AppCompatActivity {
                                         dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                     }
                                 } else {
+                                    shardpref.remove("event");
                                     pm.PlaceList(mContext);
                                 }
                                 dlog.i("SetNoticeListview Thread run! ");
