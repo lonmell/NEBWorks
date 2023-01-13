@@ -54,7 +54,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -479,23 +478,32 @@ public class WorkstatusFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //5초마다 실행
-                SetCalenderData(gYear, gMonth);
-                if (USER_INFO_AUTH.isEmpty()) {
-                    binding.cnt01.setText("10");
-                    binding.cnt02.setText("2");
-                    binding.cnt03.setText("5");
-                    binding.cnt04.setText("3");
-                } else {
-                    PlaceWorkCheck(place_id);
-                }
-            }
-        };
-        timer = new Timer();
-        timer.schedule(timerTask,0,5000);
+        SetCalenderData(gYear, gMonth);
+        if (USER_INFO_AUTH.isEmpty()) {
+            binding.cnt01.setText("10");
+            binding.cnt02.setText("2");
+            binding.cnt03.setText("5");
+            binding.cnt04.setText("3");
+        } else {
+            PlaceWorkCheck(place_id);
+        }
+//        TimerTask timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                //5초마다 실행
+//                SetCalenderData(gYear, gMonth);
+//                if (USER_INFO_AUTH.isEmpty()) {
+//                    binding.cnt01.setText("10");
+//                    binding.cnt02.setText("2");
+//                    binding.cnt03.setText("5");
+//                    binding.cnt04.setText("3");
+//                } else {
+//                    PlaceWorkCheck(place_id);
+//                }
+//            }
+//        };
+//        timer = new Timer();
+//        timer.schedule(timerTask,0,10000);
     }
     @Override
     public void onDestroy() {

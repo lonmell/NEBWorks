@@ -263,24 +263,24 @@ public class HomeFragment2 extends Fragment {
     public void onResume() {
         super.onResume();
         shardpref.remove("Tap");
+        InOutLogMember();
+        UserCheck();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 //5초마다 실행
                 if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !place_id.isEmpty() && !USER_INFO_AUTH.isEmpty()){
-                    UserCheck();
                     PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
                     PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
                     PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
                     PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
                     PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
-                    InOutLogMember();
 //                    getFCMToken();
                 }
             }
         };
         timer = new Timer();
-        timer.schedule(timerTask,0,5000);
+        timer.schedule(timerTask,0,10000);
     }
     @Override
     public void onDestroy() {
@@ -346,6 +346,7 @@ public class HomeFragment2 extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     activity.runOnUiThread(() -> {
                         String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("InOutLogMember jsonResponse : " + jsonResponse);
                         if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
                             //그날 최초 출근
                             kind = "-1";

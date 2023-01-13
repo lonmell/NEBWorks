@@ -320,6 +320,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         binding.clearNick.setOnClickListener(v -> {
             binding.userNick.setText("");
         });
+        binding.clearNick2.setOnClickListener(v -> {
+            binding.userName.setText("");
+        });
         binding.userNick.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -579,7 +582,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                                     }
                                     dlog.i("START profileSetimg1");
                                     binding.userName.setText(mem_name);
-                                    binding.userNick.setText(mem_nick.isEmpty() ? mem_name : mem_nick);
+                                    binding.userNick.setText(mem_nick.isEmpty() ? "" : mem_nick);
                                     binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
 
                                     if (mem_img_path != null) {
@@ -648,7 +651,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 }
                 dlog.i("START profileSetimg1");
                 binding.userName.setText(mem_name);
-                binding.userNick.setText(mem_nick.isEmpty() ? mem_name : mem_nick);
+                binding.userNick.setText(mem_nick.isEmpty() ? "" : mem_nick);
                 binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
 
                 if (mem_img_path != null) {
@@ -750,7 +753,15 @@ public class ProfileEditActivity extends AppCompatActivity {
                                             pm.MoreBack(mContext);
                                         } else {
                                             String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
-                                            UserCheck(USER_INFO_EMAIL);
+//                                            UserCheck(USER_INFO_EMAIL);
+                                            if(!USER_INFO_AUTH.equals("-1")){
+                                                shardpref.putString("USER_INFO_AUTH",USER_INFO_AUTH);
+                                                binding.loginAlertText.setVisibility(View.GONE);
+                                                pm.PlaceList(mContext);
+                                            }else{
+                                                binding.loginAlertText.setVisibility(View.GONE);
+                                                pm.AuthSelect(mContext);
+                                            }
                                         }
                                     }
                                 } catch (Exception e) {
@@ -794,15 +805,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                             shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
                             shardpref.putString("USER_INFO_EMAIL", USER_INFO_EMAIL);
                             shardpref.remove("editstate");
-//                            shardpref.putString("USER_INFO_AUTH", "0");
-//                            shardpref.putInt("SELECT_POSITION", 0);
-//                            shardpref.putInt("SELECT_POSITION_sub", 0);
-//                            pm.PlaceList(mContext);
                              kakaoChannel();
-//                            Uri url = TalkApiClient.getInstance().channelChatUrl("_rTkJxj");
-//                            KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
-//                            instance.openWithDefault(mContext, url);
-//                            pm.AuthSelect(mContext);
                             binding.loginAlertText.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {

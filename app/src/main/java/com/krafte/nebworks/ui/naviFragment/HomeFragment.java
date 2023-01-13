@@ -203,6 +203,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+        SetAllMemberList();
     }
 
     Timer timer = new Timer();
@@ -223,7 +226,7 @@ public class HomeFragment extends Fragment {
             }
         };
         timer = new Timer();
-        timer.schedule(timerTask,0,5000);
+        timer.schedule(timerTask,0,10000);
     }
 
     @Override
