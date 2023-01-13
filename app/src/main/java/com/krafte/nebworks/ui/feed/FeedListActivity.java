@@ -240,18 +240,18 @@ public class FeedListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        if(returnPage.equals("PlaceListActivity")){
+//        if(returnPage.equals("PlaceListActivity")){
 //            pm.PlaceList(mContext);
             super.onBackPressed();
-        }else{
-            if(USER_INFO_AUTH.equals("0")){
-                shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
-                pm.Main(mContext);
-            }else{
-                shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
-                pm.Main2(mContext);
-            }
-        }
+//        }else{
+//            if(USER_INFO_AUTH.equals("0")){
+//                shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+//                pm.Main(mContext);
+//            }else{
+//                shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+//                pm.Main2(mContext);
+//            }
+//        }
     }
 
     CardView add_worktime_btn;
