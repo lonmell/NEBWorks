@@ -185,10 +185,7 @@ public class HomeFragment extends Fragment {
             //0-관리자 / 1- 근로자
             dlog.i("gotoplace location view USER_INFO_AUTH : " + USER_INFO_AUTH);
             //USER_INFO_AUTH 가 -1일때
-//            if (USER_INFO_AUTH.equals("-1")) {
-//                USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
-//                shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-//            }
+
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -201,9 +198,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
-        SetAllMemberList();
+        getPlaceData();
     }
 
     @Override
@@ -414,7 +409,6 @@ public class HomeFragment extends Fragment {
         th.start();
         try {
             th.join(); // 작동한 스레드의 종료까지 대기 후 메인 스레드 실행
-            getPlaceData();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -476,7 +470,6 @@ public class HomeFragment extends Fragment {
         th.start();
         try {
             th.join(); // 작동한 스레드의 종료까지 대기 후 메인 스레드 실행
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

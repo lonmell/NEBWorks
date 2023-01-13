@@ -230,7 +230,7 @@
                                 android:paddingStart="15dp"
                                 android:text="총 0명 근무 중"
                                 android:textColor="@color/blue"
-                                android:textSize="15sp"
+                                android:textSize="14sp"
                                 android:visibility="visible" />
 
                             <TextView
@@ -239,12 +239,12 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="end"
                                 android:fontFamily="@font/inter_bold"
-                                android:gravity="end|center"
+                                android:gravity="center"
                                 android:paddingEnd="5dp"
                                 android:paddingStart="15dp"
                                 android:text="근무자를 선택하세요 >"
                                 android:textColor="#949494"
-                                android:textSize="15sp"
+                                android:textSize="14sp"
                                 android:visibility="visible" />
                         </LinearLayout>
 

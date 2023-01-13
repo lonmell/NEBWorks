@@ -59,7 +59,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -248,6 +247,7 @@ public class HomeFragment2 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        getPlaceData();
     }
 
     @Override
@@ -643,7 +643,7 @@ public class HomeFragment2 extends Fragment {
         th.start();
         try {
             th.join(); // 작동한 스레드의 종료까지 대기 후 메인 스레드 실행
-            getPlaceData();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

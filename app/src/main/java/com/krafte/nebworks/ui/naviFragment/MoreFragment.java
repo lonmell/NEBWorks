@@ -39,7 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -175,22 +174,12 @@ public class MoreFragment extends Fragment {
         super.onStop();
     }
 
-    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
-
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //5초마다 실행
-                if(!USER_INFO_ID.isEmpty() && !place_id.isEmpty()){
-                    SetAllMemberList();
-                }
-            }
-        };
-        timer = new Timer();
-        timer.schedule(timerTask,0,1000);
+        if(!USER_INFO_ID.isEmpty() && !place_id.isEmpty()){
+            SetAllMemberList();
+        }
     }
 
     public void setBtnEvent() {
