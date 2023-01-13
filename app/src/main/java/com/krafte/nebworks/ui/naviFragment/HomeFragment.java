@@ -51,8 +51,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -208,7 +206,6 @@ public class HomeFragment extends Fragment {
         SetAllMemberList();
     }
 
-    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
@@ -216,23 +213,14 @@ public class HomeFragment extends Fragment {
         shardpref.remove("item_user_id");
         shardpref.remove("item_user_name");
         UserCheck();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //5초마다 실행
-                PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
-                PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
-                SetAllMemberList();
-            }
-        };
-        timer = new Timer();
-        timer.schedule(timerTask,0,10000);
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+        SetAllMemberList();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
     }
 
     public void setBtnEvent() {

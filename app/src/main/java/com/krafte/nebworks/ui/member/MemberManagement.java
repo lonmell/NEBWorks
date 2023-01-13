@@ -178,16 +178,7 @@ public class MemberManagement extends AppCompatActivity {
         setAddBtnSetting();
         getNotReadFeedcnt();
         SetAllMemberList(place_id);
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                //5초마다 실행
-//                getNotReadFeedcnt();
-//                SetAllMemberList(place_id);
-//            }
-//        };
-//        timer = new Timer();
-//        timer.schedule(timerTask,0,10000);
+
     }
 
     @Override

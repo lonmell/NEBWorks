@@ -409,16 +409,7 @@ public class MainFragment2 extends AppCompatActivity {
         UserCheck();
         SetAllMemberList();
         getNotReadFeedcnt();
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                //5초마다 실행
-//                SetAllMemberList();
-//                getNotReadFeedcnt();
-//            }
-//        };
-//        timer = new Timer();
-//        timer.schedule(timerTask,0,10000);
+
     }
     @Override
     public void onDestroy() {

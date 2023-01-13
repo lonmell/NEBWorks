@@ -245,15 +245,6 @@ public class WorkgotoFragment extends Fragment {
             RemoveShared();
             setAddBtnSetting();
             setRecyclerView();
-//            TimerTask timerTask = new TimerTask() {
-//                @Override
-//                public void run() {
-//                    //5초마다 실행
-//                    setRecyclerView();
-//                    timer.cancel();
-//                }
-//            };
-//            timer.schedule(timerTask,0,10000);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -474,7 +474,6 @@ public class WorkstatusFragment extends Fragment {
     }
 
 
-    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
@@ -487,28 +486,10 @@ public class WorkstatusFragment extends Fragment {
         } else {
             PlaceWorkCheck(place_id);
         }
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                //5초마다 실행
-//                SetCalenderData(gYear, gMonth);
-//                if (USER_INFO_AUTH.isEmpty()) {
-//                    binding.cnt01.setText("10");
-//                    binding.cnt02.setText("2");
-//                    binding.cnt03.setText("5");
-//                    binding.cnt04.setText("3");
-//                } else {
-//                    PlaceWorkCheck(place_id);
-//                }
-//            }
-//        };
-//        timer = new Timer();
-//        timer.schedule(timerTask,0,10000);
     }
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
         shardpref.remove("FtoDay");
     }
 

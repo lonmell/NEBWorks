@@ -265,22 +265,11 @@ public class HomeFragment2 extends Fragment {
         shardpref.remove("Tap");
         InOutLogMember();
         UserCheck();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //5초마다 실행
-                if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !place_id.isEmpty() && !USER_INFO_AUTH.isEmpty()){
-                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
-                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
-                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
-                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
-                    PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
-//                    getFCMToken();
-                }
-            }
-        };
-        timer = new Timer();
-        timer.schedule(timerTask,0,10000);
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
     }
     @Override
     public void onDestroy() {
