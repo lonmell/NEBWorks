@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.api.LogDescriptor;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
@@ -761,8 +763,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
 
         if (RepeatCheck) {
-            start_time = starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime;
-            end_time = endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime;
+            start_time = starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime.replace("오전","").replace("오후","").trim();
+            end_time = endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime.replace("오전","").replace("오후","").trim();;
         } else {
             start_time = (getStartDate.isEmpty()?today:getStartDate) + " " + (starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime.replace("오전","").replace("오후","").trim());
             end_time = (getEndDate.isEmpty()?today:getEndDate) + " " + (endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime.replace("오전","").replace("오후","").trim());
@@ -1046,10 +1048,17 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         } else {
             toDay = searchDate;
         }
+
+        String[] start = binding.inputTime01.getText().toString().split(" ");
+        Log.d(TAG, "start: " + Arrays.toString(start));
+
+        String[] end = binding.inputTime02.getText().toString().split(" ");
+        Log.d(TAG, "end: " + Arrays.toString(end));
+
         WorkTitle = binding.inputWorktitle.getText().toString();
         WorkContents = binding.inputWorkcontents.getText().toString();
-        start_time = binding.inputTime01.getText().toString();
-        end_time = binding.inputTime02.getText().toString();
+        start_time = start[1];
+        end_time = end[1];
         user_id = String.valueOf(item_user_id).replace("[", "").replace("]", "").replace(" ", "").trim();
         overdate = overdate.replace("년 ", "-").replace("월 ", "-").replace("일", "").trim();
 
