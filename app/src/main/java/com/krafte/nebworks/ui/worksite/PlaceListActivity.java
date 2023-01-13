@@ -20,6 +20,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceListAdapter;
 import com.krafte.nebworks.bottomsheet.StoreListBottomSheet;
 import com.krafte.nebworks.data.PlaceListData;
+import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -193,7 +194,8 @@ public class PlaceListActivity extends AppCompatActivity {
             onStartAuth();
         });
         binding.notiArea.setOnClickListener(v -> {
-            shardpref.putString("returnPage","PlaceListActivity");
+            ReturnPageData.getInstance().setPage("PlaceListActivity");
+//            shardpref.putString("returnPage","PlaceListActivity");
             pm.FeedList(mContext);
         });
         binding.logoutArea.setOnClickListener(v -> {

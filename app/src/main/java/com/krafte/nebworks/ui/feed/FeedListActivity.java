@@ -145,7 +145,8 @@ public class FeedListActivity extends AppCompatActivity {
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
             if(returnPage.equals("PlaceListActivity")){
-                pm.PlaceList(mContext);
+//                pm.PlaceList(mContext);
+                super.onBackPressed();
             }else{
                 if(USER_INFO_AUTH.equals("0")){
                     shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
@@ -240,7 +241,8 @@ public class FeedListActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
         if(returnPage.equals("PlaceListActivity")){
-            pm.PlaceList(mContext);
+//            pm.PlaceList(mContext);
+            super.onBackPressed();
         }else{
             if(USER_INFO_AUTH.equals("0")){
                 shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
