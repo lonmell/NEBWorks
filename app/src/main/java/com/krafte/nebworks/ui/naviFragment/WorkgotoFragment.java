@@ -230,7 +230,6 @@ public class WorkgotoFragment extends Fragment {
     }
 
 
-    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();

@@ -395,7 +395,6 @@ public class MainFragment extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
     }
 
     DBConnection dbc = new DBConnection();
