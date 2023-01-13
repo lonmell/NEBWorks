@@ -142,7 +142,8 @@ public class PlaceSearchActivity extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            pm.PlaceList(mContext);
+            super.onBackPressed();
+//            pm.PlaceList(mContext);
         });
 
         binding.searchBtn.setOnClickListener(v -> {
@@ -240,7 +241,8 @@ public class PlaceSearchActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        pm.PlaceList(mContext);
+        super.onBackPressed();
+//        pm.PlaceList(mContext);
     }
 
 }
