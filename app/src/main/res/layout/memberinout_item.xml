@@ -122,9 +122,11 @@
 
             <RelativeLayout
                 android:id="@+id/list_setting"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:layout_alignTop="@+id/name"
+                android:visibility="invisible"
                 android:layout_alignParentEnd="true">
 
                 <ImageView

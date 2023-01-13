@@ -25,7 +25,9 @@
     <ImageView
         android:id="@+id/thumnail_in"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:scaleType="center" />
+        android:layout_below="@+id/close_btn"
+        android:layout_marginBottom="59dp"
+        android:scaleType="fitCenter" />
 </RelativeLayout>
