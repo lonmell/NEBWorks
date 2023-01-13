@@ -450,8 +450,8 @@ public class CommunityAddActivity extends AppCompatActivity {
                                         saveBitmapAndGetURI();
                                     }
                                     sharedRemove();
-                                    Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                    pm.FeedList(mContext);
+                                    Toast.makeText(mContext, "글 수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
