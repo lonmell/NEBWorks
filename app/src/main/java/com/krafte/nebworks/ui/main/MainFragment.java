@@ -390,15 +390,7 @@ public class MainFragment extends AppCompatActivity {
         super.onResume();
         setNavBarBtnEvent();
         UserCheck();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //5초마다 실행
-                getNotReadFeedcnt();
-            }
-        };
-        timer = new Timer();
-        timer.schedule(timerTask,0,5000);
+        getNotReadFeedcnt();
     }
     @Override
     public void onDestroy() {

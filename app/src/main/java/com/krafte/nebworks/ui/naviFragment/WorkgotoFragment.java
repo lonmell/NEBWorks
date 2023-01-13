@@ -57,7 +57,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -245,16 +244,7 @@ public class WorkgotoFragment extends Fragment {
             shardpref.remove("overdate");
             RemoveShared();
             setAddBtnSetting();
-
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    //5초마다 실행
-                    setRecyclerView();
-                    timer.cancel();
-                }
-            };
-            timer.schedule(timerTask,0,5000);
+            setRecyclerView();
         } catch (Exception e) {
             e.printStackTrace();
         }

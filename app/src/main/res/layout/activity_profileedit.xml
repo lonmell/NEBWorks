@@ -111,8 +111,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="5dp"
                 android:layout_toEndOf="@+id/profile_img_area"
                 android:orientation="horizontal">
@@ -245,17 +245,19 @@
                 android:textColorHint="#a9a9a9"
                 android:textSize="16sp"
                 tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
             <LinearLayout
                 android:id="@+id/clear_nick"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_alignParentEnd="true"
                 android:gravity="center">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_edit_clear_icon"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_edit_clear_icon" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -265,8 +267,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -286,21 +287,44 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/user_name"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/default_gray_round"
-            android:fontFamily="@font/inter_regular"
-            android:hint="성명을 입력해주세요"
-            android:inputType="text"
-            android:paddingStart="15dp"
-            android:textColor="#000000"
-            android:textColorHint="#a9a9a9"
-            android:visibility="gone" />
+            android:background="@drawable/default_gray_round">
+
+            <EditText
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@+id/clear_nick"
+                android:background="@color/white"
+                android:fontFamily="@font/inter_regular"
+                android:hint="닉네임을 자유롭게 입력해주세요"
+                android:inputType="text"
+                android:paddingStart="15dp"
+                android:textColor="#000000"
+                android:textColorHint="#a9a9a9"
+                android:textSize="16sp"
+                tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+            <LinearLayout
+                android:id="@+id/clear_nick2"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_edit_clear_icon" />
+            </LinearLayout>
+        </RelativeLayout>
+
 
 
         <LinearLayout

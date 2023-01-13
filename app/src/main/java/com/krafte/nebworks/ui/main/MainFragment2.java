@@ -62,7 +62,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -408,16 +407,9 @@ public class MainFragment2 extends AppCompatActivity {
         super.onResume();
         setNavBarBtnEvent();
         UserCheck();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //5초마다 실행
-                SetAllMemberList();
-                getNotReadFeedcnt();
-            }
-        };
-        timer = new Timer();
-        timer.schedule(timerTask,0,5000);
+        SetAllMemberList();
+        getNotReadFeedcnt();
+
     }
     @Override
     public void onDestroy() {
