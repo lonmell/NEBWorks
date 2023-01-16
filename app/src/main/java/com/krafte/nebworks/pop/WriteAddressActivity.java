@@ -185,6 +185,7 @@ public class WriteAddressActivity extends Activity {
                                                 shardpref.putString("pin_store_address",Response.getJSONObject(position).getString("roadAddrPart1"));
                                                 shardpref.putString("pin_store_addressdetail",Response.getJSONObject(position).getString("roadAddrPart2"));
                                                 shardpref.putString("pin_zipcode",Response.getJSONObject(position).getString("zipNo"));
+                                                shardpref.putBoolean("address_event", true);
                                                 finish();
                                             }catch (JSONException e){
                                                 e.printStackTrace();
