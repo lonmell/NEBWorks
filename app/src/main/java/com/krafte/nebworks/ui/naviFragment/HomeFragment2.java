@@ -153,7 +153,7 @@ public class HomeFragment2 extends Fragment {
 
     /*Fragment 콜백함수*/
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         if (context instanceof Activity)
@@ -192,7 +192,6 @@ public class HomeFragment2 extends Fragment {
             //shardpref Area
             accept_state = shardpref.getInt("accept_state", -99);
             input_date = shardpref.getString("input_date", "-1");
-            in_time = shardpref.getString("in_time", "");
             shardpref.putInt("SELECT_POSITION",0);
             if (USER_INFO_AUTH.isEmpty()) {
                 setDummyData();
@@ -219,10 +218,9 @@ public class HomeFragment2 extends Fragment {
                 binding.acceptArea.setVisibility(View.GONE);
             }
 
-            String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+
             binding.ioMytime.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
             binding.todayWorkdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
-            binding.inTime.setText(in_time);
 
             binding.cardview02.setOnClickListener(v -> {
                 if (USER_INFO_AUTH.isEmpty()) {
@@ -343,12 +341,13 @@ public class HomeFragment2 extends Fragment {
                             binding.oArea.setVisibility(View.GONE);
                             binding.ioArea.setVisibility(View.VISIBLE);
                         } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
-                            if (response.isSuccessful() && jsonResponse != null) {
+                            if (response.isSuccessful() && response.body() != null) {
                                 dlog.i("InOutLogMember jsonResponse length : " + jsonResponse.length());
                                 dlog.i("InOutLogMember jsonResponse : " + jsonResponse);
                                 try {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     kind = Response.getJSONObject(0).getString("kind");
+                                    String io_time = Response.getJSONObject(0).getString("io_time");
                                     dlog.i("InOutLogMember kind : " + kind);
                                     if (kind.equals("1")) {
                                         kind = "-1";
@@ -358,6 +357,7 @@ public class HomeFragment2 extends Fragment {
                                         binding.oArea.setVisibility(View.VISIBLE);
                                         binding.ioArea.setVisibility(View.GONE);
                                     }
+                                    binding.inTime.setText(io_time);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

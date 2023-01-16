@@ -67,14 +67,17 @@ public class ChangePWActivity2 extends AppCompatActivity {
 
     private void setBtnEvent(){
         binding.goLogin.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             pm.Login(mContext);
         });
 
         binding.findPwBtn.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             pm.FindEmail(mContext);
         });
     }
     public void Toast_Nomal(String message){
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
         TextView toast_textview  = layout.findViewById(R.id.toast_textview);
@@ -86,5 +89,13 @@ public class ChangePWActivity2 extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.goLogin.setClickable(tf);
+        binding.goLogin.setEnabled(tf);
+
+        binding.findPwBtn.setClickable(tf);
+        binding.findPwBtn.setEnabled(tf);
     }
 }

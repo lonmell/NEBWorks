@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,6 +109,13 @@ public class ChangePWActivity extends AppCompatActivity {
         dlog.i("returnPage = " + returnPage);
     }
 
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        BtnOneCircleFun(true);
+    }
+
     private void setBtnEvent(){
         binding.backBtn.setOnClickListener(v -> {
            super.onBackPressed();
@@ -170,6 +176,7 @@ public class ChangePWActivity extends AppCompatActivity {
         });
 
         binding.joinconfirm.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             SaveUser();
         });
     }
@@ -263,6 +270,7 @@ public class ChangePWActivity extends AppCompatActivity {
     }
 
     public void Toast_Nomal(String message){
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
         TextView toast_textview  = layout.findViewById(R.id.toast_textview);
@@ -274,5 +282,10 @@ public class ChangePWActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.joinconfirm.setClickable(false);
+        binding.joinconfirm.setEnabled(false);
     }
 }

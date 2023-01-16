@@ -178,18 +178,21 @@ public class SearchAccountActivity extends AppCompatActivity {
         binding.getAuthResult.setOnClickListener(v -> {
 
             if (Uname.isEmpty()) {
+                BtnOneCircleFun(true);
                 Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                 intent.putExtra("data", "이름을 입력해 주세요.");
                 intent.putExtra("left_btn_txt", "닫기");
                 startActivity(intent);
                 overridePendingTransition(R.anim.translate_up, 0);
             } else if (UPhone.isEmpty()) {
+                BtnOneCircleFun(true);
                 Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                 intent.putExtra("data", "전화번호를 입력해주세요.");
                 intent.putExtra("left_btn_txt", "닫기");
                 startActivity(intent);
                 overridePendingTransition(R.anim.translate_up, 0);
             } else {
+                BtnOneCircleFun(false);
                 binding.confirmNumCounting.setVisibility(View.VISIBLE);
                 SendConfirmMessage();
             }
@@ -359,6 +362,7 @@ public class SearchAccountActivity extends AppCompatActivity {
         });
 
         binding.tv04.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             dlog.i("-----회원가입-----");
             dlog.i("이름 : " + Uname);
             dlog.i("번호 : " + UPhone);
@@ -562,6 +566,7 @@ public class SearchAccountActivity extends AppCompatActivity {
                     binding.confirmNumCounting.setVisibility(View.GONE);
                     binding.getAuthResult.setEnabled(false);
                     myTimer.cancel();
+                    BtnOneCircleFun(true);
                 }
             } else {
                 Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
@@ -580,6 +585,7 @@ public class SearchAccountActivity extends AppCompatActivity {
     }
 
     public void Toast_Nomal(String message){
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
         TextView toast_textview  = layout.findViewById(R.id.toast_textview);
@@ -591,5 +597,16 @@ public class SearchAccountActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.tv04.setClickable(tf);
+        binding.tv04.setEnabled(tf);
+
+        binding.getAuthResult.setClickable(tf);
+        binding.getAuthResult.setEnabled(tf);
+
+        binding.confirmPhoneBtn.setClickable(tf);
+        binding.confirmPhoneBtn.setEnabled(tf);
     }
 }

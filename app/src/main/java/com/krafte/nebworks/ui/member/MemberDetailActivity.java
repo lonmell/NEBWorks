@@ -700,6 +700,9 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             getPay = Response.getJSONObject(i).getString("recent_pay").replace(",", "");
                                             allPay += Integer.parseInt(getPay);
                                         }
+                                        String allwcnt = Response.getJSONObject(0).getString("allwcnt"); //근무해야하는 횟수
+                                        String iocnt    = Response.getJSONObject(0).getString("iocnt"); //근무한 횟수
+
                                         DecimalFormat myFormatter = new DecimalFormat("###,###");
                                         workpay = workpay.replace(",", "");
                                         int WorkPaY = Integer.parseInt(workpay);
@@ -707,10 +710,13 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         dlog.i("allPay : " + allPay);
                                         dlog.i("WorkPaY : " + WorkPaY);
                                         dlog.i("UntilNowPay : " + UntilNowPay);
-                                        binding.nowPayTv.setText(String.valueOf(myFormatter.format(allPay)) + "원");
+                                        dlog.i("allwcnt : " + allwcnt);
+                                        dlog.i("iocnt : " + iocnt);
+                                        binding.nowPayTv.setText("예상급여 " + String.valueOf(myFormatter.format(allPay)) + "원");
                                         binding.nowPay.setText(String.valueOf(myFormatter.format(allPay)) + "원");
-                                        binding.payTv.setText(workpay + "원");
-                                        binding.payDiffBar.setProgress(UntilNowPay);
+                                        binding.payTv.setText("계약시급 " + workpay + "원");
+                                        binding.payDiffBar.setProgress(Integer.parseInt(iocnt));
+                                        binding.payDiffBar.setMax(Integer.parseInt(allwcnt));
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }

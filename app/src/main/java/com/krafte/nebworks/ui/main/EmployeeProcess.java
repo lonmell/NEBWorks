@@ -55,10 +55,6 @@ public class EmployeeProcess extends AppCompatActivity {
     private ActivityEmployeeProcessBinding binding;
     Context mContext;
 
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-
     //Other 클래스
     Dlog dlog = new Dlog();
     PreferenceHelper shardpref;
@@ -153,6 +149,7 @@ public class EmployeeProcess extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        BtnOneCircleFun(true);
         getPlaceData();
         MoveMyLocation();
         handler.postDelayed(() -> {
@@ -212,6 +209,7 @@ public class EmployeeProcess extends AppCompatActivity {
 
     private void onBtnEvent() {
         binding.ioBtn.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             MoveMyLocation();
             dlog.i("location_cnt : " + location_cnt);
             long now = System.currentTimeMillis();
@@ -440,6 +438,7 @@ public class EmployeeProcess extends AppCompatActivity {
 
 
     public void Toast_Nomal(String message) {
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, null);
         TextView toast_textview = layout.findViewById(R.id.toast_textview);
@@ -451,5 +450,10 @@ public class EmployeeProcess extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.ioBtn.setClickable(tf);
+        binding.ioBtn.setEnabled(tf);
     }
 }

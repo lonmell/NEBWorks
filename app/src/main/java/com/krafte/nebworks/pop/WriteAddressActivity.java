@@ -213,6 +213,7 @@ public class WriteAddressActivity extends Activity {
         });
     }
 
+
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) binding.getRoot().findViewById(R.id.toast_layout));

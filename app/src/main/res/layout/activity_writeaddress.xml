@@ -46,6 +46,7 @@
             android:id="@+id/juso_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
         <TextView
             android:id="@+id/no_data_txt"
             android:layout_width="match_parent"
