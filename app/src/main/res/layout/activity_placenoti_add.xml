@@ -139,7 +139,7 @@
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
 
-            <EditText
+            <com.krafte.nebworks.ui.CustomEditText
                 android:id="@+id/input_workcontents"
                 android:layout_width="match_parent"
                 android:layout_height="271dp"
@@ -149,7 +149,6 @@
                 android:gravity="start|top"
                 android:hint="내용 입력"
                 android:inputType="textMultiLine"
-                android:lines="5"
                 android:maxWidth="5.0dip"
                 android:minWidth="10.0dip"
                 android:padding="10dp"
