@@ -448,6 +448,7 @@ public class FeedEditActivity extends AppCompatActivity {
                                             } else {
                                                 binding.clearImg.setVisibility(View.VISIBLE);
                                                 binding.imgPlus.setVisibility(View.GONE);
+                                                ProfileUrl = feed_img_path;
                                                 Glide.with(mContext).load(feed_img_path)
                                                         .apply(requestOptions)
                                                         .into(binding.notiSetimg);
