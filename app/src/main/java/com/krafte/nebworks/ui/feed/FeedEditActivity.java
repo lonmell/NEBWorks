@@ -217,8 +217,8 @@ public class FeedEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-        pm.FeedList(mContext);
+        super.onBackPressed();
+//        pm.FeedList(mContext);
     }
 
     String toDay = "";
@@ -394,12 +394,13 @@ public class FeedEditActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse!!: " + jsonResponse);
                             dlog.i("GETFeed jsonResponse length : " + response.body().length());
                             dlog.i("GETFeed jsonResponse : " + response.body());
                             try {
                                 if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
                                     String place_id = Response.getJSONObject(0).getString("place_id");
                                     String title = Response.getJSONObject(0).getString("title");
@@ -447,6 +448,7 @@ public class FeedEditActivity extends AppCompatActivity {
                                             } else {
                                                 binding.clearImg.setVisibility(View.VISIBLE);
                                                 binding.imgPlus.setVisibility(View.GONE);
+                                                ProfileUrl = feed_img_path;
                                                 Glide.with(mContext).load(feed_img_path)
                                                         .apply(requestOptions)
                                                         .into(binding.notiSetimg);

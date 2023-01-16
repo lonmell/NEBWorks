@@ -307,14 +307,23 @@ public class WorkgotoFragment extends Fragment {
                 if (USER_INFO_AUTH.isEmpty()) {
                     isAuth();
                 } else {
-                    cal.add(Calendar.DATE, -1);
-                    toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    getYMPicker = Year + "-" + Month;
-                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-
+                    if (chng_icon) {
+                        cal.add(Calendar.MONTH, -1);
+                        toDay = sdf.format(cal.getTime());
+                        Year = toDay.substring(0, 4);
+                        Month = toDay.substring(5, 7);
+                        Day = toDay.substring(8, 10);
+                        getYMPicker = Year + "-" + Month;
+                        binding.setdate.setText(Year + "년 " + Month + "월 ");
+                    } else {
+                        cal.add(Calendar.DATE, -1);
+                        toDay = sdf.format(cal.getTime());
+                        Year = toDay.substring(0, 4);
+                        Month = toDay.substring(5, 7);
+                        Day = toDay.substring(8, 10);
+                        getYMPicker = Year + "-" + Month;
+                        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                    }
                     SetCalenderData();
                     setRecyclerView();
                 }
@@ -331,13 +340,23 @@ public class WorkgotoFragment extends Fragment {
                 if (USER_INFO_AUTH.isEmpty()) {
                     isAuth();
                 } else {
-                    cal.add(Calendar.DATE, +1);
-                    toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    getYMPicker = Year + "-" + Month;
-                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                    if (chng_icon) {
+                        cal.add(Calendar.MONTH, +1);
+                        toDay = sdf.format(cal.getTime());
+                        Year = toDay.substring(0, 4);
+                        Month = toDay.substring(5, 7);
+                        Day = toDay.substring(8, 10);
+                        getYMPicker = Year + "-" + Month;
+                        binding.setdate.setText(Year + "년 " + Month + "월 ");
+                    } else {
+                        cal.add(Calendar.DATE, +1);
+                        toDay = sdf.format(cal.getTime());
+                        Year = toDay.substring(0, 4);
+                        Month = toDay.substring(5, 7);
+                        Day = toDay.substring(8, 10);
+                        getYMPicker = Year + "-" + Month;
+                        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                    }
                     SetCalenderData();
                     setRecyclerView();
                 }
@@ -449,12 +468,14 @@ public class WorkgotoFragment extends Fragment {
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
                 binding.selectArea.setVisibility(View.GONE);
+                binding.setdate.setText(Year + "년 " + Month + "월");
                 SetCalenderData();
             } else {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                 binding.selectArea.setVisibility(View.VISIBLE);
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 setRecyclerView();
             }
         });

@@ -116,6 +116,16 @@ public class PinSelectLocationActivity extends AppCompatActivity implements MapV
             mapView = new MapView(this);
             mapViewContainer = findViewById(R.id.map_view);
 
+            String pin_store_address = shardpref.getString("pin_store_address", "");
+            String pin_store_addressdetail = shardpref.getString("pin_store_addressdetail", "");
+            String pin_zipcode = shardpref.getString("pin_zipcode", "");
+            binding.address01.setText(pin_store_address.isEmpty() ? "" : pin_store_address);
+            binding.address02.setText(pin_store_addressdetail.isEmpty() ? "" : pin_store_addressdetail);
+            if(!pin_store_address.isEmpty()){
+                String location = pin_store_address + " " + pin_store_addressdetail;
+                GeoCoding(location);
+            }
+
             if (!checkLocationServicesStatus()) {
                 showDialogForLocationServiceSetting();
             } else {
@@ -150,6 +160,8 @@ public class PinSelectLocationActivity extends AppCompatActivity implements MapV
             /*현재 내 위치로 지도 중앙을 이동, 위치 트래킹 기능 on*/
             mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
             mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 2, true);
+            mapView.setZoomLevel(0, true);
+            mapView.zoomIn(true);
             mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
             reverseCoding(latitude, longitude);
         });
@@ -177,10 +189,12 @@ public class PinSelectLocationActivity extends AppCompatActivity implements MapV
         String pin_store_address = shardpref.getString("pin_store_address", "");
         String pin_store_addressdetail = shardpref.getString("pin_store_addressdetail", "");
         String pin_zipcode = shardpref.getString("pin_zipcode", "");
+        boolean event =  shardpref.getBoolean("address_event", false);
         binding.address01.setText(pin_store_address.isEmpty() ? "" : pin_store_address);
         binding.address02.setText(pin_store_addressdetail.isEmpty() ? "" : pin_store_addressdetail);
-        if(!pin_store_address.isEmpty()){
+        if(event){
             String location = pin_store_address + " " + pin_store_addressdetail;
+            shardpref.remove("address_event");
             GeoCoding(location);
         }
     }
