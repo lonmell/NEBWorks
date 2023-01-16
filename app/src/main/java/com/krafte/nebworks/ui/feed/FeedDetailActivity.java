@@ -151,7 +151,8 @@ public class FeedDetailActivity extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
-            pm.FeedList(mContext);
+            super.onBackPressed();
+            // pm.FeedList(mContext);
         });
         binding.editGo.setOnClickListener(v -> {
             dlog.i("editGo");
@@ -412,7 +413,7 @@ public class FeedDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-        pm.FeedList(mContext);
+        super.onBackPressed();
+//        pm.FeedList(mContext);
     }
 }

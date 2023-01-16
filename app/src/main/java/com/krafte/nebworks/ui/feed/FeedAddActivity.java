@@ -276,8 +276,8 @@ public class FeedAddActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-        pm.PlaceWorkBack(mContext);
+        super.onBackPressed();
+//        pm.PlaceWorkBack(mContext);
     }
 
     public void setBtnEvent() {

@@ -217,8 +217,8 @@ public class FeedEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-        pm.FeedList(mContext);
+        super.onBackPressed();
+//        pm.FeedList(mContext);
     }
 
     String toDay = "";
