@@ -282,7 +282,8 @@ public class FeedAddActivity extends AppCompatActivity {
 
     public void setBtnEvent() {
         binding.closeBtn.setOnClickListener(v -> {
-            pm.PlaceWorkBack(mContext);
+            // pm.PlaceWorkBack(mContext);
+            super.onBackPressed();
         });
 
         binding.workSave.setOnClickListener(v -> {
@@ -534,7 +535,8 @@ public class FeedAddActivity extends AppCompatActivity {
                                     }
                                     Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     BtnOneCircleFun(true);
-                                    pm.FeedList(mContext);
+                                    // pm.FeedList(mContext);
+                                    finish();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
