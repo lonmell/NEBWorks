@@ -143,14 +143,14 @@ public class MemberManagement extends AppCompatActivity {
                 pm.FeedList(mContext);
             });
             binding.backBtn.setOnClickListener(v -> {
-//                super.onBackPressed();
-                shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
-                shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
-                if(USER_INFO_AUTH.equals("0")){
-                    pm.Main(mContext);
-                }else{
-                    pm.Main2(mContext);
-                }
+                super.onBackPressed();
+//                shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+//                shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+//                if(USER_INFO_AUTH.equals("0")){
+//                    pm.Main(mContext);
+//                }else{
+//                    pm.Main2(mContext);
+//                }
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,14 +160,14 @@ public class MemberManagement extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-        shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
-        shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
-        if(USER_INFO_AUTH.equals("0")){
-            pm.Main(mContext);
-        }else{
-            pm.Main2(mContext);
-        }
+        super.onBackPressed();
+//        shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+//        shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+//        if(USER_INFO_AUTH.equals("0")){
+//            pm.Main(mContext);
+//        }else{
+//            pm.Main2(mContext);
+//        }
     }
 
 
