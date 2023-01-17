@@ -93,7 +93,6 @@ public class PlaceSearchActivity extends AppCompatActivity {
             latitude = gpsTracker.getLatitude();
             longitude = gpsTracker.getLongitude();
 //        Glide.with(this).load(R.raw.walk_loading2).into(loading_view);
-            SetWorkplaceList();
 
             binding.searchStore.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -138,7 +137,16 @@ public class PlaceSearchActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        SetWorkplaceList();
+    }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
 
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
@@ -225,6 +233,7 @@ public class PlaceSearchActivity extends AppCompatActivity {
                             ));
                         }
                         mAdapter.notifyDataSetChanged();
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

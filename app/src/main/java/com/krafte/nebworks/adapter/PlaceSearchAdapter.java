@@ -104,6 +104,9 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
 
         holder.applicant_storegroup.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onItemClick(v, position);
+            }
             shardpref.putString("guin_store_no", item.getId());
             shardpref.putString("place_id", item.getId());
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
@@ -150,9 +153,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     PlaceListData.PlaceListData_list item = mData.get(pos);
-                    if (mListener != null) {
-                        mListener.onItemClick(view, pos);
-                    }
+
                 }
             });
 

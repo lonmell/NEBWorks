@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.member;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -360,15 +361,21 @@ public class AddMemberDetail extends AppCompatActivity {
             @SuppressLint("LongLogTag")
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                binding.jikgup.setText(stringCategory1.get(i));
-                dlog.i("i : " + stringCategory1.get(i));
                 mem_jikgup = stringCategory1.get(i);
+                binding.jikgup.setText(mem_jikgup);
+                dlog.i("i : " + mem_jikgup);
+                binding.jikgupround.setBackgroundResource(R.drawable.default_select_on_round);
+                binding.jikgup.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.jikgup.setTextColor(Color.parseColor("#ffffff"));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-//                binding.jikgup.setText("알바");
                 mem_jikgup = "알바";
+                binding.jikgup.setText(mem_jikgup);
+                binding.jikgupround.setBackgroundResource(R.drawable.default_input_round);
+                binding.jikgup.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.jikgup.setTextColor(Color.parseColor("#696969"));
             }
         });
 
@@ -385,15 +392,21 @@ public class AddMemberDetail extends AppCompatActivity {
             @SuppressLint("LongLogTag")
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                binding.pay.setText(stringCategory2.get(i));
-                dlog.i("i : " + stringCategory2.get(i));
                 mem_paykind = stringCategory2.get(i);
+                binding.pay.setText(mem_paykind);
+                dlog.i("i : " + mem_paykind);
+                binding.payround.setBackgroundResource(R.drawable.default_select_on_round);
+                binding.pay.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.pay.setTextColor(Color.parseColor("#ffffff"));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-//                binding.pay.setText("근로자에게 직접지급");
-                mem_paykind = "선택";
+                mem_paykind = "일급";
+                binding.pay.setText(mem_paykind);
+                binding.payround.setBackgroundResource(R.drawable.default_input_round);
+                binding.pay.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.pay.setTextColor(Color.parseColor("#696969"));
             }
         });
 

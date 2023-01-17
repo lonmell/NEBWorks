@@ -75,7 +75,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * 근로자용 메인페이지 프래그먼트
  * */
 public class MainFragment2 extends AppCompatActivity {
-    private static final String TAG = "TaskApprovalFragment";
+    private static final String TAG = "MainFragment2";
     private ActivityMainfragmentBinding binding;
     Context mContext;
     private final DateCurrent dc = new DateCurrent();
@@ -153,7 +153,7 @@ public class MainFragment2 extends AppCompatActivity {
             return_page         = shardpref.getString("return_page", "");
             store_no            = shardpref.getString("store_no", "");
             place_owner_id      = shardpref.getString("place_owner_id", "0");
-            shardpref.putString("returnPage", "BusinessApprovalActivity");
+            shardpref.putString("returnPage", "MainFragment2");
 
 
             bottom_icon01 = binding.getRoot().findViewById(R.id.bottom_icon01);
@@ -414,7 +414,6 @@ public class MainFragment2 extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
     }
     DBConnection dbc = new DBConnection();
     /*
