@@ -290,6 +290,7 @@ public class TaskReportActivity extends AppCompatActivity {
     private void setBtnEvent() {
 
         binding.bottomBtn.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             String task_id = task_no;
             String task_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
             String incomplete_reason = binding.contents.getText().toString();
@@ -303,8 +304,10 @@ public class TaskReportActivity extends AppCompatActivity {
                 setSaveTask(task_id, task_date, ProfileUrl, complete_yn, incomplete_reason);
             } else {
                 if (incomplete_reason.isEmpty()) {
+                    BtnOneCircleFun(true);
                     Toast.makeText(mContext, "보고사항을 추가해주세요.", Toast.LENGTH_SHORT).show();
                 }else if (imagePath.isEmpty()) {
+                    BtnOneCircleFun(true);
                     Toast.makeText(mContext, "보고할 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     setSaveTask(task_id, task_date, ProfileUrl, "y", incomplete_reason);
@@ -378,6 +381,7 @@ public class TaskReportActivity extends AppCompatActivity {
 //                                    Log.i(TAG, "task_conduct_id : " + USER_INFO_ID);
 //                                    getPushBoolean();
                                 } else {
+                                    BtnOneCircleFun(true);
                                     Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -801,6 +805,7 @@ public class TaskReportActivity extends AppCompatActivity {
     }
 
     public void Toast_Nomal(String message) {
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
         TextView toast_textview = layout.findViewById(R.id.toast_textview);
@@ -812,5 +817,10 @@ public class TaskReportActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.bottomBtn.setClickable(tf);
+        binding.bottomBtn.setEnabled(tf);
     }
 }

@@ -285,6 +285,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             binding.select02.setTextColor(Color.parseColor("#ffffff"));
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             if (SaveCheck()) {
                 SaveAddWork();
             }
@@ -837,10 +838,12 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                             if (!user_id.equals("")) {
                                                 SendUserCheck(1);
                                                 if (return_page.equals("TaskCalenderActivity")) {
+                                                    BtnOneCircleFun(true);
                                                     pm.CalenderBack(mContext);
                                                 } else {
                                                     shardpref.putInt("SELECT_POSITION", 1);
                                                     shardpref.putInt("SELECT_POSITION_sub", 0);
+                                                    BtnOneCircleFun(true);
                                                     pm.Main(mContext);
                                                 }
 
@@ -851,13 +854,16 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                         } else {
                                             shardpref.putInt("SELECT_POSITION", 1);
                                             shardpref.putInt("SELECT_POSITION_sub", 0);
+                                            BtnOneCircleFun(true);
                                             pm.Main2(mContext);
                                         }
 
 
                                     } else if (jsonResponse.replace("\"", "").equals("fail") || jsonResponse.replace("\"", "").equals("fail")) {
+                                        BtnOneCircleFun(true);
                                         Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
                                     } else {
+                                        BtnOneCircleFun(true);
                                         Toast.makeText(mContext, "서버입력 오류! 데이터를 입력할 수 없습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -1064,26 +1070,32 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
         if (WorkTitle.equals("")) {
             dlog.i("WorkTitle");
+            BtnOneCircleFun(true);
             Toast.makeText(this, "할일을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else if (WorkContents.isEmpty()) {
             dlog.i("WorkContents");
+            BtnOneCircleFun(true);
             Toast.makeText(this, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else if (TaskKind.isEmpty() && make_kind == 1) {
+            BtnOneCircleFun(true);
             Toast.makeText(this, "완료방법을 선택해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (TaskKind.isEmpty() && make_kind == 4) {
             return true;
         } else if (WorkDay.isEmpty()) {
+            BtnOneCircleFun(true);
             Toast.makeText(this, "업무날짜를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (start_time.equals("-99")) {
             dlog.i("StarTime");
+            BtnOneCircleFun(true);
             Toast.makeText(this, "시작시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (end_time.equals("-99")) {
             dlog.i("StarTime");
+            BtnOneCircleFun(true);
             Toast.makeText(this, "마감시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (user_id.equals("")) {
@@ -1094,14 +1106,17 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                     return true;
                 } else {
                     if (total_member_cnt == 0) {
+                        BtnOneCircleFun(true);
                         Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                         intent.putExtra("data", "등록된 직원이 없습니다. 직원을 추가 후 이용해 주세요.");
                         intent.putExtra("left_btn_txt", "닫기");
                         startActivity(intent);
                         overridePendingTransition(R.anim.translate_up, 0);
                     } else {
+                        BtnOneCircleFun(true);
                         Toast.makeText(this, "업무를 배정할 직원을 선택해주세요.", Toast.LENGTH_SHORT).show();
                     }
+                    BtnOneCircleFun(true);
                     return false;
                 }
 
@@ -1231,6 +1246,11 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         }
     }
     /* -- 할일 추가 FCM 전송 영역 */
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.bottomBtnBox.setClickable(tf);
+        binding.bottomBtnBox.setEnabled(tf);
+    }
 
 
     @Override

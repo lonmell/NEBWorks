@@ -292,8 +292,9 @@ public class MoreFragment extends Fragment {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    TalkApiClient talkApiClient = TalkApiClient.getInstance();
     private void kakaoChannel() {
-        Uri url = TalkApiClient.getInstance().channelChatUrl("_rTkJxj");
+        Uri url = talkApiClient.channelChatUrl("_rTkJxj");
         KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
         instance.openWithDefault(mContext, url);
     }

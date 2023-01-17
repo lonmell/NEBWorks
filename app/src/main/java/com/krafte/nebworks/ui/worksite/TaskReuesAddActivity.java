@@ -267,6 +267,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             binding.select02.setTextColor(Color.parseColor("#ffffff"));
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             if (SaveCheck()) {
                 SaveAddWork();
             }
@@ -754,11 +755,14 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                                     dlog.i("jsonResponse : " + jsonResponse);
                                     if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
+                                        BtnOneCircleFun(true);
                                         pm.TaskReuse(mContext);
                                         RemoveShared();
                                     } else if (jsonResponse.replace("\"", "").equals("fail") || jsonResponse.replace("\"", "").equals("fail")) {
+                                        BtnOneCircleFun(true);
                                         Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
                                     } else {
+                                        BtnOneCircleFun(true);
                                         Toast.makeText(mContext, "서버입력 오류! 데이터를 입력할 수 없습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -923,26 +927,32 @@ public class TaskReuesAddActivity extends AppCompatActivity {
 
         if (WorkTitle.equals("")) {
             dlog.i("WorkTitle");
+            BtnOneCircleFun(true);
             Toast.makeText(this, "할일을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else if (WorkContents.isEmpty()) {
             dlog.i("WorkContents");
+            BtnOneCircleFun(true);
             Toast.makeText(this, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else if (TaskKind.isEmpty() && make_kind == 1) {
+            BtnOneCircleFun(true);
             Toast.makeText(this, "완료방법을 선택해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (TaskKind.isEmpty() && make_kind == 4) {
             return true;
         } else if (WorkDay.isEmpty()) {
+            BtnOneCircleFun(true);
             Toast.makeText(this, "업무날짜를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (start_time.equals("-99")) {
             dlog.i("StarTime");
+            BtnOneCircleFun(true);
             Toast.makeText(this, "시작시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (end_time.equals("-99")) {
             dlog.i("StarTime");
+            BtnOneCircleFun(true);
             Toast.makeText(this, "마감시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -985,6 +995,11 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         shardpref.remove("approval_state");
         shardpref.remove("overdate");
         shardpref.remove("make_kind");
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.bottomBtnBox.setClickable(tf);
+        binding.bottomBtnBox.setEnabled(tf);
     }
 
     @Override
