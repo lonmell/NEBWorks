@@ -182,6 +182,10 @@ public class PinSelectLocationActivity extends AppCompatActivity implements MapV
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
+
+        binding.backBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
     }
 
     public void onResume() {
