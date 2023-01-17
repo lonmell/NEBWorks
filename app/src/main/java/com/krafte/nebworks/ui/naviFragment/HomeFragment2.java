@@ -417,14 +417,20 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                if (kind.equals("-1") || kind.equals("0")) {
-                    if (kind.equals("-1")) {
-                        kind = "0";
-                    } else {
-                        kind = "1";
+                UserCheck();
+                dlog.i("UserCheckData.getInstance().getUser_sieob() : " + UserCheckData.getInstance().getUser_sieob());
+                if(!UserCheckData.getInstance().getUser_sieob().equals("null")){
+                    if (kind.equals("-1") || kind.equals("0")) {
+                        if (kind.equals("-1")) {
+                            kind = "0";
+                        } else {
+                            kind = "1";
+                        }
+                        shardpref.putString("kind", kind);
+                        pm.EmployeeProcess(mContext);
                     }
-                    shardpref.putString("kind", kind);
-                    pm.EmployeeProcess(mContext);
+                }else{
+                    Toast_Nomal("근무시작 시간이 배정되지 않았습니다.");
                 }
             }
         });
@@ -432,8 +438,14 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                shardpref.putString("kind", "1");
-                pm.EmployeeProcess(mContext);
+                UserCheck();
+                if(!UserCheckData.getInstance().getUser_sieob().equals("null")){
+                    shardpref.putString("kind", "1");
+                    pm.EmployeeProcess(mContext);
+                }else{
+                    Toast_Nomal("근무종료 시간이 배정되지 않았습니다.");
+                }
+
             }
         });
         binding.acceptBtn.setOnClickListener(v -> {
@@ -604,8 +616,10 @@ public class HomeFragment2 extends Fragment {
      * 20230105 HomFragment2에서만 한번 사용자 id , 매장 id를 사용해
      * 사용자 정보를 체크, 이후 다른 페이지에서는 Singleton 전역변수로 사용
      * */
+    DBConnection dbc = new DBConnection();
     public void UserCheck() {
         Thread th = new Thread(() -> {
+            dbc.UserCheck(place_id, USER_INFO_ID);
             activity.runOnUiThread(() -> {
                 try {
                     mem_id = UserCheckData.getInstance().getUser_id();

@@ -199,6 +199,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getPlaceData();
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
     }
 
     @Override
@@ -208,7 +209,7 @@ public class HomeFragment extends Fragment {
         shardpref.remove("item_user_id");
         shardpref.remove("item_user_name");
         UserCheck();
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
+
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
         SetAllMemberList();
     }
@@ -444,7 +445,7 @@ public class HomeFragment extends Fragment {
                     dlog.i("getPlaceData place_name : " + place_name);
                     Glide.with(mContext).load(place_img_path)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .placeholder(R.drawable.no_image)
+                            .placeholder(R.drawable.ic_store_icon)
                             .skipMemoryCache(true)
                             .into(binding.storeThumnail);
 
@@ -476,7 +477,11 @@ public class HomeFragment extends Fragment {
     }
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
+        dlog.i("--------PlaceWorkCheck--------");
         dlog.i("PlaceWorkCheck place_id : " + place_id);
+        dlog.i("PlaceWorkCheck auth : " + auth);
+        dlog.i("PlaceWorkCheck kind : " + kind);
+        dlog.i("--------PlaceWorkCheck--------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MainContentsInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -496,14 +501,14 @@ public class HomeFragment extends Fragment {
                             try {
                                 if (!response.body().equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-
+                                    dlog.i("Response length : " + Response.length());
                                     try {
                                         if (kind.equals("0")) {
                                             binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
                                             binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
                                             binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
                                             binding.restCnt.setText(Response.getJSONObject(0).getString("rest_cnt"));
-                                            dlog.i("-----MainData-----");
+                                            dlog.i("-----MainData1-----");
                                             dlog.i("i_cnt : " + Response.getJSONObject(0).getString("i_cnt"));
                                             dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
                                             dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
@@ -515,7 +520,7 @@ public class HomeFragment extends Fragment {
                                             DecimalFormat myFormatter = new DecimalFormat("###,###");
                                             binding.paynum.setText(myFormatter.format(allPay) + "원");
                                             dlog.i("allPay : " + myFormatter.format(allPay));
-                                            dlog.i("-----MainData-----");
+                                            dlog.i("-----MainData1-----");
 
                                             mList = new ArrayList<>();
                                             mAdapter = new MainMemberLAdapter(mContext, mList);

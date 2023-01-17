@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F6F8"
+    android:background="@color/white"
     tools:ignore="UsingOnClickInXml">
 
     <androidx.core.widget.NestedScrollView
@@ -18,292 +18,323 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/place_info"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                app:cardBackgroundColor="#ffffff"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp">
+                android:orientation="vertical">
 
-                <LinearLayout
+                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
+                    android:background="@drawable/home_top_area" />
 
-                    <RelativeLayout
-                        android:id="@+id/item_area"
+                <RelativeLayout
+                    android:id="@+id/place_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_alignParentTop="true">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginEnd="25dp"
+                        android:orientation="vertical">
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/i_o_btn"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="15dp"
-                            android:elevation="10dp"
-                            android:visibility="gone"
-                            app:cardBackgroundColor="@color/blue"
-                            app:cardCornerRadius="60dp"
-                            app:cardElevation="5dp">
-
-                            <ImageView
-                                android:id="@+id/store_thumnail"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="#dcdcdc"
-                                android:scaleType="fitXY" />
-                        </androidx.cardview.widget.CardView>
-
-                        <TextView
-                            android:id="@+id/title"
+                        <RelativeLayout
+                            android:id="@+id/item_area"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_alignTop="@+id/i_o_btn"
-                            android:layout_alignBottom="@+id/i_o_btn"
-                            android:layout_marginEnd="10dp"
-                            android:layout_toStartOf="@+id/place_state"
-                            android:layout_toEndOf="@+id/i_o_btn"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="start|center"
-                            android:maxLines="2"
-                            android:text="STORE NAME"
-                            android:textColor="#000000"
-                            android:textSize="22sp"
-                            tools:ignore="HardcodedText" />
-
-                        <ImageView
-                            android:id="@+id/place_state"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/switching_store" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:background="#ffffff" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="10dp"
-                            android:gravity="center|start"
-                            android:text="직원수"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:id="@+id/member_cnt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="10dp"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center|start"
-                            android:maxLines="1"
-                            android:text="0명"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/start_datetx"
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="10dp"
-                            android:gravity="center|start"
-                            android:text="예상급여"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:id="@+id/paynum"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="10dp"
-                            android:layout_toEndOf="@+id/start_datetx"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center|start"
-                            android:maxLines="1"
-                            android:text="0원"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/goto_place"
-                            android:layout_width="90dp"
                             android:layout_height="40dp"
-                            android:layout_alignTop="@+id/date"
-                            android:layout_alignParentEnd="true"
-                            app:cardBackgroundColor="@color/blue"
-                            app:cardCornerRadius="5dp"
-                            app:cardElevation="0dp">
+                            android:orientation="horizontal">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/i_o_btn"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="15dp"
+                                android:elevation="10dp"
+                                app:cardBackgroundColor="@color/blue"
+                                app:cardCornerRadius="60dp"
+                                app:cardElevation="5dp">
 
-                                <TextView
-                                    android:id="@+id/addMemberBtn"
+                                <ImageView
+                                    android:id="@+id/store_thumnail"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_toStartOf="@+id/move_arrow"
-                                    android:fontFamily="@font/inter_bold"
-                                    android:gravity="center"
-                                    android:text="+직원추가"
-                                    android:textColor="@color/white"
-                                    android:textSize="16sp"
-                                    tools:ignore="HardcodedText,RtlSymmetry" />
-                            </RelativeLayout>
-                        </androidx.cardview.widget.CardView>
-                    </RelativeLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                                    android:background="#dcdcdc"
+                                    android:scaleType="fitXY" />
+                            </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardview01"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/place_info"
-                android:layout_margin="20dp"
-                app:cardBackgroundColor="#ffffff"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/cardview00"
-                app:layout_constraintTop_toBottomOf="@+id/place_info"
-                tools:layout_editor_absoluteX="20dp">
+                            <TextView
+                                android:id="@+id/title"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignTop="@+id/i_o_btn"
+                                android:layout_alignBottom="@+id/i_o_btn"
+                                android:layout_marginEnd="10dp"
+                                android:layout_toStartOf="@+id/place_state"
+                                android:layout_toEndOf="@+id/i_o_btn"
+                                android:fontFamily="@font/gangwonedu_bold"
+                                android:gravity="start|center"
+                                android:maxLines="2"
+                                android:text="STORE NAME"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                tools:ignore="HardcodedText" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
+                            <ImageView
+                                android:id="@+id/place_state"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:background="@drawable/switching_store2" />
+                        </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp">
-
-                        <ImageView
-                            android:id="@+id/important_icon"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentStart="true"
-                            android:background="@drawable/exclamation" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/important_icon"
-                            android:layout_alignBottom="@+id/important_icon"
-                            android:layout_marginStart="15dp"
-                            android:layout_toEndOf="@+id/important_icon"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="center"
-                            android:text="직원 월급 리스트"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/important_icon"
-                            android:layout_alignBottom="@+id/important_icon"
-                            android:layout_alignParentEnd="true"
-                            android:fontFamily="@font/inter_regular"
-                            android:gravity="center"
-                            android:text="더보기 >"
-                            android:textColor="#696969"
-                            android:visibility="invisible" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/add_member_area"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/inter_bold"
-                                android:gravity="center"
-                                android:text="첫 직원을 추가해보세요!"
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="10dp"
+                                android:gravity="center|start"
+                                android:text="직원수"
+                                android:textColor="@color/white"
                                 android:textSize="16sp"
-                                android:textColor="#696969" />
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:id="@+id/member_cnt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="10dp"
+                                android:fontFamily="@font/inter_bold"
+                                android:gravity="center|start"
+                                android:maxLines="1"
+                                android:text="0명"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                tools:ignore="HardcodedText" />
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/start_datetx"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:gravity="center|start"
+                                android:text="예상급여"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:id="@+id/paynum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:layout_toEndOf="@+id/start_datetx"
+                                android:fontFamily="@font/inter_bold"
+                                android:gravity="center|start"
+                                android:maxLines="1"
+                                android:text="0원"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                tools:ignore="HardcodedText" />
 
                             <androidx.cardview.widget.CardView
-                                android:layout_width="198dp"
-                                android:layout_height="35dp"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="10dp"
-                                app:cardBackgroundColor="#C3C3C3"
-                                app:cardCornerRadius="10dp"
+                                android:id="@+id/goto_place"
+                                android:layout_width="68dp"
+                                android:layout_height="28dp"
+                                android:layout_alignTop="@+id/date"
+                                android:layout_alignParentEnd="true"
+                                app:cardBackgroundColor="@color/black"
+                                app:cardCornerRadius="5dp"
                                 app:cardElevation="0dp">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/addMemberBtn"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_toStartOf="@+id/move_arrow"
+                                        android:fontFamily="@font/inter_bold"
+                                        android:gravity="center"
+                                        android:text="+직원추가"
+                                        android:textColor="@color/white"
+                                        android:textSize="13sp"
+                                        tools:ignore="HardcodedText,RtlSymmetry" />
+                                </RelativeLayout>
+                            </androidx.cardview.widget.CardView>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview01"
+                    android:layout_width="match_parent"
+                    android:layout_height="77dp"
+                    android:layout_below="@+id/place_info"
+                    android:layout_margin="20dp"
+                    app:cardBackgroundColor="#ffffff"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
+                    app:layout_constraintBottom_toTopOf="@+id/cardview00"
+                    app:layout_constraintTop_toBottomOf="@+id/place_info"
+                    tools:layout_editor_absoluteX="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp">
+
+                            <ImageView
+                                android:id="@+id/important_icon"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_marginEnd="15dp"
+                                android:background="@drawable/exclamation"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/important_icon"
+                                android:layout_alignBottom="@+id/important_icon"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginBottom="-24dp"
+                                android:layout_toEndOf="@+id/important_icon"
+                                android:fontFamily="@font/gangwonedu_bold"
+                                android:gravity="center"
+                                android:text="중요"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/important_icon"
+                                android:layout_alignBottom="@+id/important_icon"
+                                android:layout_alignParentEnd="true"
+                                android:fontFamily="@font/inter_regular"
+                                android:gravity="center"
+                                android:text="더보기 >"
+                                android:textColor="#696969"
+                                android:visibility="invisible" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="21dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentStart="true"
+                                android:fontFamily="@font/inter_bold"
+                                android:gravity="center"
+                                android:text="급여 이체 0원"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/inter_regular"
+                                android:gravity="center"
+                                android:text="0000.00.00"
+                                android:layout_alignParentEnd="true"
+                                android:textColor="#696969"
+                                android:textSize="15sp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/add_member_area"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter_bold"
                                     android:gravity="center"
-                                    android:text="+ 직원 추가하기"
+                                    android:text="첫 직원을 추가해보세요!"
                                     android:textSize="16sp"
-                                    android:textColor="#ffffff" />
-                            </androidx.cardview.widget.CardView>
-                        </LinearLayout>
-                    </RelativeLayout>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/important_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginTop="10dp"
-                        android:visibility="gone" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                                    android:textColor="#696969" />
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="198dp"
+                                    android:layout_height="35dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="10dp"
+                                    app:cardBackgroundColor="#C3C3C3"
+                                    app:cardCornerRadius="10dp"
+                                    app:cardElevation="0dp">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/inter_bold"
+                                        android:gravity="center"
+                                        android:text="+ 직원 추가하기"
+                                        android:textSize="16sp"
+                                        android:textColor="#ffffff" />
+                                </androidx.cardview.widget.CardView>
+                            </LinearLayout>
+                        </RelativeLayout>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/important_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardview00"
@@ -311,7 +342,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                app:cardBackgroundColor="#ffffff"
+                app:cardBackgroundColor="#EFF4FD"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/cardview02">
@@ -334,14 +365,15 @@
                             android:layout_height="25dp"
                             android:layout_alignParentStart="true"
                             android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:layout_marginEnd="15dp"
                             android:background="@drawable/signs" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
+                            android:fontFamily="@font/gangwonedu_bold"
                             android:gravity="center"
                             android:text="공지"
-                            android:layout_marginStart="15dp"
                             android:textColor="@color/blue"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -372,7 +404,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                app:cardBackgroundColor="#ffffff"
+                app:cardBackgroundColor="#EFF4FD"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/textView8"
@@ -387,17 +419,17 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="45dp">
+                        android:layout_height="wrap_content">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
-                            android:fontFamily="@font/inter_bold"
+                            android:fontFamily="@font/gangwonedu_bold"
                             android:text="출퇴근 현황"
                             android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/detail_inout"
@@ -406,9 +438,9 @@
                             android:layout_alignParentEnd="true"
                             android:fontFamily="@font/inter_regular"
                             android:gravity="center"
-                            android:text="상세보기 >"
-                            android:textColor="#696969"
-                            android:textSize="16sp" />
+                            android:text="0000년 00월 00일 00:00"
+                            android:textColor="#1445D0"
+                            android:textSize="13sp" />
                     </RelativeLayout>
 
                     <LinearLayout
@@ -421,8 +453,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             android:weightSum="4">
@@ -435,8 +465,8 @@
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center"
                                 android:text="출근"
-                                android:textSize="16sp"
-                                android:textColor="#696969" />
+                                android:textSize="20sp"
+                                android:textColor="@color/black" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -446,13 +476,13 @@
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center"
                                 android:text="결근"
-                                android:textSize="16sp"
-                                android:textColor="#696969" />
+                                android:textSize="20sp"
+                                android:textColor="@color/black" />
 
                             <LinearLayout
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#dbdbdb" />
+                                android:background="@color/black" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -462,8 +492,8 @@
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center"
                                 android:text="퇴근"
-                                android:textSize="16sp"
-                                android:textColor="#696969" />
+                                android:textSize="20sp"
+                                android:textColor="@color/black" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -473,15 +503,13 @@
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center"
                                 android:text="휴무"
-                                android:textSize="16sp"
-                                android:textColor="#696969" />
+                                android:textSize="20sp"
+                                android:textColor="@color/black" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             android:weightSum="4">
@@ -492,7 +520,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentEnd="true"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/inter_bold"
+                                android:textSize="20sp"
+                                android:fontFamily="@font/gangwonedu_bold"
                                 android:gravity="center|bottom"
                                 android:text="0"
                                 android:textColor="@color/black" />
@@ -503,7 +532,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentEnd="true"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/inter_bold"
+                                android:textSize="20sp"
+                                android:fontFamily="@font/gangwonedu_bold"
                                 android:gravity="center|bottom"
                                 android:text="0"
                                 android:textColor="@color/red" />
@@ -511,7 +541,7 @@
                             <LinearLayout
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#dbdbdb" />
+                                android:background="@color/black" />
 
                             <TextView
                                 android:id="@+id/out_cnt"
@@ -519,10 +549,11 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentEnd="true"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/inter_bold"
+                                android:textSize="20sp"
+                                android:fontFamily="@font/gangwonedu_bold"
                                 android:gravity="center|bottom"
                                 android:text="0"
-                                android:textColor="#dbdbdb" />
+                                android:textColor="@color/black" />
 
                             <TextView
                                 android:id="@+id/rest_cnt"
@@ -530,20 +561,22 @@
                                 android:layout_height="match_parent"
                                 android:layout_alignParentEnd="true"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/inter_bold"
+                                android:textSize="20sp"
+                                android:fontFamily="@font/gangwonedu_bold"
                                 android:gravity="center|bottom"
                                 android:text="0"
-                                android:textColor="#dbdbdb" />
+                                android:textColor="@color/black" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/all_member_go"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_width="80dp"
+                        android:layout_height="35dp"
                         android:layout_marginTop="20dp"
-                        app:cardBackgroundColor="#f2f2f2"
-                        app:cardCornerRadius="8dp"
+                        android:layout_gravity="end"
+                        app:cardBackgroundColor="#97AEEB"
+                        app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
 
                         <TextView
@@ -551,9 +584,9 @@
                             android:layout_height="match_parent"
                             android:fontFamily="@font/inter_bold"
                             android:gravity="center"
-                            android:text="전체 직원 목록"
-                            android:textSize="16sp"
-                            android:textColor="@color/black" />
+                            android:text="전체 보기"
+                            android:textSize="12sp"
+                            android:textColor="@color/white" />
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -563,10 +596,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="22dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/gangwonedu_bold"
                 android:text="빠른이동"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/bottom_menu"
                 app:layout_constraintStart_toStartOf="@+id/bottom_menu" />
 

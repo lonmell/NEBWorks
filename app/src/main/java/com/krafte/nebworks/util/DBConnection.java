@@ -22,6 +22,7 @@ public class DBConnection {
     private static final String TAG = "DBConnection";
     private final String URL = "http://krafte.net";
 
+    PreferenceHelper shardpref;
     GetResultData resultData = new GetResultData();
     UserCheckData ucd = new UserCheckData();
     PlaceCheckData pcd = new PlaceCheckData();
