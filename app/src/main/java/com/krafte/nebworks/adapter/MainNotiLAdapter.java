@@ -87,7 +87,7 @@ public class MainNotiLAdapter extends RecyclerView.Adapter<MainNotiLAdapter.View
 
     @Override
     public int getItemCount() {
-        return Math.min(mData.size(), 3);
+        return Math.min(mData.size(), 1);
     } // 아이템 뷰를 저장하는 뷰홀더 클래스
 
     public class ViewHolder extends RecyclerView.ViewHolder {
