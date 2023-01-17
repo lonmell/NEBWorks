@@ -525,6 +525,7 @@ public class HomeFragment extends Fragment {
                                             }
                                             DecimalFormat myFormatter = new DecimalFormat("###,###");
                                             binding.paynum.setText(myFormatter.format(allPay) + "원");
+                                            binding.payText.setText("급여 이체 " + myFormatter.format(allPay) + "원");
                                             dlog.i("allPay : " + myFormatter.format(allPay));
                                             dlog.i("-----MainData1-----");
 
