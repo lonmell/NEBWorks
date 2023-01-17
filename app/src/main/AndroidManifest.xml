@@ -41,6 +41,7 @@
 
 <!--    android:fullBackupContent="@xml/backup_rules"-->
     <application
+        android:name=".app.KakaoApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
         tools:replace="android:allowBackup"
