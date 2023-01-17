@@ -604,6 +604,7 @@ public class AddMemberDetail extends AppCompatActivity {
         });
 
         binding.addMemberBtn.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             if (input_kind == 0) {
                 if (SaveCheck() && SaveCheckOtherInfo()) {
                     dlog.i("addMemberBtn SaveCheck 1 : " + SaveCheck());
@@ -1017,6 +1018,7 @@ public class AddMemberDetail extends AppCompatActivity {
     }
 
     public void Toast_Nomal(String message) {
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
         TextView toast_textview = layout.findViewById(R.id.toast_textview);
@@ -1028,5 +1030,10 @@ public class AddMemberDetail extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.addMemberBtn.setClickable(tf);
+        binding.addMemberBtn.setEnabled(tf);
     }
 }

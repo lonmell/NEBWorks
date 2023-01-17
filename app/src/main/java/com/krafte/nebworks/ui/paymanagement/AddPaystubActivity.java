@@ -478,6 +478,7 @@ public class AddPaystubActivity extends AppCompatActivity {
         });
 
         binding.sendPaystub.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             DataCheck();
         });
     }
@@ -549,6 +550,8 @@ public class AddPaystubActivity extends AppCompatActivity {
                         String message = "["+select_user_name+"] 님의 " + select_month.substring(6,8) + "월 급여명세서가 도착했습니다.";
                         getUserToken(select_user_id,"1",message);
                         AddPush("급여명세서",message,select_user_id);
+                    }else{
+                        BtnOneCircleFun(true);
                     }
 
                 }
@@ -663,7 +666,6 @@ public class AddPaystubActivity extends AppCompatActivity {
 
 
 
-    /*직원 전체 리스트 START*/
     public void GetInsurancePercent() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(paymanaInterface.URL)
@@ -725,4 +727,10 @@ public class AddPaystubActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.sendPaystub.setClickable(tf);
+        binding.sendPaystub.setEnabled(tf);
+    }
+
 }

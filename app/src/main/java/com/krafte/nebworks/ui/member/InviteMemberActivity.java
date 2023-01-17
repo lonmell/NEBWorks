@@ -101,9 +101,9 @@ public class InviteMemberActivity extends AppCompatActivity {
             USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
             USER_INFO_PHONE = UserCheckData.getInstance().getUser_phone();
             
-            dlog.i("USER_INFO_NAME = " + USER_INFO_NAME);
-            dlog.i("USER_INFO_PHONE = " + USER_INFO_PHONE);
-            dlog.i("place_name = " + place_name);
+            dlog.i("USER_INFO_NAME      = " + USER_INFO_NAME);
+            dlog.i("USER_INFO_PHONE     = " + USER_INFO_PHONE);
+            dlog.i("place_name          = " + place_name);
             
             //shardpref Area
             shardpref           = new PreferenceHelper(mContext);
@@ -144,13 +144,20 @@ public class InviteMemberActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        BtnOneCircleFun(true);
+    }
 
     private void setBtnEvent() {
         binding.addMemberBtn.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             UserCheck();
         });
 
         binding.addMemberNodata.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
 
@@ -219,6 +226,7 @@ public class InviteMemberActivity extends AppCompatActivity {
                                             + (String.valueOf(mDay).length() == 1 ? "0" + String.valueOf(mDay) : String.valueOf(mDay));
 
                                     dlog.i("ConfrimPlaceMember(id) : " + ConfrimPlaceMember(id));
+
                                     if (ConfrimPlaceMember(id)) {
                                         AddPlaceMember(id, name, phone, "", join_date);
                                     } else {
@@ -538,6 +546,7 @@ public class InviteMemberActivity extends AppCompatActivity {
     }
 
     public void Toast_Nomal(String message) {
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
         TextView toast_textview = layout.findViewById(R.id.toast_textview);
@@ -554,5 +563,13 @@ public class InviteMemberActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.addMemberNodata.setClickable(tf);
+        binding.addMemberNodata.setEnabled(tf);
+
+        binding.addMemberBtn.setClickable(tf);
+        binding.addMemberBtn.setEnabled(tf);
     }
 }

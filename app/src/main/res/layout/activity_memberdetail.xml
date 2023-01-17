@@ -596,7 +596,7 @@
                                     android:layout_marginStart="15dp"
                                     android:fontFamily="@font/inter_regular"
                                     android:gravity="start|center"
-                                    android:text="계약급여 / 근로 일수  = "
+                                    android:text="계약시간 * 근로시간  = "
                                     android:textColor="@color/white"
                                     android:textSize="12sp"
                                     tools:ignore="HardcodedText" />
@@ -652,7 +652,7 @@
                                     android:layout_alignParentEnd="true"
                                     android:layout_marginEnd="15dp"
                                     android:fontFamily="@font/inter_bold"
-                                    android:text="계약급여 0원"
+                                    android:text="계약시급 0원"
                                     android:textColor="@color/white"
                                     android:textSize="12sp"
                                     tools:ignore="HardcodedText" />

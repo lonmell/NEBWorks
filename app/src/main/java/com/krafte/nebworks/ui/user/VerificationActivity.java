@@ -161,6 +161,7 @@ public class VerificationActivity extends AppCompatActivity {
 
 
         binding.getAuthResult.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             UserCheck(1);
         });
 
@@ -325,6 +326,7 @@ public class VerificationActivity extends AppCompatActivity {
         });
 
         binding.tv04.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             dlog.i("-----회원가입-----");
             dlog.i("이름 : " + Uname);
             dlog.i("번호 : " + UPhone);
@@ -532,6 +534,7 @@ public class VerificationActivity extends AppCompatActivity {
                     binding.editConfirmNum.setText(Sms_receiver.receiverNum);
                     binding.confirmNumCounting.setVisibility(View.GONE);
                     myTimer.cancel();
+                    BtnOneCircleFun(true);
                 }
             } else {
                 Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
@@ -546,10 +549,12 @@ public class VerificationActivity extends AppCompatActivity {
             binding.confirmNumCounting.setVisibility(View.GONE);
             Toast_Nomal("인증번호의 유효기간이 만료되었습니다.");
             SND_NUM = "";
+            BtnOneCircleFun(true);
         }
     }
 
     public void Toast_Nomal(String message) {
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
         TextView toast_textview = layout.findViewById(R.id.toast_textview);
@@ -561,5 +566,16 @@ public class VerificationActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.tv04.setClickable(tf);
+        binding.tv04.setEnabled(tf);
+
+        binding.getAuthResult.setClickable(tf);
+        binding.getAuthResult.setEnabled(tf);
+
+        binding.confirmPhoneBtn.setClickable(tf);
+        binding.confirmPhoneBtn.setEnabled(tf);
     }
 }

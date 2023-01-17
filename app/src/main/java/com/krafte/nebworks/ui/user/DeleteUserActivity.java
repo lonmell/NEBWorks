@@ -85,6 +85,7 @@ public class DeleteUserActivity extends AppCompatActivity {
             if(!check){
                 Toast_Nomal("안내사항 확인 동의에 체크해주세요.");
             }else{
+                BtnOneCircleFun(false);
                 Intent intent = new Intent(this, TwoButtonPopActivity.class);
                 intent.putExtra("data", "회원탈퇴 하시겠습니까?\n 모든 정보가 삭제됩니다.");
                 intent.putExtra("flag", "회원탈퇴");
@@ -100,6 +101,7 @@ public class DeleteUserActivity extends AppCompatActivity {
         });
     }
     public void Toast_Nomal(String message) {
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) binding.getRoot().findViewById(R.id.toast_layout));
         TextView toast_textview = layout.findViewById(R.id.toast_textview);
@@ -116,5 +118,11 @@ public class DeleteUserActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.delUser.setClickable(tf);
+        binding.delUser.setEnabled(tf);
+
     }
 }

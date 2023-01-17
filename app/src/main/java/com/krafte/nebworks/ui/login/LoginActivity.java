@@ -195,6 +195,12 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        BtnOneCircleFun(true);
+    }
+
     private void KakaoSetting() {
         keyHash = Utility.INSTANCE.getKeyHash(this);
         dlog.i("SMS에서 사용할 HASH : " + HashCode.getAppSignatures(this));
@@ -207,6 +213,7 @@ public class LoginActivity extends AppCompatActivity {
         KakaoSdk.init(this, getString(R.string.kakao_native_key));
 
         binding.kakaoLoginArea.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             binding.loginAlertText.setVisibility(View.VISIBLE);
             Glide.with(this).load(R.drawable.identificon)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -356,6 +363,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         binding.googleLoginArea.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             Glide.with(this).load(R.drawable.identificon)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(binding.loadingView);
@@ -367,6 +375,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onEvent() {
         binding.buttonOAuthLoginImg.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             int sdkinfo = diu.getDeviceSdk();
             if(sdkinfo > 31){
                 Toast_Nomal("현재 버전에서는 사용할 수 없는 기능입니다.");
@@ -376,6 +385,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.loginBtn.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             String email = binding.deviceNumEdit.getText().toString();
             String pw = binding.pwdEdit.getText().toString();
             LoginCheck(email, pw, "NEB");
@@ -387,9 +397,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.joinBtn.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             pm.JoinBefore(mContext);
         });
         binding.turnPwdChar.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             if (turnvisible == 0) {
                 turnvisible = 1;
                 binding.pwdEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
@@ -402,16 +414,19 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.findEmail.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             shardpref.putString("findkind", "email");
             pm.SearchEmail(mContext);
         });
 
         binding.findPw.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             shardpref.putString("findkind", "password");
             pm.SearchEmail(mContext);
         });
 
         binding.ltdTv.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             clickcnt++;
             if (clickcnt == 3) {
                 clickcnt = 0;
@@ -793,7 +808,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 } else {
                                     if (GET_ACCOUNT_EMAIL.isEmpty()) {
-                                        Toast_Nomal("통신연결이 불안정합니다. 다시 로그인해주세요.");
+                                        Toast_Nomal("이메일을 읽을 수 없습니다.");
                                     } else {
                                         if (!platform.equals("NEB")) {
                                             UserCheck(GET_ACCOUNT_EMAIL);
@@ -1017,6 +1032,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Toast_Nomal(String message) {
+        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
         TextView toast_textview = layout.findViewById(R.id.toast_textview);
@@ -1028,5 +1044,28 @@ public class LoginActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.loginBtn.setClickable(tf);
+        binding.loginBtn.setEnabled(tf);
+
+        binding.joinBtn.setClickable(tf);
+        binding.joinBtn.setEnabled(tf);
+
+        binding.findEmail.setClickable(tf);
+        binding.findEmail.setEnabled(tf);
+
+        binding.findPw.setClickable(tf);
+        binding.findPw.setEnabled(tf);
+
+        binding.naverLogin.setClickable(tf);
+        binding.naverLogin.setEnabled(tf);
+
+        binding.kakaoLoginArea.setClickable(tf);
+        binding.kakaoLoginArea.setEnabled(tf);
+
+        binding.googleLoginArea.setClickable(tf);
+        binding.googleLoginArea.setEnabled(tf);
     }
 }
