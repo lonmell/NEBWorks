@@ -287,6 +287,7 @@ public class FeedAddActivity extends AppCompatActivity {
 
         binding.workSave.setOnClickListener(v -> {
             dlog.i("DataCheck() : " + DataCheck());
+            BtnOneCircleFun(false);
             if (DataCheck()) {
                 AddStroeNoti();
             }
@@ -532,6 +533,7 @@ public class FeedAddActivity extends AppCompatActivity {
                                         SendUserCheck();
                                     }
                                     Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    BtnOneCircleFun(true);
                                     pm.FeedList(mContext);
                                 }
                             } catch (Exception e) {
@@ -564,9 +566,11 @@ public class FeedAddActivity extends AppCompatActivity {
         noti_event_end = binding.eventEndttime.getText().toString();
 
         if (noti_title.isEmpty()) {
+            BtnOneCircleFun(true);
             Toast.makeText(mContext, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (noti_contents.isEmpty()) {
+            BtnOneCircleFun(true);
             Toast.makeText(mContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -906,4 +910,9 @@ public class FeedAddActivity extends AppCompatActivity {
         }
     }
     /* -- 할일 추가 FCM 전송 영역 */
+
+    private void BtnOneCircleFun(boolean tf){
+        binding.workSave.setClickable(tf);
+        binding.workSave.setEnabled(tf);
+    }
 }
