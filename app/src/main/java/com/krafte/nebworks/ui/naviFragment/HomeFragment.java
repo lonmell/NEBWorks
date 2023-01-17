@@ -166,6 +166,12 @@ public class HomeFragment extends Fragment {
             USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
+            String date = dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일 ";
+            binding.payDate.setText(date);
+
+            String[] dateWithTime = dc.GET_TIME.split(" ");
+            binding.detailInout.setText(date + dateWithTime[1]);
+
             //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);
             isAuth    = shardpref.getInt("isAuth", 0);
@@ -297,14 +303,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.detailInout.setOnClickListener(v -> {
-            if (USER_INFO_AUTH.isEmpty()) {
-                isAuth();
-            } else {
-                shardpref.putInt("SELECT_POSITION", 2);
-                pm.Main(mContext);
-            }
-        });
+//        binding.detailInout.setOnClickListener(v -> {
+//            if (USER_INFO_AUTH.isEmpty()) {
+//                isAuth();
+//            } else {
+//                shardpref.putInt("SELECT_POSITION", 2);
+//                pm.Main(mContext);
+//            }
+//        });
 
         binding.addMemberBtn.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {

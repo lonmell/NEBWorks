@@ -269,6 +269,7 @@
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
                             <TextView
+                                android:id="@+id/pay_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:fontFamily="@font/inter_regular"
@@ -376,6 +377,24 @@
                             android:text="공지"
                             android:textColor="@color/blue"
                             android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="end">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="right"
+                                android:fontFamily="@font/gangwonedu_bold"
+                                android:gravity="center"
+                                android:text="전체 보기"
+                                android:textColor="@color/blue"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
                     </LinearLayout>
 
 
