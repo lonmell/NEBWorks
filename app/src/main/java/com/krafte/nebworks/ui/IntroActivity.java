@@ -162,6 +162,11 @@ public class IntroActivity extends AppCompatActivity {
         dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
+
+        Glide.with(this).load(R.raw.neb_loding_whtie)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         initView();
         //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
         FirebaseMessaging.getInstance().subscribeToTopic("NEBWorks").addOnCompleteListener(task -> {
@@ -204,9 +209,6 @@ public class IntroActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
 
-        Glide.with(this).load(R.drawable.identificon)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(binding.loadingView);
         shardpref.putString("USER_LOGIN_METHOD", "Google");
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -318,10 +320,6 @@ public class IntroActivity extends AppCompatActivity {
     private void getKaKaoProfile() {
         UserApiClient.getInstance().me((user, throwable) -> {
             if (user != null) {
-                binding.loginAlertText.setVisibility(View.VISIBLE);
-                Glide.with(this).load(R.drawable.identificon)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true).into(binding.loadingView);
                 shardpref.putString("USER_LOGIN_METHOD", "Kakao");
 
                 Handler handler = new Handler();
@@ -600,7 +598,7 @@ public class IntroActivity extends AppCompatActivity {
         createNotificationChannel();
         getReleaseHashKey();
         Handler handler = new Handler();
-        handler.postDelayed(this::getLastVersion,100); //0.5초 후 인트로 실행
+        handler.postDelayed(this::getLastVersion,1000); //1초 후 인트로 실행
     }
 
     private void getReleaseHashKey() {

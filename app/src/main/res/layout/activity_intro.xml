@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,11 +31,11 @@
 
         <ImageView
             android:id="@+id/loading_view"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="67dp"
+            android:scaleType="fitXY"
             tools:ignore="ContentDescription" />
 
     </RelativeLayout>
