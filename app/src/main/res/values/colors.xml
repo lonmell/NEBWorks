@@ -23,5 +23,9 @@
     <color name="gray">#F5F6F8</color>
     <color name="mainbtn">#FFCD4A</color>
 
+    <color name="new_blue">#1445D0</color>
+    <color name="blue_100">#EFF4FD</color>
+    <color name="blue_500">#1762E6</color>
+
 </resources>
 
