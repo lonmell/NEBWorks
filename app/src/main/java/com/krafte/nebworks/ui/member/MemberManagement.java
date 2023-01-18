@@ -197,7 +197,7 @@ public class MemberManagement extends AppCompatActivity {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        if(!response.body().equals("[]") && Response.length() != 0){
+                        if(!jsonResponse.equals("[]") && Response.length() != 0){
                             String NotRead = Response.getJSONObject(0).getString("notread_feed");
                             if(NotRead.equals("0") || NotRead.isEmpty()){
                                 binding.notiRed.setVisibility(View.INVISIBLE);
@@ -406,7 +406,7 @@ public class MemberManagement extends AppCompatActivity {
                                             if(kind == 1){
                                                 dlog.i("kind : " + kind);
                                                 dlog.i("id : " + getid);
-                                                TaskDel(getid);
+                                                MemDel(getid);
                                             }else if(kind == 2){
                                                 dlog.i("kind : " + kind);
                                                 dlog.i("id : " + getid);
@@ -440,7 +440,7 @@ public class MemberManagement extends AppCompatActivity {
     }
     /*직원 전체 리스트 END*/
 
-    public void TaskDel(String mem_id) {
+    public void MemDel(String mem_id) {
 //        매장 멤버 삭제 (매장에서 나가기, 매장에서 내보내기)
 //        http://krafte.net/kogas/place/delete_member.php?place_id=28&user_id=24
         Retrofit retrofit = new Retrofit.Builder()

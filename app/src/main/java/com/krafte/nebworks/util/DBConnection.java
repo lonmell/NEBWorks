@@ -423,6 +423,7 @@ public class DBConnection {
                         UserCheckData.getInstance().setUser_jongeob(jsonObject.getString("jongeob"));
                         UserCheckData.getInstance().setUser_platform(jsonObject.getString("platform"));
                         UserCheckData.getInstance().setUser_contract_cnt(jsonObject.getString("contract_cnt"));
+                        UserCheckData.getInstance().setUser_contract_id(jsonObject.getString("contract_id"));
                     }
                 }
                 // 연결 끊기

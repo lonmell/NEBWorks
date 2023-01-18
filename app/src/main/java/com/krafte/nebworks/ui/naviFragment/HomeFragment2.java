@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -35,7 +36,6 @@ import com.krafte.nebworks.data.MainTaskData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
-import com.krafte.nebworks.dataInterface.InOutInsertInterface;
 import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
@@ -490,75 +490,30 @@ public class HomeFragment2 extends Fragment {
                 pm.Main2(mContext);
             }
         });
-    }
 
-    private void InOutInsert(String kind) {
-        dlog.i("--------InOutInsert--------");
-        dlog.i("place_id : " + place_id);
-        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("kind - 0출근, 1퇴근 : " + kind);
-        dlog.i("--------InOutInsert--------");
-
-        if (kind.equals("0")) {
-            io_state = "출근";
-        } else {
-            io_state = "퇴근";
-        }
-        binding.state.setText("현재" + io_state + " 중");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(InOutInsertInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        InOutInsertInterface api = retrofit.create(InOutInsertInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID, kind);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        String jsonResponse = rc.getBase64decode(response.body());
-                        dlog.i("jsonResponse length : " + jsonResponse.length());
-                        dlog.i("jsonResponse : " + jsonResponse);
-                        if (jsonResponse.replace("[", "").replace("]", "").replace("\"", "").length() == 0) {
-                            //최초 출근
-
-                        } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
-                            if (response.isSuccessful() && response.body() != null) {
-                                dlog.i("LoginCheck jsonResponse length : " + jsonResponse.length());
-                                dlog.i("LoginCheck jsonResponse : " + jsonResponse);
-                                try {
-                                    if (jsonResponse.replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
-//                                        timer.cancel();
-//                                        Intent intent = new Intent(mContext, InoutPopActivity.class);
-//                                        intent.putExtra("title", io_state + " 처리되었습니다.");
-//                                        intent.putExtra("time", GET_TIME);
-//                                        intent.putExtra("state", "1");
-//                                        intent.putExtra("store_name", place_name);
-//                                        mContext.startActivity(intent);
-//                                        ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                                        if (!place_owner_id.equals(USER_INFO_ID)) {
-//                                            getEmployerToken();
-                                        }
-                                        InOutLogMember();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
+        binding.contractPrint.setOnClickListener(v -> {
+            dlog.i("------contractPrint------");
+            dlog.i("contractPrint contract_id : " + contract_id);
+            dlog.i("------contractPrint------");
+            if(contract_id.equals("0")){
+                Toast_Nomal("작성된 근로계약서가 없습니다.");
+            }else{
+                String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF.php?id="+contract_id;
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
+                startActivity(intent);
             }
         });
+        binding.inoutPrint.setOnClickListener(v -> {
+            dlog.i("------inoutPrint------");
+            dlog.i("inoutPrint USER_INFO_ID : " + USER_INFO_ID);
+            dlog.i("inoutPrint place_id : " + place_id);
+            dlog.i("------inoutPrint------");
+            String Contract_uri = "https://krafte.net/NEBWorks/Commute.php?user_id=" + USER_INFO_ID + "&place_id=" + place_id + "&date=";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
+            startActivity(intent);
+        });
     }
+
     public void getPlaceData() {
         Thread th = new Thread(() -> {
             activity.runOnUiThread(() -> {
@@ -617,6 +572,7 @@ public class HomeFragment2 extends Fragment {
      * 사용자 정보를 체크, 이후 다른 페이지에서는 Singleton 전역변수로 사용
      * */
     DBConnection dbc = new DBConnection();
+    String contract_id = "";
     public void UserCheck() {
         Thread th = new Thread(() -> {
             dbc.UserCheck(place_id, USER_INFO_ID);
@@ -633,22 +589,38 @@ public class HomeFragment2 extends Fragment {
                     mem_jikgup = UserCheckData.getInstance().getUser_jikgup();
                     mem_pay = UserCheckData.getInstance().getUser_pay();
                     jongeob = UserCheckData.getInstance().getUser_jongeob();
-                    shardpref.putString("jongeob",jongeob);
-                    dlog.i("------UserCheck-------");
-                    USER_INFO_ID = mem_id;
-                    dlog.i("프로필 사진 url : " + mem_img_path);
-                    dlog.i("성명 : " + mem_name);
-                    dlog.i("부서 : " + mem_jikgup);
-                    dlog.i("급여 : " + mem_pay);
-                    dlog.i("------UserCheck-------");
+                    String kind = UserCheckData.getInstance().getUser_kind();
+                    contract_id = UserCheckData.getInstance().getUser_contract_id();
 
-                    shardpref.putString("mem_name",mem_name);
-                    if (USER_INFO_AUTH.isEmpty()) {
-                        binding.ioTime.setText("김이름님 오늘도 화이팅하세요!");
-                    } else {
-                        binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
+                    if(kind.equals("4")){
+                        binding.noMemberLine.setVisibility(View.VISIBLE);
+                        binding.memberLine.setVisibility(View.GONE);
+                        binding.payline.setVisibility(View.GONE);
+                        binding.state.setVisibility(View.GONE);
+                        binding.placeState.setVisibility(View.GONE);
+                    }else{
+                        binding.noMemberLine.setVisibility(View.GONE);
+                        binding.memberLine.setVisibility(View.VISIBLE);
+                        binding.payline.setVisibility(View.VISIBLE);
+                        binding.state.setVisibility(View.VISIBLE);
+                        binding.placeState.setVisibility(View.VISIBLE);
+
+                        shardpref.putString("jongeob",jongeob);
+                        dlog.i("------UserCheck-------");
+                        USER_INFO_ID = mem_id;
+                        dlog.i("프로필 사진 url : " + mem_img_path);
+                        dlog.i("성명 : " + mem_name);
+                        dlog.i("부서 : " + mem_jikgup);
+                        dlog.i("급여 : " + mem_pay);
+                        dlog.i("------UserCheck-------");
+
+                        shardpref.putString("mem_name",mem_name);
+                        if (USER_INFO_AUTH.isEmpty()) {
+                            binding.ioTime.setText("김이름님 오늘도 화이팅하세요!");
+                        } else {
+                            binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
+                        }
                     }
-//                                getFCMToken();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

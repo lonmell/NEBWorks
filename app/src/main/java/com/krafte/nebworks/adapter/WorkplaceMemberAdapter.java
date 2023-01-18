@@ -105,6 +105,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 holder.linear03.setVisibility(View.GONE);
                 holder.contract_state.setVisibility(View.GONE);
                 holder.state.setVisibility(View.GONE);
+                holder.list_setting.setVisibility(View.INVISIBLE);
 
                 holder.contract_area_tv.setText("거절");
                 holder.contract_area.setOnClickListener(v -> {
@@ -113,6 +114,23 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     }
                 });
                 holder.add_detail_tv.setText("수락");
+                holder.add_detail.setOnClickListener(v -> {
+                    if (mListener2 != null) {
+                        mListener2.onItemClick(v, position,2);
+                    }
+                });
+            }else if(item.getKind().equals("4")){
+                //퇴직상태
+                holder.linear04.setVisibility(View.VISIBLE);
+                holder.linear01.setVisibility(View.GONE);
+                holder.linear02.setVisibility(View.GONE);
+                holder.linear03.setVisibility(View.VISIBLE);
+                holder.contract_state.setVisibility(View.GONE);
+                holder.contract_area.setVisibility(View.GONE);
+                holder.state.setVisibility(View.GONE);
+                holder.list_setting.setVisibility(View.INVISIBLE);
+                holder.jejik.setText("퇴직"); //-- 퇴직후 보관날짜를 표시할지 회의 필요
+                holder.add_detail_tv.setText("복직");
                 holder.add_detail.setOnClickListener(v -> {
                     if (mListener2 != null) {
                         mListener2.onItemClick(v, position,2);
@@ -160,23 +178,6 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                             holder.jejik.setText(jejikState);
                             holder.jejik.setTextColor(Color.parseColor("#000000"));
                         }
-
-//                        if(item.getWorktime().equals("오전")) {
-//                            holder.state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
-//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-//                        }else if(item.getWorktime().equals("주간")) {
-//                            holder.state.setCardBackgroundColor(Color.parseColor("#44F905"));
-//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-//                        }else if(item.getWorktime().equals("야간")) {
-//                            holder.state.setCardBackgroundColor(Color.parseColor("#1D1D1D"));
-//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-//                        }else if(item.getWorktime().equals("주말")) {
-//                            holder.state.setCardBackgroundColor(Color.parseColor("#FF687A"));
-//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-//                        }else {
-//                            holder.state.setCardBackgroundColor(Color.parseColor("#696969"));
-//                            holder.state_tv.setTextColor(Color.parseColor("#ffffff"));
-//                        }
                         holder.state_tv.setText(item.getWorktime());
                     }
                     holder.add_detail.setVisibility(View.GONE);
@@ -188,12 +189,22 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     if(item.getContract_cnt().equals("1")){
                         holder.contract_state.setCardBackgroundColor(Color.parseColor("#68B0FF"));
                         holder.contract_state_tv.setTextColor(Color.parseColor("#000000"));
-                        holder.contract_state_tv.setText("근로계약서 완료");
+                        holder.contract_state_tv.setText("근로계약서 진행");
                     } else {
-                        holder.contract_state_tv.setText("근로계약서 미완료");
+                        holder.contract_state_tv.setText("근로계약서 미진행");
                     }
                 }
 
+
+                if(USER_INFO_AUTH.equals("0")){
+                    holder.list_setting.setVisibility(View.VISIBLE);
+                    holder.list_setting.setClickable(true);
+                    holder.list_setting.setEnabled(true);
+                }else{
+                    holder.list_setting.setVisibility(View.INVISIBLE);
+                    holder.list_setting.setClickable(false);
+                    holder.list_setting.setEnabled(false);
+                }
 
                 holder.add_detail.setOnClickListener(v -> {
                     shardpref.putString("mem_id",item.getId());
@@ -210,13 +221,6 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     pm.AddMemberDetail(mContext);
                 });
 
-                if(USER_INFO_AUTH.equals("0")){
-                    holder.list_setting.setVisibility(View.VISIBLE);
-                }else{
-                    holder.list_setting.setVisibility(View.INVISIBLE);
-                    holder.list_setting.setClickable(false);
-                    holder.list_setting.setEnabled(false);
-                }
                 holder.list_setting.setOnClickListener(v -> {
                     shardpref.putString("mem_id",item.getId());
                     shardpref.putString("mem_account",item.getAccount());

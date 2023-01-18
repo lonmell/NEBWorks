@@ -137,7 +137,7 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
                                 binding.placeList.setAdapter(mAdapter);
                                 binding.placeList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                 dlog.i("SIZE : " + Response.length());
-                                if (response.body().equals("[]")) {
+                                if (jsonResponse.equals("[]")) {
                                     binding.noData.setVisibility(View.VISIBLE);
                                     dlog.i("SetNoticeListview Thread run! ");
                                     dlog.i("GET SIZE : " + Response.length());

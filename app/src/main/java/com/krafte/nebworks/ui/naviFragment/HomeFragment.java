@@ -505,7 +505,7 @@ public class HomeFragment extends Fragment {
                             dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
                             dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
+                                if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     dlog.i("Response length : " + Response.length());
                                     try {
@@ -534,7 +534,7 @@ public class HomeFragment extends Fragment {
                                             binding.importantList.setAdapter(mAdapter);
                                             binding.importantList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                             dlog.i("SIZE : " + Response.length());
-                                            if (response.body().equals("[]")) {
+                                            if (jsonResponse.equals("[]")) {
                                                 dlog.i("SetNoticeListview Thread run! ");
                                                 dlog.i("GET SIZE : " + Response.length());
                                             } else {
