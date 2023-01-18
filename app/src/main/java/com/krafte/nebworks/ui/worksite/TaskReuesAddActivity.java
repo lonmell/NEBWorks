@@ -708,6 +708,11 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             start_time = getStartDate + " " + starttime;
             end_time = getEndDate + " " + endtime;
         }
+        start_time = start_time.replace("오전", "");
+        start_time = start_time.replace("오후", "");
+
+        end_time = end_time.replace("오전", "");
+        end_time = end_time.replace("오후", "");
 
         dlog.i("make_kind : " + make_kind);
         dlog.i("task_no : " + task_no);
@@ -756,8 +761,9 @@ public class TaskReuesAddActivity extends AppCompatActivity {
                                     if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         BtnOneCircleFun(true);
-                                        pm.TaskReuse(mContext);
+//                                        pm.TaskReuse(mContext);
                                         RemoveShared();
+                                        finish();
                                     } else if (jsonResponse.replace("\"", "").equals("fail") || jsonResponse.replace("\"", "").equals("fail")) {
                                         BtnOneCircleFun(true);
                                         Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
@@ -1017,6 +1023,6 @@ public class TaskReuesAddActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        pm.TaskReuse(mContext);
+//        pm.TaskReuse(mContext);
     }
 }
