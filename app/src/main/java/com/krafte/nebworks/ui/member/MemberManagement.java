@@ -2,6 +2,7 @@ package com.krafte.nebworks.ui.member;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -31,10 +32,12 @@ import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
+import com.krafte.nebworks.dataInterface.GetNotDetailInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
 import com.krafte.nebworks.dataInterface.MemberUpdateBasicInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.ActivityMemberManageBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -143,14 +146,8 @@ public class MemberManagement extends AppCompatActivity {
                 pm.FeedList(mContext);
             });
             binding.backBtn.setOnClickListener(v -> {
-                super.onBackPressed();
-//                shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
-//                shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
-//                if(USER_INFO_AUTH.equals("0")){
-//                    pm.Main(mContext);
-//                }else{
-//                    pm.Main2(mContext);
-//                }
+//                super.onBackPressed();
+                getWorkCnt();
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,14 +157,8 @@ public class MemberManagement extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-//        shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
-//        shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
-//        if(USER_INFO_AUTH.equals("0")){
-//            pm.Main(mContext);
-//        }else{
-//            pm.Main2(mContext);
-//        }
+//        super.onBackPressed();
+        getWorkCnt();
     }
 
 
@@ -178,7 +169,6 @@ public class MemberManagement extends AppCompatActivity {
         setAddBtnSetting();
         getNotReadFeedcnt();
         SetAllMemberList(place_id);
-
     }
 
     @Override
@@ -216,6 +206,66 @@ public class MemberManagement extends AppCompatActivity {
                             }
                         }else{
                             binding.notiRed.setVisibility(View.INVISIBLE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e( "에러 = " + t.getMessage());
+            }
+        });
+    }
+
+    int wccnt = 0;
+    private void getWorkCnt() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(GetNotDetailInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        GetNotDetailInterface api = retrofit.create(GetNotDetailInterface.class);
+        Call<String> call = api.getData(place_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.e("getWorkCnt");
+                dlog.e("response 1: " + response.isSuccessful());
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        for(int i = 0; i < Response.length(); i++){
+                            String workcnt = Response.getJSONObject(i).getString("workcnt");
+                            if(workcnt.equals("0")){
+                                wccnt++;
+                            }
+                        }
+                        dlog.i("wccnt : " + wccnt);
+                        shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+                        shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+                        if(USER_INFO_AUTH.equals("0")){
+                            if(wccnt == 0){
+                                //직원상세정보가 모두 추가되었을 때
+                                pm.Main(mContext);
+                            }else{
+                                //직원상세정보 추가 안한 사람이 있을 때
+                                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                                intent.putExtra("data", "상세정보가 입력되지 않은 직원이 있습니다.");
+                                intent.putExtra("flag", "직원미입력");
+                                intent.putExtra("left_btn_txt", "닫기");
+                                intent.putExtra("right_btn_txt", "뒤로가기");
+                                startActivity(intent);
+                            }
+                        }else{
+                            pm.Main2(mContext);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

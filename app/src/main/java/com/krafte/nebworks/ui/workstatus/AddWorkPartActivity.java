@@ -24,6 +24,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.SelectYoilActivity;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.WorkPartSaveInterface;
 import com.krafte.nebworks.databinding.ActivityAddworkpartBinding;
@@ -84,6 +85,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
     String break_time_get02 = "";
     String diff_break_time_get = "";
     //--매장 정보 수정할때
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -454,6 +456,13 @@ public class AddWorkPartActivity extends AppCompatActivity {
                                     if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
                                         pm.Main2(mContext);
                                     }else if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")){
+                                        if(ReturnPageData.getInstance().getPage().equals("AddMemberDetail")){
+                                            shardpref.putInt("SELECT_POSITION",0);
+                                            shardpref.putInt("SELECT_POSITION_sub",0);
+                                        }else{
+                                            shardpref.putInt("SELECT_POSITION",2);
+                                            shardpref.putInt("SELECT_POSITION_sub",0);
+                                        }
                                         pm.Main(mContext);
                                     }
 //                                    getPartTimeYoil(setYoil);

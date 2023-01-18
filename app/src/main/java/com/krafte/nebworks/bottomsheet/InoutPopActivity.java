@@ -253,7 +253,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                 if(state.equals("4")){
                     dlog.i("setBtnEvent kind : " + kind);
                     if (kind.equals("0")) {
-                        if (getDistance <= 10) {
+                        if (getDistance <= 20) {
                             dlog.i("ssid tf : " + getMySSID.equals(place_wifi_name));
                             if(getMySSID.equals(place_wifi_name)){
                                 InOutInsert();
@@ -264,7 +264,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                             Toast_Nomal("설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.");
                         }
                     } else {
-                        if (getDistance <= 10) {
+                        if (getDistance <= 20) {
                             dlog.i("ssid tf : " + getMySSID.equals(place_wifi_name));
                             if(getMySSID.equals(place_wifi_name)){
                                 InOutInsert();

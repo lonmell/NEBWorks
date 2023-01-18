@@ -85,6 +85,9 @@ public class TwoButtonPopActivity extends Activity {
     String place_id = "";
     String mem_id = "";
 
+    int SELECT_POSITION = 0;
+    int SELECT_POSITION_sub = 0;
+
     //Other
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
@@ -160,6 +163,8 @@ public class TwoButtonPopActivity extends Activity {
         place_id            = shardpref.getString("place_id", "-1");
         mem_id              = shardpref.getString("mem_id","");
         USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
+        SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
+        SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
 
         if (title.equals("알림")) {
             binding.txtText.setVisibility(View.INVISIBLE);
@@ -272,6 +277,10 @@ public class TwoButtonPopActivity extends Activity {
                     KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
                     instance.openWithDefault(mContext, url);
                     pm.AuthSelect(mContext);
+                } else if (flag.equals("직원미입력")) {
+                    shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+                    shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+                    pm.Main(mContext);
                 }
             }catch (Exception e){
                 e.printStackTrace();
