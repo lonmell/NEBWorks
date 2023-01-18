@@ -659,7 +659,7 @@ public class MainFragment extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION",0);
         } else if (view.getId() == R.id.bottom_navigation02) {
             dlog.i("할일 Click!");
-            binding.title.setText("");
+            binding.title.setText("할 일");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION",1);
         } else if (view.getId() == R.id.bottom_navigation03) {
