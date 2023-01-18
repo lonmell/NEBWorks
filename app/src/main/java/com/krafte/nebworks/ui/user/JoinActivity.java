@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.kakao.sdk.common.util.KakaoCustomTabsClient;
 import com.kakao.sdk.talk.TalkApiClient;
@@ -240,24 +241,40 @@ public class JoinActivity extends AppCompatActivity {
 
         binding.selectMan.setOnClickListener(v -> {
             USER_INFO_GENDER = "1";
-            binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
-            binding.manTxt.setBackgroundColor(Color.parseColor("#ffffff"));
-            binding.selectMan.setBackgroundColor(Color.parseColor("#1E90FF"));
+//            binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
+//            binding.manTxt.setBackgroundColor(Color.parseColor("#ffffff"));
+//            binding.selectMan.setBackgroundColor(Color.parseColor("#1E90FF"));
 
-            binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-            binding.womanTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.selectWoman.setBackgroundColor(Color.parseColor("#a9a9a9"));
+            binding.manTxt.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.manTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
+            binding.selectMan.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+
+//            binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+//            binding.womanTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
+//            binding.selectWoman.setBackgroundColor(Color.parseColor("#a9a9a9"));
+
+            binding.womanTxt.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            binding.womanTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+            binding.selectWoman.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
         });
 
         binding.selectWoman.setOnClickListener(v -> {
             USER_INFO_GENDER = "2";
-            binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-            binding.manTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            binding.selectMan.setBackgroundColor(Color.parseColor("#a9a9a9"));
+//            binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+//            binding.manTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
+//            binding.selectMan.setBackgroundColor(Color.parseColor("#a9a9a9"));
 
-            binding.womanTxt.setTextColor(Color.parseColor("#1E90FF"));
-            binding.womanTxt.setBackgroundColor(Color.parseColor("#ffffff"));
-            binding.selectWoman.setBackgroundColor(Color.parseColor("#1E90FF"));
+            binding.womanTxt.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.womanTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
+            binding.selectWoman.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+
+//            binding.womanTxt.setTextColor(Color.parseColor("#1E90FF"));
+//            binding.womanTxt.setBackgroundColor(Color.parseColor("#ffffff"));
+//            binding.selectWoman.setBackgroundColor(Color.parseColor("#1E90FF"));
+
+            binding.manTxt.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            binding.manTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+            binding.selectMan.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
         });
 
         binding.linear03.setOnClickListener(v -> {
