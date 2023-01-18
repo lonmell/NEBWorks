@@ -1,6 +1,5 @@
 package com.krafte.nebworks.ui.main;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -165,7 +164,7 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("GET_TIME : " + simpleDate.format(mDate));
             dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
             dlog.i("거리 : " + getDistance);
-            if (getDistance <= 10 && getMySSID.equals(place_wifi_name)) {
+            if (getDistance <= 20 && getMySSID.equals(place_wifi_name)) {
                 if (kind.equals("0")) {
                     title = "출근처리";
                 } else {

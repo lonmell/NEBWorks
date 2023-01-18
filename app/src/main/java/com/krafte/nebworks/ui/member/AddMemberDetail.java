@@ -23,9 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.GetMemberDetailInterface;
 import com.krafte.nebworks.dataInterface.GetMemberOtherInterface;
+import com.krafte.nebworks.dataInterface.GetNotHourInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberInsertDetail;
 import com.krafte.nebworks.dataInterface.PlaceMemberInsertOther;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
@@ -810,6 +812,7 @@ public class AddMemberDetail extends AppCompatActivity {
     }
 
     private void AddMemberDetail() {
+        mem_pay = mem_pay.replace(",","");
         dlog.i("-----AddMemberDetail------");
         dlog.i("place_id : " + place_id);
         dlog.i("mem_id : " + mem_id);
@@ -839,7 +842,7 @@ public class AddMemberDetail extends AppCompatActivity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("직원정보가 업데이트 되었습니다.");
-                                pm.MemberManagement(mContext);
+                                getWorkCnt();
                             }
                         }
                     });
@@ -1028,6 +1031,57 @@ public class AddMemberDetail extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
         pm.MemberManagement(mContext);
+    }
+
+    int wccnt = 0;
+    private void getWorkCnt() {
+        //직원의 근무현황이 입력되어있지 않을 때
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(GetNotHourInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        GetNotHourInterface api = retrofit.create(GetNotHourInterface.class);
+        Call<String> call = api.getData(place_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.e("getWorkCnt");
+                dlog.e("response 1: " + response.isSuccessful());
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("jsonResponse length : " + jsonResponse.length());
+                    dlog.i("jsonResponse : " + jsonResponse);
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        for(int i = 0; i < Response.length(); i++){
+                            String workcnt = Response.getJSONObject(i).getString("workcnt");
+                            if(workcnt.equals("0")){
+                                wccnt++;
+                            }
+                        }
+                        dlog.i("wccnt : " + wccnt);
+                        if(wccnt == 0){
+                            pm.MemberManagement(mContext);
+                        }else{
+                            shardpref.putString("item_user_id", mem_id);
+                            shardpref.putString("item_user_name", mem_name);
+                            ReturnPageData.getInstance().setPage("AddMemberDetail");
+                            pm.AddWorkPart(mContext);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e( "에러 = " + t.getMessage());
+            }
+        });
     }
 
     public void Toast_Nomal(String message) {

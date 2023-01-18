@@ -9,52 +9,34 @@
 
     <ImageView
         android:id="@+id/intro01"
-        android:layout_width="184dp"
-        android:layout_height="162dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/intro01"
+        android:background="@drawable/ic_intro"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="127dp"
-        android:background="@drawable/intro02"
-        android:layout_marginEnd="-4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <RelativeLayout
         android:id="@+id/login_alert_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#4D000000"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:clickable="false"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/loading_view"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_centerInParent="true"
-            app:cardBackgroundColor="#ffffff"
-            app:cardCornerRadius="120dp"
-            app:cardElevation="0dp">
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="67dp"
+            tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/loading_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                tools:ignore="ContentDescription" />
-        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
