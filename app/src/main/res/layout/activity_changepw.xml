@@ -48,10 +48,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/gangwonedu_bold"
         android:text="새로운 비밀번호를\n입력해주세요."
         android:textColor="#000000"
-        android:textSize="22sp"
+        android:textSize="28sp"
+        android:lineSpacingExtra="5dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/input01"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,10 +73,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_regular"
+            android:fontFamily="@font/pretendard_bold"
             android:text="새로운 비밀번호"
-            android:textColor="#949494"
+            android:textColor="@color/black"
             android:textSize="16sp"
+            android:layout_marginBottom="5dp"
             tools:ignore="TextContrastCheck" />
 
 
@@ -109,10 +111,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_regular"
+            android:fontFamily="@font/pretendard_bold"
             android:text="비밀번호 확인"
-            android:textColor="#949494"
+            android:textColor="@color/black"
             android:textSize="16sp"
+            android:layout_marginBottom="5dp"
             tools:ignore="TextContrastCheck" />
 
 
@@ -152,7 +155,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="27dp"
         android:layout_weight="2"
-        app:cardBackgroundColor="#6395EC"
+        app:cardBackgroundColor="@color/new_blue"
         app:cardCornerRadius="5dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -164,7 +167,7 @@
             android:fontFamily="@font/inter_bold"
             android:gravity="center"
             android:text="비밀번호 변경"
-           android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="16sp"
             tools:ignore="TextContrastCheck" />
     </androidx.cardview.widget.CardView>

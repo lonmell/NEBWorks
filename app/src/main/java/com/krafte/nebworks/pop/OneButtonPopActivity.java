@@ -119,6 +119,11 @@ public class OneButtonPopActivity extends Activity {
                 startActivity(intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            } else if(data.equals("가입하지 않은 사용자입니다.")){
+                intent = new Intent(mContext, JoinActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, R.anim.translate_down);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             }
 //            else{
 //                //데이터 전달하기

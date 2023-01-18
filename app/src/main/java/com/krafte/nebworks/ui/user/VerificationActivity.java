@@ -79,14 +79,6 @@ public class VerificationActivity extends AppCompatActivity {
     String USER_INFO_EMAIL = "";
 
     //사용자 정보 체크
-    String id = "";
-    String name = "";
-    String email = "";
-    String employee_no = "";
-    String department = "";
-    String jikchk = "";
-    String img_path = "";
-    String return_page = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -396,7 +388,12 @@ public class VerificationActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_NAME", Uname);
                                     shardpref.putString("USER_INFO_PHONE", UPhone);
                                     shardpref.putString("USER_LOGIN_METHOD", "NEB");
-                                    pm.Join(mContext);
+//                                    pm.Join(mContext);
+                                    Intent intent = new Intent(mContext, OneButtonPopActivity.class);
+                                    intent.putExtra("data", "가입하지 않은 사용자입니다.");
+                                    intent.putExtra("left_btn_txt", "닫기");
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.translate_up, 0);
                                 }else{
                                     if (Uname.isEmpty()) {
                                         Intent intent = new Intent(mContext, OneButtonPopActivity.class);
@@ -529,8 +526,8 @@ public class VerificationActivity extends AppCompatActivity {
             if (!Sms_receiver.receiverNum.isEmpty()) {
                 if (SND_NUM.equals(Sms_receiver.receiverNum)) {
                     Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
-                    binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#6395EC"));
-                    binding.confirmPhoneBtn.setTextColor(Color.parseColor("#000000"));
+                    binding.confirmPhoneBox.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.confirmPhoneBtn.setTextColor(Color.parseColor("#ffffff"));
                     binding.editConfirmNum.setText(Sms_receiver.receiverNum);
                     binding.confirmNumCounting.setVisibility(View.GONE);
                     myTimer.cancel();

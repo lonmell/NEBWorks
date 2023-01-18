@@ -176,7 +176,6 @@ public class SearchAccountActivity extends AppCompatActivity {
         });
 
         binding.getAuthResult.setOnClickListener(v -> {
-
             if (Uname.isEmpty()) {
                 BtnOneCircleFun(true);
                 Intent intent = new Intent(mContext, OneButtonPopActivity.class);
@@ -206,6 +205,7 @@ public class SearchAccountActivity extends AppCompatActivity {
                 if (Sms_receiver.receiverNum.equals(SND_NUM) && Sms_receiver.receiverNum.equals(binding.editConfirmNum.getText().toString())) {
                     CertiSuccessTF = true;
                     Toast_Nomal("인증번호가 확인되었습니다.");
+                    BtnOneCircleFun(true);
 //                    Toast.makeText(this, "인증번호가 확인되었습니다.", Toast.LENGTH_LONG).show();
                     binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#dcdcdc"));
                     binding.confirmPhoneBtn.setText("인증완료");
@@ -401,12 +401,12 @@ public class SearchAccountActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("UserCheck jsonResponse length : " + response.body().length());
-                            dlog.i("UserCheck jsonResponse : " + response.body());
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
-                                    JSONArray Response = new JSONArray(response.body());
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
                                     String name = Response.getJSONObject(0).getString("name");
                                     String account = Response.getJSONObject(0).getString("account");
@@ -560,8 +560,8 @@ public class SearchAccountActivity extends AppCompatActivity {
             if (!Sms_receiver.receiverNum.isEmpty()) {
                 if (SND_NUM.equals(Sms_receiver.receiverNum)) {
                     Log.i(TAG, "SendConfirmMessage : " + Sms_receiver.receiverNum);
-                    binding.confirmPhoneBtn.setBackgroundColor(Color.parseColor("#6395EC"));
-                    binding.confirmPhoneBtn.setTextColor(Color.parseColor("#000000"));
+                    binding.confirmPhoneBox.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.confirmPhoneBtn.setTextColor(Color.parseColor("#ffffff"));
                     binding.editConfirmNum.setText(Sms_receiver.receiverNum);
                     binding.confirmNumCounting.setVisibility(View.GONE);
                     binding.getAuthResult.setEnabled(false);

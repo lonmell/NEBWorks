@@ -48,10 +48,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/gangwonedu_bold"
+        android:lineSpacingExtra="5dp"
         android:text="본인확인을 위해\n인증을 진행해 주세요."
         android:textColor="#000000"
-        android:textSize="22sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/input01"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,20 +73,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_regular"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/pretendard_black"
             android:text="성명"
-            android:textColor="#949494"
+            android:textColor="@color/black"
             android:textSize="16sp"
             tools:ignore="TextContrastCheck" />
-
 
         <EditText
             android:id="@+id/user_name"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="50dp"
             android:background="@drawable/default_input_round"
             android:fontFamily="@font/applesdgothicneo"
-            android:hint="성명입력"
+            android:hint="이름 입력"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:paddingStart="10dp"
@@ -101,7 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="21dp"
         android:layout_marginEnd="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linear02"
@@ -111,9 +112,9 @@
             android:id="@+id/tv02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_regular"
+            android:fontFamily="@font/pretendard_black"
             android:text="휴대폰번호 입력"
-            android:textColor="#949494"
+            android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/linear01"
             app:layout_constraintTop_toBottomOf="@+id/input01"
@@ -131,12 +132,12 @@
             <EditText
                 android:id="@+id/user_phone"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/default_input_round"
-                android:fontFamily="@font/applesdgothicneo"
-                android:hint="'-'제외 휴대폰 번호"
+                android:fontFamily="@font/pretendard_regular"
+                android:hint="숫자만 입력"
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:paddingStart="10dp"
@@ -149,9 +150,9 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/get_auth_result"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:layout_weight="2"
-                app:cardBackgroundColor="#6395EC"
+                app:cardBackgroundColor="@color/new_blue"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="0dp">
 
@@ -162,7 +163,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:gravity="center"
                     android:text="인증번호 전송"
-                    android:textColor="#000000"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     tools:ignore="TextContrastCheck" />
             </androidx.cardview.widget.CardView>
@@ -180,6 +181,7 @@
         android:weightSum="3"
         app:layout_constraintBottom_toTopOf="@+id/linear03"
         app:layout_constraintTop_toBottomOf="@+id/input04">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -189,9 +191,9 @@
             <EditText
                 android:id="@+id/edit_confirm_num"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:background="@drawable/default_input_round"
-                android:fontFamily="@font/applesdgothicneo"
+                android:fontFamily="@font/pretendard_regular"
                 android:hint="인증번호 입력"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
@@ -206,10 +208,10 @@
                 android:id="@+id/confirm_num_counting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/applesdgothicneo"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
+                android:fontFamily="@font/applesdgothicneo"
                 android:gravity="center|start"
                 android:text="00:00"
                 android:textColor="#d9d9d9"
@@ -220,10 +222,11 @@
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/confirm_phone_box"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="50dp"
             android:layout_weight="2"
-            app:cardBackgroundColor="#f2f2f2"
+            app:cardBackgroundColor="@color/blue_200"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
 
@@ -234,7 +237,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center"
                 android:text="인증번호 확인"
-                android:textColor="#a9a9a9"
+                android:textColor="@color/new_blue"
                 android:textSize="16sp"
                 tools:ignore="TextContrastCheck" />
         </androidx.cardview.widget.CardView>
@@ -248,7 +251,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="20dp"
-        app:cardBackgroundColor="#F5F6F8"
+        app:cardBackgroundColor="@color/blue_100"
         app:cardCornerRadius="5dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/select_area01"
@@ -275,7 +278,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center|start"
                 android:text="본인 인증 서비스 약관 전체동의"
-                android:textColor="#000000" />
+                android:textColor="@color/new_blue" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
@@ -322,7 +325,7 @@
                     android:layout_toEndOf="@+id/service_radio01"
                     android:text="휴대폰 본인 인출 서비스 이용약관동의(필수)"
                     android:textColor="#666666"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 
@@ -333,10 +336,11 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="@string/view_tv"
-                android:textColor="#696969"
-                android:textSize="15sp" />
+                android:textColor="@color/new_blue"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
@@ -372,7 +376,7 @@
                     android:layout_toEndOf="@+id/service_radio02"
                     android:text="휴대폰 통신사 이용약관 동의(필수)"
                     android:textColor="#666666"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 
@@ -384,10 +388,11 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="@string/view_tv"
-                android:textColor="#696969"
-                android:textSize="15sp" />
+                android:textColor="@color/new_blue"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
@@ -418,11 +423,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="11dp"
                     android:layout_toEndOf="@+id/service_radio03"
                     android:text="개인정보 제공 및 이용동의(필수)"
                     android:textColor="#666666"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 
@@ -433,10 +439,11 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="@string/view_tv"
-                android:textColor="#696969"
-                android:textSize="15sp" />
+                android:textColor="@color/new_blue"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
@@ -472,7 +479,7 @@
                     android:layout_toEndOf="@+id/service_radio04"
                     android:text="고유식별정보 처리(필수)"
                     android:textColor="#666666"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     tools:ignore="HardcodedText" />
 
             </RelativeLayout>
@@ -484,10 +491,11 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="@string/view_tv"
-                android:textColor="#696969"
-                android:textSize="15sp" />
+                android:textColor="@color/new_blue"
+                android:textSize="12sp" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -500,7 +508,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="27dp"
         android:layout_weight="2"
-        app:cardBackgroundColor="#6395EC"
+        app:cardBackgroundColor="@color/new_blue"
         app:cardCornerRadius="5dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -512,7 +520,7 @@
             android:fontFamily="@font/inter_bold"
             android:gravity="center"
             android:text="회원가입하기"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="16sp"
             tools:ignore="TextContrastCheck" />
     </androidx.cardview.widget.CardView>

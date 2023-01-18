@@ -36,10 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/applesdgothicneo"
+            android:fontFamily="@font/pretendard_bold"
             android:text="회원가입"
             android:textColor="@color/black"
-            android:textSize="21sp"
+            android:textSize="15sp"
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 
@@ -66,15 +66,47 @@
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@+id/input01"
                 app:layout_constraintTop_toBottomOf="@+id/tv01">
-
-                <TextView
-                    android:id="@+id/tv05"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Email"
-                    android:textColor="#949494"
-                    android:textSize="16sp"
-                    tools:ignore="HardcodedText" />
+                    android:weightSum="3">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+                        <TextView
+                            android:id="@+id/tv05"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="이메일"
+                            android:layout_alignParentStart="true"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/pretendard_bold"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/tv07"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="10dp"
+                            android:visibility="invisible"
+                            android:fontFamily="@font/pretendard_regular"
+                            android:text="사용가능"
+                            android:textColor="@color/new_blue"
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2">
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,25 +117,25 @@
                     <EditText
                         android:id="@+id/input_user_email"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="50dp"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/default_input_round"
-                        android:hint="이메일을 입력하세요"
+                        android:hint="이메일 입력"
                         android:importantForAutofill="no"
                         android:inputType="textEmailAddress"
                         android:paddingStart="10dp"
                         android:paddingEnd="5dp"
                         android:textColor="@color/black"
                         android:textColorHint="#B1B1B1"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="50dp"
                         android:layout_weight="2"
-                        app:cardBackgroundColor="#6395EC"
+                        app:cardBackgroundColor="@color/new_blue"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
 
@@ -111,10 +143,10 @@
                             android:id="@+id/tv06"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:fontFamily="@font/inter_bold"
+                            android:fontFamily="@font/pretendard_bold"
                             android:gravity="center"
                             android:text="중복체크"
-                            android:textColor="#000000"
+                            android:textColor="@color/white"
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
                     </androidx.cardview.widget.CardView>
@@ -138,14 +170,15 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5dp"
                 android:text="비밀번호"
-                android:textColor="#696969"
+                android:textColor="@color/black"
                 android:textSize="16sp"
+                android:fontFamily="@font/pretendard_bold"
                 tools:ignore="HardcodedText" />
 
             <EditText
                 android:id="@+id/edit_pw"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/default_gray_round"
@@ -168,17 +201,6 @@
                 android:layout_marginEnd="15dp"
                 android:textColor="@color/red"
                 android:visibility="gone" />
-            <TextView
-                android:id="@+id/check_validation_txt2"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
-                android:text="@string/check_validation_String"
-                android:textColor="#B1B1B1"
-                android:textSize="12sp" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -188,13 +210,14 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5dp"
                 android:text="비밀번호 확인"
-                android:textColor="#696969"
+                android:textColor="@color/black"
                 android:textSize="16sp"
+                android:fontFamily="@font/pretendard_bold"
                 tools:ignore="HardcodedText" />
             <EditText
                 android:id="@+id/edit_pw_confirm"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/default_gray_round"
@@ -477,8 +500,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="성별"
-                    android:textColor="#696969"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
+                    android:fontFamily="@font/pretendard_bold"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -486,7 +510,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="선택"
-                    android:textColor="#949494"
+                    android:textColor="@color/new_blue"
                     android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
@@ -494,7 +518,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
@@ -506,7 +530,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#f2f2f2">
+                    android:background="#DBDBDB">
 
                     <TextView
                         android:id="@+id/man_txt"
@@ -519,7 +543,7 @@
                         android:background="#ffffff"
                         android:gravity="center"
                         android:text="남자"
-                        android:textColor="#A1887F"
+                        android:textColor="@color/black"
                         android:textSize="22sp"
                         tools:ignore="HardcodedText" />
                 </RelativeLayout>
@@ -529,7 +553,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#f2f2f2">
+                    android:background="#DBDBDB">
 
                     <TextView
                         android:id="@+id/woman_txt"
@@ -542,7 +566,7 @@
                         android:background="#ffffff"
                         android:gravity="center"
                         android:text="여자"
-                        android:textColor="#A1887F"
+                        android:textColor="@color/black"
                         android:textSize="22sp"
                         tools:ignore="HardcodedText" />
                 </RelativeLayout>

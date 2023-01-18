@@ -150,14 +150,14 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="#6395EC"
-                                    android:fontFamily="@font/inter_bold"
                                     android:drawableEnd="@drawable/ic_button_icon"
+                                    android:fontFamily="@font/inter_bold"
                                     android:gravity="start|center"
                                     android:paddingHorizontal="8dp"
                                     android:text="사업장 등록하기"
                                     android:textColor="@color/white"
                                     android:textSize="11sp"
-                                    tools:ignore="DuplicateClickableBoundsCheck" />
+                                    tools:ignore="DuplicateClickableBoundsCheck,TextContrastCheck,TouchTargetSizeCheck" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -255,13 +255,14 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="#6395EC"
-                                    android:fontFamily="@font/inter_bold"
                                     android:drawableEnd="@drawable/ic_button_icon"
+                                    android:fontFamily="@font/inter_bold"
                                     android:gravity="start|center"
                                     android:paddingHorizontal="8dp"
                                     android:text="근무하기"
                                     android:textColor="@color/white"
-                                    android:textSize="11sp" />
+                                    android:textSize="11sp"
+                                    tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
                             </androidx.cardview.widget.CardView>
 

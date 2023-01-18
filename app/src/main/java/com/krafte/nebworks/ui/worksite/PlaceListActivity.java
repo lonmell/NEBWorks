@@ -158,7 +158,7 @@ public class PlaceListActivity extends AppCompatActivity {
         dlog.i("USER_INFO_NAME : " + USER_INFO_NAME);
         dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
         dlog.i("-----onResume-----");
-        if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
+        if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
             GetPlaceList();
             getNotReadFeedcnt();
         }
