@@ -708,6 +708,11 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             start_time = getStartDate + " " + starttime;
             end_time = getEndDate + " " + endtime;
         }
+        start_time = start_time.replace("오전", "");
+        start_time = start_time.replace("오후", "");
+
+        end_time = end_time.replace("오전", "");
+        end_time = end_time.replace("오후", "");
 
         dlog.i("make_kind : " + make_kind);
         dlog.i("task_no : " + task_no);
