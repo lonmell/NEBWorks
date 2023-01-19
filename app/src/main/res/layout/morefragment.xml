@@ -16,7 +16,7 @@
         <RelativeLayout
             android:id="@+id/profile_area"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="64dp"
             android:layout_margin="20dp"
             android:gravity="center"
             android:layout_alignParentTop="true"
@@ -24,8 +24,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/user_profile_box"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 app:cardBackgroundColor="#dbdbdb"
@@ -51,22 +51,22 @@
                     android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/gangwonedu_bold"
                     android:gravity="start|center"
                     android:text="김이름"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="28sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/jikgup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
                     android:gravity="start|center"
                     android:text="미정"
-                    android:textColor="@color/blue"
-                    android:textSize="15sp"
+                    android:textColor="@color/new_blue"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
         </RelativeLayout>
@@ -86,11 +86,11 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:fontFamily="@font/applesdgothicneo"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center|start"
                 android:text="프로필 설정"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:drawableEndCompat="@drawable/ic_page_move_arrow"
                 tools:ignore="HardcodedText" />
 
@@ -107,11 +107,11 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:fontFamily="@font/applesdgothicneo"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center|start"
                 android:text="알림 내역"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:drawableEndCompat="@drawable/ic_page_move_arrow"
                 tools:ignore="HardcodedText" />
 
@@ -127,11 +127,11 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:fontFamily="@font/applesdgothicneo"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center|start"
                 android:text="알림 설정"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:drawableEndCompat="@drawable/ic_page_move_arrow"
                 tools:ignore="HardcodedText" />
 
@@ -147,11 +147,11 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:fontFamily="@font/applesdgothicneo"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center|start"
                 android:text="카톡 채널 추가"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:drawableEndCompat="@drawable/ic_page_move_arrow"
                 tools:ignore="HardcodedText" />
 
@@ -173,11 +173,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    android:fontFamily="@font/applesdgothicneo"
+                    android:fontFamily="@font/pretendard_regular"
                     android:gravity="center|start"
                     android:text="회원탈퇴"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     app:drawableEndCompat="@drawable/ic_page_move_arrow"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
