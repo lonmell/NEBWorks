@@ -64,7 +64,7 @@
                 android:layout_marginTop="23dp"
                 android:layout_marginEnd="20dp"
                 android:padding="5dp"
-                app:cardBackgroundColor="#EFF4FD"
+                app:cardBackgroundColor="@color/new_blue"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="0dp">
 
@@ -84,26 +84,27 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/store_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/inter_bold"
-                            android:gravity="start|center"
-                            android:text="store_name"
-                            android:textColor="@color/black"
-                            android:textSize="17sp"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/store_name"
-                            android:fontFamily="@font/inter_bold"
+                            android:fontFamily="@font/pretendard_bold"
                             android:gravity="start|center"
                             android:text="현재 선택된 매장"
-                            android:textColor="#696969"
+                            android:textColor="@color/white"
                             android:textSize="15sp"
                             tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/store_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gangwonedu_bold"
+                            android:gravity="start|center"
+                            android:text="store_name"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            tools:ignore="HardcodedText" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -137,7 +138,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="29dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="제목"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -170,7 +171,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="내용"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -229,7 +230,7 @@
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/inter_regular"
                     android:text="입력하지 않을 경우 당일로 처리됩니다."
-                    android:textColor="@color/blue"
+                    android:textColor="@color/new_blue"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -289,7 +290,7 @@
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/inter_regular"
                     android:text="입력하지 않을 경우 종일로 처리됩니다."
-                    android:textColor="@color/blue"
+                    android:textColor="@color/new_blue"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -478,7 +479,8 @@
                         android:id="@+id/empty_select_member"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:background="#F5F6F8"
+                        android:background="@color/blue_200"
+                        android:textColor="@color/new_blue"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="start|center"
                         android:paddingStart="15dp"
@@ -599,7 +601,7 @@
                 android:layout_marginTop="201dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="38dp"
-                android:background="@color/blue"
+                android:background="@color/new_blue"
                 android:orientation="horizontal">
 
                 <TextView
@@ -610,7 +612,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:gravity="center"
                     android:text="할일 작성하기"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     tools:ignore="HardcodedText,TextContrastCheck" />
 
             </LinearLayout>

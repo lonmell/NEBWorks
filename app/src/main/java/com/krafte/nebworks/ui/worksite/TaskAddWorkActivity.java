@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -254,7 +255,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         binding.needReport.setOnClickListener(v -> {
             if (!NeedReportTF) {
                 NeedReportTF = true;
-                binding.needReport.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.needReport.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
                 binding.reportVisible.setVisibility(View.VISIBLE);
                 TaskKind = "1";
@@ -271,18 +272,18 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         binding.select01Box.setOnClickListener(v -> {
             TaskKind = "1";
             dlog.i("select01Box click [TaskKind : " + TaskKind + "]");
-            binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
-            binding.select01.setTextColor(Color.parseColor("#ffffff"));
-            binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
             binding.select02.setTextColor(Color.parseColor("#000000"));
         });
         binding.select02Box.setOnClickListener(v -> {
             TaskKind = "0";
             dlog.i("select02Box click [TaskKind : " + TaskKind + "]");
-            binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
             binding.select01.setTextColor(Color.parseColor("#000000"));
-            binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round);
-            binding.select02.setTextColor(Color.parseColor("#ffffff"));
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
             BtnOneCircleFun(false);
@@ -443,7 +444,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             if (!String.valueOf(yoillist).equals("[]")) {
                 RepeatCheck = true;
                 binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
-                binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.selectRepeatBtn.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
                 binding.inputDateBox01.setVisibility(View.GONE);
                 binding.inputDateBox02.setVisibility(View.GONE);

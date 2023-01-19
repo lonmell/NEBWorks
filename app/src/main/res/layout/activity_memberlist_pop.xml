@@ -114,7 +114,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="38dp"
-            android:background="@color/blue"
+            android:background="@color/new_blue"
             android:orientation="horizontal">
 
             <TextView
@@ -125,7 +125,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="center"
                 android:text="추가"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 tools:ignore="HardcodedText,TextContrastCheck" />
 
         </LinearLayout>

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -309,7 +310,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                     binding.taskKind00.setVisibility(View.VISIBLE);
                     binding.taskKind01.setVisibility(View.GONE);
 
-                    binding.taskKind00.setTextColor(Color.parseColor(complete_yn.equals("y")?"#6395EC":"#FF0000"));
+                    binding.taskKind00.setTextColor(Color.parseColor(complete_yn.equals("y")?"#1445D0":"#FF0000"));
                     binding.taskKind00.setText(complete_yn.equals("y")?"완료":"미완료");
                 } else if (TaskKind.equals("1")) {
                     TaskKind = "1";
@@ -329,7 +330,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
 
             //--approval_state -- // 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
             if(approval_state.equals("0") || approval_state.equals("1") || approval_state.equals("3")){
-                binding.approvalState.setTextColor(Color.parseColor("#6395EC"));
+                binding.approvalState.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 if(approval_state.equals("0")){
                     binding.approvalState.setText("결재대기중");
                 }else if(approval_state.equals("1")){

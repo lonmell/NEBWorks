@@ -48,7 +48,7 @@
                 android:id="@+id/certi01"
                 android:layout_width="71dp"
                 android:layout_height="71dp"
-                android:background="@drawable/ic_certi02"
+                android:background="@drawable/icon_report"
                 android:layout_centerVertical="true"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                         android:text="직접 등록하기"
                         android:gravity="center|start"
                         android:textSize="18sp"
-                        android:fontFamily="@font/inter_bold"
+                        android:fontFamily="@font/gangwonedu_bold"
                         android:textColor="@color/black"/>
                 <TextView
                     android:id="@+id/selecttv01_1"
@@ -76,7 +76,7 @@
                     android:layout_weight="1"
                     android:text="직원정보를 입력해 직접 등록합니다"
                     android:gravity="top|start"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
                     android:textSize="15sp"
                     android:textColor="#a9a9a9"/>
             </LinearLayout>
@@ -95,7 +95,7 @@
             android:layout_width="71dp"
             android:layout_height="71dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/ic_certi02" />
+            android:background="@drawable/contact_icon" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
                 android:text="초대하기"
                 android:gravity="center|start"
                 android:textSize="18sp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/gangwonedu_bold"
                 android:textColor="@color/black"/>
             <TextView
                 android:id="@+id/selecttv02_1"
@@ -122,7 +122,7 @@
                 android:layout_weight="1"
                 android:text="직원을 초대해 기본정보를 입력합니다"
                 android:gravity="top|start"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/pretendard_regular"
                 android:textSize="15sp"
                 android:textColor="#a9a9a9"/>
         </LinearLayout>

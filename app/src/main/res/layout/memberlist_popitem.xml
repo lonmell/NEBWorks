@@ -44,7 +44,7 @@
                 android:textSize="16sp"
                 android:gravity="center|start"
                 android:textColor="@color/black"
-                android:fontFamily="@font/inter_bold" />
+                android:fontFamily="@font/gangwonedu_bold" />
             <TextView
                 android:id="@+id/jikgup"
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:textSize="15sp"
                 android:gravity="center|start"
                 android:textColor="#54585A"
-                android:fontFamily="@font/inter_bold" />
+                android:fontFamily="@font/pretendard_bold" />
         </LinearLayout>
         <TextView
             android:id="@+id/confirm_date"
