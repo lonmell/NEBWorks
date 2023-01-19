@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:text="공지사항"
             android:textColor="#000000"
@@ -77,10 +77,10 @@
                         android:layout_gravity="end"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
-                        android:fontFamily="@font/inter_regular"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="start|center"
                         android:text="0000-00-00"
-                        android:textColor="@color/black"
+                        android:textColor="@color/new_blue"
                         android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
@@ -91,11 +91,12 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
-                        android:fontFamily="@font/inter_bold"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/gangwonedu_bold"
                         android:gravity="start|center"
                         android:text="feed_title"
                         android:textColor="@color/black"
-                        android:textSize="22sp"
+                        android:textSize="24sp"
                         tools:ignore="HardcodedText" />
 
 
@@ -130,7 +131,7 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="10dp"
                             android:layout_toEndOf="@+id/profile_area"
-                            android:fontFamily="@font/inter_regular"
+                            android:fontFamily="@font/pretendard_regular"
                             android:gravity="start|center"
                             android:text="이름"
                             android:textColor="@color/black"
@@ -151,7 +152,7 @@
                                 android:text="수정"
                                 android:textColor="#696969"
                                 android:padding="5dp"
-                                android:fontFamily="@font/inter_regular"
+                                android:fontFamily="@font/pretendard_regular"
                                 tools:ignore="HardcodedText" />
                             <TextView
                                 android:id="@+id/del_go"
@@ -161,7 +162,7 @@
                                 android:layout_marginStart="15dp"
                                 android:textColor="#696969"
                                 android:padding="5dp"
-                                android:fontFamily="@font/inter_regular"
+                                android:fontFamily="@font/pretendard_regular"
                                 tools:ignore="HardcodedText" />
                         </LinearLayout>
                     </RelativeLayout>
@@ -194,6 +195,7 @@
                                 android:gravity="top|start"
                                 android:padding="10dp"
                                 android:text="내용"
+                                android:fontFamily="@font/pretendard_regular"
                                 android:textColor="#000000"
                                 android:textSize="16sp"
                                 tools:ignore="HardcodedText,SpeakableTextPresentCheck,TextContrastCheck" />
@@ -207,7 +209,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/inter_bold"
+                        android:fontFamily="@font/pretendard_bold"
                         android:text="링크"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -244,6 +246,7 @@
                                     android:layout_height="19dp"
                                     android:layout_gravity="center"
                                     android:layout_marginStart="15dp"
+                                    android:backgroundTint="@color/new_blue"
                                     android:background="@drawable/link" />
 
                                 <TextView
@@ -292,7 +295,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="확인"
                     android:textColor="@color/black"
                     android:textSize="18sp"
@@ -304,9 +307,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="0명"
-                    android:textColor="#6395EC"
+                    android:textColor="@color/new_blue"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />

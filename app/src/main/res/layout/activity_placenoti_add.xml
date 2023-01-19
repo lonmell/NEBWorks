@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="제목"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -114,6 +114,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:fontFamily="@font/pretendard_bold"
                 android:background="@drawable/default_gray_round"
                 android:hint="제목을 입력해주세요"
                 android:importantForAutofill="no"
@@ -132,7 +133,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="내용"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -145,6 +146,7 @@
                 android:layout_height="271dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:fontFamily="@font/pretendard_regular"
                 android:background="@drawable/default_gray_round"
                 android:gravity="start|top"
                 android:hint="내용 입력"
@@ -170,7 +172,7 @@
                     android:id="@+id/textView5"
                     android:layout_width="33dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="기간"
                     android:textColor="@color/black"
                     android:textSize="16sp"
@@ -182,9 +184,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
                     android:text="입력할 경우 [이벤트] 로 표시됩니다."
-                    android:textColor="#8EB3FC"
+                    android:textColor="@color/new_blue"
                     android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
@@ -205,7 +207,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_toStartOf="@+id/event_starttv"
-                        app:cardBackgroundColor="#F5F6F8"
+                        app:cardBackgroundColor="@color/blue_200"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
 
@@ -224,13 +226,14 @@
                                 android:hint="시작일"
                                 android:paddingStart="15dp"
                                 android:paddingEnd="15dp"
-                                android:textColor="@color/black"
-                                android:textColorHint="#a9a9a9" />
+                                android:textColor="@color/new_blue"
+                                android:textColorHint="@color/new_blue" />
                             <ImageView
                                 android:id="@+id/start_calendar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/calendar_resize"
+                                android:backgroundTint="@color/new_blue"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginEnd="15dp"/>
@@ -245,7 +248,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/inter_regular"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="center"
                         android:text="부터"
                         android:textColor="@color/black" />
@@ -261,7 +264,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_toStartOf="@+id/event_endttv"
-                        app:cardBackgroundColor="#F5F6F8"
+                        app:cardBackgroundColor="@color/blue_200"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
                         <RelativeLayout
@@ -279,13 +282,14 @@
                                 android:hint="시작일"
                                 android:paddingStart="15dp"
                                 android:paddingEnd="15dp"
-                                android:textColor="@color/black"
-                                android:textColorHint="#a9a9a9" />
+                                android:textColor="@color/new_blue"
+                                android:textColorHint="@color/new_blue" />
                             <ImageView
                                 android:id="@+id/end_calendar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/calendar_resize"
+                                android:backgroundTint="@color/new_blue"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginEnd="15dp"/>
@@ -299,7 +303,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/inter_regular"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="center"
                         android:text="까지"
                         android:textColor="@color/black" />
@@ -313,7 +317,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="링크"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -351,7 +355,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="매장사진"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -429,12 +433,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#6395EC"
+                    android:background="@color/new_blue"
                     android:fontFamily="@font/inter_bold"
                     android:gravity="center"
                     android:text="공지 작성하기"
                     android:textColor="#ffffff"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText,TextContrastCheck" />
 

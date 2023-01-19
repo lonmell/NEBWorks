@@ -67,7 +67,7 @@ public class FeedListActivity extends AppCompatActivity {
     RetrofitConnect rc = new RetrofitConnect();
     int listitemsize = 0;
     String feed_spinner = "";
-    int spinner_i = 0;
+    int spinner_i = 2;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -107,8 +107,10 @@ public class FeedListActivity extends AppCompatActivity {
         stringCategory1.add("오름차순");
         stringCategory1.add("내림차순");
 
-        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory1);
+        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.color_spinner_layout, stringCategory1);
+        select_filter1.setDropDownViewResource(R.layout.dropdown_item_list);
         binding.feedSpinner.setAdapter(select_filter1);
+        binding.feedSpinner.setSelection(2);
         binding.feedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @SuppressLint("LongLogTag")
             @Override
