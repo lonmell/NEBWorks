@@ -60,10 +60,10 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="임시저장"
-                    android:textColor="#8F9191"
+                    android:textColor="@color/new_blue"
                     android:textSize="15sp"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
@@ -72,13 +72,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/gangwonedu_bold"
                 android:gravity="start|center"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:text="기본정보"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="28sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
 
@@ -154,10 +154,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="start|center"
                     android:text="매장명"
-                    android:textColor="#949494"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -170,7 +170,7 @@
                     android:background="@drawable/default_input_round"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="start|center"
-                    android:hint="매장명입력"
+                    android:hint="매장명 입력"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:maxEms="10"
@@ -179,7 +179,7 @@
                     android:paddingEnd="5dp"
                     android:textColor="#696969"
                     android:textColorHint="#a9a9a9"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
             </LinearLayout>
@@ -197,17 +197,18 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="start|center"
                     android:text="사업자등록번호"
-                    android:textColor="#949494"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
 
                     <EditText
                         android:id="@+id/inputbox02"
@@ -219,7 +220,7 @@
                         android:background="@drawable/default_input_round"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
-                        android:hint="'-'제외 사업자 번호"
+                        android:hint="숫자만 입력"
                         android:importantForAutofill="no"
                         android:inputType="number"
                         android:maxEms="12"
@@ -238,7 +239,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:padding="10dp"
-                        app:cardBackgroundColor="#f2f2f2"
+                        app:cardBackgroundColor="@color/blue_200"
                         app:cardCornerRadius="8dp">
 
                         <TextView
@@ -249,7 +250,7 @@
                             android:fontFamily="@font/inter_bold"
                             android:gravity="center"
                             android:text="중복확인"
-                            android:textColor="#54585A"
+                            android:textColor="@color/new_blue"
                             android:textSize="16sp"
                             tools:ignore="HardcodedText" />
                     </androidx.cardview.widget.CardView>
@@ -280,10 +281,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="매장분류"
-                    android:textColor="#949494"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -308,12 +309,16 @@
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:id="@+id/place_kind_down_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_margin="15dp"
-                        android:background="@drawable/down_arrow" />
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/down_arrow_gray" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -336,10 +341,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_regular"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="center"
                         android:text="주소입력"
-                        android:textColor="#949494"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
@@ -347,6 +352,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
                         app:cardBackgroundColor="#f2f2f2"
                         app:cardCornerRadius="10dp"
                         app:cardElevation="0dp">
@@ -377,7 +383,7 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentEnd="true"
                             android:padding="10dp"
-                            app:cardBackgroundColor="#f2f2f2"
+                            app:cardBackgroundColor="@color/blue_200"
                             app:cardCornerRadius="8dp">
 
                             <TextView
@@ -388,7 +394,7 @@
                                 android:fontFamily="@font/inter_bold"
                                 android:gravity="center"
                                 android:text="주소검색"
-                                android:textColor="#54585A"
+                                android:textColor="@color/new_blue"
                                 android:textSize="16sp"
                                 tools:ignore="HardcodedText" />
                         </androidx.cardview.widget.CardView>
@@ -398,7 +404,7 @@
                         android:id="@+id/inputbox04_1"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="12dp"
                         android:background="@drawable/default_input_round"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="start|center"
@@ -425,13 +431,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="50dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/gangwonedu_bold"
                 android:gravity="start|center"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:text="상세정보"
+                android:text="공통 상세 정보"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="28sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
 
@@ -447,10 +453,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="급여정산일"
-                    android:textColor="#949494"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -486,7 +492,8 @@
                         android:layout_centerVertical="true"
                         android:gravity="center"
                         android:text="일"
-                        android:textColor="#949494"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/pretendard_bold"
                         android:textSize="16sp" />
                 </RelativeLayout>
 
@@ -505,10 +512,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="수습기간"
-                    android:textColor="#949494"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -546,7 +553,8 @@
                         android:layout_centerVertical="true"
                         android:gravity="center"
                         android:text="일"
-                        android:textColor="#949494"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/pretendard_bold"
                         android:textSize="16sp" />
                 </RelativeLayout>
             </LinearLayout>
@@ -564,10 +572,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="휴가기간"
-                    android:textColor="#949494"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -624,10 +632,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="보험"
-                    android:textColor="#949494"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -636,6 +644,7 @@
                     android:id="@+id/boheomarea01"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/default_input_round"
                     android:orientation="horizontal">
 
@@ -655,12 +664,12 @@
                         android:id="@+id/boheomtv_01"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:fontFamily="@font/inter_regular"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="start|center"
                         android:paddingStart="8dp"
                         android:paddingEnd="1dp"
                         android:text="4대보험"
-                        android:textColor="#a9a9a9"
+                        android:textColor="#949494"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                 </LinearLayout>
@@ -689,12 +698,12 @@
                         android:id="@+id/boheomtv_02"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:fontFamily="@font/inter_regular"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="start|center"
                         android:paddingStart="8dp"
                         android:paddingEnd="1dp"
                         android:text="3.3%소득세"
-                        android:textColor="#a9a9a9"
+                        android:textColor="#949494"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                 </LinearLayout>
@@ -723,12 +732,12 @@
                         android:id="@+id/boheomtv_03"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:fontFamily="@font/inter_regular"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="start|center"
                         android:paddingStart="8dp"
                         android:paddingEnd="1dp"
                         android:text="없음"
-                        android:textColor="#a9a9a9"
+                        android:textColor="#949494"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
                 </LinearLayout>
@@ -754,10 +763,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="주 운영시간"
-                    android:textColor="#949494"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -786,19 +795,17 @@
                             android:textSize="16sp" />
                     </androidx.cardview.widget.CardView>
 
-
-                    <ImageView
+                    <TextView
                         android:id="@+id/inputbox_inside"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:alpha="0.4"
-                        android:background="@drawable/left_arrow_resize"
                         android:gravity="center"
-                        android:rotation="180"
-                        android:textColor="#000000" />
+                        android:text="~"
+                        android:textSize="14sp"
+                        android:textColor="#949494" />
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/inputbox09box"
@@ -838,17 +845,17 @@
                 android:layout_height="55dp"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="20dp"
-                app:cardBackgroundColor="#6395EC"
+                app:cardBackgroundColor="@color/new_blue"
                 app:cardCornerRadius="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="저장하기"
-                    android:textColor="#000000"
-                    android:textSize="22sp"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText,TextContrastCheck" />
 
             </androidx.cardview.widget.CardView>
