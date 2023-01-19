@@ -48,8 +48,8 @@
                 android:paddingBottom="5dp">
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_area"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     app:cardBackgroundColor="#dcdcdc"
                     android:layout_alignParentStart="true"
                     android:layout_marginEnd="15dp"
@@ -75,10 +75,10 @@
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@+id/item_notify_readyn"
                     android:layout_toEndOf="@+id/profile_area"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="매장이름"
                     android:textColor="#000"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     tools:ignore="HardcodedText" />
                 <LinearLayout
                     android:id="@+id/read_yn"
@@ -103,13 +103,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/item_notify_name"
                     android:layout_alignStart="@+id/item_notify_name"
-                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@+id/item_notify_time"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
                     android:gravity="center|start"
                     android:text="매장주소"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
                     android:textColor="#696969"
                     tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
 
@@ -125,7 +124,7 @@
                     android:gravity="center|end"
                     android:text="00:00"
                     android:textColor="#696969"
-                    android:textSize="15sp"
+                    android:textSize="10sp"
                     tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
