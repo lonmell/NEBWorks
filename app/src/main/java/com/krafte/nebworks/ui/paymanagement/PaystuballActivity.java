@@ -158,12 +158,11 @@ public class PaystuballActivity extends AppCompatActivity {
         if(USER_INFO_AUTH.equals("0")){
             binding.resendBtn.setText("급여명세서 재발송");
         }else{
-            binding.resendBtn.setText("확인");
-            binding.resendBtn.setOnClickListener(v -> {
-                super.onBackPressed();
-            });
+            binding.resendBtn.setText("목록으로");
         }
-
+        binding.resendBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
     }
 
     private void DataCheck(){

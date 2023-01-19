@@ -21,6 +21,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.bottomsheet.SelectYoilActivity;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
@@ -114,7 +115,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
 
             //shardpref Area
             i_cnt           = shardpref.getString("i_cnt", "0");
-
+            change_place_id = place_id;
 
             binding.storeName.setText(place_name);
             binding.memCnt.setText("총 " + i_cnt + "명 근무 중");
@@ -190,7 +191,24 @@ public class AddWorkPartActivity extends AppCompatActivity {
     boolean SELECTTIME02 = false; // 휴식시간 false - 시작시간 / true - 종료시간
     String GetTime = "";
     List<String> resultYoil = new ArrayList<>();
+    String change_place_id = "";
+    String change_place_name = "";
+    String change_place_owner_id = "";
+
     private void setBtnEvent() {
+        binding.placeChangeArea.setOnClickListener(v -> {
+            PlaceListBottomSheet plb = new PlaceListBottomSheet();
+            plb.show(getSupportFragmentManager(), "PlaceListBottomSheet");
+            plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
+                change_place_id = place_id;
+                change_place_name = place_name;
+                change_place_owner_id = place_owner_id;
+                shardpref.putString("change_place_id", place_id);
+                shardpref.putString("change_place_name", place_name);
+                shardpref.putString("change_place_owner_id", place_owner_id);
+                binding.storeName.setText(place_name);
+            });
+        });
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });
@@ -435,7 +453,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkPartSaveInterface api = retrofit.create(WorkPartSaveInterface.class);
-        Call<String> call = api.getData(place_id, user_id, setYoil.replace("[", "").replace("]", ""), total_work_time_get, sieob_get, jong_eob_get, break_time_get01, break_time_get02, diff_break_time_get);
+        Call<String> call = api.getData(change_place_id, user_id, setYoil.replace("[", "").replace("]", ""), total_work_time_get, sieob_get, jong_eob_get, break_time_get01, break_time_get02, diff_break_time_get);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

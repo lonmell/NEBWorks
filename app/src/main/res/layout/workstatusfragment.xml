@@ -103,11 +103,13 @@
                                     android:layout_height="50dp"
                                     android:layout_below="@+id/place_status"
                                     android:layout_marginStart="20dp"
+                                    android:layout_marginTop="15dp"
                                     android:layout_marginEnd="20dp">
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_centerHorizontal="true"
                                         android:orientation="horizontal"
                                         android:visibility="visible">
 
@@ -118,10 +120,10 @@
                                             android:gravity="center|start">
 
                                             <ImageView
-                                                android:layout_width="20dp"
-                                                android:layout_height="20dp"
-                                                android:background="@drawable/find_right_arrow"
-                                                android:rotation="-180" />
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:background="@drawable/down_arrow_blue"
+                                                android:rotation="90" />
                                         </RelativeLayout>
 
                                         <TextView
@@ -133,8 +135,8 @@
                                             android:fontFamily="@font/pretendard_bold"
                                             android:gravity="center"
                                             android:text="0000년 00월 00일"
-                                            android:textSize="15sp"
-                                            android:textColor="@color/black" />
+                                            android:textColor="@color/black"
+                                            android:textSize="15sp" />
 
                                         <RelativeLayout
                                             android:id="@+id/next_date"
@@ -143,9 +145,10 @@
                                             android:gravity="center|end">
 
                                             <ImageView
-                                                android:layout_width="20dp"
-                                                android:layout_height="20dp"
-                                                android:background="@drawable/find_right_arrow" />
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:background="@drawable/down_arrow_blue"
+                                                android:rotation="-90" />
                                         </RelativeLayout>
                                     </LinearLayout>
 
@@ -327,13 +330,74 @@
                             android:orientation="vertical"
                             android:elevation="0dp"
                             android:padding="10dp">
+                            <RelativeLayout
+                                android:id="@+id/title_area"
+                                android:layout_width="match_parent"
+                                android:layout_height="55dp"
+                                android:layout_below="@+id/top_bar"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp">
 
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_toStartOf="@+id/change_place"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_alignParentStart="true"
+                                        android:fontFamily="@font/pretendard_bold"
+                                        android:gravity="start|center"
+                                        android:text="관리중인 근무"
+                                        android:textColor="@color/black"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/change_place"
+                                    android:layout_width="121dp"
+                                    android:layout_height="36dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    app:cardBackgroundColor="@color/blue_200"
+                                    app:cardCornerRadius="5dp"
+                                    app:cardElevation="0dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent">
+
+                                        <TextView
+                                            android:id="@+id/select_place"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginStart="10dp"
+                                            android:fontFamily="@font/pretendard_bold"
+                                            android:gravity="start|center"
+                                            android:text="매장선택"
+                                            android:textColor="@color/new_blue" />
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginEnd="15dp"
+                                            android:background="@drawable/ic_page_move_arrow"
+                                            android:rotation="90" />
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+                            </RelativeLayout>
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/place_status"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
-                                app:cardBackgroundColor="#F5F6F8"
+                                app:cardBackgroundColor="@color/blue_100"
                                 android:layout_marginStart="20dp"
                                 android:layout_marginEnd="20dp"
                                 android:layout_marginBottom="20dp"
@@ -348,30 +412,38 @@
 
                                     <RelativeLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="40dp">
+                                        android:layout_height="wrap_content">
 
                                         <TextView
                                             android:id="@+id/inout_name"
                                             android:layout_width="wrap_content"
                                             android:layout_height="match_parent"
                                             android:layout_alignParentStart="true"
-                                            android:layout_marginStart="15dp"
                                             android:fontFamily="@font/pretendard_bold"
                                             android:gravity="center"
-                                            android:text="오늘의 출퇴근"
-                                            android:textSize="16sp"
-                                            android:textColor="@color/black" />
+                                            android:text="오늘의 근무"
+                                            android:textColor="@color/new_blue"
+                                            android:textSize="16sp" />
 
-                                        <TextView
-                                            android:id="@+id/task_more"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
+                                        <androidx.cardview.widget.CardView
+                                            android:id="@+id/all_member_go"
+                                            android:layout_width="69dp"
+                                            android:layout_height="26dp"
+                                            android:layout_gravity="end"
                                             android:layout_alignParentEnd="true"
-                                            android:fontFamily="@font/inter_regular"
-                                            android:gravity="center"
-                                            android:visibility="invisible"
-                                            android:text="더보기 >"
-                                            android:textColor="#696969" />
+                                            app:cardBackgroundColor="#97AEEB"
+                                            app:cardCornerRadius="5dp"
+                                            app:cardElevation="0dp">
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:fontFamily="@font/inter_bold"
+                                                android:gravity="center"
+                                                android:text="전체 보기"
+                                                android:textSize="12sp"
+                                                android:textColor="@color/white" />
+                                        </androidx.cardview.widget.CardView>
                                     </RelativeLayout>
 
                                     <LinearLayout
@@ -397,7 +469,7 @@
                                                 android:gravity="center"
                                                 android:text="근무중"
                                                 android:textSize="15sp"
-                                                android:textColor="#696969" />
+                                                android:textColor="@color/new_blue" />
 
                                             <TextView
                                                 android:layout_width="match_parent"
@@ -408,7 +480,7 @@
                                                 android:gravity="center"
                                                 android:text="미출근"
                                                 android:textSize="15sp"
-                                                android:textColor="#696969" />
+                                                android:textColor="@color/new_blue" />
 
                                             <LinearLayout
                                                 android:layout_width="1dp"
@@ -424,7 +496,7 @@
                                                 android:gravity="center"
                                                 android:text="퇴근"
                                                 android:textSize="15sp"
-                                                android:textColor="#696969" />
+                                                android:textColor="@color/new_blue" />
 
                                             <TextView
                                                 android:layout_width="match_parent"
@@ -435,7 +507,7 @@
                                                 android:gravity="center"
                                                 android:text="휴무"
                                                 android:textSize="15sp"
-                                                android:textColor="#696969" />
+                                                android:textColor="@color/new_blue" />
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -455,7 +527,7 @@
                                                 android:gravity="center|bottom"
                                                 android:text="0"
                                                 android:textSize="15sp"
-                                                android:textColor="@color/black" />
+                                                android:textColor="@color/new_blue" />
 
                                             <TextView
                                                 android:id="@+id/cnt02"
@@ -484,7 +556,7 @@
                                                 android:gravity="center|bottom"
                                                 android:text="0"
                                                 android:textSize="15sp"
-                                                android:textColor="#dbdbdb" />
+                                                android:textColor="@color/new_blue" />
 
                                             <TextView
                                                 android:id="@+id/cnt04"
@@ -496,7 +568,7 @@
                                                 android:gravity="center|bottom"
                                                 android:text="0"
                                                 android:textSize="15sp"
-                                                android:textColor="#dbdbdb" />
+                                                android:textColor="@color/new_blue" />
                                         </LinearLayout>
                                     </LinearLayout>
 

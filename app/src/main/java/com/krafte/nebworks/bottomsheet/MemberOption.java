@@ -51,7 +51,7 @@ public class MemberOption extends BottomSheetDialogFragment {
         setBtnEvent();
         Log.i(TAG, "data : " + data);
         binding.certi01.setBackgroundResource(R.drawable.ic_pencil_icon);
-        binding.certi01.setBackgroundResource(R.drawable.ic_mail_icon);
+        binding.certi02.setBackgroundResource(R.drawable.ic_mail_icon);
 
         return binding.getRoot();
     }

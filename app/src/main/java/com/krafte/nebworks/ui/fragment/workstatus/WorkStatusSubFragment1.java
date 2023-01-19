@@ -59,6 +59,7 @@ public class WorkStatusSubFragment1 extends Fragment {
     String USER_INFO_AUTH = "";
     String place_id = "";
     String place_owner_id = "";
+    String change_place_id = "";
 
     //Other
     ArrayList<WorkStatusTapData.WorkStatusTapData_list> mList;
@@ -120,6 +121,7 @@ public class WorkStatusSubFragment1 extends Fragment {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
             place_id = PlaceCheckData.getInstance().getPlace_id();
             place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
+            change_place_id = place_id;
 
             //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);
@@ -147,12 +149,21 @@ public class WorkStatusSubFragment1 extends Fragment {
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("FtoDay");
+        shardpref.remove("change_place_id");
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);
         toDay = shardpref.getString("FtoDay",toDay);
+        change_place_id = shardpref.getString("change_place_id","").isEmpty()?PlaceCheckData.getInstance().getPlace_id():shardpref.getString("change_place_id","");
+        dlog.i("change_place_id :"  + change_place_id);
         SetAllMemberList();
     }
 
@@ -163,13 +174,18 @@ public class WorkStatusSubFragment1 extends Fragment {
     /*직원 전체 리스트 START*/
     public void SetAllMemberList() {
         total_member_cnt = 0;
+        dlog.i("------SetAllMemberList------");
+        dlog.i("change_place_id :"  + change_place_id);
+        dlog.i("USER_INFO_ID :"     + USER_INFO_ID);
+        dlog.i("toDay :"            + toDay);
+        dlog.i("------SetAllMemberList------");
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(WorkStatusTapInterface.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             WorkStatusTapInterface api = retrofit.create(WorkStatusTapInterface.class);
-            Call<String> call = api.getData(place_id,USER_INFO_ID,"",toDay);
+            Call<String> call = api.getData(change_place_id,USER_INFO_ID,"",toDay);
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -212,6 +228,13 @@ public class WorkStatusSubFragment1 extends Fragment {
                                 if (Response.length() == 0) {
                                     binding.nodataArea.setVisibility(View.VISIBLE);
                                     binding.allMemberlist.setVisibility(View.GONE);
+                                    binding.nodataArea.setOnClickListener(v -> {
+                                        if (USER_INFO_AUTH.isEmpty()) {
+                                            isAuth();
+                                        } else {
+                                            pm.AddWorkPart(mContext);
+                                        }
+                                    });
                                 } else {
                                     binding.nodataArea.setVisibility(View.GONE);
                                     binding.allMemberlist.setVisibility(View.VISIBLE);
@@ -249,7 +272,7 @@ public class WorkStatusSubFragment1 extends Fragment {
                                                 shardpref.putString("mem_name", mList.get(position).getName());
                                                 shardpref.putString("remote", "workhour");
                                                 Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
-                                                intent.putExtra("place_id", place_id);
+                                                intent.putExtra("place_id", change_place_id);
                                                 intent.putExtra("user_id", mList.get(position).getId());
                                                 mContext.startActivity(intent);
                                                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);

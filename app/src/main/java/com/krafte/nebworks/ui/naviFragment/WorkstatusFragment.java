@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
+import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.bottomsheet.WorkstatusBottomSheet;
 import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.PlaceCheckData;
@@ -157,6 +158,7 @@ public class WorkstatusFragment extends Fragment {
                 }
             }
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+            SELECT_POSITION = 1;
             fg = WorkStatusSubFragment1.newInstance();
             setBtnEvent();
             setAddBtnSetting();
@@ -176,6 +178,7 @@ public class WorkstatusFragment extends Fragment {
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+            SELECT_POSITION = 1;
             fg = WorkStatusSubFragment1.newInstance();
             setChildFragment(fg);
         } else if (SELECT_POSITION_sub == 1) {
@@ -183,6 +186,7 @@ public class WorkstatusFragment extends Fragment {
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+            SELECT_POSITION = 2;
             fg = WorkStatusSubFragment2.newInstance();
             setChildFragment(fg);
         } else if (SELECT_POSITION_sub == 2) {
@@ -190,6 +194,7 @@ public class WorkstatusFragment extends Fragment {
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+            SELECT_POSITION = 3;
             fg = WorkStatusSubFragment3.newInstance();
             setChildFragment(fg);
         } else if (SELECT_POSITION_sub == 3) {
@@ -197,6 +202,7 @@ public class WorkstatusFragment extends Fragment {
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            SELECT_POSITION = 4;
             fg = WorkStatusSubFragment4.newInstance();
             setChildFragment(fg);
         }
@@ -382,6 +388,7 @@ public class WorkstatusFragment extends Fragment {
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                SELECT_POSITION = 1;
                 fg = WorkStatusSubFragment1.newInstance();
                 setChildFragment(fg);
             }
@@ -394,6 +401,7 @@ public class WorkstatusFragment extends Fragment {
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                SELECT_POSITION = 2;
                 fg = WorkStatusSubFragment2.newInstance();
                 setChildFragment(fg);
             }
@@ -406,6 +414,7 @@ public class WorkstatusFragment extends Fragment {
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                SELECT_POSITION = 3;
                 fg = WorkStatusSubFragment3.newInstance();
                 setChildFragment(fg);
             }
@@ -418,6 +427,7 @@ public class WorkstatusFragment extends Fragment {
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                SELECT_POSITION = 4;
                 fg = WorkStatusSubFragment4.newInstance();
                 setChildFragment(fg);
             }
@@ -505,7 +515,6 @@ public class WorkstatusFragment extends Fragment {
             }
         });
 
-        binding.taskMore.setVisibility(View.INVISIBLE);
         if (USER_INFO_AUTH.isEmpty()) {
             // dummy
             binding.inoutName.setText("나의 매장 출퇴근");
@@ -525,6 +534,35 @@ public class WorkstatusFragment extends Fragment {
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
             }
+        });
+
+        binding.selectPlace.setText(place_name);
+        binding.changePlace.setTag(place_name);
+
+        binding.changePlace.setOnClickListener(v -> {
+            PlaceListBottomSheet plb = new PlaceListBottomSheet();
+            plb.show(getChildFragmentManager(),"PlaceListBottomSheet");
+            plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
+                shardpref.putString("change_place_id",place_id);
+                dlog.i("change_place_id : " + place_id);
+                binding.selectPlace.setText(place_name);
+                binding.changePlace.setTag(place_name);
+                SetCalenderData(Year, Month);
+                PlaceWorkCheck(place_id);
+                if(SELECT_POSITION == 1){
+                    fg = WorkStatusSubFragment1.newInstance();
+                    setChildFragment(fg);
+                } else  if(SELECT_POSITION == 2){
+                    fg = WorkStatusSubFragment2.newInstance();
+                    setChildFragment(fg);
+                } else  if(SELECT_POSITION == 3){
+                    fg = WorkStatusSubFragment3.newInstance();
+                    setChildFragment(fg);
+                } else  if(SELECT_POSITION == 4){
+                    fg = WorkStatusSubFragment4.newInstance();
+                    setChildFragment(fg);
+                }
+            });
         });
     }
 
@@ -599,7 +637,7 @@ public class WorkstatusFragment extends Fragment {
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
-        addbtn_tv.setText("근무설정");
+        addbtn_tv.setText("근무추가");
         add_worktime_btn.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();

@@ -22,13 +22,13 @@
                 android:id="@+id/top_bar"
                 android:layout_width="match_parent"
                 android:layout_height="59dp"
-                android:background="@color/blue">
+                android:background="@color/new_blue">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="직원상세"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -69,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/top_bar"
-                android:background="@color/blue"
+                android:background="@color/new_blue"
                 android:orientation="vertical">
 
                 <FrameLayout
@@ -146,17 +146,32 @@
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
                                                             android:layout_alignParentStart="true"
-                                                            android:fontFamily="@font/pretendard_bold"
+                                                            android:fontFamily="@font/gangwonedu_bold"
                                                             android:text="오늘의 업무"
-                                                            android:textColor="@color/black" />
+                                                            android:layout_centerVertical="true"
+                                                            android:textColor="@color/new_blue"
+                                                            android:textSize="15sp" />
 
-                                                        <TextView
-                                                            android:layout_width="wrap_content"
-                                                            android:layout_height="wrap_content"
+                                                        <androidx.cardview.widget.CardView
+                                                            android:id="@+id/all_task_go"
+                                                            android:layout_width="69dp"
+                                                            android:layout_height="26dp"
+                                                            android:layout_gravity="end"
                                                             android:layout_alignParentEnd="true"
-                                                            android:fontFamily="@font/inter_regular"
-                                                            android:text="더보기 >"
-                                                            android:textColor="#696969" />
+                                                            app:cardBackgroundColor="#97AEEB"
+                                                            app:cardCornerRadius="5dp"
+                                                            app:cardElevation="0dp">
+
+                                                            <TextView
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="match_parent"
+                                                                android:fontFamily="@font/inter_bold"
+                                                                android:gravity="center"
+                                                                android:text="전체 보기"
+                                                                android:textSize="12sp"
+                                                                android:textColor="@color/white" />
+                                                        </androidx.cardview.widget.CardView>
+
                                                     </RelativeLayout>
 
                                                     <LinearLayout
@@ -181,7 +196,7 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center"
                                                                 android:text="완료"
-                                                                android:textColor="#696969" />
+                                                                android:textColor="@color/new_blue" />
 
                                                             <TextView
                                                                 android:layout_width="match_parent"
@@ -191,12 +206,12 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center"
                                                                 android:text="미완료"
-                                                                android:textColor="#696969" />
+                                                                android:textColor="@color/new_blue" />
 
                                                             <LinearLayout
                                                                 android:layout_width="1dp"
                                                                 android:layout_height="match_parent"
-                                                                android:background="#dbdbdb" />
+                                                                android:background="@color/new_blue" />
 
                                                             <TextView
                                                                 android:layout_width="match_parent"
@@ -206,7 +221,7 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center"
                                                                 android:text="요청"
-                                                                android:textColor="#696969" />
+                                                                android:textColor="@color/new_blue" />
 
                                                             <TextView
                                                                 android:layout_width="match_parent"
@@ -216,7 +231,7 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center"
                                                                 android:text="승인"
-                                                                android:textColor="#696969" />
+                                                                android:textColor="@color/new_blue" />
 
                                                             <TextView
                                                                 android:layout_width="match_parent"
@@ -226,7 +241,7 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center"
                                                                 android:text="반려"
-                                                                android:textColor="#696969" />
+                                                                android:textColor="@color/new_blue" />
                                                         </LinearLayout>
 
                                                         <LinearLayout
@@ -245,7 +260,7 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center|bottom"
                                                                 android:text="0"
-                                                                android:textColor="@color/black" />
+                                                                android:textColor="@color/new_blue" />
 
                                                             <TextView
                                                                 android:id="@+id/workdata02"
@@ -261,7 +276,7 @@
                                                             <LinearLayout
                                                                 android:layout_width="1dp"
                                                                 android:layout_height="match_parent"
-                                                                android:background="#dbdbdb" />
+                                                                android:background="@color/new_blue" />
 
                                                             <TextView
                                                                 android:id="@+id/workdata03"
@@ -272,7 +287,7 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center|bottom"
                                                                 android:text="0"
-                                                                android:textColor="#dbdbdb" />
+                                                                android:textColor="@color/new_blue" />
 
                                                             <TextView
                                                                 android:id="@+id/workdata04"
@@ -283,7 +298,7 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center|bottom"
                                                                 android:text="0"
-                                                                android:textColor="#dbdbdb" />
+                                                                android:textColor="@color/new_blue" />
 
                                                             <TextView
                                                                 android:id="@+id/workdata05"
@@ -294,7 +309,7 @@
                                                                 android:fontFamily="@font/pretendard_bold"
                                                                 android:gravity="center|bottom"
                                                                 android:text="0"
-                                                                android:textColor="#dbdbdb" />
+                                                                android:textColor="@color/new_blue" />
                                                         </LinearLayout>
                                                     </LinearLayout>
 
@@ -375,6 +390,7 @@
                                                         android:layout_marginEnd="10dp"
                                                         android:drawableStart="@drawable/ic_printed"
                                                         android:gravity="center"
+                                                        android:textColor="@color/new_blue"
                                                         android:text="월 출결표 출력"
                                                         android:textSize="12sp" />
                                                 </androidx.cardview.widget.CardView>
@@ -434,7 +450,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/blue"
+                            android:background="@color/new_blue"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -463,6 +479,7 @@
                                             android:id="@+id/profile_img"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
+                                            android:background="@drawable/certi02"
                                             android:scaleType="fitXY" />
 
                                     </androidx.cardview.widget.CardView>
@@ -476,27 +493,46 @@
 
                                     <TextView
                                         android:id="@+id/name"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
-                                        android:layout_toStartOf="@+id/work_state_area"
-                                        android:fontFamily="@font/pretendard_bold"
+                                        android:fontFamily="@font/gangwonedu_bold"
                                         android:gravity="start|center"
                                         android:text="name"
                                         android:textColor="@color/white"
-                                        android:textSize="22sp"
+                                        android:textSize="28sp"
                                         android:textStyle="bold"
                                         tools:ignore="HardcodedText" />
+
+                                    <LinearLayout
+                                        android:id="@+id/work_state_area"
+                                        android:layout_width="60dp"
+                                        android:layout_height="30dp"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_toEndOf="@+id/name"
+                                        android:gravity="center">
+
+                                        <TextView
+                                            android:id="@+id/work_state"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="19dp"
+                                            android:layout_gravity="center"
+                                            android:fontFamily="@font/pretendard_bold"
+                                            android:gravity="center"
+                                            android:text="미출근"
+                                            android:background="@color/white"
+                                            android:textColor="@color/new_blue"
+                                            android:textSize="11sp"
+                                            tools:ignore="HardcodedText" />
+                                    </LinearLayout>
 
                                     <TextView
                                         android:id="@+id/place_nametv"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_above="@+id/join_datetv"
                                         android:layout_below="@+id/name"
                                         android:layout_alignStart="@+id/name"
-                                        android:layout_alignEnd="@+id/name"
-                                        android:fontFamily="@font/inter_regular"
+                                        android:fontFamily="@font/pretendard_regular"
                                         android:gravity="start|center"
                                         android:text="store_name"
                                         android:textColor="@color/white"
@@ -509,9 +545,8 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_alignStart="@+id/name"
-                                        android:layout_alignEnd="@+id/name"
-                                        android:layout_alignParentBottom="true"
-                                        android:fontFamily="@font/inter_regular"
+                                        android:fontFamily="@font/pretendard_regular"
+                                        android:layout_below="@+id/place_nametv"
                                         android:gravity="start|center"
                                         android:text="0000.00.00"
                                         android:textColor="@color/white"
@@ -519,26 +554,19 @@
                                         android:textStyle="bold"
                                         tools:ignore="HardcodedText" />
 
-                                    <androidx.cardview.widget.CardView
-                                        android:id="@+id/work_state_area"
-                                        android:layout_width="60dp"
-                                        android:layout_height="30dp"
-                                        android:layout_alignParentEnd="true"
-                                        app:cardBackgroundColor="@color/white"
-                                        app:cardCornerRadius="14dp"
-                                        app:cardElevation="0dp">
+                                        <RelativeLayout
+                                            android:id="@+id/mem_option"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            android:layout_alignParentEnd="true">
 
-                                        <TextView
-                                            android:id="@+id/work_state"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:fontFamily="@font/inter_regular"
-                                            android:gravity="center"
-                                            android:text=""
-                                            android:textColor="@color/blue"
-                                            android:textSize="16sp"
-                                            tools:ignore="HardcodedText" />
-                                    </androidx.cardview.widget.CardView>
+                                            <ImageView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_centerInParent="true"
+                                                android:alpha="0.7"
+                                                android:background="@drawable/ic_mem_option" />
+                                        </RelativeLayout>
                                 </RelativeLayout>
                             </LinearLayout>
 
@@ -551,13 +579,13 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:layout_width="70dp"
+                                    android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/pretendard_bold"
                                     android:gravity="start|center"
                                     android:text="계약급여"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="16sp"
                                     tools:ignore="HardcodedText" />
 
                                 <TextView
@@ -565,11 +593,11 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="15dp"
-                                    android:fontFamily="@font/inter_regular"
+                                    android:fontFamily="@font/pretendard_bold"
                                     android:gravity="start|center"
                                     android:text="work_pay"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="16sp"
                                     tools:ignore="HardcodedText" />
                             </LinearLayout>
 
@@ -581,24 +609,24 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:layout_width="70dp"
+                                    android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/pretendard_bold"
                                     android:gravity="start|center"
                                     android:text="실제 예상급여"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="16sp"
                                     tools:ignore="HardcodedText" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="15dp"
-                                    android:fontFamily="@font/inter_regular"
+                                    android:fontFamily="@font/pretendard_bold"
                                     android:gravity="start|center"
                                     android:text="계약시간 * 근로시간  = "
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="16sp"
                                     tools:ignore="HardcodedText" />
 
                                 <TextView
@@ -610,7 +638,7 @@
                                     android:gravity="start|center"
                                     android:text="0원"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="16sp"
                                     tools:ignore="HardcodedText" />
                             </LinearLayout>
 
@@ -641,7 +669,7 @@
                                     android:fontFamily="@font/pretendard_bold"
                                     android:text="실제 예상급여 0원"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="16sp"
                                     tools:ignore="HardcodedText" />
 
                                 <TextView
@@ -654,7 +682,7 @@
                                     android:fontFamily="@font/pretendard_bold"
                                     android:text="계약시급 0원"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp"
+                                    android:textSize="16sp"
                                     tools:ignore="HardcodedText" />
 
                                 <LinearLayout
@@ -681,12 +709,22 @@
                                         <RelativeLayout
                                             android:id="@+id/user_call"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent">
+                                            android:layout_height="match_parent"
+                                            android:padding="5dp">
+
+                                            <ImageView
+                                                android:id="@+id/phone_icon"
+                                                android:layout_width="25dp"
+                                                android:layout_height="26dp"
+                                                android:layout_centerVertical="true"
+                                                android:layout_marginStart="8dp"
+                                                android:background="@drawable/ic_phone_blue" />
 
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_marginStart="10dp"
+                                                android:layout_toEndOf="@+id/phone_icon"
                                                 android:layout_toStartOf="@+id/arrwo1"
                                                 android:orientation="vertical">
 
@@ -696,9 +734,9 @@
                                                     android:layout_height="match_parent"
                                                     android:layout_weight="1"
                                                     android:fontFamily="@font/pretendard_bold"
-                                                    android:gravity="start|bottom"
+                                                    android:gravity="center|start"
                                                     android:text="전화걸기"
-                                                    android:textColor="@color/black"
+                                                    android:textColor="@color/new_blue"
                                                     android:textSize="15sp" />
 
                                                 <TextView
@@ -707,20 +745,21 @@
                                                     android:layout_height="match_parent"
                                                     android:layout_weight="1"
                                                     android:fontFamily="@font/pretendard_bold"
-                                                    android:gravity="start|top"
-                                                    android:text=""
-                                                    android:textColor="@color/blue"
-                                                    android:textSize="15sp" />
+                                                    android:gravity="center|start"
+                                                    android:text="010-0000-0000"
+                                                    android:textColor="@color/new_blue"
+                                                    android:textSize="12sp" />
                                             </LinearLayout>
 
                                             <ImageView
                                                 android:id="@+id/arrwo1"
-                                                android:layout_width="20dp"
-                                                android:layout_height="20dp"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
                                                 android:layout_alignParentEnd="true"
                                                 android:layout_centerVertical="true"
                                                 android:layout_marginEnd="10dp"
-                                                android:background="@drawable/find_right_arrow" />
+                                                android:background="@drawable/down_arrow_blue"
+                                                android:rotation="-90" />
                                         </RelativeLayout>
                                     </androidx.cardview.widget.CardView>
 
@@ -730,7 +769,7 @@
                                         android:layout_height="50dp"
                                         android:layout_marginStart="5dp"
                                         android:layout_weight="1"
-                                        app:cardBackgroundColor="@color/white"
+                                        app:cardBackgroundColor="@color/red_100"
                                         app:cardCornerRadius="6dp"
                                         app:cardElevation="0dp">
 
@@ -738,10 +777,19 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent">
 
+                                            <ImageView
+                                                android:id="@+id/contract_icon"
+                                                android:layout_width="25dp"
+                                                android:layout_height="26dp"
+                                                android:layout_centerVertical="true"
+                                                android:layout_marginStart="12dp"
+                                                android:background="@drawable/ic_contract_icon" />
+
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_marginStart="10dp"
+                                                android:layout_toEndOf="@+id/contract_icon"
                                                 android:layout_toStartOf="@+id/arrwo2"
                                                 android:orientation="vertical">
 
@@ -752,7 +800,7 @@
                                                     android:fontFamily="@font/pretendard_bold"
                                                     android:gravity="start|bottom"
                                                     android:text="근로계약서 작성"
-                                                    android:textColor="@color/black"
+                                                    android:textColor="@color/red_600"
                                                     android:textSize="15sp" />
 
                                                 <TextView
@@ -762,19 +810,19 @@
                                                     android:layout_weight="1"
                                                     android:fontFamily="@font/pretendard_bold"
                                                     android:gravity="start|top"
-                                                    android:text=""
-                                                    android:textColor="@color/red"
+                                                    android:text="미처리"
+                                                    android:textColor="@color/red_600"
                                                     android:textSize="15sp" />
                                             </LinearLayout>
 
                                             <ImageView
                                                 android:id="@+id/arrwo2"
-                                                android:layout_width="20dp"
-                                                android:layout_height="20dp"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
                                                 android:layout_alignParentEnd="true"
                                                 android:layout_centerVertical="true"
                                                 android:layout_marginEnd="10dp"
-                                                android:background="@drawable/find_right_arrow" />
+                                                android:background="@drawable/ic_red_arrow" />
                                         </RelativeLayout>
                                     </androidx.cardview.widget.CardView>
                                 </LinearLayout>

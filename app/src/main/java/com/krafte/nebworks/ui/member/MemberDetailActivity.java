@@ -440,7 +440,7 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     /*업무카운팅 START*/
 
-    /*직원 전체 리스트 START*/
+    /*직원 정보 START*/
     String workpay = "";
     String CallNum = "";
     public void SetAllMemberList(String place_id, String user_id) {
@@ -466,12 +466,19 @@ public class MemberDetailActivity extends AppCompatActivity {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
                             if(Response.length() != 0){
-                                String name = Response.getJSONObject(0).getString("name");
-                                String place_name = Response.getJSONObject(0).getString("place_name");
-                                String join_date = Response.getJSONObject(0).getString("join_date").replace("-", ".");
-                                String img_path = Response.getJSONObject(0).getString("img_path");
-                                String phone = Response.getJSONObject(0).getString("phone");
-                                String owner_phone = Response.getJSONObject(0).getString("owner_phone");
+                                String mem_id       = Response.getJSONObject(0).getString("id");
+                                String name         = Response.getJSONObject(0).getString("name");
+                                String place_name   = Response.getJSONObject(0).getString("place_name");
+                                String join_date    = Response.getJSONObject(0).getString("join_date").replace("-", ".");
+                                String img_path     = Response.getJSONObject(0).getString("img_path");
+                                String phone        = Response.getJSONObject(0).getString("phone");
+                                String owner_phone  = Response.getJSONObject(0).getString("owner_phone");
+                                String jumin        = Response.getJSONObject(0).getString("jumin");
+                                String gender       = Response.getJSONObject(0).getString("gender");
+                                String kind         = Response.getJSONObject(0).getString("kind");
+                                String state        = Response.getJSONObject(0).getString("state");
+                                String pay          = Response.getJSONObject(0).getString("pay");
+
                                 if(!owner_phone.isEmpty()){
                                     owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
                                             + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
@@ -520,6 +527,21 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 });
                                 setNavBarBtnEvent();
                                 PlaceWorkCheck(stub_place_id, "1", "3");
+
+                                binding.memOption.setOnClickListener(v -> {
+                                    shardpref.putString("mem_id",mem_id);
+                                    shardpref.putString("mem_account",stub_user_account);
+                                    shardpref.putString("mem_name",name);
+                                    shardpref.putString("mem_phone",CallNum);
+                                    shardpref.putString("mem_gender",gender);
+                                    shardpref.putString("mem_jumin",jumin);
+                                    shardpref.putString("mem_kind",kind);
+                                    shardpref.putString("mem_join_date",join_date);
+                                    shardpref.putString("mem_state",state);
+                                    shardpref.putString("mem_jikgup",jikgup);
+                                    shardpref.putString("mem_pay",pay);
+                                    pm.AddMemberDetail(mContext);
+                                });
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -540,7 +562,7 @@ public class MemberDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    /*직원 전체 리스트 END*/
+    /*직원 정보 리스트 END*/
 
     public void SetAllMemberList() {
         dlog.i("-----SetAllMemberList-----");

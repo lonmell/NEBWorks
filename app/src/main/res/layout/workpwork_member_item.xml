@@ -5,44 +5,51 @@
     android:id="@+id/item_total"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/default_gray_round"
     android:orientation="horizontal"
-    android:padding="13dp"
     android:minHeight="52dp"
-    android:layout_marginTop="11dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
     tools:ignore="HardcodedText,RtlSymmetry">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/member_thumnail"
-        android:layout_width="47dp"
-        android:layout_height="47dp"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
         android:layout_alignParentStart="true"
-        app:cardBackgroundColor="#dbdbdb"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="60dp">
             <ImageView
                 android:id="@+id/user_thumnail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:background="@drawable/certi01"/>
+                android:background="@drawable/certi02"/>
     </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
         android:layout_alignTop="@+id/member_thumnail"
+        android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/member_thumnail"
-        android:layout_toStartOf="@+id/list_setting"
-        android:fontFamily="@font/pretendard_bold"
+        android:fontFamily="@font/gangwonedu_bold"
         android:text="name"
         android:textColor="@color/black"
-        android:textSize="22sp" />
+        android:textSize="20sp" />
 
-
+    <androidx.cardview.widget.CardView
+        android:id="@+id/warnning"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_toEndOf="@+id/name"
+        android:layout_alignTop="@+id/name"
+        android:layout_marginTop="-2dp"
+        android:layout_marginStart="5dp"
+        app:cardBackgroundColor="#DD6540"
+        app:cardElevation="0dp"
+        android:visibility="gone"
+        app:cardCornerRadius="60dp"/>
     <RelativeLayout
         android:id="@+id/list_setting"
         android:layout_width="45dp"
@@ -64,17 +71,19 @@
         android:layout_below="@+id/name"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/member_thumnail"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="5dp">
         <TextView
+            android:id="@+id/worktime_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:fontFamily="@font/inter_regular"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:padding="5dp"
+            android:visibility="visible"
             android:text="근무시간"
-            android:textColor="#696969"
+            android:textColor="@color/new_blue"
             android:textSize="15sp" />
         <TextView
             android:id="@+id/worktime"
@@ -86,7 +95,7 @@
             android:gravity="center"
             android:padding="5dp"
             android:text=""
-            android:textColor="@color/black"
+            android:textColor="@color/new_blue"
             android:textSize="15sp" />
     </LinearLayout>
     <LinearLayout
@@ -102,82 +111,54 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:fontFamily="@font/inter_regular"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:padding="5dp"
-            android:text="출근시간"
-            android:textColor="#696969"
+            android:text="출근"
+            android:textColor="@color/black"
             android:textSize="15sp" />
         <TextView
             android:id="@+id/inTime"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
             android:padding="5dp"
-            android:text=""
+            android:text="출근전"
             android:textColor="@color/black"
             android:textSize="15sp" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/linear03"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/member_thumnail"
-        android:layout_below="@+id/linear02">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="퇴근시간"
-            android:textColor="#696969"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/outTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-    </LinearLayout>
-    <androidx.cardview.widget.CardView
-        android:id="@+id/state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/list_setting"
-        android:layout_alignBottom="@+id/linear02"
-        android:layout_alignEnd="@+id/list_setting"
-        app:cardBackgroundColor="#f2f2f2"
-        android:layout_marginEnd="15dp"
-        app:cardElevation="0dp"
-        app:cardCornerRadius="5dp">
-
-        <TextView
-            android:id="@+id/state_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:padding="5dp"
-            android:text="근무 중"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:text="퇴근"
+            android:textColor="@color/black"
+            android:layout_marginStart="15dp"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/outTime"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="퇴근전"
             android:textColor="@color/black"
             android:textSize="15sp" />
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/linear02"
+        android:layout_marginTop="20dp"
+        android:background="@color/gray_200"/>
 </RelativeLayout>

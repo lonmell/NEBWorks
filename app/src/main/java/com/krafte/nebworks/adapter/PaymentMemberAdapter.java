@@ -194,10 +194,10 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
         TextView total_pay,work_day,work_time,name;
         ProgressBar weekly_worktime_progress;
         TextView nowpay,mypay,result_pay,result_gongje;
-        LinearLayout gongje_box,write_payment,send_user_state;
+        LinearLayout gongje_box,send_user_state;
         RelativeLayout progress_tvarea;
         ImageView profile_setimg;
-        CardView paystub_resend,send_money;
+        CardView paystub_resend,send_money,write_payment;
 
 
         ViewHolder(View itemView) {

@@ -215,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.kakaoLoginArea.setOnClickListener(v -> {
             BtnOneCircleFun(false);
             binding.loginAlertText.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.drawable.identificon)
+            Glide.with(this).load(R.raw.neb_loding_whtie)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(binding.loadingView);
             shardpref.putString("USER_LOGIN_METHOD", "Kakao");
@@ -364,7 +364,7 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.googleLoginArea.setOnClickListener(v -> {
             BtnOneCircleFun(false);
-            Glide.with(this).load(R.drawable.identificon)
+            Glide.with(this).load(R.raw.neb_loding_whtie)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(binding.loadingView);
             shardpref.putString("USER_LOGIN_METHOD", "Google");

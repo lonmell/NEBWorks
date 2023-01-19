@@ -61,7 +61,7 @@
             android:layout_height="36dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            app:cardBackgroundColor="#E0EAFB"
+            app:cardBackgroundColor="@color/blue_200"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
 
@@ -76,7 +76,7 @@
                     android:layout_marginStart="10dp"
                     android:gravity="start|center"
                     android:text="전체매장"
-                    android:textColor="@color/blue" />
+                    android:textColor="@color/new_blue" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -96,7 +96,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:layout_marginStart="15dp"
-            app:cardBackgroundColor="#E0EAFB"
+            app:cardBackgroundColor="@color/blue_200"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
 
@@ -111,7 +111,7 @@
                     android:layout_marginStart="10dp"
                     android:gravity="start|center"
                     android:text="전체직원"
-                    android:textColor="@color/blue" />
+                    android:textColor="@color/new_blue" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -131,12 +131,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/select_area"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -196,6 +198,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -288,38 +291,14 @@
             android:layout_alignParentTop="true"
             android:background="#ffffff"
             android:orientation="vertical"
-            android:visibility="visible">
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                android:layout_margin="20dp"
-                app:cardBackgroundColor="#F5F6F8"
-                app:cardCornerRadius="10dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="29dp"
-                        android:background="@drawable/remove_blank" />
-                    <TextView
-                        android:id="@+id/nodata_txt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="작성된 급여내역이 없습니다.\n급여 내역을 작성해주세요."
-                        android:textSize="17sp"
-                        android:textColor="#696969"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="29dp"
-                        android:gravity="center"/>
-                </LinearLayout>
+            android:visibility="gone">
 
-            </androidx.cardview.widget.CardView>
-
+            <ImageView
+                android:layout_width="350dp"
+                android:layout_height="212dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/ic_first_pay_btn" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

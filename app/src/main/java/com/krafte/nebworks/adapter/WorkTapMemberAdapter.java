@@ -109,27 +109,32 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
                     .skipMemoryCache(true)
                     .into(holder.user_thumnail);
 
+
             holder.worktime.setText(item.getWorktime().equals("null")?"":item.getWorktime());
+
 
             yoil.addAll(Arrays.asList(item.getYoil().split(",")));
 
             if (item.getKind().equals("0")) {
                 state = "근무 중";
-                holder.state_tv.setTextColor(R.color.blue);
-                holder.state.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
             } else if (item.getKind().equals("1")) {
                 state = "퇴근";
-                holder.state_tv.setTextColor(Color.parseColor("#696969"));
-                holder.state.setCardBackgroundColor(Color.parseColor("#dbdbdb"));
-            } else if (item.getKind().equals("2")) {
-                //출근날인데 출근 안한거
+            } else if (item.getKind().equals("2") && item.getCommuting().equals("미출근")) {
+                //출근시간 지남
                 state = item.getCommuting();
-                holder.state_tv.setTextColor(Color.parseColor("#DD6540"));
-                holder.state.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
+                holder.warnning.setVisibility(View.VISIBLE);
+                holder.worktime_title.setTextColor(Color.parseColor("#DD6540"));
+                holder.worktime.setTextColor(Color.parseColor("#DD6540"));
+                holder.worktime.setText(state);
+//                holder.worktime.setText(state + "[" + (item.getWorktime().equals("null")?"":item.getWorktime()) + "]");
             }
+//            else if (item.getKind().equals("2") && item.getCommuting().equals("")) {
+//                //아직 출근시간 아님
+////                state = "출근시간 아님";
+////                holder.worktime.setText(state + "[" + (item.getWorktime().equals("null")?"":item.getWorktime()) + "]");
+//            }
             holder.inTime.setText(editTimeText(item.getIn_time()));
             holder.outTime.setText(editTimeText(item.getOut_time()));
-            holder.state_tv.setText(state);
 
             if(Tap.equals("99")){
                 holder.list_setting.setVisibility(View.INVISIBLE);
@@ -191,8 +196,8 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, worktime, inTime, outTime, state_tv;
-        CardView add_detail, state, edit_linear;
+        TextView name, worktime, inTime, outTime,  worktime_title;
+        CardView add_detail, warnning;
         RelativeLayout list_setting, item_total;
         LinearLayout linear01, linear02;
         ImageView user_thumnail;
@@ -200,19 +205,18 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            item_total = itemView.findViewById(R.id.item_total);
-            name = itemView.findViewById(R.id.name);
-            worktime = itemView.findViewById(R.id.worktime);
-            inTime = itemView.findViewById(R.id.inTime);
-            outTime = itemView.findViewById(R.id.outTime);
-            state_tv = itemView.findViewById(R.id.state_tv);
-            add_detail = itemView.findViewById(R.id.add_detail);
-            state = itemView.findViewById(R.id.state);
-            list_setting = itemView.findViewById(R.id.list_setting);
-            linear01 = itemView.findViewById(R.id.linear01);
-            linear02 = itemView.findViewById(R.id.linear02);
-            user_thumnail = itemView.findViewById(R.id.user_thumnail);
-
+            item_total      = itemView.findViewById(R.id.item_total);
+            name            = itemView.findViewById(R.id.name);
+            worktime        = itemView.findViewById(R.id.worktime);
+            inTime          = itemView.findViewById(R.id.inTime);
+            outTime         = itemView.findViewById(R.id.outTime);
+            add_detail      = itemView.findViewById(R.id.add_detail);
+            list_setting    = itemView.findViewById(R.id.list_setting);
+            linear01        = itemView.findViewById(R.id.linear01);
+            linear02        = itemView.findViewById(R.id.linear02);
+            user_thumnail   = itemView.findViewById(R.id.user_thumnail);
+            worktime_title  = itemView.findViewById(R.id.worktime_title);
+            warnning         = itemView.findViewById(R.id.warnning);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");

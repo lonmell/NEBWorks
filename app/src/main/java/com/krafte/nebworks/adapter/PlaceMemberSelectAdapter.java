@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -63,7 +64,7 @@ public class PlaceMemberSelectAdapter extends RecyclerView.Adapter<PlaceMemberSe
     public PlaceMemberSelectAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.workplace_member_item, parent, false);
+        View view = inflater.inflate(R.layout.select_member_item, parent, false);
         PlaceMemberSelectAdapter.ViewHolder vh = new PlaceMemberSelectAdapter.ViewHolder(view);
 
         if (context instanceof Activity)
@@ -84,9 +85,6 @@ public class PlaceMemberSelectAdapter extends RecyclerView.Adapter<PlaceMemberSe
             holder.state.setVisibility(View.GONE);
             holder.contract_state.setVisibility(View.GONE);
             holder.linear04.setVisibility(View.GONE);
-            holder.list_setting.setVisibility(View.INVISIBLE);
-            holder.list_setting.setClickable(false);
-            holder.list_setting.setEnabled(false);
             if ((item.getPay().equals("null") || item.getPay().isEmpty())) {
                 holder.pay.setText("상세정보 입력 전");
                 holder.pay.setTextColor(Color.parseColor("#a9a9a9"));
@@ -100,6 +98,10 @@ public class PlaceMemberSelectAdapter extends RecyclerView.Adapter<PlaceMemberSe
             } else {
                 holder.jikgup.setText(item.getJikgup());
             }
+
+            holder.check_area.setOnClickListener(v -> {
+                holder.check_area_icon.setBackgroundResource(R.drawable.ic_selectmem_on);
+            });
         } catch (Exception e) {
             dlog.i("Exception : " + e);
         }
@@ -115,24 +117,26 @@ public class PlaceMemberSelectAdapter extends RecyclerView.Adapter<PlaceMemberSe
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, jikgup, pay, state_tv;
         CardView add_detail, state, contract_state;
-        RelativeLayout list_setting;
         LinearLayout linear01, linear02, linear03, linear04;
+        RelativeLayout check_area;
+        ImageView check_area_icon;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            name = itemView.findViewById(R.id.name);
-            jikgup = itemView.findViewById(R.id.jikgup);
-            pay = itemView.findViewById(R.id.pay);
-            state_tv = itemView.findViewById(R.id.state_tv);
-            add_detail = itemView.findViewById(R.id.add_detail);
-            state = itemView.findViewById(R.id.state);
-            list_setting = itemView.findViewById(R.id.list_setting);
-            linear01 = itemView.findViewById(R.id.linear01);
-            linear02 = itemView.findViewById(R.id.linear02);
-            linear03 = itemView.findViewById(R.id.linear03);
-            linear04 = itemView.findViewById(R.id.linear04);
-            contract_state = itemView.findViewById(R.id.contract_state);
+            name            = itemView.findViewById(R.id.name);
+            jikgup          = itemView.findViewById(R.id.jikgup);
+            pay             = itemView.findViewById(R.id.pay);
+            state_tv        = itemView.findViewById(R.id.state_tv);
+            add_detail      = itemView.findViewById(R.id.add_detail);
+            state           = itemView.findViewById(R.id.state);
+            linear01        = itemView.findViewById(R.id.linear01);
+            linear02        = itemView.findViewById(R.id.linear02);
+            linear03        = itemView.findViewById(R.id.linear03);
+            linear04        = itemView.findViewById(R.id.linear04);
+            contract_state  = itemView.findViewById(R.id.contract_state);
+            check_area      = itemView.findViewById(R.id.check_area);
+            check_area_icon = itemView.findViewById(R.id.check_area_icon);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");

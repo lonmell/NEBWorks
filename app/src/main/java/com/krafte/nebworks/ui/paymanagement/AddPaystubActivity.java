@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.paymanagement;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -396,6 +397,10 @@ public class AddPaystubActivity extends AppCompatActivity {
             binding.editOverwork.setText("0");
             binding.overWorkhourArea.setVisibility(View.GONE);
             binding.editOverwork.setVisibility(View.VISIBLE);
+            binding.select01.setTextColor(Color.parseColor("#1445D0"));
+            binding.select02.setTextColor(Color.parseColor("#54585A"));
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
+            binding.select02Box.setBackgroundResource(R.drawable.default_gray_round);
             binding.select01.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             binding.select02.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
         });
@@ -407,7 +412,11 @@ public class AddPaystubActivity extends AppCompatActivity {
             binding.editOverworkhour.setEnabled(true);
             binding.editOverwork.setText("0");
             binding.overWorkhourArea.setVisibility(View.VISIBLE);
-            binding.editOverwork.setVisibility(View.VISIBLE);
+            binding.editOverwork.setVisibility(View.GONE);
+            binding.select01.setTextColor(Color.parseColor("#54585A"));
+            binding.select02.setTextColor(Color.parseColor("#1445D0"));
+            binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round);
             binding.select01.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
             binding.select02.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
         });
@@ -416,6 +425,12 @@ public class AddPaystubActivity extends AppCompatActivity {
         binding.select03Box.setOnClickListener(v -> {
             select0304 = "포함";
             binding.editMealPay.setVisibility(View.VISIBLE);
+
+            binding.select03.setTextColor(Color.parseColor("#1445D0"));
+            binding.select04.setTextColor(Color.parseColor("#54585A"));
+            binding.select03Box.setBackgroundResource(R.drawable.default_select_on_round);
+            binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
+
             binding.select03.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             binding.select04.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
 
@@ -446,6 +461,12 @@ public class AddPaystubActivity extends AppCompatActivity {
             binding.editMealPay.setText("0");
             get_edit_mealpay = "0";
             binding.editMealPay.setVisibility(View.GONE);
+
+            binding.select03.setTextColor(Color.parseColor("#54585A"));
+            binding.select04.setTextColor(Color.parseColor("#1445D0"));
+            binding.select03Box.setBackgroundResource(R.drawable.default_gray_round);
+            binding.select04Box.setBackgroundResource(R.drawable.default_select_on_round);
+
             binding.select03.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
             binding.select04.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             AllPayment = AllPayment + Integer.parseInt(get_edit_mealpay);
@@ -456,6 +477,12 @@ public class AddPaystubActivity extends AppCompatActivity {
             select0506 = "공제";
             binding.select05.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             binding.select06.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
+
+            binding.select05.setTextColor(Color.parseColor("#1445D0"));
+            binding.select06.setTextColor(Color.parseColor("#54585A"));
+            binding.select05Box.setBackgroundResource(R.drawable.default_select_on_round);
+            binding.select06Box.setBackgroundResource(R.drawable.default_gray_round);
+
             binding.gongjeArea.setVisibility(View.VISIBLE);
             DecimalFormat myFormatter = new DecimalFormat("###,###");
             AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
@@ -470,6 +497,12 @@ public class AddPaystubActivity extends AppCompatActivity {
             binding.select05.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
             binding.select06.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
             binding.gongjeArea.setVisibility(View.GONE);
+
+            binding.select05.setTextColor(Color.parseColor("#54585A"));
+            binding.select06.setTextColor(Color.parseColor("#1445D0"));
+            binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
+            binding.select06Box.setBackgroundResource(R.drawable.default_select_on_round);
+
             DecimalFormat myFormatter = new DecimalFormat("###,###");
             AllPayment = Integer.parseInt(select_total_payment) + Integer.parseInt(get_edit_expenses.replace(",","").equals("")?"0":get_edit_expenses.replace(",",""))
                     + Integer.parseInt(get_edit_overwork.replace(",","").equals("")?"0":get_edit_overwork.replace(",",""));

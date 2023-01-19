@@ -30,7 +30,7 @@
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:text="근무시간"
-            android:textColor="#949494" />
+            android:textColor="@color/new_blue" />
 
         <TextView
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:text="출근"
-            android:textColor="#949494" />
+            android:textColor="@color/new_blue" />
 
         <TextView
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:text="퇴근"
-            android:textColor="#949494" />
+            android:textColor="@color/new_blue" />
 
         <TextView
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/today_area"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="53dp"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         app:cardBackgroundColor="#F5F6F8"

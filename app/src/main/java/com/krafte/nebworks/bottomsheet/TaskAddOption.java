@@ -54,7 +54,7 @@ public class TaskAddOption extends BottomSheetDialogFragment {
         binding.selecttv021.setText("저장된 자주하는 업무를 불러옵니다.");
 
         binding.certi01.setBackgroundResource(R.drawable.ic_icon_report);
-        binding.certi01.setBackgroundResource(R.drawable.ic_contact_icon);
+        binding.certi02.setBackgroundResource(R.drawable.ic_contact_icon);
 
         setBtnEvent();
         Log.i(TAG, "data : " + data);

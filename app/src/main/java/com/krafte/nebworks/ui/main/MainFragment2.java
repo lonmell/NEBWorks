@@ -309,7 +309,6 @@ public class MainFragment2 extends AppCompatActivity {
     String getjikgup = "";
     RetrofitConnect rc = new RetrofitConnect();
 
-
     public void SetAllMemberList() {
         dlog.i("-----SetAllMemberList-----");
         dlog.i("place_id : " + place_id);

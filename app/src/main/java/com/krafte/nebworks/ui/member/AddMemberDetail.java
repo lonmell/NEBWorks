@@ -125,9 +125,9 @@ public class AddMemberDetail extends AppCompatActivity {
         USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
         USER_INFO_PHONE     = UserCheckData.getInstance().getUser_phone();
 
-        dlog.i( "USER_INFO_NAME = " + USER_INFO_NAME);
-        dlog.i( "USER_INFO_PHONE = " + USER_INFO_PHONE);
-        dlog.i( "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+        dlog.i("USER_INFO_NAME = " + USER_INFO_NAME);
+        dlog.i("USER_INFO_PHONE = " + USER_INFO_PHONE);
+        dlog.i("USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
 
         //shardpref Area
         shardpref = new PreferenceHelper(mContext);
