@@ -49,12 +49,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="공지사항"
-                android:textSize="25sp"
+                android:textSize="28sp"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/gangwonedu_bold"
                 android:textColor="@color/black" />
         <RelativeLayout
             android:layout_width="153dp"
@@ -65,7 +65,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/default_gray_round"
+            android:background="@drawable/go_worker_background"
             android:weightSum="2">
 
             <Spinner
@@ -76,12 +76,12 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginBottom="1dp"
-                android:background="@color/white"
+                android:background="@color/blue_200"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/down_arrow"
+                android:background="@drawable/dropdown_icon"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:layout_alignParentEnd="true"/>

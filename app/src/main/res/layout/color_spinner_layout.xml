@@ -4,10 +4,10 @@
     tools:ignore="HardcodedText,TouchTargetSizeCheck"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:fontFamily="@font/inter_regular"
+    android:fontFamily="@font/pretendard_bold"
     android:gravity="start|center"
-    android:paddingStart="8dp"
+    android:paddingStart="18dp"
     android:paddingEnd="1dp"
     android:text="고용보험"
-    android:textColor="@color/black"
+    android:textColor="@color/new_blue"
     android:textSize="16sp" />

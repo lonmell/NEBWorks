@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="#F5F6F8"
+    app:cardBackgroundColor="@color/blue_200"
     android:layout_margin="10dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp">
@@ -37,7 +37,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:gravity="start|center"
                 android:text="name"
-                android:textColor="@color/black"
+                android:textColor="@color/new_blue"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -50,7 +50,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
                 android:text="date"
-                android:textColor="#a9a9a9"
+                android:textColor="@color/new_blue"
                 android:textSize="16sp" />
         </RelativeLayout>
 </androidx.cardview.widget.CardView>
