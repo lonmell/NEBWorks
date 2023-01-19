@@ -143,7 +143,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="로그인"
                 android:textColor="@color/white"
@@ -164,7 +164,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="회원가입"
                 android:textColor="@color/new_blue"

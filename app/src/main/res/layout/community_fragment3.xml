@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="알려드립니다 - 세무"
             android:textColor="@color/black"
             android:textSize="17sp" />
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="15dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center|start"
                 android:text="소상공인 세금 절세\n알려드립니다."
                 android:textColor="@color/white"
@@ -61,7 +61,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center|start"
                     android:text="부가세란?"
                     android:textColor="#949494"
@@ -107,7 +107,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center|start"
                     android:text="소득세란?"
                     android:textColor="#949494"
@@ -144,7 +144,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="세금신고 도움받기"
                 android:gravity="start|center"
                 android:textColor="@color/black"
@@ -180,7 +180,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginTop="26dp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="알려드립니다 - 노무"
             android:textColor="@color/black"
             android:textSize="17sp" />
@@ -200,7 +200,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="15dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center|start"
                 android:text="소상공인 세금 절세\n알려드립니다."
                 android:textColor="@color/white"
@@ -227,7 +227,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center|start"
                     android:text="부가세란?"
                     android:textColor="#949494"
@@ -273,7 +273,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center|start"
                     android:text="소득세란?"
                     android:textColor="#949494"
@@ -310,7 +310,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="노무문제 도움받기"
                 android:gravity="start|center"
                 android:textColor="@color/black"

@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="매장관리"
             android:textColor="#000000"
             android:textSize="16sp" />
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="관리중인 매장"
             android:textColor="#000000"
             android:textSize="22sp" />
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/store_cnt_tv"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="0"
             android:textColor="@color/new_blue"
             android:textSize="22sp" />

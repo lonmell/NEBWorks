@@ -49,23 +49,20 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/gangwonedu_bold"
+        android:fontFamily="@font/inter_bold"
         android:gravity="start|center"
         android:layout_below="@+id/top_bar"
-        android:text="매장의 종류를\n선택하세요"
+        android:text="매장의 종류를\n선택해주세요"
         android:textColor="#000000"
-        android:textSize="28sp" />
+        android:textSize="25dp" />
 
     <LinearLayout
         android:id="@+id/search_area"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/title"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/default_select_on_round_100"
+        android:layout_margin="20dp"
+        android:background="@drawable/default_input_round"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -73,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.8"
+            android:background="#ffffff"
             android:orientation="horizontal"
             android:padding="5dp">
 
@@ -89,8 +87,8 @@
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:singleLine="false"
-                android:textColor="@color/new_blue"
-                android:textColorHint="@color/new_blue"
+                android:textColor="#000000"
+                android:textColorHint="#696969"
                 tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck" />
 
             <LinearLayout
@@ -107,7 +105,6 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:background="@drawable/ic_search"
-                    android:backgroundTint="@color/new_blue"
                     android:fontFamily="@font/applesdgothicneo"
                     android:textColor="@color/black"
                     android:textSize="15sp"

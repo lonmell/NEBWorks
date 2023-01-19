@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:textSize="15sp"
             android:textColor="#54585A"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="이름"
             android:gravity="bottom|start"/>
 
@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:textSize="15sp"
             android:textColor="#242627"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="이름"
             android:gravity="top|start"/>
     </LinearLayout>

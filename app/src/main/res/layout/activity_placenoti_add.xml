@@ -434,7 +434,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/new_blue"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="공지 작성하기"
                     android:textColor="#ffffff"

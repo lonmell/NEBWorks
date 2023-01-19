@@ -78,7 +78,7 @@
             android:layout_marginEnd="20dp"
             android:layout_alignEnd="@+id/list_edit_area"
             android:layout_alignTop="@+id/date"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="start|center"
             android:singleLine="true"
             android:text="직급"

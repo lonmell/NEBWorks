@@ -94,21 +94,7 @@ public class PlaceMemberSelectAdapter extends RecyclerView.Adapter<PlaceMemberSe
                 holder.pay.setText(item.getPay());
                 holder.pay.setTextColor(Color.parseColor("#000000"));
             }
-            if ((item.getState().equals("null") || item.getState().isEmpty())) {
-                holder.jejik.setText("상세정보 입력 전");
-                holder.jejik.setTextColor(Color.parseColor("#a9a9a9"));
-            } else {
-                String jejikState = "";
-                if (item.getState().equals("1")) {
-                    //등록,재직
-                    jejikState = "재직";
-                } else if (item.getState().equals("2")) {
-                    //휴직
-                    jejikState = "휴직";
-                }
-                holder.jejik.setText(jejikState);
-                holder.jejik.setTextColor(Color.parseColor("#000000"));
-            }
+
             if ((item.getJikgup().equals("null") || item.getJikgup().isEmpty())) {
                 holder.linear01.setVisibility(View.GONE);
             } else {
@@ -127,7 +113,7 @@ public class PlaceMemberSelectAdapter extends RecyclerView.Adapter<PlaceMemberSe
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, jikgup, pay, state_tv, jejik;
+        TextView name, jikgup, pay, state_tv;
         CardView add_detail, state, contract_state;
         RelativeLayout list_setting;
         LinearLayout linear01, linear02, linear03, linear04;
@@ -146,7 +132,6 @@ public class PlaceMemberSelectAdapter extends RecyclerView.Adapter<PlaceMemberSe
             linear02 = itemView.findViewById(R.id.linear02);
             linear03 = itemView.findViewById(R.id.linear03);
             linear04 = itemView.findViewById(R.id.linear04);
-            jejik = itemView.findViewById(R.id.jejik);
             contract_state = itemView.findViewById(R.id.contract_state);
 
             shardpref = new PreferenceHelper(mContext);

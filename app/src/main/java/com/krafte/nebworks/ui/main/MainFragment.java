@@ -440,6 +440,8 @@ public class MainFragment extends AppCompatActivity {
                 }else{
                     UserCheckData.getInstance().setUser_auth("1");
                 }
+                shardpref.putString("place_id",PlaceCheckData.getInstance().getPlace_id());
+                shardpref.putString("place_owner_id",PlaceCheckData.getInstance().getPlace_owner_id());
             });
         });
         th.start();

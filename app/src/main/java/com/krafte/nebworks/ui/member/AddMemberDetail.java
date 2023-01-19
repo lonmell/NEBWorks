@@ -3,7 +3,6 @@ package com.krafte.nebworks.ui.member;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,8 +11,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +38,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -351,66 +347,125 @@ public class AddMemberDetail extends AppCompatActivity {
         });
 
         /*직급*/
-        ArrayList<String> stringCategory1 = new ArrayList<>();
-        stringCategory1.add("알바");
-        stringCategory1.add("정직원");
-        stringCategory1.add("매니저");
-        stringCategory1.add("기타");
-
-        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory1);
-        binding.jikgupSpinner.setAdapter(select_filter1);
-        binding.jikgupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mem_jikgup = stringCategory1.get(i);
-                binding.jikgup.setText(mem_jikgup);
-                dlog.i("i : " + mem_jikgup);
-                binding.jikgupround.setBackgroundResource(R.drawable.default_select_on_round);
-                binding.jikgup.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.jikgup.setTextColor(Color.parseColor("#ffffff"));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                mem_jikgup = "알바";
-                binding.jikgup.setText(mem_jikgup);
-                binding.jikgupround.setBackgroundResource(R.drawable.default_input_round);
-                binding.jikgup.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.jikgup.setTextColor(Color.parseColor("#696969"));
+//        ArrayList<String> stringCategory1 = new ArrayList<>();
+//        stringCategory1.add("알바");
+//        stringCategory1.add("정직원");
+//        stringCategory1.add("매니저");
+//        stringCategory1.add("기타");
+//
+//        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory1);
+//        binding.jikgupSpinner.setAdapter(select_filter1);
+//        binding.jikgupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                mem_jikgup = stringCategory1.get(i);
+//                binding.jikgup.setText(mem_jikgup);
+//                dlog.i("i : " + mem_jikgup);
+//                binding.jikgupround.setBackgroundResource(R.drawable.default_select_on_round);
+//                binding.jikgup.setBackgroundColor(Color.parseColor("#6395EC"));
+//                binding.jikgup.setTextColor(Color.parseColor("#ffffff"));
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//                mem_jikgup = "알바";
+//                binding.jikgup.setText(mem_jikgup);
+//                binding.jikgupround.setBackgroundResource(R.drawable.default_input_round);
+//                binding.jikgup.setBackgroundColor(Color.parseColor("#ffffff"));
+//                binding.jikgup.setTextColor(Color.parseColor("#696969"));
+//            }
+//        });
+        binding.jikgup.setOnClickListener(v -> {
+            if(binding.selectJikgupkind.getVisibility() == View.GONE){
+                binding.selectJikgupkind.setVisibility(View.VISIBLE);
+            }else{
+                binding.selectJikgupkind.setVisibility(View.GONE);
             }
         });
-
+        binding.jikgupkind00.setOnClickListener(v -> {
+            binding.selectJikgupkind.setVisibility(View.GONE);
+            mem_jikgup = "";
+            binding.jikgup.setText("선택");
+        });
+        binding.jikgupkind01.setOnClickListener(v -> {
+            binding.selectJikgupkind.setVisibility(View.GONE);
+            mem_jikgup = "알바";
+            binding.jikgup.setText("알바");
+        });
+        binding.jikgupkind02.setOnClickListener(v -> {
+            binding.selectJikgupkind.setVisibility(View.GONE);
+            mem_jikgup = "정직원";
+            binding.jikgup.setText("정직원");
+        });
+        binding.jikgupkind03.setOnClickListener(v -> {
+            binding.selectJikgupkind.setVisibility(View.GONE);
+            mem_jikgup = "매니저";
+            binding.jikgup.setText("매니저");
+        });
+        binding.jikgupkind04.setOnClickListener(v -> {
+            binding.selectJikgupkind.setVisibility(View.GONE);
+            mem_jikgup = "기타";
+            binding.jikgup.setText("기타");
+        });
         /*급여 지급방식*/
-        ArrayList<String> stringCategory2 = new ArrayList<>();
-        stringCategory2.add("일급");
-        stringCategory2.add("시급");
-        stringCategory2.add("주급");
-        stringCategory2.add("월급");
-
-        ArrayAdapter<String> select_filter2 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory2);
-        binding.paySpinner.setAdapter(select_filter2);
-        binding.paySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mem_paykind = stringCategory2.get(i);
-                binding.pay.setText(mem_paykind);
-                dlog.i("i : " + mem_paykind);
-                binding.payround.setBackgroundResource(R.drawable.default_select_on_round);
-                binding.pay.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.pay.setTextColor(Color.parseColor("#ffffff"));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                mem_paykind = "일급";
-                binding.pay.setText(mem_paykind);
-                binding.payround.setBackgroundResource(R.drawable.default_input_round);
-                binding.pay.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.pay.setTextColor(Color.parseColor("#696969"));
+//        ArrayList<String> stringCategory2 = new ArrayList<>();
+//        stringCategory2.add("일급");
+//        stringCategory2.add("시급");
+//        stringCategory2.add("주급");
+//        stringCategory2.add("월급");
+//
+//        ArrayAdapter<String> select_filter2 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory2);
+//        binding.paySpinner.setAdapter(select_filter2);
+//        binding.paySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                mem_paykind = stringCategory2.get(i);
+//                binding.pay.setText(mem_paykind);
+//                dlog.i("i : " + mem_paykind);
+//                binding.payround.setBackgroundResource(R.drawable.default_select_on_round);
+//                binding.pay.setBackgroundColor(Color.parseColor("#6395EC"));
+//                binding.pay.setTextColor(Color.parseColor("#ffffff"));
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//                mem_paykind = "일급";
+//                binding.pay.setText(mem_paykind);
+//                binding.payround.setBackgroundResource(R.drawable.default_input_round);
+//                binding.pay.setBackgroundColor(Color.parseColor("#ffffff"));
+//                binding.pay.setTextColor(Color.parseColor("#696969"));
+//            }
+//        });
+        binding.pay.setOnClickListener(v -> {
+            if(binding.selectPaykind.getVisibility() == View.GONE){
+                binding.selectPaykind.setVisibility(View.VISIBLE);
+            }else{
+                binding.selectPaykind.setVisibility(View.GONE);
             }
         });
+        binding.paykind00.setOnClickListener(v -> {
+            binding.selectPaykind.setVisibility(View.GONE);
+            mem_paykind = "";
+            binding.pay.setText("선택");
+        });
+        binding.paykind01.setOnClickListener(v -> {
+            binding.selectPaykind.setVisibility(View.GONE);
+            mem_paykind = "시급";
+            binding.pay.setText("시급");
+        });
+        binding.paykind02.setOnClickListener(v -> {
+            binding.selectPaykind.setVisibility(View.GONE);
+            mem_paykind = "주급";
+            binding.pay.setText("주급");
+        });
+        binding.paykind03.setOnClickListener(v -> {
+            binding.selectPaykind.setVisibility(View.GONE);
+            mem_paykind = "월급";
+            binding.pay.setText("월급");
+        });
+
 
         /*급여액*/
         binding.inputbox05.addTextChangedListener(new TextWatcher() {
@@ -908,35 +963,39 @@ public class AddMemberDetail extends AppCompatActivity {
                                         binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
                                     }
 
-                                    switch (jikgup) {
-                                        case "알바":
-                                            binding.jikgupSpinner.setSelection(0);
-                                            break;
-                                        case "정직원":
-                                            binding.jikgupSpinner.setSelection(1);
-                                            break;
-                                        case "매니저":
-                                            binding.jikgupSpinner.setSelection(2);
-                                            break;
-                                        case "기타":
-                                            binding.jikgupSpinner.setSelection(3);
-                                            break;
-                                    }
+//                                    switch (jikgup) {
+//                                        case "알바":
+//                                            binding.jikgupSpinner.setSelection(0);
+//                                            break;
+//                                        case "정직원":
+//                                            binding.jikgupSpinner.setSelection(1);
+//                                            break;
+//                                        case "매니저":
+//                                            binding.jikgupSpinner.setSelection(2);
+//                                            break;
+//                                        case "기타":
+//                                            binding.jikgupSpinner.setSelection(3);
+//                                            break;
+//                                    }
+//                                    switch (paykind) {
+//                                        case "일급":
+//                                            binding.selectPaykind.setVisibility(View.GONE);
+//                                            break;
+//                                        case "시급":
+//                                            binding.paySpinner.setSelection(1);
+//                                            break;
+//                                        case "주급":
+//                                            binding.paySpinner.setSelection(2);
+//                                            break;
+//                                        case "월급":
+//                                            binding.paySpinner.setSelection(3);
+//                                            break;
+//                                    }
+                                    binding.selectJikgupkind.setVisibility(View.GONE);
+                                    binding.pay.setText(jikgup);
 
-                                    switch (paykind) {
-                                        case "일급":
-                                            binding.paySpinner.setSelection(0);
-                                            break;
-                                        case "시급":
-                                            binding.paySpinner.setSelection(1);
-                                            break;
-                                        case "주급":
-                                            binding.paySpinner.setSelection(2);
-                                            break;
-                                        case "월급":
-                                            binding.paySpinner.setSelection(3);
-                                            break;
-                                    }
+                                    binding.selectPaykind.setVisibility(View.GONE);
+                                    binding.pay.setText(paykind);
 
                                     binding.inputbox05.setText(pay);
 

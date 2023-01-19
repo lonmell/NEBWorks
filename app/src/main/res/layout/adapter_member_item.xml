@@ -111,7 +111,7 @@
                     android:id="@+id/other_cnt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="+0"
                     android:textColor="@color/white"

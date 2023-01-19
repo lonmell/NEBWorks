@@ -196,7 +196,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="안내사항을 모두 확인하였으며, 이에 동의합니다."
                 android:textColor="@color/new_blue"
                 android:textSize="14sp"

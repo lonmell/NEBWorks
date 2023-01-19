@@ -111,7 +111,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="검색결과"
             android:textColor="#696969"
             android:textSize="16sp" />
@@ -120,7 +120,7 @@
             android:id="@+id/search_cnt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="0개"
             android:layout_marginStart="5dp"
             android:textColor="@color/blue"

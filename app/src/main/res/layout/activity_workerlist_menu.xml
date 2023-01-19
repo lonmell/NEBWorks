@@ -15,7 +15,7 @@
         android:textSize="22sp"
         android:textColor="@color/black"
         android:layout_margin="20dp"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/pretendard_bold"
         android:textStyle="bold"/>
     <RelativeLayout
         android:layout_width="match_parent"

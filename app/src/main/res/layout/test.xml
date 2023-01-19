@@ -138,7 +138,7 @@
                         android:layout_alignBottom="@+id/titlearea"
                         android:layout_marginEnd="40dp"
                         android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/inter_bold"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="center"
                         android:text="대기"
                         android:textColor="#6395EC"

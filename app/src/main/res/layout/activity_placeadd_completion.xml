@@ -13,18 +13,18 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="98dp"
-            android:layout_height="98dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/add_place_icon" />
+            android:background="@drawable/ic_store_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:fontFamily="@font/gangwonedu_bold"
+            android:fontFamily="@font/inter_bold"
             android:gravity="center"
-            android:text="매장등록이\n완료되었습니다."
+            android:text="매장등록이 완료되었습니다."
             android:textColor="@color/black"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -32,8 +32,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/pretendard_regular"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/inter_regular"
             android:gravity="center"
             android:text="매장등록이 완료되었습니다.\n직원의 추가 등을 통해 매장을 운영해보세요"
             android:textColor="@color/black"
@@ -42,34 +42,32 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/go_this_place"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="50dp"
         app:cardElevation="0dp"
         app:cardCornerRadius="5dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_above="@+id/place_list_go"
-        app:cardBackgroundColor="@color/new_blue">
+        app:cardBackgroundColor="@color/blue">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/inter_bold"
             android:text="해당 매장 메인으로"
             android:textSize="16sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:gravity="center"/>
     </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:id="@+id/place_list_go"
             android:layout_width="match_parent"
-            android:layout_height="59dp"
+            android:layout_height="50dp"
             app:cardElevation="0dp"
             app:cardCornerRadius="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="50dp"
+            android:layout_margin="20dp"
             android:layout_alignParentBottom="true"
-            app:cardBackgroundColor="@color/blue_200">
+            app:cardBackgroundColor="#F5F6F8">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -77,7 +75,7 @@
                     android:text="매장 목록으로"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@color/new_blue"
+                    android:textColor="#54585A"
                     android:gravity="center"/>
         </androidx.cardview.widget.CardView>
 </RelativeLayout>

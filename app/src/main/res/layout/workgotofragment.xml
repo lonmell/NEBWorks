@@ -132,7 +132,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:textSize="20sp"
                     android:text="0000년 00월 00일"

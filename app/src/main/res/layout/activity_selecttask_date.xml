@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="시작 일시 선택"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:text="시작 날짜 선택"
             android:textSize="26sp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:textColor="@color/black"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"/>
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="날짜를 선택해주세요"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColorHint="#949494"
                 android:textColor="@color/black"
                 android:gravity="center|start"
@@ -101,7 +101,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="0000년 00월"
                     android:textColor="@color/black" />
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:text="시작 시간 입력"
             android:textSize="26sp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:textColor="@color/black"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"/>
@@ -154,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="시간을 선택해주세요"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColorHint="#949494"
                 android:gravity="center|start"
                 android:textColor="@color/black"
@@ -175,7 +175,7 @@
                 android:text="저장"
                 android:gravity="center"
                 android:textSize="16sp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/black"/>
         </LinearLayout>
     </LinearLayout>

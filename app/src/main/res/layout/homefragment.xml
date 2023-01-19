@@ -345,14 +345,14 @@
                                 app:layout_constraintBottom_toBottomOf="parent"/>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
-<!--                        <androidx.recyclerview.widget.RecyclerView-->
-<!--                            android:id="@+id/important_list"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:layout_marginStart="10dp"-->
-<!--                            android:layout_marginEnd="10dp"-->
-<!--                            android:layout_marginTop="10dp"-->
-<!--                            android:visibility="gone" />-->
+                        <!--                        <androidx.recyclerview.widget.RecyclerView-->
+                        <!--                            android:id="@+id/important_list"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="match_parent"-->
+                        <!--                            android:layout_marginStart="10dp"-->
+                        <!--                            android:layout_marginEnd="10dp"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:visibility="gone" />-->
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
@@ -675,7 +675,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:background="@drawable/member_manage_icon"/>
+                                android:background="@drawable/ic_member_manage_icon"/>
                         </androidx.cardview.widget.CardView>
 
                         <TextView
@@ -722,7 +722,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:background="@drawable/icon_report"/>
+                                android:background="@drawable/ic_icon_report"/>
                         </androidx.cardview.widget.CardView>
 
                         <TextView
@@ -769,7 +769,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:background="@drawable/pay_btn_icon" />
+                                android:background="@drawable/ic_pay_btn_icon" />
                         </androidx.cardview.widget.CardView>
 
                         <TextView
@@ -816,7 +816,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:background="@drawable/contact_icon"/>
+                                android:background="@drawable/ic_contact_icon"/>
                         </androidx.cardview.widget.CardView>
 
                         <TextView

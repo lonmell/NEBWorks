@@ -13,7 +13,7 @@
         android:layout_margin="25dp"
         android:onClick="btnOnclick"
         app:cardCornerRadius="60dp"
-        app:cardBackgroundColor="@color/blue"
+        app:cardBackgroundColor="@color/new_blue"
         app:cardElevation="0dp">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -21,12 +21,12 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_above="@+id/center_line"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_plus2" />
+                    android:background="@drawable/white_plus" />
 
                 <LinearLayout
                     android:id="@+id/center_line"
@@ -41,10 +41,10 @@
                     android:layout_below="@+id/center_line"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="할일추가"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
             </RelativeLayout>
 

@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="초대할 직원 정보 입력"
             android:textColor="@color/black"
             android:textSize="22sp" />
@@ -75,26 +75,26 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="정보입력 없이 링크 공유하기"
             android:layout_marginTop="24dp"
-            android:textColor="#a9a9a9"
+            android:textColor="@color/black"
             android:textSize="16sp" />
         <androidx.cardview.widget.CardView
             android:id="@+id/addMemberNodata"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:cardBackgroundColor="#6395EC"
+            app:cardBackgroundColor="@color/new_blue"
             android:layout_above="@+id/addMemberBtn"
             app:cardCornerRadius="5dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="직원에게 연결 방법 공유"
-                android:textColor="#000000"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText,TextContrastCheck" />
 
@@ -180,16 +180,16 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="30dp"
-            app:cardBackgroundColor="#6395EC"
+            app:cardBackgroundColor="@color/new_blue"
             app:cardCornerRadius="5dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="초대 메세지 발송"
-                android:textColor="#000000"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText,TextContrastCheck" />
 

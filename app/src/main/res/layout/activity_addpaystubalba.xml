@@ -60,7 +60,7 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="name"
                     android:textColor="#000000"
                     android:textSize="25sp" />
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="0월"
                     android:textColor="@color/blue"
                     android:textSize="25sp" />
@@ -788,7 +788,7 @@
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="총 급여"
                 android:textColor="#000000"
                 android:textSize="24sp" />
@@ -806,7 +806,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="원"
                 android:textColor="#000000"
                 android:textSize="24sp" />
@@ -827,7 +827,7 @@
                 android:id="@+id/send_paystub"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="급여명세서 발송"
                 android:textColor="@color/black"

@@ -34,7 +34,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_toStartOf="@+id/date"
                 android:layout_toEndOf="@+id/profile_area"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="start|center"
                 android:text="name"
                 android:textColor="@color/new_blue"

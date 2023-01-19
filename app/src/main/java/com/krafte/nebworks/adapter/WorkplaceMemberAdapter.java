@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +18,8 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.pop.WorkMemberOptionActivity;
@@ -91,18 +94,24 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
         WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(position);
 
         try{
+            dlog.DlogContext(mContext);
             /*
              * 직급
              * -- 대표님 : 점주가 생성
              *  -- 관리자 : 근로자가 생성
              */
+            dlog.i("WorkplaceMemberAdapter getkind : " + item.getKind());
             holder.name.setText(item.getName());
+
+            Glide.with(mContext).load(item.getImg_path())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(holder.member_profile);
             if(item.getKind().equals("0")){
                 //승인대기상태
-                holder.linear04.setVisibility(View.VISIBLE);
+                holder.linear04.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
                 holder.linear01.setVisibility(View.GONE);
                 holder.linear02.setVisibility(View.GONE);
-                holder.linear03.setVisibility(View.GONE);
                 holder.contract_state.setVisibility(View.GONE);
                 holder.state.setVisibility(View.GONE);
                 holder.list_setting.setVisibility(View.INVISIBLE);
@@ -121,16 +130,13 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 });
             }else if(item.getKind().equals("4")){
                 //퇴직상태
-                holder.linear04.setVisibility(View.VISIBLE);
                 holder.linear01.setVisibility(View.GONE);
                 holder.linear02.setVisibility(View.GONE);
-                holder.linear03.setVisibility(View.VISIBLE);
-                holder.contract_state.setVisibility(View.GONE);
-                holder.contract_area.setVisibility(View.GONE);
-                holder.state.setVisibility(View.GONE);
+                holder.state_tv.setText("퇴직");
                 holder.list_setting.setVisibility(View.INVISIBLE);
-                holder.jejik.setText("퇴직"); //-- 퇴직후 보관날짜를 표시할지 회의 필요
+                holder.contract_area.setVisibility(View.GONE);
                 holder.add_detail_tv.setText("복직");
+                holder.linear04.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
                 holder.add_detail.setOnClickListener(v -> {
                     if (mListener2 != null) {
                         mListener2.onItemClick(v, position,2);
@@ -141,9 +147,8 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 if(item.getState().equals("null")){
                     //직원 상세정보가 없을때
                     holder.add_detail.setVisibility(View.VISIBLE);
-                    holder.linear04.setVisibility(View.VISIBLE);
+                    holder.linear04.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
 
-                    holder.linear03.setVisibility(View.GONE);
                     holder.contract_state.setVisibility(View.GONE);
                     holder.state.setVisibility(View.GONE);
                 }else{
@@ -151,7 +156,6 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                         holder.add_detail.setVisibility(View.VISIBLE);
                         holder.state.setVisibility(View.GONE);
                         holder.linear02.setVisibility(View.GONE);
-                        holder.linear03.setVisibility(View.GONE);
                         holder.linear04.setVisibility(View.GONE);
                         holder.contract_state.setVisibility(View.GONE);
                         dlog.i("item.getJikgup() : " + item.getJikgup());
@@ -162,21 +166,6 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                         }else{
                             holder.pay.setText(item.getPay());
                             holder.pay.setTextColor(Color.parseColor("#000000"));
-                        }
-                        if((item.getState().equals("null") || item.getState().isEmpty())){
-                            holder.jejik.setText("상세정보 입력 전");
-                            holder.jejik.setTextColor(Color.parseColor("#a9a9a9"));
-                        }else{
-                            String jejikState = "";
-                            if(item.getState().equals("1")){
-                                //등록,재직
-                                jejikState = "재직";
-                            }else if(item.getState().equals("2")){
-                                //휴직
-                                jejikState = "휴직";
-                            }
-                            holder.jejik.setText(jejikState);
-                            holder.jejik.setTextColor(Color.parseColor("#000000"));
                         }
                         holder.state_tv.setText(item.getWorktime());
                     }
@@ -194,7 +183,6 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                         holder.contract_state_tv.setText("근로계약서 미진행");
                     }
                 }
-
 
                 if(USER_INFO_AUTH.equals("0")){
                     holder.list_setting.setVisibility(View.VISIBLE);
@@ -234,6 +222,19 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     shardpref.putString("mem_jikgup",item.getJikgup());
                     shardpref.putString("mem_pay",item.getPay());
                     shardpref.putString("remote", "member");
+                    dlog.i("------list_setting------");
+                    dlog.i("mem_id : "          + item.getId());
+                    dlog.i("mem_account : "     + item.getAccount());
+                    dlog.i("mem_name : "        + item.getName());
+                    dlog.i("mem_phone : "       + item.getPhone());
+                    dlog.i("mem_gender : "      + item.getGender());
+                    dlog.i("mem_jumin : "       + item.getJumin());
+                    dlog.i("mem_kind : "        + item.getKind());
+                    dlog.i("mem_join_date : "   + item.getJoin_date());
+                    dlog.i("mem_state : "       + item.getState());
+                    dlog.i("mem_jikgup : "      + item.getJikgup());
+                    dlog.i("mem_pay : "         + item.getPay());
+                    dlog.i("------list_setting------");
                     Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
                     intent.putExtra("place_id", place_id);
                     intent.putExtra("user_id",item.getId());
@@ -258,10 +259,11 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name,jikgup,pay,state_tv,jejik,contract_area_tv,add_detail_tv,contract_state_tv;
+        TextView name,jikgup,pay,state_tv,contract_area_tv,add_detail_tv,contract_state_tv;
         CardView add_detail,state,contract_state,contract_area;
         RelativeLayout list_setting;
-        LinearLayout linear01,linear02,linear03,linear04;
+        LinearLayout linear01,linear02,linear04;
+        ImageView member_profile;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -275,9 +277,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
             list_setting        = itemView.findViewById(R.id.list_setting);
             linear01            = itemView.findViewById(R.id.linear01);
             linear02            = itemView.findViewById(R.id.linear02);
-            linear03            = itemView.findViewById(R.id.linear03);
             linear04            = itemView.findViewById(R.id.linear04);
-            jejik               = itemView.findViewById(R.id.jejik);
             contract_state      = itemView.findViewById(R.id.contract_state);
 
             add_detail          = itemView.findViewById(R.id.add_detail);
@@ -286,6 +286,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
             contract_area       = itemView.findViewById(R.id.contract_area);
             contract_area_tv    = itemView.findViewById(R.id.contract_area_tv);
             contract_state_tv   = itemView.findViewById(R.id.contract_state_tv);
+            member_profile      = itemView.findViewById(R.id.member_profile);
 
             shardpref      = new PreferenceHelper(mContext);
             USER_INFO_ID   = shardpref.getString("USER_INFO_ID", "");

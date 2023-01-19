@@ -3,13 +3,15 @@ package com.krafte.nebworks.ui.member;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +53,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,15 +60,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class MemberManagement extends AppCompatActivity {
+public class MemberManagement extends AppCompatActivity implements View.OnTouchListener{
     private static final String TAG = "MemberManagement";
     private ActivityMemberManageBinding binding;
     Context mContext;
     private final DateCurrent dc = new DateCurrent();
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
-
-    //BottomNavigation
-    ImageView bottom_icon01, bottom_icon02, bottom_icon03, bottom_icon04, bottom_icon05;
 
     // shared 저장값
     PreferenceHelper shardpref;
@@ -95,6 +93,16 @@ public class MemberManagement extends AppCompatActivity {
     String return_page = "";
 
     int total_member_cnt = 0;
+    /*
+        0 - 승인 대기중 ( 직원이 근무신청 )
+        1 - 승인
+        2 - 직접입력한 멤버
+        3 - 초대한 멤버 ( 점주가 직원초대 )
+        4 - 퇴직한 멤버
+    */
+    int memkind = -1;
+    float oldXvalue;
+    float oldYvalue;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
@@ -116,8 +124,8 @@ public class MemberManagement extends AppCompatActivity {
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
             //Singleton Area
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_id        = PlaceCheckData.getInstance().getPlace_id().equals("0")?shardpref.getString("place_id","0"):PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id().equals("0")?shardpref.getString("getPlace_owner_id","0"):PlaceCheckData.getInstance().getPlace_owner_id();
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
@@ -130,6 +138,18 @@ public class MemberManagement extends AppCompatActivity {
             wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
             gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
 
+            dlog.i("------MemberManagement onCreate------");
+            dlog.i("place_id : "            + place_id);
+            dlog.i("place_owner_id : "      + place_owner_id);
+            dlog.i("USER_INFO_ID : "        + USER_INFO_ID);
+            dlog.i("USER_INFO_NAME : "      + USER_INFO_NAME);
+            dlog.i("USER_INFO_AUTH : "      + USER_INFO_AUTH);
+            dlog.i("return_page : "         + return_page);
+            dlog.i("SELECT_POSITION : "     + SELECT_POSITION);
+            dlog.i("SELECT_POSITION_sub : " + SELECT_POSITION_sub);
+            dlog.i("wifi_certi_flag : "     + wifi_certi_flag);
+            dlog.i("gps_certi_flag : "      + gps_certi_flag);
+            dlog.i("------MemberManagement onCreate------");
 
             binding.changePlace.setOnClickListener(v -> {
                 PlaceListBottomSheet plb = new PlaceListBottomSheet();
@@ -149,6 +169,24 @@ public class MemberManagement extends AppCompatActivity {
 //                super.onBackPressed();
                 getWorkCnt();
             });
+
+            binding.memMenu01.setOnClickListener(v -> {
+                ChangeMenu(1);
+                SetAllMemberList(place_id);
+            });
+            binding.memMenu02.setOnClickListener(v -> {
+                ChangeMenu(2);
+                SetAllMemberList(place_id);
+            });
+            binding.memMenu03.setOnClickListener(v -> {
+                ChangeMenu(3);
+                SetAllMemberList(place_id);
+            });
+            binding.memMenu04.setOnClickListener(v -> {
+                ChangeMenu(4);
+                SetAllMemberList(place_id);
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -162,7 +200,6 @@ public class MemberManagement extends AppCompatActivity {
     }
 
 
-    Timer timer = new Timer();
     @Override
     public void onResume() {
         super.onResume();
@@ -174,7 +211,6 @@ public class MemberManagement extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
     }
 
     public void getNotReadFeedcnt() {
@@ -302,9 +338,9 @@ public class MemberManagement extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        dlog.e("GetInsurancePercent function START");
-                        dlog.e("response 1: " + response.isSuccessful());
-                        dlog.e("response 2: " + rc.getBase64decode(response.body()));
+                        dlog.e("SetAllMemberList function START");
+                        dlog.e("SetAllMemberList response 1: " + response.isSuccessful());
+                        dlog.e("SetAllMemberList response 2: " + rc.getBase64decode(response.body()));
                         try {
                             String jsonResponse = rc.getBase64decode(response.body());
                             //Array데이터를 받아올 때
@@ -322,73 +358,98 @@ public class MemberManagement extends AppCompatActivity {
                             } else {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-//                                    if(USER_INFO_AUTH.equals("0")){
-//                                        if(!PlaceCheckData.getInstance().getPlace_owner_id().equals(UserCheckData.getInstance().getUser_id())){
-//                                            total_member_cnt ++;
-//                                            mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-//                                                    jsonObject.getString("id"),
-//                                                    jsonObject.getString("place_name"),
-//                                                    jsonObject.getString("account"),
-//                                                    jsonObject.getString("name"),
-//                                                    jsonObject.getString("phone"),
-//                                                    jsonObject.getString("gender"),
-//                                                    jsonObject.getString("img_path"),
-//                                                    jsonObject.getString("jumin"),
-//                                                    jsonObject.getString("kind"),
-//                                                    jsonObject.getString("join_date"),
-//                                                    jsonObject.getString("state"),
-//                                                    jsonObject.getString("jikgup"),
-//                                                    jsonObject.getString("pay"),
-//                                                    jsonObject.getString("worktime"),
-//                                                    jsonObject.getString("contract_cnt")
-//                                            ));
-//                                        }
-//                                    }else{
-//                                        total_member_cnt ++;
-//                                        mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-//                                                jsonObject.getString("id"),
-//                                                jsonObject.getString("place_name"),
-//                                                jsonObject.getString("account"),
-//                                                jsonObject.getString("name"),
-//                                                jsonObject.getString("phone"),
-//                                                jsonObject.getString("gender"),
-//                                                jsonObject.getString("img_path"),
-//                                                jsonObject.getString("jumin"),
-//                                                jsonObject.getString("kind"),
-//                                                jsonObject.getString("join_date"),
-//                                                jsonObject.getString("state"),
-//                                                jsonObject.getString("jikgup"),
-//                                                jsonObject.getString("pay"),
-//                                                jsonObject.getString("worktime"),
-//                                                jsonObject.getString("contract_cnt")
-//                                        ));
-//                                    }
-                                    total_member_cnt ++;
-                                    mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("place_name"),
-                                            jsonObject.getString("account"),
-                                            jsonObject.getString("name"),
-                                            jsonObject.getString("phone"),
-                                            jsonObject.getString("gender"),
-                                            jsonObject.getString("img_path"),
-                                            jsonObject.getString("jumin"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("join_date"),
-                                            jsonObject.getString("state"),
-                                            jsonObject.getString("jikgup"),
-                                            jsonObject.getString("pay"),
-                                            jsonObject.getString("worktime"),
-                                            jsonObject.getString("contract_cnt")
-                                    ));
+                                    if(memkind == -1){
+                                        total_member_cnt ++;
+                                        mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("place_name"),
+                                                jsonObject.getString("account"),
+                                                jsonObject.getString("name"),
+                                                jsonObject.getString("phone"),
+                                                jsonObject.getString("gender"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("jumin"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("join_date"),
+                                                jsonObject.getString("state"),
+                                                jsonObject.getString("jikgup"),
+                                                jsonObject.getString("pay"),
+                                                jsonObject.getString("worktime"),
+                                                jsonObject.getString("contract_cnt")
+                                        ));
+                                    } else if(memkind == 1){
+                                        if(jsonObject.getString("kind").equals("1") && (!jsonObject.getString("jikgup").equals("null") || !jsonObject.getString("pay").equals("null"))){
+                                            total_member_cnt ++;
+                                            mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("place_name"),
+                                                    jsonObject.getString("account"),
+                                                    jsonObject.getString("name"),
+                                                    jsonObject.getString("phone"),
+                                                    jsonObject.getString("gender"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("jumin"),
+                                                    jsonObject.getString("kind"),
+                                                    jsonObject.getString("join_date"),
+                                                    jsonObject.getString("state"),
+                                                    jsonObject.getString("jikgup"),
+                                                    jsonObject.getString("pay"),
+                                                    jsonObject.getString("worktime"),
+                                                    jsonObject.getString("contract_cnt")
+                                            ));
+                                        }
+                                    } else if(memkind == 2){
+                                        if(jsonObject.getString("jikgup").equals("null") || jsonObject.getString("pay").equals("null")){
+                                            total_member_cnt ++;
+                                            mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("place_name"),
+                                                    jsonObject.getString("account"),
+                                                    jsonObject.getString("name"),
+                                                    jsonObject.getString("phone"),
+                                                    jsonObject.getString("gender"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("jumin"),
+                                                    jsonObject.getString("kind"),
+                                                    jsonObject.getString("join_date"),
+                                                    jsonObject.getString("state"),
+                                                    jsonObject.getString("jikgup"),
+                                                    jsonObject.getString("pay"),
+                                                    jsonObject.getString("worktime"),
+                                                    jsonObject.getString("contract_cnt")
+                                            ));
+                                        }
+                                    } else if(memkind == 3){
+                                        if(jsonObject.getString("kind").equals("4")){
+                                            total_member_cnt ++;
+                                            mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("place_name"),
+                                                    jsonObject.getString("account"),
+                                                    jsonObject.getString("name"),
+                                                    jsonObject.getString("phone"),
+                                                    jsonObject.getString("gender"),
+                                                    jsonObject.getString("img_path"),
+                                                    jsonObject.getString("jumin"),
+                                                    jsonObject.getString("kind"),
+                                                    jsonObject.getString("join_date"),
+                                                    jsonObject.getString("state"),
+                                                    jsonObject.getString("jikgup"),
+                                                    jsonObject.getString("pay"),
+                                                    jsonObject.getString("worktime"),
+                                                    jsonObject.getString("contract_cnt")
+                                            ));
+                                        }
+                                    }
                                 }
 
-                                if(total_member_cnt == 0){
+                                if(Response.length() == 0){
                                     binding.nodataArea.setVisibility(View.VISIBLE);
                                     binding.allMemberlist.setVisibility(View.GONE);
                                 }else{
                                     binding.nodataArea.setVisibility(View.GONE);
                                     binding.allMemberlist.setVisibility(View.VISIBLE);
+                                    binding.memberCnt.setText(Response.length() + "명");
                                 }
                                 mAdapter.setOnItemClickListener2(new WorkplaceMemberAdapter.OnItemClickListener2() {
                                     @Override
@@ -625,6 +686,36 @@ public class MemberManagement extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void ChangeMenu(int i){
+        binding.memMenu01.setTextColor(Color.parseColor("#DBDBDB"));
+        binding.memMenu02.setTextColor(Color.parseColor("#DBDBDB"));
+        binding.memMenu03.setTextColor(Color.parseColor("#DBDBDB"));
+        binding.memMenu04.setTextColor(Color.parseColor("#DBDBDB"));
+        binding.memLine01.setBackgroundColor(Color.parseColor("#DBDBDB"));
+        binding.memLine02.setBackgroundColor(Color.parseColor("#DBDBDB"));
+        binding.memLine03.setBackgroundColor(Color.parseColor("#DBDBDB"));
+        binding.memLine04.setBackgroundColor(Color.parseColor("#DBDBDB"));
+
+        if(i == 1){
+            memkind = -1;
+            binding.memMenu01.setTextColor(Color.parseColor("#1445D0"));
+            binding.memLine01.setBackgroundColor(Color.parseColor("#1445D0"));
+        }else if(i == 2){
+            memkind = 1;
+            binding.memMenu02.setTextColor(Color.parseColor("#1445D0"));
+            binding.memLine02.setBackgroundColor(Color.parseColor("#1445D0"));
+        }else if(i == 3){
+            memkind = 2; //(0,2,3)
+            binding.memMenu03.setTextColor(Color.parseColor("#1445D0"));
+            binding.memLine03.setBackgroundColor(Color.parseColor("#1445D0"));
+        }else if(i == 4){
+            memkind = 3;
+            binding.memMenu04.setTextColor(Color.parseColor("#1445D0"));
+            binding.memLine04.setBackgroundColor(Color.parseColor("#1445D0"));
+        }
+    }
+
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
@@ -645,11 +736,63 @@ public class MemberManagement extends AppCompatActivity {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("직원추가");
+        add_worktime_btn.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
         add_worktime_btn.setOnClickListener(v -> {
             MemberOption mo = new MemberOption();
             mo.show(getSupportFragmentManager(),"MemberOption");
         });
     }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        int width = ((ViewGroup) v.getParent()).getWidth() - v.getWidth();
+        int height = ((ViewGroup) v.getParent()).getHeight() - v.getHeight();
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            oldXvalue = event.getX();
+            oldYvalue = event.getY();
+            //  Log.i("Tag1", "Action Down X" + event.getX() + "," + event.getY());
+            Log.i("Tag1", "Action Down rX " + event.getRawX() + "," + event.getRawY());
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            v.setX(event.getRawX() - oldXvalue);
+            v.setY(event.getRawY() - (oldYvalue + v.getHeight()));
+            //  Log.i("Tag2", "Action Down " + me.getRawX() + "," + me.getRawY());
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+
+            if (v.getX() > width && v.getY() > height) {
+                v.setX(width);
+                v.setY(height);
+            } else if (v.getX() < 0 && v.getY() > height) {
+                v.setX(0);
+                v.setY(height);
+            } else if (v.getX() > width && v.getY() < 0) {
+                v.setX(width);
+                v.setY(0);
+            } else if (v.getX() < 0 && v.getY() < 0) {
+                v.setX(0);
+                v.setY(0);
+            } else if (v.getX() < 0 || v.getX() > width) {
+                if (v.getX() < 0) {
+                    v.setX(0);
+                    v.setY(event.getRawY() - oldYvalue - v.getHeight());
+                } else {
+                    v.setX(width);
+                    v.setY(event.getRawY() - oldYvalue - v.getHeight());
+                }
+            } else if (v.getY() < 0 || v.getY() > height) {
+                if (v.getY() < 0) {
+                    v.setX(event.getRawX() - oldXvalue);
+                    v.setY(0);
+                } else {
+                    v.setX(event.getRawX() - oldXvalue);
+                    v.setY(height);
+                }
+            }
+        }
+        return true;
+    }
+
+
 //    //-------몰입화면 설정
 //    @Override
 //    public void onWindowFocusChanged(boolean hasFocus) {

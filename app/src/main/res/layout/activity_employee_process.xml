@@ -30,7 +30,7 @@
         android:text="0000년 00월 00일"
         android:textSize="18sp"
         android:textColor="@color/white"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/pretendard_bold"
         android:gravity="center"/>
     <TextView
         android:id="@+id/process_title"
@@ -39,7 +39,7 @@
         android:text="000님 ~"
         android:textSize="25sp"
         android:textColor="@color/black"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/pretendard_bold"
         android:gravity="center"/>
     <ImageView
         android:id="@+id/io_btn"
@@ -83,7 +83,7 @@
                         android:id="@+id/store_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_bold"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="start|center"
                         android:text="store_name"
                         android:textColor="@color/black"
@@ -94,7 +94,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/store_name"
-                        android:fontFamily="@font/inter_bold"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="start|center"
                         android:text="현재 선택된 매장"
                         android:textColor="#696969"
@@ -134,7 +134,7 @@
                 android:id="@+id/inout_able"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="Loading..."
                 android:textColor="@color/blue"
@@ -149,7 +149,7 @@
             android:layout_below="@+id/store_name"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="43dp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:text="@string/close_txt"
             android:textColor="@color/white"

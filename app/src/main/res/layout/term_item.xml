@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toStartOf="@+id/del_term01"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="start|center"
             android:paddingStart="10dp"
             android:text="근로자가 무단 결근 2일 이상 하거나 월 2일 이상\n결근하는 경우 근로계약을 해지 할 수 있음"

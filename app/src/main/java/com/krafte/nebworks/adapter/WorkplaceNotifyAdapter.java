@@ -84,9 +84,9 @@ public class WorkplaceNotifyAdapter extends RecyclerView.Adapter<WorkplaceNotify
             String title = mData.get(position).getTitle();
             dlog.i("title: " + title);
             if (title.equals("업무결재") || title.equals("근로계약서") || title.equals("급여명세서") || title.equals("업무보고") || title.equals("근무신청")) {
-                Glide.with(mContext).load(R.drawable.icon_report)
+                Glide.with(mContext).load(R.drawable.ic_icon_report)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .placeholder(R.drawable.icon_report)
+                        .placeholder(R.drawable.ic_icon_report)
                         .skipMemoryCache(true)
                         .into(holder.profile_setimg);
 

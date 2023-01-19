@@ -55,7 +55,7 @@
             android:layout_gravity="end"
             android:layout_marginEnd="15dp"
             android:text="모두읽음"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:textSize="16sp"
             tools:ignore="HardcodedText" />
     </RelativeLayout>
@@ -65,7 +65,7 @@
         android:textColor="@color/black"
         android:text="알림"
         android:layout_margin="20dp"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/pretendard_bold"
         android:textSize="22sp"
         tools:ignore="HardcodedText" />
     <androidx.recyclerview.widget.RecyclerView

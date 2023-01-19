@@ -53,7 +53,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,10 +98,6 @@ public class WorkstatusFragment extends Fragment {
     String Month = "";
     String Day = "";
     String getYMPicker = "";
-    String gYear = "";
-    String gMonth = "";
-    String bYear = "";
-    String bMonth = "";
 
     public static WorkstatusFragment newInstance(int number) {
         WorkstatusFragment fragment = new WorkstatusFragment();
@@ -143,7 +138,7 @@ public class WorkstatusFragment extends Fragment {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
 
-        setBtnEvent();
+
         //UI 데이터 세팅
         try {
             //Singleton Area
@@ -163,137 +158,9 @@ public class WorkstatusFragment extends Fragment {
             }
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             fg = WorkStatusSubFragment1.newInstance();
-
+            setBtnEvent();
             setAddBtnSetting();
             SendToday();
-
-            binding.statusFragmentbtn1.setOnClickListener(v -> {
-                if(USER_INFO_AUTH.isEmpty()) {
-                    isAuth();
-                } else {
-                    binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                    binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                    fg = WorkStatusSubFragment1.newInstance();
-                    setChildFragment(fg);
-                }
-            });
-            binding.statusFragmentbtn2.setOnClickListener(v -> {
-                if(USER_INFO_AUTH.isEmpty()) {
-                    isAuth();
-                } else {
-                    binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                    binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                    fg = WorkStatusSubFragment2.newInstance();
-                    setChildFragment(fg);
-                }
-            });
-            binding.statusFragmentbtn3.setOnClickListener(v -> {
-                if(USER_INFO_AUTH.isEmpty()) {
-                    isAuth();
-                } else {
-                    binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                    binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
-                    fg = WorkStatusSubFragment3.newInstance();
-                    setChildFragment(fg);
-                }
-            });
-            binding.statusFragmentbtn4.setOnClickListener(v -> {
-                if(USER_INFO_AUTH.isEmpty()) {
-                    isAuth();
-                } else {
-                    binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                    binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
-                    fg = WorkStatusSubFragment4.newInstance();
-                    setChildFragment(fg);
-                }
-            });
-
-            cal = Calendar.getInstance();
-            toDay = sdf.format(cal.getTime());
-            dlog.i("오늘 :" + toDay);
-            binding.setdate.setText(toDay);
-            shardpref.putString("FtoDay", toDay);
-            gYear = toDay.substring(0, 4);
-            gMonth = toDay.substring(5, 7);
-            getYMPicker = gYear + "-" + gMonth;
-            SetCalenderData(gYear, gMonth);
-
-            binding.prevDate.setOnClickListener(v -> {
-                if(USER_INFO_AUTH.isEmpty()) {
-                    isAuth();
-                } else {
-                    cal.add(Calendar.DATE, -1);
-                    toDay = sdf.format(cal.getTime());
-                    binding.setdate.setText(toDay);
-                    shardpref.putString("FtoDay", toDay);
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    SetCalenderData(Year, Month);
-                    SendToday();
-                }
-            });
-            binding.nextDate.setOnClickListener(v -> {
-                if(USER_INFO_AUTH.isEmpty()) {
-                    isAuth();
-                } else {
-                    cal.add(Calendar.DATE, +1);
-                    toDay = sdf.format(cal.getTime());
-                    binding.setdate.setText(toDay);
-                    shardpref.putString("FtoDay", toDay);
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    SetCalenderData(Year, Month);
-                    SendToday();
-                }
-            });
-
-            Calendar c = Calendar.getInstance();
-            int mYear = c.get(Calendar.YEAR);
-            int mMonth = c.get(Calendar.MONTH);
-            int mDay = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    Year = String.valueOf(year);
-                    Month = String.valueOf(month + 1);
-                    Day = String.valueOf(dayOfMonth);
-                    Day = Day.length() == 1 ? "0" + Day : Day;
-                    Month = Month.length() == 1 ? "0" + Month : Month;
-                    binding.setdate.setText(year + "-" + Month + "-" + Day);
-                    getYMPicker = binding.setdate.getText().toString().substring(0, 7);
-                    SendToday();
-                    SetCalenderData(String.valueOf(year), Month);
-                }
-            }, mYear, mMonth, mDay);
-
-            binding.setdate.setOnClickListener(view -> {
-                if(USER_INFO_AUTH.isEmpty()) {
-                    isAuth();
-                } else {
-                    if (binding.setdate.isClickable()) {
-                        datePickerDialog.show();
-                    }
-                }
-            });
-
-            binding.taskMore.setVisibility(View.INVISIBLE);
-            if (USER_INFO_AUTH.isEmpty()) {
-                // dummy
-                binding.inoutName.setText("나의 매장 출퇴근");
-            } else {
-                binding.inoutName.setText(place_name + " 출퇴근");
-            }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -477,7 +344,20 @@ public class WorkstatusFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SetCalenderData(gYear, gMonth);
+
+        cal = Calendar.getInstance();
+        toDay = sdf.format(cal.getTime());
+        dlog.i("오늘 :" + toDay);
+        binding.setdate.setText(toDay);
+        shardpref.putString("FtoDay", toDay);
+        Year = toDay.substring(0, 4);
+        Month = toDay.substring(5, 7);
+        Day = toDay.substring(8, 10);
+        getYMPicker = Year + "-" + Month;
+        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+
+        SetCalenderData(Year, Month);
+
         if (USER_INFO_AUTH.isEmpty()) {
             binding.cnt01.setText("10");
             binding.cnt02.setText("2");
@@ -494,16 +374,156 @@ public class WorkstatusFragment extends Fragment {
     }
 
     public void setBtnEvent() {
+        binding.statusFragmentbtn1.setOnClickListener(v -> {
+            if(USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                fg = WorkStatusSubFragment1.newInstance();
+                setChildFragment(fg);
+            }
+        });
+        binding.statusFragmentbtn2.setOnClickListener(v -> {
+            if(USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                fg = WorkStatusSubFragment2.newInstance();
+                setChildFragment(fg);
+            }
+        });
+        binding.statusFragmentbtn3.setOnClickListener(v -> {
+            if(USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
+                fg = WorkStatusSubFragment3.newInstance();
+                setChildFragment(fg);
+            }
+        });
+        binding.statusFragmentbtn4.setOnClickListener(v -> {
+            if(USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
+                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                fg = WorkStatusSubFragment4.newInstance();
+                setChildFragment(fg);
+            }
+        });
+
+
+        binding.prevDate.setOnClickListener(v -> {
+            if(USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                if (chng_icon) {
+                    cal.add(Calendar.MONTH, -1);
+                    toDay = sdf.format(cal.getTime());
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    getYMPicker = Year + "-" + Month;
+                    binding.setdate.setText(Year + "년 " + Month + "월 ");
+                } else {
+                    cal.add(Calendar.DATE, -1);
+                    toDay = sdf.format(cal.getTime());
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    getYMPicker = Year + "-" + Month;
+                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                }
+                SetCalenderData(Year, Month);
+                SendToday();
+            }
+        });
+        binding.nextDate.setOnClickListener(v -> {
+            if(USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                if (chng_icon) {
+                    cal.add(Calendar.MONTH, +1);
+                    toDay = sdf.format(cal.getTime());
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    getYMPicker = Year + "-" + Month;
+                    binding.setdate.setText(Year + "년 " + Month + "월 ");
+                } else {
+                    cal.add(Calendar.DATE, +1);
+                    toDay = sdf.format(cal.getTime());
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    getYMPicker = Year + "-" + Month;
+                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                }
+                SetCalenderData(Year, Month);
+                SendToday();
+            }
+        });
+
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Year = String.valueOf(year);
+                Month = String.valueOf(month + 1);
+                Day = String.valueOf(dayOfMonth);
+                Day = Day.length() == 1 ? "0" + Day : Day;
+                Month = Month.length() == 1 ? "0" + Month : Month;
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                getYMPicker = Year + "년 " + Month + "월 ";
+                SendToday();
+                SetCalenderData(String.valueOf(year), Month);
+            }
+        }, mYear, mMonth, mDay);
+
+        binding.setdate.setOnClickListener(view -> {
+            if(USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                if (binding.setdate.isClickable()) {
+                    datePickerDialog.show();
+                }
+            }
+        });
+
+        binding.taskMore.setVisibility(View.INVISIBLE);
+        if (USER_INFO_AUTH.isEmpty()) {
+            // dummy
+            binding.inoutName.setText("나의 매장 출퇴근");
+        } else {
+            binding.inoutName.setText(place_name + " 출퇴근");
+        }
         binding.changeIcon.setOnClickListener(v -> {
             if (!chng_icon) {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
-                SetCalenderData(gYear, gMonth);
+                binding.setdate.setText(Year + "년 " + Month + "월");
+                SetCalenderData(Year, Month);
             } else {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
             }
         });
     }

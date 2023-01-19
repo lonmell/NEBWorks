@@ -3,10 +3,10 @@ package com.krafte.nebworks.ui.member;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddDirectlyInterface;
@@ -50,6 +51,9 @@ public class AdddirectlyMember extends AppCompatActivity {
 
     //Shared
     String place_id = "";
+    String place_name = "";
+    String change_place_id = "";
+
     String USER_INFO_NAME = "";
     String USER_INFO_PHONE = "";
     String USER_LOGIN_METHOD = "";
@@ -79,6 +83,10 @@ public class AdddirectlyMember extends AppCompatActivity {
     String Jumin = "";
     String JoinDate = "";
 
+    Calendar cal;
+    String format = "yyyy-MM-dd";
+    SimpleDateFormat sdf = new SimpleDateFormat(format);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,15 +109,31 @@ public class AdddirectlyMember extends AppCompatActivity {
         //shardpref Area
         shardpref = new PreferenceHelper(mContext);
         USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD", "");
+        place_name          = shardpref.getString("place_name", "");
+        change_place_id = place_id;
+        dlog.i("USER_INFO_NAME = "      + USER_INFO_NAME);
+        dlog.i("USER_INFO_PHONE = "     + USER_INFO_PHONE);
+        dlog.i("USER_LOGIN_METHOD = "   + USER_LOGIN_METHOD);
+        dlog.i("place_id = "            + place_id);
+        dlog.i("place_name = "          + place_name);
 
-        Log.i(TAG, "USER_INFO_NAME = " + USER_INFO_NAME);
-        Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
-        Log.i(TAG, "USER_LOGIN_METHOD = " + USER_LOGIN_METHOD);
+        binding.storeName.setText(place_name);
 
-        Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR);
-        int mMonth = c.get(Calendar.MONTH);
-        int mDay = c.get(Calendar.DAY_OF_MONTH);
+//        Calendar c = Calendar.getInstance();
+//        int mYear = c.get(Calendar.YEAR);
+//        int mMonth = c.get(Calendar.MONTH);
+//        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        cal = Calendar.getInstance();
+        toDay = sdf.format(cal.getTime());
+        dlog.i("오늘 :" + toDay);
+        int mYear = Integer.parseInt(toDay.substring(0, 4));
+        int mMonth = Integer.parseInt(toDay.substring(5, 7));
+        int mDay = Integer.parseInt(toDay.substring(8, 10));
+
+        dlog.i("Calendar mYear : " + mYear);
+        dlog.i("Calendar mMonth : " + (mMonth == 0?mMonth+1:mMonth));
+        dlog.i("Calendar mDay : " + mDay);
 
         binding.inputbox04.setText(mYear + "-" + (String.valueOf(mMonth).length() == 1?"0"+mMonth:mMonth) + "-"
                 + (String.valueOf(mDay).length() == 1?"0"+String.valueOf(mDay):String.valueOf(mDay)));
@@ -209,6 +233,16 @@ public class AdddirectlyMember extends AppCompatActivity {
 
 
     private void setBtnEvent() {
+        binding.selectPlace.setOnClickListener(v -> {
+            PlaceListBottomSheet plb = new PlaceListBottomSheet();
+            plb.show(getSupportFragmentManager(),"PlaceListBottomSheet");
+            plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
+                shardpref.putString("change_place_id",place_id);
+                dlog.i("change_place_id : " + place_id);
+                change_place_id = place_id;
+                binding.storeName.setText(place_name);
+            });
+        });
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });
@@ -227,7 +261,7 @@ public class AdddirectlyMember extends AppCompatActivity {
 
     private boolean SaveCheck() {
         JoinDate = binding.inputbox04.getText().toString();
-        if(place_id.isEmpty()){
+        if(change_place_id.isEmpty()){
             Toast.makeText(mContext,"매장 ID가 저장되어있지 않습니다, 다시 시도해주세요.",Toast.LENGTH_SHORT).show();
             pm.PlaceList(mContext);
             return false;
@@ -245,7 +279,7 @@ public class AdddirectlyMember extends AppCompatActivity {
             return false;
         }else{
             dlog.i("------SaveCheck------");
-            dlog.i("place_id : " + place_id);
+            dlog.i("place_id : " + change_place_id);
             dlog.i("name : " + name);
             dlog.i("phone : " + phone);
             dlog.i("Jumin : " + Jumin);
@@ -262,7 +296,7 @@ public class AdddirectlyMember extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PlaceMemberAddDirectlyInterface api = retrofit.create(PlaceMemberAddDirectlyInterface.class);
-        Call<String> call = api.getData(place_id, "-99",name,phone,Jumin,"2",JoinDate);
+        Call<String> call = api.getData(change_place_id, "-99",name,phone,Jumin,"2",JoinDate);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -274,8 +308,7 @@ public class AdddirectlyMember extends AppCompatActivity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             if (jsonResponse.replace("\"", "").equals("success")) {
-                                dlog.i("매장 멤버 추가 완료");
-                                Toast_Nomal("직원이 정상적으로 등록되었습니다.");
+                                Toast_Nomal("직원 등록이 완료되었습니다.");
                                 pm.MemberManagement(mContext);
                             }
                         }

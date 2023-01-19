@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:orientation="vertical"
-    tools:ignore="HardcodedText"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".ui.main.MainFragment"
+    tools:ignore="HardcodedText">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="직원관리"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -73,67 +73,182 @@
                     android:background="@drawable/bell" />
             </RelativeLayout>
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/title_area"
             android:layout_width="match_parent"
+            android:layout_height="55dp"
             android:layout_below="@+id/top_bar"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_height="55dp">
-            <TextView
+            android:layout_marginEnd="20dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="start|center"
-                android:text="직원목록"
-                android:textColor="@color/black"
-                android:fontFamily="@font/inter_bold"
                 android:layout_toStartOf="@+id/change_place"
-                android:layout_alignParentStart="true"
-                android:textStyle="bold"
-                android:textSize="25sp"/>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/change_place"
-                    android:layout_width="180dp"
-                    android:layout_height="36dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="5dp"
-                    app:cardBackgroundColor="#E0EAFB">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/select_place"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:gravity="start|center"
-                            android:text="매장선택"
-                            android:textColor="@color/blue" />
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="15dp"
-                            android:background="@drawable/ic_page_move_arrow"
-                            android:rotation="90"/>
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="start|center"
+                    android:text="괸라중인 직원"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/member_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="7dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="start|center"
+                    android:text="0명"
+                    android:textColor="@color/new_blue"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/change_place"
+                android:layout_width="121dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:cardBackgroundColor="@color/blue_200"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/select_place"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="start|center"
+                        android:text="매장선택"
+                        android:textColor="@color/new_blue" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/ic_page_move_arrow"
+                        android:rotation="90" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/title_area">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/all_memberlist"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="120dp"
-                android:background="#ffffff" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:id="@+id/mem_menu01"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="전체"
+                        android:textColor="@color/new_blue" />
+
+                    <TextView
+                        android:id="@+id/mem_menu02"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="등록"
+                        android:textColor="#949494" />
+
+                    <TextView
+                        android:id="@+id/mem_menu03"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="대기"
+                        android:textColor="#949494" />
+
+                    <TextView
+                        android:id="@+id/mem_menu04"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="휴직"
+                        android:textColor="#949494" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:id="@+id/mem_line01"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/new_blue" />
+
+                    <LinearLayout
+                        android:id="@+id/mem_line02"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#DBDBDB" />
+
+                    <LinearLayout
+                        android:id="@+id/mem_line03"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#DBDBDB" />
+
+                    <LinearLayout
+                        android:id="@+id/mem_line04"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#DBDBDB" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/all_memberlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#ffffff" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/nodata_area"
@@ -143,49 +258,27 @@
                 android:background="#ffffff"
                 android:orientation="vertical"
                 android:visibility="gone">
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="0dp"
-                    android:layout_margin="20dp"
-                    app:cardBackgroundColor="#f2f2f2"
-                    app:cardCornerRadius="10dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="29dp"
-                            android:background="@drawable/remove_blank" />
-                        <TextView
-                            android:id="@+id/nodata_txt"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="해당되는 직원이 없습니다.\n직원을 추가해주세요."
-                            android:textSize="17sp"
-                            android:textColor="#696969"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="29dp"
-                            android:gravity="center"/>
-                    </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:layout_width="350dp"
+                    android:layout_height="212dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="35dp"
+                    android:background="@drawable/ic_first_mem_btn" />
             </LinearLayout>
-<!--            <ImageView-->
-<!--                android:id="@+id/add_member_btn"-->
-<!--                android:layout_width="80dp"-->
-<!--                android:layout_height="80dp"-->
-<!--                android:layout_alignParentEnd="true"-->
-<!--                android:layout_alignParentBottom="true"-->
-<!--                android:layout_marginEnd="20dp"-->
-<!--                android:layout_marginBottom="40dp"-->
-<!--                android:background="@drawable/addmemberbtn" />-->
-            <include
-                android:id="@+id/add_btn"
-                layout="@layout/addbtn" />
+            <!--            <ImageView-->
+            <!--                android:id="@+id/add_member_btn"-->
+            <!--                android:layout_width="80dp"-->
+            <!--                android:layout_height="80dp"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_alignParentBottom="true"-->
+            <!--                android:layout_marginEnd="20dp"-->
+            <!--                android:layout_marginBottom="40dp"-->
+            <!--                android:background="@drawable/addmemberbtn" />-->
         </RelativeLayout>
+
+        <include
+            android:id="@+id/add_btn"
+            layout="@layout/addbtn" />
     </RelativeLayout>
 </LinearLayout>

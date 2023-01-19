@@ -52,6 +52,10 @@ public class TaskAddOption extends BottomSheetDialogFragment {
         binding.selecttv011.setText("새로운 할일을 추가합니다.");
         binding.selecttv02.setText("자주하는 업무 추가");
         binding.selecttv021.setText("저장된 자주하는 업무를 불러옵니다.");
+
+        binding.certi01.setBackgroundResource(R.drawable.ic_icon_report);
+        binding.certi01.setBackgroundResource(R.drawable.ic_contact_icon);
+
         setBtnEvent();
         Log.i(TAG, "data : " + data);
         shardpref.remove("make_kind");

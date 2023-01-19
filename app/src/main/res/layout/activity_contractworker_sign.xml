@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="근로계약서"
                 android:textColor="#000000"
@@ -373,7 +373,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
             <TextView
@@ -383,7 +383,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/red"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -409,7 +409,7 @@
                 android:layout_height="wrap_content"
                 android:text="제 2 조  (수습기간 )"
                 android:textStyle="bold"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
@@ -434,7 +434,7 @@
             android:layout_height="50dp"
             android:text="제  3  조   (근무장소 및 업무내용)"
             android:textStyle="bold"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
@@ -498,7 +498,7 @@
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:gravity="start|center"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
             <TextView
@@ -508,7 +508,7 @@
                 android:textStyle="bold"
                 android:gravity="start|center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/red"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -597,7 +597,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
             <TextView
@@ -607,7 +607,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/red"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -685,7 +685,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
             <TextView
@@ -695,7 +695,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/red"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -744,7 +744,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
             <TextView
@@ -754,7 +754,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/red"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -816,7 +816,7 @@
             android:background="@drawable/grayback_gray_round"
             android:paddingStart="15dp"
             android:gravity="center|start"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
@@ -870,7 +870,7 @@
             android:background="@drawable/grayback_gray_round"
             android:paddingStart="15dp"
             android:gravity="center|start"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
@@ -926,7 +926,7 @@
             android:background="@drawable/grayback_gray_round"
             android:paddingStart="15dp"
             android:gravity="center|start"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
@@ -1011,7 +1011,7 @@
             android:layout_height="wrap_content"
             android:text="제 11 조   ( 기타 )"
             android:textStyle="bold"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
@@ -1033,7 +1033,7 @@
             android:layout_height="wrap_content"
             android:text="제 12 조  (근로계약서의 교부 )"
             android:textStyle="bold"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
@@ -1070,7 +1070,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="서명진행"
                 android:textColor="#000000"
@@ -1081,7 +1081,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="고용주 서명"
                 android:textColor="#000000"
@@ -1107,7 +1107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="근로자 서명"
                 android:textColor="#000000"
@@ -1132,7 +1132,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:textSize="16sp"
                     android:background="#F5F6F8"
                     android:textColor="#949494"
@@ -1152,7 +1152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="저장"
                     android:textColor="@color/white"

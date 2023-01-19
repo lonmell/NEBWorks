@@ -32,6 +32,7 @@ public class MemberOption extends BottomSheetDialogFragment {
 
     // shared 저장값
     PreferenceHelper shardpref;
+    int optionkind = 0;//0 -- 직원관리 , 1 -- 할일 관리
 
     //Other
     Dlog dlog = new Dlog();
@@ -49,6 +50,8 @@ public class MemberOption extends BottomSheetDialogFragment {
 
         setBtnEvent();
         Log.i(TAG, "data : " + data);
+        binding.certi01.setBackgroundResource(R.drawable.ic_pencil_icon);
+        binding.certi01.setBackgroundResource(R.drawable.ic_mail_icon);
 
         return binding.getRoot();
     }
