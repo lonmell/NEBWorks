@@ -345,13 +345,13 @@ public class ProfileEditActivity extends AppCompatActivity {
             binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
             binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
 
-            binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+            binding.womanTxt.setTextColor(Color.parseColor("#000000"));
             binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
         });
 
         binding.selectWoman.setOnClickListener(v -> {
             USER_INFO_GENDER = "2";
-            binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+            binding.manTxt.setTextColor(Color.parseColor("#000000"));
             binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
 
             binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));

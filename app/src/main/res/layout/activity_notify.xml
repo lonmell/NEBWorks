@@ -50,17 +50,30 @@
             android:padding="10dp"
             android:gravity="center"
             android:fontFamily="@font/inter_regular"
-            android:text="모두읽기"
+            android:text="모두읽음"
             android:textColor="#8F9191"
             android:textSize="16sp"
             tools:ignore="HardcodedText,RtlSymmetry" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/notifi_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="알림을 확인해주세요"
+        android:textSize="28sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/gangwonedu_bold"
+        />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workplace_notify_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="30dp"
         android:background="#ffffff" />
     <LinearLayout
@@ -76,24 +89,24 @@
             android:layout_height="wrap_content"
             app:cardElevation="0dp"
             android:layout_margin="20dp"
-            app:cardBackgroundColor="#f2f2f2"
             app:cardCornerRadius="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="98dp"
+                    android:layout_height="98dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="29dp"
-                    android:background="@drawable/remove_blank" />
+                    android:layout_marginTop="94dp"
+                    android:background="@drawable/no_nofifi_data" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="내용이 존재하지 않습니다."
-                    android:textSize="17sp"
-                    android:textColor="#696969"
+                    android:text="알림 내역이\n존재하지 않습니다."
+                    android:textSize="28sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/gangwonedu_bold"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="29dp"
                     android:gravity="center"/>

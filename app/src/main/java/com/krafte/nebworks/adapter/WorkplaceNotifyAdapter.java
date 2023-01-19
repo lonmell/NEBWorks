@@ -81,11 +81,22 @@ public class WorkplaceNotifyAdapter extends RecyclerView.Adapter<WorkplaceNotify
                 }
             }
 
-            Glide.with(mContext).load(item.getImg_path())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .placeholder(R.drawable.identificon)
-                    .skipMemoryCache(true)
-                    .into(holder.profile_setimg);
+            String title = mData.get(position).getTitle();
+            dlog.i("title: " + title);
+            if (title.equals("업무결재") || title.equals("근로계약서") || title.equals("급여명세서") || title.equals("업무보고") || title.equals("근무신청")) {
+                Glide.with(mContext).load(R.drawable.icon_report)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .placeholder(R.drawable.icon_report)
+                        .skipMemoryCache(true)
+                        .into(holder.profile_setimg);
+
+            } else {
+                Glide.with(mContext).load(item.getImg_path())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .placeholder(R.drawable.identificon)
+                        .skipMemoryCache(true)
+                        .into(holder.profile_setimg);
+            }
 
             if(item.getRead_yn().equals("n")){
                 holder.read_yn.setVisibility(View.VISIBLE);

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.UserCheckData;
@@ -37,6 +38,9 @@ public class DeleteUserActivity extends AppCompatActivity {
 
     //other
     boolean check = false;
+
+    boolean firstCheck = false;
+    boolean secondCheck = false;
 
     Dlog dlog = new Dlog();
     @Override
@@ -66,23 +70,97 @@ public class DeleteUserActivity extends AppCompatActivity {
         binding.acceptDel.setBackgroundResource(R.drawable.resize_service_off);
     }
 
+    private void setGuide01Check() {
+        firstCheck = true;
+        binding.pagetv03.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+        binding.guideArea01.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
+        binding.guideImg01.setBackgroundResource(R.drawable.resize_service_on_blue);
+    }
+
+    private void setGuide01CheckCancel() {
+        firstCheck = false;
+        binding.pagetv03.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+        binding.guideArea01.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
+        binding.guideImg01.setBackgroundResource(R.drawable.resize_service_off);
+    }
+
+    private void setGuide02Check() {
+        secondCheck = true;
+        binding.pagetv04.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+        binding.guideArea02.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
+        binding.guideImg02.setBackgroundResource(R.drawable.resize_service_on_blue);
+    }
+
+    private void setGuide02CheckCancel() {
+        secondCheck = false;
+        binding.pagetv04.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+        binding.guideArea02.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
+        binding.guideImg02.setBackgroundResource(R.drawable.resize_service_off);
+    }
+
+    private void setAcceptDelCheck() {
+        check = true;
+        binding.pagetv05.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        binding.acceptDelArea.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+        binding.acceptDel.setBackgroundResource(R.drawable.resize_service_on);
+    }
+
+    private void setAcceptDelCheckCancel() {
+        check = false;
+        binding.pagetv05.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+        binding.acceptDelArea.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
+        binding.acceptDel.setBackgroundResource(R.drawable.resize_service_off);
+    }
+
 
     private void setBtnEvent(){
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });
+
+        binding.guideArea01.setOnClickListener(v -> {
+            if (!firstCheck) {
+                setGuide01Check();
+
+                if (secondCheck) {
+                    setAcceptDelCheck();
+                }
+
+            } else {
+                setGuide01CheckCancel();
+                setAcceptDelCheckCancel();
+            }
+        });
+
+        binding.guideArea02.setOnClickListener(v -> {
+            if (!secondCheck) {
+                setGuide02Check();
+
+                if (firstCheck) {
+                    setAcceptDelCheck();
+                }
+            } else {
+                setGuide02CheckCancel();
+                setAcceptDelCheckCancel();
+            }
+        });
+
         binding.acceptDelArea.setOnClickListener(v -> {
             if(!check){
-                check = true;
-                binding.acceptDel.setBackgroundResource(R.drawable.resize_service_on);
+                setAcceptDelCheck();
+                setGuide01Check();
+                setGuide02Check();
+
             }else{
-                check = false;
-                binding.acceptDel.setBackgroundResource(R.drawable.resize_service_off);
+                setAcceptDelCheckCancel();
+                setGuide01CheckCancel();
+                setGuide02CheckCancel();
             }
         });
 
         binding.delUser.setOnClickListener(v -> {
             if(!check){
+                BtnOneCircleFun(false);
                 Toast_Nomal("안내사항 확인 동의에 체크해주세요.");
             }else{
                 BtnOneCircleFun(false);
