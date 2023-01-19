@@ -158,7 +158,7 @@ public class PlaceListActivity extends AppCompatActivity {
         dlog.i("USER_INFO_NAME : " + USER_INFO_NAME);
         dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
         dlog.i("-----onResume-----");
-        if(!USER_INFO_ID.isEmpty() && !USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
+        if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
             GetPlaceList();
             getNotReadFeedcnt();
         }
@@ -428,7 +428,7 @@ public class PlaceListActivity extends AppCompatActivity {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        if(!response.body().equals("[]") && Response.length() != 0){
+                        if(!jsonResponse.equals("[]") && Response.length() != 0){
                             String NotRead = Response.getJSONObject(0).getString("notread_feed");
                             if(NotRead.equals("0") || NotRead.isEmpty()){
                                 binding.notiRed.setVisibility(View.INVISIBLE);

@@ -265,7 +265,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     dlog.i("PlaceWorkCheck jsonResponse length : " + jsonResponse.length());
                     dlog.i("PlaceWorkCheck jsonResponse : " + jsonResponse);
                     try {
-                        if (!response.body().equals("[]")) {
+                        if (!jsonResponse.equals("[]")) {
                             JSONArray Response = new JSONArray(jsonResponse);
 
                             try {

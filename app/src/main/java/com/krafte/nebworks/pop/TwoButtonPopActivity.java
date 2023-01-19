@@ -277,7 +277,7 @@ public class TwoButtonPopActivity extends Activity {
                     KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
                     instance.openWithDefault(mContext, url);
                     pm.AuthSelect(mContext);
-                } else if (flag.equals("직원미입력")) {
+                }else if (flag.equals("직원미입력")) {
                     shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
                     shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
                     pm.Main(mContext);

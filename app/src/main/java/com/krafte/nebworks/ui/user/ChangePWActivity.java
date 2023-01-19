@@ -113,7 +113,6 @@ public class ChangePWActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        BtnOneCircleFun(true);
     }
 
     private void setBtnEvent(){
@@ -176,7 +175,6 @@ public class ChangePWActivity extends AppCompatActivity {
         });
 
         binding.joinconfirm.setOnClickListener(v -> {
-            BtnOneCircleFun(false);
             SaveUser();
         });
     }
@@ -270,7 +268,6 @@ public class ChangePWActivity extends AppCompatActivity {
     }
 
     public void Toast_Nomal(String message){
-        BtnOneCircleFun(true);
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
         TextView toast_textview  = layout.findViewById(R.id.toast_textview);
@@ -284,8 +281,4 @@ public class ChangePWActivity extends AppCompatActivity {
         toast.show();
     }
 
-    private void BtnOneCircleFun(boolean tf){
-        binding.joinconfirm.setClickable(false);
-        binding.joinconfirm.setEnabled(false);
-    }
 }

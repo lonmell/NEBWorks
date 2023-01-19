@@ -153,7 +153,7 @@ public class PaySelectPlaceActivity extends BottomSheetDialogFragment {
                                 worker_list.setAdapter(mAdapter);
                                 worker_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                 dlog.i("SIZE : " + Response.length());
-                                if (response.body().equals("[]")) {
+                                if (jsonResponse.equals("[]")) {
                                     no_data_txt.setVisibility(View.VISIBLE);
                                     dlog.i("SetNoticeListview Thread run! ");
                                     dlog.i("GET SIZE : " + Response.length());

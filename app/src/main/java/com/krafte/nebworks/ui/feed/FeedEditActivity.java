@@ -400,7 +400,7 @@ public class FeedEditActivity extends AppCompatActivity {
                             dlog.i("GETFeed jsonResponse length : " + response.body().length());
                             dlog.i("GETFeed jsonResponse : " + response.body());
                             try {
-                                if (!response.body().equals("[]")) {
+                                if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
                                     String place_id = Response.getJSONObject(0).getString("place_id");
@@ -531,7 +531,7 @@ public class FeedEditActivity extends AppCompatActivity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
+                                if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     if (!ProfileUrl.isEmpty()) {
                                         saveBitmapAndGetURI();
                                     }

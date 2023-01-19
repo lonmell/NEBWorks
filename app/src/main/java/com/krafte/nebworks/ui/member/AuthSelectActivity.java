@@ -369,7 +369,7 @@ public class AuthSelectActivity extends AppCompatActivity {
                             dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
                             dlog.i("UserCheck jsonResponse : " + jsonResponse);
                             try {
-                                if (!response.body().equals("[]")) {
+                                if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
                                     String name = Response.getJSONObject(0).getString("name");

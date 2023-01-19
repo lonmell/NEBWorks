@@ -38,8 +38,6 @@ import com.krafte.nebworks.util.RetrofitConnect;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.Timer;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -146,11 +144,11 @@ public class MoreFragment extends Fragment {
                     binding.settingList05Txt.setText("연결해제");
                     binding.loginMethodIcon.setVisibility(View.VISIBLE);
                     if(USER_LOGIN_METHOD.equals("Google")){
-                        binding.loginMethodIcon.setBackgroundResource(R.drawable.google);
+                        binding.loginMethodIcon.setBackgroundResource(R.drawable.google_icon);
                     } else if(USER_LOGIN_METHOD.equals("Kakao")){
-                        binding.loginMethodIcon.setBackgroundResource(R.drawable.kakao);
+                        binding.loginMethodIcon.setBackgroundResource(R.drawable.kakao_icon);
                     } else if(USER_LOGIN_METHOD.equals("Naver")){
-                        binding.loginMethodIcon.setBackgroundResource(R.drawable.naver_icon);
+                        binding.loginMethodIcon.setBackgroundResource(R.drawable.naver_icon2);
                     }
                 }
             }

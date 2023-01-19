@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,8 +23,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.kakao.sdk.common.util.KakaoCustomTabsClient;
-import com.kakao.sdk.talk.TalkApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.dataInterface.UserInsertInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
@@ -532,12 +529,14 @@ public class JoinActivity extends AppCompatActivity {
                                 cnt = jsonResponse.length();
 //                                Toast.makeText(mContext,"이미 존재하는 이메일입니다.",Toast.LENGTH_SHORT).show();
                                 binding.emailCheck.setText("중복되는 이메일입니다.");
+                                binding.tv07.setVisibility(View.INVISIBLE);
                                 binding.emailCheck.setTextColor(Color.parseColor("#FF3D00"));
                             } else {
                                 binding.tv06.setBackgroundColor(Color.parseColor("#a9a9a9"));
                                 binding.tv06.setTextColor(Color.parseColor("#ffffff"));
                                 binding.tv06.setClickable(false);
                                 binding.tv06.setEnabled(false);
+                                binding.tv07.setVisibility(View.VISIBLE);
                                 binding.emailCheck.setText("사용할 수 있습니다.");
                                 binding.emailCheck.setTextColor(Color.parseColor("#1483FE"));
                                 duplicateCheck = true;

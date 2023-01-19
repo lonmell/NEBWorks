@@ -22,6 +22,7 @@ public class UserCheckData {
     private static String user_jongeob = "0";
     private static String user_platform = "0";
     private static String user_contract_cnt = "0";
+    private static String user_contract_id = "0";
     private static String user_auth = "";
 
     public String getUser_id() {
@@ -190,6 +191,18 @@ public class UserCheckData {
 
     public void setUser_contract_cnt(String user_contract_cnt) {
         this.user_contract_cnt = user_contract_cnt;
+    }
+
+    public String getUser_contract_id() {
+        return user_contract_id;
+    }
+
+    public void setUser_contract_id(String user_contract_id) {
+        UserCheckData.user_contract_id = user_contract_id;
+    }
+
+    public static void setInstance(UserCheckData instance) {
+        UserCheckData.instance = instance;
     }
 
     public String getUser_auth() {

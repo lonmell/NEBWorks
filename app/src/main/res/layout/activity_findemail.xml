@@ -42,12 +42,12 @@
 
     <ImageView
         android:id="@+id/find_email_img"
-        android:layout_width="172dp"
-        android:layout_height="155dp"
+        android:layout_width="248dp"
+        android:layout_height="213dp"
         android:layout_below="@+id/top_bar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="54dp"
-        android:background="@drawable/find_ur_email" />
+        android:background="@drawable/change_pw_end" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/copyemail_area"
