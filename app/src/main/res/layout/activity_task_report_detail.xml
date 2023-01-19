@@ -62,7 +62,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="29dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/gangwonedu_bold"
                 android:text="업무지시 사항"
                 android:textColor="@color/black"
                 android:textSize="25sp"
@@ -76,7 +76,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="29dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="할일"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -102,7 +102,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="부가설명"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -131,7 +131,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="보고방식"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -141,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text=""
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
@@ -159,7 +159,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="요청 시작시간"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -169,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
                     android:text="00:00"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -187,7 +187,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="요청 마감시간"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -197,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
                     android:text="00:00"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -222,7 +222,7 @@
                     android:id="@+id/textView02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="업무지시 보고"
                     android:textColor="@color/black"
                     android:textSize="25sp"
@@ -234,9 +234,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text=""
-                    android:textColor="@color/blue"
+                    android:textColor="@color/new_blue"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -263,7 +263,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="실제 마감시간"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -273,7 +273,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
                     android:text="00:00"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -288,7 +288,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="보고사항"
                     android:textColor="@color/black"
                     android:textSize="15sp"
@@ -299,9 +299,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text=""
-                    android:textColor="@color/blue"
+                    android:textColor="@color/new_blue"
                     android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -328,7 +328,7 @@
                     android:id="@+id/incomplete_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
                     android:background="@drawable/grayback_gray_round"
                     android:minHeight="50dp"
                     android:text=""
@@ -357,7 +357,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="반려사유"
                     android:textColor="@color/black"
                     android:textSize="25sp"
@@ -368,7 +368,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"
@@ -385,7 +385,7 @@
                 android:layout_marginTop="100dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="15dp"
-                android:background="@color/blue"
+                android:background="@color/new_blue"
                 android:orientation="horizontal">
 
                 <TextView
@@ -393,10 +393,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="결재하러가기"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     tools:ignore="HardcodedText,TextContrastCheck" />
 
             </LinearLayout>
@@ -418,7 +418,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="목록으로"
                     android:textColor="@color/black"

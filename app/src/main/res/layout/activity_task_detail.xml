@@ -128,7 +128,7 @@
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/inter_bold"
                 android:text=""
-                android:textColor="@color/blue"
+                android:textColor="@color/new_blue"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -215,7 +215,7 @@
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/inter_bold"
                 android:text="0명"
-                android:textColor="@color/blue"
+                android:textColor="@color/new_blue"
                 android:textSize="16sp" />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
@@ -232,7 +232,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="20dp"
-            android:background="@color/blue">
+            android:background="@color/new_blue">
             <TextView
                 android:id="@+id/accept_tv"
                 android:layout_width="match_parent"

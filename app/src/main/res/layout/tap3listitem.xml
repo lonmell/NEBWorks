@@ -23,7 +23,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="start|top"
             android:singleLine="true"
             android:text="제목"
@@ -61,11 +61,11 @@
                 android:id="@+id/diff_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="start|center"
                 android:singleLine="true"
                 android:text="0시간"
-                android:textColor="#949494"
+                android:textColor="@color/new_blue"
                 android:textSize="15sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
@@ -96,11 +96,11 @@
                 android:id="@+id/task_kind_state"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="start|center"
                 android:singleLine="true"
                 android:text="인증사진"
-                android:textColor="#949494"
+                android:textColor="@color/new_blue"
                 android:textSize="15sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </LinearLayout>
@@ -130,10 +130,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="할일에 추가하기"
-                android:textColor="#6395EC"
+                android:textColor="@color/new_blue"
                 android:textSize="15sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
         </RelativeLayout>

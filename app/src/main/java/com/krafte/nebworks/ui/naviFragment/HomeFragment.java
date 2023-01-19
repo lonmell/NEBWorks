@@ -234,6 +234,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        binding.payLayout.setOnClickListener(v-> {
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                pm.PayManagement(mContext);
+            }
+        });
+
         binding.itemArea.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
