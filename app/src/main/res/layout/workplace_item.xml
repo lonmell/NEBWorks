@@ -7,17 +7,12 @@
     android:layout_height="wrap_content"
     android:id="@+id/total_item"
     android:background="#ffffff"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginEnd="20dp"
-    app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
     app:cardBackgroundColor="#dbdbdb">
     <androidx.cardview.widget.CardView
         android:id="@+id/item_area"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         android:layout_margin="1dp"
         app:cardBackgroundColor="#ffffff">
@@ -31,16 +26,16 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/i_o_btn"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="51dp"
+                android:layout_height="51dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
                 android:elevation="10dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardBackgroundColor="@color/blue"
-                app:cardCornerRadius="60dp"
                 app:cardElevation="0dp">
 
                 <ImageView
@@ -56,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/i_o_btn"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentStart="false"
                 android:layout_marginEnd="10dp"
                 android:layout_toStartOf="@+id/place_state"
                 android:layout_toEndOf="@+id/i_o_btn"
@@ -76,12 +71,12 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_toStartOf="@+id/place_state"
-                        android:fontFamily="@font/inter_bold"
+                        android:fontFamily="@font/gangwonedu_bold"
                         android:gravity="start|center"
                         android:maxLines="1"
                         android:text="작업 중"
                         android:textColor="#000000"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         tools:ignore="HardcodedText" />
 
                     <RelativeLayout
@@ -102,6 +97,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="3dp"
+                            android:backgroundTint="@color/new_blue"
                             android:background="@drawable/people_icon2"
                             android:scaleType="fitXY" />
 
@@ -116,7 +112,7 @@
                             android:gravity="center"
                             android:singleLine="true"
                             android:text="0"
-                            android:textColor="#A9A9A9"
+                            android:textColor="#54585A"
                             android:textSize="16sp"
                             tools:ignore="HardcodedText,TextContrastCheck" />
                     </RelativeLayout>
@@ -150,12 +146,12 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_bold"
                     android:gravity="start|center"
                     android:maxLines="1"
                     android:text="작업 중"
-                    android:textColor="#54585A"
-                    android:textSize="16sp"
+                    android:textColor="@color/new_blue"
+                    android:textSize="13sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -165,9 +161,10 @@
                 android:layout_height="match_parent"
                 android:layout_alignTop="@+id/money_area"
                 android:layout_alignBottom="@+id/money_area"
-                android:layout_alignParentStart="true"
+                android:layout_below="@+id/store_basic_info"
+                android:layout_alignStart="@+id/store_basic_info"
                 android:visibility="visible"
-                app:cardBackgroundColor="#DBDBDB"
+                app:cardBackgroundColor="@color/blue_200"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="0dp">
 
@@ -180,8 +177,8 @@
                     android:text="임시저장중"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:textColor="#54585A"
-                    android:textSize="16sp"
+                    android:textColor="@color/new_blue"
+                    android:textSize="12sp"
                     tools:ignore="HardcodedText" />
             </androidx.cardview.widget.CardView>
 
@@ -191,7 +188,8 @@
                 android:layout_height="30dp"
                 android:layout_below="@+id/store_basic_info"
                 android:layout_alignStart="@+id/store_basic_info"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="18dp"
                 android:orientation="horizontal"
                 android:visibility="invisible">
 
@@ -203,7 +201,7 @@
                     android:maxLines="1"
                     android:text="예상급여"
                     android:textColor="#54585A"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -216,7 +214,7 @@
                     android:maxLines="1"
                     android:text="0원"
                     android:textColor="#000000"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
         </RelativeLayout>

@@ -34,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.loader.content.CursorLoader;
 
 import com.bumptech.glide.Glide;
@@ -312,9 +313,11 @@ public class PlaceAddActivity extends AppCompatActivity {
                 if (category.isEmpty()) {
                     binding.inputbox03.setBackgroundResource(R.drawable.default_input_round);
                     binding.inputbox03.setTextColor(Color.parseColor("#696969"));
+                    binding.placeKindDownArrow.setBackgroundResource(R.drawable.down_arrow);
                 } else {
                     binding.inputbox03.setBackgroundResource(R.drawable.default_select_on_round);
-                    binding.inputbox03.setTextColor(Color.parseColor("#000000"));
+                    binding.inputbox03.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    binding.placeKindDownArrow.setBackgroundResource(R.drawable.down_arrow_blue);
                 }
             });
         });
@@ -331,11 +334,17 @@ public class PlaceAddActivity extends AppCompatActivity {
                 boheom.add("4대보험");
                 boheom.remove("없음");
                 binding.boheom01.setBackgroundResource(R.drawable.select_full_round);
+                binding.boheomarea01.setBackgroundResource(R.drawable.default_select_on_round_100);
+                binding.boheomtv01.setTextColor(R.color.new_blue);
                 binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheomarea03.setBackgroundResource(R.drawable.default_input_round);
+                binding.boheomtv03.setTextColor(Color.parseColor("#949494"));
             } else {
                 boheom01TF = false;
                 boheom.remove("4대보험");
                 binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheomarea01.setBackgroundResource(R.drawable.default_input_round);
+                binding.boheomtv01.setTextColor(Color.parseColor("#949494"));
             }
         });
 
@@ -346,11 +355,17 @@ public class PlaceAddActivity extends AppCompatActivity {
                 boheom.add("3.3%소득세");
                 boheom.remove("없음");
                 binding.boheom02.setBackgroundResource(R.drawable.select_full_round);
+                binding.boheomarea02.setBackgroundResource(R.drawable.default_select_on_round_100);
+                binding.boheomtv02.setTextColor(R.color.new_blue);
                 binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheomarea03.setBackgroundResource(R.drawable.default_input_round);
+                binding.boheomtv03.setTextColor(Color.parseColor("#949494"));
             } else {
                 boheom02TF = false;
                 boheom.remove("3.3%소득세");
                 binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheomarea02.setBackgroundResource(R.drawable.default_input_round);
+                binding.boheomtv02.setTextColor(Color.parseColor("#949494"));
             }
         });
 
@@ -362,12 +377,20 @@ public class PlaceAddActivity extends AppCompatActivity {
                 boheom.clear();
                 boheom.add("없음");
                 binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheomarea01.setBackgroundResource(R.drawable.default_input_round);
+                binding.boheomtv01.setTextColor(Color.parseColor("#949494"));
                 binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheomarea02.setBackgroundResource(R.drawable.default_input_round);
+                binding.boheomtv02.setTextColor(Color.parseColor("#949494"));
                 binding.boheom03.setBackgroundResource(R.drawable.select_full_round);
+                binding.boheomarea03.setBackgroundResource(R.drawable.default_select_on_round_100);
+                binding.boheomtv03.setTextColor(R.color.new_blue);
             } else {
                 boheom03TF = false;
                 boheom.clear();
                 binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
+                binding.boheomarea03.setBackgroundResource(R.drawable.default_input_round);
+                binding.boheomtv03.setTextColor(Color.parseColor("#949494"));
             }
         });
 

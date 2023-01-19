@@ -115,6 +115,8 @@ public class AuthSelectActivity extends AppCompatActivity {
         bottom_icon04tv = binding.getRoot().findViewById(R.id.bottom_icon04tv);
         bottom_icon05tv = binding.getRoot().findViewById(R.id.bottom_icon05tv);
 
+        binding.ownerImg.bringToFront();
+
         final List<String> tabElement;
         tabElement = Arrays.asList("홈", "할일", "근무현황", "커뮤니티", "더보기");
         ArrayList<Fragment> fragments = new ArrayList<>();
@@ -220,21 +222,7 @@ public class AuthSelectActivity extends AppCompatActivity {
             shardpref.putString("event", "auth_select");
             pm.PlaceList(mContext);
         });
-        binding.ownerButton.setOnClickListener(v -> {
-            shardpref.putString("USER_INFO_AUTH", "0");
-            shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
-            shardpref.putString("event", "auth_select");
-            pm.PlaceList(mContext);
-        });
         binding.goWorker.setOnClickListener(v -> {
-            shardpref.putString("USER_INFO_AUTH", "1");
-            shardpref.putInt("SELECT_POSITION", 0);
-            shardpref.putInt("SELECT_POSITION_sub", 0);
-            shardpref.putString("event", "auth_select");
-            pm.PlaceList(mContext);
-        });
-        binding.workerButton.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH", "1");
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
