@@ -116,7 +116,7 @@
             android:layout_toEndOf="@+id/store_cnt_tv"
             android:fontFamily="@font/inter_bold"
             android:text="0"
-            android:textColor="#6395EC"
+            android:textColor="@color/new_blue"
             android:textSize="22sp" />
 
         <TextView
@@ -141,7 +141,8 @@
             android:id="@+id/place_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/add_place" />
+            android:layout_above="@+id/add_place"
+            android:layout_marginTop="20dp"/>
 
         <LinearLayout
             android:id="@+id/add_place"
@@ -183,6 +184,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffffff"
+            android:layout_marginTop="16dp"
             android:visibility="gone">
 
             <ImageView

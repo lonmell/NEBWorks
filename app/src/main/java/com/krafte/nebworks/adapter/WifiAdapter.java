@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
@@ -56,6 +58,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
             holder.wifi_icon.setBackgroundResource(R.drawable.wifi);
             holder.wifi_name.setTextColor(R.color.black);
             holder.wifi_select_icon.setVisibility(View.INVISIBLE);
+            holder.wifi_list_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
         }
         holder.wifi_name.setOnClickListener(v -> {
             dlog.i("lastPos :" + lastPos);
@@ -63,6 +66,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
             holder.wifi_icon.setBackgroundResource(R.drawable.wifi_on);
             holder.wifi_name.setTextColor(R.color.blue);
             holder.wifi_select_icon.setVisibility(View.VISIBLE);
+            holder.wifi_list_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
             lastPos = position;
             if (mListener != null) {
                 mListener.onItemClick(v, position);
@@ -79,6 +83,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView wifi_name;
         ImageView wifi_icon,wifi_select_icon;
+        RelativeLayout wifi_list_layout;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -86,6 +91,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
             wifi_name = itemView.findViewById(R.id.wifi_name);
             wifi_icon = itemView.findViewById(R.id.wifi_icon);
             wifi_select_icon = itemView.findViewById(R.id.wifi_select_icon);
+            wifi_list_layout = itemView.findViewById(R.id.wifi_list_layout);
 
             shardpref = new PreferenceHelper(mContext);
             dlog.DlogContext(mContext);

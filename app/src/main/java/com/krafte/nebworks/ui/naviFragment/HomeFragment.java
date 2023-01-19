@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment {
             binding.payDate.setText(date);
 
             String[] dateWithTime = dc.GET_TIME.split(" ");
-            binding.detailInout.setText(date + dateWithTime[1]);
+//            binding.detailInout.setText(date + dateWithTime[1]);
 
             //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);
@@ -348,12 +348,12 @@ public class HomeFragment extends Fragment {
                                 //직원이 없을때
                                 dlog.i("SIZE 1 : " + Response.length());
                                 binding.addMemberArea.setVisibility(View.VISIBLE);
-                                binding.importantList.setVisibility(View.GONE);
+                                // binding.importantList.setVisibility(View.GONE);
                             } else {
                                 //직원이 한명이라도 있을때
                                 dlog.i("SIZE 2 : " + Response.length());
                                 binding.addMemberArea.setVisibility(View.GONE);
-                                binding.importantList.setVisibility(View.VISIBLE);
+                                // binding.importantList.setVisibility(View.VISIBLE);
                                 //-- 직원 총 급여 표시할것
                             }
                         } catch (JSONException e) {
@@ -469,6 +469,13 @@ public class HomeFragment extends Fragment {
 
                     binding.title.setText(place_name);
                     binding.memberCnt.setText(place_totalcnt + "명");
+                    if (new Integer(place_totalcnt) > 0) {
+                        binding.addMemberArea.setVisibility(View.GONE);
+                        binding.payLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.addMemberArea.setVisibility(View.VISIBLE);
+                        binding.payLayout.setVisibility(View.GONE);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -531,8 +538,8 @@ public class HomeFragment extends Fragment {
 
                                             mList = new ArrayList<>();
                                             mAdapter = new MainMemberLAdapter(mContext, mList);
-                                            binding.importantList.setAdapter(mAdapter);
-                                            binding.importantList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                            //binding.importantList.setAdapter(mAdapter);
+                                            // binding.importantList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                                             dlog.i("SIZE : " + Response.length());
                                             if (jsonResponse.equals("[]")) {
                                                 dlog.i("SetNoticeListview Thread run! ");

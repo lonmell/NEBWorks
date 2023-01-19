@@ -301,7 +301,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                     binding.noData.setVisibility(View.VISIBLE);
                                     dlog.i("SetNoticeListview Thread run! ");
                                     dlog.i("GET SIZE : " + Response.length());
-                                    binding.storeCnt.setText(String.valueOf(Response.length()));
+                                    binding.storeCnt.setText(String.valueOf(Response.length()) + "개");
                                 } else {
                                     binding.noData.setVisibility(View.GONE);
                                     for (int i = 0; i < Response.length(); i++) {
@@ -334,7 +334,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                         ));
                                     }
                                 }
-                                binding.storeCnt.setText(String.valueOf(store_cnt));
+                                binding.storeCnt.setText(String.valueOf(store_cnt) + "개");
 
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.setOnItemClickListener(new WorkplaceListAdapter.OnItemClickListener() {
