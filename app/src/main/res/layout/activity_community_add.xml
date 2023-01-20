@@ -175,7 +175,7 @@
                 android:id="@+id/writer_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#ffffff"
+                android:background="@color/blue_200"
                 android:fontFamily="@font/applesdgothicneo"
                 android:padding="15dp"
                 android:text="   닉네임으로 작성 "

@@ -106,6 +106,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         PlaceListData.PlaceListData_list item = mData.get(position);
 
         try {
+            holder.first_line.setVisibility(position == 0?View.VISIBLE:View.GONE);
 
             Glide.with(mContext).load(item.getImg_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -134,7 +135,8 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     if (item.getAccept_state().equals("0")) {
                         holder.money_area.setVisibility(View.INVISIBLE);
                         holder.store_kind_state.setVisibility(View.VISIBLE);
-                        holder.state_tv.setText("임시저장 중 / 승인대기 중");
+                        holder.address.setText("임시저장 중 / 승인대기 중");
+                        holder.state_tv.setText("작성하기");
                         holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
                         holder.list_setting.setVisibility(View.INVISIBLE);
                         holder.list_setting.setClickable(false);
@@ -200,27 +202,28 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         ImageView store_thumnail;
         TextView title, name, address, state_tv;
         TextView item_peoplecnt, total_money;
-        CardView store_kind_state, item_area, total_item, store_invite_accept;
+        CardView store_kind_state, item_area, store_invite_accept;
         RelativeLayout list_setting, list_img_area, place_state;
-        LinearLayout money_area;
+        LinearLayout money_area, total_item, first_line;
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            store_thumnail = itemView.findViewById(R.id.store_thumnail);
-            title = itemView.findViewById(R.id.title);
-            item_peoplecnt = itemView.findViewById(R.id.item_peoplecnt);
-            name = itemView.findViewById(R.id.name);
-            place_state = itemView.findViewById(R.id.place_state);
-            address = itemView.findViewById(R.id.address);
-            list_setting = itemView.findViewById(R.id.list_setting);
-            list_img_area = itemView.findViewById(R.id.list_img_area);
-            money_area = itemView.findViewById(R.id.money_area);
-            store_kind_state = itemView.findViewById(R.id.store_kind_state);
-            total_item = itemView.findViewById(R.id.total_item);
-            item_area = itemView.findViewById(R.id.item_area);
-            state_tv = itemView.findViewById(R.id.state_tv);
-            total_money = itemView.findViewById(R.id.total_money);
+            store_thumnail      = itemView.findViewById(R.id.store_thumnail);
+            title               = itemView.findViewById(R.id.title);
+            item_peoplecnt      = itemView.findViewById(R.id.item_peoplecnt);
+            name                = itemView.findViewById(R.id.name);
+            place_state         = itemView.findViewById(R.id.place_state);
+            address             = itemView.findViewById(R.id.address);
+            list_setting        = itemView.findViewById(R.id.list_setting);
+            list_img_area       = itemView.findViewById(R.id.list_img_area);
+            money_area          = itemView.findViewById(R.id.money_area);
+            store_kind_state    = itemView.findViewById(R.id.store_kind_state);
+            total_item          = itemView.findViewById(R.id.total_item);
+            item_area           = itemView.findViewById(R.id.item_area);
+            state_tv            = itemView.findViewById(R.id.state_tv);
+            total_money         = itemView.findViewById(R.id.total_money);
+            first_line          = itemView.findViewById(R.id.first_line);
 
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);

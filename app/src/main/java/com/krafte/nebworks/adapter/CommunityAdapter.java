@@ -105,10 +105,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
                 holder.category_box.setVisibility(View.VISIBLE);
             }else if(kind == 1){
                 holder.rank_area.setVisibility(View.GONE);
-                holder.profile_area.setVisibility(View.GONE);
-                holder.name.setVisibility(View.GONE);
-                holder.write_date.setVisibility(View.GONE);
-                holder.category_box.setVisibility(View.GONE);
+                holder.profile_area.setVisibility(View.VISIBLE);
+                holder.name.setVisibility(View.VISIBLE);
+                holder.write_date.setVisibility(View.VISIBLE);
+                holder.category_box.setVisibility(View.VISIBLE);
             }
             holder.rank_tv.setText(String.valueOf(position+1));
 
@@ -118,7 +118,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
             Glide.with(mContext).load(item.getWriter_img_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .placeholder(R.drawable.identificon)
+                    .placeholder(R.drawable.certi02)
                     .skipMemoryCache(true)
                     .into(holder.profile_img);
             holder.name.setText(item.getWriter_name().equals("null")?"":item.getWriter_name());

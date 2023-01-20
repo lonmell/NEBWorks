@@ -6,16 +6,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.FeedConfirmData;
+import com.krafte.nebworks.data.StringData;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -24,9 +21,9 @@ import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.util.ArrayList;
 
-public class FeedConfrimLogAdapter extends RecyclerView.Adapter<FeedConfrimLogAdapter.ViewHolder> {
-    private static final String TAG = "FeedConfrimLogAdapter";
-    private ArrayList<FeedConfirmData.FeedConfirmData_list> mData = null;
+public class SelectCateAdapter extends RecyclerView.Adapter<SelectCateAdapter.ViewHolder> {
+    private static final String TAG = "SelectCateAdapter";
+    private ArrayList<StringData.StringData_list> mData = null;
     Context mContext;
     PageMoveClass pm = new PageMoveClass();
     PreferenceHelper shardpref;
@@ -42,24 +39,24 @@ public class FeedConfrimLogAdapter extends RecyclerView.Adapter<FeedConfrimLogAd
         void onItemClick(View v, int position);
     }
 
-    private FeedConfrimLogAdapter.OnItemClickListener mListener = null;
+    private SelectCateAdapter.OnItemClickListener mListener = null;
 
-    public void setOnItemClickListener(FeedConfrimLogAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(SelectCateAdapter.OnItemClickListener listener) {
         this.mListener = listener;
     }
 
-    public FeedConfrimLogAdapter(Context context, ArrayList<FeedConfirmData.FeedConfirmData_list> data) {
+    public SelectCateAdapter(Context context, ArrayList<StringData.StringData_list> data) {
         this.mData = data;
         this.mContext = context;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull
     @Override
-    public FeedConfrimLogAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SelectCateAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.feedlog_listitem, parent, false);
-        FeedConfrimLogAdapter.ViewHolder vh = new FeedConfrimLogAdapter.ViewHolder(view);
+        View view = inflater.inflate(R.layout.cate_horaezon_item, parent, false);
+        SelectCateAdapter.ViewHolder vh = new SelectCateAdapter.ViewHolder(view);
 
         if (context instanceof Activity)
             activity = (Activity) context;
@@ -69,17 +66,11 @@ public class FeedConfrimLogAdapter extends RecyclerView.Adapter<FeedConfrimLogAd
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull FeedConfrimLogAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        FeedConfirmData.FeedConfirmData_list item = mData.get(position);
-
+    public void onBindViewHolder(@NonNull SelectCateAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        StringData.StringData_list item = mData.get(position);
         try{
-            Glide.with(mContext).load(item.getImg_path())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .placeholder(R.drawable.certi02)
-                    .skipMemoryCache(true)
-                    .into(holder.profile_img);
-            holder.name.setText(item.getName());
-            holder.date.setText(item.getCreated_at().substring(0,10) + " 확인");
+            dlog.i("mData item : " + mData.get(position));
+            holder.selectcate.setText(item.getItem());
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }
@@ -93,16 +84,11 @@ public class FeedConfrimLogAdapter extends RecyclerView.Adapter<FeedConfrimLogAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView profile_img;
-        TextView name,date;
-
-
+        TextView selectcate;
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            profile_img = itemView.findViewById(R.id.profile_img);
-            name = itemView.findViewById(R.id.name);
-            date = itemView.findViewById(R.id.date);
+            selectcate = itemView.findViewById(R.id.selectcate);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
@@ -113,16 +99,24 @@ public class FeedConfrimLogAdapter extends RecyclerView.Adapter<FeedConfrimLogAd
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
-                    FeedConfirmData.FeedConfirmData_list item = mData.get(pos);
-
+                    if (mListener != null) {
+                        mListener.onItemClick(view,pos);
+                    }
                 }
             });
         }
     }
 
-    public void addItem(FeedConfirmData.FeedConfirmData_list data) {
+    public void addItem(StringData.StringData_list data) {
         mData.add(data);
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterList(ArrayList<StringData.StringData_list> filteredList) {
+        mData = filteredList;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getItemViewType(int position) {

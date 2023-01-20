@@ -16,7 +16,7 @@
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                app:cardCornerRadius="20dp">
+                app:cardCornerRadius="60dp">
 
                 <ImageView
                     android:id="@+id/profile_img"
@@ -24,7 +24,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
                     android:layout_alignParentStart="true"
-                    android:background="@drawable/certi01" />
+                    android:background="@drawable/certi02" />
             </androidx.cardview.widget.CardView>
 
             <TextView

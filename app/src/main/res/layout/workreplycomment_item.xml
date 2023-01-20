@@ -19,7 +19,7 @@
 
         <ImageView
             android:id="@+id/reply_arrow"
-            android:layout_width="13dp"
+            android:layout_width="15dp"
             android:layout_height="15.5dp"
             android:background="@drawable/ic_reply" />
 

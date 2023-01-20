@@ -36,9 +36,9 @@ public class CateAdapter extends RecyclerView.Adapter<CateAdapter.ViewHolder> {
         void onItemClick(View v, int position);
     }
 
-    private CateAdapter.OnItemClickListener mListener = null;
+    private OnItemClickListener mListener = null;
 
-    public void setOnItemClickListener(CateAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
 

@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -200,17 +201,6 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     private void setBtnEvent() {
-//        binding.selectBoardkindTxt.setOnClickListener(v -> {
-//            shardpref.putInt("SelectKind", 0);
-//            SelectStringBottomSheet ssb = new SelectStringBottomSheet();
-//            ssb.show(getSupportFragmentManager(), "selectBoardkindTxt");
-//            ssb.setOnItemClickListener(new SelectStringBottomSheet.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(View v, String category) {
-//                    binding.selectBoardkindTxt.setText(category);
-//                }
-//            });
-//        });
         binding.selectBoardkindTxt.setText("자유게시판");
         binding.selectCategoryTxt.setOnClickListener(v -> {
             shardpref.putInt("SelectKind", 1);
@@ -279,10 +269,12 @@ public class CommunityAddActivity extends AppCompatActivity {
                     nickname_select = 1;
                     user_input_name = USER_INFO_NICKNAME;
                     binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
+                    binding.writerName.setBackgroundColor(Color.parseColor("#E0EAFB"));
                 } else {
                     nickname_select = 0;
                     user_input_name = USER_INFO_NAME;
                     binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
+                    binding.writerName.setBackgroundColor(Color.parseColor("#ffffff"));
                 }
             }
 
@@ -299,7 +291,11 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     private String DataCheck() {
-
+        if (nickname_select == 0) {
+            user_input_name = USER_INFO_NICKNAME;
+        } else {
+            user_input_name = USER_INFO_NAME;
+        }
         CommTitle = binding.writeTitle.getText().toString();
         CommContnets = binding.writeContents.getText().toString();
 

@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CommunityAdapter;
+import com.krafte.nebworks.adapter.SelectCateAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.PlaceNotiData;
+import com.krafte.nebworks.data.StringData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.databinding.CommunityFragment1Binding;
@@ -66,6 +68,11 @@ public class community_fragment1 extends Fragment {
     CommunityAdapter BestmAdapter = null;
     ArrayList<PlaceNotiData.PlaceNotiData_list> mList = new ArrayList<>();
     CommunityAdapter mAdapter = null;
+
+    ArrayList<String> setCate = new ArrayList<>();
+    ArrayList<StringData.StringData_list> mData = new ArrayList<>();
+    SelectCateAdapter cateAdapter = null;
+
     RetrofitConnect rc = new RetrofitConnect();
     GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
@@ -138,6 +145,7 @@ public class community_fragment1 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
     }
 
     @Override
@@ -155,6 +163,7 @@ public class community_fragment1 extends Fragment {
 
         setRecyclerView();
         setRecyclerView2();
+        setCateList();
     }
 
     private void setBtnEvent() {
@@ -180,14 +189,51 @@ public class community_fragment1 extends Fragment {
         });
     }
 
+    String selectCate = "";
+    private void setCateList(){
+        mData.clear();
+        setCate.add("#전체보기");
+        setCate.add("#정보에요");
+        setCate.add("#화나요");
+        setCate.add("#억울해요");
+        setCate.add("#자랑해요");
+        setCate.add("#점주가 말한다");
+        setCate.add("#알바가 말한다");
+        setCate.add("#이런 사람 조심하세요");
+        setCate.add("#이런 상황 조심하세요");
+
+        mData = new ArrayList<>();
+        dlog.i("setCate : " + setCate);
+        cateAdapter = new SelectCateAdapter(mContext,mData);
+        binding.selectCategory.setAdapter(cateAdapter);
+        binding.selectCategory.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+        for(String str : setCate.toString().replace("[","").replace("]","").trim().split(",")){
+            cateAdapter.addItem(new StringData.StringData_list(
+                    str
+            ));
+        }
+        cateAdapter.notifyDataSetChanged();
+        cateAdapter.setOnItemClickListener(new SelectCateAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                selectCate = setCate.get(position);
+                if(selectCate.equals("#전체보기")){
+                    selectCate = "";
+                }
+                dlog.i("onItemClick : " + selectCate);
+                setRecyclerView2();
+            }
+        });
+    }
+
     /*List 전체 초기화*/
     private void allClear() {
         mList.clear();
         BestmList.clear();
     }
 
-    int total_cnt = 0;
 
+    int total_cnt = 0;
     public void setRecyclerView() {
         //Best List
         allClear();
@@ -222,6 +268,7 @@ public class community_fragment1 extends Fragment {
                         if (USER_INFO_AUTH.isEmpty()) {
                             binding.bestListTitle.setVisibility(View.VISIBLE);
                             binding.bestList.setVisibility(View.VISIBLE);
+                            binding.bestUnderLine.setVisibility(View.VISIBLE);
                             BestmAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                     "",
                                     "",
@@ -327,7 +374,6 @@ public class community_fragment1 extends Fragment {
     }
 
     int total_cnt2 = 0;
-
     public void setRecyclerView2() {
         //전체
         mList.clear();
@@ -390,32 +436,63 @@ public class community_fragment1 extends Fragment {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if (jsonObject.getString("boardkind").equals("자유게시판")) {
-                                        total_cnt2++;
-                                        mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
-                                                jsonObject.getString("id"),
-                                                jsonObject.getString("place_id"),
-                                                jsonObject.getString("title"),
-                                                jsonObject.getString("contents"),
-                                                jsonObject.getString("writer_id"),
-                                                jsonObject.getString("writer_name"),
-                                                jsonObject.getString("writer_img_path"),
-                                                jsonObject.getString("jikgup"),
-                                                jsonObject.getString("view_cnt"),
-                                                jsonObject.getString("comment_cnt"),
-                                                jsonObject.getString("like_cnt"),
-                                                jsonObject.getString("link"),
-                                                jsonObject.getString("feed_img_path"),
-                                                jsonObject.getString("created_at"),
-                                                jsonObject.getString("updated_at"),
-                                                jsonObject.getString("open_date"),
-                                                jsonObject.getString("close_date"),
-                                                jsonObject.getString("boardkind"),
-                                                jsonObject.getString("category"),
-                                                jsonObject.getString("mylikeyn")
-                                        ));
+                                        if(!selectCate.isEmpty()){
+                                            dlog.i("selectCate : " + selectCate);
+                                            dlog.i("category : " + jsonObject.getString("category"));
+                                            total_cnt2++;
+                                            if(jsonObject.getString("category").equals(selectCate.replace("#","").trim())){
+                                                mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
+                                                        jsonObject.getString("id"),
+                                                        jsonObject.getString("place_id"),
+                                                        jsonObject.getString("title"),
+                                                        jsonObject.getString("contents"),
+                                                        jsonObject.getString("writer_id"),
+                                                        jsonObject.getString("writer_name"),
+                                                        jsonObject.getString("writer_img_path"),
+                                                        jsonObject.getString("jikgup"),
+                                                        jsonObject.getString("view_cnt"),
+                                                        jsonObject.getString("comment_cnt"),
+                                                        jsonObject.getString("like_cnt"),
+                                                        jsonObject.getString("link"),
+                                                        jsonObject.getString("feed_img_path"),
+                                                        jsonObject.getString("created_at"),
+                                                        jsonObject.getString("updated_at"),
+                                                        jsonObject.getString("open_date"),
+                                                        jsonObject.getString("close_date"),
+                                                        jsonObject.getString("boardkind"),
+                                                        jsonObject.getString("category"),
+                                                        jsonObject.getString("mylikeyn")
+                                                ));
+                                            }
+                                        }else{
+                                            total_cnt2++;
+                                            mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
+                                                    jsonObject.getString("id"),
+                                                    jsonObject.getString("place_id"),
+                                                    jsonObject.getString("title"),
+                                                    jsonObject.getString("contents"),
+                                                    jsonObject.getString("writer_id"),
+                                                    jsonObject.getString("writer_name"),
+                                                    jsonObject.getString("writer_img_path"),
+                                                    jsonObject.getString("jikgup"),
+                                                    jsonObject.getString("view_cnt"),
+                                                    jsonObject.getString("comment_cnt"),
+                                                    jsonObject.getString("like_cnt"),
+                                                    jsonObject.getString("link"),
+                                                    jsonObject.getString("feed_img_path"),
+                                                    jsonObject.getString("created_at"),
+                                                    jsonObject.getString("updated_at"),
+                                                    jsonObject.getString("open_date"),
+                                                    jsonObject.getString("close_date"),
+                                                    jsonObject.getString("boardkind"),
+                                                    jsonObject.getString("category"),
+                                                    jsonObject.getString("mylikeyn")
+                                            ));
+                                        }
                                     }
                                 }
                             }
+                            selectCate = "";
                             mAdapter.notifyDataSetChanged();
                             if (total_cnt2 == 0) {
                                 binding.allList.setVisibility(View.GONE);

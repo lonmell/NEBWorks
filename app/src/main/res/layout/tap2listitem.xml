@@ -79,6 +79,7 @@
                     android:fontFamily="@font/pretendard_bold"
                     android:gravity="end|center"
                     android:singleLine="true"
+                    android:layout_marginTop="5dp"
                     android:text="0000.00.00 | 00:00 마감"
                     android:textColor="#696969"
                     android:textSize="15sp"
@@ -90,7 +91,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/member_img_array"
                     android:layout_alignParentEnd="true"
-                    android:fontFamily="@font/pretendard_bold"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:layout_marginTop="10dp"
                     android:text="000/000/000 외 3명"
                     android:textColor="#696969"
                     android:textSize="15sp"
@@ -106,7 +108,7 @@
                 android:layout_toEndOf="@+id/work_date_info"
                 android:layout_alignTop="@+id/work_date_info"
                 android:layout_alignBottom="@+id/work_date_info"
-                android:gravity="center"
+                android:gravity="bottom|center"
                 android:orientation="vertical">
                 <!--                    <androidx.recyclerview.widget.RecyclerView-->
                 <!--                        android:id="@+id/member_list"-->
@@ -119,8 +121,7 @@
                     android:id="@+id/join_member_arae"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
-                    android:gravity="center|end">
+                    android:gravity="end">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/workimg_url01"
@@ -257,8 +258,8 @@
                 android:layout_alignParentEnd="true">
 
                 <ImageView
-                    android:layout_width="5dp"
-                    android:layout_height="23dp"
+                    android:layout_width="4dp"
+                    android:layout_height="17dp"
                     android:layout_centerInParent="true"
                     android:background="@drawable/list_setting" />
             </RelativeLayout>

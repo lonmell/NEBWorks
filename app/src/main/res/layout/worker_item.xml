@@ -130,8 +130,8 @@
         android:layout_alignParentEnd="true">
 
         <ImageView
-            android:layout_width="5dp"
-            android:layout_height="23dp"
+            android:layout_width="4dp"
+            android:layout_height="17dp"
             android:layout_centerInParent="true"
             android:background="@drawable/list_setting" />
     </RelativeLayout>

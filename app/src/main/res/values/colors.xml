@@ -9,7 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
     <color name="blue">#6395EC</color>
-    <color name="blue_200">#E0EAFB</color>
     <color name="green">#008000</color>
     <color name="lime">#00ff00</color>
 
@@ -25,6 +24,7 @@
 
     <color name="new_blue">#1445D0</color>
     <color name="blue_100">#EFF4FD</color>
+    <color name="blue_200">#E0EAFB</color>
     <color name="blue_500">#1762E6</color>
 
     <color name="red_100">#FCF0EC</color>

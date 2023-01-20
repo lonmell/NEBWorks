@@ -126,7 +126,7 @@ public class MemberListPop extends Activity {
                                 binding.allMemberList.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if(!place_owner_id.equals(jsonObject.getString("id"))){
+                                    if(!place_owner_id.equals(jsonObject.getString("id")) && !jsonObject.getString("kind").equals("4")){
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_name"),

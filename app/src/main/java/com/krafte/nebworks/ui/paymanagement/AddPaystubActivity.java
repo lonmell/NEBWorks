@@ -569,7 +569,7 @@ public class AddPaystubActivity extends AppCompatActivity {
                     String jsonResponse = rc.getBase64decode(response.body());
 //                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + jsonResponse);
                     if(response.body().replace("\"","").equals("success")){
-                        pm.PayManagement(mContext);
+//                        pm.PayManagement(mContext);
 
                         shardpref.remove("select_month");
                         shardpref.remove("select_user_id");
@@ -580,9 +580,20 @@ public class AddPaystubActivity extends AppCompatActivity {
                         shardpref.remove("select_total_workhour");
                         shardpref.remove("select_payment");
                         shardpref.remove("select_GET_DATE");
-                        String message = "["+select_user_name+"] 님의 " + select_month.substring(6,8) + "월 급여명세서가 도착했습니다.";
+                        String message = "["+PlaceCheckData.getInstance().getPlace_name()+"] \n ["+select_user_name+"] 님의 " + select_month.substring(6,8) + "월 급여명세서가 도착했습니다.";
                         getUserToken(select_user_id,"1",message);
                         AddPush("급여명세서",message,select_user_id);
+
+//                        Intent intent = new Intent(Intent.ACTION_SEND);
+//                        intent.setType("text/plain");
+//
+//                        // String으로 받아서 넣기
+//                        String sendMessage = "["+PlaceCheckData.getInstance().getPlace_name()+"] \n ["+select_user_name+"] 님의 " + select_month.substring(6,8) + "월 급여명세서가 도착했습니다.";
+//                        intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
+//
+//                        Intent shareIntent = Intent.createChooser(intent, "share");
+//                        startActivity(shareIntent);
+                        pm.PayManagement(mContext);
                     }else{
                         BtnOneCircleFun(true);
                     }
