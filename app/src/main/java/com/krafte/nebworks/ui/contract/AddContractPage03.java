@@ -253,12 +253,12 @@ public class AddContractPage03 extends AppCompatActivity {
         select0102 = i;
         if (i == 1) {
             binding.select01.setBackgroundResource(R.drawable.default_select_round);
-            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round);
-            binding.select01tv.setTextColor(Color.parseColor("#6395EC"));
+            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round_check);
+            binding.select01tv.setTextColor(Color.parseColor("#1445D0"));
         } else if (i == 2) {
             binding.select02.setBackgroundResource(R.drawable.default_select_round);
-            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
-            binding.select02tv.setTextColor(Color.parseColor("#6395EC"));
+            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round_check);
+            binding.select02tv.setTextColor(Color.parseColor("#1445D0"));
 
         }
     }
@@ -278,16 +278,16 @@ public class AddContractPage03 extends AppCompatActivity {
         size010203 = i;
         if (i == 1) {
             binding.sizeBox01.setBackgroundResource(R.drawable.default_select_round);
-            binding.sizeRound01.setBackgroundResource(R.drawable.ic_full_round);
-            binding.sizetv01.setTextColor(Color.parseColor("#6395EC"));
+            binding.sizeRound01.setBackgroundResource(R.drawable.ic_full_round_check);
+            binding.sizetv01.setTextColor(Color.parseColor("#1445D0"));
         } else if (i == 2) {
             binding.sizeBox02.setBackgroundResource(R.drawable.default_select_round);
-            binding.sizeRound02.setBackgroundResource(R.drawable.ic_full_round);
-            binding.sizetv02.setTextColor(Color.parseColor("#6395EC"));
+            binding.sizeRound02.setBackgroundResource(R.drawable.ic_full_round_check);
+            binding.sizetv02.setTextColor(Color.parseColor("#1445D0"));
         } else if (i == 3) {
             binding.sizeBox03.setBackgroundResource(R.drawable.default_select_round);
-            binding.sizeRound03.setBackgroundResource(R.drawable.ic_full_round);
-            binding.sizetv03.setTextColor(Color.parseColor("#6395EC"));
+            binding.sizeRound03.setBackgroundResource(R.drawable.ic_full_round_check);
+            binding.sizetv03.setTextColor(Color.parseColor("#1445D0"));
         }
     }
 

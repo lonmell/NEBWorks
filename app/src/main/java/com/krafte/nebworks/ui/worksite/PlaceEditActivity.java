@@ -417,12 +417,12 @@ public class PlaceEditActivity extends AppCompatActivity {
                                     if (str.contains("4대보험")) {
                                         boheom01TF = true;
                                         boheom03TF = false;
-                                        binding.boheom01.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.boheom01.setBackgroundResource(R.drawable.ic_full_round_check);
                                         binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
                                     } else if (str.contains("3.3%소득세")) {
                                         boheom02TF = true;
                                         boheom03TF = false;
-                                        binding.boheom02.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.boheom02.setBackgroundResource(R.drawable.ic_full_round_check);
                                         binding.boheom03.setBackgroundResource(R.drawable.select_empty_round);
                                     } else if (str.contains("없음")) {
                                         boheom03TF = true;
@@ -430,7 +430,7 @@ public class PlaceEditActivity extends AppCompatActivity {
                                         boheom02TF = false;
                                         binding.boheom01.setBackgroundResource(R.drawable.select_empty_round);
                                         binding.boheom02.setBackgroundResource(R.drawable.select_empty_round);
-                                        binding.boheom03.setBackgroundResource(R.drawable.resize_service_on);
+                                        binding.boheom03.setBackgroundResource(R.drawable.ic_full_round_check);
                                     }
                                 }
                                 binding.inputbox08.setText(start_time);

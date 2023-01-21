@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,6 +82,9 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
         try {
             holder.name.setText(item.getName());
             holder.phone.setText(item.getJoin_date());
+
+            holder.profile_tv.setVisibility(View.VISIBLE);
+            holder.profile_tv2.setVisibility(View.GONE);
 
             if(item.getContract_yn().equals("0")){
                 holder.profile_img.setCardBackgroundColor(Color.parseColor("#DD6540"));
@@ -209,6 +213,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
         TextView name, address, phone, profile_tv;
         CardView item_total,profile_img;
         LinearLayout call_icon;
+        ImageView profile_tv2;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -220,6 +225,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
             call_icon   = itemView.findViewById(R.id.call_icon);
             profile_img = itemView.findViewById(R.id.profile_img);
             profile_tv  = itemView.findViewById(R.id.profile_tv);
+            profile_tv2  = itemView.findViewById(R.id.profile_tv2);
 
             call_icon.setVisibility(View.GONE);
             shardpref = new PreferenceHelper(mContext);

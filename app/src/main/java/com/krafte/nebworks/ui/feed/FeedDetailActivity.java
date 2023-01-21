@@ -116,7 +116,7 @@ public class FeedDetailActivity extends AppCompatActivity {
             state           = shardpref.getString("editstate", "");
             writer_id       = shardpref.getString("writer_id", "");
 
-            icon_on = mContext.getResources().getDrawable(R.drawable.resize_service_on);
+            icon_on = mContext.getResources().getDrawable(R.drawable.ic_full_round_check);
             icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
             imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 

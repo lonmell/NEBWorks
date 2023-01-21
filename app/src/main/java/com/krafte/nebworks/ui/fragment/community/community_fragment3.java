@@ -150,7 +150,14 @@ public class community_fragment3 extends Fragment {
     }
 
     private void setBtnEvent() {
-
+        binding.moreSemu.setOnClickListener(v -> {
+            shardpref.putInt("com_kind", 2);
+            pm.MoreListCommunity(mContext);
+        });
+        binding.moreNomu.setOnClickListener(v -> {
+            shardpref.putInt("com_kind", 3);
+            pm.MoreListCommunity(mContext);
+        });
     }
     private void allClear() {
         mList.clear();

@@ -190,7 +190,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             //수정할때 필요
             task_no     = shardpref.getString("task_no", "0");
             icon_off    = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
-            icon_on     = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+            icon_on     = getApplicationContext().getResources().getDrawable(R.drawable.ic_full_round_check);
 
             //--처음에는 공통임무로 설정된채로 시작
             if (task_no.equals("0")) {

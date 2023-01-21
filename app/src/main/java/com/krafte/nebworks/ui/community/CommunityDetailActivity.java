@@ -125,7 +125,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
         shardpref = new PreferenceHelper(mContext);
         icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
-        icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+        icon_on = getApplicationContext().getResources().getDrawable(R.drawable.ic_full_round_check);
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
         //Singleton Area

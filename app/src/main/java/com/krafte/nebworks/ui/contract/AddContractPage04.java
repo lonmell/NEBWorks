@@ -255,7 +255,7 @@ public class AddContractPage04 extends AppCompatActivity {
         binding.select03.setOnClickListener(v -> {
             if (contract_type.equals("0")) {
                 contract_type = "1";
-                binding.select03Round.setBackgroundResource(R.drawable.resize_service_on);
+                binding.select03Round.setBackgroundResource(R.drawable.ic_full_round_check);
             } else {
                 contract_type = "0";
                 binding.select03Round.setBackgroundResource(R.drawable.resize_service_off);

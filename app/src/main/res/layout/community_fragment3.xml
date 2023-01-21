@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--CommunityFragment3-->
+<?xml version="1.0" encoding="utf-8"?><!--CommunityFragment3-->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/community_fragment3"
@@ -26,19 +25,34 @@
             android:layout_height="78dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
-            app:cardBackgroundColor="#6395EC"
+            app:cardBackgroundColor="@color/new_blue"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="15dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center|start"
-                android:text="소상공인 세금 절세\n알려드립니다."
-                android:textColor="@color/white"
-                android:textSize="17sp" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="18dp"
+                    android:background="@drawable/ic_money_white" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="15dp"
+                    android:layout_marginStart="18dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center|start"
+                    android:text="소상공인 세금 절세\n알려드립니다."
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -48,7 +62,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
-            app:cardBackgroundColor="#F5F6F8"
+            app:cardBackgroundColor="@color/blue_100"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
 
@@ -61,10 +75,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/pretendard_bold"
+                    android:fontFamily="@font/gangwonedu_bold"
                     android:gravity="center|start"
                     android:text="부가세란?"
-                    android:textColor="#949494"
+                    android:textColor="@color/new_blue"
                     android:textSize="17sp" />
 
                 <androidx.cardview.widget.CardView
@@ -78,11 +92,11 @@
                     app:cardElevation="0dp">
 
                     <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/find_right_arrow"
-                        android:rotation="90" />
+                        android:layout_margin="5dp"
+                        android:background="@drawable/down_arrow" />
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
@@ -94,7 +108,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
-            app:cardBackgroundColor="#F5F6F8"
+            app:cardBackgroundColor="@color/blue_100"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
 
@@ -107,10 +121,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/pretendard_bold"
+                    android:fontFamily="@font/gangwonedu_bold"
                     android:gravity="center|start"
                     android:text="소득세란?"
-                    android:textColor="#949494"
+                    android:textColor="@color/new_blue"
                     android:textSize="17sp" />
 
                 <androidx.cardview.widget.CardView
@@ -124,11 +138,11 @@
                     app:cardElevation="0dp">
 
                     <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/find_right_arrow"
-                        android:rotation="90" />
+                        android:layout_margin="5dp"
+                        android:background="@drawable/down_arrow" />
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
@@ -136,75 +150,91 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginStart="25dp"
             android:layout_marginTop="59dp"
             android:layout_marginEnd="25dp"
+            android:orientation="horizontal"
             android:weightSum="2">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="세금신고 도움받기"
                 android:gravity="start|center"
+                android:text="세금신고 도움받기"
                 android:textColor="@color/black"
-                android:layout_weight="1"
                 android:textSize="16sp" />
+
             <TextView
+                android:id="@+id/more_semu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="end|center"
-                android:fontFamily="@font/inter_regular"
-                android:text="파트너 세무사 전체보기 >"
-                android:textColor="@color/black"
                 android:layout_weight="1"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="end|center"
+                android:text="파트너 세무사 전체보기 >"
+                android:textColor="@color/gray_400"
                 android:textSize="15sp" />
         </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/semu_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="8dp"
-            android:background="#F5F6F8"
-            android:layout_marginTop="35dp"/>
+            android:layout_marginTop="35dp"
+            android:background="#F5F6F8" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
             android:layout_marginTop="26dp"
-            android:fontFamily="@font/pretendard_bold"
-            android:text="알려드립니다 - 노무"
+            android:layout_marginEnd="25dp"
+            android:fontFamily="@font/gangwonedu_bold"
+            android:text="노무, 알려드립니다"
             android:textColor="@color/black"
-            android:textSize="17sp" />
+            android:textSize="28sp" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/nomu_01"
             android:layout_width="match_parent"
             android:layout_height="78dp"
             android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="15dp"
-            app:cardBackgroundColor="#6395EC"
+            android:layout_marginEnd="15dp"
+            app:cardBackgroundColor="@color/new_blue"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="15dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center|start"
-                android:text="소상공인 세금 절세\n알려드립니다."
-                android:textColor="@color/white"
-                android:textSize="17sp" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="18dp"
+                    android:background="@drawable/ic_nomusa_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="15dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center|start"
+                    android:text="소상공인 세금 절세\n알려드립니다."
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -214,7 +244,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
-            app:cardBackgroundColor="#F5F6F8"
+            app:cardBackgroundColor="@color/blue_100"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
 
@@ -227,28 +257,27 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/pretendard_bold"
+                    android:fontFamily="@font/gangwonedu_bold"
                     android:gravity="center|start"
-                    android:text="부가세란?"
-                    android:textColor="#949494"
+                    android:text="근로계약서 작성법"
+                    android:textColor="@color/new_blue"
                     android:textSize="17sp" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:padding="3dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="60dp"
                     app:cardElevation="0dp">
 
                     <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/find_right_arrow"
-                        android:rotation="90" />
+                        android:layout_margin="5dp"
+                        android:background="@drawable/down_arrow" />
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
@@ -260,7 +289,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
-            app:cardBackgroundColor="#F5F6F8"
+            app:cardBackgroundColor="@color/blue_100"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp">
 
@@ -273,10 +302,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/pretendard_bold"
+                    android:fontFamily="@font/gangwonedu_bold"
                     android:gravity="center|start"
-                    android:text="소득세란?"
-                    android:textColor="#949494"
+                    android:text="근로자 입금정보"
+                    android:textColor="@color/new_blue"
                     android:textSize="17sp" />
 
                 <androidx.cardview.widget.CardView
@@ -290,11 +319,11 @@
                     app:cardElevation="0dp">
 
                     <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@drawable/find_right_arrow"
-                        android:rotation="90" />
+                        android:layout_margin="5dp"
+                        android:background="@drawable/down_arrow" />
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
@@ -302,34 +331,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginStart="25dp"
             android:layout_marginTop="59dp"
             android:layout_marginEnd="25dp"
+            android:orientation="horizontal"
             android:weightSum="2">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="노무문제 도움받기"
                 android:gravity="start|center"
+                android:text="노무문제 도움받기"
                 android:textColor="@color/black"
-                android:layout_weight="1"
                 android:textSize="16sp" />
+
             <TextView
+                android:id="@+id/more_nomu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="end|center"
-                android:fontFamily="@font/inter_regular"
-                android:text="파트너 세무사 전체보기 >"
-                android:textColor="@color/black"
                 android:layout_weight="1"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="end|center"
+                android:text="파트너 노무사 전체보기 >"
+                android:textColor="@color/gray_400"
                 android:textSize="15sp" />
         </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/nomu_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"/>
+            android:layout_margin="20dp" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

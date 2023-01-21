@@ -22,12 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.adapter.SelectCateAdapter;
+import com.krafte.nebworks.adapter.TaxListAdapter;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.StringData;
+import com.krafte.nebworks.data.TaxMemberData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
+import com.krafte.nebworks.dataInterface.TaxMemListInterface;
 import com.krafte.nebworks.databinding.ActivityCommunityAllBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.Dlog;
@@ -70,6 +73,11 @@ public class MoreListCommunityActivity extends AppCompatActivity {
     ArrayList<StringData.StringData_list> mData = new ArrayList<>();
     SelectCateAdapter cateAdapter = null;
 
+    ArrayList<TaxMemberData.TaxMemberData_list> taxmList = new ArrayList<>();
+    ArrayList<TaxMemberData.TaxMemberData_list> taxmList2 = new ArrayList<>();
+    TaxListAdapter taxmAdapter = null;
+    TaxListAdapter taxmAdapter2 = null;
+
     //Other
     RetrofitConnect rc = new RetrofitConnect();
     PageMoveClass pm = new PageMoveClass();
@@ -93,30 +101,63 @@ public class MoreListCommunityActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
         //Singleton Area
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        returnPage      = ReturnPageData.getInstance().getPage();
-        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+        returnPage = ReturnPageData.getInstance().getPage();
+        place_id = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area
-        com_kind        = shardpref.getInt("com_kind",0); // -- 0 : 인기게시글 / 1 : 전체게시글
-        returnPage      = shardpref.getString("returnPage", "");
-        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-
-        binding.pageTitle.setText((com_kind == 0)?"인기게시글":"전체게시글");
-        binding.selectCategory.setVisibility((com_kind == 0)?View.GONE:View.VISIBLE);
+        com_kind = shardpref.getInt("com_kind", 0); // -- 0 : 인기게시글 / 1 : 전체게시글
+        returnPage = shardpref.getString("returnPage", "");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         setAddBtnSetting();
+
+        String pagetitle = "";
+        switch (com_kind) {
+            case 0:
+                pagetitle = "인기게시글";
+                add_worktime_btn.setVisibility(View.VISIBLE);
+                binding.selectCategory.setVisibility(View.VISIBLE);
+                binding.searchArea.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                pagetitle = "전체게시글";
+                binding.selectCategory.setVisibility(View.GONE);
+                add_worktime_btn.setVisibility(View.VISIBLE);
+                binding.searchArea.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                pagetitle = "파트너 세무사";
+                binding.selectCategory.setVisibility(View.GONE);
+                add_worktime_btn.setVisibility(View.GONE);
+                binding.searchArea.setVisibility(View.GONE);
+                break;
+            case 3:
+                pagetitle = "파트너 노무사";
+                binding.selectCategory.setVisibility(View.GONE);
+                add_worktime_btn.setVisibility(View.GONE);
+                binding.searchArea.setVisibility(View.GONE);
+                break;
+        }
+        binding.pageTitle.setText(pagetitle);
+        binding.barTitle.setText("커뮤니티");
+
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        if(com_kind == 0){
+        if (com_kind == 0) {
             setRecyclerView();
-        }else if(com_kind == 1){
+        } else if (com_kind == 1) {
             setCateList();
             setRecyclerView2();
+        } else if (com_kind == 2) {
+            TaxListSemu();
+        } else if (com_kind == 3) {
+            TaxListNomu();
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -126,7 +167,8 @@ public class MoreListCommunityActivity extends AppCompatActivity {
     }
 
     String selectCate = "";
-    private void setCateList(){
+
+    private void setCateList() {
         mData.clear();
         setCate.add("#전체보기");
         setCate.add("#정보에요");
@@ -140,10 +182,10 @@ public class MoreListCommunityActivity extends AppCompatActivity {
 
         mData = new ArrayList<>();
         dlog.i("setCate : " + setCate);
-        cateAdapter = new SelectCateAdapter(mContext,mData);
+        cateAdapter = new SelectCateAdapter(mContext, mData);
         binding.selectCategory.setAdapter(cateAdapter);
         binding.selectCategory.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-        for(String str : setCate.toString().replace("[","").replace("]","").trim().split(",")){
+        for (String str : setCate.toString().replace("[", "").replace("]", "").trim().split(",")) {
             cateAdapter.addItem(new StringData.StringData_list(
                     str
             ));
@@ -153,7 +195,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position) {
                 selectCate = setCate.get(position);
-                if(selectCate.equals("#전체보기")){
+                if (selectCate.equals("#전체보기")) {
                     selectCate = "";
                 }
                 dlog.i("onItemClick : " + selectCate);
@@ -169,6 +211,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
     }
 
     int total_cnt = 0;
+
     public void setRecyclerView() {
         //Best List
         allClear();
@@ -298,6 +341,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
     }
 
     int total_cnt2 = 0;
+
     public void setRecyclerView2() {
         //전체
         mList.clear();
@@ -359,11 +403,11 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if (jsonObject.getString("boardkind").equals("자유게시판")) {
-                                        if(!selectCate.isEmpty()){
+                                        if (!selectCate.isEmpty()) {
                                             dlog.i("selectCate : " + selectCate);
                                             dlog.i("category : " + jsonObject.getString("category"));
                                             total_cnt2++;
-                                            if(jsonObject.getString("category").equals(selectCate.replace("#","").trim())){
+                                            if (jsonObject.getString("category").equals(selectCate.replace("#", "").trim())) {
                                                 mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                                         jsonObject.getString("id"),
                                                         jsonObject.getString("place_id"),
@@ -387,7 +431,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                                         jsonObject.getString("mylikeyn")
                                                 ));
                                             }
-                                        }else{
+                                        } else {
                                             total_cnt2++;
                                             mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                                     jsonObject.getString("id"),
@@ -465,6 +509,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
 
     CardView add_worktime_btn;
     TextView addbtn_tv;
+
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
@@ -474,7 +519,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                 isAuth();
             } else {
                 if (paging_position == 0) {
-                    shardpref.putString("state","AddCommunity");
+                    shardpref.putString("state", "AddCommunity");
                     pm.CommunityAdd(mContext);
                 } else if (paging_position == 1) {
                     Toast_Nomal("사장님 게시글");
@@ -495,6 +540,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) binding.getRoot().findViewById(R.id.toast_layout));
@@ -507,5 +553,133 @@ public class MoreListCommunityActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
+    }
+
+    int semu_cnt = 0;
+    int nomu_cnt = 0;
+
+    public void TaxListSemu() {
+        allClear();
+        dlog.i("position 0 setRecyclerView place_id : " + place_id);
+        taxmList.clear();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaxMemListInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaxMemListInterface api = retrofit.create(TaxMemListInterface.class);
+        Call<String> call = api.getData(place_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("semu jsonResponse length : " + jsonResponse.length());
+                    dlog.i("semu jsonResponse : " + jsonResponse);
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        taxmList = new ArrayList<>();
+                        taxmAdapter = new TaxListAdapter(mContext, taxmList);
+                        binding.allList.setAdapter(taxmAdapter);
+                        binding.allList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                        Log.i(TAG, "SetNoticeListview Thread run! ");
+
+                        if (Response.length() == 0) {
+                            Log.i(TAG, "GET SIZE : " + mList.size());
+                        } else {
+                            for (int i = 0; i < Response.length(); i++) {
+                                JSONObject jsonObject = Response.getJSONObject(i);
+                                if (jsonObject.getString("kind").equals("1")) {
+                                    taxmAdapter.addItem(new TaxMemberData.TaxMemberData_list(
+                                            jsonObject.getString("id"),
+                                            jsonObject.getString("place_id"),
+                                            jsonObject.getString("name"),
+                                            jsonObject.getString("img_path"),
+                                            jsonObject.getString("address"),
+                                            jsonObject.getString("contact_num"),
+                                            jsonObject.getString("kind"),
+                                            jsonObject.getString("created_at"),
+                                            jsonObject.getString("updated_at")
+                                    ));
+                                }
+                            }
+                            taxmAdapter.notifyDataSetChanged();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void TaxListNomu() {
+        allClear();
+        dlog.i("position 0 setRecyclerView place_id : " + place_id);
+        taxmList.clear();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaxMemListInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaxMemListInterface api = retrofit.create(TaxMemListInterface.class);
+        Call<String> call = api.getData(place_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("nomu jsonResponse length : " + jsonResponse.length());
+                    dlog.i("nomu jsonResponse : " + jsonResponse);
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+
+                        taxmList2 = new ArrayList<>();
+                        taxmAdapter2 = new TaxListAdapter(mContext, taxmList2);
+                        binding.allList.setAdapter(taxmAdapter2);
+                        binding.allList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                        Log.i(TAG, "SetNoticeListview Thread run! ");
+
+                        if (Response.length() == 0) {
+                            Log.i(TAG, "GET SIZE : " + taxmList2.size());
+                        } else {
+                            for (int i = 0; i < Response.length(); i++) {
+                                JSONObject jsonObject = Response.getJSONObject(i);
+                                if (jsonObject.getString("kind").equals("2")) {
+                                    taxmAdapter2.addItem(new TaxMemberData.TaxMemberData_list(
+                                            jsonObject.getString("id"),
+                                            jsonObject.getString("place_id"),
+                                            jsonObject.getString("name"),
+                                            jsonObject.getString("img_path"),
+                                            jsonObject.getString("address"),
+                                            jsonObject.getString("contact_num"),
+                                            jsonObject.getString("kind"),
+                                            jsonObject.getString("created_at"),
+                                            jsonObject.getString("updated_at")
+                                    ));
+                                }
+                            }
+                            taxmAdapter2.notifyDataSetChanged();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
     }
 }

@@ -150,7 +150,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
-        icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+        icon_on = getApplicationContext().getResources().getDrawable(R.drawable.ic_full_round_check);
         check_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_blue_check);
         check_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_circle_gray_check);
         x_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_red_x);

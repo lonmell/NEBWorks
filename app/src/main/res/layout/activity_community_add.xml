@@ -181,7 +181,7 @@
                 android:text="   닉네임으로 작성 "
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:drawableStartCompat="@drawable/resize_service_on"
+                app:drawableStartCompat="@drawable/ic_full_round_check"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView

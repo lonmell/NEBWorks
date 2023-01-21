@@ -178,7 +178,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             //수정할때 필요
             task_no = shardpref.getString("task_no", "0");
             icon_off = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_off);
-            icon_on = getApplicationContext().getResources().getDrawable(R.drawable.resize_service_on);
+            icon_on = getApplicationContext().getResources().getDrawable(R.drawable.ic_full_round_check);
             dlog.i("task_no : " + task_no);
             setBtnEvent();
             toDay = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;

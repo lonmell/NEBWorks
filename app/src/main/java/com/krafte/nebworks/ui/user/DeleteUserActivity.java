@@ -74,7 +74,7 @@ public class DeleteUserActivity extends AppCompatActivity {
         firstCheck = true;
         binding.pagetv03.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         binding.guideArea01.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
-        binding.guideImg01.setBackgroundResource(R.drawable.resize_service_on_blue);
+        binding.guideImg01.setBackgroundResource(R.drawable.resize_service_on);
     }
 
     private void setGuide01CheckCancel() {
@@ -88,7 +88,7 @@ public class DeleteUserActivity extends AppCompatActivity {
         secondCheck = true;
         binding.pagetv04.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         binding.guideArea02.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
-        binding.guideImg02.setBackgroundResource(R.drawable.resize_service_on_blue);
+        binding.guideImg02.setBackgroundResource(R.drawable.resize_service_on);
     }
 
     private void setGuide02CheckCancel() {
@@ -102,7 +102,7 @@ public class DeleteUserActivity extends AppCompatActivity {
         check = true;
         binding.pagetv05.setTextColor(ContextCompat.getColor(mContext, R.color.white));
         binding.acceptDelArea.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
-        binding.acceptDel.setBackgroundResource(R.drawable.resize_service_on);
+        binding.acceptDel.setBackgroundResource(R.drawable.ic_full_round_check);
     }
 
     private void setAcceptDelCheckCancel() {

@@ -149,7 +149,7 @@ public class FeedEditActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
 
-        icon_on = mContext.getResources().getDrawable(R.drawable.resize_service_on);
+        icon_on = mContext.getResources().getDrawable(R.drawable.ic_full_round_check);
         icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
         shardpref.putInt("SELECT_POSITION", 0);
         setBtnEvent();

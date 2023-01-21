@@ -52,25 +52,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="28dp"
             android:layout_marginEnd="15dp"
-            android:fontFamily="@font/pretendard_bold"
+            android:fontFamily="@font/gangwonedu_bold"
             android:gravity="start|center"
             android:text="스마트 폰에서 쉽고 빠르게\n근로 계약서를 작성해 보세요"
             android:textColor="#000000"
-            android:textSize="22sp" />
+            android:textSize="24sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/subtitle"
-            android:layout_above="@+id/next"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="24dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true"
                 android:orientation="vertical">
 
@@ -81,7 +80,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="15dp"
-                    app:cardBackgroundColor="#F5F6F8"
+                    app:cardBackgroundColor="@color/blue_100"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp">
 
@@ -106,7 +105,7 @@
                             android:fontFamily="@font/pretendard_bold"
                             android:gravity="center"
                             android:text="본인 인증 서비스 약관 전체동의"
-                            android:textColor="#000000"
+                            android:textColor="@color/new_blue"
                             android:textSize="16sp" />
                     </RelativeLayout>
 
@@ -139,7 +138,7 @@
                         android:gravity="start|center"
                         android:text="휴대폰 본인 인출 서비스 이용약관 동의(필수)"
                         android:textColor="#000000"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/accept01_tv"
@@ -149,7 +148,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
                         android:text="@string/contract_tv02"
-                        android:textColor="#54585A"
+                        android:textColor="@color/new_blue"
                         android:textSize="15sp" />
                 </RelativeLayout>
 
@@ -179,7 +178,7 @@
                         android:gravity="start|center"
                         android:text="휴대폰 통신사 이용약관 동의(필수)"
                         android:textColor="#000000"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/accept02_tv"
@@ -189,7 +188,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
                         android:text="@string/contract_tv02"
-                        android:textColor="#54585A"
+                        android:textColor="@color/new_blue"
                         android:textSize="15sp" />
                 </RelativeLayout>
 
@@ -219,7 +218,7 @@
                         android:gravity="start|center"
                         android:text="개인정보 제공 및 이용동의(필수)"
                         android:textColor="#000000"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/accept03_tv"
@@ -229,7 +228,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
                         android:text="@string/contract_tv02"
-                        android:textColor="#54585A"
+                        android:textColor="@color/new_blue"
                         android:textSize="15sp" />
                 </RelativeLayout>
 
@@ -259,7 +258,7 @@
                         android:gravity="start|center"
                         android:text="고유식별정보 처리(필수)"
                         android:textColor="#000000"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/accept04_tv"
@@ -269,18 +268,21 @@
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
                         android:text="@string/contract_tv02"
-                        android:textColor="#54585A"
+                        android:textColor="@color/new_blue"
                         android:textSize="15sp" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:id="@+id/next"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#6395EC"
             android:layout_margin="20dp"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            app:cardBackgroundColor="@color/new_blue"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="5dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -289,8 +291,8 @@
                 android:gravity="center"
                 android:text="다음으로"
                 android:textColor="@color/white"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 tools:ignore="HardcodedText" />
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 </LinearLayout>

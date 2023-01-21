@@ -160,7 +160,7 @@ public class AddContractPage05 extends AppCompatActivity {
         binding.payConference.setOnClickListener(v -> {
             if(pay_conference.equals("0")){
                 pay_conference = "1";
-                binding.payConferenceRound.setBackgroundResource(R.drawable.resize_service_on);
+                binding.payConferenceRound.setBackgroundResource(R.drawable.ic_full_round_check);
             }else{
                 pay_conference = "0";
                 binding.payConferenceRound.setBackgroundResource(R.drawable.resize_service_off);

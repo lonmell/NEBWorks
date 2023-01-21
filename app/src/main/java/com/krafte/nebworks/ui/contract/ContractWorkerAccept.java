@@ -75,11 +75,11 @@ public class ContractWorkerAccept extends AppCompatActivity {
                 select02tf = true;
                 select03tf = true;
                 select04tf = true;
-                binding.allCheck.setBackgroundResource(R.drawable.resize_service_on);
-                binding.check01.setBackgroundResource(R.drawable.resize_service_on);
-                binding.check02.setBackgroundResource(R.drawable.resize_service_on);
-                binding.check03.setBackgroundResource(R.drawable.resize_service_on);
-                binding.check04.setBackgroundResource(R.drawable.resize_service_on);
+                binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
             }else{
                 select05tf = false;
                 select01tf = false;
@@ -96,14 +96,14 @@ public class ContractWorkerAccept extends AppCompatActivity {
         binding.accept01.setOnClickListener(v -> {
             if(!select01tf){
                 select01tf = true;
-                binding.check01.setBackgroundResource(R.drawable.resize_service_on);
+                binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
                 if(select01tf && select02tf && select03tf && select04tf){
                     select05tf = true;
-                    binding.allCheck.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check01.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check02.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check03.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check04.setBackgroundResource(R.drawable.resize_service_on);
+                    binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
                 }
             }else{
                 select01tf = false;
@@ -115,14 +115,14 @@ public class ContractWorkerAccept extends AppCompatActivity {
         binding.accept02.setOnClickListener(v -> {
             if(!select02tf){
                 select02tf = true;
-                binding.check02.setBackgroundResource(R.drawable.resize_service_on);
+                binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
                 if(select01tf && select02tf && select03tf && select04tf){
                     select05tf = true;
-                    binding.allCheck.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check01.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check02.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check03.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check04.setBackgroundResource(R.drawable.resize_service_on);
+                    binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
                 }
             }else{
                 select02tf = false;
@@ -134,14 +134,14 @@ public class ContractWorkerAccept extends AppCompatActivity {
         binding.accept03.setOnClickListener(v -> {
             if(!select03tf){
                 select03tf = true;
-                binding.check03.setBackgroundResource(R.drawable.resize_service_on);
+                binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
                 if(select01tf && select02tf && select03tf && select04tf){
                     select05tf = true;
-                    binding.allCheck.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check01.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check02.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check03.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check04.setBackgroundResource(R.drawable.resize_service_on);
+                    binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
                 }
             }else{
                 select03tf = false;
@@ -153,14 +153,14 @@ public class ContractWorkerAccept extends AppCompatActivity {
         binding.accept04.setOnClickListener(v -> {
             if(!select04tf){
                 select04tf = true;
-                binding.check03.setBackgroundResource(R.drawable.resize_service_on);
+                binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
                 if(select01tf && select02tf && select03tf && select04tf){
                     select05tf = true;
-                    binding.allCheck.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check01.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check02.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check03.setBackgroundResource(R.drawable.resize_service_on);
-                    binding.check04.setBackgroundResource(R.drawable.resize_service_on);
+                    binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
                 }
             }else{
                 select04tf = false;

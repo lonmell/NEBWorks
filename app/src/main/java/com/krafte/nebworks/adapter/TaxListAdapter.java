@@ -11,12 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.TaxMemberData;
 import com.krafte.nebworks.util.DateCurrent;
@@ -78,9 +81,19 @@ public class TaxListAdapter extends RecyclerView.Adapter<TaxListAdapter.ViewHold
         TaxMemberData.TaxMemberData_list item = mData.get(position);
 
         try {
+            holder.profile_tv.setVisibility(View.GONE);
+            holder.profile_tv2.setVisibility(View.VISIBLE);
+
             holder.name.setText(item.getName());
             holder.address.setText(item.getAddress());
             holder.phone.setText(item.getContact_num());
+
+            Glide.with(mContext).load(item.getImg_path())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .placeholder(R.drawable.certi02)
+                    .skipMemoryCache(true)
+                    .into(holder.profile_tv2);
+
             if (loadlist == 0) {
                 //--아이템에 나타나기 애니메이션 줌
                 holder.item_total.setTranslationY(150);
@@ -109,8 +122,10 @@ public class TaxListAdapter extends RecyclerView.Adapter<TaxListAdapter.ViewHold
     } // 아이템 뷰를 저장하는 뷰홀더 클래스
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, address, phone;
-        CardView item_total;
+        TextView name, address, phone, profile_tv;
+        CardView item_total, profile_img;
+        ImageView profile_tv2;
+
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
@@ -118,6 +133,9 @@ public class TaxListAdapter extends RecyclerView.Adapter<TaxListAdapter.ViewHold
             address     = itemView.findViewById(R.id.address);
             phone       = itemView.findViewById(R.id.phone);
             item_total  = itemView.findViewById(R.id.item_total);
+            profile_img = itemView.findViewById(R.id.profile_img);
+            profile_tv  = itemView.findViewById(R.id.profile_tv);
+            profile_tv2  = itemView.findViewById(R.id.profile_tv2);
 
             shardpref = new PreferenceHelper(mContext);
             dlog.DlogContext(mContext);

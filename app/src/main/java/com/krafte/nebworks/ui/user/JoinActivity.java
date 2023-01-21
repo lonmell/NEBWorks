@@ -281,11 +281,11 @@ public class JoinActivity extends AppCompatActivity {
                 Uservice02 = true;
                 Uservice03 = true;
                 Uservice04 = true;
-                binding.linear04.setBackgroundResource(R.drawable.resize_service_on);
-                binding.serviceRadio01.setBackgroundResource(R.drawable.resize_service_on);
-                binding.serviceRadio02.setBackgroundResource(R.drawable.resize_service_on);
-                binding.serviceRadio03.setBackgroundResource(R.drawable.resize_service_on);
-                binding.serviceRadio04.setBackgroundResource(R.drawable.resize_service_on);
+                binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.serviceRadio01.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.serviceRadio02.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.serviceRadio03.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.serviceRadio04.setBackgroundResource(R.drawable.ic_full_round_check);
             } else {
                 allcheck = false;
                 Uservice01 = false;
@@ -303,9 +303,9 @@ public class JoinActivity extends AppCompatActivity {
         binding.serviceTv01.setOnClickListener(v -> {
             if (!Uservice01) {
                 Uservice01 = true;
-                binding.serviceRadio01.setBackgroundResource(R.drawable.resize_service_on);
+                binding.serviceRadio01.setBackgroundResource(R.drawable.ic_full_round_check);
                 if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
-                    binding.linear04.setBackgroundResource(R.drawable.resize_service_on);
+                    binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
                 }
             } else {
                 Uservice01 = false;
@@ -319,9 +319,9 @@ public class JoinActivity extends AppCompatActivity {
         binding.serviceTv02.setOnClickListener(v -> {
             if (!Uservice02) {
                 Uservice02 = true;
-                binding.serviceRadio02.setBackgroundResource(R.drawable.resize_service_on);
+                binding.serviceRadio02.setBackgroundResource(R.drawable.ic_full_round_check);
                 if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
-                    binding.linear04.setBackgroundResource(R.drawable.resize_service_on);
+                    binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
                 }
             } else {
                 Uservice02 = false;
@@ -335,9 +335,9 @@ public class JoinActivity extends AppCompatActivity {
         binding.serviceTv03.setOnClickListener(v -> {
             if (!Uservice03) {
                 Uservice03 = true;
-                binding.serviceRadio03.setBackgroundResource(R.drawable.resize_service_on);
+                binding.serviceRadio03.setBackgroundResource(R.drawable.ic_full_round_check);
                 if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
-                    binding.linear04.setBackgroundResource(R.drawable.resize_service_on);
+                    binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
                 }
             } else {
                 Uservice03 = false;
@@ -351,9 +351,9 @@ public class JoinActivity extends AppCompatActivity {
         binding.serviceTv04.setOnClickListener(v -> {
             if (!Uservice04) {
                 Uservice04 = true;
-                binding.serviceRadio04.setBackgroundResource(R.drawable.resize_service_on);
+                binding.serviceRadio04.setBackgroundResource(R.drawable.ic_full_round_check);
                 if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
-                    binding.linear04.setBackgroundResource(R.drawable.resize_service_on);
+                    binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
                 }
             } else {
                 Uservice04 = false;
