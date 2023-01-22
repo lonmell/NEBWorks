@@ -282,6 +282,8 @@ public class SearchAccountActivity extends AppCompatActivity {
                 binding.serviceRadio02.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.serviceRadio03.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.serviceRadio04.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
             } else {
                 allcheck = false;
                 Uservice01 = false;
@@ -293,6 +295,8 @@ public class SearchAccountActivity extends AppCompatActivity {
                 binding.serviceRadio02.setBackgroundResource(R.drawable.select_empty_round);
                 binding.serviceRadio03.setBackgroundResource(R.drawable.select_empty_round);
                 binding.serviceRadio04.setBackgroundResource(R.drawable.select_empty_round);
+                binding.linear03.setCardBackgroundColor(Color.parseColor("#EFF4FD"));
+                binding.linear04tv.setTextColor(Color.parseColor("#1445D0"));
             }
         });
 
@@ -302,12 +306,16 @@ public class SearchAccountActivity extends AppCompatActivity {
                 binding.serviceRadio01.setBackgroundResource(R.drawable.ic_full_round_check);
                 if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
                 }
             } else {
                 Uservice01 = false;
                 binding.serviceRadio01.setBackgroundResource(R.drawable.select_empty_round);
                 if (!Uservice01 || !Uservice02 || !Uservice03 || !Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.select_empty_round);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#EFF4FD"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#1445D0"));
                 }
             }
         });
@@ -318,12 +326,16 @@ public class SearchAccountActivity extends AppCompatActivity {
                 binding.serviceRadio02.setBackgroundResource(R.drawable.ic_full_round_check);
                 if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
                 }
             } else {
                 Uservice02 = false;
                 binding.serviceRadio02.setBackgroundResource(R.drawable.select_empty_round);
                 if (!Uservice01 || !Uservice02 || !Uservice03 || !Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.select_empty_round);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#EFF4FD"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#1445D0"));
                 }
             }
         });
@@ -334,12 +346,16 @@ public class SearchAccountActivity extends AppCompatActivity {
                 binding.serviceRadio03.setBackgroundResource(R.drawable.ic_full_round_check);
                 if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
                 }
             } else {
                 Uservice03 = false;
                 binding.serviceRadio03.setBackgroundResource(R.drawable.select_empty_round);
                 if (!Uservice01 || !Uservice02 || !Uservice03 || !Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.select_empty_round);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#EFF4FD"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#1445D0"));
                 }
             }
         });
@@ -350,6 +366,8 @@ public class SearchAccountActivity extends AppCompatActivity {
                 binding.serviceRadio04.setBackgroundResource(R.drawable.ic_full_round_check);
                 if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
                 }
             } else {
                 Uservice04 = false;
@@ -357,6 +375,8 @@ public class SearchAccountActivity extends AppCompatActivity {
                 binding.linear04.setBackgroundResource(R.drawable.select_empty_round);
                 if (!Uservice01 || !Uservice02 || !Uservice03 || !Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.select_empty_round);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#EFF4FD"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#1445D0"));
                 }
             }
         });

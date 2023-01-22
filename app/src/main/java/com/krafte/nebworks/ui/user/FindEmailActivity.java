@@ -62,6 +62,7 @@ public class FindEmailActivity extends AppCompatActivity {
         Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
 
         binding.findMyEmail.setText(USER_INFO_EMAIL);
+        binding.findEmailImg.setBackgroundResource(R.drawable.change_pw_end);
     }
 
 

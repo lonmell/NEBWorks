@@ -59,7 +59,7 @@ public class ChangePWActivity2 extends AppCompatActivity {
         Log.i(TAG, "USER_INFO_EMAIL = " + USER_INFO_EMAIL);
         Log.i(TAG, "USER_INFO_PHONE = " + USER_INFO_PHONE);
 
-        binding.findEmailImg.setBackgroundResource(R.drawable.change_pw_end);
+        binding.findEmailImg.setBackgroundResource(R.drawable.ic_find_pw);
         binding.copyemailArea.setVisibility(View.GONE);
         binding.findPwtv.setText("이메일도 찾기");
     }

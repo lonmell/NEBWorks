@@ -238,17 +238,10 @@ public class JoinActivity extends AppCompatActivity {
 
         binding.selectMan.setOnClickListener(v -> {
             USER_INFO_GENDER = "1";
-//            binding.manTxt.setTextColor(Color.parseColor("#1E90FF"));
-//            binding.manTxt.setBackgroundColor(Color.parseColor("#ffffff"));
-//            binding.selectMan.setBackgroundColor(Color.parseColor("#1E90FF"));
-
             binding.manTxt.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
-            binding.manTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
-            binding.selectMan.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+//            binding.manTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
+            binding.selectMan.setBackgroundResource(R.drawable.join_gender_leftround);
 
-//            binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-//            binding.womanTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
-//            binding.selectWoman.setBackgroundColor(Color.parseColor("#a9a9a9"));
 
             binding.womanTxt.setTextColor(ContextCompat.getColor(mContext, R.color.black));
             binding.womanTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
@@ -257,17 +250,10 @@ public class JoinActivity extends AppCompatActivity {
 
         binding.selectWoman.setOnClickListener(v -> {
             USER_INFO_GENDER = "2";
-//            binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-//            binding.manTxt.setBackgroundColor(Color.parseColor("#f2f2f2"));
-//            binding.selectMan.setBackgroundColor(Color.parseColor("#a9a9a9"));
 
             binding.womanTxt.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
-            binding.womanTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
-            binding.selectWoman.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
-
-//            binding.womanTxt.setTextColor(Color.parseColor("#1E90FF"));
-//            binding.womanTxt.setBackgroundColor(Color.parseColor("#ffffff"));
-//            binding.selectWoman.setBackgroundColor(Color.parseColor("#1E90FF"));
+//            binding.womanTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
+            binding.selectWoman.setBackgroundResource(R.drawable.join_gender_rightround);
 
             binding.manTxt.setTextColor(ContextCompat.getColor(mContext, R.color.black));
             binding.manTxt.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
@@ -537,7 +523,7 @@ public class JoinActivity extends AppCompatActivity {
                                 binding.tv06.setClickable(false);
                                 binding.tv06.setEnabled(false);
                                 binding.tv07.setVisibility(View.VISIBLE);
-                                binding.emailCheck.setText("사용할 수 있습니다.");
+                                binding.emailCheck.setText("");
                                 binding.emailCheck.setTextColor(Color.parseColor("#1483FE"));
                                 duplicateCheck = true;
                             }

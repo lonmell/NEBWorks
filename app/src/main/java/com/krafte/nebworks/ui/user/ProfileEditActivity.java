@@ -155,6 +155,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     String mem_phone = "";
     String mem_gender = "";
     String mem_img_path = "";
+    String mem_user_auth = "";
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -567,7 +568,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                                     mem_phone = Response.getJSONObject(0).getString("phone");
                                     mem_gender = Response.getJSONObject(0).getString("gender");
                                     mem_img_path = Response.getJSONObject(0).getString("img_path");
-
+                                    mem_user_auth = Response.getJSONObject(0).getString("user_auth");
                                     dlog.i("------UserCheck-------");
                                     USER_INFO_ID = mem_id;
                                     dlog.i("프로필 사진 url : " + mem_img_path);
