@@ -571,6 +571,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                                     mem_user_auth = Response.getJSONObject(0).getString("user_auth");
                                     dlog.i("------UserCheck-------");
                                     USER_INFO_ID = mem_id;
+                                    USER_INFO_AUTH = mem_user_auth;
                                     dlog.i("프로필 사진 url : " + mem_img_path);
                                     dlog.i("성명 : " + mem_name);
                                     dlog.i("성별 : " + mem_gender);
