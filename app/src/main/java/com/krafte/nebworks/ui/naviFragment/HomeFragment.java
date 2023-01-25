@@ -252,12 +252,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.allMemberGo.setOnClickListener(v -> {
+        binding.commuteArea.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                shardpref.putInt("SELECT_POSITION", 1);
-                pm.MemberManagement(mContext);
+                shardpref.putInt("SELECT_POSITION", 2);
+                pm.Main(mContext);
+//                pm.MemberManagement(mContext);
             }
         });
 
