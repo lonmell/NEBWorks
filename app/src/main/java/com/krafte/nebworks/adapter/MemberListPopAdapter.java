@@ -79,20 +79,23 @@ public class MemberListPopAdapter extends RecyclerView.Adapter<MemberListPopAdap
             if(kind == 0){
                 if(!getuser_id.isEmpty()){
                     if(getuser_id.contains(item.getId())){
-                            holder.select_member_icon.setVisibility(View.VISIBLE);
+                            holder.select_member_icon.setBackgroundResource(R.drawable.task_member_check);
+                            holder.view.setVisibility(View.VISIBLE);
                     }
                 }
                 holder.confirm_date.setVisibility(View.GONE);
                 holder.item_total.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 holder.item_total.setOnClickListener(v -> {
-                    if(holder.select_member_icon.getVisibility() == View.VISIBLE){
-                        holder.select_member_icon.setVisibility(View.INVISIBLE);
+                    if(holder.view.getVisibility() == View.VISIBLE){
+                        holder.view.setVisibility(View.INVISIBLE);
+                        holder.select_member_icon.setBackgroundResource(R.drawable.task_member_check_none);
                         item_user_id.remove(item.getId());
                         item_user_name.remove(item.getName());
                         item_user_img.remove(item.getImg_path());
                         item_user_position.remove(item.getJikgup());
                     }else{
-                        holder.select_member_icon.setVisibility(View.VISIBLE);
+                        holder.view.setVisibility(View.VISIBLE);
+                        holder.select_member_icon.setBackgroundResource(R.drawable.task_member_check);
                         item_user_id.add(item.getId());
                         item_user_name.add(item.getName());
                         item_user_img.add(item.getImg_path());
@@ -110,6 +113,7 @@ public class MemberListPopAdapter extends RecyclerView.Adapter<MemberListPopAdap
             }else if(kind == 1){
                 holder.confirm_date.setVisibility(View.VISIBLE);
                 holder.confirm_date.setText(dc.GET_YEAR + "." + dc.GET_MONTH + "." + dc.GET_DAY + " 확인");
+                holder.select_member_icon.setVisibility(View.INVISIBLE);
                 holder.item_total.setClickable(false);
                 holder.item_total.setBackgroundResource(R.drawable.grayback_gray_round);
                 holder.underline.setVisibility(View.GONE);
@@ -133,6 +137,7 @@ public class MemberListPopAdapter extends RecyclerView.Adapter<MemberListPopAdap
         TextView name,jikgup,confirm_date;
         RelativeLayout select_member_area,item_total;
         LinearLayout underline;
+        View view;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -148,6 +153,7 @@ public class MemberListPopAdapter extends RecyclerView.Adapter<MemberListPopAdap
             item_total             = itemView.findViewById(R.id.item_total);
             confirm_date           = itemView.findViewById(R.id.confirm_date);
             underline              = itemView.findViewById(R.id.underline);
+            view                   = itemView.findViewById(R.id.view);
 
             item_user_id          = new ArrayList<>();
             item_user_name        = new ArrayList<>();

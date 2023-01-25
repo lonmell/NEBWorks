@@ -249,7 +249,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/resize_service_off" />
+                    android:background="@drawable/task_check_none" />
 
                 <TextView
                     android:id="@+id/repeat_tv"
@@ -525,7 +525,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/resize_service_off" />
+                    android:background="@drawable/task_check_none" />
 
                 <TextView
                     android:id="@+id/report_tv"
@@ -533,7 +533,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="15dp"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="보고가 필요한 업무입니다."
                     android:textColor="@color/black"
                     android:textSize="16sp"
@@ -559,6 +559,14 @@
                     android:background="@drawable/default_select_round"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/select01_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="30dp"
+                        android:background="@drawable/task_check_none"/>
+
                     <TextView
                         android:id="@+id/select01"
                         android:layout_width="match_parent"
@@ -579,6 +587,14 @@
                     android:background="@drawable/default_select_round"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/select02_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="30dp"
+                        android:background="@drawable/task_check_none"/>
+
                     <TextView
                         android:id="@+id/select02"
                         android:layout_width="match_parent"
@@ -588,6 +604,7 @@
                         android:text="체크"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
+
                 </LinearLayout>
             </LinearLayout>
 

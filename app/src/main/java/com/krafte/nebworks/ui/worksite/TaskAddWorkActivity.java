@@ -258,13 +258,16 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.needReport.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
                 binding.reportVisible.setVisibility(View.VISIBLE);
+                binding.reportBtn.setBackgroundResource(R.drawable.task_check_white);
                 TaskKind = "1";
                 binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
-                binding.select01.setTextColor(Color.parseColor("#ffffff"));
+                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
             } else {
                 NeedReportTF = false;
                 binding.needReport.setBackgroundColor(Color.parseColor("#F5F6F8"));
                 binding.reportTv.setTextColor(Color.parseColor("#000000"));
+                binding.reportBtn.setBackgroundResource(R.drawable.task_check_none);
                 binding.reportVisible.setVisibility(View.GONE);
             }
         });
@@ -274,16 +277,20 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             dlog.i("select01Box click [TaskKind : " + TaskKind + "]");
             binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
             binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
             binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
             binding.select02.setTextColor(Color.parseColor("#000000"));
+            binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
         });
         binding.select02Box.setOnClickListener(v -> {
             TaskKind = "0";
             dlog.i("select02Box click [TaskKind : " + TaskKind + "]");
             binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
             binding.select01.setTextColor(Color.parseColor("#000000"));
+            binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
             binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
             binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select02Img.setBackgroundResource(R.drawable.task_check_blue);
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
             BtnOneCircleFun(false);
@@ -450,7 +457,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.inputDateBox02.setVisibility(View.GONE);
             } else {
                 RepeatCheck = false;
-                binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
+                binding.repeatBtn.setBackgroundResource(R.drawable.task_check_none);
+                binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#F5F6F8"));
+                binding.repeatTv.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                 binding.inputDateBox01.setVisibility(View.VISIBLE);
                 binding.inputDateBox02.setVisibility(View.VISIBLE);
             }
@@ -646,14 +655,16 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
         if (!String.valueOf(getYoil).equals("[]")) {
             RepeatCheck = true;
-            binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
-            binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.repeatBtn.setBackgroundResource(R.drawable.task_check_white);
+            binding.selectRepeatBtn.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
         } else {
             dlog.i("input_pop_time : " + input_pop_time);
             dlog.i("SET_TASK_TIME_VALUE : " + SET_TASK_TIME_VALUE);
             RepeatCheck = false;
-            binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
+            binding.repeatBtn.setBackgroundResource(R.drawable.task_check_none);
+            binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#F5F6F8"));
+            binding.repeatTv.setTextColor(ContextCompat.getColor(mContext, R.color.black));
 
             if (return_page.equals("task_reuse")) {
                 shardpref.putString("picker_year", today.substring(0, 4));
@@ -725,21 +736,26 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         if (!TaskKind.isEmpty()) {
             dlog.i("if(!TaskKind) : " + TaskKind);
             NeedReportTF = true;
-            binding.needReport.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.needReport.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.reportBtn.setBackgroundResource(R.drawable.task_check_white);
             binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
             binding.reportVisible.setVisibility(View.VISIBLE);
             if (TaskKind.equals("0")) {
                 TaskKind = "0";
-                binding.select01Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
                 binding.select01.setTextColor(Color.parseColor("#000000"));
-                binding.select02Box.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.select02.setTextColor(Color.parseColor("#ffffff"));
+                binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round);
+                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                binding.select02Img.setBackgroundResource(R.drawable.task_check_blue);
             } else if (TaskKind.equals("1")) {
                 TaskKind = "1";
-                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.select01.setTextColor(Color.parseColor("#ffffff"));
-                binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
+                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
                 binding.select02.setTextColor(Color.parseColor("#000000"));
+                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
             }
         }
         dlog.i("-----getTaskContents END-----");
