@@ -113,7 +113,7 @@
                     android:textColor="@color/black"
                     android:textColorHint="#a9a9a9"
                     android:textSize="17sp"
-                    tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                    tools:ignore="HardcodedText,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             </LinearLayout>
 

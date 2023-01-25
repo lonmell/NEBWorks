@@ -240,6 +240,9 @@ public class WorkStatusSubFragment1 extends Fragment {
                                     binding.allMemberlist.setVisibility(View.VISIBLE);
                                     for (int i = 0; i < Response.length(); i++) {
                                         JSONObject jsonObject = Response.getJSONObject(i);
+//                                        if(!jsonObject.getString("kind").equals("4")){
+//
+//                                        }
                                         mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_id"),

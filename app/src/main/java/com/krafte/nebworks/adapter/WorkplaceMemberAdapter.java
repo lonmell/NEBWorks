@@ -134,14 +134,29 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                 holder.linear02.setVisibility(View.GONE);
                 holder.state_tv.setText("퇴직");
                 holder.list_setting.setVisibility(View.INVISIBLE);
-                holder.contract_area.setVisibility(View.GONE);
-                holder.add_detail_tv.setText("복직");
+                holder.contract_area.setVisibility(View.VISIBLE);
+                holder.add_detail.setVisibility(View.VISIBLE);
+
+                holder.contract_area.setCardBackgroundColor(Color.parseColor("#1483FE"));
+                holder.contract_area_tv.setText("복직");
+                holder.contract_area_tv.setTextColor(Color.parseColor("#000000"));
+
+                holder.add_detail.setCardBackgroundColor(Color.parseColor("#FF3D00"));
+                holder.add_detail_tv.setText("직원삭제");
+                holder.add_detail_tv.setTextColor(Color.parseColor("#ffffff"));
+
                 holder.linear04.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
-                holder.add_detail.setOnClickListener(v -> {
+                holder.contract_area.setOnClickListener(v -> {
                     if (mListener2 != null) {
                         mListener2.onItemClick(v, position,2);
                     }
                 });
+                holder.add_detail_tv.setOnClickListener(v -> {
+                    if (mListener2 != null) {
+                        mListener2.onItemClick(v, position,3);
+                    }
+                });
+
             }else{
                 dlog.DlogContext(mContext);
                 if(item.getState().equals("null")){

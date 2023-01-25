@@ -290,8 +290,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                         if(USER_INFO_AUTH.equals("0")){
                             if(wccnt == 0){
                                 //직원상세정보가 모두 추가되었을 때
-//                                pm.Main(mContext);
-                                finish();
+                                pm.Main(mContext);
+//                                finish();
                             }else{
                                 //직원상세정보 추가 안한 사람이 있을 때
                                 Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
@@ -302,8 +302,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                 startActivity(intent);
                             }
                         }else{
-//                            pm.Main2(mContext);
-                            finish();
+                            pm.Main2(mContext);
+//                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -474,6 +474,16 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                                 dlog.i("kind : " + kind);
                                                 dlog.i("id : " + getid);
                                                 UpdateBasic(getid, name, phone, jumin, "1", join_date, place_name);
+                                            }else if(kind == 3){
+                                                shardpref.putString("mem_id",getid);
+                                                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                                                intent.putExtra("flag","직원삭제2");
+                                                intent.putExtra("data","근로계약서, 출근표가 삭제됩니다\n삭제하시겠습니까?");
+                                                intent.putExtra("left_btn_txt", "닫기");
+                                                intent.putExtra("right_btn_txt", "삭제");
+                                                startActivity(intent);
+                                                overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             }
                                         }catch (Exception e){
                                             e.printStackTrace();

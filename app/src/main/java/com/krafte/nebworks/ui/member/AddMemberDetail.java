@@ -142,6 +142,7 @@ public class AddMemberDetail extends AppCompatActivity {
         mem_join_date       = shardpref.getString("mem_join_date", "");
         mem_state           = shardpref.getString("mem_state", "");
         mem_jikgup          = shardpref.getString("mem_jikgup", "");
+        mem_paykind         = shardpref.getString("mem_paykind", "");
         mem_pay             = shardpref.getString("mem_pay", "");
 
         dlog.i("mem_phone : " + mem_phone);
@@ -346,36 +347,6 @@ public class AddMemberDetail extends AppCompatActivity {
             }
         });
 
-        /*직급*/
-//        ArrayList<String> stringCategory1 = new ArrayList<>();
-//        stringCategory1.add("알바");
-//        stringCategory1.add("정직원");
-//        stringCategory1.add("매니저");
-//        stringCategory1.add("기타");
-//
-//        ArrayAdapter<String> select_filter1 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory1);
-//        binding.jikgupSpinner.setAdapter(select_filter1);
-//        binding.jikgupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                mem_jikgup = stringCategory1.get(i);
-//                binding.jikgup.setText(mem_jikgup);
-//                dlog.i("i : " + mem_jikgup);
-//                binding.jikgupround.setBackgroundResource(R.drawable.default_select_on_round);
-//                binding.jikgup.setBackgroundColor(Color.parseColor("#6395EC"));
-//                binding.jikgup.setTextColor(Color.parseColor("#ffffff"));
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//                mem_jikgup = "알바";
-//                binding.jikgup.setText(mem_jikgup);
-//                binding.jikgupround.setBackgroundResource(R.drawable.default_input_round);
-//                binding.jikgup.setBackgroundColor(Color.parseColor("#ffffff"));
-//                binding.jikgup.setTextColor(Color.parseColor("#696969"));
-//            }
-//        });
         binding.jikgup.setOnClickListener(v -> {
             if(binding.selectJikgupkind.getVisibility() == View.GONE){
                 binding.selectJikgupkind.setVisibility(View.VISIBLE);
@@ -408,36 +379,7 @@ public class AddMemberDetail extends AppCompatActivity {
             mem_jikgup = "기타";
             binding.jikgup.setText("기타");
         });
-        /*급여 지급방식*/
-//        ArrayList<String> stringCategory2 = new ArrayList<>();
-//        stringCategory2.add("일급");
-//        stringCategory2.add("시급");
-//        stringCategory2.add("주급");
-//        stringCategory2.add("월급");
-//
-//        ArrayAdapter<String> select_filter2 = new ArrayAdapter<>(mContext, R.layout.dropdown_item_list, stringCategory2);
-//        binding.paySpinner.setAdapter(select_filter2);
-//        binding.paySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                mem_paykind = stringCategory2.get(i);
-//                binding.pay.setText(mem_paykind);
-//                dlog.i("i : " + mem_paykind);
-//                binding.payround.setBackgroundResource(R.drawable.default_select_on_round);
-//                binding.pay.setBackgroundColor(Color.parseColor("#6395EC"));
-//                binding.pay.setTextColor(Color.parseColor("#ffffff"));
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//                mem_paykind = "일급";
-//                binding.pay.setText(mem_paykind);
-//                binding.payround.setBackgroundResource(R.drawable.default_input_round);
-//                binding.pay.setBackgroundColor(Color.parseColor("#ffffff"));
-//                binding.pay.setTextColor(Color.parseColor("#696969"));
-//            }
-//        });
+
         binding.pay.setOnClickListener(v -> {
             if(binding.selectPaykind.getVisibility() == View.GONE){
                 binding.selectPaykind.setVisibility(View.VISIBLE);
@@ -712,24 +654,32 @@ public class AddMemberDetail extends AppCompatActivity {
             dlog.i("주민번호 : " + mem_jumin);
             dlog.i("초대 승인상태 : " + mem_kind);
             dlog.i("입사날짜 : " + mem_join_date);
+            dlog.i("직급 : " + mem_jikgup);
+            dlog.i("급여방식 : " + mem_paykind);
             dlog.i("------SaveCheck------");
             return true;
         } else {
             if (place_id.isEmpty()) {
-                Toast.makeText(mContext, "매장 ID가 저장되어있지 않습니다, 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                Toast_Nomal("매장 ID가 저장되어있지 않습니다, 다시 시도해주세요.");
                 pm.PlaceList(mContext);
                 return false;
             } else if (mem_name.isEmpty()) {
-                Toast.makeText(mContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                 Toast_Nomal("이름을 입력해주세요.");
                 return false;
             } else if (mem_phone.isEmpty()) {
-                Toast.makeText(mContext, "전화번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                 Toast_Nomal("전화번호를 입력해주세요.");
                 return false;
             } else if (mem_jumin.isEmpty()) {
-                Toast.makeText(mContext, "주민번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                 Toast_Nomal("주민번호를 입력해주세요.");
                 return false;
             } else if (mem_join_date.isEmpty()) {
-                Toast.makeText(mContext, "입사일자를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                 Toast_Nomal("입사일자를 입력해주세요.");
+                return false;
+            } else if (mem_jikgup.isEmpty()) {
+                 Toast_Nomal("직급을 선택해주세요");
+                return false;
+            } else if (mem_paykind.isEmpty()) {
+                 Toast_Nomal("급여 지급 방식을 선택해주세요");
                 return false;
             } else {
                 //상세정보 체크
@@ -740,6 +690,8 @@ public class AddMemberDetail extends AppCompatActivity {
                 dlog.i("주민번호 : " + mem_jumin);
                 dlog.i("초대 승인상태 : " + mem_kind);
                 dlog.i("입사날짜 : " + mem_join_date);
+                dlog.i("직급 : " + mem_jikgup);
+                dlog.i("급여방식 : " + mem_paykind);
                 dlog.i("------SaveCheck------");
                 return true;
             }
@@ -992,10 +944,11 @@ public class AddMemberDetail extends AppCompatActivity {
 //                                            break;
 //                                    }
                                     binding.selectJikgupkind.setVisibility(View.GONE);
-                                    binding.pay.setText(jikgup);
-
+                                    binding.jikgup.setText(jikgup);
+                                    mem_jikgup = jikgup;
                                     binding.selectPaykind.setVisibility(View.GONE);
                                     binding.pay.setText(paykind);
+                                    mem_paykind = paykind;
 
                                     binding.inputbox05.setText(pay);
 

@@ -334,9 +334,9 @@ public class MemberDetailActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        SetContractList();
         SetAllMemberList();
         SetAllMemberList(stub_place_id, stub_user_id);
+        SetContractList();
         MainWorkCnt(stub_place_id, stub_user_id);
 
     }
@@ -356,78 +356,77 @@ public class MemberDetailActivity extends AppCompatActivity {
     public void MainWorkCnt(String place_id, String user_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
         dlog.i("SetAllMemberList user_id : " + user_id);
-        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(MainWorkCntInterface.URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .build();
-            MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
-            Call<String> call = api.getData(place_id, user_id);
-            call.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        String jsonResponse = rc.getBase64decode(response.body());
-                        dlog.i("jsonResponse length : " + jsonResponse.length());
-                        dlog.i("jsonResponse : " + jsonResponse);
-                        Log.e("onSuccess : ", response.body());
-                        try {
-                            //Array데이터를 받아올 때
-                            JSONArray Response = new JSONArray(jsonResponse);
-                            if (Response.length() != 0) {
-                                String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
-                                String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt");
-                                String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
-                                String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
-                                String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
-                                String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
-                                String contract_cnt = Response.getJSONObject(0).getString("contract_cnt");
-                                String owner_sign_id = Response.getJSONObject(0).getString("owner_sign_id");
-                                String worker_sign_id = Response.getJSONObject(0).getString("worker_sign_id");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MainWorkCntInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
+        Call<String> call = api.getData(place_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("MainWorkCnt jsonResponse length : " + jsonResponse.length());
+                    dlog.i("MainWorkCnt jsonResponse : " + jsonResponse);
+                    Log.e("onSuccess : ", response.body());
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        if (Response.length() != 0) {
+                            String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
+                            String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt");
+                            String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
+                            String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
+                            String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
+                            String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
+                            String contract_cnt = Response.getJSONObject(0).getString("contract_cnt");
+                            String owner_sign_id = Response.getJSONObject(0).getString("owner_sign_id");
+                            String worker_sign_id = Response.getJSONObject(0).getString("worker_sign_id");
 
-                                contract_id = Response.getJSONObject(0).getString("id");
+                            contract_id = Response.getJSONObject(0).getString("id");
 
-                                dlog.i("-----MainWorkCnt-----");
-                                dlog.i("task_complete_cnt : " + task_complete_cnt);
-                                dlog.i("task_incomplete_cnt : " + task_incomplete_cnt);
-                                dlog.i("waiting_cnt : " + waiting_cnt);
-                                dlog.i("approval_cnt : " + approval_cnt);
-                                dlog.i("reject_cnt : " + reject_cnt);
-                                dlog.i("contract_cnt : " + contract_cnt);
-                                dlog.i("contract_id : " + contract_id);
-                                dlog.i("owner_sign_id : " + owner_sign_id);
-                                dlog.i("worker_sign_id : " + worker_sign_id);
-                                dlog.i("-----MainWorkCnt-----");
-                                binding.workdata01.setText(task_complete_cnt);
-                                binding.workdata02.setText(task_incomplete_cnt);
-                                binding.workdata03.setText(waiting_cnt);
-                                binding.workdata04.setText(approval_cnt);
-                                binding.workdata05.setText(reject_cnt);
-                                if (!worker_sign_id.equals("null") && !owner_sign_id.equals("null")) {
-                                    binding.contractState.setTextColor(Color.parseColor("#6395EC"));
-                                    binding.contractState.setText("작성완료");
+                            dlog.i("-----MainWorkCnt-----");
+                            dlog.i("task_complete_cnt : " + task_complete_cnt);
+                            dlog.i("task_incomplete_cnt : " + task_incomplete_cnt);
+                            dlog.i("waiting_cnt : " + waiting_cnt);
+                            dlog.i("approval_cnt : " + approval_cnt);
+                            dlog.i("reject_cnt : " + reject_cnt);
+                            dlog.i("contract_cnt : " + contract_cnt);
+                            dlog.i("contract_id : " + contract_id);
+                            dlog.i("owner_sign_id : " + owner_sign_id);
+                            dlog.i("worker_sign_id : " + worker_sign_id);
+                            dlog.i("-----MainWorkCnt-----");
+                            binding.workdata01.setText(task_complete_cnt);
+                            binding.workdata02.setText(task_incomplete_cnt);
+                            binding.workdata03.setText(waiting_cnt);
+                            binding.workdata04.setText(approval_cnt);
+                            binding.workdata05.setText(reject_cnt);
+                            if (!worker_sign_id.equals("null") && !owner_sign_id.equals("null")) {
+                                binding.contractState.setTextColor(Color.parseColor("#6395EC"));
+                                binding.contractState.setText("작성완료");
+                                binding.contractAllGo.setOnClickListener(v -> {
+                                    shardpref.putString("contract_id", contract_id);
+                                    pm.ContractAll(mContext);
+                                });
+                            } else {
+                                if (worker_sign_id.equals("null") && owner_sign_id.equals("null")) {
+                                    binding.contractState.setTextColor(Color.parseColor("#DD6540"));
+                                    binding.contractState.setText("미처리");
+                                    //미처리 일때 근로계약서 리스트 페이지로
                                     binding.contractAllGo.setOnClickListener(v -> {
-                                        shardpref.putString("contract_id", contract_id);
-                                        pm.ContractAll(mContext);
+                                        if (USER_INFO_AUTH.equals("0")) {
+                                            pm.AddContractPage01(mContext);
+                                        } else {
+                                            Toast.makeText(mContext, "작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
+                                        }
                                     });
                                 } else {
-                                    if (worker_sign_id.equals("null") && owner_sign_id.equals("null")) {
-                                        binding.contractState.setTextColor(Color.parseColor("#DD6540"));
-                                        binding.contractState.setText("미처리");
-                                        //미처리 일때 근로계약서 리스트 페이지로
-                                        binding.contractAllGo.setOnClickListener(v -> {
-                                            if (USER_INFO_AUTH.equals("0")) {
-                                                pm.AddContractPage01(mContext);
-                                            } else {
-                                                Toast.makeText(mContext, "작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    } else {
-                                        binding.contractState.setTextColor(Color.parseColor("#DD6540"));
-                                        binding.contractState.setText("작성중");
-                                        binding.contractAllGo.setOnClickListener(v -> {
-                                            shardpref.putString("contract_id", contract_id);
-                                            shardpref.putString("progress_pos", getprogress_pos);
+                                    binding.contractState.setTextColor(Color.parseColor("#DD6540"));
+                                    binding.contractState.setText("작성중");
+                                    binding.contractAllGo.setOnClickListener(v -> {
+                                        shardpref.putString("contract_id", contract_id);
+                                        shardpref.putString("progress_pos", getprogress_pos);
                                             /* item.getContract_id()
                                             *   현재 진행중인 페이지
                                                 0 or null - 작성안됨
@@ -439,62 +438,56 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 6 - 서명
                                                 7 - 완료
                                             * */
-                                            if (USER_INFO_AUTH.equals("0")) {
-                                                if (getprogress_pos.equals("0")) {
-                                                    pm.AddContractPage03(mContext);
-                                                } else if (getprogress_pos.equals("1")) {
-                                                    //근무 기본사항 부터
-                                                    pm.AddContractPage04(mContext);
-                                                } else if (getprogress_pos.equals("2")) {
-                                                    //급여 기본사항 부터
-                                                    pm.AddContractPage05(mContext);
-                                                } else if (getprogress_pos.equals("3")) {
-                                                    //특약 부터
-                                                    pm.AddContractPage06(mContext);
-                                                } else if (getprogress_pos.equals("4")) {
-                                                    //근로자 인적사항 부터
-                                                    pm.AddContractPage07(mContext);
-                                                } else if (getprogress_pos.equals("5")) {
-                                                    //서명 부터
-                                                    pm.AddContractPage08(mContext);
-                                                } else if (getprogress_pos.equals("7")) {
-                                                    //해당 근로계약서 전체 상세 페이지로
-                                                    shardpref.putString("contract_id", contract_id);
-                                                    pm.ContractAll(mContext);
-                                                }
-                                            } else {
-                                                //근로자일경우
-                                                if (getprogress_pos.equals("6")) {
-                                                    pm.ContractWorkerAccept(mContext);
-                                                } else if (getprogress_pos.equals("7")) {
-                                                    //해당 근로계약서 전체 상세 페이지로
-                                                    shardpref.putString("contract_id", contract_id);
-                                                    pm.ContractAll(mContext);
-                                                }
+                                        if (USER_INFO_AUTH.equals("0")) {
+                                            if (getprogress_pos.equals("0")) {
+                                                pm.AddContractPage03(mContext);
+                                            } else if (getprogress_pos.equals("1")) {
+                                                //근무 기본사항 부터
+                                                pm.AddContractPage04(mContext);
+                                            } else if (getprogress_pos.equals("2")) {
+                                                //급여 기본사항 부터
+                                                pm.AddContractPage05(mContext);
+                                            } else if (getprogress_pos.equals("3")) {
+                                                //특약 부터
+                                                pm.AddContractPage06(mContext);
+                                            } else if (getprogress_pos.equals("4")) {
+                                                //근로자 인적사항 부터
+                                                pm.AddContractPage07(mContext);
+                                            } else if (getprogress_pos.equals("5")) {
+                                                //서명 부터
+                                                pm.AddContractPage08(mContext);
+                                            } else if (getprogress_pos.equals("7")) {
+                                                //해당 근로계약서 전체 상세 페이지로
+                                                shardpref.putString("contract_id", contract_id);
+                                                pm.ContractAll(mContext);
                                             }
-                                        });
-                                    }
-//                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
+                                        } else {
+                                            //근로자일경우
+                                            if (getprogress_pos.equals("6")) {
+                                                pm.ContractWorkerAccept(mContext);
+                                            } else if (getprogress_pos.equals("7")) {
+                                                //해당 근로계약서 전체 상세 페이지로
+                                                shardpref.putString("contract_id", contract_id);
+                                                pm.ContractAll(mContext);
+                                            }
+                                        }
+                                    });
                                 }
+//                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
+            }
 
-                @Override
-                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    dlog.e("에러 = " + t.getMessage());
-                }
-            });
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
         });
-        th.start();
-        try {
-            th.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 
     /*업무카운팅 START*/

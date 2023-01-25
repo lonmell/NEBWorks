@@ -35,6 +35,7 @@ import com.krafte.nebworks.dataInterface.FcmTokenDelInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentDelInterface;
 import com.krafte.nebworks.dataInterface.FeedDelInterface;
 import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface;
+import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface2;
 import com.krafte.nebworks.dataInterface.PlaceDelInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -239,7 +240,9 @@ public class TwoButtonPopActivity extends Activity {
                     PlaceDel();
                 } else if(flag.equals("직원삭제")){
                     TaskDel();
-                }  else if(flag.equals("근무정보삭제")){
+                } else if(flag.equals("직원삭제2")){
+                    TaskDel2();
+                } else if(flag.equals("근무정보삭제")){
                     WorkHourDel();
                 } else if(flag.equals("그룹신청")){
                     message = "새로운 근무지원 신청이 도착했습니다.";
@@ -601,6 +604,47 @@ public class TwoButtonPopActivity extends Activity {
         });
     }
 
+    private void TaskDel2(){
+        dlog.i("TaskDel2 place_id : " + place_id);
+        dlog.i("TaskDel2 mem_id : " + mem_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MemberOutPlaceInterface2.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        MemberOutPlaceInterface2 api = retrofit.create(MemberOutPlaceInterface2.class);
+        Call<String> call = api.getData(place_id, mem_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("TaskDel2 jsonResponse length : " + jsonResponse.length());
+                            dlog.i("TaskDel2 jsonResponse : " + jsonResponse);
+                            try {
+                                if (jsonResponse.replace("\"", "").equals("success")) {
+                                    Toast_Nomal("해당 직원의 데이터 모두 삭제가 완료되었습니다.");
+                                    shardpref.remove("remote");
+                                    shardpref.remove("mem_id");
+                                    ClosePop();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
     public void WorkHourDel() {
 //        매장 멤버 삭제 (매장에서 나가기, 매장에서 내보내기)
         Retrofit retrofit = new Retrofit.Builder()
