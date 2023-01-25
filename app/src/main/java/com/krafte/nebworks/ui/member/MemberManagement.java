@@ -290,7 +290,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                         if(USER_INFO_AUTH.equals("0")){
                             if(wccnt == 0){
                                 //직원상세정보가 모두 추가되었을 때
-                                pm.Main(mContext);
+//                                pm.Main(mContext);
+                                finish();
                             }else{
                                 //직원상세정보 추가 안한 사람이 있을 때
                                 Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
@@ -301,7 +302,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                 startActivity(intent);
                             }
                         }else{
-                            pm.Main2(mContext);
+//                            pm.Main2(mContext);
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
