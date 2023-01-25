@@ -11,6 +11,7 @@ public interface ContractListInterface {
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(
-            @Field("place_id") String place_id
+            @Field("place_id") String place_id,
+            @Field("user_id") String user_id
     );
 }

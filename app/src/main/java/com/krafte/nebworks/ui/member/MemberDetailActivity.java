@@ -36,6 +36,7 @@ import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkGotoListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
+import com.krafte.nebworks.dataInterface.ContractListInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.MainWorkCntInterface;
 import com.krafte.nebworks.dataInterface.WorkGotoListInterface;
@@ -135,23 +136,23 @@ public class MemberDetailActivity extends AppCompatActivity {
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
             //Singleton Area
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
+            place_id = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+            USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             //shardpref Area
-            stub_place_id       = shardpref.getString("stub_place_id", "0");
-            stub_user_id        = shardpref.getString("stub_user_id", "0");
-            stub_user_account   = shardpref.getString("stub_user_account", "");
-            change_place_name   = shardpref.getString("change_place_name", "");
-            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
+            stub_place_id = shardpref.getString("stub_place_id", "0");
+            stub_user_id = shardpref.getString("stub_user_id", "0");
+            stub_user_account = shardpref.getString("stub_user_account", "");
+            change_place_name = shardpref.getString("change_place_name", "");
+            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
-            gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
-            return_page         = shardpref.getString("return_page", "");
-            item_user_id        = shardpref.getString("item_user_id", "");
+            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
+            return_page = shardpref.getString("return_page", "");
+            item_user_id = shardpref.getString("item_user_id", "");
 
             setBtnEvent();
             drawerLayout = findViewById(R.id.drawer_layout);
@@ -160,13 +161,13 @@ public class MemberDetailActivity extends AppCompatActivity {
             drawerView.setOnTouchListener((v, event) -> false);
             setAddBtnSetting();
 
-            if(USER_INFO_AUTH.equals("1")){
+            if (USER_INFO_AUTH.equals("1")) {
                 binding.addBtn.getRoot().setVisibility(View.GONE);
             }
 
-            if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
-                    binding.contractPhoneInfo.setVisibility(View.GONE);
-            }else if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")){
+            if (place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")) {
+                binding.contractPhoneInfo.setVisibility(View.GONE);
+            } else if (place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")) {
                 binding.contractPhoneInfo.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
@@ -313,7 +314,7 @@ public class MemberDetailActivity extends AppCompatActivity {
             dlog.i("date : " + binding.setdate.getText().toString());
             dlog.i("-----inoutPrint-----");
 //            https://krafte.net/NEBWorks/Commute.php?user_id=64&place_id=97&date=2022-12
-            String Contract_uri = "https://krafte.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date="+date;
+            String Contract_uri = "https://krafte.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date=" + date;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
             startActivity(intent);
         });
@@ -333,9 +334,11 @@ public class MemberDetailActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        SetContractList();
         SetAllMemberList();
         SetAllMemberList(stub_place_id, stub_user_id);
         MainWorkCnt(stub_place_id, stub_user_id);
+
     }
 
     @Override
@@ -411,9 +414,65 @@ public class MemberDetailActivity extends AppCompatActivity {
                                     if (worker_sign_id.equals("null") && owner_sign_id.equals("null")) {
                                         binding.contractState.setTextColor(Color.parseColor("#DD6540"));
                                         binding.contractState.setText("미처리");
+                                        //미처리 일때 근로계약서 리스트 페이지로
+                                        binding.contractAllGo.setOnClickListener(v -> {
+                                            if (USER_INFO_AUTH.equals("0")) {
+                                                pm.AddContractPage01(mContext);
+                                            } else {
+                                                Toast.makeText(mContext, "작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     } else {
                                         binding.contractState.setTextColor(Color.parseColor("#DD6540"));
                                         binding.contractState.setText("작성중");
+                                        binding.contractAllGo.setOnClickListener(v -> {
+                                            shardpref.putString("contract_id", contract_id);
+                                            shardpref.putString("progress_pos", getprogress_pos);
+                                            /* item.getContract_id()
+                                            *   현재 진행중인 페이지
+                                                0 or null - 작성안됨
+                                                1 - 사업장 기본사항
+                                                2 - 근무 기본사항
+                                                3 - 급여 기본사항
+                                                4 - 특약
+                                                5 - 근로자 인적사항
+                                                6 - 서명
+                                                7 - 완료
+                                            * */
+                                            if (USER_INFO_AUTH.equals("0")) {
+                                                if (getprogress_pos.equals("0")) {
+                                                    pm.AddContractPage03(mContext);
+                                                } else if (getprogress_pos.equals("1")) {
+                                                    //근무 기본사항 부터
+                                                    pm.AddContractPage04(mContext);
+                                                } else if (getprogress_pos.equals("2")) {
+                                                    //급여 기본사항 부터
+                                                    pm.AddContractPage05(mContext);
+                                                } else if (getprogress_pos.equals("3")) {
+                                                    //특약 부터
+                                                    pm.AddContractPage06(mContext);
+                                                } else if (getprogress_pos.equals("4")) {
+                                                    //근로자 인적사항 부터
+                                                    pm.AddContractPage07(mContext);
+                                                } else if (getprogress_pos.equals("5")) {
+                                                    //서명 부터
+                                                    pm.AddContractPage08(mContext);
+                                                } else if (getprogress_pos.equals("7")) {
+                                                    //해당 근로계약서 전체 상세 페이지로
+                                                    shardpref.putString("contract_id", contract_id);
+                                                    pm.ContractAll(mContext);
+                                                }
+                                            } else {
+                                                //근로자일경우
+                                                if (getprogress_pos.equals("6")) {
+                                                    pm.ContractWorkerAccept(mContext);
+                                                } else if (getprogress_pos.equals("7")) {
+                                                    //해당 근로계약서 전체 상세 페이지로
+                                                    shardpref.putString("contract_id", contract_id);
+                                                    pm.ContractAll(mContext);
+                                                }
+                                            }
+                                        });
                                     }
 //                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
                                 }
@@ -443,6 +502,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     /*직원 정보 START*/
     String workpay = "";
     String CallNum = "";
+
     public void SetAllMemberList(String place_id, String user_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
         dlog.i("SetAllMemberList user_id : " + user_id);
@@ -465,21 +525,21 @@ public class MemberDetailActivity extends AppCompatActivity {
                         try {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
-                            if(Response.length() != 0){
-                                String mem_id       = Response.getJSONObject(0).getString("id");
-                                String name         = Response.getJSONObject(0).getString("name");
-                                String place_name   = Response.getJSONObject(0).getString("place_name");
-                                String join_date    = Response.getJSONObject(0).getString("join_date").replace("-", ".");
-                                String img_path     = Response.getJSONObject(0).getString("img_path");
-                                String phone        = Response.getJSONObject(0).getString("phone");
-                                String owner_phone  = Response.getJSONObject(0).getString("owner_phone");
-                                String jumin        = Response.getJSONObject(0).getString("jumin");
-                                String gender       = Response.getJSONObject(0).getString("gender");
-                                String kind         = Response.getJSONObject(0).getString("kind");
-                                String state        = Response.getJSONObject(0).getString("state");
-                                String pay          = Response.getJSONObject(0).getString("pay");
+                            if (Response.length() != 0) {
+                                String mem_id = Response.getJSONObject(0).getString("id");
+                                String name = Response.getJSONObject(0).getString("name");
+                                String place_name = Response.getJSONObject(0).getString("place_name");
+                                String join_date = Response.getJSONObject(0).getString("join_date").replace("-", ".");
+                                String img_path = Response.getJSONObject(0).getString("img_path");
+                                String phone = Response.getJSONObject(0).getString("phone");
+                                String owner_phone = Response.getJSONObject(0).getString("owner_phone");
+                                String jumin = Response.getJSONObject(0).getString("jumin");
+                                String gender = Response.getJSONObject(0).getString("gender");
+                                String kind = Response.getJSONObject(0).getString("kind");
+                                String state = Response.getJSONObject(0).getString("state");
+                                String pay = Response.getJSONObject(0).getString("pay");
 
-                                if(!owner_phone.isEmpty()){
+                                if (!owner_phone.isEmpty()) {
                                     owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
                                             + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
                                             + Response.getJSONObject(0).getString("owner_phone").substring(7, 11);
@@ -522,24 +582,24 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 }
 
                                 binding.userCall.setOnClickListener(v -> {
-                                    Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:"+ CallNum));
+                                    Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + CallNum));
                                     mContext.startActivity(mIntent);
                                 });
                                 setNavBarBtnEvent();
                                 PlaceWorkCheck(stub_place_id, "1", "3");
 
                                 binding.memOption.setOnClickListener(v -> {
-                                    shardpref.putString("mem_id",mem_id);
-                                    shardpref.putString("mem_account",stub_user_account);
-                                    shardpref.putString("mem_name",name);
-                                    shardpref.putString("mem_phone",CallNum);
-                                    shardpref.putString("mem_gender",gender);
-                                    shardpref.putString("mem_jumin",jumin);
-                                    shardpref.putString("mem_kind",kind);
-                                    shardpref.putString("mem_join_date",join_date);
-                                    shardpref.putString("mem_state",state);
-                                    shardpref.putString("mem_jikgup",jikgup);
-                                    shardpref.putString("mem_pay",pay);
+                                    shardpref.putString("mem_id", mem_id);
+                                    shardpref.putString("mem_account", stub_user_account);
+                                    shardpref.putString("mem_name", name);
+                                    shardpref.putString("mem_phone", CallNum);
+                                    shardpref.putString("mem_gender", gender);
+                                    shardpref.putString("mem_jumin", jumin);
+                                    shardpref.putString("mem_kind", kind);
+                                    shardpref.putString("mem_join_date", join_date);
+                                    shardpref.putString("mem_state", state);
+                                    shardpref.putString("mem_jikgup", jikgup);
+                                    shardpref.putString("mem_pay", pay);
                                     pm.AddMemberDetail(mContext);
                                 });
                             }
@@ -723,7 +783,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             allPay += Integer.parseInt(getPay);
                                         }
                                         String allwcnt = Response.getJSONObject(0).getString("allwcnt"); //근무해야하는 횟수
-                                        String iocnt    = Response.getJSONObject(0).getString("iocnt"); //근무한 횟수
+                                        String iocnt = Response.getJSONObject(0).getString("iocnt"); //근무한 횟수
 
                                         DecimalFormat myFormatter = new DecimalFormat("###,###");
                                         workpay = workpay.replace(",", "");
@@ -755,6 +815,57 @@ public class MemberDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    String getcontract_id = "";
+    String getcontract_kind = "";
+    String getprogress_pos = "";
+    private void SetContractList() {
+        dlog.i("-----SetContractList1-----");
+        dlog.i("place_id : " + place_id);
+        dlog.i("stub_user_id : " + stub_user_id);
+        dlog.i("-----SetContractList1-----");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractListInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractListInterface api = retrofit.create(ContractListInterface.class);
+        Call<String> call = api.getData(place_id, stub_user_id);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("SetContractList jsonResponse length : " + jsonResponse.length());
+                    dlog.i("SetContractList jsonResponse : " + jsonResponse);
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        getcontract_id = Response.getJSONObject(0).getString("contract_yn");
+                        getcontract_kind = Response.getJSONObject(0).getString("kind");
+                        getprogress_pos = Response.getJSONObject(0).getString("progress_pos");
+                        shardpref.putString("worker_id", stub_user_id);
+                        shardpref.putString("worker_name", Navname);
+                        shardpref.putString("contract_place_id", place_id);
+                        shardpref.putString("contract_user_id", stub_user_id);
+                        dlog.i("-----SetContractList2-----");
+                        dlog.i("worker_id : " + stub_user_id);
+                        dlog.i("worker_name : " + Navname);
+                        dlog.i("contract_place_id : " + place_id);
+                        dlog.i("contract_user_id : " + stub_user_id);
+                        dlog.i("-----SetContractList2-----");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러3 = " + t.getMessage());
             }
         });
     }

@@ -568,7 +568,6 @@ public class TaskListActivity extends AppCompatActivity {
     //미처리인 업무 세기
     int state_null = 0;
     String writer_id = "";
-
     public void setRecyclerView() {
         String select_date = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
         if(change_member_id.isEmpty()){

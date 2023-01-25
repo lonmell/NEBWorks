@@ -184,7 +184,7 @@ public class ContractFragment3 extends Fragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             ContractListInterface api = retrofit.create(ContractListInterface.class);
-            Call<String> call = api.getData(place_id);
+            Call<String> call = api.getData(place_id,"");
 
             call.enqueue(new Callback<String>() {
                 @Override

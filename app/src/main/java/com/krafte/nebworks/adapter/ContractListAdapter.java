@@ -120,7 +120,6 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                     }else{
                         Toast.makeText(mContext,"작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
                     }
-
                 }else if(item.getContract_yn().equals("1")){
 //                    if(item.getWorker_sign_id().isEmpty() || item.getWorker_sign_id().equals("null")){
 //                       dlog.i("서명대기중");
