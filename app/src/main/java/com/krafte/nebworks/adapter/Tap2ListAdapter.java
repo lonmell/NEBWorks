@@ -261,17 +261,21 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 if (item.getStart_time().length() > 5) {
                     String date = item.getStart_time().substring(0, 10);
                     String time = item.getStart_time().substring(11);
-                    holder.work_start_time.setText(date.replace("-", ".") + " | " + time + " 시작");
+                    String[] timeSplit = time.split(":");
+                    holder.work_start_time.setText(date.replace("-", ".") + " | " + String.format("%02d:%02d", Integer.parseInt(timeSplit[0]), Integer.parseInt(timeSplit[1])) + " 시작");
                 } else {
-                    holder.work_start_time.setText(item.getStart_time() + " 시작");
+                    String[] timeSplit = item.getStart_time().split(":");
+                    holder.work_start_time.setText(String.format("%02d:%02d", Integer.parseInt(timeSplit[0]), Integer.parseInt(timeSplit[1])) + " 시작");
                 }
 
                 if (item.getEnd_time().length() > 6) {
                     String date = item.getEnd_time().substring(0, 10);
                     String time = item.getEnd_time().substring(11);
-                    holder.work_end_time.setText(date.replace("-", ".") + " | " + time + " 마감");
+                    String[] timeSplit = time.split(":");
+                    holder.work_end_time.setText(date.replace("-", ".") + " | " + String.format("%02d:%02d", Integer.parseInt(timeSplit[0]), Integer.parseInt(timeSplit[1])) + " 마감");
                 } else {
-                    holder.work_end_time.setText("[반복할일] "+item.getEnd_time() + " 마감");
+                    String[] timeSplit = item.getEnd_time().split(":");
+                    holder.work_end_time.setText("[반복할일] " + String.format("%02d:%02d", Integer.parseInt(timeSplit[0]), Integer.parseInt(timeSplit[1])) + " 마감");
                 }
 
                 //0:대기, 1:승인, 2:반려

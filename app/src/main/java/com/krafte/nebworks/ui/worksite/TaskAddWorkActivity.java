@@ -758,6 +758,41 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
             }
         }
+
+        // 할일 시간 세팅
+        if (getYoil.isEmpty()) { // 반복 업무 X
+            String[] startTimeSplit = start_time.split(" ");
+            String[] splitStartTime = startTimeSplit[1].split(":");
+            if (Integer.parseInt(splitStartTime[0]) < 12) {
+                binding.inputTime01.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+            } else {
+                binding.inputTime01.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+            }
+
+            String[] endTimeSplit = end_time.split(" ");
+            String[] splitEndTime = endTimeSplit[1].split(":");
+            if (Integer.parseInt(splitEndTime[0]) < 12) {
+                binding.inputTime02.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+            } else {
+                binding.inputTime02.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+            }
+        } else { // 반복 업무 O
+            String[] splitStartTime = start_time.split(":");
+            if (Integer.parseInt(splitStartTime[0]) < 12) {
+                binding.inputTime01.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+            } else {
+                binding.inputTime01.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+            }
+
+            String[] splitEndTime = end_time.split(":");
+            if (Integer.parseInt(splitEndTime[0]) < 12) {
+                binding.inputTime02.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+            } else {
+                binding.inputTime02.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+            }
+        }
+
+
         dlog.i("-----getTaskContents END-----");
     }
 
