@@ -137,10 +137,12 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
             binding.gotowork.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.gotoworkText.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             binding.gotoworkTextTime.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            binding.gotoworkTimeDel.setBackgroundResource(R.drawable.ic_baseline_cancel_24);
 
             binding.gooffwork.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
             binding.gooffworkText.setTextColor(ContextCompat.getColor(mContext, R.color.black));
             binding.gooffworkTextTime.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            binding.gooffworkTimeDel.setBackgroundResource(R.drawable.ic_baseline_cancel_24_black);
 
             if (!goToWorkTime.equals("null")) {
                 binding.commuteTimepicker.setHour(Integer.parseInt(splitGoToWorkTime[0]));
@@ -159,10 +161,12 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
             binding.gooffwork.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.gooffworkText.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             binding.gooffworkTextTime.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            binding.gooffworkTimeDel.setBackgroundResource(R.drawable.ic_baseline_cancel_24);
 
             binding.gotowork.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
             binding.gotoworkText.setTextColor(ContextCompat.getColor(mContext, R.color.black));
             binding.gotoworkTextTime.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            binding.gotoworkTimeDel.setBackgroundResource(R.drawable.ic_baseline_cancel_24_black);
 
             if (!goOffWorkTime.equals("null")) {
                 binding.commuteTimepicker.setHour(Integer.parseInt(splitGoOffWorkTime[0]));
@@ -185,6 +189,18 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                     binding.gooffworkTextTime.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
                 }
             }
+        });
+
+        binding.gotoworkTimeDel.setOnClickListener(v -> {
+            goToWorkTime = "00:00";
+            binding.commuteTimepicker.setHour(0);
+            binding.commuteTimepicker.setMinute(0);
+        });
+
+        binding.gooffworkTimeDel.setOnClickListener(v -> {
+            goOffWorkTime = "00:00";
+            binding.commuteTimepicker.setHour(0);
+            binding.commuteTimepicker.setMinute(0);
         });
 
         // 저장 버튼
