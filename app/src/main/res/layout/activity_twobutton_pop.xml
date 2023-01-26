@@ -29,6 +29,7 @@
                 android:gravity="center"
                 android:minHeight="120dp"
                 android:text="noti_text"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 tools:ignore="HardcodedText" />
@@ -63,6 +64,7 @@
                         android:text="팝업 왼쪽버튼"
                         android:textColor="#696969"
                         android:textSize="15sp"
+                        android:fontFamily="@font/pretendard_bold"
                         tools:ignore="HardcodedText,TextContrastCheck" />
                 </RelativeLayout>
                 <LinearLayout
@@ -83,8 +85,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="팝업 오른쪽버튼"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/new_blue"
                         android:textSize="15sp"
+                        android:fontFamily="@font/pretendard_bold"
                         tools:ignore="HardcodedText,TextContrastCheck" />
                 </RelativeLayout>
             </LinearLayout>

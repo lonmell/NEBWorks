@@ -50,7 +50,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_weight="1"
-                        android:background="#8EB3FC"
+                        android:background="@color/new_blue"
                         android:orientation="horizontal" />
                 </LinearLayout>
 

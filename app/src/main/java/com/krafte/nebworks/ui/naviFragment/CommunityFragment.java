@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -170,19 +171,19 @@ public class CommunityFragment extends Fragment {
 
         paging_position = i;
         if (i == 0) {
-            binding.selectFragmenttv1.setTextColor(Color.parseColor("#6395EC"));
-            binding.selectFragmentline1.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.selectFragmenttv1.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.selectFragmentline1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.addBtn.addWorktimeBtn.setVisibility(View.VISIBLE);
             fg = community_fragment1.newInstance();
             setChildFragment(fg);
         } else if (i == 1) {
-            binding.selectFragmenttv2.setTextColor(Color.parseColor("#6395EC"));
-            binding.selectFragmentline2.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.selectFragmenttv2.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.selectFragmentline2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             fg = community_fragment2.newInstance();
             setChildFragment(fg);
         } else if (i == 2) {
-            binding.selectFragmenttv3.setTextColor(Color.parseColor("#6395EC"));
-            binding.selectFragmentline3.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.selectFragmenttv3.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.selectFragmentline3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             fg = community_fragment3.newInstance();
             setChildFragment(fg);
         }

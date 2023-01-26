@@ -152,6 +152,7 @@
                     android:gravity="start|center"
                     android:maxLines="1"
                     android:text="작업 중"
+                    android:layout_marginTop="10dp"
                     android:textColor="@color/new_blue"
                     android:textSize="16sp"
                     tools:ignore="HardcodedText" />
