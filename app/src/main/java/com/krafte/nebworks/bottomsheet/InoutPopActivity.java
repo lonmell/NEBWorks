@@ -106,19 +106,14 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             fragmentManager = getParentFragmentManager();
 
             shardpref           = new PreferenceHelper(mContext);
-//            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
-//            place_id            = shardpref.getString("place_id", "");
-//            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", "");
-//            place_end_time      = shardpref.getString("place_end_time", "");
-//            mem_name            = shardpref.getString("mem_name", "");
-            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
 
             place_id            = PlaceCheckData.getInstance().getPlace_id();
             USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-            place_end_time      = shardpref.getString("place_end_time", "");
             mem_name            = UserCheckData.getInstance().getUser_name();
 
             //데이터 가져오기
+            place_end_time  = shardpref.getString("place_end_time", "");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
             time            = shardpref.getString("time", "");
             state           = shardpref.getString("state", "");
             store_name      = shardpref.getString("store_name", "");
@@ -214,6 +209,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     public void onStop() {
         super.onStop();
         shardpref.remove("change_place_id");
+        shardpref.remove("kind");
     }
 
     //list_settingitem01
@@ -318,7 +314,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         dlog.i("retry ssid tf : " + getMySSID.equals(place_wifi_name));
 
         if (kind.equals("0")) {
-            if (getDistance <= 40) {
+            if (getDistance <= 20) {
                 //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
                 if(getMySSID.equals(place_wifi_name)){
                     state = "1";
@@ -348,7 +344,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                 inout_tv2 = "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.";
             }
         } else {
-            if (getDistance <= 40) {
+            if (getDistance <= 20) {
                 io_state = "퇴근처리";
                 dlog.i("compareDate2 :" +  compareDate2());
                 //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교

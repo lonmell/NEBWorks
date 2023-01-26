@@ -147,7 +147,6 @@ public class MainFragment extends AppCompatActivity {
             place_owner_id      = shardpref.getString("place_owner_id", "0");
             shardpref.putString("returnPage", "BusinessApprovalActivity");
 
-
             bottom_icon01 = binding.getRoot().findViewById(R.id.bottom_icon01);
             bottom_icon02 = binding.getRoot().findViewById(R.id.bottom_icon02);
             bottom_icon03 = binding.getRoot().findViewById(R.id.bottom_icon03);

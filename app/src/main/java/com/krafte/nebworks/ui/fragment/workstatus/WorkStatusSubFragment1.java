@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkTapMemberAdapter;
+import com.krafte.nebworks.bottomsheet.CommuteBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
@@ -160,8 +162,8 @@ public class WorkStatusSubFragment1 extends Fragment {
         super.onResume();
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
-        dlog.i("오늘 :" + toDay);
         toDay = shardpref.getString("FtoDay",toDay);
+        dlog.i("오늘 :" + toDay);
         change_place_id = shardpref.getString("change_place_id","").isEmpty()?PlaceCheckData.getInstance().getPlace_id():shardpref.getString("change_place_id","");
         dlog.i("change_place_id :"  + change_place_id);
         SetAllMemberList();
@@ -264,23 +266,42 @@ public class WorkStatusSubFragment1 extends Fragment {
                                         ));
                                     }
                                     mAdapter.notifyDataSetChanged();
-                                    mAdapter.setOnItemClickListener(new WorkTapMemberAdapter.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(View v, int position) {
-                                            if (USER_INFO_AUTH.isEmpty()) {
-                                                isAuth();
-                                            } else {
-                                                shardpref.putString("status_id", mList.get(position).getId());
-                                                shardpref.putString("mem_id", mList.get(position).getUser_id());
-                                                shardpref.putString("mem_name", mList.get(position).getName());
-                                                shardpref.putString("remote", "workhour");
-                                                Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
-                                                intent.putExtra("place_id", change_place_id);
-                                                intent.putExtra("user_id", mList.get(position).getId());
-                                                mContext.startActivity(intent);
-                                                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            }
+                                    mAdapter.setOnItemClickListener((v, position) -> {
+                                        if (USER_INFO_AUTH.isEmpty()) {
+                                            isAuth();
+                                        } else {
+                                            shardpref.putString("status_id", mList.get(position).getId());
+                                            shardpref.putString("mem_id", mList.get(position).getUser_id());
+                                            shardpref.putString("mem_name", mList.get(position).getName());
+                                            shardpref.putString("remote", "workhour");
+                                            Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
+                                            intent.putExtra("place_id", change_place_id);
+                                            intent.putExtra("user_id", mList.get(position).getId());
+                                            mContext.startActivity(intent);
+                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        }
+                                    });
+                                    mAdapter.setOnItemClickListener2((v, position) -> {
+                                        try{
+                                            shardpref.putString("commute_place_id", Response.getJSONObject(position).getString("place_id"));
+                                            shardpref.putString("commute_user_id", Response.getJSONObject(position).getString("user_id"));
+                                            shardpref.putString("commute_name", Response.getJSONObject(position).getString("name"));
+                                            shardpref.putString("commute_work_time", Response.getJSONObject(position).getString("worktime"));
+                                            shardpref.putString("commute_in_time", Response.getJSONObject(position).getString("in_time"));
+                                            shardpref.putString("commute_out_time", Response.getJSONObject(position).getString("out_time"));
+                                            shardpref.putString("commute_date",Response.getJSONObject(position).getString("io_date"));
+                                            CommuteBottomSheet cb = new CommuteBottomSheet();
+                                            cb.show(getParentFragmentManager(), "commuteBottomSheet");
+                                            cb.setOnItemClickListener(v1 -> {
+                                                Handler handler = new Handler();
+                                                handler.postDelayed(() -> {
+                                                    mList.clear();
+                                                    SetAllMemberList();
+                                                }, 500); //0.5초 후
+                                            });
+                                        }catch (JSONException e){
+                                            e.printStackTrace();
                                         }
                                     });
                                 }

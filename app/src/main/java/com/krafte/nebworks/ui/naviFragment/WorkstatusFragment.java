@@ -500,6 +500,7 @@ public class WorkstatusFragment extends Fragment {
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 getYMPicker = Year + "년 " + Month + "월 ";
+                toDay = Year + "-" + Month + "-" + Day;
                 SendToday();
                 SetCalenderData(String.valueOf(year), Month);
             }

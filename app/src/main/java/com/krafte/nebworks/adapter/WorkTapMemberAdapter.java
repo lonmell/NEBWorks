@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.bottomsheet.CommuteBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkStatusTapData;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -74,6 +73,18 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
     // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
     public void setOnItemClickListener(WorkTapMemberAdapter.OnItemClickListener listener) {
         this.mListener = listener;
+    }
+
+    public interface OnItemClickListener2 {
+        void onItemClick(View v, int position);
+    }
+
+    // 리스너 객체 참조를 저장하는 변수
+    private OnItemClickListener mListener2 = null;
+
+    // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
+    public void setOnItemClickListener2(OnItemClickListener listener2) {
+        this.mListener2 = listener2;
     }
 
     public WorkTapMemberAdapter(Context context, ArrayList<WorkStatusTapData.WorkStatusTapData_list> data, String Tap, FragmentManager fragmentManager) {
@@ -155,12 +166,9 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
 
             holder.linear02.setOnClickListener(v -> {
                 if (USER_INFO_AUTH.equals("0")) {
-                    shardpref.putString("commute_name", mData.get(position).getName());
-                    shardpref.putString("commute_work_time", mData.get(position).getWorktime());
-                    shardpref.putString("commute_in_time", mData.get(position).getIn_time());
-                    shardpref.putString("commute_out_time", mData.get(position).getOut_time());
-                    CommuteBottomSheet cb = new CommuteBottomSheet();
-                    cb.show(fragmentManager, "commuteBottomSheet");
+                    if (mListener2 != null) {
+                        mListener2.onItemClick(v, position);
+                    }
                 }
             });
 

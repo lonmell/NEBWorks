@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.adapter.WorkTapMemberAdapter;
+import com.krafte.nebworks.bottomsheet.CommuteBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
@@ -226,6 +228,28 @@ public class WorkStatusSubFragment4 extends Fragment {
                                     }
                                 }
                                 mAdapter.notifyDataSetChanged();
+                                mAdapter.setOnItemClickListener2((v, position) -> {
+                                    try{
+                                        shardpref.putString("commute_place_id", Response.getJSONObject(position).getString("place_id"));
+                                        shardpref.putString("commute_user_id", Response.getJSONObject(position).getString("user_id"));
+                                        shardpref.putString("commute_name", Response.getJSONObject(position).getString("name"));
+                                        shardpref.putString("commute_work_time", Response.getJSONObject(position).getString("worktime"));
+                                        shardpref.putString("commute_in_time", Response.getJSONObject(position).getString("in_time"));
+                                        shardpref.putString("commute_out_time", Response.getJSONObject(position).getString("out_time"));
+                                        shardpref.putString("commute_date",Response.getJSONObject(position).getString("io_date"));
+                                        CommuteBottomSheet cb = new CommuteBottomSheet();
+                                        cb.show(getParentFragmentManager(), "commuteBottomSheet");
+                                        cb.setOnItemClickListener(v1 -> {
+                                            Handler handler = new Handler();
+                                            handler.postDelayed(() -> {
+                                                mList.clear();
+                                                SetAllMemberList();
+                                            }, 500); //0.5초 후
+                                        });
+                                    }catch (JSONException e){
+                                        e.printStackTrace();
+                                    }
+                                });
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
