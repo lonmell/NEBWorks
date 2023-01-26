@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.bottomsheet.CommuteBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.WorkStatusTapData;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -136,25 +137,30 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             holder.inTime.setText(editTimeText(item.getIn_time()));
             holder.outTime.setText(editTimeText(item.getOut_time()));
 
-            if(Tap.equals("99")){
+            if(USER_INFO_AUTH.equals("0")){
+                holder.list_setting.setVisibility(View.VISIBLE);
+                holder.list_setting.setClickable(true);
+                holder.list_setting.setEnabled(true);
+            }else{
                 holder.list_setting.setVisibility(View.INVISIBLE);
                 holder.list_setting.setClickable(false);
                 holder.list_setting.setEnabled(false);
-            }else{
-                if(USER_INFO_AUTH.equals("0")){
-                    holder.list_setting.setVisibility(View.VISIBLE);
-                    holder.list_setting.setClickable(true);
-                    holder.list_setting.setEnabled(true);
-                }else{
-                    holder.list_setting.setVisibility(View.INVISIBLE);
-                    holder.list_setting.setClickable(false);
-                    holder.list_setting.setEnabled(false);
-                }
             }
 
             holder.list_setting.setOnClickListener(v -> {
                 if (mListener != null) {
                     mListener.onItemClick(v, position);
+                }
+            });
+
+            holder.linear02.setOnClickListener(v -> {
+                if (USER_INFO_AUTH.equals("0")) {
+                    shardpref.putString("commute_name", mData.get(position).getName());
+                    shardpref.putString("commute_work_time", mData.get(position).getWorktime());
+                    shardpref.putString("commute_in_time", mData.get(position).getIn_time());
+                    shardpref.putString("commute_out_time", mData.get(position).getOut_time());
+                    CommuteBottomSheet cb = new CommuteBottomSheet();
+                    cb.show(fragmentManager, "commuteBottomSheet");
                 }
             });
 

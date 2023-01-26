@@ -142,6 +142,12 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     int a = 0;
     List<String> inmember = new ArrayList<>();
 
+    int timeStartHour = 0;
+    int timeStartMin = 0;
+
+    int timeEndHour = 0;
+    int timeEndMin = 0;
+
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat", "LongLogTag"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,6 +275,14 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.reportTv.setTextColor(Color.parseColor("#000000"));
                 binding.reportBtn.setBackgroundResource(R.drawable.task_check_none);
                 binding.reportVisible.setVisibility(View.GONE);
+
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
+
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
             }
         });
 
@@ -321,6 +335,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
         binding.inputTimeBox01.setOnClickListener(v -> {
             SELECTTIME = false;
+            binding.timeSetpicker.setHour(timeStartHour);
+            binding.timeSetpicker.setMinute(timeStartMin);
             binding.inputTimeBox01.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
             binding.inputTimeBox02.setCardBackgroundColor(Color.parseColor("#ffffff"));
             binding.inputDateBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
@@ -330,6 +346,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         });
         binding.inputTimeBox02.setOnClickListener(v -> {
             SELECTTIME = true;
+            binding.timeSetpicker.setHour(timeEndHour);
+            binding.timeSetpicker.setMinute(timeEndMin);
             binding.inputTimeBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
             binding.inputTimeBox02.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
             binding.inputDateBox01.setCardBackgroundColor(Color.parseColor("#ffffff"));
@@ -363,9 +381,13 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.timeSetpicker.clearFocus();
                 if (!SELECTTIME) {
                     starttime = HOUR + ":" + MIN;
+                    timeStartHour = Integer.parseInt(HOUR);
+                    timeStartMin = Integer.parseInt(MIN);
                     binding.inputTime01.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
                 } else {
                     endtime = HOUR + ":" + MIN;
+                    timeEndHour = Integer.parseInt(HOUR);
+                    timeEndMin = Integer.parseInt(MIN);
                     binding.inputTime02.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
                 }
             }
@@ -763,32 +785,48 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         if (getYoil.isEmpty()) { // 반복 업무 X
             String[] startTimeSplit = start_time.split(" ");
             String[] splitStartTime = startTimeSplit[1].split(":");
+            int startHour = Integer.parseInt(splitStartTime[0]);
+            int startMin = Integer.parseInt(splitStartTime[1]);
+            timeStartHour = startHour;
+            timeStartMin = startMin;
             if (Integer.parseInt(splitStartTime[0]) < 12) {
-                binding.inputTime01.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                binding.inputTime01.setText(String.format("오전 %02d:%02d", startHour, startMin));
             } else {
-                binding.inputTime01.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                binding.inputTime01.setText(String.format("오후 %02d:%02d", startHour, startMin));
             }
 
             String[] endTimeSplit = end_time.split(" ");
             String[] splitEndTime = endTimeSplit[1].split(":");
+            int endHour = Integer.parseInt(splitEndTime[0]);
+            int endMin = Integer.parseInt(splitEndTime[1]);
+            timeEndHour = endHour;
+            timeEndMin = endMin;
             if (Integer.parseInt(splitEndTime[0]) < 12) {
-                binding.inputTime02.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                binding.inputTime02.setText(String.format("오전 %02d:%02d", endHour, endMin));
             } else {
-                binding.inputTime02.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                binding.inputTime02.setText(String.format("오후 %02d:%02d", endHour, endMin));
             }
         } else { // 반복 업무 O
             String[] splitStartTime = start_time.split(":");
+            int startHour = Integer.parseInt(splitStartTime[0]);
+            int startMin = Integer.parseInt(splitStartTime[1]);
+            timeStartHour = startHour;
+            timeStartMin = startMin;
             if (Integer.parseInt(splitStartTime[0]) < 12) {
-                binding.inputTime01.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                binding.inputTime01.setText(String.format("오전 %02d:%02d", startHour, startMin));
             } else {
-                binding.inputTime01.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                binding.inputTime01.setText(String.format("오후 %02d:%02d", startHour, startMin));
             }
 
             String[] splitEndTime = end_time.split(":");
+            int endHour = Integer.parseInt(splitEndTime[0]);
+            int endMin = Integer.parseInt(splitEndTime[1]);
+            timeEndHour = endHour;
+            timeEndMin = endMin;
             if (Integer.parseInt(splitEndTime[0]) < 12) {
-                binding.inputTime02.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                binding.inputTime02.setText(String.format("오전 %02d:%02d", endHour, endMin));
             } else {
-                binding.inputTime02.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                binding.inputTime02.setText(String.format("오후 %02d:%02d", endHour, endMin));
             }
         }
 
