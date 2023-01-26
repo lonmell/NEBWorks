@@ -232,7 +232,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UpdateCommuteInterface api = retrofit.create(UpdateCommuteInterface.class);
-        Call<String> call = api.getData(commute_place_id,commute_user_id,kind,commute_date,time);
+        Call<String> call = api.getData(commute_place_id,commute_user_id,kind,commute_date,time.equals("0:0")?"":time);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
