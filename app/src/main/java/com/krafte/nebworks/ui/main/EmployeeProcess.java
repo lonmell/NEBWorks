@@ -225,7 +225,7 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("kind : " + kind);
 
             if (kind.equals("0")) {
-                if (getDistance <= 10 && getMySSID.equals(place_wifi_name)) {
+                if (getDistance <= 20 && getMySSID.equals(place_wifi_name)) {
                     //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
                     io_state = "출근처리";
                     InOutPop(GET_TIME, "1", place_name, io_state, "", "0");
@@ -233,7 +233,7 @@ public class EmployeeProcess extends AppCompatActivity {
                     InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.", "0");
                 }
             } else {
-                if (getDistance <= 10 && getMySSID.equals(place_wifi_name)) {
+                if (getDistance <= 20 && getMySSID.equals(place_wifi_name)) {
                     io_state = "퇴근처리";
                     dlog.i("compareDate2 :" + compareDate2());
                     //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
@@ -452,7 +452,7 @@ public class EmployeeProcess extends AppCompatActivity {
     }
 
     private void BtnOneCircleFun(boolean tf){
-        binding.ioBtn.setClickable(tf);
-        binding.ioBtn.setEnabled(tf);
+//        binding.ioBtn.setClickable(tf);
+//        binding.ioBtn.setEnabled(tf);
     }
 }
