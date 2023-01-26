@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
@@ -68,13 +69,13 @@ public class CateAdapter extends RecyclerView.Adapter<CateAdapter.ViewHolder> {
         try {
             dlog.i("mData item : " + mData.get(position));
             if(position == before_pos){
-                holder.cate_back.setCardBackgroundColor(Color.parseColor("#FF0000"));
-                holder.cate_back1.setCardBackgroundColor(Color.parseColor("#ffffff"));
-                holder.cate.setTextColor(Color.parseColor("#FF0000"));
+                holder.cate_back.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_200));
+                holder.cate_back1.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_200));
+                holder.cate.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
             }else{
-                holder.cate_back.setCardBackgroundColor(Color.parseColor("#dcdcdc"));
-                holder.cate_back1.setCardBackgroundColor(Color.parseColor("#ffffff"));
-                holder.cate.setTextColor(Color.parseColor("#a9a9a9"));
+                holder.cate_back.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
+                holder.cate_back1.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
+                holder.cate.setTextColor(ContextCompat.getColor(mContext, R.color.gray_500));
             }
 
             holder.cate.setText(item.getItem());

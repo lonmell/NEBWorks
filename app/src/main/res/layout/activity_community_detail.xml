@@ -133,7 +133,7 @@
                     android:fontFamily="@font/pretendard_bold"
                     android:text="cate"
                     android:gravity="start|center"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/new_blue"
                     android:textSize="15sp" />
             </LinearLayout>
 

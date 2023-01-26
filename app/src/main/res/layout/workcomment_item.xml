@@ -27,7 +27,7 @@
                 android:id="@+id/profile_box"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 android:layout_alignParentStart="true"
                 android:layout_gravity="center"
                 app:cardCornerRadius="40dp"
@@ -124,7 +124,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_margin="20dp">
 
             <ImageView
                 android:id="@+id/delete_comment"
@@ -154,6 +154,7 @@
                 android:layout_toEndOf="@+id/comment_user_contents"
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
+                android:layout_marginStart="10dp"
                 android:text="(수정됨)"
                 android:textColor="#dedede"
                 android:textSize="12sp"
@@ -162,7 +163,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_margin="10dp">
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp">
 
             <TextView
                 android:id="@+id/reply_cnt"

@@ -80,7 +80,7 @@ public class OwnerCommunityAdapter  extends RecyclerView.Adapter<OwnerCommunityA
         SecondTapCommunityData.SecondTapCommunityData_list item = mData.get(position);
 
         try{
-            holder.cate.setText("#"+item.getCategory());
+            holder.cate.setText(item.getCategory());
             holder.title.setText(item.getTitle());
             holder.location.setText(item.getLocation());
             holder.gigan.setText(item.getGigan());
