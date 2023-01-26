@@ -268,31 +268,31 @@ public class TaskDetailActivity extends AppCompatActivity {
             String[] startTimeSplit = start_time.split(" ");
             String[] splitStartTime = startTimeSplit[1].split(":");
             if (Integer.parseInt(splitStartTime[0]) < 12) {
-                binding.startTime.setText(startTimeSplit[0] + " " + String.format("오전 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                binding.startTime.setText(startTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
             } else {
-                binding.startTime.setText(startTimeSplit[0] + " " + String.format("오후 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                binding.startTime.setText(startTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
             }
 
             String[] endTimeSplit = end_time.split(" ");
             String[] splitEndTime = endTimeSplit[1].split(":");
             if (Integer.parseInt(splitEndTime[0]) < 12) {
-                binding.endTime.setText(endTimeSplit[0] + " " + String.format("오전 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                binding.endTime.setText(endTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
             } else {
-                binding.endTime.setText(endTimeSplit[0] + " " + String.format("오후 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                binding.endTime.setText(endTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
             }
         } else { // 반복 업무 O
             String[] splitStartTime = start_time.split(":");
             if (Integer.parseInt(splitStartTime[0]) < 12) {
-                binding.startTime.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                binding.startTime.setText(String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
             } else {
-                binding.startTime.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                binding.startTime.setText(String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
             }
 
             String[] splitEndTime = end_time.split(":");
             if (Integer.parseInt(splitEndTime[0]) < 12) {
-                binding.endTime.setText(String.format("오전 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                binding.endTime.setText(String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
             } else {
-                binding.endTime.setText(String.format("오후 %02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                binding.endTime.setText(String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
             }
         }
 
