@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -179,17 +180,17 @@ public class TaskApprovalFragment extends AppCompatActivity {
         binding.select04line.setBackgroundColor(Color.parseColor("#FFFFFF"));
         select_date = Year + "-" + Month + "-" + Day;
         if(i.equals("")){
-            binding.select01tv.setTextColor(Color.parseColor("#6395EC"));
-            binding.select01line.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select01tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select01line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
         }else if(i.equals("0")){
-            binding.select02tv.setTextColor(Color.parseColor("#6395EC"));
-            binding.select02line.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select02tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select02line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
         }else if(i.equals("1")){
-            binding.select03tv.setTextColor(Color.parseColor("#6395EC"));
-            binding.select03line.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select03tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select03line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
         }else if(i.equals("2")){
-            binding.select04tv.setTextColor(Color.parseColor("#6395EC"));
-            binding.select04line.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.select04tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select04line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
         }
     }
     private void setBtnEvent(){

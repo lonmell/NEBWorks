@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +21,7 @@ import com.krafte.nebworks.data.CalendarSetData;
 import com.krafte.nebworks.data.CalendarTaskData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.util.DBConnection;
+import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -29,12 +32,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapter.ViewHolder> {
     private static final String TAG = "WorkCalenderAdapter";
     private ArrayList<WorkCalenderData.WorkCalenderData_list> mData = null;
     private ArrayList<CalendarSetData.CalendarSetData_list> mData2 = null;
     Context mContext;
+    private String month;
+    private final DateCurrent dc = new DateCurrent();
 
     int user_kind;
     String stateKind = "";
@@ -83,13 +89,14 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
     String str = "";
 
     public WorkCalenderAdapter(Context context, ArrayList<WorkCalenderData.WorkCalenderData_list> data, ArrayList<CalendarSetData.CalendarSetData_list> data2
-            , String place_id, String write_id, String selected_date) {
+            , String place_id, String write_id, String selected_date, String month) {
         this.mData = data;
         this.mData2 = data2;
         this.mContext = context;
         this.place_id = place_id;
         this.write_id = write_id;
         this.selected_date = selected_date;
+        this.month = month;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull
@@ -123,6 +130,38 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
             } else {
                 holder.yoil_area.setVisibility(View.GONE);
             }
+
+            if (Objects.equals(month, dc.GET_MONTH)) {
+                if (Objects.equals(item.getSun(), dc.GET_DAY)) {
+                    holder.sun_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.sun.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                }
+                if (Objects.equals(item.getMon(), dc.GET_DAY)) {
+                    holder.mon_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.mon.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                }
+                if (Objects.equals(item.getTue(), dc.GET_DAY)) {
+                    holder.tue_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.tue.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                }
+                if (Objects.equals(item.getWed(), dc.GET_DAY)) {
+                    holder.wed_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.wed.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                }
+                if (Objects.equals(item.getThu(), dc.GET_DAY)) {
+                    holder.thu_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.thu.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                }
+                if (Objects.equals(item.getFri(), dc.GET_DAY)) {
+                    holder.fri_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.fri.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                }
+                if (Objects.equals(item.getSat(), dc.GET_DAY)) {
+                    holder.sat_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.sat.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                }
+            }
+
 
             // -- 일요일
             holder.sun.setText(item.getSun().equals("null") ? "" : item.getSun());
@@ -401,6 +440,7 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
         TextView sun, mon, tue, wed, thu, fri, sat;
         LinearLayout sun_box, mon_box, tue_box, wed_box, thu_box, fri_box, sat_box, yoil_area;
         //업무표시할 텍스트들
+        RelativeLayout sun_layout, mon_layout, tue_layout, wed_layout, thu_layout, fri_layout, sat_layout;
         RecyclerView sunlist, monlist, tuelist, wedlist, thulist, frilist, satlist;
 
         ViewHolder(View itemView) {
@@ -431,6 +471,15 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
             thulist = itemView.findViewById(R.id.thulist);
             frilist = itemView.findViewById(R.id.frilist);
             satlist = itemView.findViewById(R.id.satlist);
+
+            sun_layout = itemView.findViewById(R.id.sun_layout);
+            mon_layout = itemView.findViewById(R.id.mon_layout);
+            tue_layout = itemView.findViewById(R.id.tue_layout);
+            wed_layout = itemView.findViewById(R.id.wed_layout);
+            thu_layout = itemView.findViewById(R.id.thu_layout);
+            fri_layout = itemView.findViewById(R.id.fri_layout);
+            sat_layout = itemView.findViewById(R.id.sat_layout);
+
 
             shardpref = new PreferenceHelper(mContext);
             dlog.DlogContext(mContext);

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -174,7 +175,7 @@ public class WorkstatusFragment extends Fragment {
         shardpref.putString("FtoDay", toDay);
 
         if (SELECT_POSITION_sub == 0) {
-            binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            binding.statusFragmentline1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -183,7 +184,7 @@ public class WorkstatusFragment extends Fragment {
             setChildFragment(fg);
         } else if (SELECT_POSITION_sub == 1) {
             binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-            binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            binding.statusFragmentline2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
             SELECT_POSITION = 2;
@@ -192,7 +193,7 @@ public class WorkstatusFragment extends Fragment {
         } else if (SELECT_POSITION_sub == 2) {
             binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-            binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            binding.statusFragmentline3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
             SELECT_POSITION = 3;
             fg = WorkStatusSubFragment3.newInstance();
@@ -201,7 +202,7 @@ public class WorkstatusFragment extends Fragment {
             binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
             binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-            binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
+            binding.statusFragmentline4.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             SELECT_POSITION = 4;
             fg = WorkStatusSubFragment4.newInstance();
             setChildFragment(fg);
@@ -290,7 +291,7 @@ public class WorkstatusFragment extends Fragment {
                             String select_date = Year + "-" + Month;
                             JSONArray Response = new JSONArray(response.body());
                             mList = new ArrayList<>();
-                            mAdapter = new WorkStatusCalenderAdapter(mContext, mList, mList2, place_id, USER_INFO_ID, select_date);
+                            mAdapter = new WorkStatusCalenderAdapter(mContext, mList, mList2, place_id, USER_INFO_ID, select_date, Month);
                             binding.createCalender.setAdapter(mAdapter);
                             binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                             dlog.i("SetNoticeListview Thread run! ");
@@ -384,7 +385,7 @@ public class WorkstatusFragment extends Fragment {
             if(USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -398,7 +399,7 @@ public class WorkstatusFragment extends Fragment {
                 isAuth();
             } else {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
                 SELECT_POSITION = 2;
@@ -412,7 +413,7 @@ public class WorkstatusFragment extends Fragment {
             } else {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
                 SELECT_POSITION = 3;
                 fg = WorkStatusSubFragment3.newInstance();
@@ -426,7 +427,7 @@ public class WorkstatusFragment extends Fragment {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline4.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 SELECT_POSITION = 4;
                 fg = WorkStatusSubFragment4.newInstance();
                 setChildFragment(fg);
