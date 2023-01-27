@@ -98,6 +98,7 @@
         android:weightSum="7">
 
         <RelativeLayout
+            android:id="@+id/sun_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -133,6 +134,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/mon_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -165,6 +167,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/tue_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -198,6 +201,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/wed_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -230,6 +234,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/thu_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -262,6 +267,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/fri_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -294,6 +300,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/sat_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
