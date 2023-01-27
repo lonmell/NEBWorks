@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
@@ -93,20 +94,20 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                 holder.address.setTextColor(Color.parseColor("#DD6540"));
             }else if(item.getContract_yn().equals("1")){
                 if(!(item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && (item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())) {
-                    holder.profile_img.setCardBackgroundColor(Color.parseColor("#6395EC"));
+                    holder.profile_img.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.profile_tv.setText("서명\n대기중");
                     holder.address.setText("근로계약서 작성");
-                    holder.address.setTextColor(Color.parseColor("#6395EC"));
+                    holder.address.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 } else if(!(item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && !(item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())){
                     holder.profile_img.setCardBackgroundColor(Color.parseColor("#DBDBDB"));
                     holder.profile_tv.setText("완료");
                     holder.address.setText("근로계약서 작성");
                     holder.address.setTextColor(Color.parseColor("#DBDBDB"));
                 }else if((item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && (item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())){
-                    holder.profile_img.setCardBackgroundColor(Color.parseColor("#6395EC"));
+                    holder.profile_img.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.profile_tv.setText("작성중");
                     holder.address.setText("근로계약서 작성중");
-                    holder.address.setTextColor(Color.parseColor("#6395EC"));
+                    holder.address.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 }
             }
             holder.item_total.setOnClickListener(v -> {

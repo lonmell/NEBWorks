@@ -44,6 +44,17 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/contract_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="근로계약 목록"
+        android:textSize="28sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/gangwonedu_bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"/>
+
     <LinearLayout
         android:id="@+id/search_area"
         android:layout_width="match_parent"
@@ -108,6 +119,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tabTextColor="#696969"
+                    app:tabIndicatorColor="@color/new_blue"
+                    app:tabRippleColor="@null"
                     tools:ignore="SpeakableTextPresentCheck" />
 
                 <!-- ViewPager2: 이 위치에 Fragment들이 노출된다. -->
