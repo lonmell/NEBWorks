@@ -385,7 +385,7 @@ public class WorkstatusFragment extends Fragment {
             if(USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -399,7 +399,7 @@ public class WorkstatusFragment extends Fragment {
                 isAuth();
             } else {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline2.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
                 SELECT_POSITION = 2;
@@ -413,7 +413,7 @@ public class WorkstatusFragment extends Fragment {
             } else {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#ffffff"));
                 SELECT_POSITION = 3;
                 fg = WorkStatusSubFragment3.newInstance();
@@ -427,7 +427,7 @@ public class WorkstatusFragment extends Fragment {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
                 binding.statusFragmentline3.setBackgroundColor(Color.parseColor("#ffffff"));
-                binding.statusFragmentline4.setBackgroundColor(Color.parseColor("#8EB3FC"));
+                binding.statusFragmentline4.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 SELECT_POSITION = 4;
                 fg = WorkStatusSubFragment4.newInstance();
                 setChildFragment(fg);

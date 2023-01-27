@@ -77,7 +77,8 @@
                         android:layout_marginStart="10dp"
                         android:gravity="start|center"
                         android:text="전체매장"
-                        android:textColor="@color/blue" />
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textColor="@color/new_blue" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -112,7 +113,8 @@
                         android:layout_marginStart="10dp"
                         android:gravity="start|center"
                         android:text="전체직원"
-                        android:textColor="@color/blue" />
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textColor="@color/new_blue" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -220,12 +222,12 @@
                         android:gravity="center"
                         android:textSize="16sp"
                         android:fontFamily="@font/pretendard_bold"
-                        android:textColor="@color/blue"/>
+                        android:textColor="@color/new_blue"/>
                     <LinearLayout
                         android:id="@+id/select01line"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="@color/blue"/>
+                        android:background="@color/new_blue"/>
                 </LinearLayout>
             <LinearLayout
                 android:id="@+id/select02"
