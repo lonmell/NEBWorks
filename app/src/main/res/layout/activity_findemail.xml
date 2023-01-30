@@ -40,14 +40,42 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/find_email_img"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/complete_area"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_below="@+id/top_bar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="54dp"
-        android:background="@drawable/change_pw_end" />
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/find_email_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="54dp"
+            android:background="@drawable/ic_change_pw_end" />
+        <TextView
+            android:id="@+id/find_email_tv01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="고객님의 비밀번호가\n변경되었습니다"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/gangwonedu_bold"
+            android:textSize="28sp"/>
+        <TextView
+            android:id="@+id/find_email_tv02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="비밀번호가 정상적으로 변경되었습니다.\n다시 로그인을 진행해주세요."
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:fontFamily="@font/pretendard_regular"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/copyemail_area"
@@ -59,7 +87,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         app:cardBackgroundColor="#f2f2f2"
-        android:layout_below="@+id/find_email_img">
+        android:layout_below="@+id/complete_area">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
