@@ -269,6 +269,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
                 binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
             } else {
                 NeedReportTF = false;
                 binding.needReport.setBackgroundColor(Color.parseColor("#F5F6F8"));
