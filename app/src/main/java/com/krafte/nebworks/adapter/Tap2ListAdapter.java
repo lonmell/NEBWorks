@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -153,7 +154,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     holder.list_setting.setClickable(true);
                     holder.list_setting.setEnabled(true);
                 } else {
-                    holder.list_setting.setVisibility(View.INVISIBLE);
+                    holder.list_setting.setVisibility(View.GONE);
                     holder.list_setting.setClickable(false);
                     holder.list_setting.setEnabled(false);
                 }
@@ -284,10 +285,10 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     state = "";
                 }else if(item.getApproval_state().equals("0")){
                     state = "승인대기";
-                    holder.approval_state.setTextColor(Color.parseColor("#6395EC"));
+                    holder.approval_state.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
                 }else if(item.getApproval_state().equals("1")){
                     state = "승인";
-                    holder.approval_state.setTextColor(Color.parseColor("#C3C3C3"));
+                    holder.approval_state.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 }else if(item.getApproval_state().equals("2")){
                     state = "반려";
                     holder.approval_state.setTextColor(Color.parseColor("#DD6540"));
