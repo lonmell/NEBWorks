@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
@@ -88,7 +89,8 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color01 = "#696969";
                     break;
             }
-            holder.task_tv1.setBackgroundColor(Color.parseColor(Color01));
+//            holder.task_tv1.setBackgroundColor(Color.parseColor(Color01));
+            holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
 
             dlog.i("mData getKind 1:" + mData.get(1).getUser_name());
             holder.task_tv2.setText(mData.get(1).getUser_name());
@@ -109,7 +111,8 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color02 = "#696969";
                     break;
             }
-            holder.task_tv2.setBackgroundColor(Color.parseColor(Color02));
+//            holder.task_tv2.setBackgroundColor(Color.parseColor(Color02));
+            holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
 
             dlog.i("mData getKind 2:" + mData.get(2).getUser_name());
             holder.task_tv3.setText(mData.get(2).getUser_name());
@@ -130,7 +133,8 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color03 = "#696969";
                     break;
             }
-            holder.task_tv3.setBackgroundColor(Color.parseColor(Color03));
+//            holder.task_tv3.setBackgroundColor(Color.parseColor(Color03));
+            holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
 
             dlog.i("mData getKind 3:" + mData.get(3).getUser_name());
             holder.task_tv4.setText(mData.get(3).getUser_name());
@@ -151,7 +155,8 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color04 = "#696969";
                     break;
             }
-            holder.task_tv4.setBackgroundColor(Color.parseColor(Color04));
+//            holder.task_tv4.setBackgroundColor(Color.parseColor(Color04));
+            holder.task_tv4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
 
             dlog.i("mData getKind 4:" + mData.get(4).getUser_name());
             holder.task_tv5.setText(mData.get(4).getUser_name());
@@ -172,7 +177,8 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color05 = "#696969";
                     break;
             }
-            holder.task_tv5.setBackgroundColor(Color.parseColor(Color05));
+//            holder.task_tv5.setBackgroundColor(Color.parseColor(Color05));
+            holder.task_tv5.setTextColor(ContextCompat.getColor(mContext, R.color.black));
 
         }catch (Exception e){
             dlog.i("Exception :" + e);
