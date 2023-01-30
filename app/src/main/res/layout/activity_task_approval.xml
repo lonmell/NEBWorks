@@ -183,15 +183,13 @@
             <RelativeLayout
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:visibility="invisible">
+                android:layout_alignParentEnd="true">
 
                 <ImageView
                     android:id="@+id/change_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:clickable="false"
                     android:background="@drawable/calendar_resize" />
             </RelativeLayout>
         </RelativeLayout>
@@ -311,6 +309,19 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/loginbox_round"
                 android:padding="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/calendar_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignTop="@+id/status_select_area"
+                android:background="@color/white"
+                android:visibility="gone">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/create_calender"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/no_data_txt"
