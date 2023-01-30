@@ -22,7 +22,10 @@ public class RetrofitConnect {
     public ArrayList<PaymentData.PaymentData_list> paymentData_lists = new ArrayList<>();
 
     public String getBase64decode(String content) {
-        return new String(Base64.decode(content, 0)); //TODO Base64 암호화된 문자열을 >> 복호화된 원본 문자열로 반환
+        String decode = content.replace(" ", "+");
+        decode = decode.replace("_", "/");
+        decode = decode.replace("-", "+");
+        return new String(Base64.decode(decode, 0)); //TODO Base64 암호화된 문자열을 >> 복호화된 원본 문자열로 반환
     }
 
 

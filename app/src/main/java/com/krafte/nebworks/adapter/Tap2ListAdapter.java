@@ -358,7 +358,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     Intent intent = new Intent(mContext, Tap2OptionActivity.class);
                     intent.putExtra("left_btn_txt", "닫기");
                     mContext.startActivity(intent);
-                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+//                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 }
             });

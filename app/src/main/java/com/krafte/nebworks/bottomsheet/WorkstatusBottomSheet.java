@@ -3,6 +3,7 @@ package com.krafte.nebworks.bottomsheet;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.Tap2ListAdapter;
 import com.krafte.nebworks.adapter.WorkTapMemberAdapter;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.data.WorkStatusTapData;
 import com.krafte.nebworks.dataInterface.WorkStatusTapInterface;
 import com.krafte.nebworks.databinding.ActivityPlacelistBinding;
+import com.krafte.nebworks.pop.WorkMemberOptionActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -56,6 +59,7 @@ public class WorkstatusBottomSheet extends BottomSheetDialogFragment {
     String select_date = "";
     String getYMPicker = "";
     String FtoDay = "";
+    String change_place_id = "";
 
     //Other
     Dlog dlog = new Dlog();
@@ -81,6 +85,7 @@ public class WorkstatusBottomSheet extends BottomSheetDialogFragment {
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
             place_id        = shardpref.getString("place_id", "");
             FtoDay          = shardpref.getString("FtoDay", "");
+            change_place_id = shardpref.getString("change_place_id","").isEmpty()? PlaceCheckData.getInstance().getPlace_id():shardpref.getString("change_place_id","");
 
             dlog.i("-----onCreateView-----");
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -170,7 +175,18 @@ public class WorkstatusBottomSheet extends BottomSheetDialogFragment {
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();
-
+                                mAdapter.setOnItemClickListener((v, position) -> {
+                                    shardpref.putString("status_id", mList.get(position).getId());
+                                    shardpref.putString("mem_id", mList.get(position).getUser_id());
+                                    shardpref.putString("mem_name", mList.get(position).getName());
+                                    shardpref.putString("remote", "workhour");
+                                    Intent intent = new Intent(mContext, WorkMemberOptionActivity.class);
+                                    intent.putExtra("place_id", change_place_id);
+                                    intent.putExtra("user_id", mList.get(position).getId());
+                                    mContext.startActivity(intent);
+                                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                });
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
