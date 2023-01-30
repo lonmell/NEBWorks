@@ -184,6 +184,11 @@ public class PinSelectLocationActivity extends AppCompatActivity implements MapV
         });
 
         binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("pin_store_address");
+            shardpref.remove("pin_zipcode");
+            shardpref.remove("pin_store_addressdetail");
+            shardpref.remove("pin_latitude");
+            shardpref.remove("pin_longitube");
             super.onBackPressed();
         });
     }
@@ -458,6 +463,11 @@ public class PinSelectLocationActivity extends AppCompatActivity implements MapV
 
     @Override
     public void onBackPressed() {
+        shardpref.remove("pin_store_address");
+        shardpref.remove("pin_zipcode");
+        shardpref.remove("pin_store_addressdetail");
+        shardpref.remove("pin_latitude");
+        shardpref.remove("pin_longitube");
         super.onBackPressed();
     }
 }
