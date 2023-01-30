@@ -290,7 +290,7 @@ public class WorkStatusSubFragment1 extends Fragment {
                                             shardpref.putString("commute_work_time", Response.getJSONObject(position).getString("worktime"));
                                             shardpref.putString("commute_in_time", Response.getJSONObject(position).getString("in_time"));
                                             shardpref.putString("commute_out_time", Response.getJSONObject(position).getString("out_time"));
-                                            shardpref.putString("commute_date",Response.getJSONObject(position).getString("io_date"));
+//                                            shardpref.putString("commute_date",Response.getJSONObject(position).getString("io_date"));
                                             CommuteBottomSheet cb = new CommuteBottomSheet();
                                             cb.show(getParentFragmentManager(), "commuteBottomSheet");
                                             cb.setOnItemClickListener(v1 -> {

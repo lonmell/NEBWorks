@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,8 +74,8 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
         workTime            = shardpref.getString("commute_work_time", "");
         goToWorkTime        = shardpref.getString("commute_in_time", "");
         goOffWorkTime       = shardpref.getString("commute_out_time", "");
-        commute_date        = shardpref.getString("commute_date", "");
-
+        commute_date        = shardpref.getString("commute_date", "").replace("년", "-").replace("월", "-").replace("일", "").replace(" ","");
+        dlog.i("commute_date: " + commute_date);
         commute_place_id    = shardpref.getString("commute_place_id", "");
         commute_user_id     = shardpref.getString("commute_user_id", "");
 
