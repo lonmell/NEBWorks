@@ -99,7 +99,8 @@ public class PushActivity extends AppCompatActivity {
             setUserTokenDB(token, binding.activeOnBt01.isChecked(), binding.activeOnBt02.isChecked(), binding.activeOnBt03.isChecked(), binding.activeOnBt04.isChecked());
         });
         binding.backBtn.setOnClickListener(v -> {
-            pm.MoreBack(mContext);
+//            pm.MoreBack(mContext);
+            finish();
         });
 
         binding.activeOnArea01.setOnClickListener(v -> {
@@ -234,7 +235,8 @@ public class PushActivity extends AppCompatActivity {
                     shardpref.putBoolean("channelId3", channel3);
                     shardpref.putBoolean("channelId4", channel4);
 
-                    pm.MoreBack(mContext);
+//                    pm.MoreBack(mContext);
+                    finish();
                 } else {
                     Toast.makeText(mContext, "네트워크가 정상적이지 않습니다.", Toast.LENGTH_SHORT).show();
                 }
