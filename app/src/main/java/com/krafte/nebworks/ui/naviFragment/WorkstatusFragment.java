@@ -448,6 +448,7 @@ public class WorkstatusFragment extends Fragment {
                     Month = toDay.substring(5, 7);
                     Day = toDay.substring(8, 10);
                     getYMPicker = Year + "-" + Month;
+                    shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     cal.add(Calendar.DATE, -1);
@@ -456,6 +457,7 @@ public class WorkstatusFragment extends Fragment {
                     Month = toDay.substring(5, 7);
                     Day = toDay.substring(8, 10);
                     getYMPicker = Year + "-" + Month;
+                    shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 }
                 SetCalenderData(Year, Month);
