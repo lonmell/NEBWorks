@@ -482,7 +482,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             } else {
                 RepeatCheck = false;
                 binding.repeatBtn.setBackgroundResource(R.drawable.task_check_none);
-                binding.selectRepeatBtn.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+                binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#F5F6F8"));
                 binding.repeatTv.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                 binding.inputDateBox01.setVisibility(View.VISIBLE);
                 binding.inputDateBox02.setVisibility(View.VISIBLE);
