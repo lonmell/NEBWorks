@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -140,7 +141,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                 //대기
                 holder.state_tv.setText("승인대기");
                 holder.state_area.setBackgroundResource(R.drawable.default_right_blue_round);
-                holder.state_line.setBackgroundColor(Color.parseColor("#6395EC"));
+                holder.state_line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             } else if (item.getState().equals("1")) {
                 //승인
                 holder.state_tv.setText("승인");

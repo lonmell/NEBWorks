@@ -472,10 +472,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             picker_day = shardpref.getString("picker_day", "00");
             input_pop_time = shardpref.getString("input_pop_time", "");
 
-
             if (!String.valueOf(yoillist).equals("[]")) {
                 RepeatCheck = true;
-                binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
+                binding.repeatBtn.setBackgroundResource(R.drawable.task_check_white);
                 binding.selectRepeatBtn.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
                 binding.inputDateBox01.setVisibility(View.GONE);

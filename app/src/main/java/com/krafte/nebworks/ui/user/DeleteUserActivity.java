@@ -74,7 +74,7 @@ public class DeleteUserActivity extends AppCompatActivity {
         firstCheck = true;
         binding.pagetv03.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         binding.guideArea01.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
-        binding.guideImg01.setBackgroundResource(R.drawable.resize_service_on);
+        binding.guideImg01.setBackgroundResource(R.drawable.resize_service_on_blue);
     }
 
     private void setGuide01CheckCancel() {
@@ -88,7 +88,7 @@ public class DeleteUserActivity extends AppCompatActivity {
         secondCheck = true;
         binding.pagetv04.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         binding.guideArea02.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.blue_100));
-        binding.guideImg02.setBackgroundResource(R.drawable.resize_service_on);
+        binding.guideImg02.setBackgroundResource(R.drawable.resize_service_on_blue);
     }
 
     private void setGuide02CheckCancel() {
@@ -102,7 +102,7 @@ public class DeleteUserActivity extends AppCompatActivity {
         check = true;
         binding.pagetv05.setTextColor(ContextCompat.getColor(mContext, R.color.white));
         binding.acceptDelArea.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
-        binding.acceptDel.setBackgroundResource(R.drawable.ic_full_round_check);
+        binding.acceptDel.setBackgroundResource(R.drawable.resize_service_on);
     }
 
     private void setAcceptDelCheckCancel() {
@@ -159,11 +159,11 @@ public class DeleteUserActivity extends AppCompatActivity {
         });
 
         binding.delUser.setOnClickListener(v -> {
+            BtnOneCircleFun(false);
             if(!check){
-                BtnOneCircleFun(false);
                 Toast_Nomal("안내사항 확인 동의에 체크해주세요.");
+                BtnOneCircleFun(true);
             }else{
-                BtnOneCircleFun(false);
                 Intent intent = new Intent(this, TwoButtonPopActivity.class);
                 intent.putExtra("data", "회원탈퇴 하시겠습니까?\n 모든 정보가 삭제됩니다.");
                 intent.putExtra("flag", "회원탈퇴");
@@ -196,6 +196,12 @@ public class DeleteUserActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BtnOneCircleFun(true);
     }
 
     private void BtnOneCircleFun(boolean tf){

@@ -37,8 +37,8 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
 
     private String userName = "";
     private String workTime = "";
-    private String goToWorkTime = "";
-    private String goOffWorkTime = "";
+    private String goToWorkTime = "-1";
+    private String goOffWorkTime = "-1";
     private String commute_date = "";
     private String commute_place_id = "";
     private String commute_user_id = "";
@@ -129,7 +129,6 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
     private void setBtnEvent() {
         //출근 시간
         binding.gotowork.setOnClickListener(v -> {
-            String[] splitGoToWorkTime = goToWorkTime.split(":");
 
             SELECT_POSITION = true;
 
@@ -145,15 +144,17 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
             binding.gooffworkTextTime.setTextColor(ContextCompat.getColor(mContext, R.color.black));
             binding.gooffworkTimeDel.setBackgroundResource(R.drawable.ic_baseline_cancel_24_black);
 
-            if (!goToWorkTime.equals("null")) {
-                binding.commuteTimepicker.setHour(Integer.parseInt(splitGoToWorkTime[0]));
-                binding.commuteTimepicker.setMinute(Integer.parseInt(splitGoToWorkTime[1]));
+            if (!goToWorkTime.equals("-1")) {
+                if (!goToWorkTime.equals("null")) {
+                    String[] splitGoToWorkTime = goToWorkTime.split(":");
+                    binding.commuteTimepicker.setHour(Integer.parseInt(splitGoToWorkTime[0]));
+                    binding.commuteTimepicker.setMinute(Integer.parseInt(splitGoToWorkTime[1]));
+                }
             }
         });
 
         // 퇴근 시간
         binding.gooffwork.setOnClickListener(v -> {
-            String[] splitGoOffWorkTime = goOffWorkTime.split(":");
 
             SELECT_POSITION = false;
 
@@ -169,9 +170,12 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
             binding.gotoworkTextTime.setTextColor(ContextCompat.getColor(mContext, R.color.black));
             binding.gotoworkTimeDel.setBackgroundResource(R.drawable.ic_baseline_cancel_24_black);
 
-            if (!goOffWorkTime.equals("null")) {
-                binding.commuteTimepicker.setHour(Integer.parseInt(splitGoOffWorkTime[0]));
-                binding.commuteTimepicker.setMinute(Integer.parseInt(splitGoOffWorkTime[1]));
+            if (!goOffWorkTime.equals("-1")) {
+                if (!goOffWorkTime.equals("null")) {
+                    String[] splitGoOffWorkTime = goOffWorkTime.split(":");
+                    binding.commuteTimepicker.setHour(Integer.parseInt(splitGoOffWorkTime[0]));
+                    binding.commuteTimepicker.setMinute(Integer.parseInt(splitGoOffWorkTime[1]));
+                }
             }
         });
 
@@ -193,15 +197,16 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
         });
 
         binding.gotoworkTimeDel.setOnClickListener(v -> {
-            goToWorkTime = "00:00";
-            binding.commuteTimepicker.setHour(0);
-            binding.commuteTimepicker.setMinute(0);
+            goToWorkTime = "-1";
+            binding.gotoworkTextTime.setText("");
+            binding.commuteTimepicker.setVisibility(View.GONE);
+
         });
 
         binding.gooffworkTimeDel.setOnClickListener(v -> {
-            goOffWorkTime = "00:00";
-            binding.commuteTimepicker.setHour(0);
-            binding.commuteTimepicker.setMinute(0);
+            goOffWorkTime = "-1";
+            binding.gooffworkTextTime.setText("");
+            binding.commuteTimepicker.setVisibility(View.GONE);
         });
 
         // 저장 버튼
@@ -233,7 +238,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UpdateCommuteInterface api = retrofit.create(UpdateCommuteInterface.class);
-        Call<String> call = api.getData(commute_place_id,commute_user_id,kind,commute_date,time.equals("0:0")?"":time);
+        Call<String> call = api.getData(commute_place_id,commute_user_id,kind,commute_date,time.equals("-1")?"":time);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -275,7 +280,6 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
         shardpref.remove("commute_work_time");
         shardpref.remove("commute_in_time");
         shardpref.remove("commute_out_time");
-        shardpref.remove("commute_date");
     }
 
     // 리스너 객체 참조를 저장하는 변수

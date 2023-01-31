@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -130,6 +131,12 @@ public class TaskReuesAddActivity extends AppCompatActivity {
     int a = 0;
     List<String> inmember = new ArrayList<>();
 
+    int timeStartHour = 0;
+    int timeStartMin = 0;
+
+    int timeEndHour = 0;
+    int timeEndMin = 0;
+
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat", "LongLogTag"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,35 +243,53 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         binding.needReport.setOnClickListener(v -> {
             if (!NeedReportTF) {
                 NeedReportTF = true;
-                binding.needReport.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.needReport.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
                 binding.reportVisible.setVisibility(View.VISIBLE);
+                binding.reportBtn.setBackgroundResource(R.drawable.task_check_white);
                 TaskKind = "1";
                 binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
-                binding.select01.setTextColor(Color.parseColor("#ffffff"));
+                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
             } else {
                 NeedReportTF = false;
                 binding.needReport.setBackgroundColor(Color.parseColor("#F5F6F8"));
                 binding.reportTv.setTextColor(Color.parseColor("#000000"));
+                binding.reportBtn.setBackgroundResource(R.drawable.task_check_none);
                 binding.reportVisible.setVisibility(View.GONE);
+
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
+
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
             }
         });
 
         binding.select01Box.setOnClickListener(v -> {
             TaskKind = "1";
             dlog.i("select01Box click [TaskKind : " + TaskKind + "]");
-            binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
-            binding.select01.setTextColor(Color.parseColor("#ffffff"));
-            binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
             binding.select02.setTextColor(Color.parseColor("#000000"));
+            binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
         });
         binding.select02Box.setOnClickListener(v -> {
             TaskKind = "0";
             dlog.i("select02Box click [TaskKind : " + TaskKind + "]");
-            binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
             binding.select01.setTextColor(Color.parseColor("#000000"));
-            binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round);
-            binding.select02.setTextColor(Color.parseColor("#ffffff"));
+            binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select02Img.setBackgroundResource(R.drawable.task_check_blue);
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
             BtnOneCircleFun(false);
@@ -423,14 +448,14 @@ public class TaskReuesAddActivity extends AppCompatActivity {
 
             if (!String.valueOf(yoillist).equals("[]")) {
                 RepeatCheck = true;
-                binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
-                binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#6395EC"));
+                binding.repeatBtn.setBackgroundResource(R.drawable.task_check_white);
+                binding.selectRepeatBtn.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
                 binding.inputDateBox01.setVisibility(View.GONE);
                 binding.inputDateBox02.setVisibility(View.GONE);
             } else {
                 RepeatCheck = false;
-                binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
+                binding.repeatBtn.setBackgroundResource(R.drawable.task_check_none);
                 binding.inputDateBox01.setVisibility(View.VISIBLE);
                 binding.inputDateBox02.setVisibility(View.VISIBLE);
             }
@@ -610,14 +635,14 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
         if (!String.valueOf(getYoil).equals("[]")) {
             RepeatCheck = true;
-            binding.repeatBtn.setBackgroundResource(R.drawable.ic_service_white);
-            binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.repeatBtn.setBackgroundResource(R.drawable.task_check_white);
+            binding.selectRepeatBtn.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
         } else {
             dlog.i("input_pop_time : " + input_pop_time);
             dlog.i("SET_TASK_TIME_VALUE : " + SET_TASK_TIME_VALUE);
             RepeatCheck = false;
-            binding.repeatBtn.setBackgroundResource(R.drawable.resize_service_off);
+            binding.repeatBtn.setBackgroundResource(R.drawable.task_check_none);
 
             if (return_page.equals("task_reuse")) {
                 shardpref.putString("picker_year", today.substring(0, 4));
@@ -665,21 +690,75 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         if (!TaskKind.isEmpty()) {
             dlog.i("if(!TaskKind) : " + TaskKind);
             NeedReportTF = true;
-            binding.needReport.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.needReport.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.reportBtn.setBackgroundResource(R.drawable.task_check_white);
             binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
             binding.reportVisible.setVisibility(View.VISIBLE);
             if (TaskKind.equals("0")) {
                 TaskKind = "0";
-                binding.select01Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
                 binding.select01.setTextColor(Color.parseColor("#000000"));
-                binding.select02Box.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.select02.setTextColor(Color.parseColor("#ffffff"));
+                binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round);
+                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                binding.select02Img.setBackgroundResource(R.drawable.task_check_blue);
             } else if (TaskKind.equals("1")) {
                 TaskKind = "1";
-                binding.select01Box.setBackgroundColor(Color.parseColor("#6395EC"));
-                binding.select01.setTextColor(Color.parseColor("#ffffff"));
-                binding.select02Box.setBackgroundColor(Color.parseColor("#F5F6F8"));
+                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
+                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
+                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
                 binding.select02.setTextColor(Color.parseColor("#000000"));
+                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
+            }
+
+            // 할일 시간 세팅
+            if (getYoil.isEmpty()) { // 반복 업무 X
+                String[] startTimeSplit = start_time.split(" ");
+                String[] splitStartTime = startTimeSplit[1].split(":");
+                int startHour = Integer.parseInt(splitStartTime[0]);
+                int startMin = Integer.parseInt(splitStartTime[1]);
+                timeStartHour = startHour;
+                timeStartMin = startMin;
+                if (Integer.parseInt(splitStartTime[0]) < 12) {
+                    binding.inputTime01.setText(String.format("오전 %02d:%02d", startHour, startMin));
+                } else {
+                    binding.inputTime01.setText(String.format("오후 %02d:%02d", startHour, startMin));
+                }
+
+                String[] endTimeSplit = end_time.split(" ");
+                String[] splitEndTime = endTimeSplit[1].split(":");
+                int endHour = Integer.parseInt(splitEndTime[0]);
+                int endMin = Integer.parseInt(splitEndTime[1]);
+                timeEndHour = endHour;
+                timeEndMin = endMin;
+                if (Integer.parseInt(splitEndTime[0]) < 12) {
+                    binding.inputTime02.setText(String.format("오전 %02d:%02d", endHour, endMin));
+                } else {
+                    binding.inputTime02.setText(String.format("오후 %02d:%02d", endHour, endMin));
+                }
+            } else { // 반복 업무 O
+                String[] splitStartTime = start_time.split(":");
+                int startHour = Integer.parseInt(splitStartTime[0]);
+                int startMin = Integer.parseInt(splitStartTime[1]);
+                timeStartHour = startHour;
+                timeStartMin = startMin;
+                if (Integer.parseInt(splitStartTime[0]) < 12) {
+                    binding.inputTime01.setText(String.format("오전 %02d:%02d", startHour, startMin));
+                } else {
+                    binding.inputTime01.setText(String.format("오후 %02d:%02d", startHour, startMin));
+                }
+
+                String[] splitEndTime = end_time.split(":");
+                int endHour = Integer.parseInt(splitEndTime[0]);
+                int endMin = Integer.parseInt(splitEndTime[1]);
+                timeEndHour = endHour;
+                timeEndMin = endMin;
+                if (Integer.parseInt(splitEndTime[0]) < 12) {
+                    binding.inputTime02.setText(String.format("오전 %02d:%02d", endHour, endMin));
+                } else {
+                    binding.inputTime02.setText(String.format("오후 %02d:%02d", endHour, endMin));
+                }
             }
         }
         dlog.i("-----getTaskContents END-----");
