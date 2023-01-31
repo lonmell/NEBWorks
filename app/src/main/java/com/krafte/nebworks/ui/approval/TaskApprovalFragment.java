@@ -36,6 +36,7 @@ import com.krafte.nebworks.dataInterface.TaskSapprovalInterface;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.WorkCalendersetData;
 import com.krafte.nebworks.databinding.ActivityTaskApprovalBinding;
+import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -63,6 +64,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
 
     Context mContext;
     Activity activity;
+    DateCurrent dc = new DateCurrent();
 
     // shared 저장값
     PreferenceHelper shardpref;
@@ -180,7 +182,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
 //        }
     }
 
-    String select_date = "";
+    String select_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
     private void ChangeTap(String i){
         Tap = i;
         binding.select01tv.setTextColor(Color.parseColor("#949494"));
