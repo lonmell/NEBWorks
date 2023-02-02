@@ -752,7 +752,8 @@ public class ProfileEditActivity extends AppCompatActivity {
                                         Toast_Nomal("프로필 저장이 완료되었습니다.");
                                         String return_page = shardpref.getString("retrun_page", "");
                                         if (return_page.equals("MoreActivity")) {
-                                            pm.MoreBack(mContext);
+//                                            pm.MoreBack(mContext);
+                                            finish();
                                         } else {
                                             String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
 //                                            UserCheck(USER_INFO_EMAIL);
