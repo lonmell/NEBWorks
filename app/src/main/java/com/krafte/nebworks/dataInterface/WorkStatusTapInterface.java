@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 public interface WorkStatusTapInterface
 {
     String URL = "http://krafte.net/NEBWorks/commute/";
-    //http://krafte.net/NEBWorks/commute/get_tap.php?place_id=166&user_id=199&tap=1&date=2023-01-01
+    //http://krafte.net/NEBWorks/commute/get_tap.php?place_id=166&user_id=199&tap=&date=2023-02-02
     @FormUrlEncoded
     @POST("get_tap.php")
     Call<String> getData(

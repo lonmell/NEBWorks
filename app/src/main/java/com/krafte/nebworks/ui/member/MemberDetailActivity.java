@@ -789,7 +789,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         dlog.i("iocnt : " + iocnt);
                                         binding.nowPayTv.setText("예상급여 " + String.valueOf(myFormatter.format(allPay)) + "원");
                                         binding.nowPay.setText(String.valueOf(myFormatter.format(allPay)) + "원");
-                                        binding.payTv.setText("계약시급 " + workpay + "원");
+                                        binding.payTv.setText(workpay + "원");
                                         binding.payDiffBar.setProgress(Integer.parseInt(iocnt));
                                         binding.payDiffBar.setMax(Integer.parseInt(allwcnt));
                                     } catch (Exception e) {
