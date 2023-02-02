@@ -174,7 +174,7 @@ public class PushActivity extends AppCompatActivity {
                 dlog.i("jsonResponse length : " + jsonResponse.length());
                 dlog.i("jsonResponse : " + jsonResponse);
                 try {
-                    JSONArray Response = new JSONArray(response.body());
+                    JSONArray Response = new JSONArray(jsonResponse);
                     Log.i(TAG, "user_id : " + Response.getJSONObject(0).getString("user_id"));
                     Log.i(TAG, "token : " + Response.getJSONObject(0).getString("token"));
                     id = Response.getJSONObject(0).getString("id");
