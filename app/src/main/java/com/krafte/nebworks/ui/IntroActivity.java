@@ -98,7 +98,7 @@ public class IntroActivity extends AppCompatActivity {
     //Other 변수
     // shared 저장값
     String KAKAO_keyHash = "";
-    //Login_Method => 가입한 루트를 표시 ( KOGAS - 그냥 앱 자체 기능으로 가입 / Kakao - 카카오로 가입 )
+    //Login_Method => 가입한 루트를 표시 ( NEB - 그냥 앱 자체 기능으로 가입 / Kakao - 카카오로 가입 )
     String USER_LOGIN_METHOD = "0";
 
     private static final int RC_SIGN_IN = 9001;

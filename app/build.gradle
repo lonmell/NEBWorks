@@ -10,8 +10,8 @@ android {
         applicationId "com.krafte.nebworks"
         minSdk 24
         targetSdk 32
-        versionCode 19
-        versionName "19"
+        versionCode 20
+        versionName "20"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
