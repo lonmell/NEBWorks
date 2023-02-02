@@ -470,6 +470,7 @@
                 app:cardElevation="0dp">
 
                 <TextView
+                    android:id="@+id/add_workpart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/pretendard_bold"
