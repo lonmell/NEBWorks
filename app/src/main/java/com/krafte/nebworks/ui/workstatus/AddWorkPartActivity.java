@@ -27,6 +27,7 @@ import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.UserCheckData;
+import com.krafte.nebworks.dataInterface.WorkPartGetInterface;
 import com.krafte.nebworks.dataInterface.WorkPartSaveInterface;
 import com.krafte.nebworks.databinding.ActivityAddworkpartBinding;
 import com.krafte.nebworks.pop.SelectMemberPop;
@@ -36,6 +37,10 @@ import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,6 +48,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,6 +93,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
     String diff_break_time_get = "";
     //--매장 정보 수정할때
 
+    boolean workPartState = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +119,10 @@ public class AddWorkPartActivity extends AppCompatActivity {
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
             place_id        = PlaceCheckData.getInstance().getPlace_id();
             place_name      = PlaceCheckData.getInstance().getPlace_name();
+
+            workPartState   = shardpref.getBoolean("workpart_state", false);
+
+            dlog.i("workPartState: " + workPartState);
 
             //shardpref Area
             i_cnt           = shardpref.getString("i_cnt", "0");
@@ -175,6 +186,10 @@ public class AddWorkPartActivity extends AppCompatActivity {
             binding.selectMem.setClickable(true);
         }
 
+        if (workPartState) {
+            getWorkPart();
+        }
+
         //시간 지정하기
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
@@ -210,10 +225,13 @@ public class AddWorkPartActivity extends AppCompatActivity {
             });
         });
         binding.backBtn.setOnClickListener(v -> {
+            shardpref.remove("item_user_id");
+            shardpref.remove("item_user_name");
             super.onBackPressed();
         });
         binding.yoil.setOnClickListener(v -> {
             SelectYoilActivity sya = new SelectYoilActivity();
+            shardpref.putString("select_yoil", setYoil);
             sya.show(getSupportFragmentManager(), "SelectYoilActivity");
             sya.setOnItemClickListener(new SelectYoilActivity.OnItemClickListener() {
                 @Override
@@ -446,6 +464,92 @@ public class AddWorkPartActivity extends AppCompatActivity {
         }
     }
 
+    private void getWorkPart() {
+        dlog.i("getWorkPart");
+        dlog.i("getWorkPart place_id: " + place_id);
+        dlog.i("getWorkPart item_user_id: " + item_user_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WorkPartGetInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        WorkPartGetInterface api = retrofit.create(WorkPartGetInterface.class);
+        Call<String> call = api.getData(place_id, item_user_id, "월");
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                dlog.i("GetWorkPartTime Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    List<JSONObject> objectList = new ArrayList<>();
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    for (int i = 0; i < Response.length(); i++) {
+                                        JSONObject jsonObject = Response.getJSONObject(i);
+                                        objectList.add(jsonObject);
+                                    }
+                                    setWorkTimeContent(objectList);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+    private void setWorkTimeContent(List<JSONObject> objects) throws JSONException {
+        // 요일 세팅
+        binding.title.setText("근무시간 수정");
+        binding.addWorkpart.setText("수정하기");
+        StringBuilder sb = new StringBuilder();
+        setYoil = objects.get(0).getString("yoil");
+        dlog.i("setWorkTimeContent object: " + objects);
+        for (int i = 1; i < objects.size(); i++) {
+            sb.append(",");
+            sb.append(objects.get(i).getString("yoil"));
+        }
+        setYoil += sb.toString();
+        binding.yoilTv.setText(setYoil);
+
+        sieob_get = objects.get(0).getString("sieob");
+        jong_eob_get = objects.get(0).getString("jongeob");
+        break_time_get01 = objects.get(0).getString("breaktime01");
+        break_time_get02 = objects.get(0).getString("breaktime02");
+
+        String[] workStart = sieob_get.split(":");
+        String[] workEnd = jong_eob_get.split(":");
+        String[] breakStart = break_time_get01.split(":");
+        String[] breakEnd = break_time_get02.split(":");
+
+        setContentTime(workStart[0], workStart[1], binding.selectTime01);
+        setContentTime(workEnd[0], workEnd[1], binding.selectTime02);
+        setContentTime(breakStart[0], breakStart[1], binding.selectTime03);
+        setContentTime(breakEnd[0], breakEnd[1], binding.selectTime04);
+
+        total_work_time_get = objects.get(0).getString("workhour");
+        diff_break_time_get = objects.get(0).getString("breaktime");
+    }
+
+    private void setContentTime(String hour, String min, TextView view) {
+        if (Integer.parseInt(hour) < 12) {
+            view.setText("오전 " + hour + ":" + min);
+        } else {
+            view.setText("오후 " + hour + ":" + min);
+        }
+    }
+
     public void SaveWorkPartTime(String user_id) {
         dlog.i("setYoil : " + setYoil);
         Retrofit retrofit = new Retrofit.Builder()
@@ -518,6 +622,8 @@ public class AddWorkPartActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        shardpref.remove("item_user_id");
+        shardpref.remove("item_user_name");
         super.onBackPressed();
     }
 }

@@ -22,7 +22,9 @@ import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class SelectYoilActivity extends BottomSheetDialogFragment {
     private ActivitySelectyoilBinding binding;
@@ -42,6 +44,8 @@ public class SelectYoilActivity extends BottomSheetDialogFragment {
     List<String> selectYoil = new ArrayList<>();
     ListYoilStringAdapter mAdapter;
 
+    String dayOfWeek = "";
+
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
@@ -60,9 +64,20 @@ public class SelectYoilActivity extends BottomSheetDialogFragment {
         setItem.add("토요일");
         setItem.add("일요일");
 
+        dayOfWeek = shardpref.getString("select_yoil", "");
+        if (!dayOfWeek.equals("")) {
+            String[] dayOfWeekSplit = dayOfWeek.split(",");
+            for (int i = 0; i < dayOfWeekSplit.length; i++) {
+                dayOfWeekSplit[i] = dayOfWeekSplit[i] + "요일";
+            }
+            selectYoil.addAll(Arrays.asList(dayOfWeekSplit));
+            dlog.i("selectYoil: " + selectYoil);
+        }
+
+
         mList = new ArrayList<>();
         searchmList = new ArrayList<>();
-        mAdapter = new ListYoilStringAdapter(mContext, mList);
+        mAdapter = new ListYoilStringAdapter(mContext, mList, selectYoil);
         binding.categoryList.setAdapter(mAdapter);
         binding.categoryList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         for (int i = 0; i < setItem.size(); i++) {

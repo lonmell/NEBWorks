@@ -37,6 +37,9 @@ public class ListYoilStringAdapter extends RecyclerView.Adapter<ListYoilStringAd
     String USER_INFO_ID = "";
     Dlog dlog = new Dlog();
     List<String> selectPos = new ArrayList<>();
+    List<String> selectYoil = new ArrayList<>();
+
+
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
@@ -48,9 +51,10 @@ public class ListYoilStringAdapter extends RecyclerView.Adapter<ListYoilStringAd
         this.mListener = listener;
     }
 
-    public ListYoilStringAdapter(Context context, ArrayList<StringData.StringData_list> data) {
+    public ListYoilStringAdapter(Context context, ArrayList<StringData.StringData_list> data, List<String> selectYoil) {
         this.mData = data;
         this.mContext = context;
+        this.selectYoil = selectYoil;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull
@@ -71,14 +75,29 @@ public class ListYoilStringAdapter extends RecyclerView.Adapter<ListYoilStringAd
     @Override
     public void onBindViewHolder(@NonNull ListYoilStringAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         StringData.StringData_list item = mData.get(position);
+        dlog.i("select_yoil: " + selectYoil);
+        if (!selectYoil.isEmpty()) {
+            for (int k = 0; k < selectYoil.size(); k++) {
+                String target = selectYoil.get(k);
+                if (selectYoil.get(k).equals(item.getItem())) {
+                    dlog.i("target: " + target + " " + item.getItem());
+                    holder.select_on.setVisibility(View.VISIBLE);
+                    selectPos.add(item.getItem());
+                    break;
+                }
+            }
+        }
+        dlog.i("select pos: " + selectPos);
         try{
             dlog.i("mData item : " + mData.get(position));
             holder.item_name.setText(item.getItem());
             holder.item_name.setOnClickListener(v -> {
                 if(selectPos.contains(item.getItem())){
+                    dlog.i("same");
                     selectPos.remove(item.getItem());
                     holder.select_on.setVisibility(View.INVISIBLE);
                 }else{
+                    dlog.i("not same");
                     selectPos.add(item.getItem());
                     holder.select_on.setVisibility(View.VISIBLE);
                 }

@@ -160,6 +160,8 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
 
             holder.list_setting.setOnClickListener(v -> {
                 if (mListener != null) {
+                    shardpref.putString("item_user_id", item.getUser_id());
+                    shardpref.putString("item_user_name", item.getName());
                     mListener.onItemClick(v, position);
                 }
             });

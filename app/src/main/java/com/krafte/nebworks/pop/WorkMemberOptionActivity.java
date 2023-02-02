@@ -104,6 +104,7 @@ public class WorkMemberOptionActivity extends Activity {
 
         binding.listSettingitem01.setOnClickListener(v -> {
             if(remote.equals("workhour")){
+                shardpref.putBoolean("workpart_state", true);
                 pm.AddWorkPart(mContext);
                 finish();
                 Intent intent = new Intent();
