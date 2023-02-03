@@ -44,6 +44,7 @@ import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment3;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment4;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
+import com.krafte.nebworks.util.OnSwipeTouchListener;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
@@ -572,6 +573,41 @@ public class WorkstatusFragment extends Fragment {
                 }
             });
         });
+
+        binding.createCalender.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            @Override
+            public void onSwipeLeft() {
+//                super.onSwipeLeft();
+                setCalender(1);
+            }
+
+            @Override
+            public void onSwipeRight() {
+//                super.onSwipeRight();
+                setCalender(-1);
+            }
+        });
+    }
+
+    private void setCalender(int state) {
+        if (chng_icon) {
+            cal.add(Calendar.MONTH, state);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+        } else {
+            cal.add(Calendar.DATE, state);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+        }
+        SetCalenderData(Year, Month);
     }
 
     private void setChildFragment(Fragment child) {

@@ -45,6 +45,7 @@ import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
+import com.krafte.nebworks.util.OnSwipeTouchListener;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
@@ -290,6 +291,28 @@ public class WorkgotoFragment extends Fragment {
         shardpref.remove("change_place_name");
     }
 
+    private void setCalender(int state) {
+        if (chng_icon) {
+            cal.add(Calendar.MONTH, state);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+        } else {
+            cal.add(Calendar.DATE, state);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+        }
+        SetCalenderData();
+        setRecyclerView();
+    }
+
     public void setBtnEvent() {
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
@@ -378,7 +401,11 @@ public class WorkgotoFragment extends Fragment {
                 Day = String.valueOf(dayOfMonth);
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
-                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                if (chng_icon) {
+                    binding.setdate.setText(Year + "년 " + Month + "월 ");
+                } else {
+                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                }
                 getYMPicker = Year + "년 " + Month + "월 ";
                 SetCalenderData();
                 setRecyclerView();
@@ -477,6 +504,20 @@ public class WorkgotoFragment extends Fragment {
                 binding.selectArea.setVisibility(View.VISIBLE);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 setRecyclerView();
+            }
+        });
+
+        binding.createCalender.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            @Override
+            public void onSwipeLeft() {
+//                super.onSwipeLeft();
+                setCalender(1);
+            }
+
+            @Override
+            public void onSwipeRight() {
+//                super.onSwipeRight();
+                setCalender(-1);
             }
         });
     }
