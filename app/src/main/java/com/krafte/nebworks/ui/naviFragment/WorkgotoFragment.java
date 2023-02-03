@@ -378,7 +378,11 @@ public class WorkgotoFragment extends Fragment {
                 Day = String.valueOf(dayOfMonth);
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
-                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                if (chng_icon) {
+                    binding.setdate.setText(Year + "년 " + Month + "월 ");
+                } else {
+                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                }
                 getYMPicker = Year + "년 " + Month + "월 ";
                 SetCalenderData();
                 setRecyclerView();
