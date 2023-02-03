@@ -59,6 +59,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -240,7 +241,6 @@ public class HomeFragment2 extends Fragment {
         return binding.getRoot();
 //        return rootView;
     }
-
     @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
@@ -251,7 +251,7 @@ public class HomeFragment2 extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-//        timer.cancel();
+        timer.cancel();
     }
 
 
@@ -268,6 +268,16 @@ public class HomeFragment2 extends Fragment {
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
+
+        timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //5초마다 실행
+                PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+            }
+        };
+        timer.schedule(timerTask,1000,5000);
     }
     @Override
     public void onDestroy() {

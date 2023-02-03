@@ -85,7 +85,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 /*
  * 2022-10-04 방창배 작성 카카오 로그인 추가
- * 2022-10-05 방창배 수정 구글 로그인 추가 - 인증진행중
+ * 2022-10-05 방창배 수정 구글 로그인 추가
  *
  * */
 public class LoginActivity extends AppCompatActivity {
@@ -912,6 +912,7 @@ public class LoginActivity extends AppCompatActivity {
                 dlog.i("permissionCheck() : Permission Denied");
             }
         };
+
         TedPermission.create()
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage(

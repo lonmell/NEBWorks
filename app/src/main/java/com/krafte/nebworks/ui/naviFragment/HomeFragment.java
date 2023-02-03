@@ -51,6 +51,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,7 +70,6 @@ public class HomeFragment extends Fragment {
 
     Context mContext;
     Activity activity;
-
 
     //shared
     String place_id = "";
@@ -200,12 +201,14 @@ public class HomeFragment extends Fragment {
 //        return rootView;
     }
 
+    Timer timer;
     @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
         super.onStart();
         getPlaceData();
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
+        timer = new Timer();
     }
 
     @Override
@@ -215,14 +218,29 @@ public class HomeFragment extends Fragment {
         shardpref.remove("item_user_id");
         shardpref.remove("item_user_name");
         UserCheck();
-
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
         SetAllMemberList();
+
+        timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //5초마다 실행
+                PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+            }
+        };
+        timer.schedule(timerTask,1000,5000);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        timer.cancel();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        timer.cancel();
     }
 
     public void setBtnEvent() {
