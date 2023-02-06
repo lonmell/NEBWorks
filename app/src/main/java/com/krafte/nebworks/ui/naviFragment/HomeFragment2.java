@@ -41,6 +41,7 @@ import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
+import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
@@ -125,6 +126,7 @@ public class HomeFragment2 extends Fragment {
     String input_date = "";
     String in_time = "";
     String jongeob = "";
+    int allPay = 0;
 
     //Other 클래스
     PageMoveClass pm = new PageMoveClass();
@@ -259,18 +261,21 @@ public class HomeFragment2 extends Fragment {
 
 
     Timer timer = new Timer();
+
     @Override
     public void onResume() {
         super.onResume();
         shardpref.remove("Tap");
         InOutLogMember();
         UserCheck();
+        allPay = 0;
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
-
+        String today = dc.GET_YEAR + "-" + dc.GET_MONTH;
+        WritePaymentList(place_id, USER_INFO_ID, today);
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -827,13 +832,9 @@ public class HomeFragment2 extends Fragment {
                                             dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
                                             dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
                                         } else if (kind.equals("3")) {
-                                            int allPay = 0;
                                             for (int i = 0; i < Response.length(); i++) {
                                                 allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                             }
-                                            DecimalFormat myFormatter = new DecimalFormat("###,###");
-                                            binding.realPaynum.setText(myFormatter.format(allPay) + "원");
-                                            dlog.i("allPay : " + myFormatter.format(allPay));
                                         } else if(kind.equals("4")){
                                             dlog.i("kind 4 Result : " + jsonResponse);
 
@@ -889,6 +890,59 @@ public class HomeFragment2 extends Fragment {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void WritePaymentList(String place_id, String SelectId, String GET_DATE) {
+        dlog.i("------------PaymentFragment2 List------------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("GET_DATE : " + GET_DATE);
+        dlog.i("SelectId : " + SelectId);
+        dlog.i("------------PaymentFragment2 List------------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(paymanaInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        paymanaInterface api = retrofit.create(paymanaInterface.class);
+        Call<String> call = api.getData("1", place_id, GET_DATE, SelectId, "", "", "", "", "", "", "", "", "", "");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "WritePaymentList / setRecyclerView");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                Log.e(TAG, "response 2: " + rc.getBase64decode(response.body()));
+                if (response.isSuccessful() && response.body() != null) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+//                    Log.e(TAG, "GetWorkStateInfo function onSuccess : " + jsonResponse);
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        dlog.i("workhour : " + Response.getJSONObject(0).getString("workhour"));
+                        dlog.i("jikgup : " + Response.getJSONObject(0).getString("jikgup"));
+                        dlog.i("payment : " + Response.getJSONObject(0).getString("payment"));
+                        String workhour = Response.getJSONObject(0).getString("workhour");
+                        String jikgup = Response.getJSONObject(0).getString("jikgup");
+                        String payment = Response.getJSONObject(0).getString("payment");
+                        String paykind = Response.getJSONObject(0).getString("paykind");
+                        //알바, 정직원, 매니저, 기타
+                        DecimalFormat myFormatter = new DecimalFormat("###,###");
+                        if(paykind.equals("시급") || paykind.equals("주급")){
+                            binding.realPaynum.setText("근무 " + workhour + "시간 X 시급 " + payment + "원 = " + myFormatter.format(allPay) + "원");
+                        } else if(paykind.equals("월급")){
+                            binding.realPaynum.setText(myFormatter.format(allPay) + "원");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
             }
         });
     }
@@ -995,6 +1049,7 @@ public class HomeFragment2 extends Fragment {
             }
         });
     }
+
     public void AddPush(String title, String content, String user_id) {
         place_owner_id = shardpref.getString("place_owner_id","");
         Retrofit retrofit = new Retrofit.Builder()
