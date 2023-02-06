@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#6395EC"
+    android:background="@color/new_blue"
     android:orientation="vertical"
     tools:context=".ui.main.EmployeeProcess">
 
@@ -37,17 +37,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="000님 ~"
-        android:textSize="25sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/pretendard_bold"
+        android:textSize="28sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/gangwonedu_bold"
         android:gravity="center"/>
-    <ImageView
-        android:id="@+id/io_btn"
-        android:layout_width="188dp"
-        android:layout_height="188dp"
-        android:layout_gravity="center"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:background="@drawable/ic_in_btn_white" />
+        android:layout_gravity="center">
+            <ImageView
+                android:id="@+id/io_btn"
+                android:layout_width="188dp"
+                android:layout_height="188dp"
+                android:layout_gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/ic_in_btn_white" />
+
+            <TextView
+                android:id="@+id/io_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:text="00:00"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="70dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -80,17 +107,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/store_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="start|center"
-                        android:text="store_name"
-                        android:textColor="@color/black"
-                        android:textSize="17sp"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/store_name"
@@ -100,6 +116,18 @@
                         android:textColor="#696969"
                         android:textSize="15sp"
                         tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/store_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gangwonedu_bold"
+                        android:gravity="start|center"
+                        android:text="store_name"
+                        android:textColor="@color/black"
+                        android:textSize="20dp"
+                        tools:ignore="HardcodedText" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -137,7 +165,7 @@
                 android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="Loading..."
-                android:textColor="@color/blue"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText" />
         </RelativeLayout>
