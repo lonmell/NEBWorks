@@ -229,6 +229,17 @@ public class MainFragment2 extends AppCompatActivity {
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
                     paging_position = position;
+                    if(position == 0){
+                        binding.topBar.setBackgroundColor(Color.parseColor("#1445D0"));
+                        binding.mainBackground.setBackgroundColor(Color.parseColor("#1445D0"));
+                        binding.menu.setBackgroundResource(R.drawable.menu_white);
+                        binding.notice.setBackgroundResource(R.drawable.bell_white);
+                    }else{
+                        binding.topBar.setBackgroundColor(Color.parseColor("#ffffff"));
+                        binding.mainBackground.setBackgroundColor(Color.parseColor("#ffffff"));
+                        binding.menu.setBackgroundResource(R.drawable.menu);
+                        binding.notice.setBackgroundResource(R.drawable.bell);
+                    }
                     ChangePosition(position);
                 }
 

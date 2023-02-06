@@ -40,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -116,13 +117,15 @@ public class EmployeeProcess extends AppCompatActivity {
 
             onBtnEvent();
             if (kind.equals("0")) {
+                binding.ioTime.setVisibility(View.GONE);
                 binding.ioBtn.setBackgroundResource(R.drawable.ic_in_btn_white);
             } else {
+                binding.ioTime.setVisibility(View.VISIBLE);
                 binding.ioBtn.setBackgroundResource(R.drawable.workinout02);
             }
 
             binding.processDate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
-            binding.processTitle.setText(mem_name + "님 오늘도 화이팅하세요!");
+            binding.processTitle.setText(mem_name + "님\n 오늘도 화이팅하세요!");
 
             binding.closeProcess.setOnClickListener(v -> {
                 super.onBackPressed();
@@ -135,6 +138,8 @@ public class EmployeeProcess extends AppCompatActivity {
             today = sdf.format(cal.getTime());
             dlog.i("오늘 :" + today);
             dlog.i("jongeob :" + jongeob.substring(3));
+
+            outTime();
 
             getMySSID = getNetworkName(mContext).replace("\"", "");
             if (getMySSID.equals("<unknown ssid>")) {
@@ -184,6 +189,26 @@ public class EmployeeProcess extends AppCompatActivity {
 //            Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
             }
         }, 1000); //0.5초 후 인트로 실행
+    }
+
+    private void outTime() {
+        String[] now = dc.GET_TIME.split(" ");
+        String[] outTimeSplit = jongeob.split(":");
+        String[] time = now[1].split(":");
+
+        int times = Integer.parseInt(time[0]) * 3600 + Integer.parseInt(time[1]) * 60;
+        int outTime = Integer.parseInt(outTimeSplit[0]) * 3600 + Integer.parseInt(outTimeSplit[1]) * 60;
+
+        int t = outTime - times;
+
+        if (t < 0) {
+            binding.ioTime.setText("퇴근시간이 지났습니다.");
+        } else {
+            int hour = t / (60 * 60);
+            int minute = t / 60 - (hour * 60);
+
+            binding.ioTime.setText("퇴근까지 " + hour + "시간 " + minute + "분");
+        }
     }
 
     public boolean compareDate2() throws ParseException {

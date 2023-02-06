@@ -35,6 +35,7 @@ import com.krafte.nebworks.data.MainNotiData;
 import com.krafte.nebworks.data.MainTaskData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
+import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
@@ -198,6 +199,7 @@ public class HomeFragment2 extends Fragment {
                 setDummyData();
             }
             setBtnEvent();
+            SetAllMemberList();
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
                 String msg = getString(R.string.msg_subscribed);
@@ -221,7 +223,7 @@ public class HomeFragment2 extends Fragment {
 
 
             binding.ioMytime.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
-            binding.todayWorkdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
+//            binding.todayWorkdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
 
             binding.cardview02.setOnClickListener(v -> {
                 if (USER_INFO_AUTH.isEmpty()) {
@@ -348,7 +350,7 @@ public class HomeFragment2 extends Fragment {
                             //그날 최초 출근
                             kind = "-1";
 //                            InOutInsert("0");
-                            binding.oArea.setVisibility(View.GONE);
+//                            binding.oArea.setVisibility(View.GONE);
                             binding.ioArea.setVisibility(View.VISIBLE);
                         } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
                             if (response.isSuccessful() && response.body() != null) {
@@ -361,11 +363,17 @@ public class HomeFragment2 extends Fragment {
                                     dlog.i("InOutLogMember kind : " + kind);
                                     if (kind.equals("1")) {
                                         kind = "-1";
-                                        binding.oArea.setVisibility(View.GONE);
+//                                        binding.oArea.setVisibility(View.GONE);
+                                        binding.ioImg.setBackgroundResource(R.drawable.workinout01);
+                                        binding.inTime.setVisibility(View.GONE);
+                                        binding.inTimeTxt.setVisibility(View.GONE);
                                         binding.ioArea.setVisibility(View.VISIBLE);
                                     }else{
-                                        binding.oArea.setVisibility(View.VISIBLE);
-                                        binding.ioArea.setVisibility(View.GONE);
+//                                        binding.oArea.setVisibility(View.VISIBLE);
+                                        binding.ioImg.setBackgroundResource(R.drawable.workinout02);
+                                        binding.inTime.setVisibility(View.VISIBLE);
+                                        binding.inTimeTxt.setVisibility(View.VISIBLE);
+//                                        binding.ioArea.setVisibility(View.GONE);
                                     }
                                     binding.inTime.setText(io_time);
                                 } catch (Exception e) {
@@ -376,10 +384,10 @@ public class HomeFragment2 extends Fragment {
                         dlog.i("InOutLogMember kind 2 : " + kind);
                         if (kind.equals("-1")) {
                             binding.ioImg.setBackgroundResource(R.drawable.workinout01);
-                            binding.state.setText("현재 퇴근 중");
+                            binding.state.setText("현재 퇴근");
                         } else if (kind.equals("0")) {
                             binding.ioImg.setBackgroundResource(R.drawable.workinout02);
-                            binding.state.setText("현재 출근 중");
+                            binding.state.setText("현재 출근");
                         }
                     });
                 }
@@ -444,20 +452,20 @@ public class HomeFragment2 extends Fragment {
                 }
             }
         });
-        binding.oBtn.setOnClickListener(v -> {
-            if (USER_INFO_AUTH.isEmpty()) {
-                isAuth();
-            } else {
-                UserCheck();
-                if(!UserCheckData.getInstance().getUser_sieob().equals("null")){
-                    shardpref.putString("kind", "1");
-                    pm.EmployeeProcess(mContext);
-                }else{
-                    Toast_Nomal("근무종료 시간이 배정되지 않았습니다.");
-                }
-
-            }
-        });
+//        binding.oBtn.setOnClickListener(v -> {
+//            if (USER_INFO_AUTH.isEmpty()) {
+//                isAuth();
+//            } else {
+//                UserCheck();
+//                if(!UserCheckData.getInstance().getUser_sieob().equals("null")){
+//                    shardpref.putString("kind", "1");
+//                    pm.EmployeeProcess(mContext);
+//                }else{
+//                    Toast_Nomal("근무종료 시간이 배정되지 않았습니다.");
+//                }
+//
+//            }
+//        });
         binding.acceptBtn.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -553,7 +561,7 @@ public class HomeFragment2 extends Fragment {
 
                     Glide.with(mContext).load(place_img_path)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .placeholder(R.drawable.no_image)
+                            .placeholder(R.drawable.ic_store_icon)
                             .skipMemoryCache(true)
                             .into(binding.storeThumnail);
 
@@ -640,6 +648,73 @@ public class HomeFragment2 extends Fragment {
         try {
             th.join(); // 작동한 스레드의 종료까지 대기 후 메인 스레드 실행
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void SetAllMemberList() {
+        dlog.i("SetAllMemberList place_id : " + place_id);
+        dlog.i("SetAllMemberList user_id : " + user_id);
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(AllMemberInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            AllMemberInterface api = retrofit.create(AllMemberInterface.class);
+            Call<String> call = api.getData(place_id, USER_INFO_ID);
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
+                        Log.e("onSuccess : ", response.body());
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(jsonResponse);
+                            if (Response.length() != 0) {
+                                String mem_id = Response.getJSONObject(0).getString("id");
+                                String name = Response.getJSONObject(0).getString("name");
+                                String place_name = Response.getJSONObject(0).getString("place_name");
+                                String join_date = Response.getJSONObject(0).getString("join_date").replace("-", ".");
+                                String img_path = Response.getJSONObject(0).getString("img_path");
+                                String phone = Response.getJSONObject(0).getString("phone");
+                                String owner_phone = Response.getJSONObject(0).getString("owner_phone");
+                                String jumin = Response.getJSONObject(0).getString("jumin");
+                                String gender = Response.getJSONObject(0).getString("gender");
+                                String kind = Response.getJSONObject(0).getString("kind");
+                                String state = Response.getJSONObject(0).getString("state");
+                                String pay = Response.getJSONObject(0).getString("pay");
+
+                                if (!owner_phone.isEmpty()) {
+                                    owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
+                                            + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
+                                            + Response.getJSONObject(0).getString("owner_phone").substring(7, 11);
+                                }
+                                String jikgup = Response.getJSONObject(0).getString("jikgup");
+
+                                dlog.i("setAll placeName: " + join_date);
+                                binding.paynum.setText(pay + "원");
+                                binding.joinPlaceDate.setText(join_date + " 입사");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -757,7 +832,7 @@ public class HomeFragment2 extends Fragment {
                                                 allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                             }
                                             DecimalFormat myFormatter = new DecimalFormat("###,###");
-                                            binding.paynum.setText(myFormatter.format(allPay) + "원");
+                                            binding.realPaynum.setText(myFormatter.format(allPay) + "원");
                                             dlog.i("allPay : " + myFormatter.format(allPay));
                                         } else if(kind.equals("4")){
                                             dlog.i("kind 4 Result : " + jsonResponse);
