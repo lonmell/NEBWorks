@@ -3,12 +3,14 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
@@ -34,6 +36,8 @@ public class SelectCateAdapter extends RecyclerView.Adapter<SelectCateAdapter.Vi
     String place_id = "";
     String USER_INFO_ID = "";
     Dlog dlog = new Dlog();
+
+    int last_pos = 0;
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
@@ -71,6 +75,11 @@ public class SelectCateAdapter extends RecyclerView.Adapter<SelectCateAdapter.Vi
         try{
             dlog.i("mData item : " + mData.get(position));
             holder.selectcate.setText(item.getItem());
+            if(last_pos != position){
+                holder.select_cate_back.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
+            }else{
+                holder.select_cate_back.setCardBackgroundColor(Color.parseColor("#1445D0"));
+            }
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }
@@ -85,10 +94,13 @@ public class SelectCateAdapter extends RecyclerView.Adapter<SelectCateAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView selectcate;
+        CardView select_cate_back;
+
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            selectcate = itemView.findViewById(R.id.selectcate);
+            selectcate          = itemView.findViewById(R.id.selectcate);
+            select_cate_back    = itemView.findViewById(R.id.select_cate_back);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
@@ -96,9 +108,11 @@ public class SelectCateAdapter extends RecyclerView.Adapter<SelectCateAdapter.Vi
 
             dlog.DlogContext(mContext);
 
+
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
+                    last_pos = pos;
                     if (mListener != null) {
                         mListener.onItemClick(view,pos);
                     }

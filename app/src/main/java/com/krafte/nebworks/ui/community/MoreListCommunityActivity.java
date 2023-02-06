@@ -146,9 +146,11 @@ public class MoreListCommunityActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        binding.selectCategory.setVisibility(View.GONE);
         if (com_kind == 0) {
             setRecyclerView();
         } else if (com_kind == 1) {
+            binding.selectCategory.setVisibility(View.VISIBLE);
             setCateList();
             setRecyclerView2();
         } else if (com_kind == 2) {
@@ -195,11 +197,13 @@ public class MoreListCommunityActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position) {
                 selectCate = setCate.get(position);
-                if (selectCate.equals("#전체보기")) {
+                if(selectCate.equals("#전체보기")){
                     selectCate = "";
                 }
+                binding.selectCatelist.setText(selectCate);
                 dlog.i("onItemClick : " + selectCate);
                 setRecyclerView2();
+                cateAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -407,7 +411,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                             dlog.i("selectCate : " + selectCate);
                                             dlog.i("category : " + jsonObject.getString("category"));
                                             total_cnt2++;
-                                            if (jsonObject.getString("category").equals(selectCate.replace("#", "").trim())) {
+                                            if (jsonObject.getString("category").equals(selectCate)) {
                                                 mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                                         jsonObject.getString("id"),
                                                         jsonObject.getString("place_id"),

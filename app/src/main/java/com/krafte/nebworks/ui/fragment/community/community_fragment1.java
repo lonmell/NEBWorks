@@ -220,8 +220,10 @@ public class community_fragment1 extends Fragment {
                 if(selectCate.equals("#전체보기")){
                     selectCate = "";
                 }
+                binding.selectCatelist.setText(selectCate);
                 dlog.i("onItemClick : " + selectCate);
                 setRecyclerView2();
+                cateAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -440,7 +442,7 @@ public class community_fragment1 extends Fragment {
                                             dlog.i("selectCate : " + selectCate);
                                             dlog.i("category : " + jsonObject.getString("category"));
                                             total_cnt2++;
-                                            if(jsonObject.getString("category").equals(selectCate.replace("#","").trim())){
+                                            if(jsonObject.getString("category").equals(selectCate)){
                                                 mAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                                         jsonObject.getString("id"),
                                                         jsonObject.getString("place_id"),

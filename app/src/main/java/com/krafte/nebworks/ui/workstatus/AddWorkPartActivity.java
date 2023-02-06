@@ -48,7 +48,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -127,9 +126,13 @@ public class AddWorkPartActivity extends AppCompatActivity {
             //shardpref Area
             i_cnt           = shardpref.getString("i_cnt", "0");
             change_place_id = place_id;
-
+            dlog.i("------AddWorkPartActivity------");
+            dlog.i("i_cnt: " + i_cnt);
+            dlog.i("change_place_id: " + change_place_id);
+            dlog.i("------AddWorkPartActivity------");
             binding.storeName.setText(place_name);
-            binding.memCnt.setText("총 " + i_cnt + "명 근무 중");
+
+
             setBtnEvent();
 
         } catch (Exception e) {
@@ -179,12 +182,29 @@ public class AddWorkPartActivity extends AppCompatActivity {
                 binding.memSelect.setVisibility(View.GONE);
                 binding.memName.setText(item_user_name);
             } else {
-                binding.memName.setVisibility(View.GONE);
-                binding.memCnt.setVisibility(View.VISIBLE);
-                binding.memSelect.setVisibility(View.VISIBLE);
+//                binding.memName.setVisibility(View.GONE);
+//                binding.memCnt.setVisibility(View.VISIBLE);
+//                binding.memSelect.setVisibility(View.VISIBLE);
+                if(i_cnt.equals("0")){
+                    binding.memCnt.setVisibility(View.GONE);
+                    binding.memSelect.setVisibility(View.GONE);
+                    binding.memName.setVisibility(View.VISIBLE);
+                    binding.memName.setText("근무자를 등록해주세요 >");
+                    binding.memName.setTextColor(Color.parseColor("#1445D0"));
+                    binding.memName.setOnClickListener(v -> {
+                        pm.MemberManagement(mContext);
+                    });
+                }else{
+                    binding.memName.setVisibility(View.GONE);
+                    binding.memCnt.setVisibility(View.VISIBLE);
+                    binding.memSelect.setVisibility(View.VISIBLE);
+                    binding.memCnt.setText("총 " + i_cnt + "명 근무 중");
+                }
             }
             binding.selectMem.setClickable(true);
         }
+
+
 
         if (workPartState) {
             getWorkPart();

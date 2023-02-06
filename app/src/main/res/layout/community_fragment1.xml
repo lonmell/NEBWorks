@@ -152,20 +152,38 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
                 android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:fontFamily="@font/gangwonedu_bold"
-                    android:text="전체게시글"
-                    android:textColor="@color/black"
-                    android:textSize="22sp" />
+                    android:padding="5dp"
+                    android:layout_toStartOf="@+id/more02"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/gangwonedu_bold"
+                        android:text="전체게시글"
+                        android:textColor="@color/black"
+                        android:textSize="22sp" />
+                    <TextView
+                        android:id="@+id/select_catelist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/gangwonedu_bold"
+                        android:text=""
+                        android:layout_marginStart="13dp"
+                        android:textColor="@color/new_blue"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/more02"
@@ -210,7 +228,7 @@
                     android:textColor="#dcdcdc"
                     android:textSize="22sp"
                     android:visibility="visible"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText,TextContrastCheck" />
             </RelativeLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

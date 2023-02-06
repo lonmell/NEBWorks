@@ -97,18 +97,22 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
         try{
             PlaceNotiData.PlaceNotiData_list item = mData.get(position);
 
-            if(kind == 0){
+            if(kind == 0){//인기글
                 holder.rank_area.setVisibility(View.VISIBLE);
                 holder.profile_area.setVisibility(View.VISIBLE);
                 holder.name.setVisibility(View.VISIBLE);
                 holder.write_date.setVisibility(View.VISIBLE);
                 holder.category_box.setVisibility(View.VISIBLE);
-            }else if(kind == 1){
+                holder.line01.setVisibility(View.GONE);
+                holder.view_com.setVisibility(View.GONE);
+                holder.like_area.setVisibility(View.GONE);
+            }else if(kind == 1){//전체게시글
                 holder.rank_area.setVisibility(View.GONE);
                 holder.profile_area.setVisibility(View.VISIBLE);
                 holder.name.setVisibility(View.VISIBLE);
                 holder.write_date.setVisibility(View.VISIBLE);
                 holder.category_box.setVisibility(View.VISIBLE);
+                holder.line01.setVisibility(View.VISIBLE);
             }
             holder.rank_tv.setText(String.valueOf(position+1));
 
@@ -125,7 +129,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
             holder.contents.setText(item.getContents().equals("null")?"":item.getContents());
             if(!item.getCategory().isEmpty()){
-                holder.categorytv.setText("#" + item.getCategory());
+                holder.categorytv.setText(item.getCategory());
             }else{
                 holder.category_box.setVisibility(View.GONE);
             }
@@ -207,7 +211,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
         LinearLayout rank_area;
         CardView profile_area;
-        LinearLayout category_box;
+        LinearLayout category_box, line01, like_area;
         ImageView profile_img, like_icon;
 
         ViewHolder(View itemView) {
@@ -228,6 +232,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             profile_img     = itemView.findViewById(R.id.profile_img);
             like_icon       = itemView.findViewById(R.id.like_icon);
             item_total      = itemView.findViewById(R.id.item_total);
+            line01          = itemView.findViewById(R.id.line01);
+            like_area       = itemView.findViewById(R.id.like_area);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

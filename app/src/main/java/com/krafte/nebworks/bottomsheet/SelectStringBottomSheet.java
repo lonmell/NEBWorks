@@ -108,14 +108,14 @@ public class SelectStringBottomSheet extends BottomSheetDialogFragment {
             setItem.add("사장님페이지");
             setItem.add("세금/노무");
         }else if(kind == 1){
-            setItem.add("정보에요");
-            setItem.add("화나요");
-            setItem.add("억울해요");
-            setItem.add("자랑해요");
-            setItem.add("점주가 말한다");
-            setItem.add("알바가 말한다");
-            setItem.add("이런 사람 조심하세요");
-            setItem.add("이런 상황 조심하세요");
+            setItem.add("#정보에요");
+            setItem.add("#화나요");
+            setItem.add("#억울해요");
+            setItem.add("#자랑해요");
+            setItem.add("#점주가 말한다");
+            setItem.add("#알바가 말한다");
+            setItem.add("#이런 사람 조심하세요");
+            setItem.add("#이런 상황 조심하세요");
         }else if(kind == 2){
             setItem.add("소상공인지원금");
             setItem.add("융자지원");

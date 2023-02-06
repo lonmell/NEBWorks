@@ -652,7 +652,7 @@ public class WorkstatusFragment extends Fragment {
                                         binding.cnt02.setText(Response.getJSONObject(0).getString("absence_cnt"));
                                         binding.cnt03.setText(Response.getJSONObject(0).getString("o_cnt"));
                                         binding.cnt04.setText(Response.getJSONObject(0).getString("rest_cnt"));
-                                        dlog.i("-----MainData-----");
+                                        dlog.i("------PlaceWorkCheck------");
                                         dlog.i("i_cnt : " + Response.getJSONObject(0).getString("i_cnt"));
                                         dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
                                         dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
@@ -662,6 +662,8 @@ public class WorkstatusFragment extends Fragment {
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }
+                                }else{
+                                    shardpref.putString("i_cnt","0");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

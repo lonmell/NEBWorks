@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -182,13 +181,16 @@ public class CommunityAddActivity extends AppCompatActivity {
         String feed_img_path    = shardpref.getString("feed_img_path","");
         String category         = shardpref.getString("category","");
 
-        binding.selectCategoryTxt.setText(category.isEmpty()?"키워드 선택":category);
+        binding.selectCategoryTxt.setText(category.isEmpty()?"#공유해요":category);
         binding.writeTitle.setText(title);
         binding.writeContents.setText(contents);
         Glide.with(mContext).load(feed_img_path)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(binding.limitImg);
+
+        nickname_select = 1;
+        user_input_name = USER_INFO_NICKNAME;
 
         setBtnEvent();
     }
@@ -201,7 +203,6 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     private void setBtnEvent() {
-        binding.selectBoardkindTxt.setText("자유게시판");
         binding.selectCategoryTxt.setOnClickListener(v -> {
             shardpref.putInt("SelectKind", 1);
             SelectStringBottomSheet ssb = new SelectStringBottomSheet();
@@ -253,32 +254,32 @@ public class CommunityAddActivity extends AppCompatActivity {
 
         });
 
-        binding.writerName.setOnClickListener(v -> {
-            if (USER_INFO_NICKNAME.isEmpty() && nickname_select == 0) {
-                shardpref.putString("returnPage", TAG);
-                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-                intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");
-                intent.putExtra("flag", "닉네임없음");
-                intent.putExtra("left_btn_txt", "취소");
-                intent.putExtra("right_btn_txt", "확인");
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            } else {
-                if (nickname_select == 0) {
-                    nickname_select = 1;
-                    user_input_name = USER_INFO_NICKNAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-                    binding.writerName.setBackgroundColor(Color.parseColor("#E0EAFB"));
-                } else {
-                    nickname_select = 0;
-                    user_input_name = USER_INFO_NAME;
-                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-                    binding.writerName.setBackgroundColor(Color.parseColor("#ffffff"));
-                }
-            }
-
-        });
+//        binding.writerName.setOnClickListener(v -> {
+//            if (USER_INFO_NICKNAME.isEmpty() && nickname_select == 0) {
+//                shardpref.putString("returnPage", TAG);
+//                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+//                intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");
+//                intent.putExtra("flag", "닉네임없음");
+//                intent.putExtra("left_btn_txt", "취소");
+//                intent.putExtra("right_btn_txt", "확인");
+//                mContext.startActivity(intent);
+//                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            } else {
+//                if (nickname_select == 0) {
+//                    nickname_select = 1;
+//                    user_input_name = USER_INFO_NICKNAME;
+//                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
+//                    binding.writerName.setBackgroundColor(Color.parseColor("#E0EAFB"));
+//                } else {
+//                    nickname_select = 0;
+//                    user_input_name = USER_INFO_NAME;
+//                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
+//                    binding.writerName.setBackgroundColor(Color.parseColor("#ffffff"));
+//                }
+//            }
+//
+//        });
 
         //------게시글 이미지 등록 / 갤러리 열기
         binding.limitImg.setOnClickListener(v -> {
@@ -351,10 +352,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     }
     //피드 게시글 업로드
     public void AddFeedCommunity() {
-//        String title = binding.writeTitle.getText().toString();
-//        String content = binding.writeContents.getText().toString();
-        boardkind = binding.selectBoardkindTxt.getText().toString();
-        // category = binding.selectCategoryTxt.getText().toString();
+        boardkind = "자유게시판";
 
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + title);
@@ -411,7 +409,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     public void EditStroeNoti() {
         String title = binding.writeTitle.getText().toString();
         String content = binding.writeContents.getText().toString();
-        boardkind = binding.selectBoardkindTxt.getText().toString();
+        boardkind = "자유게시판";
         category = binding.selectCategoryTxt.getText().toString();
 
         dlog.i("-----AddStroeNoti Check-----");

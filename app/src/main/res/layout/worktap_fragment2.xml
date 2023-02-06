@@ -227,7 +227,9 @@
         android:id="@+id/login_alert_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false">
+        android:background="#4D000000"
+        android:clickable="false"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/loading_view"

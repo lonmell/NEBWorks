@@ -1,218 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    tools:context=".ui.community.CommunityAddActivity">
-
-    <RelativeLayout
+    android:layout_height="match_parent">
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="NestedWeights">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".ui.community.CommunityAddActivity">
 
         <LinearLayout
-            android:id="@+id/back_btn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:gravity="center"
-            android:layout_marginStart="10dp"
-            tools:ignore="RtlSymmetry">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:background="@drawable/close"
-                android:padding="20dp" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/invate_code_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/back_btn"
-            android:layout_alignBottom="@+id/back_btn"
-            android:layout_toEndOf="@+id/back_btn"
-            android:fontFamily="@font/applesdgothicneo"
-            android:gravity="start|center"
-            android:paddingStart="30dp"
-            android:text="게시글쓰기"
-            android:textColor="#696969"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText,RtlSymmetry" />
-        <LinearLayout
-            android:id="@+id/top_line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/invate_code_input"
-            android:background="#f2f2f2"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/top_line"
-            android:orientation="horizontal"
-            android:weightSum="2">
-            <TextView
-                android:id="@+id/select_boardkind_txt"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#ffffff"
-                android:gravity="center|start"
-                android:paddingStart="15dp"
-                android:paddingEnd="10dp"
-                android:text="게시판 선택"
-                android:textColor="#696969"
-                android:textSize="16sp"
-                android:layout_weight="1"
-                tools:ignore="HardcodedText,TextContrastCheck" />
-            <LinearLayout
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#f2f2f2"/>
-            <TextView
-                android:id="@+id/select_category_txt"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#ffffff"
-                android:gravity="center|start"
-                android:paddingStart="15dp"
-                android:paddingEnd="10dp"
-                android:text="키워드 선택"
-                android:textColor="#696969"
-                android:textSize="16sp"
-                android:layout_weight="1"
-                tools:ignore="HardcodedText,TextContrastCheck" />
-        </LinearLayout>
-
-    </RelativeLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#f2f2f2"
-        android:orientation="horizontal" />
-
-    <EditText
-        android:id="@+id/write_title"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#ffffff"
-        android:hint="제목을 입력하세요"
-        android:paddingStart="15dp"
-        android:textColor="@color/black"
-        android:inputType="text"
-        android:textColorHint="#a9a9a9"
-        tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck"
-        android:autofillHints=""
-        android:importantForAutofill="no" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#f2f2f2"
-        android:orientation="horizontal" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#696969"
-            android:orientation="horizontal" />
-
-        <EditText
-            android:id="@+id/write_contents"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/input_area"
-            android:layout_marginBottom="0dp"
-            android:background="#ffffff"
-            android:gravity="top"
-            android:hint="내용을 입력하세요."
-            android:inputType="textMultiLine"
-            android:padding="15dp"
-            android:scrollHorizontally="false"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="#a9a9a9"
-            tools:ignore="HardcodedText,TextContrastCheck" />
-
-        <ImageView
-            android:id="@+id/limit_img"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_above="@+id/input_area"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/empty_photo"
-            android:scaleType="fitXY" />
-        <LinearLayout
-            android:id="@+id/input_area"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#f2f2f2"
-                android:orientation="horizontal" />
-
-            <TextView
-                android:id="@+id/writer_name"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/blue_200"
-                android:fontFamily="@font/applesdgothicneo"
-                android:padding="15dp"
-                android:text="   닉네임으로 작성 "
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:drawableStartCompat="@drawable/ic_full_round_check"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-
-            <TextView
-                android:id="@+id/addcommunity_btn"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:fontFamily="@font/applesdgothicneo"
-                android:gravity="center"
-                android:padding="15dp"
-                android:text="등록"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
+                tools:ignore="NestedWeights">
 
+                <TextView
+                    android:id="@+id/invate_code_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="59dp"
+                    android:layout_alignTop="@+id/back_btn"
+                    android:layout_alignBottom="@+id/back_btn"
+                    android:fontFamily="@font/applesdgothicneo"
+                    android:gravity="center"
+                    android:paddingStart="30dp"
+                    android:text="커뮤니티"
+                    android:textColor="#696969"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+
+                <LinearLayout
+                    android:id="@+id/back_btn"
+                    android:layout_width="59dp"
+                    android:layout_height="59dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    tools:ignore="RtlSymmetry">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/find_right_arrow"
+                        android:padding="20dp"
+                        android:rotation="180" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/top_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/invate_code_input"
+                    android:background="#f2f2f2" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="26dp"
+                android:paddingBottom="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gangwonedu_bold"
+                    android:gravity="start"
+                    android:text="게시글 작성"
+                    android:textColor="@color/black"
+                    android:textSize="28sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="start"
+                    android:text="제목"
+                    android:layout_marginTop="21dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+
+                <EditText
+                    android:id="@+id/write_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/default_input_round"
+                    android:hint="제목을 작성해주세요"
+                    android:paddingStart="15dp"
+                    android:textColor="@color/black"
+                    android:inputType="text"
+                    android:layout_marginTop="4dp"
+                    android:textColorHint="#a9a9a9"
+                    tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck"
+                    android:autofillHints=""
+                    android:importantForAutofill="no" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="start"
+                    android:text="내용"
+                    android:layout_marginTop="13dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+                <EditText
+                    android:id="@+id/write_contents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="368dp"
+                    android:layout_above="@+id/input_area"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/default_input_round"
+                    android:gravity="top"
+                    android:hint="내용을 입력하세요."
+                    android:inputType="textMultiLine"
+                    android:padding="15dp"
+                    android:scrollHorizontally="false"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="#a9a9a9"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+
+                <ImageView
+                    android:id="@+id/limit_img"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_above="@+id/input_area"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/empty_photo"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="start"
+                    android:text="키워드(선택)"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+
+                <TextView
+                    android:id="@+id/select_category_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="59dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/default_input_round"
+                    android:gravity="center|start"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="10dp"
+                    android:text="#공유해요"
+                    android:textColor="#696969"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="59dp"
+                    app:cardBackgroundColor="@color/new_blue"
+                    app:cardCornerRadius="5dp"
+                    android:layout_marginTop="20dp"
+                    app:cardElevation="0dp">
+                    <TextView
+                        android:id="@+id/addcommunity_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:gravity="center"
+                        android:padding="15dp"
+                        android:text="전송하기"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
         </LinearLayout>
-        <RelativeLayout
-            android:id="@+id/login_alert_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="false"
-            android:visibility="gone">
+    </androidx.core.widget.NestedScrollView>
+    <RelativeLayout
+        android:id="@+id/login_alert_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4D000000"
+        android:clickable="false"
+        android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/loading_view"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                tools:ignore="ContentDescription" />
+        <ImageView
+            android:id="@+id/loading_view"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            tools:ignore="ContentDescription" />
 
-        </RelativeLayout>
     </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

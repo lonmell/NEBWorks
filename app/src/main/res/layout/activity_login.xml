@@ -36,10 +36,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_regular"
-            android:textStyle="bold"
+            android:text="이메일"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:text="이메일"
+            android:textStyle="bold"
             tools:ignore="TextContrastCheck" />
 
         <EditText
@@ -74,10 +74,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_regular"
-            android:textStyle="bold"
+            android:text="비밀번호"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:text="비밀번호"
+            android:textStyle="bold"
             tools:ignore="TextContrastCheck" />
 
 
@@ -190,9 +190,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/pretendard_regular"
             android:gravity="center"
             android:text="이메일 찾기"
-            android:fontFamily="@font/pretendard_regular"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -208,8 +208,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:fontFamily="@font/pretendard_regular"
+            android:gravity="center"
             android:text="비밀번호 재설정"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -219,11 +219,11 @@
         android:id="@+id/middle_line2"
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:orientation="horizontal"
         android:weightSum="3"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toTopOf="@+id/social_box"
         app:layout_constraintTop_toBottomOf="@+id/middle_line">
 
@@ -231,8 +231,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:layout_marginEnd="16dp"
+            android:layout_weight="1"
             android:background="@color/new_blue" />
 
         <TextView
@@ -240,9 +240,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:text="소셜계정으로 로그인"
-            android:fontFamily="@font/pretendard_bold"
             android:textColor="@color/new_blue"
             android:textSize="14sp" />
 
@@ -250,8 +250,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:layout_marginStart="16dp"
+            android:layout_weight="1"
             android:background="@color/new_blue" />
     </LinearLayout>
 
@@ -325,22 +325,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+        <ImageView
+            android:id="@+id/loading_view"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
             android:layout_centerInParent="true"
-            app:cardBackgroundColor="#ffffff"
-            app:cardCornerRadius="120dp"
-            app:cardElevation="0dp">
-
-            <ImageView
-                android:id="@+id/loading_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                tools:ignore="ContentDescription" />
-        </androidx.cardview.widget.CardView>
+            android:layout_alignParentBottom="true"
+            tools:ignore="ContentDescription" />
     </RelativeLayout>
 
     <TextView
