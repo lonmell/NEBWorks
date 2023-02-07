@@ -362,7 +362,11 @@ public class WorkstatusFragment extends Fragment {
         Month = toDay.substring(5, 7);
         Day = toDay.substring(8, 10);
         getYMPicker = Year + "-" + Month;
-        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+        if (chng_icon) {
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+        } else {
+            binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+        }
 
         shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
 
