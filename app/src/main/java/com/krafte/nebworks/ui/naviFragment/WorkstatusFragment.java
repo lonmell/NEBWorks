@@ -505,6 +505,11 @@ public class WorkstatusFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                if (month < Integer.parseInt(Month)) {
+                    cal.add(Calendar.MONTH, - (Integer.parseInt(Month) - (month + 1)));
+                } else {
+                    cal.add(Calendar.MONTH, ((month + 1)  - Integer.parseInt(Month)));
+                }
                 Year = String.valueOf(year);
                 Month = String.valueOf(month + 1);
                 Day = String.valueOf(dayOfMonth);
