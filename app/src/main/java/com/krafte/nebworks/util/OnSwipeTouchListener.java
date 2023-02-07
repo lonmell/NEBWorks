@@ -2,16 +2,15 @@ package com.krafte.nebworks.util;
 
 
 import android.content.Context;
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent; import android.view.View;
 import android.view.View.OnTouchListener;
 
-import androidx.core.view.GestureDetectorCompat;
-
 public class OnSwipeTouchListener implements OnTouchListener {
 
+    MotionEvent nullEvent = null;
     private final GestureDetector gestureDetector;
 
     public OnSwipeTouchListener (Context ctx){
@@ -20,6 +19,9 @@ public class OnSwipeTouchListener implements OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        long downTime = SystemClock.uptimeMillis();
+        long eventTime = SystemClock.uptimeMillis();
+        nullEvent = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, event.getX(), event.getY(), 0);
         return gestureDetector.onTouchEvent(event);
     }
 
@@ -37,6 +39,8 @@ public class OnSwipeTouchListener implements OnTouchListener {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             boolean result = false;
             try {
+                if (e1 == null)
+                    e1 = nullEvent;
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
                 if (Math.abs(diffX) > Math.abs(diffY)) {
