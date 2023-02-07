@@ -118,13 +118,14 @@ public class PayManagementActivity extends AppCompatActivity {
             Tap = shardpref.getString("Tap", "0");
 
             binding.backBtn.setOnClickListener(v -> {
-                shardpref.putInt("SELECT_POSITION", 0);
-                shardpref.putInt("SELECT_POSITION_sub", 0);
-                if (USER_INFO_AUTH.equals("0")) {
-                    pm.Main(mContext);
-                } else {
-                    pm.Main2(mContext);
-                }
+                super.onBackPressed();
+//                shardpref.putInt("SELECT_POSITION", 0);
+//                shardpref.putInt("SELECT_POSITION_sub", 0);
+//                if (USER_INFO_AUTH.equals("0")) {
+//                    pm.Main(mContext);
+//                } else {
+//                    pm.Main2(mContext);
+//                }
             });
 
             binding.select01.setOnClickListener(v -> {
@@ -278,14 +279,14 @@ public class PayManagementActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-        shardpref.putInt("SELECT_POSITION", 0);
-        shardpref.putInt("SELECT_POSITION_sub", 0);
-        if (USER_INFO_AUTH.equals("0")) {
-            pm.Main(mContext);
-        } else {
-            pm.Main2(mContext);
-        }
+        super.onBackPressed();
+//        shardpref.putInt("SELECT_POSITION", 0);
+//        shardpref.putInt("SELECT_POSITION_sub", 0);
+//        if (USER_INFO_AUTH.equals("0")) {
+//            pm.Main(mContext);
+//        } else {
+//            pm.Main2(mContext);
+//        }
     }
 
     @Override
