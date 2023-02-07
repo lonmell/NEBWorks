@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -756,19 +757,19 @@ public class MainFragment extends AppCompatActivity {
 
         if (i == 0) {
             bottom_icon01.setBackgroundResource(R.drawable.ic_main_on);
-            bottom_icon01tv.setTextColor(Color.parseColor("#6395EC"));
+            bottom_icon01tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         } else if (i == 1) {
             bottom_icon02.setBackgroundResource(R.drawable.ic_task_on);
-            bottom_icon02tv.setTextColor(Color.parseColor("#6395EC"));
+            bottom_icon02tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         } else if (i == 2) {
             bottom_icon03.setBackgroundResource(R.drawable.ic_member_on);
-            bottom_icon03tv.setTextColor(Color.parseColor("#6395EC"));
+            bottom_icon03tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         } else if (i == 3) {
             bottom_icon04.setBackgroundResource(R.drawable.ic_community_on);
-            bottom_icon04tv.setTextColor(Color.parseColor("#6395EC"));
+            bottom_icon04tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         } else if (i == 4) {
             bottom_icon05.setBackgroundResource(R.drawable.ic_more_on);
-            bottom_icon05tv.setTextColor(Color.parseColor("#6395EC"));
+            bottom_icon05tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
         }
     }
 
