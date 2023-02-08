@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -42,7 +43,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -155,7 +158,28 @@ public class CommunityDetailActivity extends AppCompatActivity {
         setBtnEvent();
         DataCheck();
         UpdateView(feed_id);
-        binding.title.setText(title);
+
+        Resources res = getResources();
+        List<String> forbiList = Arrays.asList(res.getStringArray(R.array.forbidden_word));
+//        List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
+        dlog.i("String xml Forbidden Word : " + forbiList);
+        String titleForbidden = "";
+        String contentForbidden = "";
+        for(int i = 0; i < forbiList.size(); i++){
+            if(title.contains(forbiList.get(i))){
+                titleForbidden = title.replace(forbiList.get(i)," ○○○ ");
+            }
+            if(contents.contains(forbiList.get(i))){
+                contentForbidden = contents.replace(forbiList.get(i)," ○○○ ");
+            }
+        }
+
+        dlog.d("forbidden: " + title);
+        dlog.d("forbidden: " + titleForbidden);
+        dlog.d("forbidden: " + contents);
+        dlog.d("forbidden: " + contentForbidden);
+
+        binding.title.setText(titleForbidden.equals("")?title:titleForbidden);
         Glide.with(mContext).load(writer_img_path)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.drawable.certi01)
@@ -168,8 +192,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 .into(binding.feedImg);
         binding.writerName.setText(writer_name);
         binding.date.setText(updated_at);
-        binding.contents.setText(contents);
-        binding.cate.setText("#" + category);
+        binding.contents.setText(contentForbidden.equals("")?contents:contentForbidden);
+        binding.cate.setText("#" + category.replace("#", ""));
         binding.viewCom.setText("조회수 " + view_cnt + " / 댓글 " + comment_cnt);
         binding.backBtn.setOnClickListener(v -> {
             RemoveShared();

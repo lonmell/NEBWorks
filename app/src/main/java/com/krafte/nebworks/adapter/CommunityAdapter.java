@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.ViewHolder> {
     private static final String TAG = "CommunityAdapter";
@@ -116,7 +119,21 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             }
             holder.rank_tv.setText(String.valueOf(position+1));
 
-            holder.title.setText(item.getTitle().equals("null")?"":item.getTitle());
+            Resources res = mContext.getResources();
+            List<String> forbiList = Arrays.asList(res.getStringArray(R.array.forbidden_word));
+//            List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
+            dlog.i("String xml Forbidden Word : " + forbiList);
+            String title = "";
+            String content = "";
+            for(int i = 0; i < forbiList.size(); i++){
+                if(item.getTitle().contains(forbiList.get(i))){
+                    title = item.getTitle().replace(forbiList.get(i)," ○○○ ");
+                }
+                if(item.getContents().contains(forbiList.get(i))){
+                    content = item.getContents().replace(forbiList.get(i)," ○○○ ");
+                }
+            }
+            holder.title.setText(title.equals("")?item.getTitle():title);
 
             holder.write_date.setText(item.getCreated_at().equals("null")?"":item.getCreated_at());
 
@@ -127,9 +144,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
                     .into(holder.profile_img);
             holder.name.setText(item.getWriter_name().equals("null")?"":item.getWriter_name());
 
-            holder.contents.setText(item.getContents().equals("null")?"":item.getContents());
+            holder.contents.setText(content.equals("")?item.getContents():content);
             if(!item.getCategory().isEmpty()){
-                holder.categorytv.setText(item.getCategory());
+                holder.categorytv.setText("#" + item.getCategory().replace("#", ""));
             }else{
                 holder.category_box.setVisibility(View.GONE);
             }
