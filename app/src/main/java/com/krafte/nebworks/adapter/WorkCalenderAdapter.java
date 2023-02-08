@@ -2,6 +2,7 @@ package com.krafte.nebworks.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -133,31 +134,31 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
 
             if (Objects.equals(month, dc.GET_MONTH)) {
                 if (Objects.equals(item.getSun(), dc.GET_DAY)) {
-                    holder.sun_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.sun.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.sun.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 }
                 if (Objects.equals(item.getMon(), dc.GET_DAY)) {
-                    holder.mon_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.mon.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.mon.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 }
                 if (Objects.equals(item.getTue(), dc.GET_DAY)) {
-                    holder.tue_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.tue.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.tue.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 }
                 if (Objects.equals(item.getWed(), dc.GET_DAY)) {
-                    holder.wed_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.wed.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.wed.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 }
                 if (Objects.equals(item.getThu(), dc.GET_DAY)) {
-                    holder.thu_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.thu.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.thu.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 }
                 if (Objects.equals(item.getFri(), dc.GET_DAY)) {
-                    holder.fri_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.fri.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.fri.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 }
                 if (Objects.equals(item.getSat(), dc.GET_DAY)) {
-                    holder.sat_layout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.sat.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.sat.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 }
             }
@@ -187,6 +188,9 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                                         jsonObject.getString("complete_kind"),
                                         Collections.singletonList(jsonObject.getString("users"))
                                 ));
+                                if(jsonObject.getString("kind").equals("holiday")){
+                                    holder.sun.setTextColor(Color.parseColor("#FF687A"));
+                                }
                             }
                         }
                     }
@@ -220,6 +224,9 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                                             jsonObject.getString("complete_kind"),
                                             Collections.singletonList(jsonObject.getString("users"))
                                     ));
+                                    if(jsonObject.getString("kind").equals("holiday")){
+                                        holder.mon.setTextColor(Color.parseColor("#FF687A"));
+                                    }
                                 }
                             }
                         }
@@ -252,6 +259,9 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                                         jsonObject.getString("complete_kind"),
                                         Collections.singletonList(jsonObject.getString("users"))
                                 ));
+                                if(jsonObject.getString("kind").equals("holiday")){
+                                    holder.tue.setTextColor(Color.parseColor("#FF687A"));
+                                }
                             }
                         }
                     }
@@ -280,6 +290,9 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                                     jsonObject.getString("complete_kind"),
                                     Collections.singletonList(jsonObject.getString("users"))
                             ));
+                            if(jsonObject.getString("kind").equals("holiday")){
+                                holder.wed.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -307,6 +320,9 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                                     jsonObject.getString("complete_kind"),
                                     Collections.singletonList(jsonObject.getString("users"))
                             ));
+                            if(jsonObject.getString("kind").equals("holiday")){
+                                holder.thu.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -334,6 +350,9 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                                     jsonObject.getString("complete_kind"),
                                     Collections.singletonList(jsonObject.getString("users"))
                             ));
+                            if(jsonObject.getString("kind").equals("holiday")){
+                                holder.fri.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -362,6 +381,9 @@ public class WorkCalenderAdapter extends RecyclerView.Adapter<WorkCalenderAdapte
                                     jsonObject.getString("complete_kind"),
                                     Collections.singletonList(jsonObject.getString("users"))
                             ));
+                            if(jsonObject.getString("kind").equals("holiday")){
+                                holder.sat.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }

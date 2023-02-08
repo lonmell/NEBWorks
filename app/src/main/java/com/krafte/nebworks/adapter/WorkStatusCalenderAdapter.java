@@ -2,6 +2,7 @@ package com.krafte.nebworks.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -184,6 +185,9 @@ public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusC
                                     jsonObject.getString("worktime"),
                                     jsonObject.getString("workyoil")
                             ));
+                            if(jsonObject.getString("worktime").equals("holiday")){
+                                holder.sun.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -213,6 +217,9 @@ public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusC
                                     jsonObject.getString("worktime"),
                                     jsonObject.getString("workyoil")
                             ));
+                            if(jsonObject.getString("worktime").equals("holiday")){
+                                holder.mon.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -243,6 +250,9 @@ public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusC
                                     jsonObject.getString("worktime"),
                                     jsonObject.getString("workyoil")
                             ));
+                            if(jsonObject.getString("worktime").equals("holiday")){
+                                holder.tue.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -272,6 +282,9 @@ public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusC
                                     jsonObject.getString("worktime"),
                                     jsonObject.getString("workyoil")
                             ));
+                            if(jsonObject.getString("worktime").equals("holiday")){
+                                holder.wed.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -301,6 +314,9 @@ public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusC
                                     jsonObject.getString("worktime"),
                                     jsonObject.getString("workyoil")
                             ));
+                            if(jsonObject.getString("worktime").equals("holiday")){
+                                holder.thu.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -330,6 +346,9 @@ public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusC
                                     jsonObject.getString("worktime"),
                                     jsonObject.getString("workyoil")
                             ));
+                            if(jsonObject.getString("worktime").equals("holiday")){
+                                holder.fri.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
@@ -359,6 +378,9 @@ public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusC
                                     jsonObject.getString("worktime"),
                                     jsonObject.getString("workyoil")
                             ));
+                            if(jsonObject.getString("worktime").equals("holiday")){
+                                holder.sat.setTextColor(Color.parseColor("#FF687A"));
+                            }
                         }
                     }
                 }
