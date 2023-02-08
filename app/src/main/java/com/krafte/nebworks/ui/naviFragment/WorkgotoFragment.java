@@ -526,6 +526,20 @@ public class WorkgotoFragment extends Fragment {
                 setCalender(-1);
             }
         });
+
+        binding.taskList.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            @Override
+            public void onSwipeLeft() {
+//                super.onSwipeLeft();
+                setCalender(1);
+            }
+
+            @Override
+            public void onSwipeRight() {
+//                super.onSwipeRight();
+                setCalender(-1);
+            }
+        });
     }
 
 

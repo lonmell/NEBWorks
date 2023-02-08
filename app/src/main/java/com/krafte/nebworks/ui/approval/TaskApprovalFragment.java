@@ -446,6 +446,20 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 setCalender(-1);
             }
         });
+
+        binding.totalApploveList1.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            @Override
+            public void onSwipeLeft() {
+//                super.onSwipeLeft();
+                setCalender(1);
+            }
+
+            @Override
+            public void onSwipeRight() {
+//                super.onSwipeRight();
+                setCalender(-1);
+            }
+        });
     }
 
     private void setCalender(int state) {

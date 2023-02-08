@@ -42,6 +42,7 @@ import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment1;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment2;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment3;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment4;
+import com.krafte.nebworks.util.SwipeFrameLayout;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.OnSwipeTouchListener;
@@ -600,6 +601,16 @@ public class WorkstatusFragment extends Fragment {
                 setCalender(-1);
             }
         });
+
+        binding.statusChildFragmentContainer.setOnSwipeListener(new SwipeFrameLayout.OnSwipeListener() {
+            @Override
+            public void onSwipe(View view, int direction) {
+                if (direction == 1)
+                    setCalender(direction);
+                else if (direction == -1)
+                    setCalender(direction);
+            }
+        });
     }
 
     private void setCalender(int state) {
@@ -621,6 +632,7 @@ public class WorkstatusFragment extends Fragment {
             binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
         }
         SetCalenderData(Year, Month);
+        SendToday();
     }
 
     private void setChildFragment(Fragment child) {
