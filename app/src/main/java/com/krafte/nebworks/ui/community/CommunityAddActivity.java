@@ -181,7 +181,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         String feed_img_path    = shardpref.getString("feed_img_path","");
         String category         = shardpref.getString("category","");
 
-        binding.selectCategoryTxt.setText(category.isEmpty()?"#공유해요":category);
+        binding.selectCategoryTxt.setText(category.isEmpty()?"#정보에요":category);
         binding.writeTitle.setText(title);
         binding.writeContents.setText(contents);
         Glide.with(mContext).load(feed_img_path)
@@ -297,6 +297,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         } else {
             user_input_name = USER_INFO_NAME;
         }
+        category = binding.selectCategoryTxt.getText().toString();
         CommTitle = binding.writeTitle.getText().toString();
         CommContnets = binding.writeContents.getText().toString();
 
@@ -336,16 +337,16 @@ public class CommunityAddActivity extends AppCompatActivity {
         title = binding.writeTitle.getText().toString();
         content = binding.writeContents.getText().toString();
         res = getResources();
-        List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
-//        dlog.i("String xml Forbidden Word : " + forbiList);
-        for(int i = 0; i < forbiList.size(); i++){
-            if(title.contains(forbiList.get(i))){
-                title = title.replace(forbiList.get(i)," ○○○ ");
-            }
-            if(content.contains(forbiList.get(i))){
-                content = content.replace(forbiList.get(i)," ○○○ ");
-            }
-        }
+//        List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
+////        dlog.i("String xml Forbidden Word : " + forbiList);
+//        for(int i = 0; i < forbiList.size(); i++){
+//            if(title.contains(forbiList.get(i))){
+//                title = title.replace(forbiList.get(i)," ○○○ ");
+//            }
+//            if(content.contains(forbiList.get(i))){
+//                content = content.replace(forbiList.get(i)," ○○○ ");
+//            }
+//        }
 //        dlog.i("ForbiddenWordCheck title : " + title);
 //        dlog.i("ForbiddenWordCheck contents : " + content);
         return true;
