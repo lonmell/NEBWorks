@@ -24,6 +24,7 @@ public interface FeedNotiEditInterface {
             @Field("kind") String kind,
             @Field("boardkind") String boardkind,
             @Field("category") String category,
-            @Field("nicknameyn") String nicknameyn
+            @Field("nicknameyn") String nicknameyn,
+            @Field("fix_yn") String fix_yn
     );
 }

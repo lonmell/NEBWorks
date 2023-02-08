@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="SpeakableTextPresentCheck"
+    android:background="@color/white"
+    tools:context=".ui.user.MyListActivity">
+
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
+
+        <LinearLayout
+            android:id="@+id/back_btn"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/find_right_arrow"
+                android:rotation="180" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:layout_below="@+id/top_bar"/>
+    <LinearLayout
+        android:id="@+id/no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_bar"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="98dp"
+                    android:layout_height="98dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="94dp"
+                    android:background="@drawable/no_nofifi_data" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="작성 데이터가\n존재하지 않습니다"
+                    android:textSize="28sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/gangwonedu_bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="29dp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</RelativeLayout>

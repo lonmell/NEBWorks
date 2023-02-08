@@ -24,6 +24,7 @@ public class CommunityOptionActivity extends Activity {
     PreferenceHelper shardpref;
     String USER_INFO_ID = "";
 
+    String title = "";
     String state = "";
     String click_htn = "";
     String comment_id = "";
@@ -54,6 +55,7 @@ public class CommunityOptionActivity extends Activity {
         state = intent.getStringExtra("state");
         comment_id = intent.getStringExtra("comment_id");
         comment_contents = intent.getStringExtra("comment_contents");
+        title = intent.getStringExtra("title");
 
         setBtnEvent();
 
@@ -74,6 +76,7 @@ public class CommunityOptionActivity extends Activity {
         binding.feedEdit.setOnClickListener(v -> {
             if(state.equals("EditComment")){
                 shardpref.putString("editstate","EditComment");
+                shardpref.putString("comment_title",title);
                 shardpref.putString("comment_id",comment_id);
                 shardpref.putString("comment_contents",comment_contents);
             }else if(state.equals("EditFeed")){
@@ -145,7 +148,6 @@ public class CommunityOptionActivity extends Activity {
             ((Activity) mContext).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         }
-
-
     }
+
 }

@@ -139,7 +139,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                 break;
         }
         binding.pageTitle.setText(pagetitle);
-        binding.barTitle.setText("커뮤니티");
+//        binding.barTitle.setText("커뮤니티");
 
     }
 
@@ -216,6 +216,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
 
     int total_cnt = 0;
 
+
     public void setRecyclerView() {
         //Best List
         allClear();
@@ -268,6 +269,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                     "",
                                     "",
                                     "",
+                                    "n",
                                     "n"
                             ));
                         } else {
@@ -299,7 +301,8 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                                 jsonObject.getString("close_date"),
                                                 jsonObject.getString("boardkind"),
                                                 jsonObject.getString("category"),
-                                                jsonObject.getString("mylikeyn")
+                                                jsonObject.getString("mylikeyn"),
+                                                jsonObject.getString("fix_yn")
                                         ));
                                     }
                                 }
@@ -396,6 +399,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                     "",
                                     "",
                                     "",
+                                    "n",
                                     "n"
                             ));
                         } else {
@@ -432,7 +436,8 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                                         jsonObject.getString("close_date"),
                                                         jsonObject.getString("boardkind"),
                                                         jsonObject.getString("category"),
-                                                        jsonObject.getString("mylikeyn")
+                                                        jsonObject.getString("mylikeyn"),
+                                                        jsonObject.getString("fix_yn")
                                                 ));
                                             }
                                         } else {
@@ -457,7 +462,8 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                                     jsonObject.getString("close_date"),
                                                     jsonObject.getString("boardkind"),
                                                     jsonObject.getString("category"),
-                                                    jsonObject.getString("mylikeyn")
+                                                    jsonObject.getString("mylikeyn"),
+                                                    jsonObject.getString("fix_yn")
                                             ));
                                         }
                                     }

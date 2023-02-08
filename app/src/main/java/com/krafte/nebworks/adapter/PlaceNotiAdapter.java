@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,6 +93,15 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
                 holder.title.setText(item.getTitle());
             }
 
+            if(item.getFix_yn().equals("y")){
+                holder.fix_icon.setVisibility(View.VISIBLE);
+                holder.area_box.setBackgroundColor(Color.parseColor("#E0EAFB"));
+                holder.date.setTextColor(Color.parseColor("#1762E5"));
+            }else{
+                holder.fix_icon.setVisibility(View.GONE);
+                holder.area_box.setBackgroundColor(Color.parseColor("#ffffff"));
+                holder.date.setTextColor(Color.parseColor("#949494"));
+            }
             String year = item.getCreated_at().substring(0,4);
             String month = item.getCreated_at().substring(5,7);
             String day = item.getCreated_at().substring(8,10);
@@ -150,7 +160,7 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
 
         TextView title, date, writer_jikgup;
         TextView comment_cnt;
-        RelativeLayout list_edit_area,area_box;
+        RelativeLayout list_edit_area,area_box, fix_icon;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -161,6 +171,7 @@ public class PlaceNotiAdapter extends RecyclerView.Adapter<PlaceNotiAdapter.View
             writer_jikgup   = itemView.findViewById(R.id.writer_jikgup);
             list_edit_area  = itemView.findViewById(R.id.list_edit_area);
             area_box        = itemView.findViewById(R.id.area_box);
+            fix_icon        = itemView.findViewById(R.id.fix_icon);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");

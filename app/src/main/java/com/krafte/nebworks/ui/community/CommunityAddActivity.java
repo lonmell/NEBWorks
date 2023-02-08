@@ -62,10 +62,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -369,7 +366,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category, String.valueOf(nickname_select));
+        Call<String> call = api.getData(place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category, String.valueOf(nickname_select),"");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -427,7 +424,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category, String.valueOf(nickname_select));
+        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category, String.valueOf(nickname_select),"");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

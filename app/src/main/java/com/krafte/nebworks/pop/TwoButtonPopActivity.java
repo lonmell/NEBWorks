@@ -449,7 +449,6 @@ public class TwoButtonPopActivity extends Activity {
 
     //댓글삭제
     public void CommentDelete(String id) {
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedCommentDelInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -468,7 +467,12 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 if(jsonResponse.replace("\"","").equals("")){
+                                    Toast_Nomal(shardpref.getString("comment_title","") + " 댓글 삭제가 완료되었습니다");
                                     shardpref.putString("editstate","DelComment");
+                                    shardpref.putInt("page_kind",1);
+                                    shardpref.remove("comment_title");
+                                    shardpref.remove("comment_id");
+                                    shardpref.remove("comment_contents");
                                     ClosePop();
                                 }
                             } catch (Exception e) {
@@ -507,6 +511,17 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 if(jsonResponse.replace("\"","").equals("success")){
+                                    shardpref.remove("feed_id");
+                                    shardpref.remove("title");
+                                    shardpref.remove("contents");
+                                    shardpref.remove("writer_id");
+                                    shardpref.remove("writer_name");
+                                    shardpref.remove("writer_img_path");
+                                    shardpref.remove("feed_img_path");
+                                    shardpref.remove("view_cnt");
+                                    shardpref.remove("comment_cnt");
+                                    shardpref.remove("category");
+                                    shardpref.remove("state");
                                     ClosePop();
                                 }
                             } catch (Exception e) {

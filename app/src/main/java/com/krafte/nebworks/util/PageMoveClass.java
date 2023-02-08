@@ -46,7 +46,9 @@ import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity2;
 import com.krafte.nebworks.ui.user.DeleteUserActivity;
 import com.krafte.nebworks.ui.user.FindEmailActivity;
+import com.krafte.nebworks.ui.user.FobiddenListActivity;
 import com.krafte.nebworks.ui.user.JoinActivity;
+import com.krafte.nebworks.ui.user.MyListActivity;
 import com.krafte.nebworks.ui.user.ProfileEditActivity;
 import com.krafte.nebworks.ui.user.SearchAccountActivity;
 import com.krafte.nebworks.ui.user.VerificationActivity;
@@ -445,6 +447,23 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
+    @Override
+    public void MyList(Context context) {
+        Intent intent = new Intent(context, MyListActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void FobiddenList(Context context) {
+        Intent intent = new Intent(context, FobiddenListActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
     //--ui.career
     @Override
     public void Career(Context context) {
@@ -486,6 +505,7 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
 
     //--ui.contract
     @Override

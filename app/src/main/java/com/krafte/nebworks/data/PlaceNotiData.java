@@ -27,12 +27,13 @@ public class PlaceNotiData {
         String boardkind = "";
         String category = "";
         String mylikeyn = "";
+        String fix_yn = "";
 
         public PlaceNotiData_list(String id, String place_id, String title, String contents,
                 String writer_id, String writer_name, String writer_img_path, String jikgup,
                 String view_cnt, String comment_cnt, String like_cnt, String link,
                 String feed_img_path, String created_at, String updated_at,
-                String open_date, String close_date, String boardkind, String category, String mylikeyn) {
+                String open_date, String close_date, String boardkind, String category, String mylikeyn, String fix_yn) {
             this.id = id;
             this.place_id = place_id;
             this.title = title;
@@ -53,6 +54,7 @@ public class PlaceNotiData {
             this.boardkind = boardkind;
             this.category = category;
             this.mylikeyn = mylikeyn;
+            this.fix_yn = fix_yn;
         }
 
         public String getId() {
@@ -213,6 +215,14 @@ public class PlaceNotiData {
 
         public void setMylikeyn(String mylikeyn) {
             this.mylikeyn = mylikeyn;
+        }
+
+        public String getFix_yn() {
+            return fix_yn;
+        }
+
+        public void setFix_yn(String fix_yn) {
+            this.fix_yn = fix_yn;
         }
     }
 }

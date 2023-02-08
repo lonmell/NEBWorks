@@ -291,6 +291,7 @@ public class community_fragment1 extends Fragment {
                                     "",
                                     "",
                                     "",
+                                    "n",
                                     "n"
                             ));
                         } else {
@@ -326,7 +327,8 @@ public class community_fragment1 extends Fragment {
                                                 jsonObject.getString("close_date"),
                                                 jsonObject.getString("boardkind"),
                                                 jsonObject.getString("category"),
-                                                jsonObject.getString("mylikeyn")
+                                                jsonObject.getString("mylikeyn"),
+                                                jsonObject.getString("fix_yn")
                                         ));
                                     }
                                 }
@@ -427,6 +429,7 @@ public class community_fragment1 extends Fragment {
                                     "",
                                     "",
                                     "",
+                                    "n",
                                     "n"
                             ));
                         } else {
@@ -463,7 +466,8 @@ public class community_fragment1 extends Fragment {
                                                         jsonObject.getString("close_date"),
                                                         jsonObject.getString("boardkind"),
                                                         jsonObject.getString("category"),
-                                                        jsonObject.getString("mylikeyn")
+                                                        jsonObject.getString("mylikeyn"),
+                                                        jsonObject.getString("fix_yn")
                                                 ));
                                             }
                                         }else{
@@ -488,7 +492,8 @@ public class community_fragment1 extends Fragment {
                                                     jsonObject.getString("close_date"),
                                                     jsonObject.getString("boardkind"),
                                                     jsonObject.getString("category"),
-                                                    jsonObject.getString("mylikeyn")
+                                                    jsonObject.getString("mylikeyn"),
+                                                    jsonObject.getString("fix_yn")
                                             ));
                                         }
                                     }

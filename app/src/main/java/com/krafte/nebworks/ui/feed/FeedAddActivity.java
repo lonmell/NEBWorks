@@ -144,10 +144,11 @@ public class FeedAddActivity extends AppCompatActivity {
         icon_on = mContext.getResources().getDrawable(R.drawable.ic_full_round_check);
         icon_off = mContext.getResources().getDrawable(R.drawable.resize_service_off);
 
-        setBtnEvent();
+
 
         //UI 데이터 세팅
         try {
+            setBtnEvent();
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             place_id        = PlaceCheckData.getInstance().getPlace_id();
             USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
@@ -273,11 +274,13 @@ public class FeedAddActivity extends AppCompatActivity {
     String Day = "";
     String getDatePicker = "";
     String getYMPicker = "";
+    boolean FIXYN = false;
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+//        super.onBackPressed();
 //        pm.PlaceWorkBack(mContext);
+        pm.FeedList(mContext);
     }
 
     public void setBtnEvent() {
@@ -387,6 +390,20 @@ public class FeedAddActivity extends AppCompatActivity {
 //                overridePendingTransition(R.anim.translate_up, 0);
             }
         });
+
+        binding.selectFix.setOnClickListener(v -> {
+            if(!FIXYN){
+                FIXYN = true;
+                binding.selectFixRound.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.selectFix.setBackgroundResource(R.drawable.default_select_on_round);
+                binding.selectFixTv.setTextColor(Color.parseColor("#000000"));
+            }else{
+                FIXYN = false;
+                binding.selectFixRound.setBackgroundResource(R.drawable.ic_empty_round);
+                binding.selectFix.setBackgroundResource(R.drawable.default_gray_round);
+                binding.selectFixTv.setTextColor(Color.parseColor("#54585A"));
+            }
+        });
     }
 
     String mem_id = "";
@@ -403,71 +420,6 @@ public class FeedAddActivity extends AppCompatActivity {
     String io_state = "";
 
     public void UserCheck() {
-//        dlog.i("---------UserCheck---------");
-//        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-//        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
-//        dlog.i("---------UserCheck---------");
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(AllMemberInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-//        Call<String> call = api.getData(place_id, USER_INFO_ID);
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                dlog.e("UserCheck function START");
-//                dlog.e("response 1: " + response.isSuccessful());
-//                runOnUiThread(() -> {
-//                    if (response.isSuccessful() && response.body() != null) {
-//                        String jsonResponse = rc.getBase64decode(response.body());
-//                        dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
-//                        dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
-//                        try {
-//                            //Array데이터를 받아올 때
-//                            JSONArray Response = new JSONArray(jsonResponse);
-//                            try {
-//                                mem_id = Response.getJSONObject(0).getString("id");
-//                                mem_name = Response.getJSONObject(0).getString("name");
-//                                mem_phone = Response.getJSONObject(0).getString("phone");
-//                                mem_gender = Response.getJSONObject(0).getString("gender");
-//                                mem_img_path = Response.getJSONObject(0).getString("img_path");
-//                                mem_jumin = Response.getJSONObject(0).getString("jumin");
-//                                mem_kind = Response.getJSONObject(0).getString("kind");
-//                                mem_join_date = Response.getJSONObject(0).getString("join_date");
-//                                mem_state = Response.getJSONObject(0).getString("state");
-//                                mem_jikgup = Response.getJSONObject(0).getString("jikgup");
-//                                mem_pay = Response.getJSONObject(0).getString("pay");
-//
-//                                dlog.i("------UserCheck-------");
-//                                USER_INFO_ID = mem_id;
-//                                dlog.i("프로필 사진 url : " + mem_img_path);
-//                                dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
-//                                dlog.i("성명 : " + mem_name);
-//                                dlog.i("부서 : " + mem_jikgup);
-//                                dlog.i("급여 : " + mem_pay);
-//                                dlog.i("------UserCheck-------");
-//
-//                                binding.userName.setText(mem_name + "|" + mem_jikgup);
-//
-//                            } catch (Exception e) {
-//                                dlog.i("UserCheck Exception : " + e);
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//
-//            }
-//
-//            @Override
-//            @SuppressLint("LongLogTag")
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                Log.e(TAG, "에러2 = " + t.getMessage());
-//            }
-//        });
         try{
             mem_id = UserCheckData.getInstance().getUser_id();
             mem_name = UserCheckData.getInstance().getUser_name();
@@ -498,6 +450,7 @@ public class FeedAddActivity extends AppCompatActivity {
     }
 
     public void AddStroeNoti() {
+        String fix_yn = "";
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + noti_title);
         dlog.i("content : " + noti_contents);
@@ -505,14 +458,16 @@ public class FeedAddActivity extends AppCompatActivity {
         dlog.i("Profile Url : " + ProfileUrl);
         dlog.i("EventStart : " + binding.eventStarttime.getText().toString());
         dlog.i("EventEnd : " + binding.eventEndttime.getText().toString());
+        dlog.i("fix_yn : " + (FIXYN?"y":"n"));
         dlog.i("-----AddStroeNoti Check-----");
+        fix_yn = (FIXYN?"y":"n");
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedNotiAddInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "",noti_event_start,noti_event_end,"1","","","");
+        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "",noti_event_start,noti_event_end,"1","","","",fix_yn);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

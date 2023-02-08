@@ -139,6 +139,12 @@ public class MoreFragment extends Fragment {
             //shardpref Area
             USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD","");
 
+            //개발자만 보이는 메뉴 - 혐오 용어 추가페이지
+            if(USER_INFO_ID.equals("199")){
+                binding.forbiddenArea.setVisibility(View.VISIBLE);
+            }else{
+                binding.forbiddenArea.setVisibility(View.GONE);
+            }
             if (!USER_INFO_AUTH.isEmpty()) {
                 if(!USER_LOGIN_METHOD.equals("NEB")){
                     binding.settingList05Txt.setText("연결해제");
@@ -175,7 +181,7 @@ public class MoreFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(!USER_INFO_ID.isEmpty() && !place_id.isEmpty()){
+        if((!USER_INFO_ID.isEmpty() && !place_id.isEmpty()) || (!USER_INFO_ID.equals("") && !place_id.equals(""))){
             SetAllMemberList();
         }
     }
@@ -205,6 +211,19 @@ public class MoreFragment extends Fragment {
             }
         });
 
+        binding.settingList031Txt.setOnClickListener(v -> {
+            MyListMove(0);//--작성게시글
+        });
+        binding.settingList032Txt.setOnClickListener(v -> {
+            MyListMove(1);//--작성댓글
+        });
+//        binding.settingList033Txt.setOnClickListener(v -> {
+//            MyListMove(2);//--북마크
+//        });
+        binding.forbiddenArea.setOnClickListener(v -> {
+            pm.FobiddenList(mContext);
+        });
+
         binding.settingList04Txt.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -220,6 +239,11 @@ public class MoreFragment extends Fragment {
                 pm.UserDel(mContext);
             }
         });
+    }
+
+    private void MyListMove(int i){
+        shardpref.putInt("page_kind",i);
+        pm.MyList(mContext);
     }
 
     public void SetAllMemberList() {

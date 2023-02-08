@@ -105,7 +105,7 @@ public class RepeatSetPop extends Activity {
         }, mYear, mMonth, mDay);
 
         if(RepeatTF){
-            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round);
+            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round_check);
             binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
             binding.select02Round.setBackgroundResource(R.drawable.ic_empty_round);
             binding.select02Box.setBackgroundResource(R.drawable.default_gray_round);
@@ -116,7 +116,7 @@ public class RepeatSetPop extends Activity {
             if(RepeatKind == 1){
                 //매일
                 binding.select03Box.setBackgroundResource(R.drawable.default_select_round);
-                binding.select03Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.select03Round.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
@@ -135,7 +135,7 @@ public class RepeatSetPop extends Activity {
                 binding.select03Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select03Round.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.select04Box.setBackgroundResource(R.drawable.default_select_round);
-                binding.select04Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.select04Round.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select05Round.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.yoilArea.setVisibility(View.GONE);
@@ -152,7 +152,7 @@ public class RepeatSetPop extends Activity {
                 binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.select05Box.setBackgroundResource(R.drawable.default_select_round);
-                binding.select05Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.select05Round.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.yoilArea.setVisibility(View.VISIBLE);
                 for(String str:yoillist_String.split(",")){
                     yoillist.add(str);
@@ -183,7 +183,7 @@ public class RepeatSetPop extends Activity {
         }else{
             binding.select01Round.setBackgroundResource(R.drawable.ic_empty_round);
             binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
-            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
+            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round_check);
             binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
 
             binding.select03Box.setBackgroundResource(R.drawable.grayback_gray_round);
@@ -233,7 +233,7 @@ public class RepeatSetPop extends Activity {
         RepeatTF = false;
         binding.select01Round.setBackgroundResource(R.drawable.ic_empty_round);
         binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
-        binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
+        binding.select02Round.setBackgroundResource(R.drawable.ic_full_round_check);
         binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
 
         binding.select03Box.setBackgroundResource(R.drawable.grayback_gray_round);
@@ -263,7 +263,7 @@ public class RepeatSetPop extends Activity {
                 binding.select05Round.setBackgroundResource(R.drawable.ic_empty_round);
             }
             RepeatTF = true;
-            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round);
+            binding.select01Round.setBackgroundResource(R.drawable.ic_full_round_check);
             binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
             binding.select02Round.setBackgroundResource(R.drawable.ic_empty_round);
             binding.select02Box.setBackgroundResource(R.drawable.default_gray_round);
@@ -276,7 +276,7 @@ public class RepeatSetPop extends Activity {
             RepeatTF = false;
             binding.select01Round.setBackgroundResource(R.drawable.ic_empty_round);
             binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
-            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
+            binding.select02Round.setBackgroundResource(R.drawable.ic_full_round_check);
             binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
 
             binding.select03Box.setBackgroundResource(R.drawable.grayback_gray_round);
@@ -297,7 +297,7 @@ public class RepeatSetPop extends Activity {
             if(RepeatTF){
                 RepeatKind = 1;
                 binding.select03Box.setBackgroundResource(R.drawable.default_select_round);
-                binding.select03Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.select03Round.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
@@ -320,7 +320,7 @@ public class RepeatSetPop extends Activity {
                 binding.select03Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select03Round.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.select04Box.setBackgroundResource(R.drawable.default_select_round);
-                binding.select04Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.select04Round.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select05Round.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.yoilArea.setVisibility(View.GONE);
@@ -341,7 +341,7 @@ public class RepeatSetPop extends Activity {
                 binding.select04Box.setBackgroundResource(R.drawable.default_gray_round);
                 binding.select04Round.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.select05Box.setBackgroundResource(R.drawable.default_select_round);
-                binding.select05Round.setBackgroundResource(R.drawable.ic_full_round);
+                binding.select05Round.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.yoilArea.setVisibility(View.VISIBLE);
                 yoillist.clear();
             }

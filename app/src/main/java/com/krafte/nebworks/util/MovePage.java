@@ -15,6 +15,8 @@ public interface MovePage {
 
     void Main(Context context);
 
+    void FobiddenList(Context context);
+
     //--ui.career
     void Career(Context context);
 
@@ -26,6 +28,8 @@ public interface MovePage {
     void CommunityDetail(Context context);
 
     void OwnerFeedDetail(Context context);
+
+    void MyList(Context context);
 
     //--ui.contract
     void ContractFragment(Context context);

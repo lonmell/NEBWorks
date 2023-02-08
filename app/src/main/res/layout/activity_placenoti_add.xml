@@ -49,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_bar">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,8 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="gone">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_area"
@@ -114,8 +115,8 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:fontFamily="@font/pretendard_bold"
                 android:background="@drawable/default_gray_round"
+                android:fontFamily="@font/pretendard_bold"
                 android:hint="제목을 입력해주세요"
                 android:importantForAutofill="no"
                 android:inputType="text"
@@ -146,8 +147,8 @@
                 android:layout_height="271dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:fontFamily="@font/pretendard_regular"
                 android:background="@drawable/default_gray_round"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="start|top"
                 android:hint="내용 입력"
                 android:inputType="textMultiLine"
@@ -228,15 +229,16 @@
                                 android:paddingEnd="15dp"
                                 android:textColor="@color/new_blue"
                                 android:textColorHint="@color/new_blue" />
+
                             <ImageView
                                 android:id="@+id/start_calendar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/calendar_resize"
-                                android:backgroundTint="@color/new_blue"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginEnd="15dp"/>
+                                android:layout_marginEnd="15dp"
+                                android:background="@drawable/calendar_resize"
+                                android:backgroundTint="@color/new_blue" />
                         </RelativeLayout>
 
                     </androidx.cardview.widget.CardView>
@@ -267,6 +269,7 @@
                         app:cardBackgroundColor="@color/blue_200"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
@@ -284,15 +287,16 @@
                                 android:paddingEnd="15dp"
                                 android:textColor="@color/new_blue"
                                 android:textColorHint="@color/new_blue" />
+
                             <ImageView
                                 android:id="@+id/end_calendar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/calendar_resize"
-                                android:backgroundTint="@color/new_blue"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginEnd="15dp"/>
+                                android:layout_marginEnd="15dp"
+                                android:background="@drawable/calendar_resize"
+                                android:backgroundTint="@color/new_blue" />
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -381,6 +385,7 @@
                         app:cardBackgroundColor="#dcdcdc"
                         app:cardCornerRadius="8dp"
                         app:cardElevation="0dp">
+
                         <ImageView
                             android:id="@+id/img_plus"
                             android:layout_width="match_parent"
@@ -416,15 +421,79 @@
                         android:background="@drawable/approval_fail" />
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="16dp"
+                android:background="#F5F6F8" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:layout_alignParentStart="true"
+                    android:text="대표공지"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:layout_gravity="end"
+                    android:text="*대표공지는 상단에 고정됩니다"
+                    android:textColor="#1445D0"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/select_fix"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="13dp"
+                android:orientation="horizontal"
+                android:background="@drawable/default_gray_round">
+                <ImageView
+                    android:id="@+id/select_fix_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_empty_round"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"/>
+                <TextView
+                    android:id="@+id/select_fix_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:layout_gravity="center"
+                    android:text="대표공지로 지정합니다"
+                    android:textColor="#54585A"
+                    android:textSize="16sp" />
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/bottom_btn_box"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="73dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="108dp"
+                android:layout_marginBottom="31dp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -445,6 +514,7 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
     <RelativeLayout
         android:id="@+id/login_alert_text"
         android:layout_width="match_parent"

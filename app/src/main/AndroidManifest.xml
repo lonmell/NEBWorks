@@ -205,6 +205,9 @@
         <activity android:name=".ui.user.JoinActivity" />
         <activity android:name=".ui.user.ChangePWActivity" />
         <activity android:name=".ui.user.ChangePWActivity2" />
+        <activity android:name=".ui.user.MyListActivity" />
+
+        <activity android:name=".ui.user.FobiddenListActivity" />
 
         <!-- career -->
         <activity

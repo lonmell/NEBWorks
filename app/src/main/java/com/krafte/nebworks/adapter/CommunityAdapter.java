@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.ViewHolder> {
     private static final String TAG = "CommunityAdapter";
     private ArrayList<PlaceNotiData.PlaceNotiData_list> mData = null;
@@ -48,10 +49,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     private boolean animationsLocked = false;
     private boolean delayEnterAnimation = true;
 
-    int TouchItemPos = -1;
     int loadlist = 0;
-    String TodayTxt = "";
-    String topic = "";
 
     String place_id = "";
     String USER_INFO_ID = "";
@@ -117,6 +115,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
                 holder.category_box.setVisibility(View.VISIBLE);
                 holder.line01.setVisibility(View.VISIBLE);
             }
+
             holder.rank_tv.setText(String.valueOf(position+1));
 
             Resources res = mContext.getResources();
@@ -258,7 +257,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             token = shardpref.getString("token", "");
 
             dlog.DlogContext(mContext);
-
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
@@ -279,6 +277,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     public int getItemViewType(int position) {
         return position;
     }
+
+
 
 
 }

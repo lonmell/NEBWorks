@@ -103,19 +103,7 @@ public class FeedEditActivity extends AppCompatActivity {
     String USER_INFO_ID = "";
     String place_id = "";
     String feed_id = "";
-    String place_name = "";
-    String place_owner_id = "";
-    String place_owner_name = "";
-    String place_management_office = "";
-    String place_address = "";
-    String place_latitude = "";
-    String place_longitude = "";
-    String place_start_time = "";
-    String place_end_time = "";
-    String place_img_path = "";
-    String place_start_date = "";
-    String place_created_at = "";
-    String USER_INFO_EMAIL = "";
+
 
     File file;
     SimpleDateFormat dateFormat;
@@ -217,8 +205,8 @@ public class FeedEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-//        pm.FeedList(mContext);
+//        super.onBackPressed();
+        pm.FeedList(mContext);
     }
 
     String toDay = "";
@@ -227,6 +215,7 @@ public class FeedEditActivity extends AppCompatActivity {
     String Day = "";
     String getDatePicker = "";
     String getYMPicker = "";
+    boolean FIXYN = false;
 
     public void setBtnEvent() {
         binding.closeBtn.setOnClickListener(v -> {
@@ -334,6 +323,20 @@ public class FeedEditActivity extends AppCompatActivity {
 //                overridePendingTransition(R.anim.translate_up, 0);
             }
         });
+
+        binding.selectFix.setOnClickListener(v -> {
+            if(!FIXYN){
+                FIXYN = true;
+                binding.selectFixRound.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.selectFix.setBackgroundResource(R.drawable.default_select_on_round);
+                binding.selectFixTv.setTextColor(Color.parseColor("#000000"));
+            }else{
+                FIXYN = false;
+                binding.selectFixRound.setBackgroundResource(R.drawable.ic_empty_round);
+                binding.selectFix.setBackgroundResource(R.drawable.default_gray_round);
+                binding.selectFixTv.setTextColor(Color.parseColor("#54585A"));
+            }
+        });
     }
 
 
@@ -421,6 +424,7 @@ public class FeedEditActivity extends AppCompatActivity {
                                     String open_date = Response.getJSONObject(0).getString("open_date");
                                     String close_date = Response.getJSONObject(0).getString("close_date");
 
+                                    String fix_yn = Response.getJSONObject(0).getString("fix_yn");
                                     RequestOptions requestOptions = new RequestOptions();
                                     requestOptions.diskCacheStrategy(DiskCacheStrategy.NONE);
                                     requestOptions.skipMemoryCache(false);
@@ -457,6 +461,18 @@ public class FeedEditActivity extends AppCompatActivity {
 
                                             binding.eventStarttime.setText(open_date);
                                             binding.eventEndttime.setText(close_date);
+
+                                            if(fix_yn.equals("y")){
+                                                FIXYN = true;
+                                                binding.selectFixRound.setBackgroundResource(R.drawable.ic_full_round_check);
+                                                binding.selectFix.setBackgroundResource(R.drawable.default_select_on_round);
+                                                binding.selectFixTv.setTextColor(Color.parseColor("#000000"));
+                                            }else{
+                                                FIXYN = false;
+                                                binding.selectFixRound.setBackgroundResource(R.drawable.ic_empty_round);
+                                                binding.selectFix.setBackgroundResource(R.drawable.default_gray_round);
+                                                binding.selectFixTv.setTextColor(Color.parseColor("#54585A"));
+                                            }
                                         });
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
@@ -504,6 +520,7 @@ public class FeedEditActivity extends AppCompatActivity {
     }
 
     public void AddStroeNoti() {
+        String fix_yn = "";
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + noti_title);
         dlog.i("content : " + noti_contents);
@@ -511,14 +528,16 @@ public class FeedEditActivity extends AppCompatActivity {
         dlog.i("Profile Url : " + ProfileUrl);
         dlog.i("EventStart : " + binding.eventStarttime.getText().toString());
         dlog.i("EventEnd : " + binding.eventEndttime.getText().toString());
+        dlog.i("fix_yn : " + (FIXYN?"y":"n"));
         dlog.i("-----AddStroeNoti Check-----");
+        fix_yn = (FIXYN?"y":"n");
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedNotiEditInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, "",noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "",noti_event_start,noti_event_end,"1","","","");
+        Call<String> call = api.getData(feed_id, "",noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "",noti_event_start,noti_event_end,"1","","","",fix_yn);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

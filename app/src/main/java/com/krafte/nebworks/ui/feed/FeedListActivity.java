@@ -220,7 +220,8 @@ public class FeedListActivity extends AppCompatActivity {
                                         jsonObject.getString("close_date"),
                                         jsonObject.getString("boardkind"),
                                         jsonObject.getString("category"),
-                                        jsonObject.getString("mylikeyn")
+                                        jsonObject.getString("mylikeyn"),
+                                        jsonObject.getString("fix_yn")
                                 ));
                             }
                             mAdapter.notifyDataSetChanged();
