@@ -46,7 +46,6 @@ import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.databinding.ActivityCommunityAddBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
-import com.krafte.nebworks.ui.career.CareerActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -782,7 +781,7 @@ public class CommunityAddActivity extends AppCompatActivity {
 
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
-            CareerActivity.RetrofitInterface retrofitInterface = CareerActivity.ApiClient.getApiClient().create(CareerActivity.RetrofitInterface.class);
+            RetrofitInterface retrofitInterface = ApiClient.getApiClient().create(RetrofitInterface.class);
             Call<String> call = retrofitInterface.request(body);
 
             call.enqueue(new Callback<String>() {
