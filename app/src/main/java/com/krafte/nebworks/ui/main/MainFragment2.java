@@ -721,7 +721,11 @@ public class MainFragment2 extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav06) {
             shardpref.putString("Tap", "1");
             binding.title.setText("급여관리");
-            pm.PayManagement(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.PayManagement(mContext);
+            }else{
+                pm.PayManagement2(mContext);
+            }
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
 //            pm.Main2(mContext);
             drawerLayout.closeDrawer(drawerView);

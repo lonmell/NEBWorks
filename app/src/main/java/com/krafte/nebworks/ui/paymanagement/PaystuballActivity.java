@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,8 +16,11 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.ActivityPaystuballBinding;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -60,12 +65,15 @@ public class PaystuballActivity extends AppCompatActivity {
     String stub_gongjeynpay = "";
     String stub_total_payment = "";
     String stub_workday = "";
+    String stub_total_workday = "";
     String stub_total_workhour = "";
     String stub_payment = "";
     String stub_selectdate = "";
     String stub_meal_pay = "";
     String select_month = "";
     String place_name = "";
+    String place_owner_id = "";
+    String click_action = "";
 
     float insurance01p = 0;//국민연금 퍼센트
     float insurance02p = 0;//건강보험 퍼센트
@@ -84,6 +92,7 @@ public class PaystuballActivity extends AppCompatActivity {
     PageMoveClass pm = new PageMoveClass();
     int paging_position = 0;
     Dlog dlog = new Dlog();
+    Handler mHandler = new Handler(Looper.getMainLooper());
     RetrofitConnect rc = new RetrofitConnect();
 
     String get_edit_expenses = "0";
@@ -98,6 +107,7 @@ public class PaystuballActivity extends AppCompatActivity {
     String Year = "";
     String Month = "";
     String Day = "";
+
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
@@ -124,28 +134,29 @@ public class PaystuballActivity extends AppCompatActivity {
         USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
         place_id        = PlaceCheckData.getInstance().getPlace_id();
         place_name      = PlaceCheckData.getInstance().getPlace_name();
-
+        place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
         //shardpref Area
 
         //-------------------
-        select_month = shardpref.getString("select_month","");
-        stub_store_name = shardpref.getString("store_name","");
-        stub_place_id = shardpref.getString("stub_place_id","0");
-        stub_user_id = shardpref.getString("stub_user_id","0");
-        stub_user_name = shardpref.getString("stub_user_name","0");
-        stub_jikgup = shardpref.getString("stub_jikgup","0");
-        stub_basic_pay = shardpref.getString("stub_basic_pay","0");
-        stub_second_pay = shardpref.getString("stub_second_pay","0");
-        stub_overwork_pay = shardpref.getString("stub_overwork_pay","0");
-        stub_meal_allowance_yn = shardpref.getString("stub_meal_allowance_yn","0");
+        select_month            = shardpref.getString("select_month","");
+        stub_store_name         = shardpref.getString("store_name","");
+        stub_place_id           = shardpref.getString("stub_place_id","0");
+        stub_user_id            = shardpref.getString("stub_user_id","0");
+        stub_user_name          = shardpref.getString("stub_user_name","0");
+        stub_jikgup             = shardpref.getString("stub_jikgup","0");
+        stub_basic_pay          = shardpref.getString("stub_basic_pay","0");
+        stub_second_pay         = shardpref.getString("stub_second_pay","0");
+        stub_overwork_pay       = shardpref.getString("stub_overwork_pay","0");
+        stub_meal_allowance_yn  = shardpref.getString("stub_meal_allowance_yn","0");
         stub_store_insurance_yn = shardpref.getString("stub_store_insurance_yn","0");
-        stub_gongjeynpay = shardpref.getString("stub_gongjeynpay","0");
-        stub_total_payment = shardpref.getString("stub_total_payment","0");
-        stub_workday = shardpref.getString("stub_workday","0");
-        stub_total_workhour = shardpref.getString("stub_total_workhour","0");
-        stub_payment = shardpref.getString("stub_payment","0");
-        stub_selectdate = shardpref.getString("stub_selectdate","0000.00");
-        stub_meal_pay = shardpref.getString("stub_meal_pay","0");
+        stub_gongjeynpay        = shardpref.getString("stub_gongjeynpay","0");
+        stub_total_payment      = shardpref.getString("stub_total_payment","0");
+        stub_workday            = shardpref.getString("stub_workday","0");
+        stub_total_workday      = shardpref.getString("stub_total_workday","0");
+        stub_total_workhour     = shardpref.getString("stub_total_workhour","0");
+        stub_payment            = shardpref.getString("stub_payment","0");
+        stub_selectdate         = shardpref.getString("stub_selectdate","0000.00");
+        stub_meal_pay           = shardpref.getString("stub_meal_pay","0");
 
         binding.selectMonth.setText(select_month + "월");
     }
@@ -161,7 +172,16 @@ public class PaystuballActivity extends AppCompatActivity {
             binding.resendBtn.setText("목록으로");
         }
         binding.resendBtn.setOnClickListener(v -> {
-            super.onBackPressed();
+            if(USER_INFO_AUTH.equals("0")){
+                String message = "["+PlaceCheckData.getInstance().getPlace_name()+"] \n ["+stub_user_name+"] 님의 " + select_month + "월 급여명세서가 도착했습니다.";
+                getUserToken(stub_user_id,"1",message);
+            }else{
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.PayManagement(mContext);
+                }else{
+                    pm.PayManagement2(mContext);
+                }
+            }
         });
     }
 
@@ -186,7 +206,6 @@ public class PaystuballActivity extends AppCompatActivity {
         dlog.i("insurance_04(장기요양보험) : " + AllPayment * (insurance04p/100));
         dlog.i("----------------AddPaystubActivityAlba DataCheck----------------");
         getFCMToken();
-        getEmployeroken(stub_user_id);
     }
 
 
@@ -202,57 +221,108 @@ public class PaystuballActivity extends AppCompatActivity {
         });
     }
 
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+                try {
+                    JSONArray Response = new JSONArray(jsonResponse);
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel1").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "1", place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-    @SuppressLint("LongLogTag")
-    private void getEmployeroken(String USER_ID) {
-//        mHandler = new Handler(Looper.getMainLooper());
-//        mHandler.postDelayed(() -> {
-//            Thread th = new Thread(() -> {
-//                dbConnection.UserTokenUpdate("2", USER_ID, "2", "", "", "", "", "");
-//                runOnUiThread(() -> {
-//                    Log.i(TAG, "user_id : " + dbConnection.tokenData_lists.get(0).getUser_id());
-//                    Log.i(TAG, "token : " + dbConnection.tokenData_lists.get(0).getToken());
-//                    sendTopic =  dbConnection.tokenData_lists.get(0).getUser_id();
-//                    sendToken = dbConnection.tokenData_lists.get(0).getToken();
-//                    rcvchannelId2 = dbConnection.tokenData_lists.get(0).getChannelId2().equals("1");
-//                    topic = USER_ID;
-//                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
-//                        dlog.i("rcvchannelId2 : " + rcvchannelId2);
-//                        if (rcvchannelId2) {
-//                            FcmTestFunctionCall(sendToken);
-//                        }else{
-//                            pm.PayManager(mContext);
-//                        }
-//                    });
-//
-//
-//                });
-//            });
-//            th.start();
-//            try {
-//                th.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }, 0);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, place_owner_id , user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 
-    private void FcmTestFunctionCall(String token_get) {
-//        @SuppressLint("SetTextI18n")
-//        Thread th = new Thread(() -> {
-//            click_action = "EmployeeMainActivity";
-//            message = stub_selectdate + " 급여명세서가 재발송되었습니다.";
-//            dbConnection.FcmTestFunction(topic, message, token_get, click_action, "1", place_id);
-//            runOnUiThread(() -> {
-//            });
-//        });
-//        th.start();
-//        try {
-//            th.join();
-//            pm.PayManager(mContext);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+    DBConnection dbConnection = new DBConnection();
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "Payment0";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+            runOnUiThread(() -> {
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.PayManagement(mContext);
+                }else{
+                    pm.PayManagement2(mContext);
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -339,7 +409,7 @@ public class PaystuballActivity extends AppCompatActivity {
                             binding.paydata07.setText(insurance2 + "원");
                             binding.paydata08.setText(insurance3 + "원");
                             binding.paydata09.setText(insurance4 + "원");
-                            binding.paydata10.setText(stub_workday + "일");
+                            binding.paydata10.setText(stub_total_workday + "일");
                             binding.paydata11.setText(stub_total_workhour + "시간");
                             binding.paydata12.setText(myFormatter.format(Integer.parseInt(stub_gongjeynpay)) + " 원");
 

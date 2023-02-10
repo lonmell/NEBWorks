@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PaymentData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.util.DBConnection;
@@ -50,6 +52,8 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
     int before_pos = 0;
     String selectdate = "0000.00";
     String place_id = "";
+    String place_name = "";
+    String place_img = "";
     Dlog dlog = new Dlog();
     PageMoveClass pm = new PageMoveClass();
     int AllPayment = 0;
@@ -95,20 +99,43 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
         PaymentData.PaymentData_list item = mData.get(position);
         try{
             AllPayment = Integer.parseInt(item.getTotal_payment().equals("null")?"0":item.getTotal_payment()) + Integer.parseInt(item.getSecond_pay().equals("null")?"0":item.getSecond_pay()) + Integer.parseInt(item.getOverwork_pay().equals("null")?"0":item.getOverwork_pay());
-            holder.name.setText(item.getUser_name());
-
-            Glide.with(mContext).load(item.getImg_path())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(holder.profile_setimg);
 
             if(USER_INFO_AUTH.equals("1")){
-                    holder.send_user_state.setVisibility(View.GONE);
+                holder.total_pay.setVisibility(View.GONE);
+                holder.name.setText(place_name);
+                Glide.with(mContext).load(place_img)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.profile_setimg);
+                if(Tap.equals("0")){
+                    if(item.getGongjeynpay().equals("null")){
+                        holder.gongje_box.setVisibility(View.GONE);
+                        holder.send_user_state.setVisibility(View.GONE);
+                        holder.write_payment.setVisibility(View.GONE);
+                        holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                        holder.progress_tvarea.setVisibility(View.VISIBLE);
+                    }else{
+                        holder.gongje_box.setVisibility(View.VISIBLE);
+                        holder.send_user_state.setVisibility(View.GONE);
+                        holder.write_payment.setVisibility(View.GONE);
+                        holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                        holder.progress_tvarea.setVisibility(View.VISIBLE);
+                    }
+                }else if(Tap.equals("1")){
                     holder.gongje_box.setVisibility(View.VISIBLE);
+                    holder.send_user_state.setVisibility(View.GONE);
                     holder.write_payment.setVisibility(View.GONE);
                     holder.weekly_worktime_progress.setVisibility(View.GONE);
                     holder.progress_tvarea.setVisibility(View.GONE);
+                }
             }else if(USER_INFO_AUTH.equals("0")){
+                holder.total_pay.setVisibility(View.VISIBLE);
+                holder.name.setText(item.getUser_name());
+                Glide.with(mContext).load(item.getImg_path())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(holder.profile_setimg);
+
                 if(Tap.equals("0")){
                     if(item.getGongjeynpay().equals("null")){
                         holder.gongje_box.setVisibility(View.GONE);
@@ -136,25 +163,19 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
             insurance2 = String.valueOf(Math.round((AllPayment * insurance02p)/100));
             insurance3 = String.valueOf(Math.round((AllPayment * insurance03p)/100));
             insurance4 = String.valueOf(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
-//            dlog.i("insurance01p : " + insurance01p);
-//            dlog.i("insurance02p : " + insurance02p);
-//            dlog.i("insurance03p : " + insurance03p);
-//            dlog.i("insurance04p : " + insurance04p);
-//            dlog.i("insurance1 : " + insurance1);
-//            dlog.i("insurance2 : " + insurance2);
-//            dlog.i("insurance3 : " + insurance3);
-//            dlog.i("insurance4 : " + insurance4);
-//            dlog.i("result_pay : " + item.getPayment());
-//            dlog.i("result_gongje : " + (insurance1+insurance2+insurance3+insurance4));
+
             int result_gongje_int = Integer.parseInt(insurance1)+Integer.parseInt(insurance2)+Integer.parseInt(insurance3)+Integer.parseInt(insurance4);
             String resultGonjeTv = myFormatter.format(result_gongje_int);
-            holder.result_pay.setText(item.getPayment() + "원");
+            holder.result_pay.setText(myFormatter.format(Integer.parseInt(item.getTotal_payment())) + "원");
             holder.result_gongje.setText(resultGonjeTv + "원");
-//            dlog.i("result_pay : " + item.getPayment());
-//            dlog.i("result_gongje : " + resultGonjeTv);
 
-            String pay = myFormatter.format(Integer.parseInt(item.getGongjeynpay().equals("null")?"0":item.getGongjeynpay()));
-            holder.total_pay.setText(pay.isEmpty()?"미정":pay);
+            String pay = myFormatter.format(Integer.parseInt(item.getGongjeynpay().equals("null")?"0":item.getGongjeynpay()));//공제처리된 실급여
+
+            if(pay.equals("0")){
+                holder.total_pay.setVisibility(View.GONE);
+            }else{
+                holder.total_pay.setText(pay + "원");
+            }
 
             holder.work_day.setText(item.getTotal_workday() + "일");
 
@@ -223,11 +244,16 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
             paystub_resend           = itemView.findViewById(R.id.paystub_resend);
             send_money               = itemView.findViewById(R.id.send_money);
 
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","-1");
-            place_id = shardpref.getString("place_id","-1");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","-1");
+            place_id        = shardpref.getString("place_id","-1");
+            place_name      = PlaceCheckData.getInstance().getPlace_name();
+            place_img       = PlaceCheckData.getInstance().getPlace_img_path();
+
             dlog.i("------ViewHolder------");
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("place_id : " + place_id);
+            dlog.i("place_name : " + place_name);
+            dlog.i("place_img : " + place_img);
             dlog.i("------ViewHolder------");
 
             itemView.setOnClickListener(v -> {
@@ -262,6 +288,8 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
                             shardpref.putString("stub_meal_pay",item.getMeal_pay());
 //                        shardpref.putString("returnPage","");
                             pm.PaystubAll(mContext);
+                        }else{
+                            Toast.makeText(mContext,"작성된 급여명세서 데이터가 없습니다.",Toast.LENGTH_SHORT).show();
                         }
                     }else if(USER_INFO_AUTH.equals("0")){
                         if(Tap.equals("0")){

@@ -71,6 +71,7 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
         try{
 
             dlog.i("mData getKind 0:" + mData.get(0).getUser_name());
+            dlog.i("mData getKind 0 12:" + mData.get(0).getWorktime());
             holder.task_tv1.setText(mData.get(0).getUser_name());
             switch (mData.get(0).getWorktime()) {
                 case "오전":
@@ -83,6 +84,7 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color01 = "#1D1D1D";
                     break;
                 case "주말":
+                case "holiday":
                     Color01 = "#FF687A";
                     break;
                 default:
@@ -90,7 +92,12 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     break;
             }
 //            holder.task_tv1.setBackgroundColor(Color.parseColor(Color01));
-            holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            if(mData.get(0).getWorktime().equals("holiday")){
+                holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
+            }else{
+                holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            }
+
 
             dlog.i("mData getKind 1:" + mData.get(1).getUser_name());
             holder.task_tv2.setText(mData.get(1).getUser_name());
@@ -105,6 +112,7 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color02 = "#1D1D1D";
                     break;
                 case "주말":
+                case "holiday":
                     Color02 = "#FF687A";
                     break;
                 default:
@@ -112,8 +120,11 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     break;
             }
 //            holder.task_tv2.setBackgroundColor(Color.parseColor(Color02));
-            holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-
+            if(mData.get(1).getWorktime().equals("holiday")){
+                holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
+            }else{
+                holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            }
             dlog.i("mData getKind 2:" + mData.get(2).getUser_name());
             holder.task_tv3.setText(mData.get(2).getUser_name());
             switch (mData.get(2).getWorktime()) {
@@ -127,6 +138,7 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color03 = "#1D1D1D";
                     break;
                 case "주말":
+                case "holiday":
                     Color03 = "#FF687A";
                     break;
                 default:
@@ -134,8 +146,11 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     break;
             }
 //            holder.task_tv3.setBackgroundColor(Color.parseColor(Color03));
-            holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-
+            if(mData.get(2).getWorktime().equals("holiday")){
+                holder.task_tv3.setTextColor(Color.parseColor("#FF687A"));
+            }else{
+                holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            }
             dlog.i("mData getKind 3:" + mData.get(3).getUser_name());
             holder.task_tv4.setText(mData.get(3).getUser_name());
             switch (mData.get(3).getWorktime()) {
@@ -149,6 +164,7 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color04 = "#1D1D1D";
                     break;
                 case "주말":
+                case "holiday":
                     Color04 = "#FF687A";
                     break;
                 default:
@@ -156,8 +172,11 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     break;
             }
 //            holder.task_tv4.setBackgroundColor(Color.parseColor(Color04));
-            holder.task_tv4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-
+            if(mData.get(3).getWorktime().equals("holiday")){
+                holder.task_tv4.setTextColor(Color.parseColor("#FF687A"));
+            }else{
+                holder.task_tv4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            }
             dlog.i("mData getKind 4:" + mData.get(4).getUser_name());
             holder.task_tv5.setText(mData.get(4).getUser_name());
             switch (mData.get(4).getWorktime()) {
@@ -171,6 +190,7 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
                     Color05 = "#1D1D1D";
                     break;
                 case "주말":
+                case "holiday":
                     Color05 = "#FF687A";
                     break;
                 default:
@@ -179,7 +199,11 @@ public class TasklistAdapter2 extends RecyclerView.Adapter<TasklistAdapter2.View
             }
 //            holder.task_tv5.setBackgroundColor(Color.parseColor(Color05));
             holder.task_tv5.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-
+            if(mData.get(4).getWorktime().equals("holiday")){
+                holder.task_tv5.setTextColor(Color.parseColor("#FF687A"));
+            }else{
+                holder.task_tv5.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            }
         }catch (Exception e){
             dlog.i("Exception :" + e);
         }

@@ -33,58 +33,36 @@
                         android:layout_margin="0dp"
                         android:scaleType="fitXY" />
                 </androidx.cardview.widget.CardView>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/user_img_area"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp">
+                    android:layout_marginEnd="20dp"
+                    android:layout_toEndOf="@+id/user_img_area">
 
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
                         android:fontFamily="@font/pretendard_bold"
                         android:text="name"
                         android:textColor="#000000"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:id="@+id/total_pay_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/name"
-                        android:fontFamily="@font/inter_regular"
-                        android:text="공제금액"
-                        android:textColor="#000000"
-                        android:textSize="15sp"
+                        android:textSize="20sp"
                         tools:ignore="HardcodedText" />
 
                     <TextView
                         android:id="@+id/total_pay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/total_pay_title"
+                        android:layout_centerVertical="true"
                         android:layout_marginStart="20dp"
-                        android:layout_toEndOf="@+id/total_pay_title"
+                        android:layout_toEndOf="@+id/name"
                         android:fontFamily="@font/inter_regular"
                         android:text="급여"
-                        android:textColor="#000000"
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:id="@+id/start_paytxt2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_toEndOf="@+id/total_pay"
-                        android:layout_alignTop="@+id/total_pay_title"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:text="원"
-                        android:textColor="#000000"
+                        android:textColor="@color/new_blue"
                         android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
@@ -131,6 +109,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -156,7 +135,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="13dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:indeterminate="false"
@@ -170,7 +149,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp">
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp">
 
                 <TextView
                     android:id="@+id/nowpay"
@@ -203,7 +183,6 @@
                     android:id="@+id/gongje_area"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:orientation="vertical">
 
                     <LinearLayout

@@ -1,0 +1,100 @@
+package com.krafte.nebworks.data;
+
+public class CalendarPayData {
+    public static class CalendarPayData_list {
+        String id;
+        String user_id;
+        String user_name;
+        String img_path;
+        String jikgup;
+        String total_pay;
+        String yoil;
+        String setdate;
+        String day;
+
+        public CalendarPayData_list(String id, String user_id, String user_name, String img_path
+                , String jikgup, String setdate, String total_pay, String yoil, String day) {
+            this.id = id;
+            this.user_id = user_id;
+            this.user_name = user_name;
+            this.img_path = img_path;
+            this.jikgup = jikgup;
+            this.setdate = setdate;
+            this.total_pay = total_pay;
+            this.yoil = yoil;
+            this.day = day;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
+        }
+
+        public String getUser_name() {
+            return user_name;
+        }
+
+        public void setUser_name(String user_name) {
+            this.user_name = user_name;
+        }
+
+        public String getImg_path() {
+            return img_path;
+        }
+
+        public void setImg_path(String img_path) {
+            this.img_path = img_path;
+        }
+
+        public String getJikgup() {
+            return jikgup;
+        }
+
+        public void setJikgup(String jikgup) {
+            this.jikgup = jikgup;
+        }
+
+        public String getTotal_pay() {
+            return total_pay;
+        }
+
+        public void setTotal_pay(String total_pay) {
+            this.total_pay = total_pay;
+        }
+
+        public String getYoil() {
+            return yoil;
+        }
+
+        public void setYoil(String yoil) {
+            this.yoil = yoil;
+        }
+
+        public String getSetdate() {
+            return setdate;
+        }
+
+        public void setSetdate(String setdate) {
+            this.setdate = setdate;
+        }
+
+        public String getDay() {
+            return day;
+        }
+
+        public void setDay(String day) {
+            this.day = day;
+        }
+    }
+}

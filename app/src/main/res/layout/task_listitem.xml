@@ -16,7 +16,6 @@
             android:textSize="10sp"
             android:gravity="center"
             android:singleLine="true"
-            android:layout_margin="1dp"
             android:textColor="#ffffff"
             android:padding="2dp"/>
         <TextView
