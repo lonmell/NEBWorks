@@ -345,20 +345,20 @@ public class community_fragment1 extends Fragment {
                                 if (USER_INFO_AUTH.isEmpty()) {
                                     isAuth();
                                 } else {
-                                    shardpref.putString("feed_id", mList.get(position).getId());
-                                    shardpref.putString("title", mList.get(position).getTitle());
-                                    shardpref.putString("contents", mList.get(position).getContents());
-                                    shardpref.putString("writer_id", mList.get(position).getWriter_id());
-                                    shardpref.putString("writer_name", mList.get(position).getWriter_name());
-                                    shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
-                                    shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
-                                    shardpref.putString("jikgup", mList.get(position).getJikgup());
-                                    shardpref.putString("view_cnt", mList.get(position).getView_cnt());
-                                    shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
-                                    shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
-                                    shardpref.putString("category", mList.get(position).getCategory());
-                                    shardpref.putString("updated_at", mList.get(position).getUpdated_at());
-                                    shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
+                                    shardpref.putString("feed_id", BestmList.get(position).getId());
+                                    shardpref.putString("title", BestmList.get(position).getTitle());
+                                    shardpref.putString("contents", BestmList.get(position).getContents());
+                                    shardpref.putString("writer_id", BestmList.get(position).getWriter_id());
+                                    shardpref.putString("writer_name", BestmList.get(position).getWriter_name());
+                                    shardpref.putString("writer_img_path", BestmList.get(position).getWriter_img_path());
+                                    shardpref.putString("feed_img_path", BestmList.get(position).getFeed_img_path());
+                                    shardpref.putString("jikgup", BestmList.get(position).getJikgup());
+                                    shardpref.putString("view_cnt", BestmList.get(position).getView_cnt());
+                                    shardpref.putString("comment_cnt", BestmList.get(position).getComment_cnt());
+                                    shardpref.putString("like_cnt", BestmList.get(position).getLike_cnt());
+                                    shardpref.putString("category", BestmList.get(position).getCategory());
+                                    shardpref.putString("updated_at", BestmList.get(position).getUpdated_at());
+                                    shardpref.putString("mylikeyn", BestmList.get(position).getMylikeyn());
                                     pm.CommunityDetail(mContext);
                                 }
                             }

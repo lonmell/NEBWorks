@@ -70,6 +70,8 @@ public class CommunityOptionActivity extends Activity {
             binding.feedDelete.setText("게시글 삭제");
         }
 
+
+
     }
 
     private void setBtnEvent() {
@@ -99,6 +101,9 @@ public class CommunityOptionActivity extends Activity {
             }else if(state.equals("EditCommunity")){
                 intent.putExtra("data", "해당 게시글을 삭제하시겠습니까?");
                 intent.putExtra("flag", "게시글삭제");
+            }else if(state.equals("EditComment2")){
+                intent.putExtra("data", "해당 게시글을 삭제하시겠습니까?");
+                intent.putExtra("flag", "게시글삭제2");
             }
             intent.putExtra("left_btn_txt", "취소");
             intent.putExtra("right_btn_txt", "삭제");

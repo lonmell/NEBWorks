@@ -372,6 +372,13 @@ public class TwoButtonPopActivity extends Activity {
                 pm.FeedList(mContext);
             }else if (flag.equals("채널")) {
                 pm.AuthSelect(mContext);
+            }else if (flag.equals("게시글삭제2")) {
+                shardpref.putInt("SELECT_POSITION", 3);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.Main(mContext);
+                }else{
+                    pm.Main2(mContext);
+                }
             }else{
                 finish();
                 Intent intent = new Intent();

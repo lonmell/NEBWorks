@@ -210,6 +210,12 @@ public class CommunityAddActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        sharedRemove();
+    }
+
     @SuppressLint("LongLogTag")
     private void setBtnEvent() {
         binding.selectCategoryTxt.setOnClickListener(v -> {
@@ -323,8 +329,6 @@ public class CommunityAddActivity extends AppCompatActivity {
         } else {
             return "true";
         }
-
-
     }
     String title = "";
     String content = "";
@@ -413,7 +417,11 @@ public class CommunityAddActivity extends AppCompatActivity {
                                     }
                                     Toast_Nomal("게시글 저장이 완료되었습니다.");
                                     shardpref.putInt("SELECT_POSITION", 3);
-                                    pm.Main(mContext);
+                                    if(USER_INFO_AUTH.equals("0")){
+                                        pm.Main(mContext);
+                                    }else{
+                                        pm.Main2(mContext);
+                                    }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -470,8 +478,8 @@ public class CommunityAddActivity extends AppCompatActivity {
                                             saveBitmapAndGetURI(i);
                                         }
                                     }
-                                    sharedRemove();
                                     Toast.makeText(mContext, "글 수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    shardpref.putString("feed_id", feed_id);
                                     finish();
                                 }
                             } catch (Exception e) {

@@ -47,40 +47,58 @@
                         android:padding="20dp"
                         android:rotation="180" />
                 </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/list_setting"
+                    android:layout_width="59dp"
+                    android:layout_height="59dp"
+                    android:layout_alignTop="@+id/name"
+                    android:layout_alignParentEnd="true"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="4dp"
+                        android:layout_height="17dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/list_setting" />
+                </RelativeLayout>
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="25dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pretendard_bold"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="26dp"
                     android:text="title"
                     android:textColor="@color/black"
                     android:textSize="25sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="16dp">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/profile_area"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         app:cardBackgroundColor="#dcdcdc"
                         app:cardCornerRadius="60dp"
                         app:cardElevation="0dp">
 
                         <ImageView
                             android:id="@+id/profile_img"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_alignParentStart="true"
                             android:scaleType="fitXY"
                             android:background="@drawable/certi01" />
@@ -89,7 +107,7 @@
                     <TextView
                         android:id="@+id/writer_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_toEndOf="@+id/profile_area"
                         android:fontFamily="@font/pretendard_bold"
@@ -100,7 +118,7 @@
                     <TextView
                         android:id="@+id/date"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
@@ -109,11 +127,20 @@
                         android:textSize="15sp" />
                 </RelativeLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#DBDBDB"/>
+
                 <TextView
                     android:id="@+id/contents"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/inter_regular"
                     android:text="contents"
                     android:textColor="@color/black"
@@ -132,14 +159,21 @@
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/pretendard_bold"
                     android:text="cate"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginStart="20dp"
                     android:gravity="start|center"
                     android:textColor="@color/new_blue"
+                    android:background="@drawable/grayback_gray_round"
                     android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="35dp"
                 android:background="#DBDBDB" />
 
             <RelativeLayout
