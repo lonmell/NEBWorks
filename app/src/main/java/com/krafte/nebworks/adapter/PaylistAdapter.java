@@ -30,9 +30,9 @@ public class PaylistAdapter extends RecyclerView.Adapter<PaylistAdapter.ViewHold
         void onItemClick(View v, int position);
     }
 
-    private PaylistAdapter.OnItemClickListener mListener = null;
+    private OnItemClickListener mListener = null;
 
-    public void setOnItemClickListener(PaylistAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
 
@@ -60,10 +60,7 @@ public class PaylistAdapter extends RecyclerView.Adapter<PaylistAdapter.ViewHold
     public void onBindViewHolder(@NonNull PaylistAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         CalendarPayData.CalendarPayData_list item = mData.get(position);
 
-
         try{
-            dlog.i("mData getKind 0:" + mData.get(0).getUser_name());
-            dlog.i("mData getKind 0 12:" + mData.get(0).getTotal_pay());
             holder.task_tv1.setText(mData.get(0).getUser_name());
             if(mData.get(0).getUser_id().equals("holiday")){
                 holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));

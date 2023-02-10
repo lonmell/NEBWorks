@@ -121,6 +121,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/sunlist"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
             </LinearLayout>
@@ -155,6 +156,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/monlist"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -188,6 +190,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/tuelist"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -222,6 +225,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/wedlist"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -255,6 +259,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/thulist"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -288,6 +293,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/frilist"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -321,6 +327,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/satlist"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>

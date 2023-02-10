@@ -37,7 +37,6 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
     private String month;
     private final DateCurrent dc = new DateCurrent();
 
-
     //Shared
     PreferenceHelper shardpref;
     String USER_INFO_AUTH = "";
@@ -151,7 +150,7 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                         caltaskdata1 = new ArrayList<>();
                         mAdapter1 = new PaylistAdapter(mContext, caltaskdata1);
                         holder.sunlist.setAdapter(mAdapter1);
-                        holder.sunlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                        holder.sunlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         for (int i3 = 0; i3 < Response.length(); i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter1.addItem(new CalendarPayData.CalendarPayData_list(
@@ -169,7 +168,6 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                                 holder.sun.setTextColor(Color.parseColor("#FF687A"));
                             }
                         }
-                        mAdapter1.notifyDataSetChanged();
                     }
                 }
             } catch (Exception e) {
@@ -185,7 +183,7 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                         caltaskdata2 = new ArrayList<>();
                         mAdapter2 = new PaylistAdapter(mContext, caltaskdata2);
                         holder.monlist.setAdapter(mAdapter2);
-                        holder.monlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                        holder.monlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         for (int i3 = 0; i3 < Response.length(); i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter2.addItem(new CalendarPayData.CalendarPayData_list(
@@ -203,7 +201,6 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                                 holder.mon.setTextColor(Color.parseColor("#FF687A"));
                             }
                         }
-                        mAdapter2.notifyDataSetChanged();
                     }
                 }
             } catch (Exception e) {
@@ -220,7 +217,7 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                         caltaskdata3 = new ArrayList<>();
                         mAdapter3 = new PaylistAdapter(mContext, caltaskdata3);
                         holder.tuelist.setAdapter(mAdapter3);
-                        holder.tuelist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                        holder.tuelist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         for (int i3 = 0; i3 < Response.length(); i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter3.addItem(new CalendarPayData.CalendarPayData_list(
@@ -254,7 +251,7 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                         caltaskdata4 = new ArrayList<>();
                         mAdapter4 = new PaylistAdapter(mContext, caltaskdata4);
                         holder.wedlist.setAdapter(mAdapter4);
-                        holder.wedlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                        holder.wedlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         for (int i3 = 0; i3 < Response.length(); i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter4.addItem(new CalendarPayData.CalendarPayData_list(
@@ -272,7 +269,6 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                                 holder.wed.setTextColor(Color.parseColor("#FF687A"));
                             }
                         }
-                        mAdapter4.notifyDataSetChanged();
                     }
                 }
             } catch (Exception e) {
@@ -288,7 +284,7 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                         caltaskdata5 = new ArrayList<>();
                         mAdapter5 = new PaylistAdapter(mContext, caltaskdata5);
                         holder.thulist.setAdapter(mAdapter5);
-                        holder.thulist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                        holder.thulist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         for (int i3 = 0; i3 < Response.length(); i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter5.addItem(new CalendarPayData.CalendarPayData_list(
@@ -306,7 +302,6 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                                 holder.thu.setTextColor(Color.parseColor("#FF687A"));
                             }
                         }
-                        mAdapter5.notifyDataSetChanged();
                     }
                 }
             } catch (Exception e) {
@@ -322,7 +317,7 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                         caltaskdata6 = new ArrayList<>();
                         mAdapter6 = new PaylistAdapter(mContext, caltaskdata6);
                         holder.frilist.setAdapter(mAdapter6);
-                        holder.frilist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                        holder.frilist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         for (int i3 = 0; i3 < Response.length(); i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter6.addItem(new CalendarPayData.CalendarPayData_list(
@@ -340,7 +335,6 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                                 holder.fri.setTextColor(Color.parseColor("#FF687A"));
                             }
                         }
-                        mAdapter6.notifyDataSetChanged();
                     }
                 }
             } catch (Exception e) {
@@ -356,7 +350,7 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                         caltaskdata7 = new ArrayList<>();
                         mAdapter7 = new PaylistAdapter(mContext, caltaskdata7);
                         holder.satlist.setAdapter(mAdapter7);
-                        holder.satlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                        holder.satlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         for (int i3 = 0; i3 < Response.length(); i3++) {
                             JSONObject jsonObject = Response.getJSONObject(i3);
                             mAdapter7.addItem(new CalendarPayData.CalendarPayData_list(
@@ -374,7 +368,6 @@ public class PayCalenderAdapter extends RecyclerView.Adapter<PayCalenderAdapter.
                                 holder.sat.setTextColor(Color.parseColor("#FF687A"));
                             }
                         }
-                        mAdapter7.notifyDataSetChanged();
                     }
                 }
             } catch (Exception e) {
