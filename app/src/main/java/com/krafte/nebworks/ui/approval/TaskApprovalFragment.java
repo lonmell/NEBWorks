@@ -255,7 +255,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
 //                Date date = sdf.parse(getDate);
 //                dlog.i("Calendar.DATE : " + sdf.format(date));
                 if (chng_icon) {
-                    binding.noDataTxt.setVisibility(View.GONE);
                     cal.add(Calendar.MONTH, -1);
                     toDay = sdf.format(cal.getTime());
                     Year = toDay.substring(0,4);
@@ -264,7 +263,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                     SetCalenderData();
                 } else {
-                    binding.noDataTxt.setVisibility(View.VISIBLE);
                     cal.add(Calendar.DATE, -1);
                     toDay = sdf.format(cal.getTime());
                     Year = toDay.substring(0,4);
@@ -285,7 +283,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
 //                Date date = sdf.parse(getDate);
 //                dlog.i("Calendar.DATE : " + sdf.format(date));
                 if (chng_icon) {
-                    binding.noDataTxt.setVisibility(View.GONE);
                     cal.add(Calendar.MONTH, +1);
                     toDay = sdf.format(cal.getTime());
                     Year = toDay.substring(0,4);
@@ -294,7 +291,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                     SetCalenderData();
                 } else {
-                    binding.noDataTxt.setVisibility(View.VISIBLE);
                     cal.add(Calendar.DATE, +1);
                     toDay = sdf.format(cal.getTime());
                     Year = toDay.substring(0,4);
@@ -327,16 +323,18 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 Day = String.valueOf(dayOfMonth);
                 Day = Day.length()==1?"0"+Day:Day;
                 Month = Month.length()==1?"0"+Month:Month;
+                binding.noDataTxt.setVisibility(View.GONE);
                 if (chng_icon) {
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
+                    SetCalenderData();
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                    GetApprovalList(Tap,select_date);
                 }
                 getYMPicker = binding.setdate.getText().toString().substring(0,7);
 //                SetCalenderData();
 //                setRecyclerView();
                 select_date = Year + "-" + Month + "-" + Day;
-                GetApprovalList(Tap,select_date);
             }
         }, mYear, mMonth, mDay);
 
@@ -415,7 +413,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
         binding.changeIcon.setOnClickListener(v -> {
             if(!chng_icon){
                 chng_icon = true;
-                binding.noDataTxt.setVisibility(View.GONE);
                 binding.tabLayout.setVisibility(View.GONE);
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
@@ -589,6 +586,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
 
     private void SetCalenderData() {
         mList2.clear();
+        binding.noDataTxt.setVisibility(View.GONE);
         getYMPicker = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","").substring(0,7);
         dlog.i("------SetCalenderData------");
         dlog.i("place_id : " + change_place_id);
