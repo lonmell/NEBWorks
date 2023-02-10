@@ -2,12 +2,13 @@ package com.krafte.nebworks.ui.community;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.CursorLoader;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -35,6 +36,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.bottomsheet.SelectStringBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
@@ -44,6 +46,7 @@ import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.databinding.ActivityCommunityAddBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
+import com.krafte.nebworks.ui.career.CareerActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -62,7 +65,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -99,6 +104,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     RetrofitConnect rc = new RetrofitConnect();
+    MultiImageAdapter adapter;
 
     Drawable icon_off;
     Drawable icon_on;
@@ -127,6 +133,7 @@ public class CommunityAddActivity extends AppCompatActivity {
     String feed_thumnail_path = "";
     String ImgfileMaker = "";
     String state = "";
+    ArrayList<Uri> uriList = new ArrayList<>();// 이미지의 uri를 담을 ArrayList 객체
 
     @SuppressLint({"LongLogTag", "UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -195,7 +202,13 @@ public class CommunityAddActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        ImgfileMaker = ImageNameMaker();
+
+
+        if(uriList.size() == 0){
+            binding.clearImg.setVisibility(View.GONE);
+        }else{
+            binding.clearImg.setVisibility(View.VISIBLE);
+        }
     }
 
     @SuppressLint("LongLogTag")
@@ -251,38 +264,30 @@ public class CommunityAddActivity extends AppCompatActivity {
 
         });
 
-//        binding.writerName.setOnClickListener(v -> {
-//            if (USER_INFO_NICKNAME.isEmpty() && nickname_select == 0) {
-//                shardpref.putString("returnPage", TAG);
-//                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-//                intent.putExtra("data", "저장된 닉네임이 없습니다\n닉네임설정으로 이동합니다.");
-//                intent.putExtra("flag", "닉네임없음");
-//                intent.putExtra("left_btn_txt", "취소");
-//                intent.putExtra("right_btn_txt", "확인");
-//                mContext.startActivity(intent);
-//                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            } else {
-//                if (nickname_select == 0) {
-//                    nickname_select = 1;
-//                    user_input_name = USER_INFO_NICKNAME;
-//                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_on, null, null, null);
-//                    binding.writerName.setBackgroundColor(Color.parseColor("#E0EAFB"));
-//                } else {
-//                    nickname_select = 0;
-//                    user_input_name = USER_INFO_NAME;
-//                    binding.writerName.setCompoundDrawablesWithIntrinsicBounds(icon_off, null, null, null);
-//                    binding.writerName.setBackgroundColor(Color.parseColor("#ffffff"));
-//                }
-//            }
-//
-//        });
+        binding.clearImg.setOnClickListener(v -> {
+            saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
+            saveBitmap.eraseColor(Color.TRANSPARENT);
+            imgUrl.clear();
+            uriList.clear();
+            adapter.notifyDataSetChanged();
+            if(uriList.size() == 0){
+                binding.clearImg.setVisibility(View.GONE);
+            }else{
+                binding.clearImg.setVisibility(View.VISIBLE);
+            }
+        });
+
 
         //------게시글 이미지 등록 / 갤러리 열기
         binding.limitImg.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
+//            Intent intent = new Intent();
+//            intent.setType("image/*");
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//            startActivityForResult(intent, GALLEY_CODE);
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, GALLEY_CODE);
         });
     }
@@ -320,11 +325,6 @@ public class CommunityAddActivity extends AppCompatActivity {
             return "true";
         }
 
-        //if (!CommTitle.isEmpty() && !CommContnets.isEmpty() && !user_input_name.isEmpty() && !category.isEmpty()) {
-        //    return true;
-        //} else {
-        //  return false;
-        //}
 
     }
     String title = "";
@@ -334,18 +334,6 @@ public class CommunityAddActivity extends AppCompatActivity {
         title = binding.writeTitle.getText().toString();
         content = binding.writeContents.getText().toString();
         res = getResources();
-//        List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
-////        dlog.i("String xml Forbidden Word : " + forbiList);
-//        for(int i = 0; i < forbiList.size(); i++){
-//            if(title.contains(forbiList.get(i))){
-//                title = title.replace(forbiList.get(i)," ○○○ ");
-//            }
-//            if(content.contains(forbiList.get(i))){
-//                content = content.replace(forbiList.get(i)," ○○○ ");
-//            }
-//        }
-//        dlog.i("ForbiddenWordCheck title : " + title);
-//        dlog.i("ForbiddenWordCheck contents : " + content);
         return true;
     }
     //피드 게시글 업로드
@@ -382,7 +370,47 @@ public class CommunityAddActivity extends AppCompatActivity {
                             try {
                                 if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     if (!ProfileUrl.isEmpty()) {
-                                        saveBitmapAndGetURI();
+                                        if(uriList.size() == 1){
+                                            if(!uriList.get(0).toString().equals("")){
+                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
+                                                if(ImgfileMaker != null){
+                                                    saveBitmapAndGetURI(1);
+                                                }
+                                            }
+                                        }else if(uriList.size() == 2){
+                                            if(!uriList.get(0).toString().equals("")){
+                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
+                                                if(ImgfileMaker != null){
+                                                    saveBitmapAndGetURI(1);
+                                                }
+                                            }
+                                            if(!uriList.get(1).toString().equals("")){
+                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
+                                                if(ImgfileMaker != null){
+                                                    saveBitmapAndGetURI(2);
+                                                }
+                                            }
+                                        }else if(uriList.size() == 3){
+                                            if(!uriList.get(0).toString().equals("")){
+                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
+                                                if(ImgfileMaker != null){
+                                                    saveBitmapAndGetURI(1);
+                                                }
+                                            }
+                                            if(!uriList.get(1).toString().equals("")){
+                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
+                                                if(ImgfileMaker != null){
+                                                    saveBitmapAndGetURI(2);
+                                                }
+                                            }
+                                            if(!uriList.get(2).toString().equals("")){
+                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
+                                                if(ImgfileMaker != null){
+                                                    saveBitmapAndGetURI(3);
+                                                }
+                                            }
+                                        }
+
                                     }
                                     Toast_Nomal("게시글 저장이 완료되었습니다.");
                                     shardpref.putInt("SELECT_POSITION", 3);
@@ -439,7 +467,9 @@ public class CommunityAddActivity extends AppCompatActivity {
                             try {
                                 if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     if (!ProfileUrl.isEmpty()) {
-                                        saveBitmapAndGetURI();
+                                        for(int i = 0; i < uriList.size(); i++){
+                                            saveBitmapAndGetURI(i);
+                                        }
                                     }
                                     sharedRemove();
                                     Toast.makeText(mContext, "글 수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
@@ -505,55 +535,164 @@ public class CommunityAddActivity extends AppCompatActivity {
         BackMove();
     }
 
+
     //이미지 업로드에 필요한 소스 START
+    List<String> imgUrl     = new ArrayList<>();
+    List<String> cursor_url = new ArrayList<>();
+    private Bitmap saveBitmap1;//첫번째 사진
+    private Bitmap saveBitmap2;//두번째 사진
+    private Bitmap saveBitmap3;//세번째 사진
+
     @SuppressLint("LongLogTag")
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GALLEY_CODE) {
             if (resultCode == RESULT_OK) {
+                imgUrl.clear();
+                uriList.clear();
+                String imagePath1 = "";
+                String imagePath2 = "";
+                String imagePath3 = "";
+                if(data == null){   // 어떤 이미지도 선택하지 않은 경우
+                    Toast.makeText(getApplicationContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
+                } else{   // 이미지를 하나라도 선택한 경우
+                    if(data.getClipData() == null){     // 이미지를 하나만 선택한 경우
+                        Log.e("single choice: ", String.valueOf(data.getData()));
+                        uriList = new ArrayList<>();
+                        Uri imageUri = data.getData();
+                        imagePath1 = data.getDataString();
+                        uriList.add(imageUri);
 
-                String imagePath = "";
-                try {
-                    //1) data의 주소 사용하는 방법
-                    imagePath = data.getDataString(); // "content://media/external/images/media/7215"
+                        adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                        binding.imgList.setAdapter(adapter);
+                        binding.imgList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-                    Glide.with(this)
-                            .load(imagePath)
-                            .into(binding.limitImg);
+                        Glide.with(this)
+                                .load(imagePath1)
+                                .into(binding.hideimg01);
+                        Glide.with(getApplicationContext()).asBitmap().load(imagePath1).into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                saveBitmap1 = resource;
+                            }
+                        });
 
-                    Glide.with(getApplicationContext()).asBitmap().load(imagePath).into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                            saveBitmap = resource;
+                        //파일 이름 만들기
+//                        final String IMG_FILE_EXTENSION = ".JPEG";
+//                        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+//                        ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
+//                        imgUrl.add(ProfileUrl);
+                        dlog.i("한개일때uriList : " + uriList);
+                        dlog.i("한개일때 imgUrl: " + imgUrl);
+                    }
+                    else{      // 이미지를 여러장 선택한 경우
+                        ClipData clipData = data.getClipData();
+                        Log.e("clipData", String.valueOf(clipData.getItemCount()));
+
+                        if(clipData.getItemCount() > 3){   // 선택한 이미지가 3장 이상인 경우
+                            Toast.makeText(getApplicationContext(), "사진은 3장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
+                        }else{   // 선택한 이미지가 1장 이상 10장 이하인 경우
+                            Log.e(TAG, "multiple choice");
+                            uriList = new ArrayList<>();
+                            for (int i = 0; i < clipData.getItemCount(); i++){
+                                Uri imageUri = clipData.getItemAt(i).getUri();  // 선택한 이미지들의 uri를 가져온다.
+                                try {
+                                    uriList.add(imageUri);  //uri를 list에 담는다.
+//                                    final String IMG_FILE_EXTENSION = ".JPEG";
+//                                    String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+//                                    ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name + "_" + String.valueOf(clipData.getItemCount());
+//                                    imgUrl.add(ProfileUrl);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "File select error", e);
+                                }
+                            }
+                            dlog.i("여러개일때 uriList : " + uriList);
+                            dlog.i("여러개일때 imgUrl : " + imgUrl);
+                            if(uriList.size() == 1){
+                                if(!uriList.get(0).toString().equals("")){
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                            }else if(uriList.size() == 2){
+                                if(!uriList.get(0).toString().equals("")){
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                                if(!uriList.get(1).toString().equals("")){
+                                    Glide.with(this)
+                                            .load(uriList.get(1).toString())
+                                            .into(binding.hideimg02);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(1).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap2 = resource;
+                                        }
+                                    });
+                                }
+                            }else if(uriList.size() == 3){
+                                if(!uriList.get(0).toString().equals("")){
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                                if(!uriList.get(1).toString().equals("")){
+                                    Glide.with(this)
+                                            .load(uriList.get(1).toString())
+                                            .into(binding.hideimg02);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(1).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap2 = resource;
+                                        }
+                                    });
+                                }
+                                if(!uriList.get(2).toString().equals("")){
+                                    Glide.with(this)
+                                            .load(uriList.get(2).toString())
+                                            .into(binding.hideimg03);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(2).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap3 = resource;
+                                        }
+                                    });
+                                }
+                            }
+
+
+
+                            adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                            binding.imgList.setAdapter(adapter);
+                            binding.imgList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
                         }
-                    });
-
-                    final String IMG_FILE_EXTENSION = ".JPEG";
-                    String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                    ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    }
                 }
-
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    //절대경로를 구한다.
-    private String getRealPathFromUri(Uri uri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        CursorLoader cursorLoader = new CursorLoader(this, uri, proj, null, null, null);
-        Cursor cursor = cursorLoader.loadInBackground();
-
-        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String url = cursor.getString(columnIndex);
-        cursor.close();
-        return url;
-    }
 
     private String ImageNameMaker() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -594,26 +733,30 @@ public class CommunityAddActivity extends AppCompatActivity {
     }
 
     @SuppressLint({"SimpleDateFormat", "LongLogTag"})
-    public Uri saveBitmapAndGetURI() {
+    public Uri saveBitmapAndGetURI(int i) {
         //Create Bitmap
-//            saveBitmap = CanvasIO.openBitmap(mContext);
         binding.loginAlertText.setVisibility(View.VISIBLE);
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        saveBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        if(i == 1){
+            saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        }else if(i == 2){
+            saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        }else if(i == 3){
+            saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        }
         byte[] ba = bao.toByteArray();
         String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
 
         //Create Bitmap -> File
         final String IMG_FILE_EXTENSION = ".JPEG";
         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String inputDate = dc.GET_YEAR + dc.GET_MONTH + dc.GET_DAY;
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
         String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
         String fullFileName = BACKUP_PATH;
 
         dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
         dlog.i("(saveBitmapAndGetURI)USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("(saveBitmapAndGetURI)file_name : " + file_name);
+        dlog.i("(saveBitmapAndGetURI)fullFileName : " + fullFileName);
 
         File file_path;
         try {
@@ -625,24 +768,27 @@ public class CommunityAddActivity extends AppCompatActivity {
             dlog.i("(saveBitmapAndGetURI)file_name : " + file_name);
             file = new File(file_path, file_name);
             FileOutputStream out = new FileOutputStream(file);
-            saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-
-
-            ProfileUrl = "http://krafte.net/NEBWorks/image/feedimg/" + file_name;
-            feed_thumnail_path = "http://krafte.net/NEBWorks/image/feedimg/" + file_name;
+            if(i == 1){
+                saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            }else if(i == 2){
+                saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            }else if(i == 3){
+                saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            }
+            ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
             saveBitmapToFile(file);
 
-            dlog.e("이미지 저장경로 : " + ProfileUrl);
+            dlog.e("사인 저장 경로 : " + ProfileUrl);
+
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
-            RetrofitInterface retrofitInterface = ApiClient.getApiClient().create(RetrofitInterface.class);
+            CareerActivity.RetrofitInterface retrofitInterface = CareerActivity.ApiClient.getApiClient().create(CareerActivity.RetrofitInterface.class);
             Call<String> call = retrofitInterface.request(body);
 
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Log.e("uploaded_file()", "성공 : call = " + call + "response = " + response);
-                    Log.e(TAG, "response.body() : " + response.body());
 
                     if (fileDelete(String.valueOf(file))) {
                         Log.e("uploaded_file()", "기존 이미지 삭제 완료");
@@ -653,16 +799,14 @@ public class CommunityAddActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
-                    dlog.e("uploaded_file() 에러 : " + t.getMessage());
+                    Log.e("uploaded_file()", "에러 : " + t.getMessage());
                 }
             });
-            dlog.d("(saveBitmapAndGetURI)이미지 경로 : " + Uri.fromFile(file).toString());
+            Log.d("(saveBitmapAndGetURI)이미지 경로 : ", Uri.fromFile(file).toString());
 
             out.close();
             binding.loginAlertText.setVisibility(View.GONE);
             dlog.i("(saveBitmapAndGetURI)file : " + file);
-//            mHandler = new Handler(Looper.getMainLooper());
-//            mHandler.postDelayed(this::setUpdateUserStoreThumnail, 0);
         } catch (FileNotFoundException exception) {
             dlog.e("FileNotFoundException : " + exception.getMessage());
         } catch (IOException exception) {
