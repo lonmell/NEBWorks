@@ -292,11 +292,21 @@ public class MainFragment extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
         if (paging_position == 0) {
-//            shardpref.putString("event","backpressed");
-            shardpref.remove("event");
-            pm.PlaceList(mContext);
+            if(drawerLayout.isOpen()){
+                drawerLayout.closeDrawer(drawerView);
+            } else {
+    //            shardpref.putString("event","backpressed");
+                shardpref.remove("event");
+                pm.PlaceList(mContext);
+            }
         } else {
-            binding.tabLayout.getTabAt(0).select();
+            if(drawerLayout.isOpen()){
+                drawerLayout.closeDrawer(drawerView);
+            } else {
+                drawerLayout.closeDrawer(drawerView);
+                binding.tabLayout.getTabAt(0).select();
+                binding.title.setText("");
+            }
         }
     }
 
