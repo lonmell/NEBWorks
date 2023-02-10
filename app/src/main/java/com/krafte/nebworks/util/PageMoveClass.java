@@ -41,6 +41,7 @@ import com.krafte.nebworks.ui.member.MemberManagement;
 import com.krafte.nebworks.ui.notify.NotifyListActivity;
 import com.krafte.nebworks.ui.paymanagement.AddPaystubActivity;
 import com.krafte.nebworks.ui.paymanagement.PayManagementActivity;
+import com.krafte.nebworks.ui.paymanagement.PayManagementActivity2;
 import com.krafte.nebworks.ui.paymanagement.PaystuballActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity2;
@@ -688,6 +689,15 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
+
+    @Override
+    public void PayManagement2(Context context) {
+        Intent intent = new Intent(context, PayManagementActivity2.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
 
     @Override
     public void AddPaystubAlba(Context context) {

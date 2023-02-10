@@ -484,7 +484,11 @@ public class HomeFragment2 extends Fragment {
                 isAuth();
             } else {
                 dlog.i("급여관리");
-                pm.PayManagement(mContext);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.PayManagement(mContext);
+                }else{
+                    pm.PayManagement2(mContext);
+                }
             }
         });
 

@@ -43,108 +43,25 @@
             android:textSize="16sp" />
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/select_area"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_below="@+id/top_bar"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:weightSum="2"
-        android:orientation="horizontal">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/change_place"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/blue_200"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="0dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/change_place_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:gravity="start|center"
-                    android:text="전체매장"
-                    android:textColor="@color/new_blue" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/ic_page_move_arrow"
-                    android:rotation="90" />
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/change_member"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:layout_marginStart="15dp"
-            app:cardBackgroundColor="@color/blue_200"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="0dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/change_member_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:gravity="start|center"
-                    android:text="전체직원"
-                    android:textColor="@color/new_blue" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/ic_page_move_arrow"
-                    android:rotation="90" />
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/select_date_area"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_below="@+id/select_area"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_centerVertical="true">
 
             <RelativeLayout
                 android:id="@+id/prev_date"
                 android:layout_width="40dp"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:gravity="center|start">
 
                 <ImageView
@@ -163,12 +80,13 @@
                 android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:text="0000년 00월"
+                android:textSize="20sp"
                 android:textColor="@color/black" />
 
             <RelativeLayout
                 android:id="@+id/next_date"
                 android:layout_width="40dp"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:gravity="center|end">
 
                 <ImageView
@@ -180,8 +98,9 @@
 
         <RelativeLayout
             android:layout_width="45dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true">
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
 
             <ImageView
                 android:id="@+id/change_icon"
@@ -191,6 +110,74 @@
                 android:background="@drawable/calendar_resize" />
         </RelativeLayout>
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/allpay_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/pretendard_bold"
+            android:layout_toStartOf="@+id/select_area"
+            android:layout_alignParentStart="true"
+            android:text="총 0원"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:id="@+id/select_area"
+            android:layout_width="110dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/change_place"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/blue_200"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/change_place_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="start|center"
+                        android:text="전체매장"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textColor="@color/new_blue" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/ic_full_round_check"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
 
     <!-- TabLayou 을 배치한다. -->
     <LinearLayout

@@ -41,7 +41,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-
+/*
+*
+* 2023-02-09
+* 기본설정{
+*   식대 = 미포함,
+*   4대보험 = 공제
+* }
+* 소득세 자동계산
+* */
 public class AddPaystubActivity extends AppCompatActivity {
     private ActivityAddpaystubalbaBinding binding;
     private static final String TAG = "AddPaystubActivityAlba";
@@ -72,10 +80,14 @@ public class AddPaystubActivity extends AppCompatActivity {
     float insurance03p = 0;//고용보험 퍼센트
     float insurance04p = 0;//장기요양보험료 퍼센트
 
+    float incometax01p = 0;//소득세 퍼센트
+
     String insurance1 = "";
     String insurance2 = "";
     String insurance3 = "";
     String insurance4 = "";
+
+    String incometax1 = "";//소득세
 
     //Other
     /*라디오 버튼들 boolean*/
@@ -170,15 +182,20 @@ public class AddPaystubActivity extends AppCompatActivity {
         insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
         insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
         insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+
+        incometax1 = myFormatter.format(Math.round(AllPayment * incometax01p));
+
         binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
         binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
         binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
         binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
+        binding.IncomeTax33.setText(incometax1 + "(3.3%소득세)");
 
         AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                 + Integer.parseInt(insurance2.replace(",",""))
                 + Integer.parseInt(insurance3.replace(",",""))
-                + Integer.parseInt(insurance4.replace(",","")));
+                + Integer.parseInt(insurance4.replace(",",""))
+                + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
 
         String pay = myFormatter.format(AllPayment);
         binding.allPayment.setText(pay);
@@ -209,16 +226,21 @@ public class AddPaystubActivity extends AppCompatActivity {
                     insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
                     insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
                     insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+
+                    incometax1 = myFormatter.format(Math.round(AllPayment * incometax01p));
+
                     binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
                     binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
                     binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
                     binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
+                    binding.IncomeTax33.setText(incometax1 + "(3.3%소득세)");
 
                     DecimalFormat myFormatter = new DecimalFormat("###,###");
                     AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                             + Integer.parseInt(insurance2.replace(",",""))
                             + Integer.parseInt(insurance3.replace(",",""))
-                            + Integer.parseInt(insurance4.replace(",","")));
+                            + Integer.parseInt(insurance4.replace(",",""))
+                            + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
 
                     String pay = myFormatter.format(AllPayment);
                     binding.allPayment.setText(pay);
@@ -255,16 +277,22 @@ public class AddPaystubActivity extends AppCompatActivity {
                     insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
                     insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
                     insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+
+                    incometax1 = myFormatter.format(Math.round(AllPayment * incometax01p));
+
                     binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
                     binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
                     binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
                     binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
 
+                    binding.IncomeTax33.setText(incometax1 + "(3.3%소득세)");
+
                     DecimalFormat myFormatter = new DecimalFormat("###,###");
                     AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                             + Integer.parseInt(insurance2.replace(",",""))
                             + Integer.parseInt(insurance3.replace(",",""))
-                            + Integer.parseInt(insurance4.replace(",","")));
+                            + Integer.parseInt(insurance4.replace(",",""))
+                            + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
 
                     String pay = myFormatter.format(AllPayment);
                     binding.allPayment.setText(pay);
@@ -298,16 +326,22 @@ public class AddPaystubActivity extends AppCompatActivity {
                     insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
                     insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
                     insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+
+                    incometax1 = myFormatter.format(Math.round(AllPayment * incometax01p));
+
                     binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
                     binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
                     binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
                     binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
 
+                    binding.IncomeTax33.setText(incometax1 + "(3.3%소득세)");
+
                     DecimalFormat myFormatter = new DecimalFormat("###,###");
                     AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                             + Integer.parseInt(insurance2.replace(",",""))
                             + Integer.parseInt(insurance3.replace(",",""))
-                            + Integer.parseInt(insurance4.replace(",","")));
+                            + Integer.parseInt(insurance4.replace(",",""))
+                            + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
 
                     String pay = myFormatter.format(AllPayment);
                     binding.allPayment.setText(pay);
@@ -361,23 +395,99 @@ public class AddPaystubActivity extends AppCompatActivity {
                     insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
                     insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
                     insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+
+                    incometax1 = myFormatter.format(Math.round(AllPayment * incometax01p));
+
                     binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
                     binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
                     binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
                     binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
 
+                    binding.IncomeTax33.setText(incometax1 + "(3.3%소득세)");
+
                     AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                             + Integer.parseInt(insurance2.replace(",",""))
                             + Integer.parseInt(insurance3.replace(",",""))
-                            + Integer.parseInt(insurance4.replace(",","")));
+                            + Integer.parseInt(insurance4.replace(",",""))
+                            + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
 
                     String pay = myFormatter.format(AllPayment);
                     binding.allPayment.setText(pay);
                 }
             }
         });
+        BasicSetting();
     }
+    
+    boolean pintf = false;
+    boolean incometf = false;
+    private void BasicSetting(){
+        //식대 기본 설정
+        select0304 = "미포함";
+        binding.editMealPay.setText("0");
+        get_edit_mealpay = "0";
+        binding.editMealPay.setVisibility(View.GONE);
 
+        binding.select03.setTextColor(Color.parseColor("#54585A"));
+        binding.select04.setTextColor(Color.parseColor("#1445D0"));
+        binding.select03Box.setBackgroundResource(R.drawable.default_gray_round);
+        binding.select04Box.setBackgroundResource(R.drawable.default_select_on_round);
+
+        binding.select03.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
+        binding.select04.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
+        AllPayment = AllPayment + Integer.parseInt(get_edit_mealpay);
+
+        //4대보험 ( 매장 설정에 따라 공제 비공제 바뀜 )
+        
+        dlog.i("place_insurance : " + PlaceCheckData.getInstance().getPlace_insurance());
+        String pinsur = PlaceCheckData.getInstance().getPlace_insurance();
+        for(String s : pinsur.split(",")){
+            if(s.contains("4대보험")){
+                pintf = true;
+            }
+            if(s.contains("3.3%소득세")){
+                incometf = true;
+            }
+        }
+        dlog.i("pintf : " + pintf);
+        binding.IncomeTax33.setVisibility(incometf?View.VISIBLE:View.INVISIBLE);
+        if(pintf){
+            select0506 = "공제";
+            binding.select05.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
+            binding.select06.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
+
+            binding.select05.setTextColor(Color.parseColor("#1445D0"));
+            binding.select06.setTextColor(Color.parseColor("#54585A"));
+            binding.select05Box.setBackgroundResource(R.drawable.default_select_on_round);
+            binding.select06Box.setBackgroundResource(R.drawable.default_gray_round);
+
+            binding.gongjeArea.setVisibility(View.VISIBLE);
+            DecimalFormat myFormatter = new DecimalFormat("###,###");
+            AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
+                    + Integer.parseInt(insurance2.replace(",",""))
+                    + Integer.parseInt(insurance3.replace(",",""))
+                    + Integer.parseInt(insurance4.replace(",",""))
+                    + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
+            String pay = myFormatter.format(AllPayment);
+            binding.allPayment.setText(pay);
+        }else{
+            select0506 = "미공제";
+            binding.select05.setCompoundDrawablesWithIntrinsicBounds(icon_off,null,null,null);
+            binding.select06.setCompoundDrawablesWithIntrinsicBounds(icon_on,null,null,null);
+            binding.gongjeArea.setVisibility(View.GONE);
+
+            binding.select05.setTextColor(Color.parseColor("#54585A"));
+            binding.select06.setTextColor(Color.parseColor("#1445D0"));
+            binding.select05Box.setBackgroundResource(R.drawable.default_gray_round);
+            binding.select06Box.setBackgroundResource(R.drawable.default_select_on_round);
+
+            DecimalFormat myFormatter = new DecimalFormat("###,###");
+            AllPayment = Integer.parseInt(select_total_payment) + Integer.parseInt(get_edit_expenses.replace(",","").equals("")?"0":get_edit_expenses.replace(",",""))
+                    + Integer.parseInt(get_edit_overwork.replace(",","").equals("")?"0":get_edit_overwork.replace(",",""));
+            String pay = myFormatter.format(AllPayment);
+            binding.allPayment.setText(pay);
+        }
+    }
     private void setBtnEvent() {
         binding.menu.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, PayManagementActivity.class);
@@ -443,15 +553,22 @@ public class AddPaystubActivity extends AppCompatActivity {
             insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
             insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
             insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+
+            incometax1 = myFormatter.format(Math.round(AllPayment * incometax01p));
+
             binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
             binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
             binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
             binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
 
+            binding.IncomeTax33.setText(incometax1 + "(3.3%소득세)");
+
             AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                     + Integer.parseInt(insurance2.replace(",",""))
                     + Integer.parseInt(insurance3.replace(",",""))
-                    + Integer.parseInt(insurance4.replace(",","")));
+                    + Integer.parseInt(insurance4.replace(",",""))
+                    + Integer.parseInt(incometax1.replace(",",""))
+                    + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
 
             String pay = myFormatter.format(AllPayment);
             binding.allPayment.setText(pay);
@@ -488,7 +605,8 @@ public class AddPaystubActivity extends AppCompatActivity {
             AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                     + Integer.parseInt(insurance2.replace(",",""))
                     + Integer.parseInt(insurance3.replace(",",""))
-                    + Integer.parseInt(insurance4.replace(",","")));
+                    + Integer.parseInt(insurance4.replace(",",""))
+                    + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
             String pay = myFormatter.format(AllPayment);
             binding.allPayment.setText(pay);
         });
@@ -593,7 +711,11 @@ public class AddPaystubActivity extends AppCompatActivity {
 //
 //                        Intent shareIntent = Intent.createChooser(intent, "share");
 //                        startActivity(shareIntent);
-                        pm.PayManagement(mContext);
+                        if(USER_INFO_AUTH.equals("0")){
+                            pm.PayManagement(mContext);
+                        }else{
+                            pm.PayManagement2(mContext);
+                        }
                     }else{
                         BtnOneCircleFun(true);
                     }
@@ -735,7 +857,7 @@ public class AddPaystubActivity extends AppCompatActivity {
                             insurance02p = Float.parseFloat(Response.getJSONObject(0).getString("insurance02"));//건강보험 퍼센트
                             insurance03p = Float.parseFloat(Response.getJSONObject(0).getString("insurance03"));//고용보험 퍼센트
                             insurance04p = Float.parseFloat(Response.getJSONObject(0).getString("insurance04"));//장기요양보험료 퍼센트
-
+                            incometax01p = Float.parseFloat(Response.getJSONObject(0).getString("tax01"));//소득세 퍼센트
                             DecimalFormat myFormatter = new DecimalFormat("###,###");
 //        String pay = myFormatter.format(Integer.parseInt(select_total_payment));
 
@@ -744,15 +866,20 @@ public class AddPaystubActivity extends AppCompatActivity {
                             insurance2 = myFormatter.format(Math.round((AllPayment * insurance02p)/100));
                             insurance3 = myFormatter.format(Math.round((AllPayment * insurance03p)/100));
                             insurance4 = myFormatter.format(Math.round((Math.round((AllPayment * insurance02p)/100) * insurance04p)/100));
+                            incometax1 = myFormatter.format(Math.round(AllPayment * incometax01p));
+
                             binding.insurance01.setHint("자동계산시 " + insurance1);//국민연금
                             binding.insurance02.setHint("자동계산시 " + insurance2);//건강보험
                             binding.insurance03.setHint("자동계산시 " + insurance3);//고용보험
                             binding.insurance04.setHint("자동계산시 " + insurance4);//장기요양보험료
-
+                            dlog.i("incometax1 : " + incometax1);
+                            binding.IncomeTax33.setText(incometax1 + "(3.3%소득세)");
+                        
                             AllPayment = AllPayment - (Integer.parseInt(insurance1.replace(",",""))
                                     + Integer.parseInt(insurance2.replace(",",""))
                                     + Integer.parseInt(insurance3.replace(",",""))
-                                    + Integer.parseInt(insurance4.replace(",","")));
+                                    + Integer.parseInt(insurance4.replace(",",""))
+                                    + Integer.parseInt(incometf?incometax1.replace(",",""):"0"));
 
                             String pay = myFormatter.format(AllPayment);
                             binding.allPayment.setText(pay);

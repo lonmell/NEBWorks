@@ -171,6 +171,7 @@
 
         <!--paymanagement-->
         <activity android:name=".ui.paymanagement.PayManagementActivity" />
+        <activity android:name=".ui.paymanagement.PayManagementActivity2" />
         <activity android:name=".ui.paymanagement.AddPaystubActivity" />
         <activity android:name=".ui.paymanagement.PaystuballActivity" />
 

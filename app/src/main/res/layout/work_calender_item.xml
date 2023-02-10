@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -93,7 +93,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="105dp"
         android:orientation="horizontal"
         android:weightSum="7">
 
@@ -112,7 +112,7 @@
                 <TextView
                     android:id="@+id/sun"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="num"
@@ -122,7 +122,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/sunlist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"/>
             </LinearLayout>
 
             <LinearLayout
@@ -146,7 +146,7 @@
                 <TextView
                     android:id="@+id/mon"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="num"
@@ -156,7 +156,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/monlist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/mon_box"
@@ -179,7 +179,7 @@
                 <TextView
                     android:id="@+id/tue"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="num"
@@ -189,7 +189,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/tuelist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/tue_box"
@@ -213,7 +213,7 @@
                 <TextView
                     android:id="@+id/wed"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="num"
@@ -223,7 +223,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/wedlist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/wed_box"
@@ -246,7 +246,7 @@
                 <TextView
                     android:id="@+id/thu"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="num"
@@ -256,7 +256,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/thulist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/thu_box"
@@ -279,7 +279,7 @@
                 <TextView
                     android:id="@+id/fri"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="num"
@@ -289,7 +289,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/frilist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/fri_box"
@@ -312,7 +312,7 @@
                 <TextView
                     android:id="@+id/sat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="num"
@@ -322,7 +322,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/satlist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/sat_box"

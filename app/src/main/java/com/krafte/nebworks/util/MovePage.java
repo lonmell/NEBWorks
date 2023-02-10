@@ -174,6 +174,8 @@ public interface MovePage {
 
     void PayManagement(Context context);
 
+    void PayManagement2(Context context);
+
     void AddPaystubAlba(Context context);
 
     void PaystubAll(Context context);

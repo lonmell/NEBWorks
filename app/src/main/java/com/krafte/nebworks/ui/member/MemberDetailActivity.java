@@ -881,10 +881,18 @@ public class MemberDetailActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav05) {
             shardpref.putString("Tap", "0");
-            pm.PayManagement(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.PayManagement(mContext);
+            }else{
+                pm.PayManagement2(mContext);
+            }
         } else if (view.getId() == R.id.select_nav06) {
             shardpref.putString("Tap", "1");
-            pm.PayManagement(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                pm.PayManagement(mContext);
+            }else{
+                pm.PayManagement2(mContext);
+            }
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.putInt("SELECT_POSITION_sub", 0);

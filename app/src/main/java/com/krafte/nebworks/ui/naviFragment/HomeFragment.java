@@ -256,7 +256,11 @@ public class HomeFragment extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                pm.PayManagement(mContext);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.PayManagement(mContext);
+                }else{
+                    pm.PayManagement2(mContext);
+                }
             }
         });
 
@@ -318,7 +322,11 @@ public class HomeFragment extends Fragment {
                 isAuth();
             } else {
                 dlog.i("급여관리");
-                pm.PayManagement(mContext);
+                if(USER_INFO_AUTH.equals("0")){
+                    pm.PayManagement(mContext);
+                }else{
+                    pm.PayManagement2(mContext);
+                }
             }
         });
         binding.homeMenu04.setOnClickListener(v -> {
@@ -603,7 +611,11 @@ public class HomeFragment extends Fragment {
                                                         isAuth();
                                                     } else {
                                                         shardpref.putString("Tap", "1");
-                                                        pm.PayManagement(mContext);
+                                                        if(USER_INFO_AUTH.equals("0")){
+                                                            pm.PayManagement(mContext);
+                                                        }else{
+                                                            pm.PayManagement2(mContext);
+                                                        }
                                                     }
                                                 }
                                             });
