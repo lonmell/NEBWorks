@@ -495,9 +495,6 @@ public class PayManagementActivity extends AppCompatActivity {
         });
     }
     private void SetCalenderData(String Year, String Month) {
-        mList.clear();
-        mList2.clear();
-        mList3.clear();
         dlog.i("------SetCalenderData------");
         dlog.i("place_id :" + place_id);
         dlog.i("USER_INFO_ID :" + USER_INFO_ID);
@@ -507,7 +504,7 @@ public class PayManagementActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PayCalendersetData api = retrofit.create(PayCalendersetData.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, Year, Month);
+        Call<String> call2 = api.getData(place_id, "", Year, Month);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -531,6 +528,7 @@ public class PayManagementActivity extends AppCompatActivity {
                                             jsonObject.getString("week"),
                                             Collections.singletonList(jsonObject.getString("users"))
                                     ));
+                                    dlog.i(jsonObject.getString("day") + " / SetCalenderData jsonObject.getString(\"users\") : " + Collections.singletonList(jsonObject.getString("users")));
                                 }
                                 GetCalenderList(Year, Month, mList3);
                             }
