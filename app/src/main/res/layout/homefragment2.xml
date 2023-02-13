@@ -759,7 +759,7 @@
                                 android:gravity="center"
                                 android:text="출퇴근 현황"
                                 android:textColor="@color/new_blue"
-                                android:textSize="18sp" />
+                                android:textSize="20sp" />
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/all_member_go"
@@ -938,7 +938,7 @@
                     android:layout_margin="20dp"
                     android:fontFamily="@font/gangwonedu_bold"
                     android:gravity="center|bottom"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:text="간편메뉴"
                     android:textColor="@color/black" />
 
