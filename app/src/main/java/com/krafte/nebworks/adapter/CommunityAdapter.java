@@ -57,6 +57,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     Dlog dlog = new Dlog();
     int kind = 0;
     Boolean isMain = false;
+    String Word = "";
+    List<String> forbiList = new ArrayList<>();
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
@@ -119,7 +121,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             holder.rank_tv.setText(String.valueOf(position+1));
 
             Resources res = mContext.getResources();
-            List<String> forbiList = Arrays.asList(res.getStringArray(R.array.forbidden_word));
+//            List<String> forbiList = Arrays.asList(res.getStringArray(R.array.forbidden_word));
 //            List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
             String title = "";
             String content = "";
@@ -252,8 +254,11 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","");
-            place_id = shardpref.getString("place_id","");
-            token = shardpref.getString("token", "");
+            place_id     = shardpref.getString("place_id","");
+            token        = shardpref.getString("token", "");
+            Word         = shardpref.getString("FobiddenWord","");
+
+            forbiList.addAll(Arrays.asList(Word.replace("[", "").replace("]", "").replace(" ", "").split(",")));
 
             dlog.DlogContext(mContext);
             itemView.setOnClickListener(view -> {

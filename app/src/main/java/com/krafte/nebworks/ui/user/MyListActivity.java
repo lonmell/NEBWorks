@@ -174,7 +174,7 @@ public class MyListActivity extends AppCompatActivity {
                                             jsonObject.getString("boardkind"),
                                             jsonObject.getString("category"),
                                             jsonObject.getString("mylikeyn"),
-                                            jsonObject.getString("fix_yn")
+                                            ""
                                     ));
                                 }
                             }

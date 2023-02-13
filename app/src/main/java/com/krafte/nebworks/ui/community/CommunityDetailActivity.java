@@ -8,8 +8,13 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -111,6 +116,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     String subcomment_id = "";
     String subcomment_name = "";
+    boolean settingft = false;
 
     @SuppressLint({"LongLogTag", "UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -164,11 +170,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
             RemoveShared();
             super.onBackPressed();
         });
-        if (!writer_id.equals(USER_INFO_ID)) {
-            binding.listSetting.setVisibility(View.GONE);
-        } else {
-            binding.listSetting.setVisibility(View.VISIBLE);
-        }
+
 
         binding.likeCnt.setText(like_cnt);
         if (mylikeyn.equals("0")) {
@@ -189,14 +191,53 @@ public class CommunityDetailActivity extends AppCompatActivity {
             AddLike(feed_id);
         });
 
-//        binding.feedImg.setOnClickListener(v -> {
-//            Intent intent = new Intent(mContext, PhotoPopActivity.class);
-//            intent.putExtra("data", feed_img_path);
-//            mContext.startActivity(intent);
-//            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        });
-
+        if (!writer_id.equals(USER_INFO_ID)) {
+            binding.listSetting.setVisibility(View.GONE);
+        } else {
+            binding.listSetting.setVisibility(View.VISIBLE);
+        }
+//        if (!writer_id.equals(USER_INFO_ID)) {
+//            //작성자x
+//            binding.delFeedbtn.setVisibility(View.GONE);
+//            binding.editFeedbtn.setText("신고");
+//            binding.editFeedbtn.setOnClickListener(v -> {
+//                Toast_Nomal("신고하기 기능 추가 예정");
+//            });
+//        } else {
+//            //작성자
+//            binding.delFeedbtn.setVisibility(View.VISIBLE);
+//            binding.editFeedbtn.setOnClickListener(v -> {
+//                shardpref.putString("feed_id", feed_id);
+//                shardpref.putString("place_id", place_id);
+//                shardpref.putString("title", title);
+//                shardpref.putString("contents", contents);
+//                shardpref.putString("writer_id", writer_id);
+//                shardpref.putString("writer_name", writer_name);
+//                shardpref.putString("writer_img_path", writer_img_path);
+//                shardpref.putString("feed_img_path", feed_img_path);
+//                shardpref.putString("jikgup", jikgup);
+//                shardpref.putString("view_cnt", view_cnt);
+//                shardpref.putString("comment_cnt", comment_cnt);
+//                shardpref.putString("category", category);
+//                shardpref.putString("state", "EditCommunity");
+//                Intent intent = new Intent(mContext, CommunityAddActivity.class);
+//                mContext.startActivity(intent);
+//                ((Activity) mContext).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            });
+//            binding.delFeedbtn.setOnClickListener(v -> {
+//                click_htn = "icon_trash";
+//                shardpref.putString("feed_id", feed_id);
+//                Intent intent = new Intent(this, TwoButtonPopActivity.class);
+//                intent.putExtra("data", "해당 공지사항을 삭제하시겠습니까?");
+//                intent.putExtra("flag", "공지삭제");
+//                intent.putExtra("left_btn_txt", "취소");
+//                intent.putExtra("right_btn_txt", "삭제");
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            });
+//        }
         binding.listSetting.setOnClickListener(v -> {
             shardpref.putString("feed_id", feed_id);
             shardpref.putString("place_id", place_id);
@@ -216,7 +257,15 @@ public class CommunityDetailActivity extends AppCompatActivity {
             mContext.startActivity(intent);
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            if (!settingft) {
+//                settingft = true;
+//                binding.settingDetail.setVisibility(View.VISIBLE);
+//            } else {
+//                settingft = false;
+//                binding.settingDetail.setVisibility(View.GONE);
+//            }
         });
+
     }
 
     @Override
@@ -745,5 +794,19 @@ public class CommunityDetailActivity extends AppCompatActivity {
         shardpref.remove("comment_cnt");
         shardpref.remove("category");
         shardpref.remove("updated_at");
+    }
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }

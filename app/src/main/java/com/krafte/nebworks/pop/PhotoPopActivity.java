@@ -66,6 +66,7 @@ public class PhotoPopActivity extends Activity {
         PhotoViewPagerAdapter adapter = new PhotoViewPagerAdapter(imgList,mContext);
         binding.thumnailIn.setAdapter(adapter);
         binding.thumnailIn.setCurrentItem(pos);
+        binding.viewImgCount.setText(pos+1 + " / " + adapter.getItemCount());
         binding.thumnailIn.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {

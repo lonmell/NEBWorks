@@ -57,7 +57,6 @@
             android:layout_centerInParent="true"
             android:background="@drawable/list_setting" />
     </RelativeLayout>
-
     <androidx.cardview.widget.CardView
         android:id="@+id/profile_area"
         android:layout_width="20dp"

@@ -4,18 +4,16 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.WorkgotoBottomSheet;
 import com.krafte.nebworks.data.CalendarSetData;
@@ -34,7 +32,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -105,7 +102,7 @@ public class CalenderFragment extends Fragment {
 
     private void SetCalenderData() {
         mList2.clear();
-        String getYMPicker = year + "-" + month + "-" + dc.GET_DAY;
+        String getYMPicker = year + "-" + month;
         Log.i(TAG, "------SetCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);

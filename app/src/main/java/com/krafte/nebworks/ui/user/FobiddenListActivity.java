@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.user;
 
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
@@ -98,6 +99,7 @@ public class FobiddenListActivity extends AppCompatActivity {
 
     List<String> selectYoil = new ArrayList<>();
     RetrofitConnect rc = new RetrofitConnect();
+    String delWord = "";
     public void setRecyclerView() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FobiddenInterface.URL)
@@ -136,6 +138,13 @@ public class FobiddenListActivity extends AppCompatActivity {
                             }
                         }
                         mAdapter.notifyDataSetChanged();
+                        mAdapter.setOnItemClickListener(new ListYoilStringAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View v, int position) {
+                                delWord = mList.get(position).getItem();
+                                DelWord(delWord);
+                            }
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -170,6 +179,34 @@ public class FobiddenListActivity extends AppCompatActivity {
                     dlog.i("AddWord jsonResponse : " + jsonResponse);
                     binding.fobiddenInput.setText("");
                     imm.hideSoftInputFromWindow(binding.fobiddenInput.getWindowToken(), 0);
+                    setRecyclerView();
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
+        dlog.i("----END AddWord-----");
+    }
+
+    private void DelWord(String delWord){
+        dlog.i("----START AddWord-----");
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FobiddenInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FobiddenInterface api = retrofit.create(FobiddenInterface.class);
+        Call<String> call = api.getData(delWord , "2");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    String jsonResponse = rc.getBase64decode(response.body());
                     setRecyclerView();
                 }
             }

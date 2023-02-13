@@ -26,6 +26,7 @@ import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.data.StringData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
+import com.krafte.nebworks.dataInterface.FobiddenInterface;
 import com.krafte.nebworks.databinding.CommunityFragment1Binding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,6 +75,7 @@ public class community_fragment1 extends Fragment {
     ArrayList<StringData.StringData_list> mData = new ArrayList<>();
     SelectCateAdapter cateAdapter = null;
 
+    List<String> getWord = new ArrayList<>();
     RetrofitConnect rc = new RetrofitConnect();
     GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
@@ -161,9 +164,10 @@ public class community_fragment1 extends Fragment {
         dlog.i("오늘 :" + toDay);
         toDay = shardpref.getString("FtoDay", toDay);
 
+        setCateList();
+        getFobiddenWord();
         setRecyclerView();
         setRecyclerView2();
-        setCateList();
     }
 
     private void setBtnEvent() {
@@ -232,9 +236,46 @@ public class community_fragment1 extends Fragment {
     private void allClear() {
         mList.clear();
         BestmList.clear();
+        getWord.clear();
     }
 
 
+    public void getFobiddenWord() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FobiddenInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FobiddenInterface api = retrofit.create(FobiddenInterface.class);
+        Call<String> call = api.getData("", "0");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("FobiddenList jsonResponse length : " + jsonResponse.length());
+                    dlog.i("FobiddenList jsonResponse : " + jsonResponse);
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        mList = new ArrayList<>();
+                        for(int i = 0;i < Response.length(); i++){
+                            getWord.add(Response.getJSONObject(i).getString("word"));
+                        }
+                        shardpref.putString("FobiddenWord",String.valueOf(getWord));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
+    }
     int total_cnt = 0;
     public void setRecyclerView() {
         //Best List
@@ -512,24 +553,29 @@ public class community_fragment1 extends Fragment {
                         mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(View v, int position) {
+
                                 if (USER_INFO_AUTH.isEmpty()) {
                                     isAuth();
                                 } else {
-                                    shardpref.putString("feed_id", mList.get(position).getId());
-                                    shardpref.putString("title", mList.get(position).getTitle());
-                                    shardpref.putString("contents", mList.get(position).getContents());
-                                    shardpref.putString("writer_id", mList.get(position).getWriter_id());
-                                    shardpref.putString("writer_name", mList.get(position).getWriter_name());
-                                    shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
-                                    shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
-                                    shardpref.putString("jikgup", mList.get(position).getJikgup());
-                                    shardpref.putString("view_cnt", mList.get(position).getView_cnt());
-                                    shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
-                                    shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
-                                    shardpref.putString("category", mList.get(position).getCategory());
-                                    shardpref.putString("updated_at", mList.get(position).getUpdated_at());
-                                    shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
-                                    pm.CommunityDetail(mContext);
+                                    if(mList.size() != 0){
+                                        shardpref.putString("feed_id", mList.get(position).getId());
+                                        shardpref.putString("title", mList.get(position).getTitle());
+                                        shardpref.putString("contents", mList.get(position).getContents());
+                                        shardpref.putString("writer_id", mList.get(position).getWriter_id());
+                                        shardpref.putString("writer_name", mList.get(position).getWriter_name());
+                                        shardpref.putString("writer_img_path", mList.get(position).getWriter_img_path());
+                                        shardpref.putString("feed_img_path", mList.get(position).getFeed_img_path());
+                                        shardpref.putString("jikgup", mList.get(position).getJikgup());
+                                        shardpref.putString("view_cnt", mList.get(position).getView_cnt());
+                                        shardpref.putString("comment_cnt", mList.get(position).getComment_cnt());
+                                        shardpref.putString("like_cnt", mList.get(position).getLike_cnt());
+                                        shardpref.putString("category", mList.get(position).getCategory());
+                                        shardpref.putString("updated_at", mList.get(position).getUpdated_at());
+                                        shardpref.putString("mylikeyn", mList.get(position).getMylikeyn());
+                                        pm.CommunityDetail(mContext);
+                                    }else{
+                                        setRecyclerView2();
+                                    }
                                 }
                             }
                         });
