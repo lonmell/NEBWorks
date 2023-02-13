@@ -187,7 +187,6 @@
                 android:gravity="top|start"
                 android:hint="내용 입력"
                 android:inputType="textMultiLine"
-                android:lines="5"
                 android:maxWidth="5.0dip"
                 android:minWidth="10.0dip"
                 android:minHeight="271dp"
