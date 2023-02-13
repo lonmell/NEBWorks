@@ -45,6 +45,7 @@ import com.krafte.nebworks.dataInterface.FeedNotiAddInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.databinding.ActivityCommunityAddBinding;
+import com.krafte.nebworks.pop.PhotoPopActivity;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
@@ -127,8 +128,8 @@ public class CommunityAddActivity extends AppCompatActivity {
     SimpleDateFormat dateFormat;
     int GALLEY_CODE = 10;
     @SuppressLint("SdCardPath")
-    String BACKUP_PATH = "/sdcard/Download/heypass/";
-    String ProfileUrl = "";
+    String BACKUP_PATH = "/sdcard/Download/krafte/";
+    List<String> ProfileUrl = new ArrayList<>();
     String feed_thumnail_path = "";
     String ImgfileMaker = "";
     String state = "";
@@ -154,21 +155,21 @@ public class CommunityAddActivity extends AppCompatActivity {
 
 
         //Singleton Area
-        USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
-        USER_INFO_NICKNAME  = UserCheckData.getInstance().getUser_nick_name();
-        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
-        place_id            = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
+        USER_INFO_NICKNAME = UserCheckData.getInstance().getUser_nick_name();
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        place_id = PlaceCheckData.getInstance().getPlace_id();
 
         //shardpref Area
-        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH", "");
-        SELECTED_POSITION   = shardpref.getInt("SELECTED_POSITION", 0);
-        state               = shardpref.getString("state", "");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
+        state = shardpref.getString("state", "");
 
         /*작성자가 수정 버튼을 눌렀을때 가져옴*/
-        state_txt           = shardpref.getString("state", "");
-        write_id_txt        = shardpref.getString("write_id", "");
-        write_nickname      = shardpref.getString("write_nickname", "");
+        state_txt = shardpref.getString("state", "");
+        write_id_txt = shardpref.getString("write_id", "");
+        write_nickname = shardpref.getString("write_nickname", "");
 
         user_input_name = USER_INFO_NAME;
         binding.addcommunityBtn.setText("등록");
@@ -178,13 +179,35 @@ public class CommunityAddActivity extends AppCompatActivity {
         dlog.i("state : " + state);
         //-------------------------------
         //-- 게시글 수정할때
-        feed_id                 = shardpref.getString("feed_id","");
-        String title            = shardpref.getString("title","");
-        String contents         = shardpref.getString("contents","");
-        String feed_img_path    = shardpref.getString("feed_img_path","");
-        String category         = shardpref.getString("category","");
+        feed_id = shardpref.getString("feed_id", "");
+        String title = shardpref.getString("title", "");
+        String contents = shardpref.getString("contents", "");
+        String feed_img_path = shardpref.getString("feed_img_path", "");
+        String category = shardpref.getString("category", "");
 
-        binding.selectCategoryTxt.setText(category.isEmpty()?"#정보에요":category);
+        dlog.i("feed_img_path : " + feed_img_path);
+        for (String s : feed_img_path.split(",")) {
+            if(!s.equals("null")){
+                uriList.add(Uri.parse(s));
+            }
+        }
+
+        adapter = new MultiImageAdapter(uriList, getApplicationContext());
+        binding.imgList.setAdapter(adapter);
+        binding.imgList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        adapter.setOnClickListener(new MultiImageAdapter.OnClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(mContext, PhotoPopActivity.class);
+                intent.putExtra("data", String.valueOf(uriList));
+                intent.putExtra("pos", position);
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }
+        });
+
+        binding.selectCategoryTxt.setText(category.isEmpty() ? "#정보에요" : category);
         binding.writeTitle.setText(title);
         binding.writeContents.setText(contents);
         Glide.with(mContext).load(feed_img_path)
@@ -201,17 +224,18 @@ public class CommunityAddActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-
-        if(uriList.size() == 0){
+        ImgfileMaker = ImageNameMaker();
+        dlog.i("uriList : " + uriList);
+        dlog.i("uriList size : " + uriList.size());
+        if (String.valueOf(uriList).equals("[]")) {
             binding.clearImg.setVisibility(View.GONE);
-        }else{
+        } else {
             binding.clearImg.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         sharedRemove();
     }
@@ -238,7 +262,7 @@ public class CommunityAddActivity extends AppCompatActivity {
 
 
         binding.addcommunityBtn.setOnClickListener(v -> {
-            if(ForbiddenWordCheck()){
+            if (ForbiddenWordCheck()) {
                 dlog.i("3 state_txt : " + state_txt);
                 if (nickname_select == 1 && USER_INFO_NICKNAME.isEmpty()) {
                     shardpref.putString("returnPage", TAG);
@@ -272,12 +296,12 @@ public class CommunityAddActivity extends AppCompatActivity {
         binding.clearImg.setOnClickListener(v -> {
             saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
             saveBitmap.eraseColor(Color.TRANSPARENT);
-            imgUrl.clear();
+            ProfileUrl.clear();
             uriList.clear();
             adapter.notifyDataSetChanged();
-            if(uriList.size() == 0){
+            if (uriList.size() == 0) {
                 binding.clearImg.setVisibility(View.GONE);
-            }else{
+            } else {
                 binding.clearImg.setVisibility(View.VISIBLE);
             }
         });
@@ -330,26 +354,34 @@ public class CommunityAddActivity extends AppCompatActivity {
             return "true";
         }
     }
+
     String title = "";
     String content = "";
     Resources res;
-    private boolean ForbiddenWordCheck(){
+
+    private boolean ForbiddenWordCheck() {
         title = binding.writeTitle.getText().toString();
         content = binding.writeContents.getText().toString();
         res = getResources();
         return true;
     }
+
     //피드 게시글 업로드
     public void AddFeedCommunity() {
         boardkind = "자유게시판";
-
+        String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + title);
         dlog.i("content : " + content);
-        dlog.i("Profile Url : " + ProfileUrl);
+        dlog.i("Profile Url : " + inputImage);
         dlog.i("BoardKind : " + boardkind);
         dlog.i("category : " + category);
         dlog.i("nickname_select : " + nickname_select);
+        dlog.i("saveBitmap1 : " + saveBitmap1);
+        dlog.i("saveBitmap2 : " + saveBitmap2);
+        dlog.i("saveBitmap3 : " + saveBitmap3);
+        dlog.i("uriList : " + uriList);
+        dlog.i("uriList size : " + uriList.size());
         dlog.i("-----AddStroeNoti Check-----");
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -357,7 +389,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category, String.valueOf(nickname_select),"");
+        Call<String> call = api.getData(place_id, title, content, USER_INFO_ID, "", inputImage, "", "", "", "2", boardkind, category, String.valueOf(nickname_select), "");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -373,53 +405,35 @@ public class CommunityAddActivity extends AppCompatActivity {
                             try {
                                 if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     if (!ProfileUrl.isEmpty()) {
-                                        if(uriList.size() == 1){
-                                            if(!uriList.get(0).toString().equals("")){
-                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
-                                                if(ImgfileMaker != null){
-                                                    saveBitmapAndGetURI(1);
-                                                }
+                                        if (uriList.size() == 1) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
                                             }
-                                        }else if(uriList.size() == 2){
-                                            if(!uriList.get(0).toString().equals("")){
-                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
-                                                if(ImgfileMaker != null){
-                                                    saveBitmapAndGetURI(1);
-                                                }
+                                        } else if (uriList.size() == 2) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
                                             }
-                                            if(!uriList.get(1).toString().equals("")){
-                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
-                                                if(ImgfileMaker != null){
-                                                    saveBitmapAndGetURI(2);
-                                                }
+                                            if (!uriList.get(1).toString().equals("")) {
+                                                saveBitmapAndGetURI(1);
                                             }
-                                        }else if(uriList.size() == 3){
-                                            if(!uriList.get(0).toString().equals("")){
-                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
-                                                if(ImgfileMaker != null){
-                                                    saveBitmapAndGetURI(1);
-                                                }
+                                        } else if (uriList.size() == 3) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
                                             }
-                                            if(!uriList.get(1).toString().equals("")){
-                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
-                                                if(ImgfileMaker != null){
-                                                    saveBitmapAndGetURI(2);
-                                                }
+                                            if (!uriList.get(1).toString().equals("")) {
+                                                saveBitmapAndGetURI(1);
                                             }
-                                            if(!uriList.get(2).toString().equals("")){
-                                                ImgfileMaker = ImageNameMaker();// 파일명에 들어갈 순서번호 가져오기
-                                                if(ImgfileMaker != null){
-                                                    saveBitmapAndGetURI(3);
-                                                }
+                                            if (!uriList.get(2).toString().equals("")) {
+                                                saveBitmapAndGetURI(2);
                                             }
                                         }
 
                                     }
                                     Toast_Nomal("게시글 저장이 완료되었습니다.");
                                     shardpref.putInt("SELECT_POSITION", 3);
-                                    if(USER_INFO_AUTH.equals("0")){
+                                    if (USER_INFO_AUTH.equals("0")) {
                                         pm.Main(mContext);
-                                    }else{
+                                    } else {
                                         pm.Main2(mContext);
                                     }
                                 }
@@ -442,13 +456,15 @@ public class CommunityAddActivity extends AppCompatActivity {
     public void EditStroeNoti() {
         String title = binding.writeTitle.getText().toString();
         String content = binding.writeContents.getText().toString();
+        String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
         boardkind = "자유게시판";
         category = binding.selectCategoryTxt.getText().toString();
 
         dlog.i("-----AddStroeNoti Check-----");
+        dlog.i("feed_id : " + feed_id);
         dlog.i("title : " + title);
         dlog.i("content : " + content);
-        dlog.i("Profile Url : " + ProfileUrl);
+        dlog.i("Profile Url : " + inputImage);
         dlog.i("BoardKind : " + boardkind);
         dlog.i("category : " + category);
         dlog.i("nickname_select : " + nickname_select);
@@ -459,7 +475,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", ProfileUrl, "", "", "", "2", boardkind, category, String.valueOf(nickname_select),"");
+        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", inputImage, "", "", "", "2", boardkind, category, String.valueOf(nickname_select), "");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -474,9 +490,29 @@ public class CommunityAddActivity extends AppCompatActivity {
                             try {
                                 if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     if (!ProfileUrl.isEmpty()) {
-                                        for(int i = 0; i < uriList.size(); i++){
-                                            saveBitmapAndGetURI(i);
+                                        if (uriList.size() == 1) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                        } else if (uriList.size() == 2) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                            if (!uriList.get(1).toString().equals("")) {
+                                                saveBitmapAndGetURI(1);
+                                            }
+                                        } else if (uriList.size() == 3) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                            if (!uriList.get(1).toString().equals("")) {
+                                                saveBitmapAndGetURI(1);
+                                            }
+                                            if (!uriList.get(2).toString().equals("")) {
+                                                saveBitmapAndGetURI(2);
+                                            }
                                         }
+
                                     }
                                     Toast.makeText(mContext, "글 수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     shardpref.putString("feed_id", feed_id);
@@ -489,6 +525,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                     });
                 }
             }
+
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
@@ -502,7 +539,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void sharedRemove(){
+    private void sharedRemove() {
         shardpref.remove("writer_name");
         shardpref.remove("write_nickname");
         shardpref.remove("title");
@@ -523,6 +560,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         shardpref.remove("comment_cnt");
         shardpref.remove("category");
     }
+
     private void BackMove() {
         sharedRemove();
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
@@ -544,7 +582,6 @@ public class CommunityAddActivity extends AppCompatActivity {
 
 
     //이미지 업로드에 필요한 소스 START
-    List<String> imgUrl     = new ArrayList<>();
     List<String> cursor_url = new ArrayList<>();
     private Bitmap saveBitmap1;//첫번째 사진
     private Bitmap saveBitmap2;//두번째 사진
@@ -556,16 +593,17 @@ public class CommunityAddActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GALLEY_CODE) {
             if (resultCode == RESULT_OK) {
-                imgUrl.clear();
+                ProfileUrl.clear();
                 uriList.clear();
                 String imagePath1 = "";
                 String imagePath2 = "";
                 String imagePath3 = "";
-                if(data == null){   // 어떤 이미지도 선택하지 않은 경우
+                if (data == null) {   // 어떤 이미지도 선택하지 않은 경우
                     Toast.makeText(getApplicationContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
-                } else{   // 이미지를 하나라도 선택한 경우
-                    if(data.getClipData() == null){     // 이미지를 하나만 선택한 경우
+                } else {   // 이미지를 하나라도 선택한 경우
+                    if (data.getClipData() == null) {     // 이미지를 하나만 선택한 경우
                         Log.e("single choice: ", String.valueOf(data.getData()));
+                        ImgfileMaker = ImageNameMaker();
                         uriList = new ArrayList<>();
                         Uri imageUri = data.getData();
                         imagePath1 = data.getDataString();
@@ -586,38 +624,39 @@ public class CommunityAddActivity extends AppCompatActivity {
                         });
 
                         //파일 이름 만들기
-//                        final String IMG_FILE_EXTENSION = ".JPEG";
-//                        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-//                        ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
-//                        imgUrl.add(ProfileUrl);
+                        final String IMG_FILE_EXTENSION = ".JPEG";
+                        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+                        ProfileUrl.add("http://krafte.net/NEBWorks/image/feed_img/" + file_name);
                         dlog.i("한개일때uriList : " + uriList);
-                        dlog.i("한개일때 imgUrl: " + imgUrl);
-                    }
-                    else{      // 이미지를 여러장 선택한 경우
+                        dlog.i("한개일때 imgUrl: " + ProfileUrl);
+                    } else {      // 이미지를 여러장 선택한 경우
                         ClipData clipData = data.getClipData();
                         Log.e("clipData", String.valueOf(clipData.getItemCount()));
 
-                        if(clipData.getItemCount() > 3){   // 선택한 이미지가 3장 이상인 경우
+                        if (clipData.getItemCount() > 3) {   // 선택한 이미지가 3장 이상인 경우
                             Toast.makeText(getApplicationContext(), "사진은 3장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
-                        }else{   // 선택한 이미지가 1장 이상 10장 이하인 경우
+                        } else {   // 선택한 이미지가 1장 이상 10장 이하인 경우
                             Log.e(TAG, "multiple choice");
                             uriList = new ArrayList<>();
-                            for (int i = 0; i < clipData.getItemCount(); i++){
+
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
                                 Uri imageUri = clipData.getItemAt(i).getUri();  // 선택한 이미지들의 uri를 가져온다.
                                 try {
                                     uriList.add(imageUri);  //uri를 list에 담는다.
-//                                    final String IMG_FILE_EXTENSION = ".JPEG";
-//                                    String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-//                                    ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name + "_" + String.valueOf(clipData.getItemCount());
-//                                    imgUrl.add(ProfileUrl);
+                                    final String IMG_FILE_EXTENSION = ".JPEG";
+                                    int ImgNum = Integer.parseInt(ImgfileMaker) + i;
+                                    String file_name = USER_INFO_ID + "_" + ImgNum + IMG_FILE_EXTENSION;
+                                    dlog.i("multiple choice file_name : " + file_name);
+                                    ProfileUrl.add("http://krafte.net/NEBWorks/image/feed_img/" + file_name);
                                 } catch (Exception e) {
                                     Log.e(TAG, "File select error", e);
                                 }
                             }
                             dlog.i("여러개일때 uriList : " + uriList);
-                            dlog.i("여러개일때 imgUrl : " + imgUrl);
-                            if(uriList.size() == 1){
-                                if(!uriList.get(0).toString().equals("")){
+                            dlog.i("여러개일때 imgUrl : " + ProfileUrl);
+                            dlog.i("여러개일때 ProfileUrl size : " + ProfileUrl.size());
+                            if (uriList.size() == 1) {
+                                if (!uriList.get(0).toString().equals("")) {
                                     Glide.with(this)
                                             .load(uriList.get(0).toString())
                                             .into(binding.hideimg01);
@@ -628,8 +667,8 @@ public class CommunityAddActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-                            }else if(uriList.size() == 2){
-                                if(!uriList.get(0).toString().equals("")){
+                            } else if (uriList.size() == 2) {
+                                if (!uriList.get(0).toString().equals("")) {
                                     Glide.with(this)
                                             .load(uriList.get(0).toString())
                                             .into(binding.hideimg01);
@@ -640,7 +679,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-                                if(!uriList.get(1).toString().equals("")){
+                                if (!uriList.get(1).toString().equals("")) {
                                     Glide.with(this)
                                             .load(uriList.get(1).toString())
                                             .into(binding.hideimg02);
@@ -651,8 +690,8 @@ public class CommunityAddActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-                            }else if(uriList.size() == 3){
-                                if(!uriList.get(0).toString().equals("")){
+                            } else if (uriList.size() == 3) {
+                                if (!uriList.get(0).toString().equals("")) {
                                     Glide.with(this)
                                             .load(uriList.get(0).toString())
                                             .into(binding.hideimg01);
@@ -663,7 +702,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-                                if(!uriList.get(1).toString().equals("")){
+                                if (!uriList.get(1).toString().equals("")) {
                                     Glide.with(this)
                                             .load(uriList.get(1).toString())
                                             .into(binding.hideimg02);
@@ -674,7 +713,7 @@ public class CommunityAddActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-                                if(!uriList.get(2).toString().equals("")){
+                                if (!uriList.get(2).toString().equals("")) {
                                     Glide.with(this)
                                             .load(uriList.get(2).toString())
                                             .into(binding.hideimg03);
@@ -686,7 +725,6 @@ public class CommunityAddActivity extends AppCompatActivity {
                                     });
                                 }
                             }
-
 
 
                             adapter = new MultiImageAdapter(uriList, getApplicationContext());
@@ -744,21 +782,20 @@ public class CommunityAddActivity extends AppCompatActivity {
         //Create Bitmap
         binding.loginAlertText.setVisibility(View.VISIBLE);
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        if(i == 1){
+        if (i == 0) {
             saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 90, bao);
-        }else if(i == 2){
+        } else if (i == 1) {
             saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 90, bao);
-        }else if(i == 3){
+        } else if (i == 2) {
             saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 90, bao);
         }
         byte[] ba = bao.toByteArray();
         String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
 
         //Create Bitmap -> File
-        final String IMG_FILE_EXTENSION = ".JPEG";
         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+        String file_name = ProfileUrl.get(i).replace("http://krafte.net/NEBWorks/image/feed_img/", "");
         String fullFileName = BACKUP_PATH;
 
         dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
@@ -772,21 +809,20 @@ public class CommunityAddActivity extends AppCompatActivity {
                 file_path.mkdirs();
             }
             dlog.i("(saveBitmapAndGetURI)file_path : " + file_path);
-            dlog.i("(saveBitmapAndGetURI)file_name : " + file_name);
+            dlog.i("(saveBitmapAndGetURI)file_name : " + ProfileUrl.get(i));
             file = new File(file_path, file_name);
             FileOutputStream out = new FileOutputStream(file);
-            if(i == 1){
+            if (i == 0) {
                 saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 80, out);
-            }else if(i == 2){
+            } else if (i == 1) {
                 saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 80, out);
-            }else if(i == 3){
+            } else if (i == 2) {
                 saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 80, out);
             }
-            ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
+
             saveBitmapToFile(file);
 
             dlog.e("사인 저장 경로 : " + ProfileUrl);
-
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
             RetrofitInterface retrofitInterface = ApiClient.getApiClient().create(RetrofitInterface.class);

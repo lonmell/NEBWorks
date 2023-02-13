@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.adapter.WorkCommentListAdapter;
-import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCommentData;
@@ -33,8 +34,6 @@ import com.krafte.nebworks.dataInterface.UpdateViewInterfcae;
 import com.krafte.nebworks.databinding.ActivityCommunityDetailBinding;
 import com.krafte.nebworks.pop.CommunityOptionActivity;
 import com.krafte.nebworks.pop.PhotoPopActivity;
-import com.krafte.nebworks.util.DBConnection;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -92,12 +91,10 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String feed_img_path = "";
 
     //Other
-    DateCurrent dc = new DateCurrent();
-    DBConnection dbConnection = new DBConnection();
-    GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     RetrofitConnect rc = new RetrofitConnect();
+    MultiImageAdapter adapter;
 
     Drawable icon_off;
     Drawable icon_on;
@@ -110,6 +107,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     InputMethodManager imm;
     ArrayList<WorkCommentData.WorkCommentData_list> mList;
     WorkCommentListAdapter mAdapter = null;
+    ArrayList<Uri> uriList = new ArrayList<>();// 이미지의 uri를 담을 ArrayList 객체
 
     String subcomment_id = "";
     String subcomment_name = "";
@@ -134,42 +132,41 @@ public class CommunityDetailActivity extends AppCompatActivity {
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
         //Singleton Area
-        USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
-        USER_INFO_NICKNAME  = UserCheckData.getInstance().getUser_nick_name();
-        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
-        place_id            = PlaceCheckData.getInstance().getPlace_id();
-        USER_INFO_PROFILE   = UserCheckData.getInstance().getUser_img_path();
+        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+        USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
+        USER_INFO_NICKNAME = UserCheckData.getInstance().getUser_nick_name();
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        place_id = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_PROFILE = UserCheckData.getInstance().getUser_img_path();
 
         //shardpref Area
-        SELECTED_POSITION   = shardpref.getInt("SELECTED_POSITION", 0);
-        feed_id             = shardpref.getString("feed_id", "");
-        title               = shardpref.getString("title", "");
-        contents            = shardpref.getString("contents", "");
-        writer_id           = shardpref.getString("writer_id", "");
-        writer_name         = shardpref.getString("writer_name", "");
-        writer_img_path     = shardpref.getString("writer_img_path", "");
-        jikgup              = shardpref.getString("jikgup", "");
-        view_cnt            = shardpref.getString("view_cnt", "");
-        comment_cnt         = shardpref.getString("comment_cnt", "");
-        like_cnt            = shardpref.getString("like_cnt", "");
-        category            = shardpref.getString("category", "");
-        updated_at          = shardpref.getString("updated_at", "");
-        mylikeyn            = shardpref.getString("mylikeyn", "");
-        feed_img_path       = shardpref.getString("feed_img_path", "");
+        SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
+        feed_id = shardpref.getString("feed_id", "");
+        title = shardpref.getString("title", "");
+        contents = shardpref.getString("contents", "");
+        writer_id = shardpref.getString("writer_id", "");
+        writer_name = shardpref.getString("writer_name", "");
+        writer_img_path = shardpref.getString("writer_img_path", "");
+        jikgup = shardpref.getString("jikgup", "");
+        view_cnt = shardpref.getString("view_cnt", "");
+        comment_cnt = shardpref.getString("comment_cnt", "");
+        like_cnt = shardpref.getString("like_cnt", "");
+        category = shardpref.getString("category", "");
+        updated_at = shardpref.getString("updated_at", "");
+        mylikeyn = shardpref.getString("mylikeyn", "");
+        feed_img_path = shardpref.getString("feed_img_path", "");
 
         setBtnEvent();
         DataCheck();
         UpdateView(feed_id);
 
-
         binding.backBtn.setOnClickListener(v -> {
             RemoveShared();
             super.onBackPressed();
         });
-        if(!writer_id.equals(USER_INFO_ID)){
+        if (!writer_id.equals(USER_INFO_ID)) {
             binding.listSetting.setVisibility(View.GONE);
-        }else{
+        } else {
             binding.listSetting.setVisibility(View.VISIBLE);
         }
 
@@ -192,28 +189,28 @@ public class CommunityDetailActivity extends AppCompatActivity {
             AddLike(feed_id);
         });
 
-        binding.feedImg.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, PhotoPopActivity.class);
-            intent.putExtra("data", feed_img_path);
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        });
+//        binding.feedImg.setOnClickListener(v -> {
+//            Intent intent = new Intent(mContext, PhotoPopActivity.class);
+//            intent.putExtra("data", feed_img_path);
+//            mContext.startActivity(intent);
+//            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        });
 
         binding.listSetting.setOnClickListener(v -> {
-            shardpref.putString("feed_id",feed_id);
-            shardpref.putString("place_id",place_id);
-            shardpref.putString("title",title);
-            shardpref.putString("contents",contents);
-            shardpref.putString("writer_id",writer_id);
-            shardpref.putString("writer_name",writer_name);
-            shardpref.putString("writer_img_path",writer_img_path);
-            shardpref.putString("feed_img_path",feed_img_path);
-            shardpref.putString("jikgup",jikgup);
-            shardpref.putString("view_cnt",view_cnt);
-            shardpref.putString("comment_cnt",comment_cnt);
-            shardpref.putString("category",category);
-            shardpref.putString("state","EditCommunity");
+            shardpref.putString("feed_id", feed_id);
+            shardpref.putString("place_id", place_id);
+            shardpref.putString("title", title);
+            shardpref.putString("contents", contents);
+            shardpref.putString("writer_id", writer_id);
+            shardpref.putString("writer_name", writer_name);
+            shardpref.putString("writer_img_path", writer_img_path);
+            shardpref.putString("feed_img_path", feed_img_path);
+            shardpref.putString("jikgup", jikgup);
+            shardpref.putString("view_cnt", view_cnt);
+            shardpref.putString("comment_cnt", comment_cnt);
+            shardpref.putString("category", category);
+            shardpref.putString("state", "EditCommunity");
             Intent intent = new Intent(mContext, CommunityOptionActivity.class);
             intent.putExtra("state", "EditCommunity");
             mContext.startActivity(intent);
@@ -229,7 +226,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         GetCommentList(false);
     }
@@ -253,10 +250,10 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 dlog.i("----------댓글 수정의 경우----------");
                 shardpref.remove("editstate");
                 GetCommentList(true);
-            }else if (shardpref.getString("editstate", "").equals("DelComment")) {
+            } else if (shardpref.getString("editstate", "").equals("DelComment")) {
                 shardpref.remove("editstate");
                 GetCommentList(true);
-            }else{
+            } else {
                 GetCommentList(false);
             }
 
@@ -273,6 +270,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     public void GETFeed() {
+        uriList.clear();
         dlog.i("GETFeed place_id : " + place_id);
         dlog.i("GETFeed feed_id : " + feed_id);
         Retrofit retrofit = new Retrofit.Builder()
@@ -294,7 +292,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-                                    if(Response.length() != 0){
+                                    if (Response.length() != 0) {
                                         place_id = Response.getJSONObject(0).getString("place_id");
                                         title = Response.getJSONObject(0).getString("title");
                                         contents = Response.getJSONObject(0).getString("contents");
@@ -314,12 +312,12 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                             dlog.i("String xml Forbidden Word : " + forbiList);
                                             String titleForbidden = "";
                                             String contentForbidden = "";
-                                            for(int i = 0; i < forbiList.size(); i++){
-                                                if(title.contains(forbiList.get(i))){
-                                                    titleForbidden = title.replace(forbiList.get(i)," ○○○ ");
+                                            for (int i = 0; i < forbiList.size(); i++) {
+                                                if (title.contains(forbiList.get(i))) {
+                                                    titleForbidden = title.replace(forbiList.get(i), " ○○○ ");
                                                 }
-                                                if(contents.contains(forbiList.get(i))){
-                                                    contentForbidden = contents.replace(forbiList.get(i)," ○○○ ");
+                                                if (contents.contains(forbiList.get(i))) {
+                                                    contentForbidden = contents.replace(forbiList.get(i), " ○○○ ");
                                                 }
                                             }
 
@@ -328,20 +326,39 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                             dlog.d("forbidden: " + contents);
                                             dlog.d("forbidden: " + contentForbidden);
 
-                                            binding.title.setText(titleForbidden.equals("")?title:titleForbidden);
+                                            binding.title.setText(titleForbidden.equals("") ? title : titleForbidden);
                                             Glide.with(mContext).load(writer_img_path)
                                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                                                     .placeholder(R.drawable.certi01)
                                                     .skipMemoryCache(true)
                                                     .into(binding.profileImg);
 
-                                            Glide.with(mContext).load(feed_img_path)
-                                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                    .skipMemoryCache(true)
-                                                    .into(binding.feedImg);
+//                                            Glide.with(mContext).load(feed_img_path)
+//                                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                                                    .skipMemoryCache(true)
+//                                                    .into(binding.feedImg);
+                                            dlog.i("feed_img_path : " + feed_img_path);
+                                            for (String s : feed_img_path.split(",")) {
+                                                uriList.add(Uri.parse(s));
+                                            }
+
+                                            adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                                            binding.imgList.setAdapter(adapter);
+                                            binding.imgList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+                                            adapter.setOnClickListener(new MultiImageAdapter.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v, int position) {
+                                                    Intent intent = new Intent(mContext, PhotoPopActivity.class);
+                                                    intent.putExtra("data", String.valueOf(uriList));
+                                                    intent.putExtra("pos", position);
+                                                    mContext.startActivity(intent);
+                                                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                }
+                                            });
                                             binding.writerName.setText(writer_name);
                                             binding.date.setText(updated_at);
-                                            binding.contents.setText(contentForbidden.equals("")?contents:contentForbidden);
+                                            binding.contents.setText(contentForbidden.equals("") ? contents : contentForbidden);
                                             binding.cate.setText("#" + category.replace("#", ""));
                                             binding.viewCom.setText("조회수 " + view_cnt + " / 댓글 " + comment_cnt);
 
@@ -349,11 +366,11 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                             dlog.i("UserCheck Exception : " + e);
                                         }
                                     }
-                                }else{
+                                } else {
                                     shardpref.putInt("SELECT_POSITION", 3);
-                                    if(USER_INFO_AUTH.equals("0")){
+                                    if (USER_INFO_AUTH.equals("0")) {
                                         pm.Main(mContext);
-                                    }else{
+                                    } else {
                                         pm.Main2(mContext);
                                     }
                                 }
@@ -471,7 +488,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         AddLikeInterface api = retrofit.create(AddLikeInterface.class);
-        Call<String> call = api.getData(feed_id, "",USER_INFO_ID,"0");
+        Call<String> call = api.getData(feed_id, "", USER_INFO_ID, "0");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -557,10 +574,10 @@ public class CommunityDetailActivity extends AppCompatActivity {
     private void setBtnEvent() {
         binding.addCommentBtn.setOnClickListener(v -> {
             comment = binding.addCommentTxt.getText().toString();
-            if(comment_id.isEmpty()){
+            if (comment_id.isEmpty()) {
                 AddComment(feed_id, comment, USER_INFO_ID);
-            }else{
-                EditComment(comment_id,comment);
+            } else {
+                EditComment(comment_id, comment);
             }
 
         });
@@ -614,7 +631,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedCommentListInterface api = retrofit.create(FeedCommentListInterface.class);
-        Call<String> call = api.getData(feed_id,USER_INFO_ID);
+        Call<String> call = api.getData(feed_id, USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -666,7 +683,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                     mAdapter.setOnItemClickListener(new WorkCommentListAdapter.OnItemClickListener() {
                                         @Override
                                         public void onItemClick(View v, int position, String comment_id, String comment, String writer_name
-                                                ,String feed_id,String write_id, String title, String contents, String comment_contents,String write_date) {
+                                                , String feed_id, String write_id, String title, String contents, String comment_contents, String write_date) {
                                             binding.addCommentTxt.clearFocus();
                                             imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
                                             dlog.i("delete comment_id : " + comment_id);
@@ -694,7 +711,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                         @Override
                                         public void onItemClick2(View v, int position, String writer_id, String writer_name) {
                                             subcomment_id = writer_id;
-                                            subcomment_name = "@"+writer_name + "  ";
+                                            subcomment_name = "@" + writer_name + "  ";
                                             binding.addCommentTxt.setText(subcomment_name);
                                         }
                                     });

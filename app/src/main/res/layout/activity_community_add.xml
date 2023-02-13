@@ -186,8 +186,8 @@
                         android:id="@+id/img_list"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:orientation="horizontal"
-                        android:layout_below="@+id/limit_img"/>
+                        android:layout_below="@+id/limit_img"
+                        android:orientation="horizontal" />
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/clear_img"

@@ -87,7 +87,7 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
     private Bitmap saveBitmap;
     File file;
     @SuppressLint("SdCardPath")
-    String BACKUP_PATH = "/sdcard/Download/NEBWorks/";
+    String BACKUP_PATH = "/sdcard/Download/krafte/";
     String worker_sign_url = "";
     String feed_thumnail_path = "";
     String ImgfileMaker = "";

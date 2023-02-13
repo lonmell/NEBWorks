@@ -277,10 +277,10 @@ public class FeedDetailActivity extends AppCompatActivity {
                                                 total_watermark.append(place_name).append(" ");
                                             }
                                             dlog.i("total_watermark : " + total_watermark.toString());
-
                                             binding.notiSetimg.setOnClickListener(v -> {
                                                 Intent intent = new Intent(mContext, PhotoPopActivity.class);
                                                 intent.putExtra("data", feed_img_path);
+                                                intent.putExtra("pos", 0);
                                                 mContext.startActivity(intent);
                                                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

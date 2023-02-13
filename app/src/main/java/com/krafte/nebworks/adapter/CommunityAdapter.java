@@ -121,7 +121,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             Resources res = mContext.getResources();
             List<String> forbiList = Arrays.asList(res.getStringArray(R.array.forbidden_word));
 //            List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
-            dlog.i("String xml Forbidden Word : " + forbiList);
             String title = "";
             String content = "";
             for(int i = 0; i < forbiList.size(); i++){

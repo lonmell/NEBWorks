@@ -346,9 +346,11 @@ public class TaskApprovalDetail extends AppCompatActivity {
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.taskKind01);
+
                         binding.taskKind01.setOnClickListener(v -> {
                             Intent intent = new Intent(mContext, PhotoPopActivity.class);
                             intent.putExtra("data", task_img_path);
+                            intent.putExtra("pos", 0);
                             mContext.startActivity(intent);
                             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
