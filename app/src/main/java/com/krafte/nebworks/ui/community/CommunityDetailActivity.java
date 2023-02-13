@@ -21,12 +21,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkCommentListAdapter;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCommentData;
 import com.krafte.nebworks.dataInterface.AddLikeInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentEidtInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentInsertInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentListInterface;
+import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.UpdateViewInterfcae;
 import com.krafte.nebworks.databinding.ActivityCommunityDetailBinding;
 import com.krafte.nebworks.pop.CommunityOptionActivity;
@@ -136,6 +138,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
         USER_INFO_NICKNAME  = UserCheckData.getInstance().getUser_nick_name();
         USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
+        place_id            = PlaceCheckData.getInstance().getPlace_id();
         USER_INFO_PROFILE   = UserCheckData.getInstance().getUser_img_path();
 
         //shardpref Area
@@ -159,46 +162,16 @@ public class CommunityDetailActivity extends AppCompatActivity {
         DataCheck();
         UpdateView(feed_id);
 
-        Resources res = getResources();
-        List<String> forbiList = Arrays.asList(res.getStringArray(R.array.forbidden_word));
-//        List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
-        dlog.i("String xml Forbidden Word : " + forbiList);
-        String titleForbidden = "";
-        String contentForbidden = "";
-        for(int i = 0; i < forbiList.size(); i++){
-            if(title.contains(forbiList.get(i))){
-                titleForbidden = title.replace(forbiList.get(i)," ○○○ ");
-            }
-            if(contents.contains(forbiList.get(i))){
-                contentForbidden = contents.replace(forbiList.get(i)," ○○○ ");
-            }
-        }
 
-        dlog.d("forbidden: " + title);
-        dlog.d("forbidden: " + titleForbidden);
-        dlog.d("forbidden: " + contents);
-        dlog.d("forbidden: " + contentForbidden);
-
-        binding.title.setText(titleForbidden.equals("")?title:titleForbidden);
-        Glide.with(mContext).load(writer_img_path)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .placeholder(R.drawable.certi01)
-                .skipMemoryCache(true)
-                .into(binding.profileImg);
-
-        Glide.with(mContext).load(feed_img_path)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(binding.feedImg);
-        binding.writerName.setText(writer_name);
-        binding.date.setText(updated_at);
-        binding.contents.setText(contentForbidden.equals("")?contents:contentForbidden);
-        binding.cate.setText("#" + category.replace("#", ""));
-        binding.viewCom.setText("조회수 " + view_cnt + " / 댓글 " + comment_cnt);
         binding.backBtn.setOnClickListener(v -> {
             RemoveShared();
             super.onBackPressed();
         });
+        if(!writer_id.equals(USER_INFO_ID)){
+            binding.listSetting.setVisibility(View.GONE);
+        }else{
+            binding.listSetting.setVisibility(View.VISIBLE);
+        }
 
         binding.likeCnt.setText(like_cnt);
         if (mylikeyn.equals("0")) {
@@ -226,6 +199,27 @@ public class CommunityDetailActivity extends AppCompatActivity {
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
+
+        binding.listSetting.setOnClickListener(v -> {
+            shardpref.putString("feed_id",feed_id);
+            shardpref.putString("place_id",place_id);
+            shardpref.putString("title",title);
+            shardpref.putString("contents",contents);
+            shardpref.putString("writer_id",writer_id);
+            shardpref.putString("writer_name",writer_name);
+            shardpref.putString("writer_img_path",writer_img_path);
+            shardpref.putString("feed_img_path",feed_img_path);
+            shardpref.putString("jikgup",jikgup);
+            shardpref.putString("view_cnt",view_cnt);
+            shardpref.putString("comment_cnt",comment_cnt);
+            shardpref.putString("category",category);
+            shardpref.putString("state","EditCommunity");
+            Intent intent = new Intent(mContext, CommunityOptionActivity.class);
+            intent.putExtra("state", "EditCommunity");
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        });
     }
 
     @Override
@@ -245,6 +239,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         super.onResume();
         //UI 데이터 세팅
         try {
+            GETFeed();
 
             dlog.i("onResume state : " + shardpref.getString("editstate", ""));
             if (shardpref.getString("editstate", "").equals("EditComment")) {
@@ -275,6 +270,107 @@ public class CommunityDetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
+    }
+
+    public void GETFeed() {
+        dlog.i("GETFeed place_id : " + place_id);
+        dlog.i("GETFeed feed_id : " + feed_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FeedNotiInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
+        Call<String> call = api.getData(place_id, feed_id, "", "2", USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    if(Response.length() != 0){
+                                        place_id = Response.getJSONObject(0).getString("place_id");
+                                        title = Response.getJSONObject(0).getString("title");
+                                        contents = Response.getJSONObject(0).getString("contents");
+                                        writer_id = Response.getJSONObject(0).getString("writer_id");
+                                        writer_name = Response.getJSONObject(0).getString("writer_name");
+                                        writer_img_path = Response.getJSONObject(0).getString("writer_img_path");
+
+                                        jikgup = Response.getJSONObject(0).getString("jikgup");
+                                        view_cnt = Response.getJSONObject(0).getString("view_cnt");
+                                        comment_cnt = Response.getJSONObject(0).getString("comment_cnt");
+                                        feed_img_path = Response.getJSONObject(0).getString("feed_img_path");
+                                        updated_at = Response.getJSONObject(0).getString("updated_at");
+
+                                        try {
+                                            Resources res = getResources();
+                                            List<String> forbiList = Arrays.asList(res.getStringArray(R.array.forbidden_word));
+                                            dlog.i("String xml Forbidden Word : " + forbiList);
+                                            String titleForbidden = "";
+                                            String contentForbidden = "";
+                                            for(int i = 0; i < forbiList.size(); i++){
+                                                if(title.contains(forbiList.get(i))){
+                                                    titleForbidden = title.replace(forbiList.get(i)," ○○○ ");
+                                                }
+                                                if(contents.contains(forbiList.get(i))){
+                                                    contentForbidden = contents.replace(forbiList.get(i)," ○○○ ");
+                                                }
+                                            }
+
+                                            dlog.d("forbidden: " + title);
+                                            dlog.d("forbidden: " + titleForbidden);
+                                            dlog.d("forbidden: " + contents);
+                                            dlog.d("forbidden: " + contentForbidden);
+
+                                            binding.title.setText(titleForbidden.equals("")?title:titleForbidden);
+                                            Glide.with(mContext).load(writer_img_path)
+                                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                    .placeholder(R.drawable.certi01)
+                                                    .skipMemoryCache(true)
+                                                    .into(binding.profileImg);
+
+                                            Glide.with(mContext).load(feed_img_path)
+                                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                    .skipMemoryCache(true)
+                                                    .into(binding.feedImg);
+                                            binding.writerName.setText(writer_name);
+                                            binding.date.setText(updated_at);
+                                            binding.contents.setText(contentForbidden.equals("")?contents:contentForbidden);
+                                            binding.cate.setText("#" + category.replace("#", ""));
+                                            binding.viewCom.setText("조회수 " + view_cnt + " / 댓글 " + comment_cnt);
+
+                                        } catch (Exception e) {
+                                            dlog.i("UserCheck Exception : " + e);
+                                        }
+                                    }
+                                }else{
+                                    shardpref.putInt("SELECT_POSITION", 3);
+                                    if(USER_INFO_AUTH.equals("0")){
+                                        pm.Main(mContext);
+                                    }else{
+                                        pm.Main2(mContext);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
     }
 
     private boolean DataCheck() {
@@ -578,7 +674,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                             Intent intent = new Intent(mContext, CommunityOptionActivity.class);
                                             WriteName = writer_name;
 
-                                            intent.putExtra("state", "EditComment");
+                                            intent.putExtra("state", "EditComment2");
                                             intent.putExtra("feed_id", feed_id);
                                             intent.putExtra("comment_id", comment_id);
                                             intent.putExtra("write_id", write_id);
