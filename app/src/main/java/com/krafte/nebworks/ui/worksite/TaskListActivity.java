@@ -496,8 +496,8 @@ public class TaskListActivity extends AppCompatActivity {
                             JSONArray Response = new JSONArray(response.body());
                             mList = new ArrayList<>();
                             mAdapter = new WorkCalenderAdapter(mContext, mList, mList2, place_id, USER_INFO_ID, select_date, Month);
-                            binding.createCalender.setAdapter(mAdapter);
-                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+//                            binding.createCalender.setAdapter(mAdapter);
+//                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                             dlog.i("SetNoticeListview Thread run! ");
 
                             if (Response.length() == 0) {

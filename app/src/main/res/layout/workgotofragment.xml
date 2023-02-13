@@ -228,10 +228,15 @@
                 android:background="@color/white"
                 android:visibility="gone">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/create_calender"
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/create_calender"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent" />-->
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/calender_viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
             </RelativeLayout>
 
             <include
