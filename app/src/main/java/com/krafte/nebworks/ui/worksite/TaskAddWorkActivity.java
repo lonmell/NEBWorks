@@ -37,6 +37,7 @@ import com.krafte.nebworks.databinding.ActivityPlaceaddworkBinding;
 import com.krafte.nebworks.pop.MemberListPop;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
 import com.krafte.nebworks.pop.RepeatSetPop;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -1353,7 +1354,15 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+//        super.onBackPressed();
+        Intent intent = new Intent(this, TwoButtonPopActivity.class);
+        intent.putExtra("flag","할일");
+        intent.putExtra("data","할일 작성을 취소하시겠습니까?");
+        intent.putExtra("left_btn_txt", "뒤로가기");
+        intent.putExtra("right_btn_txt", "취소");
+        startActivity(intent);
+        overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //        shardpref.putInt("SELECT_POSITION", 1);
 //        shardpref.putInt("SELECT_POSITION_sub", 0);
 //        String return_page = shardpref.getString("return_page", "");

@@ -284,6 +284,14 @@ public class TwoButtonPopActivity extends Activity {
                     shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
                     shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
                     pm.Main(mContext);
+                } else if (flag.equals("할일")) {
+                    shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
+                    shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+                    if (USER_INFO_AUTH.equals("0")) {
+                        pm.Main(mContext);
+                    } else {
+                        pm.Main2(mContext);
+                    }
                 }
             }catch (Exception e){
                 e.printStackTrace();
