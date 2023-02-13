@@ -1,7 +1,6 @@
 package com.krafte.nebworks.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.ImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class MultiImageAdapter extends RecyclerView.Adapter<MultiImageAdapter.Vi
 
     //list_settingitem01
     public interface OnClickListener {
-        void onClick(View v, Bitmap photo);
+        void onClick(View v, int position);
     }
 
     private OnClickListener mListener = null;
@@ -68,10 +68,16 @@ public class MultiImageAdapter extends RecyclerView.Adapter<MultiImageAdapter.Vi
     public void onBindViewHolder(MultiImageAdapter.ViewHolder holder, int position) {
         Uri image_uri = mData.get(position) ;
 
-
         Glide.with(mContext)
                 .load(image_uri)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.image);
+
+        holder.image.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onClick(v, position);
+            }
+        });
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

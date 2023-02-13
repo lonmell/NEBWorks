@@ -348,10 +348,10 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                     binding.rejectTitle.setVisibility(View.GONE);
                 }
             }
-
             binding.taskKind01.setOnClickListener(v -> {
                 Intent intent = new Intent(mContext, PhotoPopActivity.class);
                 intent.putExtra("data", img_path);
+                intent.putExtra("pos", 0);
                 mContext.startActivity(intent);
                 ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

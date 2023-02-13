@@ -98,7 +98,7 @@ public class AddContractPage08 extends AppCompatActivity {
     SimpleDateFormat dateFormat;
     int GALLEY_CODE = 10;
     @SuppressLint("SdCardPath")
-    String BACKUP_PATH = "/sdcard/Download/NEBWorks/";
+    String BACKUP_PATH = "/sdcard/Download/krafte/";
     String owner_sign_url = "";
     String feed_thumnail_path = "";
     String ImgfileMaker = "";
