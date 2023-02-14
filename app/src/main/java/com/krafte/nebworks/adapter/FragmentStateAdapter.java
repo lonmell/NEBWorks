@@ -14,6 +14,9 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
     static final int START_POSITION = Integer.MAX_VALUE / 2;
     Calendar cal = Calendar.getInstance();
 
+    String year = "";
+    String month = "";
+
     public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
@@ -57,7 +60,22 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
         Log.d("createFragment", String.valueOf(position));
 
         long itemId = getItemId(position);
+
+        long year = itemId / 100L;
+        long month = itemId % 100L;
+
+        this.year = String.valueOf(Math.toIntExact(year));
+        this.month = String.format("%02d", Math.toIntExact(month));
+
         return new CalenderFragment(itemId / 100L, itemId % 100L);
+    }
+
+    public String returnMonth() {
+        return month;
+    }
+
+    public String returnYear() {
+        return year;
     }
 
     @Override

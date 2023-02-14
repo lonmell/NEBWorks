@@ -23,6 +23,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
@@ -80,7 +81,7 @@ public class WorkgotoFragment extends Fragment {
     DateCurrent dc = new DateCurrent();
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
-    ViewPagerFregmentAdapter viewPagerFregmentAdapter;
+    FragmentStateAdapter fragmentStateAdapter;
 
     WorkCalenderAdapter mAdapter;
     ArrayList<WorkCalenderData.WorkCalenderData_list> mList;
@@ -201,7 +202,7 @@ public class WorkgotoFragment extends Fragment {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
-            FragmentStateAdapter fragmentStateAdapter = new FragmentStateAdapter(requireActivity());
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity());
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
 
@@ -209,6 +210,7 @@ public class WorkgotoFragment extends Fragment {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+                binding.setdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
                 binding.selectArea.setVisibility(View.VISIBLE);
                 if (USER_INFO_AUTH.isEmpty()) {
                     setDummyData();
@@ -217,6 +219,7 @@ public class WorkgotoFragment extends Fragment {
                 }
             } else if (SELECT_POSITION_sub == 1) {
                 chng_icon = true;
+                binding.setdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 ");
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
                 binding.selectArea.setVisibility(View.GONE);
@@ -515,6 +518,14 @@ public class WorkgotoFragment extends Fragment {
                 binding.selectArea.setVisibility(View.VISIBLE);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 setRecyclerView();
+            }
+        });
+
+        binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                binding.setdate.setText(fragmentStateAdapter.returnYear() + "년 " + fragmentStateAdapter.returnMonth() + "월");
             }
         });
 
