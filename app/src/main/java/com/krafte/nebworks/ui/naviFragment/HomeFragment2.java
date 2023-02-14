@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -59,6 +60,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -191,12 +193,12 @@ public class HomeFragment2 extends Fragment {
             place_id = PlaceCheckData.getInstance().getPlace_id();
             USER_INFO_ID = UserCheckData.getInstance().getUser_id();
             USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             //shardpref Area
             accept_state = shardpref.getInt("accept_state", -99);
             input_date = shardpref.getString("input_date", "-1");
-            shardpref.putInt("SELECT_POSITION",0);
+            shardpref.putInt("SELECT_POSITION", 0);
             if (USER_INFO_AUTH.isEmpty()) {
                 setDummyData();
             }
@@ -245,6 +247,7 @@ public class HomeFragment2 extends Fragment {
         return binding.getRoot();
 //        return rootView;
     }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
@@ -259,7 +262,6 @@ public class HomeFragment2 extends Fragment {
     }
 
 
-
     Timer timer = new Timer();
 
     @Override
@@ -269,11 +271,12 @@ public class HomeFragment2 extends Fragment {
         InOutLogMember();
         UserCheck();
         allPay = 0;
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0"); // 할일
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1"); // 공지
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "2"); // 출퇴근 현황
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "3"); // 급여현황
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "4"); // 근로자 정보 및 최종급여
+
         String today = dc.GET_YEAR + "-" + dc.GET_MONTH;
         WritePaymentList(place_id, USER_INFO_ID, today);
         timer = new Timer();
@@ -282,10 +285,12 @@ public class HomeFragment2 extends Fragment {
             public void run() {
                 //5초마다 실행
                 PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+                WritePaymentList(place_id, USER_INFO_ID, today);// 근로자 정보 및 최종급여
             }
         };
-        timer.schedule(timerTask,1000,5000);
+        timer.schedule(timerTask, 1000, 6000);
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -373,7 +378,7 @@ public class HomeFragment2 extends Fragment {
                                         binding.inTime.setVisibility(View.GONE);
                                         binding.inTimeTxt.setVisibility(View.GONE);
                                         binding.ioArea.setVisibility(View.VISIBLE);
-                                    }else{
+                                    } else {
 //                                        binding.oArea.setVisibility(View.VISIBLE);
                                         binding.ioImg.setBackgroundResource(R.drawable.workinout02);
                                         binding.inTime.setVisibility(View.VISIBLE);
@@ -442,7 +447,7 @@ public class HomeFragment2 extends Fragment {
             } else {
                 UserCheck();
                 dlog.i("UserCheckData.getInstance().getUser_sieob() : " + UserCheckData.getInstance().getUser_sieob());
-                if(!UserCheckData.getInstance().getUser_sieob().equals("null")){
+                if (!UserCheckData.getInstance().getUser_sieob().equals("null")) {
                     if (kind.equals("-1") || kind.equals("0")) {
                         if (kind.equals("-1")) {
                             kind = "0";
@@ -452,7 +457,7 @@ public class HomeFragment2 extends Fragment {
                         shardpref.putString("kind", kind);
                         pm.EmployeeProcess(mContext);
                     }
-                }else{
+                } else {
                     Toast_Nomal("근무시작 시간이 배정되지 않았습니다.");
                 }
             }
@@ -484,9 +489,9 @@ public class HomeFragment2 extends Fragment {
                 isAuth();
             } else {
                 dlog.i("급여관리");
-                if(USER_INFO_AUTH.equals("0")){
+                if (USER_INFO_AUTH.equals("0")) {
                     pm.PayManagement(mContext);
-                }else{
+                } else {
                     pm.PayManagement2(mContext);
                 }
             }
@@ -522,10 +527,10 @@ public class HomeFragment2 extends Fragment {
             dlog.i("------contractPrint------");
             dlog.i("contractPrint contract_id : " + contract_id);
             dlog.i("------contractPrint------");
-            if(contract_id.equals("0")){
+            if (contract_id.equals("0")) {
                 Toast_Nomal("작성된 근로계약서가 없습니다.");
-            }else{
-                String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF.php?id="+contract_id;
+            } else {
+                String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF.php?id=" + contract_id;
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
                 startActivity(intent);
             }
@@ -578,7 +583,7 @@ public class HomeFragment2 extends Fragment {
                     dlog.i("USER_INFO_ID : " + USER_INFO_ID);
                     dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
                     shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-                    shardpref.putString("place_end_time",place_end_time);
+                    shardpref.putString("place_end_time", place_end_time);
                     binding.title.setText(place_name);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -600,6 +605,7 @@ public class HomeFragment2 extends Fragment {
      * */
     DBConnection dbc = new DBConnection();
     String contract_id = "";
+
     public void UserCheck() {
         Thread th = new Thread(() -> {
             dbc.UserCheck(place_id, USER_INFO_ID);
@@ -619,20 +625,20 @@ public class HomeFragment2 extends Fragment {
                     String kind = UserCheckData.getInstance().getUser_kind();
                     contract_id = UserCheckData.getInstance().getUser_contract_id();
 
-                    if(kind.equals("4")){
+                    if (kind.equals("4")) {
                         binding.noMemberLine.setVisibility(View.VISIBLE);
                         binding.memberLine.setVisibility(View.GONE);
                         binding.payline.setVisibility(View.GONE);
                         binding.state.setVisibility(View.GONE);
                         binding.placeState.setVisibility(View.GONE);
-                    }else{
+                    } else {
                         binding.noMemberLine.setVisibility(View.GONE);
                         binding.memberLine.setVisibility(View.VISIBLE);
                         binding.payline.setVisibility(View.VISIBLE);
                         binding.state.setVisibility(View.VISIBLE);
                         binding.placeState.setVisibility(View.VISIBLE);
 
-                        shardpref.putString("jongeob",jongeob);
+                        shardpref.putString("jongeob", jongeob);
                         dlog.i("------UserCheck-------");
                         USER_INFO_ID = mem_id;
                         dlog.i("프로필 사진 url : " + mem_img_path);
@@ -641,7 +647,7 @@ public class HomeFragment2 extends Fragment {
                         dlog.i("급여 : " + mem_pay);
                         dlog.i("------UserCheck-------");
 
-                        shardpref.putString("mem_name",mem_name);
+                        shardpref.putString("mem_name", mem_name);
                         if (USER_INFO_AUTH.isEmpty()) {
                             binding.ioTime.setText("김이름님 오늘도 화이팅하세요!");
                         } else {
@@ -728,6 +734,13 @@ public class HomeFragment2 extends Fragment {
             e.printStackTrace();
         }
     }
+
+    Calendar cal;
+    String format = "yyyy-MM-dd";
+    SimpleDateFormat sdf = new SimpleDateFormat(format);
+    String toDay = "";
+    int state_null = 0;
+    String writer_id = "";
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
         dlog.i("----------PlaceWorkCheck----------");
@@ -839,7 +852,7 @@ public class HomeFragment2 extends Fragment {
                                             for (int i = 0; i < Response.length(); i++) {
                                                 allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                             }
-                                        } else if(kind.equals("4")){
+                                        } else if (kind.equals("4")) {
                                             dlog.i("kind 4 Result : " + jsonResponse);
 
                                             mList3 = new ArrayList<>();
@@ -871,7 +884,8 @@ public class HomeFragment2 extends Fragment {
                                                     public void onItemClick(View v, int position) {
                                                         if (USER_INFO_AUTH.isEmpty()) {
                                                             isAuth();
-                                                        } else {}
+                                                        } else {
+                                                        }
                                                     }
                                                 });
 
@@ -932,9 +946,9 @@ public class HomeFragment2 extends Fragment {
                         String paykind = Response.getJSONObject(0).getString("paykind");
                         //알바, 정직원, 매니저, 기타
                         DecimalFormat myFormatter = new DecimalFormat("###,###");
-                        if(paykind.equals("시급") || paykind.equals("주급")){
+                        if (paykind.equals("시급") || paykind.equals("주급")) {
                             binding.realPaynum.setText("근무 " + workhour + "시간 X 시급 " + payment + "원 = " + myFormatter.format(allPay) + "원");
-                        } else if(paykind.equals("월급")){
+                        } else if (paykind.equals("월급")) {
                             binding.realPaynum.setText(myFormatter.format(allPay) + "원");
                         }
                     } catch (JSONException e) {
@@ -982,9 +996,9 @@ public class HomeFragment2 extends Fragment {
                                 Toast_Nomal("초대 수락이 완료되었습니다.");
                                 binding.acceptArea.setVisibility(View.GONE);
                                 accept_state = 1;
-                                String message = "[" + mem_name +"]근로자님이 매장초대를 수락하셨습니다.";
-                                getUserToken(place_owner_id,"0",message);
-                                AddPush("매장초대",message,place_owner_id);
+                                String message = "[" + mem_name + "]근로자님이 매장초대를 수락하셨습니다.";
+                                getUserToken(place_owner_id, "0", message);
+                                AddPush("매장초대", message, place_owner_id);
                             }
                         }
                     });
@@ -1055,7 +1069,7 @@ public class HomeFragment2 extends Fragment {
     }
 
     public void AddPush(String title, String content, String user_id) {
-        place_owner_id = shardpref.getString("place_owner_id","");
+        place_owner_id = shardpref.getString("place_owner_id", "");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PushLogInputInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -1106,6 +1120,7 @@ public class HomeFragment2 extends Fragment {
             e.printStackTrace();
         }
     }
+
     private void MoveMyLocation() {
         try {
             gpsTracker = new GpsTracker(mContext);
@@ -1230,8 +1245,8 @@ public class HomeFragment2 extends Fragment {
 
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요!");
+        intent.putExtra("flag", "더미");
+        intent.putExtra("data", "먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);
