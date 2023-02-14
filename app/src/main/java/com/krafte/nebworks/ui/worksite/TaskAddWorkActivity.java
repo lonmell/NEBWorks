@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.api.LogDescriptor;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
@@ -412,19 +411,20 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 if (Year.equals(getYear)) {
                     if (SELECTDATE) {
                         binding.inputDate02.setText(month + " " + "(" + yoil + ")");
+                        getEndDate = save_date.format(date.getDate());
                     } else {
                         binding.inputDate01.setText(month + " " + "(" + yoil + ")");
+                        getStartDate = save_date.format(date.getDate());
                     }
                 } else {
                     if (SELECTDATE) {
                         binding.inputDate02.setText(Year + "\n" + month + " " + "(" + yoil + ")");
+                        getEndDate = save_date.format(date.getDate());
                     } else {
                         binding.inputDate01.setText(Year + "\n" + month + " " + "(" + yoil + ")");
+                        getStartDate = save_date.format(date.getDate());
                     }
                 }
-                getStartDate = save_date.format(date.getDate());
-                getEndDate = save_date.format(date.getDate());
-
                 dlog.i("binding.cvCalendar CalendarDay : " + Year + "\n" + month + "," + yoil);
             }
         });
@@ -860,6 +860,8 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     private void SaveAddWork() {
         dlog.i("------------------SaveAddWork------------------");
         dlog.i("RepeatCheck : " + RepeatCheck);
+        dlog.i("getStartDate : " + getStartDate);
+        dlog.i("getEndDate : " + getEndDate);
         today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
 
         if (RepeatCheck) {
@@ -890,15 +892,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         dlog.i("sat : " + Sat);
         dlog.i("users : " + user_id);
         dlog.i("overdate : " + overdate);
-//        if(overdate.isEmpty()){
-//            cal.add(Calendar.DATE, +1);
-//            String toDay = sdf.format(cal.getTime());
-//            String Year = toDay.substring(0,4);
-//            String Month = toDay.substring(5,7);
-//            String Day = toDay.substring(8,10);
-//            overdate = Year + "-" + Month + "-" + Day;
-//            dlog.i("overdate 2 : " + overdate);
-//        }
+
         if (USER_INFO_AUTH.equals("1")) {
             user_id = USER_INFO_ID;
         }

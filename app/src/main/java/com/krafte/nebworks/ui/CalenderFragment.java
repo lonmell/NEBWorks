@@ -24,6 +24,7 @@ import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.WorkCalendersetData;
 import com.krafte.nebworks.databinding.FragmentCalenderBinding;
 import com.krafte.nebworks.util.DateCurrent;
+import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
@@ -51,7 +52,7 @@ public class CalenderFragment extends Fragment {
     PreferenceHelper shardpref;
     RetrofitConnect rc = new RetrofitConnect();
     WorkCalenderAdapter mAdapter;
-
+    Dlog dlog = new Dlog();
     private FragmentCalenderBinding binding = null;
 
     Context mContext;
@@ -67,7 +68,7 @@ public class CalenderFragment extends Fragment {
     ArrayList<CalendarSetData.CalendarSetData_list> mList2 = new ArrayList<>();
 
     // state 1: WorkGoto
-    public CalenderFragment(long year, long month, int state) {
+    public CalenderFragment(long year, long month) {
         this.year = String.valueOf(Math.toIntExact(year));
         this.month = String.format("%02d", Math.toIntExact(month));
     }
@@ -94,6 +95,8 @@ public class CalenderFragment extends Fragment {
         binding = FragmentCalenderBinding.inflate(inflater);
         mContext = inflater.getContext();
         shardpref = new PreferenceHelper(mContext);
+        dlog.DlogContext(mContext);
+
         USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
         place_id            = PlaceCheckData.getInstance().getPlace_id();
 
