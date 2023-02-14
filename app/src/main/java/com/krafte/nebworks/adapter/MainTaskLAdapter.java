@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.MainTaskData;
-import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -25,12 +23,7 @@ import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.ViewHolder> {
     private static final String TAG = "MainTaskLAdapter";
@@ -46,11 +39,6 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
     Dlog dlog = new Dlog();
-
-    List<String> user_id = new ArrayList<>();
-    List<String> user_name = new ArrayList<>();
-    List<String> user_img_path = new ArrayList<>();
-    List<String> user_img_jikgup = new ArrayList<>();
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
@@ -90,16 +78,13 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
             holder.title.setText(item.getTitle());
             String endhour = "";
             String endmin = "";
-
-            if (item.getEnd_time().length() > 6) {
-                String[] splitEndDate = item.getEnd_time().split(" ");
-                String[] endDate = splitEndDate[0].split("-");
-                endhour = splitEndDate[1].split(":")[0] + "시 ";
-                endmin = splitEndDate[1].split(":")[1] + "분";
-                holder.date.setText(endDate[0] + "년 " + endDate[1] + "월 " + endDate[2] + "일" + " | " + "마감 " + endhour + endmin);
+            if (!item.getEnd_hour().isEmpty() && !item.getEnd_min().isEmpty()) {
+                endhour = item.getEnd_hour() + "시 ";
+                endmin = item.getEnd_min() + "분";
+                holder.date.setText(item.getEnd_date() + " | " + endhour + endmin);
             } else {
-                String date[] = item.getEnd_time().split(":");
-                holder.date.setText("[반복할일]" + " 마감 " + date[0] + "시 " + date[1] + "분 까지");
+                String date = item.getEnd_date().replace("년 월 일", "");
+                holder.date.setText("[반복할일] " + date + "까지");
             }
 
             if(position == 0){
@@ -108,60 +93,11 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
                 holder.itemline.setVisibility(View.VISIBLE);
             }
             holder.report_btn.setOnClickListener(v -> {
-                try {
-                    JSONArray Response = new JSONArray(item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
-                    dlog.i("users : " + item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
-                    dlog.i("users Response : " + Response.length());
-                    if (Response.length() == 0) {
-                        Log.i(TAG, "GET SIZE : " + Response.length());
-                    } else {
-                        user_id.removeAll(user_id);
-                        user_name.removeAll(user_name);
-                        user_img_path.removeAll(user_img_path);
-                        user_img_jikgup.removeAll(user_img_jikgup);
-                        for (int i = 0; i < Response.length(); i++) {
-                            JSONObject jsonObject = Response.getJSONObject(i);
-                            if (!jsonObject.getString("user_name").equals("null")) {
-                                user_id.add(jsonObject.getString("user_id"));
-                                user_name.add(jsonObject.getString("user_name"));
-                                user_img_path.add(jsonObject.getString("img_path"));
-                                user_img_jikgup.add(jsonObject.getString("jikgup"));
-                            }
-                        }
-                    }
-//                        item.getApproval_state()
-                    shardpref.putString("task_no", item.getId());
-                    shardpref.putString("writer_id", item.getWriter_id());
-                    shardpref.putString("kind", item.getKind());
-                    shardpref.putString("title", item.getTitle());
-                    shardpref.putString("contents", item.getContents());
-                    shardpref.putString("complete_kind", item.getComplete_kind());
-                    shardpref.putString("users", user_id.toString());
-                    shardpref.putString("usersn", user_name.toString());
-                    shardpref.putString("usersimg", user_img_path.toString());
-                    shardpref.putString("usersjikgup", user_img_jikgup.toString());
-                    shardpref.putString("task_date", item.getTask_date());
-                    shardpref.putString("start_time", item.getStart_time());
-                    shardpref.putString("end_time", item.getEnd_time());
-                    shardpref.putString("sun", item.getSun());
-                    shardpref.putString("mon", item.getMon());
-                    shardpref.putString("tue", item.getTue());
-                    shardpref.putString("wed", item.getWed());
-                    shardpref.putString("thu", item.getThu());
-                    shardpref.putString("fri", item.getFri());
-                    shardpref.putString("sat", item.getSat());
-                    shardpref.putString("img_path", item.getImg_path());
-                    shardpref.putString("complete_yn", item.getComplete_yn());// y:완료, n:미완료
-                    shardpref.putString("incomplete_reason", item.getIncomplete_reason()); // n: 미완료 사요
-                    shardpref.putString("approval_state", item.getApproval_state());// 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
-                    shardpref.putString("reject_reason", item.getReject_reason());
-                    shardpref.putString("updated_at", item.getUpdated_at());
-                    dlog.i("users : " + user_id.toString());
-                    dlog.i("usersn : " + user_name.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (USER_INFO_AUTH.isEmpty()) {
+                    isAuth();
+                } else {
+                    pm.TaskList(mContext);
                 }
-                pm.TaskDetail(mContext);
             });
         }catch (Exception e){
             dlog.i("Exception : " + e);

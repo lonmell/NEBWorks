@@ -41,7 +41,6 @@ import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
-import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.Homefragment2Binding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -60,7 +59,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -271,7 +269,7 @@ public class HomeFragment2 extends Fragment {
         InOutLogMember();
         UserCheck();
         allPay = 0;
-        taskList();
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
@@ -303,30 +301,10 @@ public class HomeFragment2 extends Fragment {
         binding.mainTaskList.setAdapter(mAdapter);
         binding.mainTaskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         mAdapter.addItem(new MainTaskData.MainTaskData_list(
-                "121",
-                "143",
-                "0",
                 "할 일",
-                "할일에 대한 설명이에요",
-                "1",
-                new ArrayList<String>(Collections.singleton("[{\"user_id\":\"77\",\"user_name\":\"김준호\",\"img_path\":\"null\",\"jikgup\":\"\\uc815\\uc9c1\\uc6d0\"},{\"user_id\":\"89\",\"user_name\":\"박찬성\",\"img_path\":\"null\",\"jikgup\":\"\\ub9e4\\ub2c8\\uc800\"},{\"user_id\":\"102\",\"user_name\":\"최치호\",\"img_path\":null,\"jikgup\":\"\\ub9e4\\ub2c8\\uc800\"},{\"user_id\":\"115\",\"user_name\":\"\\ud06c\\ub798\\ud504\\ud2b8\\uace0\\uac1d\\uc9c0\\uc6d0\\ud300\",\"img_path\":\"null\",\"jikgup\":null}],\"task_date\":\"2023-01-02\",\"start_time\":\"2023-01-02 6:9\",\"end_time\":\"2023-01-02 18:09\",\"sun\":\"0\",\"mon\":\"0\",\"tue\":\"0\",\"wed\":\"0\",\"thu\":\"0\",\"fri\":\"0\",\"sat\":\"0\",\"img_path\":null,\"complete_yn\":null,\"incomplete_reason\":null,\"approval_state\":\"3\",\"task_overdate\":\"\",\"reject_reason\":null,\"updated_at\":null}]")),
-                "2023-01-01",
-                "2023-01-01 01:00",
-                "2023-01-01 23:00",
-                "0",
-                "1",
-                "1",
-                "1",
-                "1",
-                "1",
-                "0",
-                "",
-                "y",
-                "",
-                "0",
-                "2023-01-01",
-                "0",
-                "2023-01-01"
+                "2023년 1월 1일",
+                "01",
+                "23"
         ));
 
         mList2 = new ArrayList<>();
@@ -779,40 +757,40 @@ public class HomeFragment2 extends Fragment {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     try {
                                         if (kind.equals("0")) {
-//                                            mList = new ArrayList<>();
-//                                            mAdapter = new MainTaskLAdapter(mContext, mList);
-//                                            binding.mainTaskList.setAdapter(mAdapter);
-//                                            binding.mainTaskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-//                                            dlog.i("Task Get SIZE : " + Response.length());
-//                                            if (Response.length() == 0) {
-//                                                dlog.i("SetNoticeListview Thread run! ");
-//                                                dlog.i("GET SIZE : " + Response.length());
-//                                                binding.mainTaskList.setVisibility(View.GONE);
-//                                                binding.limitTasktv.setVisibility(View.VISIBLE);
-//                                            } else {
-//                                                binding.mainTaskList.setVisibility(View.VISIBLE);
-//                                                binding.limitTasktv.setVisibility(View.GONE);
-//                                                for (int i = 0; i < Response.length(); i++) {
-//                                                    JSONObject jsonObject = Response.getJSONObject(i);
-//                                                    mAdapter.addItem(new MainTaskData.MainTaskData_list(
-//                                                            jsonObject.getString("title"),
-//                                                            jsonObject.getString("end_date"),
-//                                                            jsonObject.getString("end_hour"),
-//                                                            jsonObject.getString("end_min")
-//                                                    ));
-//                                                }
-//
-//                                                mAdapter.setOnItemClickListener(new MainTaskLAdapter.OnItemClickListener() {
-//                                                    @Override
-//                                                    public void onItemClick(View v, int position) {
-//                                                        if (USER_INFO_AUTH.isEmpty()) {
-//                                                            isAuth();
-//                                                        } else {}
-//                                                    }
-//                                                });
-//
-//                                            }
-//                                            mAdapter.notifyDataSetChanged();
+                                            mList = new ArrayList<>();
+                                            mAdapter = new MainTaskLAdapter(mContext, mList);
+                                            binding.mainTaskList.setAdapter(mAdapter);
+                                            binding.mainTaskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                            dlog.i("Task Get SIZE : " + Response.length());
+                                            if (Response.length() == 0) {
+                                                dlog.i("SetNoticeListview Thread run! ");
+                                                dlog.i("GET SIZE : " + Response.length());
+                                                binding.mainTaskList.setVisibility(View.GONE);
+                                                binding.limitTasktv.setVisibility(View.VISIBLE);
+                                            } else {
+                                                binding.mainTaskList.setVisibility(View.VISIBLE);
+                                                binding.limitTasktv.setVisibility(View.GONE);
+                                                for (int i = 0; i < Response.length(); i++) {
+                                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                                    mAdapter.addItem(new MainTaskData.MainTaskData_list(
+                                                            jsonObject.getString("title"),
+                                                            jsonObject.getString("end_date"),
+                                                            jsonObject.getString("end_hour"),
+                                                            jsonObject.getString("end_min")
+                                                    ));
+                                                }
+
+                                                mAdapter.setOnItemClickListener(new MainTaskLAdapter.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(View v, int position) {
+                                                        if (USER_INFO_AUTH.isEmpty()) {
+                                                            isAuth();
+                                                        } else {}
+                                                    }
+                                                });
+
+                                            }
+                                            mAdapter.notifyDataSetChanged();
                                         } else if (kind.equals("1")) {
                                             mList2 = new ArrayList<>();
                                             mAdapter2 = new MainNotiLAdapter(mContext, mList2);
@@ -916,92 +894,6 @@ public class HomeFragment2 extends Fragment {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
-
-    public void taskList() {
-        String getYMPicker = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(TaskSelectWInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        TaskSelectWInterface api = retrofit.create(TaskSelectWInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID, getYMPicker, USER_INFO_AUTH);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                dlog.i("taskList");
-                dlog.i("response 1: " + response.isSuccessful());
-                dlog.i("response 2: " + rc.getBase64decode(response.body()));
-                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    try {
-                        JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
-                        mList = new ArrayList<>();
-                        mAdapter = new MainTaskLAdapter(mContext, mList);
-                        binding.mainTaskList.setAdapter(mAdapter);
-                        binding.mainTaskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-                        dlog.i("GET SIZE : " + Response.length());
-                        if (Response.length() == 0) {
-                            dlog.i("SetNoticeListview Thread run! ");
-                            dlog.i("GET SIZE : " + Response.length());
-                            binding.mainTaskList.setVisibility(View.GONE);
-                            binding.limitTasktv.setVisibility(View.VISIBLE);
-                        } else {
-                            binding.mainTaskList.setVisibility(View.VISIBLE);
-                            binding.limitTasktv.setVisibility(View.GONE);
-                            for (int i = 0; i < Response.length(); i++) {
-                                JSONObject jsonObject = Response.getJSONObject(i);
-                                if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
-                                    mAdapter.addItem(new MainTaskData.MainTaskData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("writer_id"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("title"),
-                                            jsonObject.getString("contents"),
-                                            jsonObject.getString("complete_kind"),
-                                            Collections.singletonList(jsonObject.getString("users")),
-                                            jsonObject.getString("task_date"),
-                                            jsonObject.getString("start_time"),
-                                            jsonObject.getString("end_time"),
-                                            jsonObject.getString("sun"),
-                                            jsonObject.getString("mon"),
-                                            jsonObject.getString("tue"),
-                                            jsonObject.getString("wed"),
-                                            jsonObject.getString("thu"),
-                                            jsonObject.getString("fri"),
-                                            jsonObject.getString("sat"),
-                                            jsonObject.getString("img_path"),
-                                            jsonObject.getString("complete_yn"),
-                                            jsonObject.getString("incomplete_reason"),
-                                            jsonObject.getString("approval_state"),
-                                            jsonObject.getString("task_overdate"),
-                                            jsonObject.getString("reject_reason"),
-                                            jsonObject.getString("updated_at")
-                                    ));
-                                }
-                                mAdapter.setOnItemClickListener(new MainTaskLAdapter.OnItemClickListener() {
-                                                    @Override
-                                                    public void onItemClick(View v, int position) {
-                                                        if (USER_INFO_AUTH.isEmpty()) {
-                                                            isAuth();
-                                                        } else {}
-                                                    }
-                                                });
-                            }
-                            mAdapter.notifyDataSetChanged();
-                        }
-
-                    } catch (Exception e) {
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
             }
         });
     }
