@@ -128,6 +128,8 @@ public class WorkgotoFragment extends Fragment {
     String change_member_id = "";
     String change_member_name = "";
 
+    int changeState = 0;
+
     public static WorkgotoFragment newInstance(int number) {
         WorkgotoFragment fragment = new WorkgotoFragment();
         Bundle bundle = new Bundle();
@@ -340,7 +342,8 @@ public class WorkgotoFragment extends Fragment {
                         Month = toDay.substring(5, 7);
                         Day = toDay.substring(8, 10);
                         getYMPicker = Year + "-" + Month;
-                        binding.setdate.setText(Year + "년 " + Month + "월 ");
+                        changeState = 1;
+                        binding.calenderViewpager.setCurrentItem(binding.calenderViewpager.getCurrentItem() - 1);
                     } else {
                         cal.add(Calendar.DATE, -1);
                         toDay = sdf.format(cal.getTime());
@@ -373,7 +376,8 @@ public class WorkgotoFragment extends Fragment {
                         Month = toDay.substring(5, 7);
                         Day = toDay.substring(8, 10);
                         getYMPicker = Year + "-" + Month;
-                        binding.setdate.setText(Year + "년 " + Month + "월 ");
+                        changeState = -1;
+                        binding.calenderViewpager.setCurrentItem(binding.calenderViewpager.getCurrentItem() + 1);
                     } else {
                         cal.add(Calendar.DATE, +1);
                         toDay = sdf.format(cal.getTime());
@@ -399,10 +403,17 @@ public class WorkgotoFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                int currentMonth = 0;
                 if (month < Integer.parseInt(Month)) {
-                    cal.add(Calendar.MONTH, - (Integer.parseInt(Month) - (month + 1)));
+                    changeState = 1;
+                    currentMonth = (Integer.parseInt(Month) - (month + 1));
+                    binding.calenderViewpager.setCurrentItem(binding.calenderViewpager.getCurrentItem() - currentMonth);
+                    cal.add(Calendar.MONTH, - currentMonth);
                 } else {
-                    cal.add(Calendar.MONTH, ((month + 1)  - Integer.parseInt(Month)));
+                    changeState = -1;
+                    currentMonth = ((month + 1)  - Integer.parseInt(Month));
+                    binding.calenderViewpager.setCurrentItem(binding.calenderViewpager.getCurrentItem() + currentMonth);
+                    cal.add(Calendar.MONTH, currentMonth);
                 }
                 Year = String.valueOf(year);
                 Month = String.valueOf(month + 1);
@@ -410,9 +421,7 @@ public class WorkgotoFragment extends Fragment {
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 getYMPicker = Year + "-" + Month;
-                if (chng_icon) {
-                    binding.setdate.setText(Year + "년 " + Month + "월 ");
-                } else {
+                if (!chng_icon) {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 }
                 getYMPicker = Year + "년 " + Month + "월 ";
@@ -519,8 +528,23 @@ public class WorkgotoFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                dlog.i("calenderViewpager || Year : " + fragmentStateAdapter.returnYear() + "|| Month : " + fragmentStateAdapter.returnMonth());
-                binding.setdate.setText(fragmentStateAdapter.returnYear() + "년 " + fragmentStateAdapter.returnMonth() + "월");
+                    String calYear = shardpref.getString("calendar_year", "");
+                    String calMonth = shardpref.getString("calendar_month", "");
+
+                    dlog.i("calenderViewpager || Year : " + calYear + "|| Month : " + calMonth);
+
+                    int intMonth = Integer.parseInt(calMonth) + changeState;
+                    calMonth = String.format("%02d", intMonth);
+
+                    if (calMonth.equals("13")) {
+                        calMonth = "01";
+                        calYear = String.valueOf(Integer.parseInt(calYear) + 1);
+                    } else if (calMonth.equals("00") || calMonth.equals("0")){
+                        calMonth = "12";
+                        calYear = String.valueOf(Integer.parseInt(calYear) - 1);
+                    }
+
+                        binding.setdate.setText(calYear + "년 " + calMonth + "월");
             }
         });
 
