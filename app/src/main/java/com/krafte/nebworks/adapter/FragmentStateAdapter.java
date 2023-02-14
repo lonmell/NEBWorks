@@ -1,5 +1,6 @@
 package com.krafte.nebworks.adapter;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,7 @@ import java.util.Calendar;
 public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentStateAdapter {
     static final int START_POSITION = Integer.MAX_VALUE / 2;
     Calendar cal = Calendar.getInstance();
-
+    Context mContext;
     String year = "";
     String month = "";
 
@@ -58,7 +59,6 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
     @Override
     public Fragment createFragment(int position) {
         Log.d("createFragment", String.valueOf(position));
-
         long itemId = getItemId(position);
 
         long year = itemId / 100L;

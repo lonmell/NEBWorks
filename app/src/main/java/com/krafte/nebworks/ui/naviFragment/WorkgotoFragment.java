@@ -28,12 +28,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.adapter.Tap2ListAdapter;
-import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.adapter.WorkCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectMemberActivity;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.bottomsheet.TaskAddOption;
-import com.krafte.nebworks.bottomsheet.WorkgotoBottomSheet;
 import com.krafte.nebworks.data.CalendarSetData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
@@ -41,8 +39,6 @@ import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
-import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
-import com.krafte.nebworks.dataInterface.WorkCalendersetData;
 import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
@@ -59,7 +55,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,7 +77,6 @@ public class WorkgotoFragment extends Fragment {
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
     FragmentStateAdapter fragmentStateAdapter;
-
     WorkCalenderAdapter mAdapter;
     ArrayList<WorkCalenderData.WorkCalenderData_list> mList;
     //Task all data
@@ -203,6 +197,7 @@ public class WorkgotoFragment extends Fragment {
             dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
             fragmentStateAdapter = new FragmentStateAdapter(requireActivity());
+//            calenderFragment.CalenderContext(mContext);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
 
@@ -520,11 +515,11 @@ public class WorkgotoFragment extends Fragment {
                 setRecyclerView();
             }
         });
-
         binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                dlog.i("calenderViewpager || Year : " + fragmentStateAdapter.returnYear() + "|| Month : " + fragmentStateAdapter.returnMonth());
                 binding.setdate.setText(fragmentStateAdapter.returnYear() + "년 " + fragmentStateAdapter.returnMonth() + "월");
             }
         });

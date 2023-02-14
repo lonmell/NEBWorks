@@ -21,6 +21,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.Tap2ListAdapter;
@@ -249,6 +250,14 @@ public class TaskListActivity extends AppCompatActivity {
         Month = toDay.substring(5, 7);
         Day = toDay.substring(8,10);
         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+
+        binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                dlog.i("onPageSelected position : " + position);
+            }
+        });
 
         binding.prevDate.setOnClickListener(v -> {
             try {
