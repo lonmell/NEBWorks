@@ -410,11 +410,17 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 String yoil = calendar_get_yoil.format(date.getDate());
 
                 if (Year.equals(getYear)) {
-                    binding.inputDate01.setText(month + " " + "(" + yoil + ")");
-                    binding.inputDate02.setText(month + " " + "(" + yoil + ")");
+                    if (SELECTDATE) {
+                        binding.inputDate02.setText(month + " " + "(" + yoil + ")");
+                    } else {
+                        binding.inputDate01.setText(month + " " + "(" + yoil + ")");
+                    }
                 } else {
-                    binding.inputDate01.setText(Year + "\n" + month + " " + "(" + yoil + ")");
-                    binding.inputDate02.setText(Year + "\n" + month + " " + "(" + yoil + ")");
+                    if (SELECTDATE) {
+                        binding.inputDate02.setText(Year + "\n" + month + " " + "(" + yoil + ")");
+                    } else {
+                        binding.inputDate01.setText(Year + "\n" + month + " " + "(" + yoil + ")");
+                    }
                 }
                 getStartDate = save_date.format(date.getDate());
                 getEndDate = save_date.format(date.getDate());
