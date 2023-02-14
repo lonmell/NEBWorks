@@ -100,6 +100,9 @@ public class CalenderFragment extends Fragment {
         USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
         place_id            = PlaceCheckData.getInstance().getPlace_id();
 
+        shardpref.putString("calendar_year", year);
+        shardpref.putString("calendar_month", month);
+
         time = time * 1000;
         Date date = new Date(time);
 
