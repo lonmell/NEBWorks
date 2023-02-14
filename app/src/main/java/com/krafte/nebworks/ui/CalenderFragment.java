@@ -66,9 +66,18 @@ public class CalenderFragment extends Fragment {
     ArrayList<WorkCalenderData.WorkCalenderData_list> mList;
     ArrayList<CalendarSetData.CalendarSetData_list> mList2 = new ArrayList<>();
 
-    public CalenderFragment(long year, long month) {
+    // state 1: WorkGoto
+    public CalenderFragment(long year, long month, int state) {
         this.year = String.valueOf(Math.toIntExact(year));
         this.month = String.format("%02d", Math.toIntExact(month));
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public String getMonth() {
+        return month;
     }
 
     @Override
