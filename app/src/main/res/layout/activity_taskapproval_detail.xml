@@ -35,11 +35,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/applesdgothicneo"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
-            android:text="할일 생성"
+            android:text="할일 보고"
             android:textColor="#000"
-            android:textSize="22sp"
+            android:textSize="20sp"
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 
@@ -329,27 +329,22 @@
                 android:id="@+id/incomplete_area"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 android:visibility="gone">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:text="보고내용"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/incomplete_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:background="@drawable/grayback_gray_round"
                     android:minHeight="50dp"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
                     android:text=""
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -384,12 +379,18 @@
                     android:id="@+id/reject_reason_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:background="@drawable/grayback_gray_round"
+                    android:minHeight="50dp"
                     android:text=""
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
 
@@ -420,18 +421,32 @@
                         app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
 
-                        <TextView
-                            android:id="@+id/select_approval01tv"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:drawableStart="@drawable/ic_blue_check"
-                            android:fontFamily="@font/inter_regular"
-                            android:gravity="center"
-                            android:text="    승인하기"
-                            android:textColor="#6395EC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:layout_gravity="center">
+
+                            <ImageView
+                                android:id="@+id/select_approval01img"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_blue_check"/>
+
+                            <TextView
+                                android:id="@+id/select_approval01tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/pretendard_regular"
+                                android:layout_marginStart="8dp"
+                                android:gravity="center"
+                                android:text="승인하기"
+                                android:textColor="@color/new_blue"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
 
                     </androidx.cardview.widget.CardView>
 
@@ -445,18 +460,31 @@
                         app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
 
-                        <TextView
-                            android:id="@+id/select_approval02tv"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:drawableStart="@drawable/ic_red_x"
-                            android:fontFamily="@font/inter_regular"
-                            android:gravity="center"
-                            android:text="    반려하기"
-                            android:textColor="#DD6540"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:layout_gravity="center">
+
+                            <ImageView
+                                android:id="@+id/select_approval02img"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_red_x"/>
+
+                            <TextView
+                                android:id="@+id/select_approval02tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/pretendard_regular"
+                                android:layout_marginStart="8dp"
+                                android:gravity="center"
+                                android:text="반려하기"
+                                android:textColor="#DD6540"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
@@ -477,7 +505,7 @@
                     android:id="@+id/reject_save"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="#6395EC"
+                    android:background="@color/new_blue"
                     android:layout_marginTop="30dp"
                     android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"

@@ -33,11 +33,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="결재처리하기"
-            android:textSize="16sp"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/inter_regular"
-            android:textColor="@color/black" />
+            android:fontFamily="@font/pretendard_bold"
+            android:text="결재처리하기"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
     </RelativeLayout>
 
 

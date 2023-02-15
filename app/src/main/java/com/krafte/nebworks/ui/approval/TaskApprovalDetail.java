@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -372,17 +373,41 @@ public class TaskApprovalDetail extends AppCompatActivity {
                 }
                 //--approval_state -- // 0: 결재대기, 1:승인, 2:반려, 3:결재요청 전
                 if(state.equals("0") || state.equals("1") || state.equals("3")){
-                    binding.approvalState.setTextColor(Color.parseColor("#6395EC"));
+                    binding.approvalState.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     if(state.equals("0")){
                         binding.approvalState.setText("결재대기중");
                     }else if(state.equals("1")){
                         binding.approvalState.setText("승인");
+                        binding.approvalState.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+
+                        binding.selectApproval01.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                        binding.selectApproval01tv.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                        binding.selectApproval01img.setBackgroundResource(R.drawable.ic_white_check);
+
+                        binding.selectApproval02.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray_200));
+                        binding.selectApproval02tv.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                        binding.selectApproval02img.setBackgroundResource(R.drawable.ic_white_x);
+
+                        binding.selectApproval01.setClickable(false);
+                        binding.selectApproval01.setEnabled(false);
                     }
                     binding.rejectArea.setVisibility(View.GONE);
                 }else{
                     binding.rejectArea.setVisibility(View.VISIBLE);
                     binding.approvalState.setTextColor(Color.parseColor("#FF0000"));
                     binding.approvalState.setText("반려");
+
+                    binding.selectApproval02.setBackgroundColor(Color.parseColor("#DD6540"));
+                    binding.selectApproval02tv.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                    binding.selectApproval02img.setBackgroundResource(R.drawable.ic_white_x);
+
+                    binding.selectApproval01.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray_200));
+                    binding.selectApproval01tv.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                    binding.selectApproval01img.setBackgroundResource(R.drawable.ic_white_check);
+
+                    binding.selectApproval02.setClickable(false);
+                    binding.selectApproval02.setEnabled(false);
+
                     if(reject_reason.length() > 0){
                         binding.rejectReasonTv.setText(reject_reason);
                     }
@@ -399,35 +424,33 @@ public class TaskApprovalDetail extends AppCompatActivity {
                 binding.bottomBtnBox.setVisibility(View.VISIBLE);
             }
 
-            binding.selectApproval01.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
-            binding.selectApproval01tv.setTextColor(Color.parseColor("#6395EC"));
-            binding.selectApproval01tv.setCompoundDrawablesWithIntrinsicBounds(check_on,null,null,null);
-            binding.selectApproval02.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
-            binding.selectApproval02tv.setTextColor(Color.parseColor("#DD6540"));
-            binding.selectApproval02tv.setCompoundDrawablesWithIntrinsicBounds(x_on,null,null,null);
             binding.rejectTv.setVisibility(View.GONE);
             binding.rejectSave.setVisibility(View.GONE);
 
             binding.selectApproval01.setOnClickListener(v -> {
                 //승인버튼
-                binding.selectApproval01.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
-                binding.selectApproval01tv.setTextColor(Color.parseColor("#6395EC"));
-                binding.selectApproval01tv.setCompoundDrawablesWithIntrinsicBounds(check_on,null,null,null);
-                binding.selectApproval02.setCardBackgroundColor(Color.parseColor("#FCF0EC"));
-                binding.selectApproval02tv.setTextColor(Color.parseColor("#DD6540"));
-                binding.selectApproval02tv.setCompoundDrawablesWithIntrinsicBounds(x_on,null,null,null);
+                binding.selectApproval01.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                binding.selectApproval01tv.setTextColor(Color.parseColor("#ffffff"));
+                binding.selectApproval01img.setBackgroundResource(R.drawable.ic_white_check);
+
+                binding.selectApproval02.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray_200));
+                binding.selectApproval02tv.setTextColor(Color.parseColor("#ffffff"));
+                binding.selectApproval02img.setBackgroundResource(R.drawable.ic_white_x);
+
                 binding.rejectTv.setVisibility(View.GONE);
                 binding.rejectSave.setVisibility(View.GONE);
                 setUpdateWorktodo("1");
             });
             binding.selectApproval02.setOnClickListener(v -> {
                 //반려버튼
-                binding.selectApproval01.setCardBackgroundColor(Color.parseColor("#DBDBDB"));
-                binding.selectApproval01tv.setTextColor(Color.parseColor("#949494"));
-                binding.selectApproval01tv.setCompoundDrawablesWithIntrinsicBounds(check_off,null,null,null);
-                binding.selectApproval02.setCardBackgroundColor(Color.parseColor("#DD6540"));
+                binding.selectApproval01.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray_200));
+                binding.selectApproval01tv.setTextColor(Color.parseColor("#ffffff"));
+                binding.selectApproval01img.setBackgroundResource(R.drawable.ic_white_check);
+
+                binding.selectApproval02.setBackgroundColor(Color.parseColor("#DD6540"));
                 binding.selectApproval02tv.setTextColor(Color.parseColor("#ffffff"));
-                binding.selectApproval02tv.setCompoundDrawablesWithIntrinsicBounds(x_off,null,null,null);
+                binding.selectApproval02img.setBackgroundResource(R.drawable.ic_white_x);
+
                 binding.rejectTv.setVisibility(View.VISIBLE);
                 binding.rejectSave.setVisibility(View.VISIBLE);
             });
@@ -448,7 +471,10 @@ public class TaskApprovalDetail extends AppCompatActivity {
     }
 
     private void setBtnEvent() {
-
+        binding.backBtn.setOnClickListener(v -> {
+            super.onBackPressed();
+            removeShared();
+        });
     }
 
     @Override
@@ -518,7 +544,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
                         dlog.i("place_owner_id : " + place_owner_id);
                         getManagerToken(requester_id, "1", place_id, place_name,state);
                         removeShared();
-                        pm.Approval(mContext);
+                        finish();
                     } else {
                         Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
                     }

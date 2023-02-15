@@ -20,7 +20,7 @@
 
             <TextView
                 android:id="@+id/work_title"
-                android:layout_width="match_parent"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/list_setting"
                 android:layout_alignBottom="@+id/list_setting"

@@ -147,11 +147,24 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
                 holder.state_tv.setText("승인");
                 holder.state_area.setBackgroundResource(R.drawable.default_right_gray_round);
                 holder.state_line.setBackgroundColor(Color.parseColor("#C3C3C3"));
+                holder.accept_btn_img.setBackgroundResource(R.drawable.ic_accept_btn_enable);
+                holder.reject_btn_img.setBackgroundResource(R.drawable.ic_reject_btn_disable);
+                holder.reject_btn.setClickable(true);
+                holder.reject_btn.setEnabled(true);
+                holder.accept_btn.setClickable(false);
+                holder.accept_btn.setEnabled(false);
+
             } else if (item.getState().equals("2")) {
                 //반려
                 holder.state_tv.setText("반려");
                 holder.state_area.setBackgroundResource(R.drawable.default_right_red_round);
                 holder.state_line.setBackgroundColor(Color.parseColor("#DD6540"));
+                holder.accept_btn_img.setBackgroundResource(R.drawable.ic_accept_btn_disable);
+                holder.reject_btn_img.setBackgroundResource(R.drawable.ic_reject_btn_enable);
+                holder.reject_btn.setClickable(false);
+                holder.reject_btn.setEnabled(false);
+                holder.accept_btn.setClickable(true);
+                holder.accept_btn.setEnabled(true);
             }
 
             Glide.with(mContext).load(item.getRequester_img_path())
@@ -214,7 +227,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         TextView state_tv;
         LinearLayout state_line, state_area;
 
-        ImageView workimg, kind;
+        ImageView workimg, kind, accept_btn_img, reject_btn_img;
 
         TextView title, name;
         TextView work_start_time, work_end_time;
@@ -235,6 +248,8 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             work_end_time = itemView.findViewById(R.id.work_end_time);
             accept_btn = itemView.findViewById(R.id.accept_btn);
             reject_btn = itemView.findViewById(R.id.reject_btn);
+            accept_btn_img = itemView.findViewById(R.id.accept_btn_img);
+            reject_btn_img = itemView.findViewById(R.id.reject_btn_img);
 
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
