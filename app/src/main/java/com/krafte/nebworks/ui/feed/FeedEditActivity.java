@@ -1,7 +1,9 @@
 package com.krafte.nebworks.ui.feed;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,6 +30,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.loader.content.CursorLoader;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,12 +41,14 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
 import com.krafte.nebworks.databinding.ActivityPlacenotiAddBinding;
+import com.krafte.nebworks.pop.PhotoPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -64,8 +69,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -104,12 +111,14 @@ public class FeedEditActivity extends AppCompatActivity {
     String place_id = "";
     String feed_id = "";
 
+    ArrayList<Uri> uriList = new ArrayList<>();// 이미지의 uri를 담을 ArrayList 객체
+    MultiImageAdapter adapter;
 
     File file;
     SimpleDateFormat dateFormat;
     @SuppressLint("SdCardPath")
     String BACKUP_PATH = "/sdcard/Download/krafte/";
-    String ProfileUrl = "";
+    List<String> ProfileUrl = new ArrayList<>();
     private Bitmap saveBitmap;
     String ImgfileMaker = "";
     Drawable icon_off;
@@ -231,37 +240,30 @@ public class FeedEditActivity extends AppCompatActivity {
             }
         });
 
-        binding.notiSetimg.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent, GALLEY_CODE);
-        });
-
         binding.closeBtn.setOnClickListener(v -> {
             pm.FeedList(mContext);
         });
 
-
-        if (saveBitmap != null) {
-            binding.clearImg.setVisibility(View.VISIBLE);
-            binding.imgPlus.setVisibility(View.GONE);
-        } else {
-            binding.clearImg.setVisibility(View.GONE);
-            binding.imgPlus.setVisibility(View.VISIBLE);
-        }
         binding.clearImg.setOnClickListener(v -> {
-            try {
-                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
-                saveBitmap.eraseColor(Color.TRANSPARENT);
-                binding.notiSetimg.setImageBitmap(saveBitmap);
-                binding.notiSetimg.setBackgroundResource(R.drawable.img_box_round);
-                ProfileUrl = "";
+            saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
+            saveBitmap.eraseColor(Color.TRANSPARENT);
+            ProfileUrl.clear();
+            uriList.clear();
+            adapter.notifyDataSetChanged();
+            if (uriList.size() == 0) {
                 binding.clearImg.setVisibility(View.GONE);
-                binding.imgPlus.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                dlog.i("clearImg Exception : " + e);
+            } else {
+                binding.clearImg.setVisibility(View.VISIBLE);
             }
+        });
+
+        //------게시글 이미지 등록 / 갤러리 열기
+        binding.limitImg.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, GALLEY_CODE);
         });
 
         Calendar c = Calendar.getInstance();
@@ -291,9 +293,6 @@ public class FeedEditActivity extends AppCompatActivity {
                 if (binding.eventStarttime.isClickable()) {
                     datePickerDialog.show();
                 }
-//                Intent intent = new Intent(this, DatePickerActivity.class);
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.translate_up, 0);
             }
         });
 
@@ -309,6 +308,7 @@ public class FeedEditActivity extends AppCompatActivity {
                 getYMPicker = binding.eventEndttime.getText().toString().substring(0,7);
             }
         }, mYear, mMonth, mDay);
+
         binding.eventEndttime.setOnClickListener(v -> {
             if(binding.eventEndttime.getText().toString().isEmpty()){
                 String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
@@ -318,9 +318,6 @@ public class FeedEditActivity extends AppCompatActivity {
                 if (binding.eventEndttime.isClickable()) {
                     datePickerDialog2.show();
                 }
-//                Intent intent = new Intent(this, DatePickerActivity.class);
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.translate_up, 0);
             }
         });
 
@@ -446,18 +443,23 @@ public class FeedEditActivity extends AppCompatActivity {
                                             binding.inputWorkcontents.setText(contents);
                                             binding.inputMovelink.setText(link);
 
-
-                                            if (feed_img_path.isEmpty() || feed_img_path.equals("null")) {
-                                                binding.clearImg.setVisibility(View.GONE);
-                                                binding.imgPlus.setVisibility(View.VISIBLE);
-                                            } else {
-                                                binding.clearImg.setVisibility(View.VISIBLE);
-                                                binding.imgPlus.setVisibility(View.GONE);
-                                                ProfileUrl = feed_img_path;
-                                                Glide.with(mContext).load(feed_img_path)
-                                                        .apply(requestOptions)
-                                                        .into(binding.notiSetimg);
+                                            for (String s : feed_img_path.split(",")) {
+                                                uriList.add(Uri.parse(s));
                                             }
+                                            adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                                            binding.imgList.setAdapter(adapter);
+                                            binding.imgList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+                                            adapter.setOnClickListener(new MultiImageAdapter.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v, int position) {
+                                                    Intent intent = new Intent(mContext, PhotoPopActivity.class);
+                                                    intent.putExtra("data", String.valueOf(uriList));
+                                                    intent.putExtra("pos", position);
+                                                    mContext.startActivity(intent);
+                                                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                }
+                                            });
 
                                             binding.eventStarttime.setText(open_date);
                                             binding.eventEndttime.setText(close_date);
@@ -521,11 +523,12 @@ public class FeedEditActivity extends AppCompatActivity {
 
     public void AddStroeNoti() {
         String fix_yn = "";
+        String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + noti_title);
         dlog.i("content : " + noti_contents);
         dlog.i("link : " + noti_link);
-        dlog.i("Profile Url : " + ProfileUrl);
+        dlog.i("Profile Url : " + inputImage);
         dlog.i("EventStart : " + binding.eventStarttime.getText().toString());
         dlog.i("EventEnd : " + binding.eventEndttime.getText().toString());
         dlog.i("fix_yn : " + (FIXYN?"y":"n"));
@@ -537,7 +540,7 @@ public class FeedEditActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, "",noti_title, noti_contents, USER_INFO_ID, noti_link, ProfileUrl, "",noti_event_start,noti_event_end,"1","","","",fix_yn);
+        Call<String> call = api.getData(feed_id, "",noti_title, noti_contents, USER_INFO_ID, noti_link, inputImage, "",noti_event_start,noti_event_end,"1","","","",fix_yn);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -552,11 +555,33 @@ public class FeedEditActivity extends AppCompatActivity {
                             try {
                                 if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
                                     if (!ProfileUrl.isEmpty()) {
-                                        saveBitmapAndGetURI();
+                                        if (uriList.size() == 1) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                        } else if (uriList.size() == 2) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                            if (!uriList.get(1).toString().equals("")) {
+                                                saveBitmapAndGetURI(1);
+                                            }
+                                        } else if (uriList.size() == 3) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                            if (!uriList.get(1).toString().equals("")) {
+                                                saveBitmapAndGetURI(1);
+                                            }
+                                            if (!uriList.get(2).toString().equals("")) {
+                                                saveBitmapAndGetURI(2);
+                                            }
+                                        }
+
                                     }
                                     Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     BtnOneCircleFun(true);
-                                    pm.FeedList(mContext);
+                                    finish();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -640,42 +665,158 @@ public class FeedEditActivity extends AppCompatActivity {
 
 
     //이미지 업로드에 필요한 소스 START
-    @SuppressLint({"LongLogTag", "CheckResult"})
+    List<String> cursor_url = new ArrayList<>();
+    private Bitmap saveBitmap1;//첫번째 사진
+    private Bitmap saveBitmap2;//두번째 사진
+    private Bitmap saveBitmap3;//세번째 사진
+
+    @SuppressLint("LongLogTag")
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GALLEY_CODE) {
             if (resultCode == RESULT_OK) {
+                ProfileUrl.clear();
+                uriList.clear();
+                String imagePath1 = "";
+                String imagePath2 = "";
+                String imagePath3 = "";
+                if (data == null) {   // 어떤 이미지도 선택하지 않은 경우
+                    Toast.makeText(getApplicationContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
+                } else {   // 이미지를 하나라도 선택한 경우
+                    if (data.getClipData() == null) {     // 이미지를 하나만 선택한 경우
+                        Log.e("single choice: ", String.valueOf(data.getData()));
+                        ImgfileMaker = ImageNameMaker();
+                        uriList = new ArrayList<>();
+                        Uri imageUri = data.getData();
+                        imagePath1 = data.getDataString();
+                        uriList.add(imageUri);
 
-                String imagePath = "";
-                try {
-                    //1) data의 주소 사용하는 방법
-                    imagePath = data.getDataString(); // "content://media/external/images/media/7215"
+                        adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                        binding.imgList.setAdapter(adapter);
+                        binding.imgList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-                    Glide.with(this)
-                            .load(imagePath)
-                            .into(binding.notiSetimg);
-                    binding.clearImg.setVisibility(View.VISIBLE);
-                    binding.imgPlus.setVisibility(View.GONE);
+                        Glide.with(this)
+                                .load(imagePath1)
+                                .into(binding.hideimg01);
+                        Glide.with(getApplicationContext()).asBitmap().load(imagePath1).into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                saveBitmap1 = resource;
+                            }
+                        });
 
-                    Glide.with(getApplicationContext()).asBitmap().load(imagePath).into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                            saveBitmap = resource;
+                        //파일 이름 만들기
+                        final String IMG_FILE_EXTENSION = ".JPEG";
+                        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+                        ProfileUrl.add("http://krafte.net/NEBWorks/image/feed_img/" + file_name);
+                        dlog.i("한개일때uriList : " + uriList);
+                        dlog.i("한개일때 imgUrl: " + ProfileUrl);
+                    } else {      // 이미지를 여러장 선택한 경우
+                        ClipData clipData = data.getClipData();
+                        Log.e("clipData", String.valueOf(clipData.getItemCount()));
+
+                        if (clipData.getItemCount() > 3) {   // 선택한 이미지가 3장 이상인 경우
+                            Toast.makeText(getApplicationContext(), "사진은 3장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
+                        } else {   // 선택한 이미지가 1장 이상 10장 이하인 경우
+                            Log.e(TAG, "multiple choice");
+                            uriList = new ArrayList<>();
+
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                                Uri imageUri = clipData.getItemAt(i).getUri();  // 선택한 이미지들의 uri를 가져온다.
+                                try {
+                                    uriList.add(imageUri);  //uri를 list에 담는다.
+                                    final String IMG_FILE_EXTENSION = ".JPEG";
+                                    int ImgNum = Integer.parseInt(ImgfileMaker) + i;
+                                    String file_name = USER_INFO_ID + "_" + ImgNum + IMG_FILE_EXTENSION;
+                                    dlog.i("multiple choice file_name : " + file_name);
+                                    ProfileUrl.add("http://krafte.net/NEBWorks/image/feed_img/" + file_name);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "File select error", e);
+                                }
+                            }
+                            dlog.i("여러개일때 uriList : " + uriList);
+                            dlog.i("여러개일때 imgUrl : " + ProfileUrl);
+                            dlog.i("여러개일때 ProfileUrl size : " + ProfileUrl.size());
+                            if (uriList.size() == 1) {
+                                if (!uriList.get(0).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                            } else if (uriList.size() == 2) {
+                                if (!uriList.get(0).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                                if (!uriList.get(1).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(1).toString())
+                                            .into(binding.hideimg02);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(1).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap2 = resource;
+                                        }
+                                    });
+                                }
+                            } else if (uriList.size() == 3) {
+                                if (!uriList.get(0).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                                if (!uriList.get(1).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(1).toString())
+                                            .into(binding.hideimg02);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(1).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap2 = resource;
+                                        }
+                                    });
+                                }
+                                if (!uriList.get(2).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(2).toString())
+                                            .into(binding.hideimg03);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(2).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap3 = resource;
+                                        }
+                                    });
+                                }
+                            }
+
+
+                            adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                            binding.imgList.setAdapter(adapter);
+                            binding.imgList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
                         }
-                    });
-
-                    final String IMG_FILE_EXTENSION = ".JPEG";
-                    String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                    ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    }
                 }
-
-            } else if (resultCode == RESULT_CANCELED) {
-                binding.imgPlus.setVisibility(View.VISIBLE);
-                binding.clearImg.setVisibility(View.GONE);
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -698,19 +839,24 @@ public class FeedEditActivity extends AppCompatActivity {
     }
 
     @SuppressLint({"SimpleDateFormat", "LongLogTag"})
-    public Uri saveBitmapAndGetURI() {
+    public Uri saveBitmapAndGetURI(int i) {
         //Create Bitmap
         binding.loginAlertText.setVisibility(View.VISIBLE);
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        saveBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        if (i == 0) {
+            saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        } else if (i == 1) {
+            saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        } else if (i == 2) {
+            saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        }
         byte[] ba = bao.toByteArray();
         String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
 
         //Create Bitmap -> File
-        final String IMG_FILE_EXTENSION = ".JPEG";
         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+        String file_name = ProfileUrl.get(i).replace("http://krafte.net/NEBWorks/image/feed_img/", "");
         String fullFileName = BACKUP_PATH;
 
         dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
@@ -724,16 +870,20 @@ public class FeedEditActivity extends AppCompatActivity {
                 file_path.mkdirs();
             }
             dlog.i("(saveBitmapAndGetURI)file_path : " + file_path);
-            dlog.i("(saveBitmapAndGetURI)file_name : " + file_name);
+            dlog.i("(saveBitmapAndGetURI)file_name : " + ProfileUrl.get(i));
             file = new File(file_path, file_name);
             FileOutputStream out = new FileOutputStream(file);
-            saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            if (i == 0) {
+                saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            } else if (i == 1) {
+                saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            } else if (i == 2) {
+                saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            }
 
-            ProfileUrl = "http://krafte.net/NEBWorks/image/feed_img/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("사인 저장 경로 : " + ProfileUrl);
-
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
             FeedAddActivity.RetrofitInterface retrofitInterface = FeedAddActivity.ApiClient.getApiClient().create(FeedAddActivity.RetrofitInterface.class);

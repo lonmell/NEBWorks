@@ -456,8 +456,8 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 } else {
                     int pos = getBindingAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
-                        TodolistData.TodolistData_list item = mData.get(pos);
                         try {
+                            TodolistData.TodolistData_list item = mData.get(pos);
                             JSONArray Response = new JSONArray(item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
                             dlog.i("users : " + item.getUsers().toString().replace("[[", "[").replace("]]", "]"));
                             dlog.i("users Response : " + Response.length());

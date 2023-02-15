@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,10 +22,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
+import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.UserCheckData;
@@ -72,6 +72,9 @@ public class TaskReportDetailActivity extends AppCompatActivity {
 
     ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mem_mList;
     MemberListPopAdapter mem_mAdapter;
+
+    ArrayList<Uri> uriList = new ArrayList<>();// 이미지의 uri를 담을 ArrayList 객체
+    MultiImageAdapter adapter;
 
     DateCurrent dc = new DateCurrent();
     PageMoveClass pm = new PageMoveClass();
@@ -304,25 +307,25 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                 mem_mAdapter.notifyDataSetChanged();
             }
 
-            if (!TaskKind.isEmpty()) {
-                if (TaskKind.equals("0")) {
-                    TaskKind = "0";
-                    binding.taskKind00.setVisibility(View.VISIBLE);
-                    binding.taskKind01.setVisibility(View.GONE);
-
-                    binding.taskKind00.setTextColor(Color.parseColor(complete_yn.equals("y")?"#1445D0":"#FF0000"));
-                    binding.taskKind00.setText(complete_yn.equals("y")?"완료":"미완료");
-                } else if (TaskKind.equals("1")) {
-                    TaskKind = "1";
-                    binding.taskKind00.setVisibility(View.GONE);
-                    binding.taskKind01.setVisibility(View.VISIBLE);
-
-                    Glide.with(mContext).load(img_path)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true)
-                            .into(binding.taskKind01);
-                }
+            dlog.i("feed_img_path : " + img_path);
+            for (String s : img_path.split(",")) {
+                uriList.add(Uri.parse(s));
             }
+            adapter = new MultiImageAdapter(uriList, getApplicationContext());
+            binding.imgList.setAdapter(adapter);
+            binding.imgList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+            adapter.setOnClickListener(new MultiImageAdapter.OnClickListener() {
+                @Override
+                public void onClick(View v, int position) {
+                    Intent intent = new Intent(mContext, PhotoPopActivity.class);
+                    intent.putExtra("data", String.valueOf(uriList));
+                    intent.putExtra("pos", position);
+                    mContext.startActivity(intent);
+                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                }
+            });
+
             if(!incomplete_reason.equals("null")){
                 binding.incompleteArea.setVisibility(View.VISIBLE);
                 binding.incompleteTitle.setText(incomplete_reason);
@@ -348,14 +351,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
                     binding.rejectTitle.setVisibility(View.GONE);
                 }
             }
-            binding.taskKind01.setOnClickListener(v -> {
-                Intent intent = new Intent(mContext, PhotoPopActivity.class);
-                intent.putExtra("data", img_path);
-                intent.putExtra("pos", 0);
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            });
+
             dlog.i("-----getTaskContents END-----");
 
         } catch (Exception e) {

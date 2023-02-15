@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,10 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
+import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
@@ -130,6 +130,9 @@ public class TaskApprovalDetail extends AppCompatActivity {
     ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mem_mList;
     MemberListPopAdapter mem_mAdapter;
 
+    ArrayList<Uri> uriList = new ArrayList<>();// 이미지의 uri를 담을 ArrayList 객체
+    MultiImageAdapter adapter;
+
     Drawable check_on;
     Drawable check_off;
     Drawable x_on;
@@ -199,6 +202,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
         int setToday = Integer.parseInt(getTime.substring(0, 2));
 
         try {
+            uriList.clear();
             dlog.i( "-------------------------TaskApprovalDetail-------------------------");
             dlog.i("task_no : " + id);
             dlog.i("GET_TIME : " + getTime.substring(0, 2));
@@ -334,26 +338,31 @@ public class TaskApprovalDetail extends AppCompatActivity {
                 if (!complete_kind.isEmpty()) {
                     if (complete_kind.equals("0")) {
                         binding.taskKind00.setVisibility(View.VISIBLE);
-                        binding.taskKind01.setVisibility(View.GONE);
+                        binding.imgList.setVisibility(View.GONE);
 
                         binding.taskKind00.setTextColor(Color.parseColor(complete_yn.equals("y")?"#6395EC":"#FF0000"));
                         binding.taskKind00.setText(complete_yn.equals("y")?"완료":"미완료");
                     } else if (complete_kind.equals("1")) {
                         binding.taskKind00.setVisibility(View.GONE);
-                        binding.taskKind01.setVisibility(View.VISIBLE);
+                        binding.imgList.setVisibility(View.VISIBLE);
 
-                        Glide.with(mContext).load(task_img_path)
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .skipMemoryCache(true)
-                                .into(binding.taskKind01);
-
-                        binding.taskKind01.setOnClickListener(v -> {
-                            Intent intent = new Intent(mContext, PhotoPopActivity.class);
-                            intent.putExtra("data", task_img_path);
-                            intent.putExtra("pos", 0);
-                            mContext.startActivity(intent);
-                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        dlog.i("task_img_path : " + task_img_path);
+                        for (String s : task_img_path.split(",")) {
+                            uriList.add(Uri.parse(s));
+                        }
+                        adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                        binding.imgList.setAdapter(adapter);
+                        binding.imgList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+                        adapter.setOnClickListener(new MultiImageAdapter.OnClickListener() {
+                            @Override
+                            public void onClick(View v, int position) {
+                                Intent intent = new Intent(mContext, PhotoPopActivity.class);
+                                intent.putExtra("data", String.valueOf(uriList));
+                                intent.putExtra("pos", position);
+                                mContext.startActivity(intent);
+                                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            }
                         });
                     }
                 }
