@@ -421,7 +421,11 @@ public class WorkgotoFragment extends Fragment {
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 getYMPicker = Year + "-" + Month;
-                if (!chng_icon) {
+                if (chng_icon) {
+                    shardpref.putInt("date_picker_year", year);
+                    shardpref.putInt("date_picker_month", month);
+                    binding.setdate.setText(Year + "년 " + Month + "월 ");
+                } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 }
                 getYMPicker = Year + "년 " + Month + "월 ";
