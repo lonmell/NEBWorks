@@ -937,19 +937,23 @@ public class HomeFragment2 extends Fragment {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        dlog.i("workhour : " + Response.getJSONObject(0).getString("workhour"));
-                        dlog.i("jikgup : " + Response.getJSONObject(0).getString("jikgup"));
-                        dlog.i("payment : " + Response.getJSONObject(0).getString("payment"));
-                        String workhour = Response.getJSONObject(0).getString("workhour");
-                        String jikgup = Response.getJSONObject(0).getString("jikgup");
-                        String payment = Response.getJSONObject(0).getString("payment");
-                        String paykind = Response.getJSONObject(0).getString("paykind");
-                        //알바, 정직원, 매니저, 기타
-                        DecimalFormat myFormatter = new DecimalFormat("###,###");
-                        if (paykind.equals("시급") || paykind.equals("주급")) {
-                            binding.realPaynum.setText("근무 " + workhour + "시간 X 시급 " + payment + "원 = " + myFormatter.format(allPay) + "원");
-                        } else if (paykind.equals("월급")) {
-                            binding.realPaynum.setText(myFormatter.format(allPay) + "원");
+                        if(Response.equals("[]")){
+                            HomeFragment2.super.onResume();
+                        }else{
+                            dlog.i("workhour : " + Response.getJSONObject(0).getString("workhour"));
+                            dlog.i("jikgup : " + Response.getJSONObject(0).getString("jikgup"));
+                            dlog.i("payment : " + Response.getJSONObject(0).getString("payment"));
+                            String workhour = Response.getJSONObject(0).getString("workhour");
+                            String jikgup = Response.getJSONObject(0).getString("jikgup");
+                            String payment = Response.getJSONObject(0).getString("payment");
+                            String paykind = Response.getJSONObject(0).getString("paykind");
+                            //알바, 정직원, 매니저, 기타
+                            DecimalFormat myFormatter = new DecimalFormat("###,###");
+                            if (paykind.equals("시급") || paykind.equals("주급")) {
+                                binding.realPaynum.setText("근무 " + workhour + "시간 X 시급 " + payment + "원 = " + myFormatter.format(allPay) + "원");
+                            } else if (paykind.equals("월급")) {
+                                binding.realPaynum.setText(myFormatter.format(allPay) + "원");
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

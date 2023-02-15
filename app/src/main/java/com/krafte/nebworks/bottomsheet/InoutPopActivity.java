@@ -488,13 +488,15 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                                             shardpref.putString("in_time",in_time);
                                             message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 출근처리가 완료되었습니다.";
                                         }else{
-                                            if(state.equals("3")){
-                                                shardpref.remove("input_date");
-                                                message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 조기퇴근이 완료되었습니다.";
-                                            }else{
-                                                shardpref.remove("input_date");
-                                                message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
-                                            }
+//                                            if(state.equals("3")){
+//                                                shardpref.remove("input_date");
+//                                                message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 조기퇴근이 완료되었습니다.";
+//                                            }else{
+//                                                shardpref.remove("input_date");
+//                                                message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
+//                                            }
+                                            shardpref.remove("input_date");
+                                            message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
                                         }
                                         getUserToken("0",message);
                                         AddPush("출퇴근 알림",message);
