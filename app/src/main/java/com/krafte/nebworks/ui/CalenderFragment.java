@@ -103,6 +103,15 @@ public class CalenderFragment extends Fragment {
         shardpref.putString("calendar_year", year);
         shardpref.putString("calendar_month", month);
 
+        int prefYear = shardpref.getInt("date_picker_year", 0);
+        int prefMonth = shardpref.getInt("date_picker_month", 0);
+        if (prefYear != 0) {
+            year = String.valueOf(prefYear);
+            month = String.format("%02d", prefMonth);
+            shardpref.remove("date_picker_year");
+            shardpref.remove("date_picker_month");
+        }
+
         time = time * 1000;
         Date date = new Date(time);
 
