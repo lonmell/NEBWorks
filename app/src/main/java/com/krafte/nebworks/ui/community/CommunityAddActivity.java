@@ -125,14 +125,14 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     private Bitmap saveBitmap;
     File file;
-    SimpleDateFormat dateFormat;
     int GALLEY_CODE = 10;
     @SuppressLint("SdCardPath")
     String BACKUP_PATH = "/sdcard/Download/krafte/";
-    List<String> ProfileUrl = new ArrayList<>();
     String feed_thumnail_path = "";
     String ImgfileMaker = "";
     String state = "";
+
+    List<String> ProfileUrl = new ArrayList<>();
     ArrayList<Uri> uriList = new ArrayList<>();// 이미지의 uri를 담을 ArrayList 객체
 
     @SuppressLint({"LongLogTag", "UseCompatLoadingForDrawables", "SetTextI18n"})

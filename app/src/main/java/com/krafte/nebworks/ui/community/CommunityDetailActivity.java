@@ -99,7 +99,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     RetrofitConnect rc = new RetrofitConnect();
-    MultiImageAdapter adapter;
+
 
     Drawable icon_off;
     Drawable icon_on;
@@ -113,7 +113,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     ArrayList<WorkCommentData.WorkCommentData_list> mList;
     WorkCommentListAdapter mAdapter = null;
     ArrayList<Uri> uriList = new ArrayList<>();// 이미지의 uri를 담을 ArrayList 객체
-
+    MultiImageAdapter adapter;
     String subcomment_id = "";
     String subcomment_name = "";
     boolean settingft = false;
@@ -196,48 +196,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
         } else {
             binding.listSetting.setVisibility(View.VISIBLE);
         }
-//        if (!writer_id.equals(USER_INFO_ID)) {
-//            //작성자x
-//            binding.delFeedbtn.setVisibility(View.GONE);
-//            binding.editFeedbtn.setText("신고");
-//            binding.editFeedbtn.setOnClickListener(v -> {
-//                Toast_Nomal("신고하기 기능 추가 예정");
-//            });
-//        } else {
-//            //작성자
-//            binding.delFeedbtn.setVisibility(View.VISIBLE);
-//            binding.editFeedbtn.setOnClickListener(v -> {
-//                shardpref.putString("feed_id", feed_id);
-//                shardpref.putString("place_id", place_id);
-//                shardpref.putString("title", title);
-//                shardpref.putString("contents", contents);
-//                shardpref.putString("writer_id", writer_id);
-//                shardpref.putString("writer_name", writer_name);
-//                shardpref.putString("writer_img_path", writer_img_path);
-//                shardpref.putString("feed_img_path", feed_img_path);
-//                shardpref.putString("jikgup", jikgup);
-//                shardpref.putString("view_cnt", view_cnt);
-//                shardpref.putString("comment_cnt", comment_cnt);
-//                shardpref.putString("category", category);
-//                shardpref.putString("state", "EditCommunity");
-//                Intent intent = new Intent(mContext, CommunityAddActivity.class);
-//                mContext.startActivity(intent);
-//                ((Activity) mContext).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            });
-//            binding.delFeedbtn.setOnClickListener(v -> {
-//                click_htn = "icon_trash";
-//                shardpref.putString("feed_id", feed_id);
-//                Intent intent = new Intent(this, TwoButtonPopActivity.class);
-//                intent.putExtra("data", "해당 공지사항을 삭제하시겠습니까?");
-//                intent.putExtra("flag", "공지삭제");
-//                intent.putExtra("left_btn_txt", "취소");
-//                intent.putExtra("right_btn_txt", "삭제");
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            });
-//        }
+
         binding.listSetting.setOnClickListener(v -> {
             shardpref.putString("feed_id", feed_id);
             shardpref.putString("place_id", place_id);
@@ -257,13 +216,6 @@ public class CommunityDetailActivity extends AppCompatActivity {
             mContext.startActivity(intent);
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            if (!settingft) {
-//                settingft = true;
-//                binding.settingDetail.setVisibility(View.VISIBLE);
-//            } else {
-//                settingft = false;
-//                binding.settingDetail.setVisibility(View.GONE);
-//            }
         });
 
     }

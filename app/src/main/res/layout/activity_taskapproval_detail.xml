@@ -306,14 +306,23 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/task_kind_01"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
+<!--            <ImageView-->
+<!--                android:id="@+id/task_kind_01"-->
+<!--                android:layout_width="95dp"-->
+<!--                android:layout_height="95dp"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginEnd="20dp"-->
+<!--                android:scaleType="fitXY"-->
+<!--                android:background="@drawable/empty_photo"-->
+<!--                android:visibility="visible" />-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/img_list"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/limit_img"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:scaleType="fitXY"
-                android:background="@drawable/empty_photo"
+                android:orientation="horizontal"
                 android:visibility="visible" />
 
             <LinearLayout

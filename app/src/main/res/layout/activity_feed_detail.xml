@@ -268,14 +268,14 @@
                         </androidx.cardview.widget.CardView>
                     </androidx.cardview.widget.CardView>
 
-                    <ImageView
-                        android:id="@+id/noti_setimg"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/img_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_below="@+id/limit_img"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:background="#f2f2f2"
-                        android:scaleType="fitXY" />
+                        android:layout_marginEnd="20dp"
+                        android:orientation="horizontal" />
                 </LinearLayout>
             </RelativeLayout>
 

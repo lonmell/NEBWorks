@@ -1,6 +1,7 @@
 package com.krafte.nebworks.ui.worksite;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -26,14 +27,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
@@ -44,6 +46,7 @@ import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.TaskApprovalInterface;
 import com.krafte.nebworks.dataInterface.TaskSaveInterface;
 import com.krafte.nebworks.databinding.ActivityTaskReportBinding;
+import com.krafte.nebworks.ui.community.CommunityAddActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -62,7 +65,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -112,6 +117,7 @@ public class TaskReportActivity extends AppCompatActivity {
 
     PageMoveClass pm = new PageMoveClass();
     GetResultData resultData = new GetResultData();
+    MultiImageAdapter adapter;
 
     Dlog dlog = new Dlog();
     String user_id = "";
@@ -135,10 +141,11 @@ public class TaskReportActivity extends AppCompatActivity {
     File file;
     @SuppressLint("SdCardPath")
     String BACKUP_PATH = "/sdcard/Download/krafte/";
-    String ProfileUrl = "";
     String return_page = "";
     String imagePath = "";
 
+    List<String> ProfileUrl = new ArrayList<>();
+    ArrayList<Uri> uriList = new ArrayList<>();// 이미지의 uri를 담을 ArrayList 객체
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -257,23 +264,13 @@ public class TaskReportActivity extends AppCompatActivity {
             binding.taskKind01.setVisibility(View.VISIBLE);
         }
         ImgfileMaker = ImageNameMaker();
-        dlog.i("saveBitmap : " + saveBitmap);
-        if (saveBitmap != null) {
-            binding.clearImg.setVisibility(View.VISIBLE);
-        } else {
+        dlog.i("uriList : " + uriList);
+        dlog.i("uriList size : " + uriList.size());
+        if (String.valueOf(uriList).equals("[]")) {
             binding.clearImg.setVisibility(View.GONE);
+        } else {
+            binding.clearImg.setVisibility(View.VISIBLE);
         }
-        binding.clearImg.setOnClickListener(v -> {
-            try {
-                saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
-                saveBitmap.eraseColor(Color.TRANSPARENT);
-                binding.taskKind01img.setImageBitmap(saveBitmap);
-                ProfileUrl = "";
-                binding.clearImg.setVisibility(View.GONE);
-            } catch (Exception e) {
-                dlog.i("clearImg Exception : " + e);
-            }
-        });
         dlog.i("-----getTaskContents END-----");
 
     }
@@ -290,6 +287,7 @@ public class TaskReportActivity extends AppCompatActivity {
     private void setBtnEvent() {
 
         binding.bottomBtn.setOnClickListener(v -> {
+            String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
             BtnOneCircleFun(false);
             String task_id = task_no;
             String task_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
@@ -301,16 +299,16 @@ public class TaskReportActivity extends AppCompatActivity {
             dlog.i("------binding.bottomBtn onClick Event------");
             //0:체크 1:사진
             if (TaskKind.equals("0")) {
-                setSaveTask(task_id, task_date, ProfileUrl, complete_yn, incomplete_reason);
+                setSaveTask(task_id, task_date, inputImage, complete_yn, incomplete_reason);
             } else {
                 if (incomplete_reason.isEmpty()) {
                     BtnOneCircleFun(true);
                     Toast.makeText(mContext, "보고사항을 추가해주세요.", Toast.LENGTH_SHORT).show();
-                }else if (imagePath.isEmpty()) {
+                }else if (inputImage.isEmpty()) {
                     BtnOneCircleFun(true);
                     Toast.makeText(mContext, "보고할 사진을 추가해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    setSaveTask(task_id, task_date, ProfileUrl, "y", incomplete_reason);
+                    setSaveTask(task_id, task_date, inputImage, "y", incomplete_reason);
                 }
             }
 
@@ -335,6 +333,29 @@ public class TaskReportActivity extends AppCompatActivity {
             binding.select01Box.setBackgroundResource(R.drawable.default_gray_round);
             binding.select02Round.setBackgroundResource(R.drawable.ic_full_round);
             binding.select02Box.setBackgroundResource(R.drawable.default_select_round);
+        });
+
+        binding.clearImg.setOnClickListener(v -> {
+            saveBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.ARGB_8888);
+            saveBitmap.eraseColor(Color.TRANSPARENT);
+            ProfileUrl.clear();
+            uriList.clear();
+            adapter.notifyDataSetChanged();
+            if (uriList.size() == 0) {
+                binding.clearImg.setVisibility(View.GONE);
+            } else {
+                binding.clearImg.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        //------게시글 이미지 등록 / 갤러리 열기
+        binding.limitImg.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, GALLEY_CODE);
         });
     }
 
@@ -367,10 +388,30 @@ public class TaskReportActivity extends AppCompatActivity {
                             runOnUiThread(() -> {
                                 dlog.i("resultData : " + resultData.getRESULT());
                                 if (jsonResponse.replace("\"", "").equals("success")) {
-                                    dlog.i("ProfileUrl : " + ProfileUrl);
-                                    dlog.i("saveBitmap : " + saveBitmap);
-                                    if (!ProfileUrl.isEmpty() && saveBitmap != null) {
-                                        saveBitmapAndGetURI();
+                                    if (!ProfileUrl.isEmpty()) {
+                                        if (uriList.size() == 1) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                        } else if (uriList.size() == 2) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                            if (!uriList.get(1).toString().equals("")) {
+                                                saveBitmapAndGetURI(1);
+                                            }
+                                        } else if (uriList.size() == 3) {
+                                            if (!uriList.get(0).toString().equals("")) {
+                                                saveBitmapAndGetURI(0);
+                                            }
+                                            if (!uriList.get(1).toString().equals("")) {
+                                                saveBitmapAndGetURI(1);
+                                            }
+                                            if (!uriList.get(2).toString().equals("")) {
+                                                saveBitmapAndGetURI(2);
+                                            }
+                                        }
+
                                     }
                                     setUpdateWorktodo(task_id);
 //                                    //근로자일때 -- 저장할때는 알림 필요없음
@@ -399,47 +440,162 @@ public class TaskReportActivity extends AppCompatActivity {
     }
 
     //이미지 업로드에 필요한 소스 START
+    List<String> cursor_url = new ArrayList<>();
+    private Bitmap saveBitmap1;//첫번째 사진
+    private Bitmap saveBitmap2;//두번째 사진
+    private Bitmap saveBitmap3;//세번째 사진
+
     @SuppressLint("LongLogTag")
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        dlog.i("resultCode : " + resultCode);
-        dlog.i("RESULT_OK : " + RESULT_OK);
         if (requestCode == GALLEY_CODE) {
             if (resultCode == RESULT_OK) {
+                ProfileUrl.clear();
+                uriList.clear();
+                String imagePath1 = "";
+                String imagePath2 = "";
+                String imagePath3 = "";
+                if (data == null) {   // 어떤 이미지도 선택하지 않은 경우
+                    Toast.makeText(getApplicationContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
+                } else {   // 이미지를 하나라도 선택한 경우
+                    if (data.getClipData() == null) {     // 이미지를 하나만 선택한 경우
+                        Log.e("single choice: ", String.valueOf(data.getData()));
+                        ImgfileMaker = ImageNameMaker();
+                        uriList = new ArrayList<>();
+                        Uri imageUri = data.getData();
+                        imagePath1 = data.getDataString();
+                        uriList.add(imageUri);
 
-                try {
-                    //1) data의 주소 사용하는 방법
-                    imagePath = data.getDataString(); // "content://media/external/images/media/7215"
+                        adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                        binding.imgList.setAdapter(adapter);
+                        binding.imgList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-                    Glide.with(this)
-                            .load(imagePath)
-                            .into(binding.taskKind01img);
+                        Glide.with(this)
+                                .load(imagePath1)
+                                .into(binding.hideimg01);
+                        Glide.with(getApplicationContext()).asBitmap().load(imagePath1).into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                saveBitmap1 = resource;
+                            }
+                        });
 
-                    Glide.with(getApplicationContext()).asBitmap().load(imagePath).into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                            saveBitmap = resource;
+                        //파일 이름 만들기
+                        final String IMG_FILE_EXTENSION = ".JPEG";
+                        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+                        ProfileUrl.add("http://krafte.net/NEBWorks/image/feed_img/" + file_name);
+                        dlog.i("한개일때uriList : " + uriList);
+                        dlog.i("한개일때 imgUrl: " + ProfileUrl);
+                    } else {      // 이미지를 여러장 선택한 경우
+                        ClipData clipData = data.getClipData();
+                        Log.e("clipData", String.valueOf(clipData.getItemCount()));
+
+                        if (clipData.getItemCount() > 3) {   // 선택한 이미지가 3장 이상인 경우
+                            Toast.makeText(getApplicationContext(), "사진은 3장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
+                        } else {   // 선택한 이미지가 1장 이상 10장 이하인 경우
+                            Log.e(TAG, "multiple choice");
+                            uriList = new ArrayList<>();
+
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                                Uri imageUri = clipData.getItemAt(i).getUri();  // 선택한 이미지들의 uri를 가져온다.
+                                try {
+                                    uriList.add(imageUri);  //uri를 list에 담는다.
+                                    final String IMG_FILE_EXTENSION = ".JPEG";
+                                    int ImgNum = Integer.parseInt(ImgfileMaker) + i;
+                                    String file_name = USER_INFO_ID + "_" + ImgNum + IMG_FILE_EXTENSION;
+                                    dlog.i("multiple choice file_name : " + file_name);
+                                    ProfileUrl.add("http://krafte.net/NEBWorks/image/feed_img/" + file_name);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "File select error", e);
+                                }
+                            }
+                            dlog.i("여러개일때 uriList : " + uriList);
+                            dlog.i("여러개일때 imgUrl : " + ProfileUrl);
+                            dlog.i("여러개일때 ProfileUrl size : " + ProfileUrl.size());
+                            if (uriList.size() == 1) {
+                                if (!uriList.get(0).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                            } else if (uriList.size() == 2) {
+                                if (!uriList.get(0).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                                if (!uriList.get(1).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(1).toString())
+                                            .into(binding.hideimg02);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(1).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap2 = resource;
+                                        }
+                                    });
+                                }
+                            } else if (uriList.size() == 3) {
+                                if (!uriList.get(0).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(0).toString())
+                                            .into(binding.hideimg01);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(0).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap1 = resource;
+                                        }
+                                    });
+                                }
+                                if (!uriList.get(1).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(1).toString())
+                                            .into(binding.hideimg02);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(1).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap2 = resource;
+                                        }
+                                    });
+                                }
+                                if (!uriList.get(2).toString().equals("")) {
+                                    Glide.with(this)
+                                            .load(uriList.get(2).toString())
+                                            .into(binding.hideimg03);
+                                    Glide.with(getApplicationContext()).asBitmap().load(uriList.get(2).toString()).into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            saveBitmap3 = resource;
+                                        }
+                                    });
+                                }
+                            }
+
+
+                            adapter = new MultiImageAdapter(uriList, getApplicationContext());
+                            binding.imgList.setAdapter(adapter);
+                            binding.imgList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
                         }
-                    });
-                    final String IMG_FILE_EXTENSION = ".JPEG";
-                    String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                    ProfileUrl = "http://krafte.net/NEBWorks/image/task_img/" + file_name;
-//                    if (saveBitmap != null) {
-//                        binding.clearImg.setVisibility(View.VISIBLE);
-//                    } else {
-//                        binding.clearImg.setVisibility(View.GONE);
-//                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    }
                 }
-                binding.clearImg.setVisibility(View.VISIBLE);
-            } else if (resultCode == RESULT_CANCELED) {
-                binding.clearImg.setVisibility(View.GONE);
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
     }
+
 
     private void setUpdateWorktodo(String task_id) {
         dlog.i("setUpdateWorktodo user_id : " + task_id);
@@ -607,19 +763,24 @@ public class TaskReportActivity extends AppCompatActivity {
     }
 
     @SuppressLint({"SimpleDateFormat", "LongLogTag"})
-    public Uri saveBitmapAndGetURI() {
+    public Uri saveBitmapAndGetURI(int i) {
         //Create Bitmap
-//            saveBitmap = CanvasIO.openBitmap(mContext);
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        saveBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        if (i == 0) {
+            saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        } else if (i == 1) {
+            saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        } else if (i == 2) {
+            saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        }
         byte[] ba = bao.toByteArray();
         String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
 
         //Create Bitmap -> File
-        final String IMG_FILE_EXTENSION = ".JPEG";
         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
+        String file_name = ProfileUrl.get(i).replace("http://krafte.net/NEBWorks/image/feed_img/", "");
         String fullFileName = BACKUP_PATH;
 
         dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
@@ -633,22 +794,23 @@ public class TaskReportActivity extends AppCompatActivity {
                 file_path.mkdirs();
             }
             dlog.i("(saveBitmapAndGetURI)file_path : " + file_path);
-            dlog.i("(saveBitmapAndGetURI)file_name : " + file_name);
+            dlog.i("(saveBitmapAndGetURI)file_name : " + ProfileUrl.get(i));
             file = new File(file_path, file_name);
             FileOutputStream out = new FileOutputStream(file);
-            saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            if (i == 0) {
+                saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            } else if (i == 1) {
+                saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            } else if (i == 2) {
+                saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            }
 
-            ProfileUrl = "http://krafte.net/NEBWorks/image/task_img/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("사인 저장 경로 : " + ProfileUrl);
-//            binding.loCanvas.setImageBitmap(ProfileUrl);
-            Glide.with(mContext).load(ProfileUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(binding.taskKind01img);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
-            PlaceWorkDetailActivity.RetrofitInterface retrofitInterface = PlaceWorkDetailActivity.ApiClient.getApiClient().create(PlaceWorkDetailActivity.RetrofitInterface.class);
+            CommunityAddActivity.RetrofitInterface retrofitInterface = CommunityAddActivity.ApiClient.getApiClient().create(CommunityAddActivity.RetrofitInterface.class);
             Call<String> call = retrofitInterface.request(body);
 
             call.enqueue(new Callback<String>() {
@@ -671,6 +833,7 @@ public class TaskReportActivity extends AppCompatActivity {
             Log.d("(saveBitmapAndGetURI)이미지 경로 : ", Uri.fromFile(file).toString());
 
             out.close();
+            binding.loginAlertText.setVisibility(View.GONE);
             dlog.i("(saveBitmapAndGetURI)file : " + file);
         } catch (FileNotFoundException exception) {
             dlog.e("FileNotFoundException : " + exception.getMessage());
