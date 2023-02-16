@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.bottomsheet.WorkstatusBottomSheet;
@@ -78,6 +79,7 @@ public class WorkstatusFragment extends Fragment {
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
 
+    FragmentStateAdapter fragmentStateAdapter;
     WorkStatusCalenderAdapter mAdapter;
     ArrayList<WorkCalenderData.WorkCalenderData_list> mList;
     //Task all data
@@ -163,6 +165,12 @@ public class WorkstatusFragment extends Fragment {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             SELECT_POSITION = 1;
             fg = WorkStatusSubFragment1.newInstance();
+
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2);
+//            calenderFragment.CalenderContext(mContext);
+            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+
             setBtnEvent();
             setAddBtnSetting();
             SendToday();
@@ -211,143 +219,143 @@ public class WorkstatusFragment extends Fragment {
         }
     }
 
-    private void SetCalenderData(String Year, String Month) {
-        mList2.clear();
-        dlog.i("------SetCalenderData------");
-        dlog.i("place_id :" + place_id);
-        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
-        dlog.i("getYMPicker :" + getYMPicker);
-        dlog.i("------SetCalenderData------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WorkstatusCalendersetData.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        WorkstatusCalendersetData api = retrofit.create(WorkstatusCalendersetData.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, Year, Month);
-        call2.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
-                activity.runOnUiThread(() -> {
-                    //캘린더 내용 (업무가) 있을때
-                    if (response2.isSuccessful() && response2.body() != null) {
-                        String jsonResponse = rc.getBase64decode(response2.body());
-                        dlog.i("jsonResponse length : " + jsonResponse.length());
-                        dlog.i("jsonResponse : " + jsonResponse);
-                        try {
-                            JSONArray Response2 = new JSONArray(jsonResponse);
-                            if (Response2.length() == 0) {
-                                dlog.i("GET SIZE : " + Response2.length());
-                                GetCalenderList(Year, Month, mList2);
-                            } else {
-                                for (int i = 0; i < Response2.length(); i++) {
-                                    JSONObject jsonObject = Response2.getJSONObject(i);
-                                    mList2.add(new CalendarSetStatusData.CalendarSetStatusData_list(
-                                            jsonObject.getString("day"),
-                                            jsonObject.getString("week"),
-                                            Collections.singletonList(jsonObject.getString("users"))
-                                    ));
-                                }
-                                GetCalenderList(Year, Month, mList2);
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-
-            @Override
-            @SuppressLint("LongLogTag")
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러2 = " + t.getMessage());
-            }
-        });
-    }
-
-    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList2) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WorkCalenderInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        WorkCalenderInterface api = retrofit.create(WorkCalenderInterface.class);
-        Call<String> call = api.getData(Year, Month);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.e(TAG, "GetCalenderList function START");
-                Log.e(TAG, "response 1: " + response.isSuccessful());
-                Log.e(TAG, "response 2: " + response.body());
-                activity.runOnUiThread(() -> {
-                    if (response.isSuccessful() && response.body() != null) {
-//                        String jsonResponse = rc.getBase64decode(response.body());
+//    private void SetCalenderData(String Year, String Month) {
+//        mList2.clear();
+//        dlog.i("------SetCalenderData------");
+//        dlog.i("place_id :" + place_id);
+//        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
+//        dlog.i("getYMPicker :" + getYMPicker);
+//        dlog.i("------SetCalenderData------");
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(WorkstatusCalendersetData.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        WorkstatusCalendersetData api = retrofit.create(WorkstatusCalendersetData.class);
+//        Call<String> call2 = api.getData(place_id, USER_INFO_ID, Year, Month);
+//        call2.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
+//                activity.runOnUiThread(() -> {
+//                    //캘린더 내용 (업무가) 있을때
+//                    if (response2.isSuccessful() && response2.body() != null) {
+//                        String jsonResponse = rc.getBase64decode(response2.body());
 //                        dlog.i("jsonResponse length : " + jsonResponse.length());
 //                        dlog.i("jsonResponse : " + jsonResponse);
-                        dlog.i("onResume place_id :" + place_id);
-                        dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
-                        dlog.i("onResume getYMPicker :" + getYMPicker);
-                        dlog.i("onResume mList2 :" + mList2);
-                        try {
-                            String select_date = Year + "-" + Month;
-                            JSONArray Response = new JSONArray(response.body());
-                            mList = new ArrayList<>();
-                            mAdapter = new WorkStatusCalenderAdapter(mContext, mList, mList2, place_id, USER_INFO_ID, select_date, Month);
-                            binding.createCalender.setAdapter(mAdapter);
-                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-                            dlog.i("SetNoticeListview Thread run! ");
-
-                            if (Response.length() == 0) {
-                                dlog.i("GET SIZE : " + Response.length());
-                            } else {
-                                for (int i = 0; i < Response.length(); i++) {
-                                    JSONObject jsonObject = Response.getJSONObject(i);
-                                    mAdapter.addItem(new WorkCalenderData.WorkCalenderData_list(
-                                            jsonObject.getString("ym"),
-                                            jsonObject.getString("Sun"),
-                                            jsonObject.getString("Mon"),
-                                            jsonObject.getString("Tue"),
-                                            jsonObject.getString("Wed"),
-                                            jsonObject.getString("Thu"),
-                                            jsonObject.getString("Fri"),
-                                            jsonObject.getString("Sat")
-                                    ));
-                                }
-                                mAdapter.notifyDataSetChanged();
-                                mAdapter.setOnItemClickListener(new WorkStatusCalenderAdapter.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                                        try {
-                                            if(USER_INFO_AUTH.isEmpty()) {
-                                                isAuth();
-                                            } else {
-                                                dlog.i("onItemClick WorkDay :" + WorkDay);
-                                                shardpref.putString("FtoDay", WorkDay);
-                                                WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
-                                                wsb.show(getChildFragmentManager(), "WorkstatusBottomSheet");
-                                            }
-                                        } catch (Exception e) {
-                                            dlog.i("onItemClick Exception :" + e);
-                                        }
-
-                                    }
-                                });
-                            }
-                        } catch (JSONException e) {
-                            dlog.i("JSONException :" + e);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            @SuppressLint("LongLogTag")
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러2 = " + t.getMessage());
-            }
-        });
-    }
+//                        try {
+//                            JSONArray Response2 = new JSONArray(jsonResponse);
+//                            if (Response2.length() == 0) {
+//                                dlog.i("GET SIZE : " + Response2.length());
+//                                GetCalenderList(Year, Month, mList2);
+//                            } else {
+//                                for (int i = 0; i < Response2.length(); i++) {
+//                                    JSONObject jsonObject = Response2.getJSONObject(i);
+//                                    mList2.add(new CalendarSetStatusData.CalendarSetStatusData_list(
+//                                            jsonObject.getString("day"),
+//                                            jsonObject.getString("week"),
+//                                            Collections.singletonList(jsonObject.getString("users"))
+//                                    ));
+//                                }
+//                                GetCalenderList(Year, Month, mList2);
+//                            }
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            @SuppressLint("LongLogTag")
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e(TAG, "에러2 = " + t.getMessage());
+//            }
+//        });
+//    }
+//
+//    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList2) {
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(WorkCalenderInterface.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        WorkCalenderInterface api = retrofit.create(WorkCalenderInterface.class);
+//        Call<String> call = api.getData(Year, Month);
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                Log.e(TAG, "GetCalenderList function START");
+//                Log.e(TAG, "response 1: " + response.isSuccessful());
+//                Log.e(TAG, "response 2: " + response.body());
+//                activity.runOnUiThread(() -> {
+//                    if (response.isSuccessful() && response.body() != null) {
+////                        String jsonResponse = rc.getBase64decode(response.body());
+////                        dlog.i("jsonResponse length : " + jsonResponse.length());
+////                        dlog.i("jsonResponse : " + jsonResponse);
+//                        dlog.i("onResume place_id :" + place_id);
+//                        dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
+//                        dlog.i("onResume getYMPicker :" + getYMPicker);
+//                        dlog.i("onResume mList2 :" + mList2);
+//                        try {
+//                            String select_date = Year + "-" + Month;
+//                            JSONArray Response = new JSONArray(response.body());
+//                            mList = new ArrayList<>();
+//                            mAdapter = new WorkStatusCalenderAdapter(mContext, mList, mList2, place_id, USER_INFO_ID, select_date, Month);
+//                            binding.createCalender.setAdapter(mAdapter);
+//                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+//                            dlog.i("SetNoticeListview Thread run! ");
+//
+//                            if (Response.length() == 0) {
+//                                dlog.i("GET SIZE : " + Response.length());
+//                            } else {
+//                                for (int i = 0; i < Response.length(); i++) {
+//                                    JSONObject jsonObject = Response.getJSONObject(i);
+//                                    mAdapter.addItem(new WorkCalenderData.WorkCalenderData_list(
+//                                            jsonObject.getString("ym"),
+//                                            jsonObject.getString("Sun"),
+//                                            jsonObject.getString("Mon"),
+//                                            jsonObject.getString("Tue"),
+//                                            jsonObject.getString("Wed"),
+//                                            jsonObject.getString("Thu"),
+//                                            jsonObject.getString("Fri"),
+//                                            jsonObject.getString("Sat")
+//                                    ));
+//                                }
+//                                mAdapter.notifyDataSetChanged();
+//                                mAdapter.setOnItemClickListener(new WorkStatusCalenderAdapter.OnItemClickListener() {
+//                                    @Override
+//                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+//                                        try {
+//                                            if(USER_INFO_AUTH.isEmpty()) {
+//                                                isAuth();
+//                                            } else {
+//                                                dlog.i("onItemClick WorkDay :" + WorkDay);
+//                                                shardpref.putString("FtoDay", WorkDay);
+//                                                WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
+//                                                wsb.show(getChildFragmentManager(), "WorkstatusBottomSheet");
+//                                            }
+//                                        } catch (Exception e) {
+//                                            dlog.i("onItemClick Exception :" + e);
+//                                        }
+//
+//                                    }
+//                                });
+//                            }
+//                        } catch (JSONException e) {
+//                            dlog.i("JSONException :" + e);
+//                        }
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            @SuppressLint("LongLogTag")
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e(TAG, "에러2 = " + t.getMessage());
+//            }
+//        });
+//    }
 
 
     @Override
@@ -371,7 +379,7 @@ public class WorkstatusFragment extends Fragment {
 
         shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
 
-        SetCalenderData(Year, Month);
+//        SetCalenderData(Year, Month);
 
         if (USER_INFO_AUTH.isEmpty()) {
             binding.cnt01.setText("10");
@@ -466,7 +474,7 @@ public class WorkstatusFragment extends Fragment {
                     shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 }
-                SetCalenderData(Year, Month);
+//                SetCalenderData(Year, Month);
                 SendToday();
             }
         });
@@ -493,7 +501,7 @@ public class WorkstatusFragment extends Fragment {
                     shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 }
-                SetCalenderData(Year, Month);
+//                SetCalenderData(Year, Month);
                 SendToday();
             }
         });
@@ -517,6 +525,10 @@ public class WorkstatusFragment extends Fragment {
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 if (chng_icon) {
+                    binding.calenderViewpager.setSaveFromParentEnabled(false);
+                    fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 2);
+                    binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                    binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
@@ -524,12 +536,22 @@ public class WorkstatusFragment extends Fragment {
                 getYMPicker = Year + "년 " + Month + "월 ";
                 toDay = Year + "-" + Month + "-" + Day;
                 SendToday();
-                SetCalenderData(String.valueOf(year), Month);
+//                SetCalenderData(String.valueOf(year), Month);
             }
         }, mYear, mMonth, mDay);
 
         binding.setdate.setOnClickListener(view -> {
             if(USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                if (binding.setdate.isClickable()) {
+                    datePickerDialog.show();
+                }
+            }
+        });
+
+        binding.dateSelect.setOnClickListener(view -> {
+            if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
                 if (binding.setdate.isClickable()) {
@@ -549,12 +571,16 @@ public class WorkstatusFragment extends Fragment {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
+                binding.dateLayout.setVisibility(View.GONE);
+                binding.dateSelect.setVisibility(View.VISIBLE);
                 binding.setdate.setText(Year + "년 " + Month + "월");
-                SetCalenderData(Year, Month);
+//                SetCalenderData(Year, Month);
             } else {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+                binding.dateLayout.setVisibility(View.VISIBLE);
+                binding.dateSelect.setVisibility(View.GONE);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
             }
         });
@@ -570,7 +596,7 @@ public class WorkstatusFragment extends Fragment {
                 dlog.i("change_place_id : " + place_id);
                 binding.selectPlace.setText(place_name);
                 binding.changePlace.setTag(place_name);
-                SetCalenderData(Year, Month);
+//                SetCalenderData(Year, Month);
                 PlaceWorkCheck(place_id);
                 if(SELECT_POSITION == 1){
                     fg = WorkStatusSubFragment1.newInstance();
@@ -588,19 +614,19 @@ public class WorkstatusFragment extends Fragment {
             });
         });
 
-        binding.createCalender.setOnTouchListener(new OnSwipeTouchListener(mContext) {
-            @Override
-            public void onSwipeLeft() {
-//                super.onSwipeLeft();
-                setCalender(1);
-            }
-
-            @Override
-            public void onSwipeRight() {
-//                super.onSwipeRight();
-                setCalender(-1);
-            }
-        });
+//        binding.createCalender.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+//            @Override
+//            public void onSwipeLeft() {
+////                super.onSwipeLeft();
+//                setCalender(1);
+//            }
+//
+//            @Override
+//            public void onSwipeRight() {
+////                super.onSwipeRight();
+//                setCalender(-1);
+//            }
+//        });
 
         binding.statusChildFragmentContainer.setOnSwipeListener(new SwipeFrameLayout.OnSwipeListener() {
             @Override
@@ -631,7 +657,7 @@ public class WorkstatusFragment extends Fragment {
             getYMPicker = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
         }
-        SetCalenderData(Year, Month);
+//        SetCalenderData(Year, Month);
         SendToday();
     }
 

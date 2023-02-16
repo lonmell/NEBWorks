@@ -123,8 +123,6 @@ public class WorkgotoFragment extends Fragment {
     String change_member_id = "";
     String change_member_name = "";
 
-    int changeState = 0;
-    int beforepos = 0;
 
     public static WorkgotoFragment newInstance(int number) {
         WorkgotoFragment fragment = new WorkgotoFragment();
@@ -194,7 +192,7 @@ public class WorkgotoFragment extends Fragment {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
-            fragmentStateAdapter = new FragmentStateAdapter(requireActivity());
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1);
 //            calenderFragment.CalenderContext(mContext);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
@@ -205,6 +203,8 @@ public class WorkgotoFragment extends Fragment {
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                 binding.setdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
                 binding.selectArea.setVisibility(View.VISIBLE);
+                binding.dateLayout.setVisibility(View.VISIBLE);
+                binding.dateSelect.setVisibility(View.GONE);
                 if (USER_INFO_AUTH.isEmpty()) {
                     setDummyData();
                 } else {
@@ -216,6 +216,11 @@ public class WorkgotoFragment extends Fragment {
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
                 binding.selectArea.setVisibility(View.GONE);
+                binding.dateLayout.setVisibility(View.GONE);
+                binding.dateSelect.setVisibility(View.VISIBLE);
+                binding.line01.setVisibility(View.GONE);
+
+//                SetCalenderData();
             }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -337,8 +342,6 @@ public class WorkgotoFragment extends Fragment {
                         Month = toDay.substring(5, 7);
                         Day = toDay.substring(8, 10);
                         getYMPicker = Year + "-" + Month;
-                        changeState = 1;
-                        binding.calenderViewpager.setCurrentItem(binding.calenderViewpager.getCurrentItem() - 1);
                     } else {
                         cal.add(Calendar.DATE, -1);
                         toDay = sdf.format(cal.getTime());
@@ -371,8 +374,6 @@ public class WorkgotoFragment extends Fragment {
                         Month = toDay.substring(5, 7);
                         Day = toDay.substring(8, 10);
                         getYMPicker = Year + "-" + Month;
-                        changeState = -1;
-                        binding.calenderViewpager.setCurrentItem(binding.calenderViewpager.getCurrentItem() + 1);
                     } else {
                         cal.add(Calendar.DATE, +1);
                         toDay = sdf.format(cal.getTime());
@@ -400,14 +401,12 @@ public class WorkgotoFragment extends Fragment {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 int currentMonth = 0;
                 if (month < Integer.parseInt(Month)) {
-                    changeState = 1;
+//                    changeDateState = true;
                     currentMonth = (Integer.parseInt(Month) - (month + 1));
-                    binding.calenderViewpager.setCurrentItem(binding.calenderViewpager.getCurrentItem() - currentMonth);
                     cal.add(Calendar.MONTH, - currentMonth);
                 } else {
-                    changeState = -1;
+//                    changeDateState = true;
                     currentMonth = ((month + 1)  - Integer.parseInt(Month));
-                    binding.calenderViewpager.setCurrentItem(binding.calenderViewpager.getCurrentItem() + currentMonth);
                     cal.add(Calendar.MONTH, currentMonth);
                 }
                 Year = String.valueOf(year);
@@ -417,19 +416,31 @@ public class WorkgotoFragment extends Fragment {
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 getYMPicker = Year + "-" + Month;
                 if (chng_icon) {
-                    shardpref.putInt("date_picker_year", year);
-                    shardpref.putInt("date_picker_month", month);
+                    binding.calenderViewpager.setSaveFromParentEnabled(false);
+                    fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 1);
+                    binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                    binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                    setRecyclerView();
                 }
                 getYMPicker = Year + "년 " + Month + "월 ";
 //                SetCalenderData();
-                setRecyclerView();
             }
         }, mYear, mMonth, mDay);
 
         binding.setdate.setOnClickListener(view -> {
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                if (binding.setdate.isClickable()) {
+                    datePickerDialog.show();
+                }
+            }
+        });
+
+        binding.dateSelect.setOnClickListener(view -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
@@ -512,43 +523,48 @@ public class WorkgotoFragment extends Fragment {
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
                 binding.selectArea.setVisibility(View.GONE);
+                binding.dateLayout.setVisibility(View.GONE);
+                binding.dateSelect.setVisibility(View.VISIBLE);
                 binding.setdate.setText(Year + "년 " + Month + "월");
+                binding.line01.setVisibility(View.GONE);
 //                SetCalenderData();
             } else {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                 binding.selectArea.setVisibility(View.VISIBLE);
+                binding.dateLayout.setVisibility(View.VISIBLE);
+                binding.dateSelect.setVisibility(View.GONE);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 setRecyclerView();
             }
         });
 
-        binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
+//        binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+//            @Override
+//            public void onPageSelected(int position) {
+//                super.onPageSelected(position);
+//                    String calYear = fragmentStateAdapter.returnYear();
+//                    String calMonth = fragmentStateAdapter.returnMonth();
+//                    dlog.i("calenderViewpager || Year : " + calYear + "|| Month : " + calMonth);
+//
+//                    dlog.i("viewpagerTwice: " + viewpagerTwice);
+//                    if (changeDateState) {
+//                        if (!viewpagerTwice) {
+//                            binding.setdate.setText(calYear + "년 " + calMonth + "월");
+//                            viewpagerTwice = true;
+//                        } else {
+//                            viewpagerTwice = false;
+//                            changeDateState = false;
+//                        }
+//                    } else {
+//                        binding.setdate.setText(calYear + "년 " + calMonth + "월");
+//                    }
+//            }
+//        });
 
-                String calYear = shardpref.getString("calendar_year", "");
-                String calMonth = shardpref.getString("calendar_month", "");
 
-                int intMonth = Integer.parseInt(calMonth) + changeState;
-                calMonth = String.format("%02d", intMonth);
 
-                dlog.i("beforepos : " + beforepos + " / position : " + position);
-                dlog.i("calenderViewpager || Year : " + calYear + "|| Month : " + calMonth);
-
-                if (calMonth.equals("13")) {
-                    calMonth = "01";
-                    calYear = String.valueOf(Integer.parseInt(calYear) + 1);
-                } else if (calMonth.equals("00") || calMonth.equals("0")){
-                    calMonth = "12";
-                    calYear = String.valueOf(Integer.parseInt(calYear) - 1);
-                }
-
-                binding.setdate.setText(calYear + "년 " + calMonth + "월");
-            }
-        });
 
 
         binding.taskList.setOnTouchListener(new OnSwipeTouchListener(mContext) {
@@ -638,7 +654,7 @@ public class WorkgotoFragment extends Fragment {
                         } else {
                             if (Response.length() == 0) {
                                 binding.nodataArea.setVisibility(View.VISIBLE);
-                                binding.line01.setVisibility(View.INVISIBLE);
+                                binding.line01.setVisibility(View.GONE);
                                 Log.i(TAG, "SetNoticeListview Thread run! ");
                                 Log.i(TAG, "GET SIZE : " + Response.length());
                             } else {

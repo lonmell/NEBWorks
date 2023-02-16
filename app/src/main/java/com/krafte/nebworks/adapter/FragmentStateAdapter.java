@@ -17,9 +17,24 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
     Context mContext;
     String year = "";
     String month = "";
+    int state = 0;
 
-    public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity) {
+    String iYear = "";
+    String iMonth = "";
+    boolean datePickerState = false;
+
+    // state: 1: workGoto 2: workStatus 3: taskApproval
+    public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, int state) {
         super(fragmentActivity);
+        this.state = state;
+    }
+
+    public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, boolean datePickerState, String year, String month, int state) {
+        super(fragmentActivity);
+        this.datePickerState = datePickerState;
+        this.iYear = year;
+        this.iMonth = month;
+        this.state = state;
     }
 
     public int returnPosition() {
@@ -29,8 +44,16 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
     @Override
     public long getItemId(int position) {
         Log.d("getItemId", String.valueOf(position));
-        int currentYear = cal.get(Calendar.YEAR);
-        int currentMonth = cal.get(Calendar.MONTH) + 1;
+        int currentYear;
+        int currentMonth;
+        if (datePickerState) {
+            currentMonth = Integer.parseInt(this.iMonth);
+            currentYear = Integer.parseInt(this.iYear);
+        } else {
+            currentYear = cal.get(Calendar.YEAR);
+            currentMonth = cal.get(Calendar.MONTH) + 1;
+        }
+        Log.d("FragmentStateAdapter", "CurrentDate: " + currentYear + " " + currentMonth);
 
         int move = position - START_POSITION;
         int bias = move < 0 ? -1 : 1;
@@ -50,8 +73,6 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
             currentMonth = currentMonth + moveMonth;
         }
 
-        cal.getTime().getTime();
-
         return (currentYear * 100 + currentMonth);
     }
 
@@ -67,7 +88,9 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
         this.year = String.valueOf(Math.toIntExact(year));
         this.month = String.format("%02d", Math.toIntExact(month));
 
-        return new CalenderFragment(itemId / 100L, itemId % 100L);
+        Log.d("FragmentStateAdapter", "year, month : " + this.year + " " + this.month);
+
+        return new CalenderFragment(this.year, this.month, state);
     }
 
     public String returnMonth() {
