@@ -58,10 +58,6 @@ public class PhotoPopActivity extends Activity {
 
         Log.i(TAG,"data : " + data);
 
-//        Glide.with(mContext).load(data)
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true).into(binding.thumnailIn);
-
         imgList.addAll(Arrays.asList(data.replace("[","").replace("]","").replace(" ","").split(",")));
         PhotoViewPagerAdapter adapter = new PhotoViewPagerAdapter(imgList,mContext);
         binding.thumnailIn.setAdapter(adapter);
@@ -75,6 +71,8 @@ public class PhotoPopActivity extends Activity {
                 binding.viewImgCount.setText(position+1 + " / " + adapter.getItemCount());
             }
         });
+
+
         binding.closeBtn.setOnClickListener(v -> {
             finish();
             Intent intent = new Intent();
@@ -84,4 +82,6 @@ public class PhotoPopActivity extends Activity {
         });
 
     }
+
+
 }

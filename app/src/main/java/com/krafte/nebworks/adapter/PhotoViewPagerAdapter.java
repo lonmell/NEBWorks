@@ -39,6 +39,7 @@ public class PhotoViewPagerAdapter extends RecyclerView.Adapter<PhotoViewPagerAd
         Glide.with(mContext)
                 .load(Items.get(position))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .centerCrop()
                 .into(holder.pagerimg);
 
     }
@@ -54,7 +55,7 @@ public class PhotoViewPagerAdapter extends RecyclerView.Adapter<PhotoViewPagerAd
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             pagerimg = itemView.findViewById(R.id.view_pager_img);
+
         }
     }
-
 }

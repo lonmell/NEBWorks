@@ -200,12 +200,12 @@ public class TaskReportDetailActivity extends AppCompatActivity {
     InputMethodManager imm;
     String decision = "";
 
-
     @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
         super.onResume();
         try {
+            uriList.clear();
             imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             dlog.i("-----getTaskContents START-----");
             task_no             = shardpref.getString("task_no", "0");
