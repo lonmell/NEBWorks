@@ -127,7 +127,6 @@ public class FeedDetailActivity extends AppCompatActivity {
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
             setBtnEvent();
-            GETFeed();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,6 +141,7 @@ public class FeedDetailActivity extends AppCompatActivity {
             if(!USER_INFO_ID.equals(writer_id)){
                 UpdateWorkNotifyReadYn();
             }
+            GETFeed();
             getCommentList();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);

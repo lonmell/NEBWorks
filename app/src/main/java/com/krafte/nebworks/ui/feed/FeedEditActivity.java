@@ -180,7 +180,11 @@ public class FeedEditActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         ImgfileMaker = ImageNameMaker();
-
+        if (String.valueOf(uriList).equals("[]")) {
+            binding.clearImg.setVisibility(View.GONE);
+        } else {
+            binding.clearImg.setVisibility(View.VISIBLE);
+        }
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         String thumnail_url = shardpref.getString("thumnail_url", "");
         String name = shardpref.getString("name", "");

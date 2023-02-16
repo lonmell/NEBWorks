@@ -292,6 +292,18 @@ public class TwoButtonPopActivity extends Activity {
                     } else {
                         pm.Main2(mContext);
                     }
+                } else if (flag.equals("업데이트")){
+                    shardpref.putString("UPDATEYN","N");
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName()));
+                    mContext.startActivity(intent);
+
+                    finish();
+                    intent = new Intent();
+                    intent.putExtra("result", "Close Popup");
+                    setResult(RESULT_OK, intent);
+                    overridePendingTransition(0, R.anim.translate_down);
+                    super.onBackPressed();
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -387,6 +399,14 @@ public class TwoButtonPopActivity extends Activity {
                 }else{
                     pm.Main2(mContext);
                 }
+            } else if (flag.equals("업데이트")){
+                shardpref.putString("UPDATEYN","N");
+                finish();
+                Intent intent = new Intent();
+                intent.putExtra("result", "Close Popup");
+                setResult(RESULT_OK, intent);
+                overridePendingTransition(0, R.anim.translate_down);
+                super.onBackPressed();
             }else{
                 finish();
                 Intent intent = new Intent();

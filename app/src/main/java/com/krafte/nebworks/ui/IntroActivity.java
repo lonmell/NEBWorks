@@ -53,6 +53,7 @@ import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityIntroBinding;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.login.LoginActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
@@ -134,6 +135,8 @@ public class IntroActivity extends AppCompatActivity {
     String ClientName = "넵";
     NaverIdLoginSDK naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
 
+    String UPDATEYN = "";
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +152,7 @@ public class IntroActivity extends AppCompatActivity {
         mContext = this;
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
         anim_FadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_intro_fadein);
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -247,11 +250,11 @@ public class IntroActivity extends AppCompatActivity {
         return null;
     };
 
-    private void initView(){
+    private void initView() {
         String url = getIntent().getStringExtra("click_action");
-        if(url != null){
+        if (url != null) {
             dlog.i("url : " + url);
-            if(url.equals("MainActivity")){
+            if (url.equals("MainActivity")) {
                 shardpref.putInt("SELECT_POSITION", 0);
                 if (USER_INFO_AUTH.equals("0")) {
                     pm.Main(mContext);
@@ -412,9 +415,9 @@ public class IntroActivity extends AppCompatActivity {
                                 shardpref.putString("USER_LOGIN_METHOD", USER_LOGIN_METHOD);
                                 shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
 
-                                if (nidProfileResponse.getProfile().getEmail().isEmpty()){
+                                if (nidProfileResponse.getProfile().getEmail().isEmpty()) {
                                     pm.Login(mContext);
-                                }else{
+                                } else {
                                     UserCheck(nidProfileResponse.getProfile().getEmail());
                                 }
 
@@ -546,8 +549,10 @@ public class IntroActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     boolean updateconfirm = false;
-    public void getUpdateConfirm(String lastVersion){
+
+    public void getUpdateConfirm(String lastVersion) {
         dlog.i("lastVersion : " + lastVersion);
         PackageInfo pi;
         try {
@@ -561,9 +566,9 @@ public class IntroActivity extends AppCompatActivity {
         dlog.i("versionCode < Integer.parseInt(lastVersion) : " + (versionCode < Integer.parseInt(lastVersion)));
         dlog.i("versionCode : " + versionCode);
         dlog.i("lastVersion : " + lastVersion);
-        if(versionCode == Integer.parseInt(lastVersion)){
+        if (versionCode == Integer.parseInt(lastVersion)) {
             updateconfirm = true;
-            Log.i(TAG,"업데이트 필요 X");
+            Log.i(TAG, "업데이트 필요 X");
             if (USER_LOGIN_METHOD.equals("Kakao")) {
                 KakaoSetting();
             } else if (USER_LOGIN_METHOD.equals("Google")) {
@@ -578,32 +583,46 @@ public class IntroActivity extends AppCompatActivity {
                     finish();
                 }, 1000); //1초 후 인트로 실행
             }
-        }else if(versionCode != Integer.parseInt(lastVersion)){
-            updateconfirm = false;
-            Log.i(TAG, "업데이트 필요 0");
-            Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-            intent.putExtra("data", "최신버전 앱으로 업데이트를 위해\n스토어로 이동합니다");
-            intent.putExtra("left_btn_txt", "확인");
-            startActivity(intent);
-            overridePendingTransition(R.anim.translate_up, 0);
-        }else if(lastVersion.equals("")){
+        } else if (versionCode != Integer.parseInt(lastVersion)) {
+            if (!UPDATEYN.equals("N")) {
+                updateconfirm = false;
+                Log.i(TAG, "업데이트 필요 0");
+                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                intent.putExtra("flag", "업데이트");
+                intent.putExtra("data", "최신버전 앱으로 업데이트를 위해\n스토어로 이동합니다");
+                intent.putExtra("left_btn_txt", "나중에");
+                intent.putExtra("right_btn_txt", "업데이트");
+                startActivity(intent);
+                overridePendingTransition(R.anim.translate_up, 0);
+            } else {
+                updateconfirm = true;
+                handler = new Handler();
+                handler.postDelayed(() -> {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent); //인트로 실행 후 바로 넘어감.
+                    finish();
+                }, 1000); //1초 후 인트로 실행
+            }
+        } else if (lastVersion.equals("")) {
             updateconfirm = true;
-            Log.i(TAG,"최신버전이 안가져와짐");
+            Log.i(TAG, "최신버전이 안가져와짐");
         }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
+        UPDATEYN = shardpref.getString("UPDATEYN", "Y");
+        dlog.i("UPDATEYN : " + UPDATEYN);
         createNotificationChannel();
         getReleaseHashKey();
         Handler handler = new Handler();
-        handler.postDelayed(this::getLastVersion,1000); //1초 후 인트로 실행
+        handler.postDelayed(this::getLastVersion, 1000); //1초 후 인트로 실행
     }
 
     private void getReleaseHashKey() {
         byte[] sha1 = {
-                (byte) 0xB1,0x1E,0x2B,(byte) 0x9C,(byte) 0x97,(byte) 0xDA,(byte) 0xCD,(byte) 0xA2,(byte) 0xE1,(byte) 0x9B,0x40,0x72,(byte) 0xAF,(byte) 0xA8,0x55,0x7E,0x37,0x62,(byte) 0xE0,0x42
+                (byte) 0xB1, 0x1E, 0x2B, (byte) 0x9C, (byte) 0x97, (byte) 0xDA, (byte) 0xCD, (byte) 0xA2, (byte) 0xE1, (byte) 0x9B, 0x40, 0x72, (byte) 0xAF, (byte) 0xA8, 0x55, 0x7E, 0x37, 0x62, (byte) 0xE0, 0x42
         };
         dlog.i("getReleaseHashKey : " + Base64.encodeToString(sha1, Base64.NO_WRAP));
     }
@@ -625,6 +644,7 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
+
     public void UserCheck(String account) {
         dlog.i("UserCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -647,9 +667,9 @@ public class IntroActivity extends AppCompatActivity {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     if (Response.length() != 0) {
-                                        String id       = Response.getJSONObject(0).getString("id");
-                                        String name     = Response.getJSONObject(0).getString("name");
-                                        String phone    = Response.getJSONObject(0).getString("phone");
+                                        String id = Response.getJSONObject(0).getString("id");
+                                        String name = Response.getJSONObject(0).getString("name");
+                                        String phone = Response.getJSONObject(0).getString("phone");
                                         String platform = Response.getJSONObject(0).getString("platform");
                                         String user_auth = Response.getJSONObject(0).getString("user_auth");
                                         try {
@@ -657,21 +677,21 @@ public class IntroActivity extends AppCompatActivity {
                                             dlog.i("성명 : " + name);
                                             dlog.i("사용자 권한 : " + user_auth);
                                             dlog.i("------UserCheck-------");
-                                            if(!user_auth.equals("-1")){
-                                                shardpref.putString("USER_INFO_AUTH",user_auth);
+                                            if (!user_auth.equals("-1")) {
+                                                shardpref.putString("USER_INFO_AUTH", user_auth);
                                                 UserCheckData.getInstance().setUser_id(id);
                                                 binding.loginAlertText.setVisibility(View.GONE);
                                                 if (name.isEmpty() || phone.isEmpty()) {
-                                                    shardpref.putString("editstate","newPro");
+                                                    shardpref.putString("editstate", "newPro");
                                                     pm.ProfileEdit(mContext);
                                                 } else {
                                                     getPlaceList(id, user_auth);
 //                                                    pm.PlaceList(mContext);
                                                 }
-                                            }else{
+                                            } else {
                                                 binding.loginAlertText.setVisibility(View.GONE);
                                                 if (name.isEmpty() || phone.isEmpty()) {
-                                                    shardpref.putString("editstate","newPro");
+                                                    shardpref.putString("editstate", "newPro");
                                                     pm.ProfileEdit(mContext);
                                                 } else {
                                                     pm.AuthSelect(mContext);
@@ -699,6 +719,7 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     int store_cnt = 0;
+
     public void getPlaceList(String id, String user_auth) {
         dlog.i("------GetPlaceList------");
         dlog.i("USER_INFO_ID : " + id);
@@ -813,6 +834,7 @@ public class IntroActivity extends AppCompatActivity {
         toast.setView(layout);
         toast.show();
     }
+
     //-------몰입화면 설정
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

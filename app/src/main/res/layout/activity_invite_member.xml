@@ -75,17 +75,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/pretendard_bold"
             android:text="정보입력 없이 링크 공유하기"
-            android:layout_marginTop="24dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/addMemberNodata"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:cardBackgroundColor="@color/new_blue"
+            android:layout_height="65dp"
             android:layout_above="@+id/addMemberBtn"
+            app:cardBackgroundColor="@color/new_blue"
             app:cardCornerRadius="5dp">
 
             <TextView
@@ -93,83 +94,92 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
-                android:text="직원에게 연결 방법 공유"
+                android:text="직원 초대하기"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText,TextContrastCheck" />
 
         </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="start|center"
-            android:text="이름"
-            android:textColor="#949494"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
-
-        <EditText
-            android:id="@+id/inputbox01"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/default_input_round"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="start|center"
-            android:hint="이름 입력"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName"
-            android:maxEms="10"
-            android:maxLength="10"
-            android:paddingStart="16dp"
-            android:paddingEnd="5dp"
-            android:textColor="@color/black"
-            android:textColorHint="#a9a9a9"
-            android:textSize="17sp"
-            tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="start|center"
-            android:text="연락처"
-            android:textColor="#949494"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
-
-        <EditText
-            android:id="@+id/inputbox02"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/default_input_round"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="start|center"
-            android:hint="숫자만 입력"
-            android:importantForAutofill="no"
-            android:inputType="number"
-            android:maxEms="11"
-            android:maxLength="11"
-            android:paddingStart="16dp"
-            android:paddingEnd="5dp"
-            android:textColor="@color/black"
-            android:textColorHint="#a9a9a9"
-            android:textSize="17sp"
-            tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/addMemberBtn"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:text="이름"
+                android:textColor="#949494"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/inputbox01"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/default_input_round"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:hint="이름 입력"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:maxEms="10"
+                android:maxLength="10"
+                android:paddingStart="16dp"
+                android:paddingEnd="5dp"
+                android:textColor="@color/black"
+                android:textColorHint="#a9a9a9"
+                android:textSize="17sp"
+                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:text="연락처"
+                android:textColor="#949494"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/inputbox02"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/default_input_round"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="start|center"
+                android:hint="숫자만 입력"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:maxEms="11"
+                android:maxLength="11"
+                android:paddingStart="16dp"
+                android:paddingEnd="5dp"
+                android:textColor="@color/black"
+                android:textColorHint="#a9a9a9"
+                android:textSize="17sp"
+                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/addMemberBtn"

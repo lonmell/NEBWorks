@@ -169,46 +169,61 @@ public class ProfileEditActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        mContext = this;
-        dlog.DlogContext(mContext);
-        shardpref = new PreferenceHelper(mContext);
+        try{
+            mContext = this;
+            dlog.DlogContext(mContext);
+            shardpref = new PreferenceHelper(mContext);
 
-        //shardpref Area
-        USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "0");
-        editstate = shardpref.getString("editstate", "");
-        platform = shardpref.getString("platform", "");
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+            //shardpref Area
+            USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "0");
+            editstate = shardpref.getString("editstate", "");
+            platform = shardpref.getString("platform", "");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
 
-        //Singleton Area
-        place_id = PlaceCheckData.getInstance().getPlace_id();
-        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-        USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-        USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
-        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+            //Singleton Area
+            place_id = PlaceCheckData.getInstance().getPlace_id();
+            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
+            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
 
-        setBtnEvent();
-        if (USER_INFO_EMAIL.isEmpty() || USER_INFO_ID.isEmpty()) {
-            Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-            intent.putExtra("data", "사용자정보를 찾을 수 없습니다, 다시 로그인해 주세요.");
-            intent.putExtra("left_btn_txt", "닫기");
-            startActivity(intent);
-            overridePendingTransition(R.anim.translate_up, 0);
+            setBtnEvent();
+            if (USER_INFO_EMAIL.isEmpty() || USER_INFO_ID.isEmpty()) {
+                Intent intent = new Intent(mContext, OneButtonPopActivity.class);
+                intent.putExtra("data", "사용자정보를 찾을 수 없습니다, 다시 로그인해 주세요.");
+                intent.putExtra("left_btn_txt", "닫기");
+                startActivity(intent);
+                overridePendingTransition(R.anim.translate_up, 0);
+            }
+
+            myTimer = new MyTimer(60000, 1000);
+
+            UserCheck();
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        myTimer = new MyTimer(60000, 1000);
-        UserCheck();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        ImgfileMaker = ImageNameMaker();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        ImgfileMaker = ImageNameMaker();
+//        if (saveBitmap != null) {
+//            binding.clearImg.setVisibility(View.VISIBLE);
+//            binding.imgPlus.setVisibility(View.GONE);
+//        } else {
+//            binding.clearImg.setVisibility(View.GONE);
+//            binding.imgPlus.setVisibility(View.VISIBLE);
+//        }
+
         SmsRetrieverClient client = SmsRetriever.getClient(this);   // this = context
         Task<Void> task = client.startSmsRetriever();
 
@@ -240,13 +255,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             }
         });
 
-        if (saveBitmap != null) {
-            binding.clearImg.setVisibility(View.VISIBLE);
-            binding.imgPlus.setVisibility(View.GONE);
-        } else {
-            binding.clearImg.setVisibility(View.GONE);
-            binding.imgPlus.setVisibility(View.VISIBLE);
-        }
+
 
         binding.clearImg.setOnClickListener(v -> {
             try {
@@ -594,6 +603,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                                                 .skipMemoryCache(true)
                                                 .into(binding.profileSetimg);
                                         binding.imgPlus.setVisibility(View.GONE);
+                                        binding.clearImg.setVisibility(View.VISIBLE);
                                         ProfileUrl = mem_img_path;
                                     }
 
@@ -663,6 +673,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                             .skipMemoryCache(true)
                             .into(binding.profileSetimg);
                     binding.imgPlus.setVisibility(View.GONE);
+                    binding.clearImg.setVisibility(View.VISIBLE);
                     ProfileUrl = mem_img_path;
                 }
 
@@ -994,19 +1005,21 @@ public class ProfileEditActivity extends AppCompatActivity {
                     //1) data의 주소 사용하는 방법
                     imagePath = data.getDataString(); // "content://media/external/images/media/7215"
 
-                    Glide.with(this)
-                            .load(imagePath)
-                            .into(binding.profileSetimg);
-
-                    binding.clearImg.setVisibility(View.VISIBLE);
-                    binding.imgPlus.setVisibility(View.GONE);
-
                     Glide.with(getApplicationContext()).asBitmap().load(imagePath).into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                             saveBitmap = resource;
                         }
                     });
+
+                    Glide.with(this)
+                            .load(imagePath)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .into(binding.profileSetimg);
+
+                    binding.clearImg.setVisibility(View.VISIBLE);
+                    binding.imgPlus.setVisibility(View.GONE);
 
                     final String IMG_FILE_EXTENSION = ".JPEG";
                     String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;

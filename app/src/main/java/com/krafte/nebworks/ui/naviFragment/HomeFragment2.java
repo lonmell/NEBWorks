@@ -174,6 +174,7 @@ public class HomeFragment2 extends Fragment {
             int num = getArguments().getInt("number");
             Log.i(TAG, "num : " + num);
         }
+
     }
 
 
@@ -202,6 +203,7 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 setDummyData();
             }
+
             setBtnEvent();
             SetAllMemberList();
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
@@ -214,10 +216,6 @@ public class HomeFragment2 extends Fragment {
             });
 
             //0-관리자 / 1- 근로자
-            //USER_INFO_AUTH 가 -1일때
-//            USER_INFO_AUTH = place_owner_id.equals(USER_INFO_ID) ? "0" : "1";
-//            shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
-
             if (accept_state == 3) {
                 //승인 대기중
                 binding.acceptArea.setVisibility(View.VISIBLE);
@@ -227,8 +225,6 @@ public class HomeFragment2 extends Fragment {
 
 
             binding.ioMytime.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
-//            binding.todayWorkdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
-
             binding.cardview02.setOnClickListener(v -> {
                 if (USER_INFO_AUTH.isEmpty()) {
                     isAuth();
@@ -240,6 +236,7 @@ public class HomeFragment2 extends Fragment {
                     pm.MemberDetail(mContext);
                 }
             });
+
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -255,14 +252,14 @@ public class HomeFragment2 extends Fragment {
         getPlaceData();
     }
 
+    Timer timer = new Timer();
+
     @Override
     public void onStop() {
         super.onStop();
         timer.cancel();
     }
 
-
-    Timer timer = new Timer();
 
     @Override
     public void onResume() {
@@ -406,7 +403,7 @@ public class HomeFragment2 extends Fragment {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
+                dlog.e("에러 1 = " + t.getMessage());
             }
         });
     }
@@ -462,20 +459,7 @@ public class HomeFragment2 extends Fragment {
                 }
             }
         });
-//        binding.oBtn.setOnClickListener(v -> {
-//            if (USER_INFO_AUTH.isEmpty()) {
-//                isAuth();
-//            } else {
-//                UserCheck();
-//                if(!UserCheckData.getInstance().getUser_sieob().equals("null")){
-//                    shardpref.putString("kind", "1");
-//                    pm.EmployeeProcess(mContext);
-//                }else{
-//                    Toast_Nomal("근무종료 시간이 배정되지 않았습니다.");
-//                }
-//
-//            }
-//        });
+
         binding.acceptBtn.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -723,7 +707,7 @@ public class HomeFragment2 extends Fragment {
 
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    dlog.e("에러 = " + t.getMessage());
+                    dlog.e("에러 2 = " + t.getMessage());
                 }
             });
         });
@@ -884,7 +868,6 @@ public class HomeFragment2 extends Fragment {
                                                     public void onItemClick(View v, int position) {
                                                         if (USER_INFO_AUTH.isEmpty()) {
                                                             isAuth();
-                                                        } else {
                                                         }
                                                     }
                                                 });
@@ -907,7 +890,7 @@ public class HomeFragment2 extends Fragment {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
+                dlog.e("에러 3 = " + t.getMessage());
             }
         });
     }
@@ -1067,7 +1050,7 @@ public class HomeFragment2 extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러 = " + t.getMessage());
+                dlog.e("에러 4 = " + t.getMessage());
             }
         });
     }
@@ -1092,7 +1075,7 @@ public class HomeFragment2 extends Fragment {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
+                dlog.e("에러 5 = " + t.getMessage());
             }
         });
     }

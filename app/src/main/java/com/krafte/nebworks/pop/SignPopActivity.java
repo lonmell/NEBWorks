@@ -33,7 +33,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class SignPopActivity  extends Activity {
-
     private static final String TAG = "EmployerOptionActivity";
     Context mContext;
 

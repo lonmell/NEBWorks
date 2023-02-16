@@ -90,10 +90,6 @@ public class OneButtonPopActivity extends Activity {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 intent.addCategory(Intent.CATEGORY_DEFAULT);
                 startActivity(intent);
-            }else if(data.equals("최신버전 앱으로 업데이트를 위해\n스토어로 이동합니다")){
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName()));
-                mContext.startActivity(intent);
             }else if(left_btn_txt.equals("로그인하기") || left_btn_txt.equals("뒤로가기")){
                 intent = new Intent(mContext, LoginActivity.class);
                 startActivity(intent);
@@ -130,7 +126,11 @@ public class OneButtonPopActivity extends Activity {
 //                //액티비티(팝업) 닫기
 //                ClosePop();
 //            }
-
+//            else if(data.equals("최신버전 앱으로 업데이트를 위해\n스토어로 이동합니다")){
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setData(Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName()));
+//                mContext.startActivity(intent);
+//            }
         });
     }
 

@@ -38,7 +38,6 @@
                 android:id="@+id/lo_canvas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#E0EAFB"
                 android:orientation="horizontal" />
         </androidx.cardview.widget.CardView>
 
