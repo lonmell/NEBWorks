@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.adapter.PayCalenderAdapter;
 import com.krafte.nebworks.adapter.PaymentMemberAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectMemberActivity;
@@ -68,6 +69,9 @@ public class PayManagementActivity extends AppCompatActivity {
     ArrayList<WorkCalenderData.WorkCalenderData_list> mList2 = new ArrayList<>();
     //Task all data
     ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList3 = new ArrayList<>();
+
+    FragmentStateAdapter fragmentStateAdapter;
+    PayManagementActivity thisActivity = this;
 
     RetrofitConnect rc = new RetrofitConnect();
     PageMoveClass pm = new PageMoveClass();
@@ -131,6 +135,11 @@ public class PayManagementActivity extends AppCompatActivity {
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
             Tap = shardpref.getString("Tap", "0");
 
+            fragmentStateAdapter = new FragmentStateAdapter(this, 4);
+//            calenderFragment.CalenderContext(mContext);
+            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+
             binding.backBtn.setOnClickListener(v -> {
                 super.onBackPressed();
             });
@@ -161,12 +170,20 @@ public class PayManagementActivity extends AppCompatActivity {
                     binding.tabLayout.setVisibility(View.GONE);
                     binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
-                    SetCalenderData(Year, Month);
+                    binding.dateLayout.setVisibility(View.GONE);
+                    binding.dateSelect.setVisibility(View.VISIBLE);
+                    binding.allMemberlist.setVisibility(View.GONE);
+                    binding.calendarArea.setVisibility(View.VISIBLE);
+//                    SetCalenderData(Year, Month);
                 } else {
                     chng_icon = false;
                     binding.tabLayout.setVisibility(View.VISIBLE);
                     binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                     binding.setdate.setText(Year + "년 " + Month + "월");
+                    binding.dateLayout.setVisibility(View.VISIBLE);
+                    binding.dateSelect.setVisibility(View.GONE);
+                    binding.allMemberlist.setVisibility(View.VISIBLE);
+                    binding.calendarArea.setVisibility(View.GONE);
                     WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, setDate , "0");
                 }
             });
@@ -194,7 +211,7 @@ public class PayManagementActivity extends AppCompatActivity {
                         dlog.i("change_place_id : " + change_place_id);
                         dlog.i("change_place_name : " + change_place_name);
                         if (chng_icon) {
-                            SetCalenderData(Year, Month);
+//                            SetCalenderData(Year, Month);
                         } else {
                             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
                         }
@@ -222,7 +239,7 @@ public class PayManagementActivity extends AppCompatActivity {
                         shardpref.putString("change_member_id", user_id);
                         shardpref.putString("change_member_name", user_name);
                         if (chng_icon) {
-                            SetCalenderData(Year, Month);
+//                            SetCalenderData(Year, Month);
                         } else {
                             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
                         }
@@ -258,7 +275,7 @@ public class PayManagementActivity extends AppCompatActivity {
         binding.setdate.setText(Year + "년 " + Month + "월");
         setDate = Year + "-" + Month;
         if (chng_icon) {
-            SetCalenderData(Year, Month);
+//            SetCalenderData(Year, Month);
         } else {
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
         }
@@ -273,7 +290,7 @@ public class PayManagementActivity extends AppCompatActivity {
             setDate = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월");
             if (chng_icon) {
-                SetCalenderData(Year, Month);
+//                SetCalenderData(Year, Month);
             } else {
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
             }
@@ -287,7 +304,7 @@ public class PayManagementActivity extends AppCompatActivity {
             setDate = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월");
             if (chng_icon) {
-                SetCalenderData(Year, Month);
+//                SetCalenderData(Year, Month);
             } else {
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
             }
@@ -309,7 +326,12 @@ public class PayManagementActivity extends AppCompatActivity {
                 binding.setdate.setText(year + "-" + Month);
                 getYMPicker = binding.setdate.getText().toString().substring(0, 7);
                 if (chng_icon) {
-                    SetCalenderData(Year, Month);
+                    binding.calenderViewpager.setSaveFromParentEnabled(false);
+                    fragmentStateAdapter = new FragmentStateAdapter(thisActivity, true, Year, Month, 4);
+                    binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                    binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                    binding.setdate.setText(Year + "년 " + Month + "월 ");
+//                    SetCalenderData(Year, Month);
                 } else {
                     WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
                 }
@@ -317,6 +339,12 @@ public class PayManagementActivity extends AppCompatActivity {
         }, mYear, mMonth, mDay);
 
         binding.setdate.setOnClickListener(view -> {
+            if (binding.setdate.isClickable()) {
+                datePickerDialog.show();
+            }
+        });
+
+        binding.dateSelect.setOnClickListener(view -> {
             if (binding.setdate.isClickable()) {
                 datePickerDialog.show();
             }
@@ -339,7 +367,7 @@ public class PayManagementActivity extends AppCompatActivity {
             binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
         }
         if (chng_icon) {
-            SetCalenderData(Year, Month);
+//            SetCalenderData(Year, Month);
         } else {
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
         }
@@ -494,137 +522,137 @@ public class PayManagementActivity extends AppCompatActivity {
             }
         });
     }
-    private void SetCalenderData(String Year, String Month) {
-        dlog.i("------SetCalenderData------");
-        dlog.i("place_id :" + place_id);
-        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
-        dlog.i("------SetCalenderData------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PayCalendersetData.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        PayCalendersetData api = retrofit.create(PayCalendersetData.class);
-        Call<String> call2 = api.getData(place_id, "", Year, Month);
-        call2.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
-                runOnUiThread(() -> {
-                    //캘린더 내용 (업무가) 있을때
-                    if (response2.isSuccessful() && response2.body() != null) {
-                        String jsonResponse = rc.getBase64decode(response2.body());
-                        dlog.i("SetCalenderData jsonResponse length : " + jsonResponse.length());
-                        dlog.i("SetCalenderData jsonResponse : " + jsonResponse);
-                        try {
-                            JSONArray Response2 = new JSONArray(jsonResponse);
-                            if (Response2.length() == 0) {
-                                dlog.i("SetCalenderData GET SIZE : " + Response2.length());
-                                GetCalenderList(Year, Month, mList3);
-                            } else {
-                                for (int i = 0; i < Response2.length(); i++) {
-                                    JSONObject jsonObject = Response2.getJSONObject(i);
-                                    mList3.add(new CalendarSetStatusData.CalendarSetStatusData_list(
-                                            jsonObject.getString("day"),
-                                            jsonObject.getString("week"),
-                                            Collections.singletonList(jsonObject.getString("users"))
-                                    ));
-                                    dlog.i(jsonObject.getString("day") + " / SetCalenderData jsonObject.getString(\"users\") : " + Collections.singletonList(jsonObject.getString("users")));
-                                }
-                                GetCalenderList(Year, Month, mList3);
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-
-            @Override
-            @SuppressLint("LongLogTag")
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러2 = " + t.getMessage());
-            }
-        });
-    }
-
-    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList3) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WorkCalenderInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        WorkCalenderInterface api = retrofit.create(WorkCalenderInterface.class);
-        Call<String> call = api.getData(Year, Month);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.e(TAG, "GetCalenderList function START");
-                Log.e(TAG, "response 1: " + response.isSuccessful());
-                Log.e(TAG, "response 2: " + response.body());
-                runOnUiThread(() -> {
-                    if (response.isSuccessful() && response.body() != null) {
-                        dlog.i("onResume place_id :" + place_id);
-                        dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
-                        try {
-                            String select_date = Year + "-" + Month;
-                            JSONArray Response = new JSONArray(response.body());
-                            mList2 = new ArrayList<>();
-                            mAdapter2 = new PayCalenderAdapter(mContext, mList2, mList3, place_id, USER_INFO_ID, select_date, Month);
-                            binding.allMemberlist.setAdapter(mAdapter2);
-                            binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-                            dlog.i("SetNoticeListview Thread run! ");
-
-                            if (Response.length() == 0) {
-                                dlog.i("GET SIZE : " + Response.length());
-                            } else {
-                                for (int i = 0; i < Response.length(); i++) {
-                                    JSONObject jsonObject = Response.getJSONObject(i);
-                                    mAdapter2.addItem(new WorkCalenderData.WorkCalenderData_list(
-                                            jsonObject.getString("ym"),
-                                            jsonObject.getString("Sun"),
-                                            jsonObject.getString("Mon"),
-                                            jsonObject.getString("Tue"),
-                                            jsonObject.getString("Wed"),
-                                            jsonObject.getString("Thu"),
-                                            jsonObject.getString("Fri"),
-                                            jsonObject.getString("Sat")
-                                    ));
-                                }
-                                mAdapter2.notifyDataSetChanged();
-                                mAdapter2.setOnItemClickListener(new PayCalenderAdapter.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                                        try {
-                                            if(USER_INFO_AUTH.isEmpty()) {
-                                                isAuth();
-                                            } else {
-//                                                dlog.i("onItemClick WorkDay :" + WorkDay);
-//                                                shardpref.putString("FtoDay", WorkDay);
-//                                                WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
-//                                                wsb.show(getSupportFragmentManager(), "WorkstatusBottomSheet");
-                                            }
-                                        } catch (Exception e) {
-                                            dlog.i("onItemClick Exception :" + e);
-                                        }
-
-                                    }
-                                });
-                            }
-                        } catch (JSONException e) {
-                            dlog.i("JSONException :" + e);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            @SuppressLint("LongLogTag")
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "에러2 = " + t.getMessage());
-            }
-        });
-    }
+//    private void SetCalenderData(String Year, String Month) {
+//        dlog.i("------SetCalenderData------");
+//        dlog.i("place_id :" + place_id);
+//        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
+//        dlog.i("------SetCalenderData------");
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(PayCalendersetData.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        PayCalendersetData api = retrofit.create(PayCalendersetData.class);
+//        Call<String> call2 = api.getData(place_id, "", Year, Month);
+//        call2.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
+//                runOnUiThread(() -> {
+//                    //캘린더 내용 (업무가) 있을때
+//                    if (response2.isSuccessful() && response2.body() != null) {
+//                        String jsonResponse = rc.getBase64decode(response2.body());
+//                        dlog.i("SetCalenderData jsonResponse length : " + jsonResponse.length());
+//                        dlog.i("SetCalenderData jsonResponse : " + jsonResponse);
+//                        try {
+//                            JSONArray Response2 = new JSONArray(jsonResponse);
+//                            if (Response2.length() == 0) {
+//                                dlog.i("SetCalenderData GET SIZE : " + Response2.length());
+//                                GetCalenderList(Year, Month, mList3);
+//                            } else {
+//                                for (int i = 0; i < Response2.length(); i++) {
+//                                    JSONObject jsonObject = Response2.getJSONObject(i);
+//                                    mList3.add(new CalendarSetStatusData.CalendarSetStatusData_list(
+//                                            jsonObject.getString("day"),
+//                                            jsonObject.getString("week"),
+//                                            Collections.singletonList(jsonObject.getString("users"))
+//                                    ));
+//                                    dlog.i(jsonObject.getString("day") + " / SetCalenderData jsonObject.getString(\"users\") : " + Collections.singletonList(jsonObject.getString("users")));
+//                                }
+//                                GetCalenderList(Year, Month, mList3);
+//                            }
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            @SuppressLint("LongLogTag")
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e(TAG, "에러2 = " + t.getMessage());
+//            }
+//        });
+//    }
+//
+//    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList3) {
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(WorkCalenderInterface.URL)
+//                .addConverterFactory(ScalarsConverterFactory.create())
+//                .build();
+//        WorkCalenderInterface api = retrofit.create(WorkCalenderInterface.class);
+//        Call<String> call = api.getData(Year, Month);
+//        call.enqueue(new Callback<String>() {
+//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                Log.e(TAG, "GetCalenderList function START");
+//                Log.e(TAG, "response 1: " + response.isSuccessful());
+//                Log.e(TAG, "response 2: " + response.body());
+//                runOnUiThread(() -> {
+//                    if (response.isSuccessful() && response.body() != null) {
+//                        dlog.i("onResume place_id :" + place_id);
+//                        dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
+//                        try {
+//                            String select_date = Year + "-" + Month;
+//                            JSONArray Response = new JSONArray(response.body());
+//                            mList2 = new ArrayList<>();
+//                            mAdapter2 = new PayCalenderAdapter(mContext, mList2, mList3, place_id, USER_INFO_ID, select_date, Month);
+//                            binding.allMemberlist.setAdapter(mAdapter2);
+//                            binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+//                            dlog.i("SetNoticeListview Thread run! ");
+//
+//                            if (Response.length() == 0) {
+//                                dlog.i("GET SIZE : " + Response.length());
+//                            } else {
+//                                for (int i = 0; i < Response.length(); i++) {
+//                                    JSONObject jsonObject = Response.getJSONObject(i);
+//                                    mAdapter2.addItem(new WorkCalenderData.WorkCalenderData_list(
+//                                            jsonObject.getString("ym"),
+//                                            jsonObject.getString("Sun"),
+//                                            jsonObject.getString("Mon"),
+//                                            jsonObject.getString("Tue"),
+//                                            jsonObject.getString("Wed"),
+//                                            jsonObject.getString("Thu"),
+//                                            jsonObject.getString("Fri"),
+//                                            jsonObject.getString("Sat")
+//                                    ));
+//                                }
+//                                mAdapter2.notifyDataSetChanged();
+//                                mAdapter2.setOnItemClickListener(new PayCalenderAdapter.OnItemClickListener() {
+//                                    @Override
+//                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+//                                        try {
+//                                            if(USER_INFO_AUTH.isEmpty()) {
+//                                                isAuth();
+//                                            } else {
+////                                                dlog.i("onItemClick WorkDay :" + WorkDay);
+////                                                shardpref.putString("FtoDay", WorkDay);
+////                                                WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
+////                                                wsb.show(getSupportFragmentManager(), "WorkstatusBottomSheet");
+//                                            }
+//                                        } catch (Exception e) {
+//                                            dlog.i("onItemClick Exception :" + e);
+//                                        }
+//
+//                                    }
+//                                });
+//                            }
+//                        } catch (JSONException e) {
+//                            dlog.i("JSONException :" + e);
+//                        }
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            @SuppressLint("LongLogTag")
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e(TAG, "에러2 = " + t.getMessage());
+//            }
+//        });
+//    }
 
     float insurance01p = 0;//국민연금 퍼센트
     float insurance02p = 0;//건강보험 퍼센트
