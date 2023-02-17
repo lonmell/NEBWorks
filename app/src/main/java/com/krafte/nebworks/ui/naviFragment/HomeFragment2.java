@@ -265,6 +265,7 @@ public class HomeFragment2 extends Fragment {
     public void onResume() {
         super.onResume();
         shardpref.remove("Tap");
+
         InOutLogMember();
         UserCheck();
         allPay = 0;

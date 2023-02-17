@@ -239,7 +239,6 @@ public class community_fragment1 extends Fragment {
         getWord.clear();
     }
 
-
     public void getFobiddenWord() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FobiddenInterface.URL)
@@ -276,6 +275,7 @@ public class community_fragment1 extends Fragment {
             }
         });
     }
+
     int total_cnt = 0;
     public void setRecyclerView() {
         //Best List

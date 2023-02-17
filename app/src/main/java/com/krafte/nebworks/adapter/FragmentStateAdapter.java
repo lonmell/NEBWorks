@@ -53,7 +53,7 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
             currentYear = cal.get(Calendar.YEAR);
             currentMonth = cal.get(Calendar.MONTH) + 1;
         }
-        Log.d("FragmentStateAdapter", "CurrentDate: " + currentYear + " " + currentMonth);
+//        Log.d("FragmentStateAdapter", "CurrentDate: " + currentYear + " " + currentMonth);
 
         int move = position - START_POSITION;
         int bias = move < 0 ? -1 : 1;

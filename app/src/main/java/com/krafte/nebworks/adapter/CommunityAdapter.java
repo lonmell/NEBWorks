@@ -125,14 +125,17 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 //            List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
             String title = "";
             String content = "";
-            for(int i = 0; i < forbiList.size(); i++){
-                if(item.getTitle().contains(forbiList.get(i))){
-                    title = item.getTitle().replace(forbiList.get(i)," ○○○ ");
-                }
-                if(item.getContents().contains(forbiList.get(i))){
-                    content = item.getContents().replace(forbiList.get(i)," ○○○ ");
+            if(forbiList.size() != 0){
+                for(int i = 0; i < forbiList.size(); i++){
+                    if(item.getTitle().contains(forbiList.get(i))){
+                        title = item.getTitle().replace(forbiList.get(i)," ○○○ ");
+                    }
+                    if(item.getContents().contains(forbiList.get(i))){
+                        content = item.getContents().replace(forbiList.get(i)," ○○○ ");
+                    }
                 }
             }
+
             holder.title.setText(title.equals("")?item.getTitle():title);
 
             holder.write_date.setText(item.getCreated_at().equals("null")?"":item.getCreated_at());
@@ -281,8 +284,5 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     public int getItemViewType(int position) {
         return position;
     }
-
-
-
 
 }
