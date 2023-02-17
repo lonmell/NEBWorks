@@ -91,7 +91,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
 
     private void setBtnEvent(){
         binding.inoutPrint.setOnClickListener(v -> {
-            String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF.php?id="+contract_id;
+            String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF2.php?id="+contract_id;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
             startActivity(intent);
         });

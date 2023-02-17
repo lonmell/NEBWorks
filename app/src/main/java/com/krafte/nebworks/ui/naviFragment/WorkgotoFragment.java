@@ -23,7 +23,6 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
@@ -539,32 +538,6 @@ public class WorkgotoFragment extends Fragment {
                 setRecyclerView();
             }
         });
-
-//        binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-//            @Override
-//            public void onPageSelected(int position) {
-//                super.onPageSelected(position);
-//                    String calYear = fragmentStateAdapter.returnYear();
-//                    String calMonth = fragmentStateAdapter.returnMonth();
-//                    dlog.i("calenderViewpager || Year : " + calYear + "|| Month : " + calMonth);
-//
-//                    dlog.i("viewpagerTwice: " + viewpagerTwice);
-//                    if (changeDateState) {
-//                        if (!viewpagerTwice) {
-//                            binding.setdate.setText(calYear + "년 " + calMonth + "월");
-//                            viewpagerTwice = true;
-//                        } else {
-//                            viewpagerTwice = false;
-//                            changeDateState = false;
-//                        }
-//                    } else {
-//                        binding.setdate.setText(calYear + "년 " + calMonth + "월");
-//                    }
-//            }
-//        });
-
-
-
 
 
         binding.taskList.setOnTouchListener(new OnSwipeTouchListener(mContext) {

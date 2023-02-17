@@ -514,7 +514,7 @@ public class HomeFragment2 extends Fragment {
             if (contract_id.equals("0")) {
                 Toast_Nomal("작성된 근로계약서가 없습니다.");
             } else {
-                String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF.php?id=" + contract_id;
+                String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF2.php?id=" + contract_id;
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
                 startActivity(intent);
             }

@@ -25,6 +25,7 @@
             android:id="@+id/member_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="fitXY"
             android:background="@drawable/certi02" />
     </androidx.cardview.widget.CardView>
 
