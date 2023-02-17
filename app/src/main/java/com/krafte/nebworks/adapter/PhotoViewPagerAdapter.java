@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.util.TouchImageView;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class PhotoViewPagerAdapter extends RecyclerView.Adapter<PhotoViewPagerAd
         Glide.with(mContext)
                 .load(Items.get(position))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .centerCrop()
+                .skipMemoryCache(true)
                 .into(holder.pagerimg);
 
     }
@@ -50,7 +50,7 @@ public class PhotoViewPagerAdapter extends RecyclerView.Adapter<PhotoViewPagerAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView pagerimg;
+        TouchImageView pagerimg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

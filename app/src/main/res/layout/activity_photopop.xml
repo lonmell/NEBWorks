@@ -36,22 +36,21 @@
         android:id="@+id/thumnail_in"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/close_btn"
-        android:layout_marginBottom="10dp"
         android:layout_above="@+id/view_img_count"
-        android:scaleType="fitCenter" />
-
+        android:layout_below="@+id/close_btn"
+        android:layout_marginBottom="10dp"/>
 
     <TextView
         android:id="@+id/view_img_count"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="0/0"
-        android:gravity="center"
-        android:fontFamily="@font/pretendard_bold"
-        android:textSize="16sp"
-        android:layout_marginBottom="59dp"
-        android:padding="5dp"
         android:layout_alignParentBottom="true"
-        android:textColor="@color/white"/>
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:text="0/0"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 </RelativeLayout>
