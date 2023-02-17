@@ -417,8 +417,8 @@ public class CalenderFragment extends Fragment {
                                             dlog.i("onItemClick WorkDay :" + WorkDay);
                                             shardpref.putString("FtoDay", WorkDay);
                                             if (!WorkDay.contains("null")) {
-                                                WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
-                                                wgb.show(getChildFragmentManager(), "WorkgotoBottomSheet");
+                                                WorkstatusBottomSheet wgb = new WorkstatusBottomSheet();
+                                                wgb.show(getChildFragmentManager(), "WorkstatusBottomSheet");
                                             }
                                         } catch (Exception e) {
                                             dlog.i("onItemClick Exception :" + e);
