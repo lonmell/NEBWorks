@@ -311,6 +311,7 @@ public class MainFragment2 extends AppCompatActivity {
             shardpref.remove("event");
             pm.PlaceList(mContext);
         } else {
+            binding.title.setText("");
             binding.tabLayout.getTabAt(0).select();
         }
     }
