@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.adapter.ApprovalAdapter;
+import com.krafte.nebworks.adapter.PayCalenderAdapter;
 import com.krafte.nebworks.adapter.WorkCalenderAdapter;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.WorkgotoBottomSheet;
@@ -25,6 +26,7 @@ import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.TaskCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
+import com.krafte.nebworks.dataInterface.PayCalendersetData;
 import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.WorkCalendersetData;
 import com.krafte.nebworks.dataInterface.WorkstatusCalendersetData;
@@ -80,6 +82,11 @@ public class CalenderFragment extends Fragment {
     ArrayList<WorkCalenderData.WorkCalenderData_list> ApprovalList2;
     WorkCalenderAdapter ApprovalAdapter;
 
+    PayCalenderAdapter payAdapter;
+    ArrayList<WorkCalenderData.WorkCalenderData_list> payList = new ArrayList<>();
+    //Task all data
+    ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> payList2 = new ArrayList<>();
+
     // state 1: WorkGoto
     public CalenderFragment(String year, String month, int state) {
         this.year = year;
@@ -129,6 +136,9 @@ public class CalenderFragment extends Fragment {
                 break;
             case 3:
                 SetApprovalCalenderData();
+                break;
+            case 4:
+                SetPayCalenderData(year, month);
                 break;
         }
         return binding.getRoot();
@@ -417,8 +427,8 @@ public class CalenderFragment extends Fragment {
                                             dlog.i("onItemClick WorkDay :" + WorkDay);
                                             shardpref.putString("FtoDay", WorkDay);
                                             if (!WorkDay.contains("null")) {
-                                                WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
-                                                wgb.show(getChildFragmentManager(), "WorkgotoBottomSheet");
+                                                WorkstatusBottomSheet wgb = new WorkstatusBottomSheet();
+                                                wgb.show(getChildFragmentManager(), "WorkstatusBottomSheet");
                                             }
                                         } catch (Exception e) {
                                             dlog.i("onItemClick Exception :" + e);
@@ -603,6 +613,134 @@ public class CalenderFragment extends Fragment {
                     }
                 });
 
+            }
+
+            @Override
+            @SuppressLint("LongLogTag")
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러2 = " + t.getMessage());
+            }
+        });
+    }
+
+    private void SetPayCalenderData(String Year, String Month) {
+        dlog.i("------SetPayCalenderData------");
+        dlog.i("place_id :" + place_id);
+        dlog.i("USER_INFO_ID :" + USER_INFO_ID);
+        dlog.i("------SetPayCalenderData------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PayCalendersetData.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PayCalendersetData api = retrofit.create(PayCalendersetData.class);
+        Call<String> call2 = api.getData(place_id, "", Year, Month);
+        call2.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
+                activity.runOnUiThread(() -> {
+                    //캘린더 내용 (업무가) 있을때
+                    if (response2.isSuccessful() && response2.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response2.body());
+                        dlog.i("SetPayCalenderData jsonResponse length : " + jsonResponse.length());
+                        dlog.i("SetPayCalenderData jsonResponse : " + jsonResponse);
+                        try {
+                            JSONArray Response2 = new JSONArray(jsonResponse);
+                            if (Response2.length() == 0) {
+                                dlog.i("SetPayCalenderData GET SIZE : " + Response2.length());
+                                GetPayCalenderList(Year, Month, payList2);
+                            } else {
+                                for (int i = 0; i < Response2.length(); i++) {
+                                    JSONObject jsonObject = Response2.getJSONObject(i);
+                                    payList2.add(new CalendarSetStatusData.CalendarSetStatusData_list(
+                                            jsonObject.getString("day"),
+                                            jsonObject.getString("week"),
+                                            Collections.singletonList(jsonObject.getString("users"))
+                                    ));
+                                    dlog.i(jsonObject.getString("day") + " / SetPayCalenderData jsonObject.getString(\"users\") : " + Collections.singletonList(jsonObject.getString("users")));
+                                }
+                                GetPayCalenderList(Year, Month, payList2);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            @SuppressLint("LongLogTag")
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러2 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void GetPayCalenderList(String Year, String Month, ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList3) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WorkCalenderInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        WorkCalenderInterface api = retrofit.create(WorkCalenderInterface.class);
+        Call<String> call = api.getData(Year, Month);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.e(TAG, "GetPayCalenderList function START");
+                Log.e(TAG, "response 1: " + response.isSuccessful());
+                Log.e(TAG, "response 2: " + response.body());
+                activity.runOnUiThread(() -> {
+                    if (response.isSuccessful() && response.body() != null) {
+                        dlog.i("onResume place_id :" + place_id);
+                        dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
+                        try {
+                            String select_date = Year + "-" + Month;
+                            JSONArray Response = new JSONArray(response.body());
+                            payList = new ArrayList<>();
+                            payAdapter = new PayCalenderAdapter(mContext, payList, payList2, place_id, USER_INFO_ID, select_date, Month);
+                            binding.createCalender.setAdapter(payAdapter);
+                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                            dlog.i("SetNoticeListview Thread run! ");
+
+                            if (Response.length() == 0) {
+                                dlog.i("GET SIZE : " + Response.length());
+                            } else {
+                                for (int i = 0; i < Response.length(); i++) {
+                                    JSONObject jsonObject = Response.getJSONObject(i);
+                                    payAdapter.addItem(new WorkCalenderData.WorkCalenderData_list(
+                                            jsonObject.getString("ym"),
+                                            jsonObject.getString("Sun"),
+                                            jsonObject.getString("Mon"),
+                                            jsonObject.getString("Tue"),
+                                            jsonObject.getString("Wed"),
+                                            jsonObject.getString("Thu"),
+                                            jsonObject.getString("Fri"),
+                                            jsonObject.getString("Sat")
+                                    ));
+                                }
+                                payAdapter.notifyDataSetChanged();
+                                payAdapter.setOnItemClickListener(new PayCalenderAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                                        try {
+//                                                dlog.i("onItemClick WorkDay :" + WorkDay);
+//                                                shardpref.putString("FtoDay", WorkDay);
+//                                                WorkstatusBottomSheet wsb = new WorkstatusBottomSheet();
+//                                                wsb.show(getSupportFragmentManager(), "WorkstatusBottomSheet");
+                                        } catch (Exception e) {
+                                            dlog.i("onItemClick Exception :" + e);
+                                        }
+
+                                    }
+                                });
+                            }
+                        } catch (JSONException e) {
+                            dlog.i("JSONException :" + e);
+                        }
+                    }
+                });
             }
 
             @Override
