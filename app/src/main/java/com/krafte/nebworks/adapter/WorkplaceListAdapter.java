@@ -108,7 +108,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         try {
             holder.first_line.setVisibility(position == 0?View.VISIBLE:View.GONE);
 
-            Glide.with(mContext).load(item.getImg_path())
+            Glide.with(mContext).load(item.getImg_path().equals("null")?"":item.getImg_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .placeholder(R.drawable.identificon)

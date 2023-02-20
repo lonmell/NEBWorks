@@ -167,7 +167,7 @@ public class HomeFragment extends Fragment {
             USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
-            String date = dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일 ";
+            String date = dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 기준";
             binding.payDate.setText(date);
 
             String[] dateWithTime = dc.GET_TIME.split(" ");

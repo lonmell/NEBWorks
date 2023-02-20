@@ -20,7 +20,6 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceListAdapter;
 import com.krafte.nebworks.bottomsheet.StoreListBottomSheet;
 import com.krafte.nebworks.data.PlaceListData;
-import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -50,7 +49,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-
 /*
  * 2022-10-05 방창배 작성
  * */
@@ -67,33 +65,30 @@ public class PlaceListActivity extends AppCompatActivity {
     //Other 변수
     ArrayList<PlaceListData.PlaceListData_list> mList;
     WorkplaceListAdapter mAdapter = null;
-    int listitemsize = 0;
-    String USER_INFO_EMAIL = "";
-    String USER_INFO_NAME = "";
-    String USER_INFO_ID = "";
-    String USER_INFO_AUTH = "";
+    String USER_INFO_EMAIL  = "";
+    String USER_INFO_NAME   = "";
+    String USER_INFO_ID     = "";
+    String USER_INFO_AUTH   = "";
 
     //사용자 정보 체크
-//    Timer timer = new Timer();
-    String id = "";
-    String name = "";
-    String email = "";
-    String phone = "";
-    String gender = "";
+    String id       = "";
+    String name     = "";
+    String email    = "";
+    String phone    = "";
+    String gender   = "";
     String img_path = "";
+    String event    = "";
 
     int confirm_cnt = 0;
-    List<String> confirm_member = new ArrayList<>();
-    String event = "";
+    Long waitTime   = 0L; // 뒤로가기 버튼 누른 시간 기록
 
-    Long waitTime = 0L; // 뒤로가기 버튼 누른 시간 기록
+    List<String> confirm_member = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-        binding = ActivityWorksiteBinding.inflate(getLayoutInflater()); // 1
-        setContentView(binding.getRoot()); // 2
+        binding = ActivityWorksiteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -115,8 +110,14 @@ public class PlaceListActivity extends AppCompatActivity {
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
-            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+
+            dlog.i("-----onCreate-----");
+            dlog.i("USER_INFO_ID : "    + USER_INFO_ID);
+            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+            dlog.i("USER_INFO_NAME : "  + USER_INFO_NAME);
+            dlog.i("USER_INFO_AUTH : "  + USER_INFO_AUTH);
+            dlog.i("event : "           + event);
+            dlog.i("-----onCreate-----");
 
             if (!event.isEmpty()) {
                 binding.logoutArea.setVisibility(View.GONE);
@@ -137,36 +138,28 @@ public class PlaceListActivity extends AppCompatActivity {
                 dlog.i("msg : " + msg);
             });
             getFCMToken();
+
+            dlog.i("-----onResume-----");
+            dlog.i("USER_INFO_ID : "        + USER_INFO_ID);
+            dlog.i("USER_INFO_EMAIL : "     + USER_INFO_EMAIL);
+            dlog.i("USER_INFO_NAME : "      + USER_INFO_NAME);
+            dlog.i("USER_INFO_AUTH : "      + USER_INFO_AUTH);
+            dlog.i("-----onResume-----");
+            if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
+                GetPlaceList();
+                getNotReadFeedcnt();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     @Override
     public void onResume() {
         super.onResume();
         shardpref.remove("page_state");
-        dlog.i("-----onResume-----");
-        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
-        dlog.i("USER_INFO_NAME : " + USER_INFO_NAME);
-        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-        dlog.i("-----onResume-----");
-        if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
-            GetPlaceList();
-            getNotReadFeedcnt();
-        }
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     private void setBtnEvent() {
@@ -180,8 +173,6 @@ public class PlaceListActivity extends AppCompatActivity {
             onStartAuth();
         });
         binding.notiArea.setOnClickListener(v -> {
-            ReturnPageData.getInstance().setPage("PlaceListActivity");
-//            shardpref.putString("returnPage","PlaceListActivity");
             pm.FeedList(mContext);
         });
         binding.logoutArea.setOnClickListener(v -> {
@@ -203,7 +194,6 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
-
     public void LoginCheck(String account) {
         dlog.i("LoginCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -301,7 +291,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                     binding.noData.setVisibility(View.VISIBLE);
                                     dlog.i("SetNoticeListview Thread run! ");
                                     dlog.i("GET SIZE : " + Response.length());
-                                    binding.storeCnt.setText(String.valueOf(Response.length()) + "개");
+                                    binding.storeCnt.setText(Response.length() + "개");
                                 } else {
                                     binding.noData.setVisibility(View.GONE);
                                     for (int i = 0; i < Response.length(); i++) {
@@ -334,64 +324,56 @@ public class PlaceListActivity extends AppCompatActivity {
                                         ));
                                     }
                                 }
-                                binding.storeCnt.setText(String.valueOf(store_cnt) + "개");
+                                binding.storeCnt.setText(store_cnt + "개");
 
                                 mAdapter.notifyDataSetChanged();
-                                mAdapter.setOnItemClickListener(new WorkplaceListAdapter.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View v, int pos) {
-                                        try {
-                                            dlog.i("place_latitude : " + shardpref.getString("place_latitude", ""));
-                                            dlog.i("place_longitude : " + shardpref.getString("place_longitude", ""));
-                                            String owner_id = Response.getJSONObject(pos).getString("owner_id");
-                                            String place_name = Response.getJSONObject(pos).getString("name");
-                                            String myid = shardpref.getString("USER_INFO_ID", "0");
-                                            String place_id = Response.getJSONObject(pos).getString("id");
-                                            String save_kind = Response.getJSONObject(pos).getString("save_kind");
-                                            String accept_state = Response.getJSONObject(pos).getString("accept_state");
-                                            String place_imgpath = Response.getJSONObject(pos).getString("img_path");
-                                            dlog.i("owner_id : " + owner_id);
-                                            dlog.i("place_name : " + place_name);
-                                            dlog.i("myid : " + myid);
-                                            dlog.i("place_id : " + place_id);
-                                            dlog.i("save_kind : " + save_kind);
-                                            dlog.i("accept_state : " + accept_state);
-                                            dlog.i("place_imgpath : " + place_imgpath);
+                                mAdapter.setOnItemClickListener((v, pos) -> {
+                                    try {
+                                        dlog.i("place_latitude : " + shardpref.getString("place_latitude", ""));
+                                        dlog.i("place_longitude : " + shardpref.getString("place_longitude", ""));
+                                        String owner_id = Response.getJSONObject(pos).getString("owner_id");
+                                        String place_name = Response.getJSONObject(pos).getString("name");
+                                        String myid = shardpref.getString("USER_INFO_ID", "0");
+                                        String place_id = Response.getJSONObject(pos).getString("id");
+                                        String save_kind = Response.getJSONObject(pos).getString("save_kind");
+                                        String accept_state = Response.getJSONObject(pos).getString("accept_state");
+                                        String place_imgpath = Response.getJSONObject(pos).getString("img_path");
+                                        dlog.i("owner_id : " + owner_id);
+                                        dlog.i("place_name : " + place_name);
+                                        dlog.i("myid : " + myid);
+                                        dlog.i("place_id : " + place_id);
+                                        dlog.i("save_kind : " + save_kind);
+                                        dlog.i("accept_state : " + accept_state);
+                                        dlog.i("place_imgpath : " + place_imgpath);
 
-                                            shardpref.putString("place_id", place_id);
-                                            shardpref.putString("place_name", place_name);
-                                            shardpref.putString("place_imgpath", place_imgpath);
-                                            if (save_kind.equals("0")) {
-                                                //임시저장된 매장
-                                                pm.PlaceEditGo(mContext);
-                                            } else {
-                                                //저장된 매장
-//                                                    if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
-//                                                        pm.ProfileEditGo(mContext);
-//                                                    } else {
-                                                if (accept_state.equals("null")) {
-                                                    if (!owner_id.equals(USER_INFO_ID)) {
-                                                        accept_state = "1";
-                                                    } else {
-                                                        accept_state = "0";
-                                                    }
-                                                }
-                                                shardpref.putInt("accept_state", Integer.parseInt(accept_state));
-                                                ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
-                                                shardpref.putInt("SELECT_POSITION", 0);
-                                                if (USER_INFO_AUTH.equals("0")) {
-                                                    pm.Main(mContext);
+                                        shardpref.putString("place_id", place_id);
+                                        shardpref.putString("place_name", place_name);
+                                        shardpref.putString("place_imgpath", place_imgpath);
+                                        if (save_kind.equals("0")) {
+                                            //임시저장된 매장
+                                            pm.PlaceEditGo(mContext);
+                                        } else {
+                                            //저장된 매장
+                                            if (accept_state.equals("null")) {
+                                                if (!owner_id.equals(USER_INFO_ID)) {
+                                                    accept_state = "1";
                                                 } else {
-                                                    pm.Main2(mContext);
+                                                    accept_state = "0";
                                                 }
-//                                                    }
                                             }
-                                        } catch (JSONException e) {
-                                            dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
+                                            shardpref.putInt("accept_state", Integer.parseInt(accept_state));
+                                            ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
+                                            shardpref.putInt("SELECT_POSITION", 0);
+                                            if (USER_INFO_AUTH.equals("0")) {
+                                                pm.Main(mContext);
+                                            } else {
+                                                pm.Main2(mContext);
+                                            }
                                         }
+                                    } catch (JSONException e) {
+                                        dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                     }
                                 });
-                                dlog.i("SetNoticeListview Thread run! ");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -574,7 +556,6 @@ public class PlaceListActivity extends AppCompatActivity {
     String channel3 = "1";
     String channel4 = "1";
 
-
     //본인 토큰 생성
     @SuppressLint("LongLogTag")
     public void getFCMToken() {
@@ -594,7 +575,6 @@ public class PlaceListActivity extends AppCompatActivity {
                     dlog.i("getFCMToken token : " + token);
                     FcmStateSelect(token);
                 });
-
     }
 
     private void FcmStateSelect(String token) {
@@ -669,7 +649,6 @@ public class PlaceListActivity extends AppCompatActivity {
                     });
                 }
             }
-
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
@@ -777,7 +756,7 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Log.d("PlaceListActivity", "event: " + event);
+        dlog.d("event: " + event);
         if(!event.isEmpty()){
             super.onBackPressed();
         }else{

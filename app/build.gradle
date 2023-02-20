@@ -10,8 +10,8 @@ android {
         applicationId "com.krafte.nebworks"
         minSdk 24
         targetSdk 32
-        versionCode 26
-        versionName "26"
+        versionCode 28
+        versionName "28"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -62,9 +62,7 @@ android {
     viewBinding {
         enabled true
     }
-    dataBinding{
-        enabled true
-    }
+
     compileOptions.encoding='UTF-8'
 }
 

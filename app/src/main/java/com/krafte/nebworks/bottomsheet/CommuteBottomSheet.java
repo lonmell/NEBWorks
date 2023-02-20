@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,18 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.PlaceCheckData;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.UpdateCommuteInterface;
 import com.krafte.nebworks.databinding.FragmentCommuteBottomSheetBinding;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -226,7 +232,9 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
 
     RetrofitConnect rc = new RetrofitConnect();
     public void UpdateCommute(String kind, String time) {
+        String place_name = PlaceCheckData.getInstance().getPlace_name();
         dlog.i("------UpdateCommute------");
+        dlog.i("place_name : " + place_name);
         dlog.i("commute_place_id : " + commute_place_id);
         dlog.i("commute_user_id : " + commute_user_id);
         dlog.i("kind : " + kind);
@@ -251,9 +259,10 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                             dlog.i("UpdateCommute jsonResponse : " + jsonResponse);
                             try {
                                 if(jsonResponse.replace("\"","").equals("success")){
+                                    String message = "[" + place_name + "] 출퇴근 데이터가 변경되었습니다.";
+                                    getUserToken(commute_user_id, "1", message);
+                                    AddPush("직원출퇴근데이터변경",message,commute_user_id);
                                     Toast.makeText(mContext,commute_date + "날짜의" + userName + " 직원의 출퇴근 데이터가 변경되었습니다",Toast.LENGTH_SHORT).show();
-                                }else{
-//                                    Toast.makeText(mContext,"Error",Toast.LENGTH_SHORT).show();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -292,5 +301,106 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
 
     public interface OnItemClickListener {
         void onItemClick(View v);
+    }
+
+    String place_owner_id = "";
+    public void getUserToken(String user_id, String type, String message) {
+        dlog.i("-----getManagerToken-----");
+        dlog.i("user_id : " + user_id);
+        dlog.i("type : " + type);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(user_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+                try {
+                    JSONArray Response = new JSONArray(jsonResponse);
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            PushFcmSend(id, "", message, token, "2", commute_place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(commute_place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+                if (response.isSuccessful() && response.body() != null) {
+
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    DBConnection dbConnection = new DBConnection();
+    String click_action = "";
+    //점주 > 근로자
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "TaskList1";
+            dlog.i("-----PushFcmSend-----");
+            dlog.i("topic : " + topic);
+            dlog.i("title : " + title);
+            dlog.i("message : " + message);
+            dlog.i("token : " + token);
+            dlog.i("click_action : " + click_action);
+            dlog.i("tag : " + tag);
+            dlog.i("place_id : " + place_id);
+            dlog.i("-----PushFcmSend-----");
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+//            activity.runOnUiThread(() -> {
+//            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

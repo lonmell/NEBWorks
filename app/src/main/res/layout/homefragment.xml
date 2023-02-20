@@ -266,7 +266,7 @@
                         <RelativeLayout
                             android:id="@+id/pay_layout"
                             android:layout_width="match_parent"
-                            android:layout_height="21dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginBottom="10dp">
@@ -281,14 +281,16 @@
                                 android:text="급여 이체 0원"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
+
                             <TextView
                                 android:id="@+id/pay_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:layout_alignParentEnd="true"
                                 android:fontFamily="@font/inter_regular"
+                                android:layout_below="@+id/pay_text"
                                 android:gravity="center"
                                 android:text="0000.00.00"
-                                android:layout_alignParentEnd="true"
                                 android:textColor="#696969"
                                 android:textSize="15sp" />
                         </RelativeLayout>

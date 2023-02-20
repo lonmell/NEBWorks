@@ -34,8 +34,6 @@ import org.json.JSONException;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -179,12 +177,13 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
 
             holder.work_day.setText(item.getTotal_workday() + "일");
 
-            List<String> workhour = new ArrayList<>(Arrays.asList(item.getWorkhour().split("\\.")));
-            holder.work_time.setText(workhour.get(0) + "시간");
-            holder.weekly_worktime_progress.setProgress(Integer.parseInt(workhour.get(0)));
+            holder.work_time.setText(item.getWorkhour() + "시간");
+
+            holder.weekly_worktime_progress.setMax(Integer.parseInt(item.getPayment()));
+            holder.weekly_worktime_progress.setProgress(Integer.parseInt(item.getTotal_payment()));
 
             holder.nowpay.setText("예상 급여 " + myFormatter.format(Integer.parseInt(item.getTotal_payment())) + "원");
-            holder.mypay.setText("계약 급여 " + item.getPayment() + "원");
+            holder.mypay.setText("계약 급여 " + myFormatter.format(Integer.parseInt(item.getPayment())) + "원");
 
 
             holder.write_payment.setOnClickListener(v -> {

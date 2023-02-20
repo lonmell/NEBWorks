@@ -652,11 +652,11 @@
                                 <SeekBar
                                     android:id="@+id/pay_diff_bar"
                                     android:layout_width="match_parent"
-                                    android:layout_height="12dp"
+                                    android:layout_height="wrap_content"
                                     android:layout_alignParentTop="true"
                                     android:max="100"
                                     android:progress="0"
-                                    android:progressDrawable="@drawable/custom_seekbar_progress_pay"
+                                    android:progressDrawable="@drawable/custom_seekbar_progress_member_detail"
                                     android:thumb="@drawable/seek_tumb" />
 
                                 <TextView

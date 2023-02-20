@@ -588,7 +588,6 @@ public class JoinActivity extends AppCompatActivity {
 //                            shardpref.putString("USER_INFO_AUTH", "0");
 //                            shardpref.putInt("SELECT_POSITION", 0);
 //                            shardpref.putInt("SELECT_POSITION_sub", 0);
-//                            pm.PlaceList(mContext);
 //                            Uri url = TalkApiClient.getInstance().channelChatUrl("_rTkJxj");
 //                            KakaoCustomTabsClient instance = KakaoCustomTabsClient.INSTANCE;
 //                            instance.openWithDefault(mContext, url);

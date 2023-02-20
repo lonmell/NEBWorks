@@ -147,7 +147,6 @@ public class FeedListActivity extends AppCompatActivity {
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
             if(returnPage.equals("PlaceListActivity")){
-//                pm.PlaceList(mContext);
                 super.onBackPressed();
             }else{
                 if(USER_INFO_AUTH.equals("0")){
@@ -244,7 +243,6 @@ public class FeedListActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
 //        if(returnPage.equals("PlaceListActivity")){
-//            pm.PlaceList(mContext);
             super.onBackPressed();
 //        }else{
 //            if(USER_INFO_AUTH.equals("0")){

@@ -122,6 +122,7 @@ public class IntroActivity extends AppCompatActivity {
     String GET_KAKAO_USER_AUTH = "9";
     String GET_KAKAO_USER_SERVICE = "S";
     boolean GET_JOIN_CONFIRM = false;
+
     String USER_INFO_AUTH = "";
 
     int versionCode = 0;
@@ -152,7 +153,6 @@ public class IntroActivity extends AppCompatActivity {
         mContext = this;
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
         anim_FadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_intro_fadein);
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -162,6 +162,8 @@ public class IntroActivity extends AppCompatActivity {
         notificationManager.createNotificationChannel(new NotificationChannel("4", "이력서/면접", NotificationManager.IMPORTANCE_DEFAULT));
 
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
+        USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "-99");// 0:점주 / 1:근로자
+
         dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
@@ -171,6 +173,7 @@ public class IntroActivity extends AppCompatActivity {
                 .skipMemoryCache(true).into(binding.loadingView);
         binding.loginAlertText.setVisibility(View.VISIBLE);
         initView();
+
         //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
         FirebaseMessaging.getInstance().subscribeToTopic("NEBWorks").addOnCompleteListener(task -> {
             String msg = getString(R.string.msg_subscribed);
@@ -192,15 +195,22 @@ public class IntroActivity extends AppCompatActivity {
         // Kakao SDK 객체 초기화
         KakaoSdk.init(this, getString(R.string.kakao_native_key));
 
-        handler.postDelayed(() -> {
-            if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
-                dlog.i("카카오톡 앱이 설치 되어있을때 : kakaoCallback = " + kakaoCallback);
-                UserApiClient.getInstance().loginWithKakaoTalk(mContext, kakaoCallback);
-            } else {
-                dlog.i("카카오톡 앱이 설치 안 되어있을때 : kakaoCallback = " + kakaoCallback);
-                UserApiClient.getInstance().loginWithKakaoAccount(mContext, kakaoCallback);
-            }
-        }, 1000); //0.5초 후 인트로 실행
+//        handler.postDelayed(() -> {
+//            if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
+//                dlog.i("카카오톡 앱이 설치 되어있을때 : kakaoCallback = " + kakaoCallback);
+//                UserApiClient.getInstance().loginWithKakaoTalk(mContext, kakaoCallback);
+//            } else {
+//                dlog.i("카카오톡 앱이 설치 안 되어있을때 : kakaoCallback = " + kakaoCallback);
+//                UserApiClient.getInstance().loginWithKakaoAccount(mContext, kakaoCallback);
+//            }
+//        }, 1000); //0.5초 후 인트로 실행
+        if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
+            dlog.i("카카오톡 앱이 설치 되어있을때 : kakaoCallback = " + kakaoCallback);
+            UserApiClient.getInstance().loginWithKakaoTalk(mContext, kakaoCallback);
+        } else {
+            dlog.i("카카오톡 앱이 설치 안 되어있을때 : kakaoCallback = " + kakaoCallback);
+            UserApiClient.getInstance().loginWithKakaoAccount(mContext, kakaoCallback);
+        }
 
     }
 
@@ -263,11 +273,6 @@ public class IntroActivity extends AppCompatActivity {
                 }
             }
         }
-
-//        if(bundle != null){
-//            dlog.i("bundle : " + bundle);
-//        }
-//        dlog.i("remoteMessage : " + "12314123");
     }
 
     @Override
@@ -609,9 +614,10 @@ public class IntroActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart(){
+        super.onStart();
         UPDATEYN = shardpref.getString("UPDATEYN", "Y");
         dlog.i("UPDATEYN : " + UPDATEYN);
         createNotificationChannel();
@@ -619,6 +625,11 @@ public class IntroActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(this::getLastVersion, 1000); //1초 후 인트로 실행
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+}
 
     private void getReleaseHashKey() {
         byte[] sha1 = {
@@ -644,7 +655,6 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
-
     public void UserCheck(String account) {
         dlog.i("UserCheck account : " + account);
         Retrofit retrofit = new Retrofit.Builder()
@@ -686,7 +696,6 @@ public class IntroActivity extends AppCompatActivity {
                                                     pm.ProfileEdit(mContext);
                                                 } else {
                                                     getPlaceList(id, user_auth);
-//                                                    pm.PlaceList(mContext);
                                                 }
                                             } else {
                                                 binding.loginAlertText.setVisibility(View.GONE);
@@ -719,7 +728,6 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     int store_cnt = 0;
-
     public void getPlaceList(String id, String user_auth) {
         dlog.i("------GetPlaceList------");
         dlog.i("USER_INFO_ID : " + id);
@@ -731,7 +739,6 @@ public class IntroActivity extends AppCompatActivity {
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
         Call<String> call = api.getData("", id, user_auth);
-        //
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override
@@ -761,25 +768,24 @@ public class IntroActivity extends AppCompatActivity {
                                         String save_kind = Response.getJSONObject(0).getString("save_kind");
                                         String accept_state = Response.getJSONObject(0).getString("accept_state");
                                         String place_imgpath = Response.getJSONObject(0).getString("img_path");
-                                        dlog.i("owner_id : " + owner_id);
-                                        dlog.i("place_name : " + place_name);
-                                        dlog.i("myid : " + myid);
-                                        dlog.i("place_id : " + place_id);
-                                        dlog.i("save_kind : " + save_kind);
-                                        dlog.i("accept_state : " + accept_state);
-                                        dlog.i("place_imgpath : " + place_imgpath);
+
+                                        dlog.i("owner_id : "        + owner_id);
+                                        dlog.i("place_name : "      + place_name);
+                                        dlog.i("myid : "            + myid);
+                                        dlog.i("place_id : "        + place_id);
+                                        dlog.i("save_kind : "       + save_kind);
+                                        dlog.i("accept_state : "    + accept_state);
+                                        dlog.i("place_imgpath : "   + place_imgpath);
 
                                         shardpref.putString("place_id", place_id);
                                         shardpref.putString("place_name", place_name);
                                         shardpref.putString("place_imgpath", place_imgpath);
+
                                         if (save_kind.equals("0")) {
                                             //임시저장된 매장
                                             pm.PlaceEditGo(mContext);
                                         } else {
                                             //저장된 매장
-//                                                    if (phone.equals("null") || phone.isEmpty() || gender.equals("null") || gender.isEmpty()) {
-//                                                        pm.ProfileEditGo(mContext);
-//                                                    } else {
                                             if (accept_state.equals("null")) {
                                                 if (!owner_id.equals(id)) {
                                                     accept_state = "1";
@@ -788,21 +794,24 @@ public class IntroActivity extends AppCompatActivity {
                                                 }
                                             }
                                             shardpref.putInt("accept_state", Integer.parseInt(accept_state));
-                                            // ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
                                             shardpref.putInt("SELECT_POSITION", 0);
+
                                             if (user_auth.equals("0")) {
                                                 pm.Main(mContext);
                                             } else {
                                                 pm.Main2(mContext);
                                             }
-//                                                    }
                                         }
                                     } catch (JSONException e) {
                                         dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                     }
-                                } else {
-                                    shardpref.remove("event");
-                                    pm.PlaceList(mContext);
+                                } else if (Response.length() > 1) {
+                                    try {
+                                        shardpref.remove("event");
+                                        pm.PlaceList(mContext);
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
                                 }
                                 dlog.i("SetNoticeListview Thread run! ");
                             } catch (JSONException e) {

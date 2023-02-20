@@ -121,8 +121,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             holder.rank_tv.setText(String.valueOf(position+1));
 
             Resources res = mContext.getResources();
-//            List<String> forbiList = Arrays.asList(res.getStringArray(R.array.forbidden_word));
-//            List<String> forbiList = new ArrayList<>(Arrays.asList(Arrays.toString(res.getStringArray(R.array.forbidden_word)).replace("[","").replace("]","").split(",")));
             String title = "";
             String content = "";
             if(forbiList.size() != 0){

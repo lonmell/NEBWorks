@@ -31,8 +31,6 @@ import com.krafte.nebworks.data.PaymentData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
-import com.krafte.nebworks.dataInterface.PayCalendersetData;
-import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.ActivityPaymanagementBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -47,7 +45,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -295,6 +292,7 @@ public class PayManagementActivity extends AppCompatActivity {
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
             }
         });
+
         binding.nextDate.setOnClickListener(v -> {
             dlog.i("nextDate Click!! PayManagementActivity");
             cal.add(Calendar.MONTH, +1);
@@ -400,8 +398,6 @@ public class PayManagementActivity extends AppCompatActivity {
                 .build();
         paymanaInterface api = retrofit.create(paymanaInterface.class);
         Call<String> call = api.getData("1", place_id, GET_DATE, SelectId, "", "", "", "", "", "", "", "", "", "");
-//        String url = "http://krafte.net/NEBWorks/pay/paymanager.php?flag=1&place_id="+place_id+"&GET_DATE="+GET_DATE+"&user_id="+SelectId+"&basic_pay=&second_pay=&overwork_hour=&overwork_pay=&meal_allowance_yn=&meal_pay=&store_insurance_yn=&other_memo=&all_payment=&selectym=";
-//        dlog.i("url : " + url);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override

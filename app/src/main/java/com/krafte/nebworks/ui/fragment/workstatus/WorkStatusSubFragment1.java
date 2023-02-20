@@ -153,6 +153,9 @@ public class WorkStatusSubFragment1 extends Fragment {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        if(shardpref == null){
+            shardpref = new PreferenceHelper(mContext);
+        }
         shardpref.remove("FtoDay");
         shardpref.remove("change_place_id");
     }
@@ -282,8 +285,10 @@ public class WorkStatusSubFragment1 extends Fragment {
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         }
                                     });
+                                    
                                     mAdapter.setOnItemClickListener2((v, position) -> {
                                         try{
+                                            //관리자가 직원의 근로 시간 정보를 수정 가능한 기능
                                             shardpref.putString("commute_place_id", Response.getJSONObject(position).getString("place_id"));
                                             shardpref.putString("commute_user_id", Response.getJSONObject(position).getString("user_id"));
                                             shardpref.putString("commute_name", Response.getJSONObject(position).getString("name"));

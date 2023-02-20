@@ -772,7 +772,6 @@ public class PlaceEditActivity extends AppCompatActivity {
                                         Toast_Nomal("임시저장 완료되었습니다.");
                                     }
                                     pm.PlaceEdit2Go(mContext);
-//                                    pm.PlaceList(mContext);
                                 } else if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("duplicate")) {
                                     Toast_Nomal("중복되는 데이터가 있습니다.");
                                 } else {

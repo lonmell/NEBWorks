@@ -482,7 +482,6 @@ public class LoginActivity extends AppCompatActivity {
                                                     pm.ProfileEdit(mContext);
                                                 } else {
                                                     getPlaceList(id, user_auth);
-//                                                    pm.PlaceList(mContext);
                                                 }
                                             }else{
                                                 binding.loginAlertText.setVisibility(View.GONE);
@@ -592,7 +591,7 @@ public class LoginActivity extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                     }
-                                } else {
+                                } else if (Response.length() > 1) {
                                     shardpref.remove("event");
                                     pm.PlaceList(mContext);
                                 }

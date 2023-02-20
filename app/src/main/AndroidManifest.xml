@@ -178,7 +178,8 @@
         <!-- state -->
 
         <!-- worksite -->
-        <activity android:name=".ui.worksite.PlaceListActivity" />
+        <activity android:name=".ui.worksite.PlaceListActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".ui.worksite.PlaceAddActivity" />
         <activity android:name=".ui.worksite.PlaceAddActivity2" />
         <activity android:name=".ui.worksite.TaskAddWorkActivity" />
