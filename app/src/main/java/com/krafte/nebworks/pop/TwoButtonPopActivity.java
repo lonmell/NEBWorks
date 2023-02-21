@@ -754,6 +754,7 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             if (jsonResponse.replace("\"", "").equals("success")) {
+                                shardpref.remove("event");
                                 Toast_Nomal("근무신청이 완료되었습니다.");
                                 ClosePop();
                             }else{
