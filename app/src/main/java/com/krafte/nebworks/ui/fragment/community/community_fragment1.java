@@ -166,8 +166,7 @@ public class community_fragment1 extends Fragment {
 
         setCateList();
         getFobiddenWord();
-        setRecyclerView();
-        setRecyclerView2();
+
     }
 
     private void setBtnEvent() {
@@ -262,6 +261,8 @@ public class community_fragment1 extends Fragment {
                             getWord.add(Response.getJSONObject(i).getString("word"));
                         }
                         shardpref.putString("FobiddenWord",String.valueOf(getWord));
+                        setRecyclerView();
+                        setRecyclerView2();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

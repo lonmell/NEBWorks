@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -60,7 +59,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class MemberManagement extends AppCompatActivity implements View.OnTouchListener{
+public class MemberManagement extends AppCompatActivity {
     private static final String TAG = "MemberManagement";
     private ActivityMemberManageBinding binding;
     Context mContext;
@@ -69,7 +68,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
 
     // shared 저장값
     PreferenceHelper shardpref;
-    ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mList = new ArrayList<>();;
+    ArrayList<WorkPlaceMemberListData.WorkPlaceMemberListData_list> mList = new ArrayList<>();
+
     WorkplaceMemberAdapter mAdapter = null;
     String USER_INFO_ID = "";
     String USER_INFO_NAME = "";
@@ -104,6 +104,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
     float oldXvalue;
     float oldYvalue;
 
+    private static final String IMAGEVIEW_TAG = "드래그 이미지";
+
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,45 +119,45 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
         }
         mContext = this;
         dlog.DlogContext(mContext);
-        shardpref           = new PreferenceHelper(mContext);
+        shardpref = new PreferenceHelper(mContext);
 
         try {
             icon_off = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_gray_bar);
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
             //Singleton Area
-            place_id        = PlaceCheckData.getInstance().getPlace_id().equals("0")?shardpref.getString("place_id","0"):PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id().equals("0")?shardpref.getString("getPlace_owner_id","0"):PlaceCheckData.getInstance().getPlace_owner_id();
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-            return_page     = ReturnPageData.getInstance().getPage();
+            place_id = PlaceCheckData.getInstance().getPlace_id().equals("0") ? shardpref.getString("place_id", "0") : PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id().equals("0") ? shardpref.getString("getPlace_owner_id", "0") : PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+            USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+            return_page = ReturnPageData.getInstance().getPage();
             ReturnPageData.getInstance().setPage("BusinessApprovalActivity");
 
             //shardpref Area
-            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
+            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
-            gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
+            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
 
             dlog.i("------MemberManagement onCreate------");
-            dlog.i("place_id : "            + place_id);
-            dlog.i("place_owner_id : "      + place_owner_id);
-            dlog.i("USER_INFO_ID : "        + USER_INFO_ID);
-            dlog.i("USER_INFO_NAME : "      + USER_INFO_NAME);
-            dlog.i("USER_INFO_AUTH : "      + USER_INFO_AUTH);
-            dlog.i("return_page : "         + return_page);
-            dlog.i("SELECT_POSITION : "     + SELECT_POSITION);
+            dlog.i("place_id : " + place_id);
+            dlog.i("place_owner_id : " + place_owner_id);
+            dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+            dlog.i("USER_INFO_NAME : " + USER_INFO_NAME);
+            dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+            dlog.i("return_page : " + return_page);
+            dlog.i("SELECT_POSITION : " + SELECT_POSITION);
             dlog.i("SELECT_POSITION_sub : " + SELECT_POSITION_sub);
-            dlog.i("wifi_certi_flag : "     + wifi_certi_flag);
-            dlog.i("gps_certi_flag : "      + gps_certi_flag);
+            dlog.i("wifi_certi_flag : " + wifi_certi_flag);
+            dlog.i("gps_certi_flag : " + gps_certi_flag);
             dlog.i("------MemberManagement onCreate------");
 
             binding.changePlace.setOnClickListener(v -> {
                 PlaceListBottomSheet plb = new PlaceListBottomSheet();
-                plb.show(getSupportFragmentManager(),"PlaceListBottomSheet");
+                plb.show(getSupportFragmentManager(), "PlaceListBottomSheet");
                 plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
-                    shardpref.putString("change_place_id",place_id);
+                    shardpref.putString("change_place_id", place_id);
                     dlog.i("change_place_id : " + place_id);
                     SetAllMemberList(place_id);
                     binding.selectPlace.setText(place_name);
@@ -219,13 +221,13 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData("", "", "","1",USER_INFO_ID);
+        Call<String> call = api.getData("", "", "", "1", USER_INFO_ID);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 dlog.e("getNotReadFeedcnt");
-                dlog.e( "response 1: " + response.isSuccessful());
+                dlog.e("response 1: " + response.isSuccessful());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
                     String jsonResponse = rc.getBase64decode(response.body());
                     dlog.i("jsonResponse length : " + jsonResponse.length());
@@ -233,14 +235,14 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        if(!jsonResponse.equals("[]") && Response.length() != 0){
+                        if (!jsonResponse.equals("[]") && Response.length() != 0) {
                             String NotRead = Response.getJSONObject(0).getString("notread_feed");
-                            if(NotRead.equals("0") || NotRead.isEmpty()){
+                            if (NotRead.equals("0") || NotRead.isEmpty()) {
                                 binding.notiRed.setVisibility(View.INVISIBLE);
-                            }else{
+                            } else {
                                 binding.notiRed.setVisibility(View.VISIBLE);
                             }
-                        }else{
+                        } else {
                             binding.notiRed.setVisibility(View.INVISIBLE);
                         }
                     } catch (JSONException e) {
@@ -252,12 +254,13 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e( "에러 = " + t.getMessage());
+                dlog.e("에러 = " + t.getMessage());
             }
         });
     }
 
     int wccnt = 0;
+
     private void getWorkCnt() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(GetNotDetailInterface.URL)
@@ -278,21 +281,21 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        for(int i = 0; i < Response.length(); i++){
+                        for (int i = 0; i < Response.length(); i++) {
                             String workcnt = Response.getJSONObject(i).getString("workcnt");
-                            if(workcnt.equals("0")){
+                            if (workcnt.equals("0")) {
                                 wccnt++;
                             }
                         }
                         dlog.i("wccnt : " + wccnt);
-                        shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
-                        shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
-                        if(USER_INFO_AUTH.equals("0")){
-                            if(wccnt == 0){
+                        shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+                        shardpref.putInt("SELECT_POSITION_sub", SELECT_POSITION_sub);
+                        if (USER_INFO_AUTH.equals("0")) {
+                            if (wccnt == 0) {
                                 //직원상세정보가 모두 추가되었을 때
                                 pm.Main(mContext);
 //                                finish();
-                            }else{
+                            } else {
                                 //직원상세정보 추가 안한 사람이 있을 때
                                 Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
                                 intent.putExtra("data", "상세정보가 입력되지 않은 직원이 있습니다.");
@@ -301,7 +304,7 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                 intent.putExtra("right_btn_txt", "뒤로가기");
                                 startActivity(intent);
                             }
-                        }else{
+                        } else {
                             pm.Main2(mContext);
 //                            finish();
                         }
@@ -314,13 +317,14 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e( "에러 = " + t.getMessage());
+                dlog.e("에러 = " + t.getMessage());
             }
         });
     }
 
     /*직원 전체 리스트 START*/
     RetrofitConnect rc = new RetrofitConnect();
+
     public void SetAllMemberList(String place_id) {
         mList.clear();
         total_member_cnt = 0;
@@ -334,7 +338,7 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-            Call<String> call = api.getData(place_id,"");
+            Call<String> call = api.getData(place_id, "");
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -360,8 +364,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                             } else {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if(memkind == -1){
-                                        total_member_cnt ++;
+                                    if (memkind == -1) {
+                                        total_member_cnt++;
                                         mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_name"),
@@ -379,9 +383,9 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                                 jsonObject.getString("worktime"),
                                                 jsonObject.getString("contract_cnt")
                                         ));
-                                    } else if(memkind == 1){
-                                        if(jsonObject.getString("kind").equals("1") && (!jsonObject.getString("jikgup").equals("null") || !jsonObject.getString("pay").equals("null"))){
-                                            total_member_cnt ++;
+                                    } else if (memkind == 1) {
+                                        if (jsonObject.getString("kind").equals("1") && (!jsonObject.getString("jikgup").equals("null") || !jsonObject.getString("pay").equals("null"))) {
+                                            total_member_cnt++;
                                             mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                     jsonObject.getString("id"),
                                                     jsonObject.getString("place_name"),
@@ -400,9 +404,9 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                                     jsonObject.getString("contract_cnt")
                                             ));
                                         }
-                                    } else if(memkind == 2){
-                                        if(jsonObject.getString("jikgup").equals("null") || jsonObject.getString("pay").equals("null")){
-                                            total_member_cnt ++;
+                                    } else if (memkind == 2) {
+                                        if (jsonObject.getString("jikgup").equals("null") || jsonObject.getString("pay").equals("null")) {
+                                            total_member_cnt++;
                                             mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                     jsonObject.getString("id"),
                                                     jsonObject.getString("place_name"),
@@ -421,9 +425,9 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                                     jsonObject.getString("contract_cnt")
                                             ));
                                         }
-                                    } else if(memkind == 3){
-                                        if(jsonObject.getString("kind").equals("4")){
-                                            total_member_cnt ++;
+                                    } else if (memkind == 3) {
+                                        if (jsonObject.getString("kind").equals("4")) {
+                                            total_member_cnt++;
                                             mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                     jsonObject.getString("id"),
                                                     jsonObject.getString("place_name"),
@@ -445,10 +449,10 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                     }
                                 }
 
-                                if(Response.length() == 0){
+                                if (Response.length() == 0) {
                                     binding.nodataArea.setVisibility(View.VISIBLE);
                                     binding.allMemberlist.setVisibility(View.GONE);
-                                }else{
+                                } else {
                                     binding.nodataArea.setVisibility(View.GONE);
                                     binding.allMemberlist.setVisibility(View.VISIBLE);
                                     binding.memberCnt.setText(Response.length() + "명");
@@ -456,7 +460,7 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                 mAdapter.setOnItemClickListener2(new WorkplaceMemberAdapter.OnItemClickListener2() {
                                     @Override
                                     public void onItemClick(View v, int position, int kind) {
-                                        try{
+                                        try {
                                             dlog.i("mAdapter setOnItemClickListener2 Click!");
                                             dlog.i("position : " + position);
 
@@ -466,26 +470,26 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                             String phone = mList.get(position).getPhone();
                                             String jumin = mList.get(position).getJumin();
                                             String join_date = mList.get(position).getJoin_date();
-                                            if(kind == 1){
+                                            if (kind == 1) {
                                                 dlog.i("kind : " + kind);
                                                 dlog.i("id : " + getid);
                                                 MemDel(getid);
-                                            }else if(kind == 2){
+                                            } else if (kind == 2) {
                                                 dlog.i("kind : " + kind);
                                                 dlog.i("id : " + getid);
                                                 UpdateBasic(getid, name, phone, jumin, "1", join_date, place_name);
-                                            }else if(kind == 3){
-                                                shardpref.putString("mem_id",getid);
+                                            } else if (kind == 3) {
+                                                shardpref.putString("mem_id", getid);
                                                 Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-                                                intent.putExtra("flag","직원삭제2");
-                                                intent.putExtra("data","근로계약서, 출근표가 삭제됩니다\n삭제하시겠습니까?");
+                                                intent.putExtra("flag", "직원삭제2");
+                                                intent.putExtra("data", "근로계약서, 출근표가 삭제됩니다\n삭제하시겠습니까?");
                                                 intent.putExtra("left_btn_txt", "닫기");
                                                 intent.putExtra("right_btn_txt", "삭제");
                                                 startActivity(intent);
                                                 overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             }
-                                        }catch (Exception e){
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                     }
@@ -552,7 +556,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
             }
         });
     }
-    public void UpdateBasic(String mem_id,String name, String phone, String jumin, String kind, String join_date, String place_name) {
+
+    public void UpdateBasic(String mem_id, String name, String phone, String jumin, String kind, String join_date, String place_name) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MemberUpdateBasicInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -577,8 +582,8 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
                                     SetAllMemberList(place_id);
 
                                     String message = "[" + place_name + "]매장에서 근무신청이 수락되었습니다.";
-                                    getUserToken(mem_id,"1",message);
-                                    AddPush("근무신청",message,mem_id);
+                                    getUserToken(mem_id, "1", message);
+                                    AddPush("근무신청", message, mem_id);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -699,7 +704,7 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
         }
     }
 
-    private void ChangeMenu(int i){
+    private void ChangeMenu(int i) {
         binding.memMenu01.setTextColor(Color.parseColor("#DBDBDB"));
         binding.memMenu02.setTextColor(Color.parseColor("#DBDBDB"));
         binding.memMenu03.setTextColor(Color.parseColor("#DBDBDB"));
@@ -709,19 +714,19 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
         binding.memLine03.setBackgroundColor(Color.parseColor("#DBDBDB"));
         binding.memLine04.setBackgroundColor(Color.parseColor("#DBDBDB"));
 
-        if(i == 1){
+        if (i == 1) {
             memkind = -1;
             binding.memMenu01.setTextColor(Color.parseColor("#1445D0"));
             binding.memLine01.setBackgroundColor(Color.parseColor("#1445D0"));
-        }else if(i == 2){
+        } else if (i == 2) {
             memkind = 1;
             binding.memMenu02.setTextColor(Color.parseColor("#1445D0"));
             binding.memLine02.setBackgroundColor(Color.parseColor("#1445D0"));
-        }else if(i == 3){
+        } else if (i == 3) {
             memkind = 2; //(0,2,3)
             binding.memMenu03.setTextColor(Color.parseColor("#1445D0"));
             binding.memLine03.setBackgroundColor(Color.parseColor("#1445D0"));
-        }else if(i == 4){
+        } else if (i == 4) {
             memkind = 3;
             binding.memMenu04.setTextColor(Color.parseColor("#1445D0"));
             binding.memLine04.setBackgroundColor(Color.parseColor("#1445D0"));
@@ -744,65 +749,127 @@ public class MemberManagement extends AppCompatActivity implements View.OnTouchL
 
     CardView add_worktime_btn;
     TextView addbtn_tv;
+    private boolean isDragging = false;
+
+
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("직원추가");
-        add_worktime_btn.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
+        add_worktime_btn.setVisibility(place_owner_id.equals(USER_INFO_ID) ? View.VISIBLE : View.GONE);
+
+        // Set OnTouchListener to ImageView
+        add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
+            private int lastAction;
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                    switch (event.getActionMasked()) {
+                        case MotionEvent.ACTION_DOWN:
+                            initialX = v.getLeft();
+                            initialY = v.getTop();
+                            initialTouchX = event.getRawX();
+                            initialTouchY = event.getRawY();
+                            lastAction = MotionEvent.ACTION_DOWN;
+                            isDragging = false;
+                            break;
+
+                        case MotionEvent.ACTION_MOVE:
+                            if (!isDragging) {
+                                isDragging = true;
+                            }
+
+                            int dx = (int) (event.getRawX() - initialTouchX);
+                            int dy = (int) (event.getRawY() - initialTouchY);
+
+                            int newX = initialX + dx;
+                            int newY = initialY + dy;
+
+                            // Update the position of the ImageView
+                            v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+
+                            lastAction = MotionEvent.ACTION_MOVE;
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                            dlog.i("lastAction : " + lastAction);
+                            if (lastAction == MotionEvent.ACTION_DOWN) {
+                                // Handle click event on image here
+                                dlog.i("MemberOption true1");
+                                MemberOption mo = new MemberOption();
+                                mo.show(getSupportFragmentManager(), "MemberOption");
+                            }
+
+                            lastAction = MotionEvent.ACTION_UP;
+                            isDragging = false;
+                            break;
+
+                        default:
+                            return false;
+                    }
+                return true;
+            }
+        });
         add_worktime_btn.setOnClickListener(v -> {
             MemberOption mo = new MemberOption();
-            mo.show(getSupportFragmentManager(),"MemberOption");
+            mo.show(getSupportFragmentManager(), "MemberOption");
         });
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        int width = ((ViewGroup) v.getParent()).getWidth() - v.getWidth();
-        int height = ((ViewGroup) v.getParent()).getHeight() - v.getHeight();
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            oldXvalue = event.getX();
-            oldYvalue = event.getY();
-            //  Log.i("Tag1", "Action Down X" + event.getX() + "," + event.getY());
-            Log.i("Tag1", "Action Down rX " + event.getRawX() + "," + event.getRawY());
-        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            v.setX(event.getRawX() - oldXvalue);
-            v.setY(event.getRawY() - (oldYvalue + v.getHeight()));
-            //  Log.i("Tag2", "Action Down " + me.getRawX() + "," + me.getRawY());
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-
-            if (v.getX() > width && v.getY() > height) {
-                v.setX(width);
-                v.setY(height);
-            } else if (v.getX() < 0 && v.getY() > height) {
-                v.setX(0);
-                v.setY(height);
-            } else if (v.getX() > width && v.getY() < 0) {
-                v.setX(width);
-                v.setY(0);
-            } else if (v.getX() < 0 && v.getY() < 0) {
-                v.setX(0);
-                v.setY(0);
-            } else if (v.getX() < 0 || v.getX() > width) {
-                if (v.getX() < 0) {
-                    v.setX(0);
-                    v.setY(event.getRawY() - oldYvalue - v.getHeight());
-                } else {
-                    v.setX(width);
-                    v.setY(event.getRawY() - oldYvalue - v.getHeight());
-                }
-            } else if (v.getY() < 0 || v.getY() > height) {
-                if (v.getY() < 0) {
-                    v.setX(event.getRawX() - oldXvalue);
-                    v.setY(0);
-                } else {
-                    v.setX(event.getRawX() - oldXvalue);
-                    v.setY(height);
-                }
-            }
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//        int width = ((ViewGroup) v.getParent()).getWidth() - v.getWidth();
+//        int height = ((ViewGroup) v.getParent()).getHeight() - v.getHeight();
+//
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            oldXvalue = event.getX();
+//            oldYvalue = event.getY();
+//            //  Log.i("Tag1", "Action Down X" + event.getX() + "," + event.getY());
+//            Log.i("Tag1", "Action Down rX " + event.getRawX() + "," + event.getRawY());
+//        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//            v.setX(event.getRawX() - oldXvalue);
+//            v.setY(event.getRawY() - (oldYvalue + v.getHeight()));
+//            //  Log.i("Tag2", "Action Down " + me.getRawX() + "," + me.getRawY());
+//        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+//
+//            if (v.getX() > width && v.getY() > height) {
+//                v.setX(width);
+//                v.setY(height);
+//            } else if (v.getX() < 0 && v.getY() > height) {
+//                v.setX(0);
+//                v.setY(height);
+//            } else if (v.getX() > width && v.getY() < 0) {
+//                v.setX(width);
+//                v.setY(0);
+//            } else if (v.getX() < 0 && v.getY() < 0) {
+//                v.setX(0);
+//                v.setY(0);
+//            } else if (v.getX() < 0 || v.getX() > width) {
+//                if (v.getX() < 0) {
+//                    v.setX(0);
+//                    v.setY(event.getRawY() - oldYvalue - v.getHeight());
+//                } else {
+//                    v.setX(width);
+//                    v.setY(event.getRawY() - oldYvalue - v.getHeight());
+//                }
+//            } else if (v.getY() < 0 || v.getY() > height) {
+//                if (v.getY() < 0) {
+//                    v.setX(event.getRawX() - oldXvalue);
+//                    v.setY(0);
+//                } else {
+//                    v.setX(event.getRawX() - oldXvalue);
+//                    v.setY(height);
+//                }
+//            }
+//        }
+//        return true;
+//    }
 
 
 //    //-------몰입화면 설정

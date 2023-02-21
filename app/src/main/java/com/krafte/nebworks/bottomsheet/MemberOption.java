@@ -30,6 +30,8 @@ public class MemberOption extends BottomSheetDialogFragment {
     String data = "";
     Intent intent;
 
+    String place_name = "";
+
     // shared 저장값
     PreferenceHelper shardpref;
     int optionkind = 0;//0 -- 직원관리 , 1 -- 할일 관리
@@ -53,6 +55,8 @@ public class MemberOption extends BottomSheetDialogFragment {
         binding.certi01.setBackgroundResource(R.drawable.ic_pencil_icon);
         binding.certi02.setBackgroundResource(R.drawable.ic_mail_icon);
 
+        place_name = shardpref.getString("place_name","");
+
         return binding.getRoot();
     }
 
@@ -63,7 +67,28 @@ public class MemberOption extends BottomSheetDialogFragment {
             ClosePop();
         });
         binding.invateAdd.setOnClickListener(v -> {
-            pm.InviteMember(mContext);
+//            pm.InviteMember(mContext);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+
+            // String으로 받아서 넣기
+            String sendMessage = "["+place_name+"] 사장님과 즐겁게 근무해요.\n" +
+                    "\n" +
+                    "[매장근무하기]\n" +
+                    "\n" +
+                    "1.사장님넵 다운로드 \n" +
+                    "\n" +
+                    "Android: https://play.google.com/store/apps/details?id=com.krafte.nebworks\n" +
+                    "\n" +
+                    "IOS:  https://apps.apple.com/apps/details?id=com.krafte.nebworks\n" +
+                    "\n" +
+                    "2.앱 설치후 회원가입 > 로그인 > 근무자님! 으로 이동 후 매장추가 버튼 터치! \n" +
+                    "매장 찾기 후 사장님 번호로 매장 검색!\n" +
+                    "근무 신청 터치!\n" +
+                    "\n";
+            intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
+            Intent shareIntent = Intent.createChooser(intent, "share");
+            startActivity(shareIntent);
             ClosePop();
         });
         binding.cancel.setOnClickListener(v -> {

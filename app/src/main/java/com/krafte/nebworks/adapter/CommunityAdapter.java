@@ -123,16 +123,19 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             Resources res = mContext.getResources();
             String title = "";
             String content = "";
+
             if(forbiList.size() != 0){
                 for(int i = 0; i < forbiList.size(); i++){
-                    if(item.getTitle().contains(forbiList.get(i))){
-                        title = item.getTitle().replace(forbiList.get(i)," ○○○ ");
+                    if(item.getTitle().contains(forbiList.get(i).replace(" ",""))){
+                        title = item.getTitle().replace(forbiList.get(i).replace(" ","")," ○○○ ");
                     }
-                    if(item.getContents().contains(forbiList.get(i))){
-                        content = item.getContents().replace(forbiList.get(i)," ○○○ ");
+                    if(item.getContents().contains(forbiList.get(i).replace(" ",""))){
+                        content = item.getContents().replace(forbiList.get(i).replace(" ","")," ○○○ ");
                     }
                 }
             }
+            dlog.i("title : " + (title.equals("")?item.getTitle():title));
+            dlog.i("content : " + (content.equals("")?item.getContents():content));
 
             holder.title.setText(title.equals("")?item.getTitle():title);
 

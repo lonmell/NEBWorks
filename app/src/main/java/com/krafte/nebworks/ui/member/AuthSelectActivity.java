@@ -30,6 +30,7 @@ import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
+import com.krafte.nebworks.dataInterface.FobiddenInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityAuthselectBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -211,10 +212,48 @@ public class AuthSelectActivity extends AppCompatActivity {
         }
 
         //자유게시판 게시글 리스트
-        setRecyclerView();
+        getFobiddenWord();
+
     }
 
+    List<String> getWord = new ArrayList<>();
+    public void getFobiddenWord() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FobiddenInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FobiddenInterface api = retrofit.create(FobiddenInterface.class);
+        Call<String> call = api.getData("", "0");
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
+                    String jsonResponse = rc.getBase64decode(response.body());
+                    dlog.i("FobiddenList jsonResponse length : " + jsonResponse.length());
+                    dlog.i("FobiddenList jsonResponse : " + jsonResponse);
+                    try {
+                        //Array데이터를 받아올 때
+                        JSONArray Response = new JSONArray(jsonResponse);
+                        mList = new ArrayList<>();
+                        for(int i = 0;i < Response.length(); i++){
+                            getWord.add(Response.getJSONObject(i).getString("word"));
+                        }
+                        shardpref.putString("FobiddenWord",String.valueOf(getWord));
+                        setRecyclerView();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러 = " + t.getMessage());
+            }
+        });
+    }
     private void setBtnEvent() {
         binding.goOwner.setOnClickListener(v -> {
             shardpref.putString("USER_INFO_AUTH", "0");

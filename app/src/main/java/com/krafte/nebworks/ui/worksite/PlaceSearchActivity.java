@@ -96,14 +96,15 @@ public class PlaceSearchActivity extends AppCompatActivity {
 
             binding.searchStore.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    searchFilter(s.toString());
+                         searchFilter(s.toString());
                 }
             });
         }catch (Exception e){
@@ -130,9 +131,10 @@ public class PlaceSearchActivity extends AppCompatActivity {
             mAdapter.filterList(searchmList);
             mAdapter.notifyDataSetChanged();
         }else{
+            searchmList.clear();
             dlog.i("searchFilter 2");
-            binding.searchCnt.setText(String.valueOf(mList.size()));
-            mAdapter.filterList(mList);
+            binding.searchCnt.setText(String.valueOf(searchmList.size()));
+            mAdapter.filterList(searchmList);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -232,7 +234,9 @@ public class PlaceSearchActivity extends AppCompatActivity {
                             ));
                         }
                         mAdapter.notifyDataSetChanged();
-
+                        if(binding.searchStore.getText().length() == 0){
+                            searchFilter("");
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

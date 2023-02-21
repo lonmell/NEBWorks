@@ -26,6 +26,7 @@ import com.krafte.nebworks.ui.member.MemberManagement;
 import com.krafte.nebworks.ui.paymanagement.PayManagementActivity;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RandomOut;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ import java.util.List;
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
     private static final String TAG = "FirebaseMsgService";
+    RandomOut ro = new RandomOut();
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -57,6 +59,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     String message0 = "";
     String message1 = "";
     String USER_INFO_AUTH = "";
+    int setId = 0;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -66,11 +69,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         shardpref = new PreferenceHelper(mContext);
         intent = new Intent();
         notificationIntent = new Intent();
+//        setId      = shardpref.getInt("setId", 0);
+        setId      = Integer.parseInt(ro.getRandomNum(2));
         channelId1 = shardpref.getBoolean("channelId1", false);
         channelId2 = shardpref.getBoolean("channelId2", false);
         channelId3 = shardpref.getBoolean("channelId3", false);
         channelId4 = shardpref.getBoolean("channelId4", false);
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
@@ -81,6 +87,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
          * */
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
+
             //Background
             Log.d(TAG, "1getData data payload: " + remoteMessage.getData());
             Log.d(TAG, "1getData Notification title: " + remoteMessage.getData().get("title"));
@@ -195,7 +202,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentIntent(pendingIntent)// 사용자가 노티피케이션을 탭시 ResultActivity로 이동하도록 설정
                 .setAutoCancel(true);             // 메시지를 터치하면 메시지가 자동으로 제거됨
 
-        notificationManager.notify(1234, builder.build()); // 고유숫자로 노티피케이션 동작시킴
+        notificationManager.notify(setId, builder.build()); // 고유숫자로 노티피케이션 동작시킴
+
+        shardpref.putInt("setId", setId);
     }
 
     @SuppressLint({"ObsoleteSdkInt", "LongLogTag"})
@@ -296,8 +305,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                             .build();
             startForeground(1, mNotification);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(1234 /* ID of notification */, mNotification);
-
+            notificationManager.notify(setId /* ID of notification */, mNotification);
+            shardpref.putInt("setId", setId);
         } else {
             Log.i(TAG,"mNotification SHOW 2");
             mNotification =
@@ -310,7 +319,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                             .build();
             startForeground(1, mNotification);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(1234 /* ID of notification */, mNotification);
+            notificationManager.notify(setId /* ID of notification */, mNotification);
+            shardpref.putInt("setId", setId);
         }
 
     }
@@ -338,9 +348,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         } else { // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
             builder.setSmallIcon(R.drawable.ic_launcher);
             return builder;
-
         }
-
     }
-
 }

@@ -592,7 +592,7 @@ public class LoginActivity extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                     }
-                                } else if (Response.length() > 1) {
+                                } else {
                                     shardpref.remove("event");
                                     pm.PlaceList(mContext);
                                 }

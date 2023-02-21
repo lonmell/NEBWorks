@@ -425,8 +425,6 @@ public class IntroActivity extends AppCompatActivity {
                                 } else {
                                     UserCheck(nidProfileResponse.getProfile().getEmail());
                                 }
-
-
                             }, 1000); //1초 후 인트로 실행
                         }
 
@@ -805,7 +803,7 @@ public class IntroActivity extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                     }
-                                } else if (Response.length() > 1) {
+                                } else {
                                     try {
                                         shardpref.remove("event");
                                         pm.PlaceList(mContext);

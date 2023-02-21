@@ -57,7 +57,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-
+/*
+* 2023-02-21 초대 기능을 BottomSheet로 이동하면서 안쓰게된 페이지
+* */
 public class InviteMemberActivity extends AppCompatActivity {
     private ActivityInviteMemberBinding binding;
     private final static String TAG = "InviteMemberActivity";

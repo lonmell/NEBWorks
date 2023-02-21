@@ -921,7 +921,7 @@ public class HomeFragment2 extends Fragment {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        if(Response.equals("[]")){
+                        if(Response.toString().equals("[]")){
                             HomeFragment2.super.onResume();
                         }else{
                             dlog.i("workhour : " + Response.getJSONObject(0).getString("workhour"));
