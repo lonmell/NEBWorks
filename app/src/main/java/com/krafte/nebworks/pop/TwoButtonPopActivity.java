@@ -219,7 +219,9 @@ public class TwoButtonPopActivity extends Activity {
                     }
 //                    FcmTokenDel();
                     finish();
+                    shardpref.remove("USER_INFO_AUTH");
                 }else if(flag.equals("회원탈퇴")){
+                    shardpref.remove("USER_INFO_AUTH");
                     UserDelete();
                     FcmTokenDel();
                 }else if (flag.equals("댓글삭제")) {

@@ -569,7 +569,12 @@ public class HomeFragment2 extends Fragment {
                     dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
                     shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
                     shardpref.putString("place_end_time", place_end_time);
-                    binding.title.setText(place_name);
+                    if (!USER_INFO_AUTH.isEmpty()) {
+                        dlog.i("place_name: " + place_name);
+                        binding.title.setText(place_name);
+                    } else {
+                        binding.title.setText("나의 매장");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -633,7 +638,7 @@ public class HomeFragment2 extends Fragment {
                         dlog.i("------UserCheck-------");
 
                         shardpref.putString("mem_name", mem_name);
-                        if (USER_INFO_AUTH.isEmpty()) {
+                        if (USER_INFO_AUTH.isEmpty() || USER_INFO_AUTH.equals("-1")) {
                             binding.ioTime.setText("김이름님 오늘도 화이팅하세요!");
                         } else {
                             binding.ioTime.setText(mem_name + "님 오늘도 화이팅하세요!");
@@ -697,7 +702,11 @@ public class HomeFragment2 extends Fragment {
                                 String jikgup = Response.getJSONObject(0).getString("jikgup");
 
                                 dlog.i("setAll placeName: " + join_date);
-                                binding.paynum.setText(pay + "원");
+                                if (pay.equals("null")) {
+                                    binding.paynum.setText("0원");
+                                } else {
+                                    binding.paynum.setText(pay + "원");
+                                }
                                 binding.joinPlaceDate.setText(join_date + " 입사");
                             }
                         } catch (JSONException e) {
