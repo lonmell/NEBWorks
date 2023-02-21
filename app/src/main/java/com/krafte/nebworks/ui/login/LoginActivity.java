@@ -376,12 +376,13 @@ public class LoginActivity extends AppCompatActivity {
     private void onEvent() {
         binding.buttonOAuthLoginImg.setOnClickListener(v -> {
             BtnOneCircleFun(false);
-            int sdkinfo = diu.getDeviceSdk();
-            if(sdkinfo > 31){
-                Toast_Nomal("현재 버전에서는 사용할 수 없는 기능입니다.");
-            }else{
-                naverIdLoginSDK.authenticate(LoginActivity.this, oAuthLoginCallback);
-            }
+//            int sdkinfo = diu.getDeviceSdk();
+//            if(sdkinfo > 31){
+//                Toast_Nomal("현재 버전에서는 사용할 수 없는 기능입니다.");
+//            }else{
+//                naverIdLoginSDK.authenticate(LoginActivity.this, oAuthLoginCallback);
+//            }
+            naverIdLoginSDK.authenticate(LoginActivity.this, oAuthLoginCallback);
         });
 
         binding.loginBtn.setOnClickListener(v -> {
