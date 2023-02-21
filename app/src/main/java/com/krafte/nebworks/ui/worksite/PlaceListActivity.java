@@ -145,9 +145,12 @@ public class PlaceListActivity extends AppCompatActivity {
             dlog.i("USER_INFO_NAME : "      + USER_INFO_NAME);
             dlog.i("USER_INFO_AUTH : "      + USER_INFO_AUTH);
             dlog.i("-----onResume-----");
-            if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty()){
+            if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty() && !USER_INFO_ID.isEmpty()){
                 GetPlaceList();
                 getNotReadFeedcnt();
+            } else {
+                binding.storeCnt.setText("0개");
+                binding.noData.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,7 +162,13 @@ public class PlaceListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         shardpref.remove("page_state");
-
+        event           = shardpref.getString("event", "");
+        if (!event.isEmpty()) {
+            binding.logoutArea.setVisibility(View.GONE);
+        } else {
+            binding.logoutArea.setVisibility(View.VISIBLE);
+            binding.backBtn.setVisibility(View.GONE);
+        }
     }
 
     private void setBtnEvent() {

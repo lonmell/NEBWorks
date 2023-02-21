@@ -87,6 +87,7 @@ public class StoreDivisionPopActivity extends BottomSheetDialogFragment {
         setItem.add("도시락 / 반찬");
         setItem.add("백화점 / 쇼핑몰");
         setItem.add("유통점 / 마트");
+        setItem.add("PC방");
 
         mList = new ArrayList<>();
         searchmList = new ArrayList<>();
