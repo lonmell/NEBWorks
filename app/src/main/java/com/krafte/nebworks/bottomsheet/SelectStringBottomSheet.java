@@ -159,10 +159,10 @@ public class SelectStringBottomSheet extends BottomSheetDialogFragment {
         mAdapter.notifyDataSetChanged();
         mAdapter.setOnItemClickListener(new ListStringAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int position) {
-                dlog.i("Get onItem : " + mList.get(position));
+            public void onItemClick(View v, String name) {
+                dlog.i("Get onItem : " + name);
                 if (mListener != null) {
-                    mListener.onItemClick(v, mList.get(position).getItem());
+                    mListener.onItemClick(v, name);
                 }
                 dismiss();
             }

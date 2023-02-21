@@ -36,7 +36,7 @@ public class ListStringAdapter extends RecyclerView.Adapter<ListStringAdapter.Vi
     Dlog dlog = new Dlog();
 
     public interface OnItemClickListener {
-        void onItemClick(View v, int position);
+        void onItemClick(View v, String name);
     }
 
     private OnItemClickListener mListener = null;
@@ -100,7 +100,7 @@ public class ListStringAdapter extends RecyclerView.Adapter<ListStringAdapter.Vi
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     if (mListener != null) {
-                        mListener.onItemClick(view,pos);
+                        mListener.onItemClick(view, item_name.getText().toString());
                     }
                 }
             });
