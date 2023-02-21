@@ -321,6 +321,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(pos);
                     shardpref.putString("stub_place_id",place_id);
                     shardpref.putString("stub_user_id",item.getId());
+                    shardpref.putString("stub_user_name",item.getName());
                     shardpref.putString("stub_user_account",item.getAccount());
                     shardpref.putString("change_place_name",item.getPlace_name());
                     pm.MemberDetail(mContext);

@@ -115,7 +115,7 @@ public class PlaceSearchActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     public void searchFilter(String searchText) {
-        if(searchText.length() != 0 && mList.size() != 0){
+        if(searchText.length() == 11 && mList.size() != 0){
             searchmList.clear();
             dlog.i("searchFilter 1");
             dlog.i("mList.size() : " + mList.size());

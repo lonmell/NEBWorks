@@ -176,11 +176,14 @@ public class AddWorkPartActivity extends AppCompatActivity {
             binding.memSelect.setVisibility(View.VISIBLE);
             item_user_id = shardpref.getString("item_user_id", "");
             item_user_name = shardpref.getString("item_user_name", "");
+            dlog.i("item_user_id : " + item_user_id);
+            dlog.i("item_user_name : " + item_user_name);
             if (!item_user_id.isEmpty() && !item_user_name.isEmpty()) {
                 binding.memName.setVisibility(View.VISIBLE);
                 binding.memCnt.setVisibility(View.GONE);
                 binding.memSelect.setVisibility(View.GONE);
                 binding.memName.setText(item_user_name);
+                binding.selectMem.setClickable(false);
             } else {
 //                binding.memName.setVisibility(View.GONE);
 //                binding.memCnt.setVisibility(View.VISIBLE);
@@ -203,8 +206,6 @@ public class AddWorkPartActivity extends AppCompatActivity {
             }
             binding.selectMem.setClickable(true);
         }
-
-
 
         if (workPartState) {
             getWorkPart();
