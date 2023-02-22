@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -754,7 +755,6 @@ public class MemberManagement extends AppCompatActivity {
     TextView addbtn_tv;
     private boolean isDragging = false;
 
-
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
@@ -762,80 +762,71 @@ public class MemberManagement extends AppCompatActivity {
         add_worktime_btn.setVisibility(place_owner_id.equals(USER_INFO_ID) ? View.VISIBLE : View.GONE);
 
         // Set OnTouchListener to ImageView
-//        add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
-//            private int lastAction;
-//            private int initialX;
-//            private int initialY;
-//            private float initialTouchX;
-//            private float initialTouchY;
-//
-//            int newX;
-//            int newY;
-//            private int lastnewX;
-//            private int lastnewY;
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//                    switch (event.getActionMasked()) {
-//                        case MotionEvent.ACTION_DOWN:
-//                            initialX = v.getLeft();
-//                            initialY = v.getTop();
-//                            initialTouchX = event.getRawX();
-//                            initialTouchY = event.getRawY();
-//                            lastAction = MotionEvent.ACTION_DOWN;
-//                            isDragging = false;
-//                            break;
-//
-//                        case MotionEvent.ACTION_MOVE:
-//                            if (!isDragging) {
-//                                isDragging = true;
-//                            }
-//
-//                            int dx = (int) (event.getRawX() - initialTouchX);
-//                            int dy = (int) (event.getRawY() - initialTouchY);
-//
-//                            newX = initialX + dx;
-//                            newY = initialY + dy;
-//
-//                            // Update the position of the ImageView
-//                            v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
-//                            lastAction = MotionEvent.ACTION_MOVE;
-//                            break;
-//
-//                        case MotionEvent.ACTION_UP:
-//                            lastAction = MotionEvent.ACTION_UP;
-//                            if(lastnewX != newX || lastnewY != newY){
-//                                dlog.i("newX : " + newX + "/ newY : " + newY);
-//                                dlog.i("lastnewX : " + lastnewX + "/ lastnewY : " + lastnewY);
-//                                dlog.i("newX - lastnewX : " + (newX - lastnewX));
-//                                dlog.i("newY - lastnewY : " + (newY - lastnewY));
-//                                dlog.i("lastnewX != newX 1: " + (lastnewX != newX));
-//                                dlog.i("lastnewY != newY 1: " + (lastnewY != newY));
-//                                lastnewX = newX;
-//                                lastnewY = newY;
-//                            }else {
-//                                //움직임에 변화가 없을때
-//                                MemberOption mo = new MemberOption();
-//                                mo.show(getSupportFragmentManager(), "MemberOption");
-//                                dlog.i("newX - lastnewX : " + (newX - lastnewX));
-//                                dlog.i("newY - lastnewY : " + (newY - lastnewY));
-//                                dlog.i("lastnewX != newX 2: " + (lastnewX != newX));
-//                                dlog.i("lastnewY != newY 2: " + (lastnewY != newY));
-//                            }
-//                            isDragging = false;
-//                            break;
-//
-//                        default:
-//                            return false;
-//                    }
-//                return true;
-//            }
-//        });
-        add_worktime_btn.setOnClickListener(v -> {
-            MemberOption mo = new MemberOption();
-            mo.show(getSupportFragmentManager(), "MemberOption");
+        add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
+            private int lastAction;
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            int newX;
+            int newY;
+            private int lastnewX;
+            private int lastnewY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                    switch (event.getActionMasked()) {
+                        case MotionEvent.ACTION_DOWN:
+                            initialX = v.getLeft();
+                            initialY = v.getTop();
+                            initialTouchX = event.getRawX();
+                            initialTouchY = event.getRawY();
+                            lastAction = MotionEvent.ACTION_DOWN;
+                            isDragging = false;
+                            break;
+
+                        case MotionEvent.ACTION_MOVE:
+                            if (!isDragging) {
+                                isDragging = true;
+                            }
+
+                            int dx = (int) (event.getRawX() - initialTouchX);
+                            int dy = (int) (event.getRawY() - initialTouchY);
+
+                            newX = initialX + dx;
+                            newY = initialY + dy;
+
+                            // Update the position of the ImageView
+                            v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+                            lastAction = MotionEvent.ACTION_MOVE;
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                            lastAction = MotionEvent.ACTION_UP;
+                            int Xdistance = (newX - lastnewX);
+                            int Ydistance = (newY - lastnewY);
+                            if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
+                                MemberOption mo = new MemberOption();
+                                mo.show(getSupportFragmentManager(), "MemberOption");
+                            }else{
+                                lastnewX = newX;
+                                lastnewY = newY;
+                            }
+                            isDragging = false;
+                            break;
+
+                        default:
+                            return false;
+                    }
+                return true;
+            }
         });
+//        add_worktime_btn.setOnClickListener(v -> {
+//            MemberOption mo = new MemberOption();
+//            mo.show(getSupportFragmentManager(), "MemberOption");
+//        });
     }
 
 

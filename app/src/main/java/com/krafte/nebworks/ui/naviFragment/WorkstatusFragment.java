@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -22,42 +23,34 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
-import com.krafte.nebworks.bottomsheet.WorkstatusBottomSheet;
 import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
-import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
-import com.krafte.nebworks.dataInterface.WorkstatusCalendersetData;
 import com.krafte.nebworks.databinding.WorkstatusfragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment1;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment2;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment3;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment4;
-import com.krafte.nebworks.util.SwipeFrameLayout;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
-import com.krafte.nebworks.util.OnSwipeTouchListener;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
+import com.krafte.nebworks.util.SwipeFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -730,16 +723,77 @@ public class WorkstatusFragment extends Fragment {
 
     CardView add_worktime_btn;
     TextView addbtn_tv;
+    private boolean isDragging = false;
 
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("근무추가");
-        add_worktime_btn.setOnClickListener(v -> {
-            if (USER_INFO_AUTH.isEmpty()) {
-                isAuth();
-            } else {
-                pm.AddWorkPart(mContext);
+        add_worktime_btn.setVisibility(place_owner_id.equals(USER_INFO_ID) ? View.VISIBLE : View.GONE);
+
+        // Set OnTouchListener to ImageView
+        add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
+            private int lastAction;
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            int newX;
+            int newY;
+            private int lastnewX;
+            private int lastnewY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = v.getLeft();
+                        initialY = v.getTop();
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        lastAction = MotionEvent.ACTION_DOWN;
+                        isDragging = false;
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        if (!isDragging) {
+                            isDragging = true;
+                        }
+
+                        int dx = (int) (event.getRawX() - initialTouchX);
+                        int dy = (int) (event.getRawY() - initialTouchY);
+
+                        newX = initialX + dx;
+                        newY = initialY + dy;
+
+                        // Update the position of the ImageView
+                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+                        lastAction = MotionEvent.ACTION_MOVE;
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        lastAction = MotionEvent.ACTION_UP;
+                        int Xdistance = (newX - lastnewX);
+                        int Ydistance = (newY - lastnewY);
+                        if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
+                            if (USER_INFO_AUTH.isEmpty()) {
+                                isAuth();
+                            } else {
+                                pm.AddWorkPart(mContext);
+                            }
+                        }else{
+                            lastnewX = newX;
+                            lastnewY = newY;
+                        }
+                        isDragging = false;
+                        break;
+
+                    default:
+                        return false;
+                }
+                return true;
             }
         });
     }
