@@ -484,15 +484,11 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.repeatBtn.setBackgroundResource(R.drawable.task_check_white);
                 binding.selectRepeatBtn.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
-                binding.inputDateBox01.setVisibility(View.GONE);
-                binding.inputDateBox02.setVisibility(View.GONE);
             } else {
                 RepeatCheck = false;
                 binding.repeatBtn.setBackgroundResource(R.drawable.task_check_none);
                 binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#F5F6F8"));
                 binding.repeatTv.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                binding.inputDateBox01.setVisibility(View.VISIBLE);
-                binding.inputDateBox02.setVisibility(View.VISIBLE);
             }
 
             //캘린더 세팅
