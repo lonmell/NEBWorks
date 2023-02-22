@@ -324,7 +324,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/service_radio01"
-                    android:text="휴대폰 본인 인출 서비스 이용약관동의(필수)"
+                    android:text="휴대폰 본인 인증 서비스 이용약관동의(필수)"
                     android:textColor="#666666"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText" />
@@ -492,6 +492,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
+                android:visibility="invisible"
+                android:clickable="false"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="@string/view_tv"

@@ -48,6 +48,21 @@ public class AddContractPage01 extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        String termaccept = shardpref.getString("termaccept","");
+        if(!termaccept.equals("")){
+            if(termaccept.equals("01")){
+                binding.arrow1.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.arrow1.setRotation(-90);
+            }else if(termaccept.equals("02")){
+                binding.arrow2.setBackgroundResource(R.drawable.ic_full_round_check);
+                binding.arrow2.setRotation(-90);
+            }
+        }
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("termaccept");
     }
 
     private void setBtnEvent(){

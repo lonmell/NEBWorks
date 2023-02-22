@@ -67,6 +67,11 @@ public class LawPopActivity extends Activity {
     private void setBtnEvent() {
         binding.closeBtn.setOnClickListener(v -> {
             //데이터 전달하기
+            if(flag.equals("1")){
+                shardpref.putString("termaccept","01");
+            }else if(flag.equals("2")){
+                shardpref.putString("termaccept","02");
+            }
             Intent intent = new Intent();
             intent.putExtra("result", "Close Popup");
             setResult(RESULT_OK, intent);

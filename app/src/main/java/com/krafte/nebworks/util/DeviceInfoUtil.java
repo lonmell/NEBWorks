@@ -25,7 +25,7 @@ public class DeviceInfoUtil {
 //     * device 브랜드 가져오기
 //     * @return
 //     */
-//    public static String getDeviceBrand() {
+//    public String getDeviceBrand() {
 //        return Build.BRAND;
 //    }
 //

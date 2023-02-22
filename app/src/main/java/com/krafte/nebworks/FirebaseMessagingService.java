@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
+import com.krafte.nebworks.data.FCMMessageData;
 import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
 import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
 import com.krafte.nebworks.ui.feed.FeedListActivity;
@@ -37,6 +38,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
     private static final String TAG = "FirebaseMsgService";
     RandomOut ro = new RandomOut();
+    String NOTI_GROUP_ID = "com.study.aos.noti_group";
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -62,6 +64,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     String USER_INFO_AUTH = "";
     int setId = 0;
 
+    String messageSnippet1 = "";
+    String messageSnippet2 = "";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // ...
@@ -71,7 +76,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         intent = new Intent();
         notificationIntent = new Intent();
 //        setId      = shardpref.getInt("setId", 0);
-        setId      = Integer.parseInt(ro.getRandomNum(2));
+//        setId      = Integer.parseInt(ro.getRandomNum(2));
         channelId1 = shardpref.getBoolean("channelId1", false);
         channelId2 = shardpref.getBoolean("channelId2", false);
         channelId3 = shardpref.getBoolean("channelId3", false);
@@ -193,28 +198,49 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }else if(click_action.equals("EmployeeProcess")){
             shardpref.putInt("SELECT_POSITION",0);
             notificationIntent = new Intent(this, MainFragment2.class);
+        }else if(click_action.equals("Contract1")){
+            shardpref.putInt("SELECT_POSITION",0);
+            notificationIntent = new Intent(this, ContractFragmentActivity.class);
         }
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        notificationIntent = new Intent(this, IntroActivity.class);
-//        notificationIntent.putExtra("click_action", click_action);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        if(!FCMMessageData.getInstance().getMessageSnippet2().equals("")){
+            FCMMessageData.getInstance().setMessageSnippet1(message);
+            FCMMessageData.getInstance().setMessageSnippet2("");
+        }else{
+            if(FCMMessageData.getInstance().getMessageSnippet1().equals("")){
+                FCMMessageData.getInstance().setMessageSnippet1(message);
+            } else if(FCMMessageData.getInstance().getMessageSnippet2().equals("")){
+                FCMMessageData.getInstance().setMessageSnippet2(message);
+            }
+        }
+        messageSnippet1 = FCMMessageData.getInstance().getMessageSnippet1();
+        messageSnippet2 = FCMMessageData.getInstance().getMessageSnippet2();
+
+        Log.i("FireBaseMessagingService","messageSnippet11 : " + messageSnippet1);
+        Log.i("FireBaseMessagingService","messageSnippet22 : " + messageSnippet2);
 
         // 1. 알림 메시지를 관리하는 notificationManager 객체 추출
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = getNotificationBuilder(notificationManager, "chennal id", "첫번째 채널입니다");
 
-        builder.setContentTitle("사장님!넵")       // 콘솔에서 설정한 타이틀
+        builder.setContentTitle("")       // 콘솔에서 설정한 타이틀
                 .setContentText(message)         // 콘솔에서 설정한 내용
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setSmallIcon(R.drawable.ic_launcher)
+                .setGroup(NOTI_GROUP_ID)
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .addLine(messageSnippet1)
+                        .addLine(messageSnippet2))
                 .setContentIntent(pendingIntent)// 사용자가 노티피케이션을 탭시 ResultActivity로 이동하도록 설정
                 .setAutoCancel(true);             // 메시지를 터치하면 메시지가 자동으로 제거됨
 
-        notificationManager.notify(setId, builder.build()); // 고유숫자로 노티피케이션 동작시킴
-
-        shardpref.putInt("setId", setId);
+//        notificationManager.notify(setId, builder.build()); // 고유숫자로 노티피케이션 동작시킴
+        notificationManager.notify(123 /* ID of notification */, builder.build());
+//        shardpref.putInt("setId", setId);
     }
 
     @SuppressLint({"ObsoleteSdkInt", "LongLogTag"})
@@ -245,10 +271,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }else if(click_action.equals("EmployeeProcess")){
             shardpref.putInt("SELECT_POSITION",0);
             intent = new Intent(this, MainFragment2.class);
+        }else if(click_action.equals("Contract1")){
+            shardpref.putInt("SELECT_POSITION",0);
+            intent = new Intent(this, ContractFragmentActivity.class);
         }
 
-//        Intent intent = new Intent(this, IntroActivity.class);
-//        intent.putExtra("click_action", click_action);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_MUTABLE);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
@@ -293,10 +320,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                     String.valueOf(R.string.channel_4),
                     NotificationManager.IMPORTANCE_NONE
             );
+            manager.createNotificationChannel(serviceChannel4);
 
             //근로계약서 및 기타알림
             NotificationChannel serviceChannel5 = new NotificationChannel(
-                    NOTIFICATION_CHANNEL4,
+                    NOTIFICATION_CHANNEL5,
                     String.valueOf(R.string.channel_5),
                     NotificationManager.IMPORTANCE_NONE
             );
@@ -315,20 +343,40 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Channel = NOTIFICATION_CHANNEL5;
         }
 
+        if(!FCMMessageData.getInstance().getMessageSnippet2().equals("")){
+            FCMMessageData.getInstance().setMessageSnippet1(message);
+            FCMMessageData.getInstance().setMessageSnippet2("");
+        }else{
+            if(FCMMessageData.getInstance().getMessageSnippet1().equals("")){
+                FCMMessageData.getInstance().setMessageSnippet1(message);
+            } else if(FCMMessageData.getInstance().getMessageSnippet2().equals("")){
+                FCMMessageData.getInstance().setMessageSnippet2(message);
+            }
+        }
+        messageSnippet1 = FCMMessageData.getInstance().getMessageSnippet1();
+        messageSnippet2 = FCMMessageData.getInstance().getMessageSnippet2();
+        Log.i("FireBaseMessagingService","messageSnippet1 : " + messageSnippet1);
+        Log.i("FireBaseMessagingService","messageSnippet2 : " + messageSnippet2);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(TAG,"mNotification SHOW 1");
 
             mNotification =
                     new Notification.Builder(this,Channel)
-                            .setContentTitle("사장님!넵")
+                            .setContentTitle("")
                             .setContentText(message)
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setContentIntent(pendingIntent)
+                            .setGroup(NOTI_GROUP_ID)
+                            .setStyle(new Notification.InboxStyle()
+                                    .addLine(messageSnippet1)
+                                    .addLine(messageSnippet2))
                             .build();
             startForeground(1, mNotification);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(setId /* ID of notification */, mNotification);
-            shardpref.putInt("setId", setId);
+//         notificationManager.notify(setId /* ID of notification */, mNotification);
+            notificationManager.notify(123 /* ID of notification */, mNotification);
+//            shardpref.putInt("setId", setId);
         } else {
             Log.i(TAG,"mNotification SHOW 2");
             mNotification =
@@ -338,11 +386,15 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setSound(defaultSoundUri)
                             .setContentIntent(pendingIntent)
+                            .setGroup(NOTI_GROUP_ID)
+                            .setStyle(new NotificationCompat.InboxStyle()
+                                    .addLine(messageSnippet1)
+                                    .addLine(messageSnippet2))
                             .build();
             startForeground(1, mNotification);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(setId /* ID of notification */, mNotification);
-            shardpref.putInt("setId", setId);
+            notificationManager.notify(123 /* ID of notification */, mNotification);
+//            shardpref.putInt("setId", setId);
         }
 
     }

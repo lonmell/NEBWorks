@@ -1,44 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:padding="10dp">
-    <ScrollView
-        android:layout_width="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    tools:context=".pop.TermViewActivity"
+    style="@style/BottomSheetDialog">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
-        <LinearLayout
+        app:cardBackgroundColor="@color/white"
+        android:background="#ffffff">
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="start"
+            android:text="약관"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText" />
 
-            <TextView
-                android:id="@+id/term_view_tv"
+        <LinearLayout
+            android:id="@+id/top_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/title"
+            android:background="#dbdbdb"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/close"
+            android:layout_below="@+id/top_line"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="Term Text View"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                tools:ignore="HardcodedText" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/close"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/login_btn_round"
-                android:fontFamily="@font/applesdgothicneo"
-                android:gravity="center"
-                android:text="닫기"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                tools:ignore="HardcodedText,TextContrastCheck" />
-        </LinearLayout>
-    </ScrollView>
+                <TextView
+                    android:id="@+id/term_view_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:gravity="start"
+                    android:text="Term Text View"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
 
+            </LinearLayout>
+        </ScrollView>
+        <TextView
+            android:id="@+id/close"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/blue_200"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:text="동의하고 계속하기"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:ignore="HardcodedText,TextContrastCheck" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

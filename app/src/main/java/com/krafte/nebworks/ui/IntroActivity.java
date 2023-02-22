@@ -160,6 +160,7 @@ public class IntroActivity extends AppCompatActivity {
         notificationManager.createNotificationChannel(new NotificationChannel("2", "결재 알림", NotificationManager.IMPORTANCE_DEFAULT));
         notificationManager.createNotificationChannel(new NotificationChannel("3", "근무시간 알림", NotificationManager.IMPORTANCE_DEFAULT));
         notificationManager.createNotificationChannel(new NotificationChannel("4", "이력서/면접", NotificationManager.IMPORTANCE_DEFAULT));
+        notificationManager.createNotificationChannel(new NotificationChannel("5", "근로계약서 및 기타 알림", NotificationManager.IMPORTANCE_DEFAULT));
 
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
         USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "-99");// 0:점주 / 1:근로자
@@ -565,51 +566,54 @@ public class IntroActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        dlog.i("versionCode == Integer.parseInt(lastVersion) : " + (versionCode == Integer.parseInt(lastVersion)));
-        dlog.i("versionCode < Integer.parseInt(lastVersion) : " + (versionCode < Integer.parseInt(lastVersion)));
-        dlog.i("versionCode : " + versionCode);
-        dlog.i("lastVersion : " + lastVersion);
-        if (versionCode == Integer.parseInt(lastVersion)) {
-            updateconfirm = true;
-            Log.i(TAG, "업데이트 필요 X");
-            if (USER_LOGIN_METHOD.equals("Kakao")) {
-                KakaoSetting();
-            } else if (USER_LOGIN_METHOD.equals("Google")) {
-                GoogleSetting();
-            } else if (USER_LOGIN_METHOD.equals("Naver")) {
-                NaverSetting();
-            } else {
-                handler = new Handler();
-                handler.postDelayed(() -> {
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent); //인트로 실행 후 바로 넘어감.
-                    finish();
-                }, 1000); //1초 후 인트로 실행
-            }
-        } else if (versionCode != Integer.parseInt(lastVersion)) {
-            if (!UPDATEYN.equals("N")) {
-                updateconfirm = false;
-                Log.i(TAG, "업데이트 필요 0");
-                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-                intent.putExtra("flag", "업데이트");
-                intent.putExtra("data", "최신버전 앱으로 업데이트를 위해\n스토어로 이동합니다");
-                intent.putExtra("left_btn_txt", "나중에");
-                intent.putExtra("right_btn_txt", "업데이트");
-                startActivity(intent);
-                overridePendingTransition(R.anim.translate_up, 0);
-            } else {
+        if(!lastVersion.equals("")){
+            dlog.i("versionCode == Integer.parseInt(lastVersion) : " + (versionCode == Integer.parseInt(lastVersion)));
+            dlog.i("versionCode < Integer.parseInt(lastVersion) : " + (versionCode < Integer.parseInt(lastVersion)));
+            dlog.i("versionCode : " + versionCode);
+            dlog.i("lastVersion : " + lastVersion);
+            if (versionCode == Integer.parseInt(lastVersion)) {
                 updateconfirm = true;
-                handler = new Handler();
-                handler.postDelayed(() -> {
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent); //인트로 실행 후 바로 넘어감.
-                    finish();
-                }, 1000); //1초 후 인트로 실행
+                Log.i(TAG, "업데이트 필요 X");
+                if (USER_LOGIN_METHOD.equals("Kakao")) {
+                    KakaoSetting();
+                } else if (USER_LOGIN_METHOD.equals("Google")) {
+                    GoogleSetting();
+                } else if (USER_LOGIN_METHOD.equals("Naver")) {
+                    NaverSetting();
+                } else {
+                    handler = new Handler();
+                    handler.postDelayed(() -> {
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent); //인트로 실행 후 바로 넘어감.
+                        finish();
+                    }, 1000); //1초 후 인트로 실행
+                }
+            } else if (versionCode != Integer.parseInt(lastVersion)) {
+                if (!UPDATEYN.equals("N")) {
+                    updateconfirm = false;
+                    Log.i(TAG, "업데이트 필요 0");
+                    Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                    intent.putExtra("flag", "업데이트");
+                    intent.putExtra("data", "최신버전 앱으로 업데이트를 위해\n스토어로 이동합니다");
+                    intent.putExtra("left_btn_txt", "나중에");
+                    intent.putExtra("right_btn_txt", "업데이트");
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.translate_up, 0);
+                } else {
+                    updateconfirm = true;
+                    handler = new Handler();
+                    handler.postDelayed(() -> {
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent); //인트로 실행 후 바로 넘어감.
+                        finish();
+                    }, 1000); //1초 후 인트로 실행
+                }
+            } else if (lastVersion.equals("")) {
+                updateconfirm = true;
+                Log.i(TAG, "최신버전이 안가져와짐");
             }
-        } else if (lastVersion.equals("")) {
-            updateconfirm = true;
-            Log.i(TAG, "최신버전이 안가져와짐");
         }
+
     }
 
 

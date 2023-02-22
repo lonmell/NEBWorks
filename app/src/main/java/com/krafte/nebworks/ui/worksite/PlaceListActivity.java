@@ -298,11 +298,13 @@ public class PlaceListActivity extends AppCompatActivity {
                                 dlog.i("SIZE : " + Response.length());
                                 if (jsonResponse.equals("[]")) {
                                     binding.noData.setVisibility(View.VISIBLE);
+                                    binding.notiArea.setVisibility(View.GONE);
                                     dlog.i("SetNoticeListview Thread run! ");
                                     dlog.i("GET SIZE : " + Response.length());
                                     binding.storeCnt.setText(Response.length() + "개");
                                 } else {
                                     binding.noData.setVisibility(View.GONE);
+                                    binding.notiArea.setVisibility(View.VISIBLE);
                                     for (int i = 0; i < Response.length(); i++) {
                                         JSONObject jsonObject = Response.getJSONObject(i);
                                         store_cnt++;

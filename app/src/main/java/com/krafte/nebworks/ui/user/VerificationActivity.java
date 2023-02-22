@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,6 +35,7 @@ import com.krafte.nebworks.dataInterface.UserNumSelectInterface;
 import com.krafte.nebworks.databinding.ActivityVerificationBinding;
 import com.krafte.nebworks.pop.AlertPopActivity;
 import com.krafte.nebworks.pop.OneButtonPopActivity;
+import com.krafte.nebworks.pop.TermViewActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -79,7 +81,8 @@ public class VerificationActivity extends AppCompatActivity {
     String USER_INFO_EMAIL = "";
 
     //사용자 정보 체크
-
+    TelephonyManager telephonyManager; //--통신사 체크
+    String TelecomName = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +101,10 @@ public class VerificationActivity extends AppCompatActivity {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
             myTimer = new MyTimer(60000, 1000);
+            telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
 
+            TelecomName = telephonyManager.getNetworkOperatorName();
+            dlog.i("통신사 : " + TelecomName);
             onBtnEvent();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -156,6 +162,26 @@ public class VerificationActivity extends AppCompatActivity {
             BtnOneCircleFun(false);
             UserCheck(1);
         });
+
+        binding.viewTv01.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, TermViewActivity.class);
+            intent.putExtra("data", TelecomName);
+            intent.putExtra("flag", "1");
+            startActivity(intent);
+        });
+        binding.viewTv02.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, TermViewActivity.class);
+            intent.putExtra("data", TelecomName);
+            intent.putExtra("flag", "2");
+            startActivity(intent);
+        });
+        binding.viewTv03.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, TermViewActivity.class);
+            intent.putExtra("data", TelecomName);
+            intent.putExtra("flag", "3");
+            startActivity(intent);
+        });
+
 
         binding.confirmPhoneBtn.setOnClickListener(view -> {
             if (binding.editConfirmNum.getText().toString().isEmpty()) {
@@ -280,7 +306,7 @@ public class VerificationActivity extends AppCompatActivity {
             if (!Uservice02) {
                 Uservice02 = true;
                 binding.serviceRadio02.setBackgroundResource(R.drawable.ic_full_round_check);
-                if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
+                if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
                     binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
                     binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
@@ -300,7 +326,7 @@ public class VerificationActivity extends AppCompatActivity {
             if (!Uservice03) {
                 Uservice03 = true;
                 binding.serviceRadio03.setBackgroundResource(R.drawable.ic_full_round_check);
-                if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
+                if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
                     binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
                     binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
@@ -320,7 +346,7 @@ public class VerificationActivity extends AppCompatActivity {
             if (!Uservice04) {
                 Uservice04 = true;
                 binding.serviceRadio04.setBackgroundResource(R.drawable.ic_full_round_check);
-                if (!Uservice01 && !Uservice02 && !Uservice03 && !Uservice04) {
+                if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
                     binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
                     binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
                     binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
@@ -465,6 +491,49 @@ public class VerificationActivity extends AppCompatActivity {
             // retriever 실패
         });
 
+        String termaccept = shardpref.getString("termaccept","");
+        if(!termaccept.isEmpty()){
+            dlog.i("termaccept : " + termaccept);
+            if(termaccept.equals("accept01")){
+                Uservice01 = true;
+                binding.serviceRadio01.setBackgroundResource(R.drawable.ic_full_round_check);
+                if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
+                    binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
+                }
+            }else if(termaccept.equals("accept02")){
+                Uservice02 = true;
+                binding.serviceRadio02.setBackgroundResource(R.drawable.ic_full_round_check);
+                if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
+                    binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
+                }
+            }else if(termaccept.equals("accept03")){
+                Uservice03 = true;
+                binding.serviceRadio03.setBackgroundResource(R.drawable.ic_full_round_check);
+                if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
+                    binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
+                }
+
+                Uservice04 = true;
+                binding.serviceRadio04.setBackgroundResource(R.drawable.ic_full_round_check);
+                if (Uservice01 && Uservice02 && Uservice03 && Uservice04) {
+                    binding.linear04.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.linear03.setCardBackgroundColor(Color.parseColor("#1445D0"));
+                    binding.linear04tv.setTextColor(Color.parseColor("#ffffff"));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("termaccept");
     }
 
     //사용자 확인하는 소스 여기에 넣고 전역변수로 구분할것

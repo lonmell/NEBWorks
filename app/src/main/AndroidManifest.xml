@@ -308,8 +308,7 @@
             android:name=".pop.AlertPopActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name=".pop.TermViewActivity"
-            android:theme="@android:style/Theme.Dialog" />
+            android:name=".pop.TermViewActivity"/>
 
         <activity
             android:name=".bottomsheet.MemberOption"
