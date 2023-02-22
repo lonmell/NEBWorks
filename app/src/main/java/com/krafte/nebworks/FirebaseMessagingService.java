@@ -95,7 +95,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
          * */
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-
+            setId ++ ;
             //Background
             Log.d(TAG, "1getData data payload: " + remoteMessage.getData());
             Log.d(TAG, "1getData Notification title: " + remoteMessage.getData().get("title"));
@@ -113,13 +113,22 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 Log.i(TAG, "1message1[1] : " + message1);
                 Log.d(TAG, "1getData Notification TAG : " + message0);
                 Log.d(TAG, "1getData Notification place_id : " + message1);
-                shardpref.putString("place_id",message1);
+                shardpref.putString("place_id", message1);
             }
             Log.d(TAG, "1channelId1: " + channelId1);
             Log.d(TAG, "1channelId2: " + channelId2);
             Log.d(TAG, "1channelId3: " + channelId3);
             Log.d(TAG, "1channelId4: " + channelId4);
             Log.d(TAG, "1channelId5: " + channelId4);
+
+            if(setId == 1){
+                FCMMessageData.getInstance().setMessageSnippet1(remoteMessage.getData().get("message"));
+            }else if(setId == 2){
+                setId = 0;
+                FCMMessageData.getInstance().setMessageSnippet2(remoteMessage.getData().get("message"));
+            }
+            messageSnippet1 = FCMMessageData.getInstance().getMessageSnippet1();
+            messageSnippet2 = FCMMessageData.getInstance().getMessageSnippet2();
 
             if (message0.equals("1") && channelId1) {
                 showNotification(String.valueOf(remoteMessage.getData().get("title"))
@@ -171,35 +180,35 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private void sendNotification(String title, String message,String click_action) {
+    private void sendNotification(String title, String message, String click_action) {
         //ForGround
         Log.i(TAG, "notificationIntent : " + notificationIntent);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
-        if(click_action.equals("PlaceList0") || click_action.equals("PlaceList1")){
+        if (click_action.equals("PlaceList0") || click_action.equals("PlaceList1")) {
             //점주 매장리스트 //근로자 매장리스트
             notificationIntent = new Intent(this, PlaceListActivity.class);
-        }else if(click_action.equals("TaskList0")){
-            shardpref.putInt("SELECT_POSITION",1);
+        } else if (click_action.equals("TaskList0")) {
+            shardpref.putInt("SELECT_POSITION", 1);
             notificationIntent = new Intent(this, MainFragment.class);
-        }else if(click_action.equals("TaskList1")){
-            shardpref.putInt("SELECT_POSITION",1);
+        } else if (click_action.equals("TaskList1")) {
+            shardpref.putInt("SELECT_POSITION", 1);
             notificationIntent = new Intent(this, MainFragment2.class);
-        }else if(click_action.equals("Member0") || click_action.equals("Member1")){
+        } else if (click_action.equals("Member0") || click_action.equals("Member1")) {
             notificationIntent = new Intent(this, MemberManagement.class);
-        }else if(click_action.equals("contract0") || click_action.equals("contract1")){
+        } else if (click_action.equals("contract0") || click_action.equals("contract1")) {
             notificationIntent = new Intent(this, ContractFragmentActivity.class);
-        }else if(click_action.equals("Payment0") || click_action.equals("Payment1")){
+        } else if (click_action.equals("Payment0") || click_action.equals("Payment1")) {
             notificationIntent = new Intent(this, PayManagementActivity.class);
-        }else if(click_action.equals("PlaceWorkFragment")){
+        } else if (click_action.equals("PlaceWorkFragment")) {
             notificationIntent = new Intent(this, FeedListActivity.class);
-        }else if(click_action.equals("TaskApprovalFragment")){
+        } else if (click_action.equals("TaskApprovalFragment")) {
             notificationIntent = new Intent(this, TaskApprovalFragment.class);
-        }else if(click_action.equals("EmployeeProcess")){
-            shardpref.putInt("SELECT_POSITION",0);
+        } else if (click_action.equals("EmployeeProcess")) {
+            shardpref.putInt("SELECT_POSITION", 0);
             notificationIntent = new Intent(this, MainFragment2.class);
-        }else if(click_action.equals("Contract1")){
-            shardpref.putInt("SELECT_POSITION",0);
+        } else if (click_action.equals("Contract1")) {
+            shardpref.putInt("SELECT_POSITION", 0);
             notificationIntent = new Intent(this, ContractFragmentActivity.class);
         }
 
@@ -207,21 +216,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        if(!FCMMessageData.getInstance().getMessageSnippet2().equals("")){
-            FCMMessageData.getInstance().setMessageSnippet1(message);
-            FCMMessageData.getInstance().setMessageSnippet2("");
-        }else{
-            if(FCMMessageData.getInstance().getMessageSnippet1().equals("")){
-                FCMMessageData.getInstance().setMessageSnippet1(message);
-            } else if(FCMMessageData.getInstance().getMessageSnippet2().equals("")){
-                FCMMessageData.getInstance().setMessageSnippet2(message);
-            }
-        }
-        messageSnippet1 = FCMMessageData.getInstance().getMessageSnippet1();
-        messageSnippet2 = FCMMessageData.getInstance().getMessageSnippet2();
-
-        Log.i("FireBaseMessagingService","messageSnippet11 : " + messageSnippet1);
-        Log.i("FireBaseMessagingService","messageSnippet22 : " + messageSnippet2);
+        Log.i("FireBaseMessagingService", "messageSnippet11 : " + messageSnippet1);
+        Log.i("FireBaseMessagingService", "messageSnippet22 : " + messageSnippet2);
 
         // 1. 알림 메시지를 관리하는 notificationManager 객체 추출
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -249,30 +245,30 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Log.i(TAG, "intent : " + intent);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
-        if(click_action.equals("PlaceList0") || click_action.equals("PlaceList1")){
+        if (click_action.equals("PlaceList0") || click_action.equals("PlaceList1")) {
             //점주 매장리스트 //근로자 매장리스트
             intent = new Intent(this, PlaceListActivity.class);
-        }else if(click_action.equals("TaskList0")){
-            shardpref.putInt("SELECT_POSITION",1);
+        } else if (click_action.equals("TaskList0")) {
+            shardpref.putInt("SELECT_POSITION", 1);
             intent = new Intent(this, MainFragment.class);
-        }else if(click_action.equals("TaskList1")){
-            shardpref.putInt("SELECT_POSITION",1);
+        } else if (click_action.equals("TaskList1")) {
+            shardpref.putInt("SELECT_POSITION", 1);
             intent = new Intent(this, MainFragment2.class);
-        }else if(click_action.equals("Member0") || click_action.equals("Member1")){
+        } else if (click_action.equals("Member0") || click_action.equals("Member1")) {
             intent = new Intent(this, MemberManagement.class);
-        }else if(click_action.equals("contract0") || click_action.equals("contract1")){
+        } else if (click_action.equals("contract0") || click_action.equals("contract1")) {
             intent = new Intent(this, ContractFragmentActivity.class);
-        }else if(click_action.equals("Payment0") || click_action.equals("Payment1")){
+        } else if (click_action.equals("Payment0") || click_action.equals("Payment1")) {
             intent = new Intent(this, PayManagementActivity.class);
-        }else if(click_action.equals("PlaceWorkFragment")){
+        } else if (click_action.equals("PlaceWorkFragment")) {
             intent = new Intent(this, FeedListActivity.class);
-        }else if(click_action.equals("TaskApprovalFragment")){
+        } else if (click_action.equals("TaskApprovalFragment")) {
             intent = new Intent(this, TaskApprovalFragment.class);
-        }else if(click_action.equals("EmployeeProcess")){
-            shardpref.putInt("SELECT_POSITION",0);
+        } else if (click_action.equals("EmployeeProcess")) {
+            shardpref.putInt("SELECT_POSITION", 0);
             intent = new Intent(this, MainFragment2.class);
-        }else if(click_action.equals("Contract1")){
-            shardpref.putInt("SELECT_POSITION",0);
+        } else if (click_action.equals("Contract1")) {
+            shardpref.putInt("SELECT_POSITION", 0);
             intent = new Intent(this, ContractFragmentActivity.class);
         }
 
@@ -343,26 +339,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Channel = NOTIFICATION_CHANNEL5;
         }
 
-        if(!FCMMessageData.getInstance().getMessageSnippet2().equals("")){
-            FCMMessageData.getInstance().setMessageSnippet1(message);
-            FCMMessageData.getInstance().setMessageSnippet2("");
-        }else{
-            if(FCMMessageData.getInstance().getMessageSnippet1().equals("")){
-                FCMMessageData.getInstance().setMessageSnippet1(message);
-            } else if(FCMMessageData.getInstance().getMessageSnippet2().equals("")){
-                FCMMessageData.getInstance().setMessageSnippet2(message);
-            }
-        }
-        messageSnippet1 = FCMMessageData.getInstance().getMessageSnippet1();
-        messageSnippet2 = FCMMessageData.getInstance().getMessageSnippet2();
-        Log.i("FireBaseMessagingService","messageSnippet1 : " + messageSnippet1);
-        Log.i("FireBaseMessagingService","messageSnippet2 : " + messageSnippet2);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.i(TAG,"mNotification SHOW 1");
+            Log.i(TAG, "mNotification SHOW 1");
 
             mNotification =
-                    new Notification.Builder(this,Channel)
+                    new Notification.Builder(this, Channel)
                             .setContentTitle("")
                             .setContentText(message)
                             .setSmallIcon(R.drawable.ic_launcher)
@@ -378,9 +360,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             notificationManager.notify(123 /* ID of notification */, mNotification);
 //            shardpref.putInt("setId", setId);
         } else {
-            Log.i(TAG,"mNotification SHOW 2");
+            Log.i(TAG, "mNotification SHOW 2");
             mNotification =
-                    new NotificationCompat.Builder(this,Channel)
+                    new NotificationCompat.Builder(this, Channel)
                             .setContentTitle("사장님!넵")
                             .setContentText(message)
                             .setSmallIcon(R.drawable.ic_launcher)
