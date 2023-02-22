@@ -115,7 +115,6 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     .into(holder.store_thumnail);
 
             holder.title.setText(item.getName());
-            holder.address.setText(item.getAddress());
 
             if (item.getOwner_id().equals(USER_INFO_ID)) {
                 //관리자일경우
@@ -125,6 +124,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             }
 
             if (item.getSave_kind().equals("0")) {
+                holder.address.setText("임시저장 중");
                 if (item.getOwner_id().equals(USER_INFO_ID)) {
                     //본인이 생성한 매장
                     holder.money_area.setVisibility(View.INVISIBLE);
@@ -135,7 +135,6 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     if (item.getAccept_state().equals("0")) {
                         holder.money_area.setVisibility(View.INVISIBLE);
                         holder.store_kind_state.setVisibility(View.VISIBLE);
-                        holder.address.setText("임시저장 중 / 승인대기 중");
                         holder.state_tv.setText("작성하기");
                         holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
                         holder.list_setting.setVisibility(View.INVISIBLE);
@@ -149,6 +148,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     }
                 }
             } else if (item.getSave_kind().equals("1")) {
+                holder.address.setText(item.getAddress());
                 if (item.getOwner_id().equals(USER_INFO_ID)) {
                     //본인이 생성한 매장
                     holder.money_area.setVisibility(View.VISIBLE);
