@@ -54,6 +54,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     boolean channelId2 = false;
     boolean channelId3 = false;
     boolean channelId4 = false;
+    boolean channelId5 = false;
 
     String Channel = "";
     String message0 = "";
@@ -75,6 +76,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         channelId2 = shardpref.getBoolean("channelId2", false);
         channelId3 = shardpref.getBoolean("channelId3", false);
         channelId4 = shardpref.getBoolean("channelId4", false);
+        channelId5 = shardpref.getBoolean("channelId5", false);
+
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
 
         // TODO(developer): Handle FCM messages here.
@@ -111,6 +114,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Log.d(TAG, "1channelId2: " + channelId2);
             Log.d(TAG, "1channelId3: " + channelId3);
             Log.d(TAG, "1channelId4: " + channelId4);
+            Log.d(TAG, "1channelId5: " + channelId4);
 
             if (message0.equals("1") && channelId1) {
                 showNotification(String.valueOf(remoteMessage.getData().get("title"))
@@ -131,6 +135,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                         , String.valueOf(remoteMessage.getData().get("message"))
                         , String.valueOf(remoteMessage.getData().get("click_action")));
             } else if (message0.equals("4") && channelId4) {
+                showNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
+                sendNotification(String.valueOf(remoteMessage.getData().get("title"))
+                        , String.valueOf(remoteMessage.getData().get("message"))
+                        , String.valueOf(remoteMessage.getData().get("click_action")));
+            } else if (message0.equals("5") && channelId5) {
                 showNotification(String.valueOf(remoteMessage.getData().get("title"))
                         , String.valueOf(remoteMessage.getData().get("message")), String.valueOf(remoteMessage.getData().get("click_action")));
                 sendNotification(String.valueOf(remoteMessage.getData().get("title"))
@@ -248,6 +258,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String NOTIFICATION_CHANNEL2 = String.valueOf(R.string.channel_2);
         String NOTIFICATION_CHANNEL3 = String.valueOf(R.string.channel_3);
         String NOTIFICATION_CHANNEL4 = String.valueOf(R.string.channel_4);
+        String NOTIFICATION_CHANNEL5 = String.valueOf(R.string.channel_5);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager manager = getBaseContext().getSystemService(NotificationManager.class);
@@ -282,7 +293,15 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                     String.valueOf(R.string.channel_4),
                     NotificationManager.IMPORTANCE_NONE
             );
-            manager.createNotificationChannel(serviceChannel4);
+
+            //근로계약서 및 기타알림
+            NotificationChannel serviceChannel5 = new NotificationChannel(
+                    NOTIFICATION_CHANNEL4,
+                    String.valueOf(R.string.channel_5),
+                    NotificationManager.IMPORTANCE_NONE
+            );
+            manager.createNotificationChannel(serviceChannel5);
+
         }
         if (message0.equals("1") && channelId1) {
             Channel = NOTIFICATION_CHANNEL1;
@@ -292,7 +311,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Channel = NOTIFICATION_CHANNEL3;
         } else if (message0.equals("4") && channelId4) {
             Channel = NOTIFICATION_CHANNEL4;
+        } else if (message0.equals("5") && channelId5) {
+            Channel = NOTIFICATION_CHANNEL5;
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(TAG,"mNotification SHOW 1");
 
