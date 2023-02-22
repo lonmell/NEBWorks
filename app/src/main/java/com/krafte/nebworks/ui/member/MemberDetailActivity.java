@@ -83,6 +83,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     String stub_user_id = "";
     String stub_user_account = "";
     String change_place_name = "";
+    String stub_user_name = "";
 
     //직원관리페이지에서 넘어왔을때
     String mem_id = "";
@@ -143,17 +144,19 @@ public class MemberDetailActivity extends AppCompatActivity {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             //shardpref Area
-            stub_place_id = shardpref.getString("stub_place_id", "0");
-            stub_user_id = shardpref.getString("stub_user_id", "0");
-            stub_user_account = shardpref.getString("stub_user_account", "");
-            change_place_name = shardpref.getString("change_place_name", "");
-            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
+            stub_place_id       = shardpref.getString("stub_place_id", "0");
+            stub_user_id        = shardpref.getString("stub_user_id", "0");
+            stub_user_account   = shardpref.getString("stub_user_account", "");
+            change_place_name   = shardpref.getString("change_place_name", "");
+            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
-            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
-            return_page = shardpref.getString("return_page", "");
-            item_user_id = shardpref.getString("item_user_id", "");
+            wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
+            return_page         = shardpref.getString("return_page", "");
+            item_user_id        = shardpref.getString("item_user_id", "");
+            stub_user_name      = shardpref.getString("stub_user_name", "");
 
+            dlog.i("stub_user_name : " + stub_user_name);
             setBtnEvent();
             drawerLayout = findViewById(R.id.drawer_layout);
             drawerView = findViewById(R.id.drawer2);
@@ -928,6 +931,8 @@ public class MemberDetailActivity extends AppCompatActivity {
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("근무추가");
         add_worktime_btn.setOnClickListener(v -> {
+            shardpref.putString("item_user_id", stub_user_id);
+            shardpref.putString("item_user_name", stub_user_name);
             pm.AddWorkPart(mContext);
         });
     }

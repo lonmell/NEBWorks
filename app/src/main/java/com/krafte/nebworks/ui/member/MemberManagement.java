@@ -324,7 +324,6 @@ public class MemberManagement extends AppCompatActivity {
 
     /*직원 전체 리스트 START*/
     RetrofitConnect rc = new RetrofitConnect();
-
     public void SetAllMemberList(String place_id) {
         mList.clear();
         total_member_cnt = 0;
@@ -361,6 +360,10 @@ public class MemberManagement extends AppCompatActivity {
                                 total_member_cnt = 0;
                                 binding.nodataArea.setVisibility(View.VISIBLE);
                                 binding.allMemberlist.setVisibility(View.GONE);
+                                binding.nodataArea.setOnClickListener(v -> {
+                                    MemberOption mo = new MemberOption();
+                                    mo.show(getSupportFragmentManager(), "MemberOption");
+                                });
                             } else {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
@@ -457,6 +460,7 @@ public class MemberManagement extends AppCompatActivity {
                                     binding.allMemberlist.setVisibility(View.VISIBLE);
                                     binding.memberCnt.setText(Response.length() + "명");
                                 }
+
                                 mAdapter.setOnItemClickListener2(new WorkplaceMemberAdapter.OnItemClickListener2() {
                                     @Override
                                     public void onItemClick(View v, int position, int kind) {
@@ -751,7 +755,6 @@ public class MemberManagement extends AppCompatActivity {
     TextView addbtn_tv;
     private boolean isDragging = false;
 
-
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
@@ -765,6 +768,11 @@ public class MemberManagement extends AppCompatActivity {
             private int initialY;
             private float initialTouchX;
             private float initialTouchY;
+
+            int newX;
+            int newY;
+            private int lastnewX;
+            private int lastnewY;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -787,25 +795,25 @@ public class MemberManagement extends AppCompatActivity {
                             int dx = (int) (event.getRawX() - initialTouchX);
                             int dy = (int) (event.getRawY() - initialTouchY);
 
-                            int newX = initialX + dx;
-                            int newY = initialY + dy;
+                            newX = initialX + dx;
+                            newY = initialY + dy;
 
                             // Update the position of the ImageView
                             v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
-
                             lastAction = MotionEvent.ACTION_MOVE;
                             break;
 
                         case MotionEvent.ACTION_UP:
-                            dlog.i("lastAction : " + lastAction);
-                            if (lastAction == MotionEvent.ACTION_DOWN) {
-                                // Handle click event on image here
-                                dlog.i("MemberOption true1");
+                            lastAction = MotionEvent.ACTION_UP;
+                            int Xdistance = (newX - lastnewX);
+                            int Ydistance = (newY - lastnewY);
+                            if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
                                 MemberOption mo = new MemberOption();
                                 mo.show(getSupportFragmentManager(), "MemberOption");
+                            }else{
+                                lastnewX = newX;
+                                lastnewY = newY;
                             }
-
-                            lastAction = MotionEvent.ACTION_UP;
                             isDragging = false;
                             break;
 
@@ -815,10 +823,10 @@ public class MemberManagement extends AppCompatActivity {
                 return true;
             }
         });
-        add_worktime_btn.setOnClickListener(v -> {
-            MemberOption mo = new MemberOption();
-            mo.show(getSupportFragmentManager(), "MemberOption");
-        });
+//        add_worktime_btn.setOnClickListener(v -> {
+//            MemberOption mo = new MemberOption();
+//            mo.show(getSupportFragmentManager(), "MemberOption");
+//        });
     }
 
 

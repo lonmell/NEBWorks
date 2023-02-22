@@ -118,9 +118,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tabTextColor="#696969"
                     app:tabIndicatorColor="@color/new_blue"
                     app:tabRippleColor="@null"
+                    app:tabTextColor="#696969"
                     tools:ignore="SpeakableTextPresentCheck" />
 
                 <!-- ViewPager2: 이 위치에 Fragment들이 노출된다. -->

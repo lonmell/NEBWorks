@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -730,17 +731,84 @@ public class WorkgotoFragment extends Fragment {
 
     CardView add_worktime_btn;
     TextView addbtn_tv;
+    private boolean isDragging = false;
 
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("할일추가");
-        add_worktime_btn.setOnClickListener(v -> {
-            if (USER_INFO_AUTH.isEmpty()) {
-                isAuth();
-            } else {
-                TaskAddOption to = new TaskAddOption();
-                to.show(getChildFragmentManager(), "TaskAddOption");
+//        add_worktime_btn.setOnClickListener(v -> {
+//            if (USER_INFO_AUTH.isEmpty()) {
+//                isAuth();
+//            } else {
+//                TaskAddOption to = new TaskAddOption();
+//                to.show(getChildFragmentManager(), "TaskAddOption");
+//            }
+//        });
+        // Set OnTouchListener to ImageView
+        add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
+            private int lastAction;
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            int newX;
+            int newY;
+            private int lastnewX;
+            private int lastnewY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = v.getLeft();
+                        initialY = v.getTop();
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        lastAction = MotionEvent.ACTION_DOWN;
+                        isDragging = false;
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        if (!isDragging) {
+                            isDragging = true;
+                        }
+
+                        int dx = (int) (event.getRawX() - initialTouchX);
+                        int dy = (int) (event.getRawY() - initialTouchY);
+
+                        newX = initialX + dx;
+                        newY = initialY + dy;
+
+                        // Update the position of the ImageView
+                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+                        lastAction = MotionEvent.ACTION_MOVE;
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        lastAction = MotionEvent.ACTION_UP;
+                        int Xdistance = (newX - lastnewX);
+                        int Ydistance = (newY - lastnewY);
+                        if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
+                            if (USER_INFO_AUTH.isEmpty()) {
+                                isAuth();
+                            } else {
+                                TaskAddOption to = new TaskAddOption();
+                                to.show(getChildFragmentManager(), "TaskAddOption");
+                            }
+                        }else{
+                            lastnewX = newX;
+                            lastnewY = newY;
+                        }
+                        isDragging = false;
+                        break;
+
+                    default:
+                        return false;
+                }
+                return true;
             }
         });
     }
