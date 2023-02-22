@@ -532,6 +532,10 @@ public class FeedAddActivity extends AppCompatActivity {
         noti_event_start = binding.eventStarttime.getText().toString();
         noti_event_end = binding.eventEndttime.getText().toString();
 
+        String[] splitStartTime = noti_event_start.split("-");
+        String[] splitEndTime = noti_event_end.split("-");
+
+
         if (noti_title.isEmpty()) {
             BtnOneCircleFun(true);
             Toast.makeText(mContext, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
@@ -539,6 +543,14 @@ public class FeedAddActivity extends AppCompatActivity {
         } else if (noti_contents.isEmpty()) {
             BtnOneCircleFun(true);
             Toast.makeText(mContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if ((noti_event_start.length() < 10 && noti_event_end.length() >= 10) || (noti_event_start.length() >= 10 && noti_event_end.length() < 10)) {
+            BtnOneCircleFun(true);
+            Toast.makeText(mContext, "기간을 모두 입력해주세요", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1]) || Integer.parseInt(splitStartTime[2]) > Integer.parseInt(splitEndTime[2])) {
+            BtnOneCircleFun(true);
+            Toast.makeText(mContext, "시작날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;

@@ -324,10 +324,11 @@ public class PlaceAddActivity2 extends AppCompatActivity {
                                     shardpref.remove("page_state");
                                     if (i == 0) {
                                         Toast_Nomal("임시저장 완료되었습니다.");
+                                        pm.PlaceList(mContext);
                                     } else {
                                         Toast_Nomal("매장 추가가 완료되었습니다.");
+                                        pm.workCompletion(mContext);
                                     }
-                                    pm.workCompletion(mContext);
                                 } else {
                                     Toast_Nomal("추가 매장을 생성하지 못했습니다. Error : " + response.body());
                                 }

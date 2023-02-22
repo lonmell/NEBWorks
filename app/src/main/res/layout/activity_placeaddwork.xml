@@ -320,7 +320,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:layout_marginBottom="15dp"
-                            android:visibility="gone"
                             app:cardBackgroundColor="#ffffff"
                             app:cardCornerRadius="10dp"
                             app:cardElevation="0dp">
@@ -380,7 +379,6 @@
                             android:layout_height="45dp"
                             android:layout_marginBottom="15dp"
                             android:layout_toEndOf="@+id/datebox_inside"
-                            android:visibility="gone"
                             app:cardBackgroundColor="#ffffff"
                             app:cardCornerRadius="10dp"
                             app:cardElevation="0dp">
