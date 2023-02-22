@@ -48,6 +48,7 @@ public class PushActivity extends AppCompatActivity {
     boolean channelId2 = true;
     boolean channelId3 = true;
     boolean channelId4 = true;
+    boolean channelId5 = true;
 
     Dlog dlog = new Dlog();
     String USER_INFO_ID = "";
@@ -96,7 +97,8 @@ public class PushActivity extends AppCompatActivity {
             dlog.i("channel2 : " + binding.activeOnBt02.isChecked());
             dlog.i("channel3 : " + binding.activeOnBt03.isChecked());
             dlog.i("channel4 : " + binding.activeOnBt04.isChecked());
-            setUserTokenDB(token, binding.activeOnBt01.isChecked(), binding.activeOnBt02.isChecked(), binding.activeOnBt03.isChecked(), binding.activeOnBt04.isChecked());
+            dlog.i("channel5 : " + binding.activeOnBt05.isChecked());
+            setUserTokenDB(token, binding.activeOnBt01.isChecked(), binding.activeOnBt02.isChecked(), binding.activeOnBt03.isChecked(), binding.activeOnBt04.isChecked(), binding.activeOnBt05.isChecked());
         });
         binding.backBtn.setOnClickListener(v -> {
 //            pm.MoreBack(mContext);
@@ -144,6 +146,16 @@ public class PushActivity extends AppCompatActivity {
                 channelId4 = true;
             }
         });
+
+        binding.activeOnArea05.setOnClickListener(v -> {
+            if (binding.activeOnBt05.isChecked()) {
+                binding.activeOnBt05.setChecked(false);
+                channelId4 = false;
+            } else {
+                binding.activeOnBt05.setChecked(true);
+                channelId4 = true;
+            }
+        });
     }
 
 
@@ -155,6 +167,7 @@ public class PushActivity extends AppCompatActivity {
     String channel2 = "";
     String channel3 = "";
     String channel4 = "";
+    String channel5 = "";
 
     RetrofitConnect rc = new RetrofitConnect();
     public void getPushBoolean() {
@@ -185,11 +198,13 @@ public class PushActivity extends AppCompatActivity {
                     channelId2 = Response.getJSONObject(0).getString("channel2").equals("1");
                     channelId3 = Response.getJSONObject(0).getString("channel3").equals("1");
                     channelId4 = Response.getJSONObject(0).getString("channel4").equals("1");
+                    channelId5 = Response.getJSONObject(0).getString("channel5").equals("1");
 
                     binding.activeOnBt01.setChecked(channelId1);
                     binding.activeOnBt02.setChecked(channelId2);
                     binding.activeOnBt03.setChecked(channelId3);
                     binding.activeOnBt04.setChecked(channelId4);
+                    binding.activeOnBt04.setChecked(channelId5);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -203,20 +218,21 @@ public class PushActivity extends AppCompatActivity {
         });
     }
 
-    public void setUserTokenDB(String token, boolean channel1, boolean channel2, boolean channel3, boolean channel4) {
+    public void setUserTokenDB(String token, boolean channel1, boolean channel2, boolean channel3, boolean channel4, boolean channel5) {
         dlog.i("------setUserTokenDB------");
         dlog.i("id : " + id);
         dlog.i("channelId1 : " + String.valueOf(channel1));
         dlog.i("channelId2 : " + String.valueOf(channel2));
         dlog.i("channelId3 : " + String.valueOf(channel3));
         dlog.i("channelId4 : " + String.valueOf(channel4));
+        dlog.i("channelId5 : " + String.valueOf(channel5));
         dlog.i("------setUserTokenDB------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FCMUpdateInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FCMUpdateInterface api = retrofit.create(FCMUpdateInterface.class);
-        Call<String> call = api.getData(id, token, channel1?"1":"0", channel2?"1":"0", channel3?"1":"0", channel4?"1":"0");
+        Call<String> call = api.getData(id, token, channel1?"1":"0", channel2?"1":"0", channel3?"1":"0", channel4?"1":"0", channel5?"1":"0");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -229,12 +245,13 @@ public class PushActivity extends AppCompatActivity {
                     Log.i(TAG, "channelId2 : " + channel2);
                     Log.i(TAG, "channelId3 : " + channel3);
                     Log.i(TAG, "channelId4 : " + channel4);
+                    Log.i(TAG, "channelId5 : " + channel5);
 
                     shardpref.putBoolean("channelId1", channel1);
                     shardpref.putBoolean("channelId2", channel2);
                     shardpref.putBoolean("channelId3", channel3);
                     shardpref.putBoolean("channelId4", channel4);
-
+                    shardpref.putBoolean("channelId5", channel5);
 //                    pm.MoreBack(mContext);
                     finish();
                 } else {

@@ -471,7 +471,7 @@ public class MainFragment extends AppCompatActivity {
     String channel2 = "1";
     String channel3 = "1";
     String channel4 = "1";
-
+    String channel5 = "1";
 
     //본인 토큰 생성
     @SuppressLint("LongLogTag")
@@ -532,6 +532,7 @@ public class MainFragment extends AppCompatActivity {
                                     channel2 = "1";
                                     channel3 = "1";
                                     channel4 = "1";
+                                    channel5 = "1";
                                 } else {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     id = Response.getJSONObject(0).getString("id");
@@ -542,18 +543,20 @@ public class MainFragment extends AppCompatActivity {
                                     channel2 = Response.getJSONObject(0).getString("channel2");
                                     channel3 = Response.getJSONObject(0).getString("channel3");
                                     channel4 = Response.getJSONObject(0).getString("channel4");
-
+                                    channel5 = Response.getJSONObject(0).getString("channel5");
                                     shardpref.putString("token", token);
                                     shardpref.putString("type", type);
                                     shardpref.putBoolean("channelId1", channel1.equals("1"));
                                     shardpref.putBoolean("channelId2", channel2.equals("1"));
                                     shardpref.putBoolean("channelId3", channel3.equals("1"));
                                     shardpref.putBoolean("channelId4", channel4.equals("1"));
+                                    shardpref.putBoolean("channelId5", channel5.equals("1"));
 
                                     dlog.i("channel1 : " + channel1);
                                     dlog.i("channel2 : " + channel2);
                                     dlog.i("channel3 : " + channel3);
                                     dlog.i("channel4 : " + channel4);
+                                    dlog.i("channel5 : " + channel5);
                                 }
                                 if (get_token.isEmpty()) {
                                     dlog.i("getFCMToken FcmTokenCreate");
@@ -588,13 +591,14 @@ public class MainFragment extends AppCompatActivity {
         dlog.i("channel2 :" + channel2);
         dlog.i("channel3 :" + channel3);
         dlog.i("channel4 :" + channel4);
+        dlog.i("channel4 :" + channel5);
         dlog.i("------FcmTokenCreate-------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FCMCrerateInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FCMCrerateInterface api = retrofit.create(FCMCrerateInterface.class);
-        Call<String> call = api.getData(USER_INFO_ID, type, token, channel1, channel2, channel3, channel4);
+        Call<String> call = api.getData(USER_INFO_ID, type, token, channel1, channel2, channel3, channel4, channel5);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -627,13 +631,14 @@ public class MainFragment extends AppCompatActivity {
         dlog.i("channel2 :" + channel2);
         dlog.i("channel3 :" + channel3);
         dlog.i("channel4 :" + channel4);
+        dlog.i("channel4 :" + channel5);
         dlog.i("------FcmTokenUpdate-------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FCMUpdateInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FCMUpdateInterface api = retrofit.create(FCMUpdateInterface.class);
-        Call<String> call = api.getData(id, token, channel1, channel2, channel3, channel4);
+        Call<String> call = api.getData(id, token, channel1, channel2, channel3, channel4, channel5);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override

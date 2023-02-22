@@ -17,6 +17,7 @@ public interface FCMCrerateInterface {
             @Field("channel1") String channel1,
             @Field("channel2") String channel2,
             @Field("channel3") String channel3,
-            @Field("channel4") String channel4
+            @Field("channel4") String channel4,
+            @Field("channel5") String channel5
     );
 }
