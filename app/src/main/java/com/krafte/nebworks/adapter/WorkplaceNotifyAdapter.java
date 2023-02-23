@@ -91,9 +91,9 @@ public class WorkplaceNotifyAdapter extends RecyclerView.Adapter<WorkplaceNotify
                         .into(holder.profile_setimg);
 
             } else {
-                Glide.with(mContext).load(item.getImg_path())
+                Glide.with(mContext).load(R.drawable.ic_icon_member)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .placeholder(R.drawable.identificon)
+                        .placeholder(R.drawable.ic_icon_member)
                         .skipMemoryCache(true)
                         .into(holder.profile_setimg);
             }
