@@ -76,20 +76,22 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
 
-        userName            = shardpref.getString("commute_name", "");
-        workTime            = shardpref.getString("commute_work_time", "");
-        goToWorkTime        = shardpref.getString("commute_in_time", "");
-        goOffWorkTime       = shardpref.getString("commute_out_time", "");
-        commute_date        = shardpref.getString("commute_date", "").replace("년", "-").replace("월", "-").replace("일", "").replace(" ","");
+        userName = shardpref.getString("commute_name", "");
+        workTime = shardpref.getString("commute_work_time", "");
+        goToWorkTime = shardpref.getString("commute_in_time", "");
+        goOffWorkTime = shardpref.getString("commute_out_time", "");
+        commute_date = shardpref.getString("commute_date", "").replace("년", "-").replace("월", "-").replace("일", "").replace(" ", "");
         dlog.i("commute_date: " + commute_date);
-        commute_place_id    = shardpref.getString("commute_place_id", "");
-        commute_user_id     = shardpref.getString("commute_user_id", "");
+        commute_place_id = shardpref.getString("commute_place_id", "");
+        commute_user_id = shardpref.getString("commute_user_id", "");
 
         setData();
         setBtnEvent();
 
         return binding.getRoot();
     }
+
+    boolean successtf = false;
 
     private void setData() {
         dlog.i("-----CommuteBottomSheet setData-----");
@@ -111,7 +113,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                     String.format("%02d:%02d", Integer.parseInt(splitGoToWorkTime[0]), Integer.parseInt(splitGoToWorkTime[1])));
             beforegoToTime = (Integer.parseInt(splitGoToWorkTime[0]) < 12 ? "오전 " : "오후 ") +
                     String.format("%02d:%02d", Integer.parseInt(splitGoToWorkTime[0]), Integer.parseInt(splitGoToWorkTime[1]));
-        }else{
+        } else {
             binding.gotoworkTextTime.setText("");
             beforegoToTime = "";
         }
@@ -124,7 +126,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                     String.format("%02d:%02d", Integer.parseInt(splitGoOffWorkTime[0]), Integer.parseInt(splitGoOffWorkTime[1])));
             beforegoOffTime = (Integer.parseInt(splitGoOffWorkTime[0]) < 12 ? "오전 " : "오후 ") +
                     String.format("%02d:%02d", Integer.parseInt(splitGoOffWorkTime[0]), Integer.parseInt(splitGoOffWorkTime[1]));
-        }else{
+        } else {
             binding.gooffworkTextTime.setText("");
             beforegoOffTime = "";
         }
@@ -155,6 +157,9 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                     String[] splitGoToWorkTime = goToWorkTime.split(":");
                     binding.commuteTimepicker.setHour(Integer.parseInt(splitGoToWorkTime[0]));
                     binding.commuteTimepicker.setMinute(Integer.parseInt(splitGoToWorkTime[1]));
+                    binding.gotoworkTimeDel.setVisibility(View.VISIBLE);
+                } else {
+                    binding.gotoworkTimeDel.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -181,6 +186,9 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                     String[] splitGoOffWorkTime = goOffWorkTime.split(":");
                     binding.commuteTimepicker.setHour(Integer.parseInt(splitGoOffWorkTime[0]));
                     binding.commuteTimepicker.setMinute(Integer.parseInt(splitGoOffWorkTime[1]));
+                    binding.gooffworkTimeDel.setVisibility(View.VISIBLE);
+                } else {
+                    binding.gooffworkTimeDel.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -195,9 +203,19 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                 if (SELECT_POSITION) {
                     goToWorkTime = HOUR + ":" + MIN;
                     binding.gotoworkTextTime.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
+                    if (binding.gotoworkTextTime.getText().length() != 0) {
+                        binding.gotoworkTimeDel.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.gotoworkTimeDel.setVisibility(View.INVISIBLE);
+                    }
                 } else {
                     goOffWorkTime = HOUR + ":" + MIN;
                     binding.gooffworkTextTime.setText((hourOfDay < 12 ? "오전" : "오후") + " " + (HOUR.length() == 1 ? "0" + HOUR : HOUR) + ":" + (MIN.length() == 1 ? "0" + MIN : MIN));
+                    if (binding.gooffworkTextTime.getText().length() != 0) {
+                        binding.gooffworkTimeDel.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.gooffworkTimeDel.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         });
@@ -217,24 +235,24 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
 
         // 저장 버튼
         binding.commuteOk.setOnClickListener(v -> {
-            if(!beforegoToTime.equals(goToWorkTime)){
+            if (!beforegoToTime.equals(goToWorkTime)) {
                 UpdateCommute("0", goToWorkTime);
             }
-            if(!beforegoOffTime.equals(goOffWorkTime)){
+            if (!beforegoOffTime.equals(goOffWorkTime)) {
                 UpdateCommute("1", goOffWorkTime);
             }
             if (mListener != null) {
                 mListener.onItemClick(v);
             }
+
             dismiss();
         });
     }
 
     RetrofitConnect rc = new RetrofitConnect();
+    int SendCnt = 0;
     public void UpdateCommute(String kind, String time) {
-        String place_name = PlaceCheckData.getInstance().getPlace_name();
         dlog.i("------UpdateCommute------");
-        dlog.i("place_name : " + place_name);
         dlog.i("commute_place_id : " + commute_place_id);
         dlog.i("commute_user_id : " + commute_user_id);
         dlog.i("kind : " + kind);
@@ -246,7 +264,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UpdateCommuteInterface api = retrofit.create(UpdateCommuteInterface.class);
-        Call<String> call = api.getData(commute_place_id,commute_user_id,kind,commute_date,time.equals("-1")?"":time);
+        Call<String> call = api.getData(commute_place_id, commute_user_id, kind, commute_date, time.equals("-1") ? "" : time);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override
@@ -258,11 +276,13 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                             dlog.i("UpdateCommute jsonResponse length : " + jsonResponse.length());
                             dlog.i("UpdateCommute jsonResponse : " + jsonResponse);
                             try {
-                                if(jsonResponse.replace("\"","").equals("success")){
-                                    String message = "[" + place_name + "] 출퇴근 데이터가 변경되었습니다.";
+                                if(SendCnt == 0){
+                                    SendCnt = SendCnt + 1;
+                                    String place_name = PlaceCheckData.getInstance().getPlace_name();
+                                    String message = "[" + place_name + "]" + commute_date + "날짜의 출퇴근 데이터가 변경되었습니다";
                                     getUserToken(commute_user_id, "1", message);
-                                    AddPush("직원출퇴근데이터변경",message,commute_user_id);
-                                    Toast.makeText(mContext,commute_date + "날짜의" + userName + " 직원의 출퇴근 데이터가 변경되었습니다",Toast.LENGTH_SHORT).show();
+                                    AddPush("직원출퇴근데이터변경", message, commute_user_id);
+                                    Toast.makeText(mContext, commute_date + "날짜의" + userName + " 직원의 출퇴근 데이터가 변경되었습니다", Toast.LENGTH_SHORT).show();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -304,6 +324,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
     }
 
     String place_owner_id = "";
+
     public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");
         dlog.i("user_id : " + user_id);
@@ -378,11 +399,12 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
 
     DBConnection dbConnection = new DBConnection();
     String click_action = "";
+
     //점주 > 근로자
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "TaskList1";
+            click_action = "status1";
             dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);

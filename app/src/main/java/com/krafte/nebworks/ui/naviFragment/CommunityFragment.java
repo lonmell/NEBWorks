@@ -233,8 +233,8 @@ public class CommunityFragment extends Fragment {
 
             int newX;
             int newY;
-            private int lastnewX;
-            private int lastnewY;
+            private int lastnewX = 0;
+            private int lastnewY = 0;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -260,6 +260,9 @@ public class CommunityFragment extends Fragment {
                         newX = initialX + dx;
                         newY = initialY + dy;
 
+                        if(lastnewX == 0){ lastnewX = newX; }
+                        if(lastnewY == 0){ lastnewY = newY; }
+
                         int parentWidth = ((ViewGroup) v.getParent()).getWidth();
                         int parentHeight = ((ViewGroup) v.getParent()).getHeight();
                         int childWidth = v.getWidth();
@@ -276,7 +279,7 @@ public class CommunityFragment extends Fragment {
                         lastAction = MotionEvent.ACTION_UP;
                         int Xdistance = (newX - lastnewX);
                         int Ydistance = (newY - lastnewY);
-                        if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
+                        if (Math.abs(Xdistance) < 10 && Math.abs(Ydistance) < 10) {
                             if (USER_INFO_AUTH.isEmpty()) {
                                 isAuth();
                             } else {

@@ -9,13 +9,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -175,8 +173,6 @@ public class PlaceListActivity extends AppCompatActivity {
         }
     }
 
-    CardView add_worktime_btn;
-    TextView addbtn_tv;
     private boolean isDragging = false;
 
     private void setBtnEvent() {
@@ -241,7 +237,7 @@ public class PlaceListActivity extends AppCompatActivity {
                         lastAction = MotionEvent.ACTION_UP;
                         int Xdistance = (newX - lastnewX);
                         int Ydistance = (newY - lastnewY);
-                        if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
+                        if (Math.abs(Xdistance) < 10 && Math.abs(Ydistance) < 10) {
                             onStartAuth();
                         }else{
                             lastnewX = newX;

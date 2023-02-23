@@ -172,9 +172,6 @@ public class WorkStatusSubFragment1 extends Fragment {
         SetAllMemberList();
     }
 
-    private void setBtnEvent() {
-
-    }
 
     /*직원 전체 리스트 START*/
     public void SetAllMemberList() {

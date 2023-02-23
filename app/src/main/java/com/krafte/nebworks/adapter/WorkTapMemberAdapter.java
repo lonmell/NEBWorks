@@ -166,13 +166,13 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
                 }
             });
 
-            holder.linear02.setOnClickListener(v -> {
-                if (USER_INFO_AUTH.equals("0")) {
-                    if (mListener2 != null) {
-                        mListener2.onItemClick(v, position);
-                    }
-                }
-            });
+//            holder.linear02.setOnClickListener(v -> {
+//                if (USER_INFO_AUTH.equals("0")) {
+//                    if (mListener2 != null) {
+//                        mListener2.onItemClick(v, position);
+//                    }
+//                }
+//            });
 
             if (loadlist == 0) {
                 //--아이템에 나타나기 애니메이션 줌
@@ -248,11 +248,16 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     WorkStatusTapData.WorkStatusTapData_list item = mData.get(pos);
-                    shardpref.putString("stub_place_id", item.getPlace_id());
-                    shardpref.putString("stub_user_id", item.getUser_id());
-                    shardpref.putString("stub_user_account", item.getAccount());
-                    shardpref.putString("change_place_name", item.getPlace_name());
-                    pm.MemberDetail(mContext);
+                    if (USER_INFO_AUTH.equals("0")) {
+                        if (mListener2 != null) {
+                            mListener2.onItemClick(view, pos);
+                        }
+                    }
+//                    shardpref.putString("stub_place_id", item.getPlace_id());
+//                    shardpref.putString("stub_user_id", item.getUser_id());
+//                    shardpref.putString("stub_user_account", item.getAccount());
+//                    shardpref.putString("change_place_name", item.getPlace_name());
+//                    pm.MemberDetail(mContext);
                 }
             }
             });
