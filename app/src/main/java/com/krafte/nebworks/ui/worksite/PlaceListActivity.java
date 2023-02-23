@@ -6,12 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -171,12 +175,86 @@ public class PlaceListActivity extends AppCompatActivity {
         }
     }
 
+    CardView add_worktime_btn;
+    TextView addbtn_tv;
+    private boolean isDragging = false;
+
     private void setBtnEvent() {
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });
-        binding.addPlace.setOnClickListener(v -> {
-            onStartAuth();
+        binding.addPlace.setOnTouchListener(new View.OnTouchListener() {
+            private int lastAction;
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            int newX;
+            int newY;
+            private int lastnewX;
+            private int lastnewY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = v.getLeft();
+                        initialY = v.getTop();
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        lastAction = MotionEvent.ACTION_DOWN;
+                        isDragging = false;
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        if (!isDragging) {
+                            isDragging = true;
+                        }
+
+                        int dx = (int) (event.getRawX() - initialTouchX);
+                        int dy = (int) (event.getRawY() - initialTouchY);
+
+                        newX = initialX + dx;
+                        newY = initialY + dy;
+                        dlog.i("newX : " + newX);
+                        dlog.i("newY : " + newY);
+//                        // Update the position of the ImageView
+//                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+//                        lastAction = MotionEvent.ACTION_MOVE;
+
+                        int parentWidth = ((ViewGroup) v.getParent()).getWidth();
+                        int parentHeight = ((ViewGroup) v.getParent()).getHeight();
+                        int childWidth = v.getWidth();
+                        int childHeight = v.getHeight();
+
+                        newX = Math.max(0, Math.min(newX, parentWidth - childWidth));
+                        newY = Math.max(0, Math.min(newY, parentHeight - childHeight));
+
+                        // Update the position of the ImageView
+                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        lastAction = MotionEvent.ACTION_UP;
+                        int Xdistance = (newX - lastnewX);
+                        int Ydistance = (newY - lastnewY);
+                        if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
+                            onStartAuth();
+                        }else{
+                            lastnewX = newX;
+                            lastnewY = newY;
+                        }
+                        isDragging = false;
+                        break;
+
+                    default:
+                        return false;
+                }
+                return true;
+            }
         });
         binding.addPlace2.setOnClickListener(v -> {
             onStartAuth();

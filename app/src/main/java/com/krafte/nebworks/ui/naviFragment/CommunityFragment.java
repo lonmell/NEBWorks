@@ -260,9 +260,16 @@ public class CommunityFragment extends Fragment {
                         newX = initialX + dx;
                         newY = initialY + dy;
 
+                        int parentWidth = ((ViewGroup) v.getParent()).getWidth();
+                        int parentHeight = ((ViewGroup) v.getParent()).getHeight();
+                        int childWidth = v.getWidth();
+                        int childHeight = v.getHeight();
+
+                        newX = Math.max(0, Math.min(newX, parentWidth - childWidth));
+                        newY = Math.max(0, Math.min(newY, parentHeight - childHeight));
+
                         // Update the position of the ImageView
                         v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
-                        lastAction = MotionEvent.ACTION_MOVE;
                         break;
 
                     case MotionEvent.ACTION_UP:

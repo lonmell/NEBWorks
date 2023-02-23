@@ -75,7 +75,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         shardpref = new PreferenceHelper(mContext);
         intent = new Intent();
         notificationIntent = new Intent();
-//        setId      = shardpref.getInt("setId", 0);
+        setId      = shardpref.getInt("setId", 0);
 //        setId      = Integer.parseInt(ro.getRandomNum(2));
         channelId1 = shardpref.getBoolean("channelId1", false);
         channelId2 = shardpref.getBoolean("channelId2", false);
@@ -123,9 +123,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
             if(setId == 1){
                 FCMMessageData.getInstance().setMessageSnippet1(remoteMessage.getData().get("message"));
+                shardpref.putInt("setId", setId);
             }else if(setId == 2){
                 setId = 0;
                 FCMMessageData.getInstance().setMessageSnippet2(remoteMessage.getData().get("message"));
+                shardpref.putInt("setId", setId);
             }
             messageSnippet1 = FCMMessageData.getInstance().getMessageSnippet1();
             messageSnippet2 = FCMMessageData.getInstance().getMessageSnippet2();

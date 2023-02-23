@@ -219,7 +219,6 @@ public class WorkgotoFragment extends Fragment {
                 binding.dateLayout.setVisibility(View.GONE);
                 binding.dateSelect.setVisibility(View.VISIBLE);
                 binding.line01.setVisibility(View.GONE);
-
 //                SetCalenderData();
             }
         } catch (Exception e) {
@@ -737,15 +736,7 @@ public class WorkgotoFragment extends Fragment {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("할일추가");
-//        add_worktime_btn.setOnClickListener(v -> {
-//            if (USER_INFO_AUTH.isEmpty()) {
-//                isAuth();
-//            } else {
-//                TaskAddOption to = new TaskAddOption();
-//                to.show(getChildFragmentManager(), "TaskAddOption");
-//            }
-//        });
-        // Set OnTouchListener to ImageView
+
         add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
             private int lastAction;
             private int initialX;
@@ -781,10 +772,23 @@ public class WorkgotoFragment extends Fragment {
 
                         newX = initialX + dx;
                         newY = initialY + dy;
+                        dlog.i("newX : " + newX);
+                        dlog.i("newY : " + newY);
+//                        // Update the position of the ImageView
+//                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+//                        lastAction = MotionEvent.ACTION_MOVE;
+
+                        int parentWidth = ((ViewGroup) v.getParent()).getWidth();
+                        int parentHeight = ((ViewGroup) v.getParent()).getHeight();
+                        int childWidth = v.getWidth();
+                        int childHeight = v.getHeight();
+
+                        newX = Math.max(0, Math.min(newX, parentWidth - childWidth));
+                        newY = Math.max(0, Math.min(newY, parentHeight - childHeight));
 
                         // Update the position of the ImageView
                         v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
-                        lastAction = MotionEvent.ACTION_MOVE;
+
                         break;
 
                     case MotionEvent.ACTION_UP:

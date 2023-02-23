@@ -324,6 +324,7 @@ public class MemberManagement extends AppCompatActivity {
 
     /*직원 전체 리스트 START*/
     RetrofitConnect rc = new RetrofitConnect();
+
     public void SetAllMemberList(String place_id) {
         mList.clear();
         total_member_cnt = 0;
@@ -754,6 +755,10 @@ public class MemberManagement extends AppCompatActivity {
     CardView add_worktime_btn;
     TextView addbtn_tv;
     private boolean isDragging = false;
+    private int xMax;
+    private int yMax;
+    private int xDelta;
+    private int yDelta;
 
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
@@ -761,6 +766,9 @@ public class MemberManagement extends AppCompatActivity {
         addbtn_tv.setText("직원추가");
         add_worktime_btn.setVisibility(place_owner_id.equals(USER_INFO_ID) ? View.VISIBLE : View.GONE);
 
+        // 제한된 영역
+        int maxX = (int) binding.layoutTotal.getScaleX();
+        int maxY = (int) binding.layoutTotal.getScaleY();
         // Set OnTouchListener to ImageView
         add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
             private int lastAction;
@@ -777,107 +785,62 @@ public class MemberManagement extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                    switch (event.getActionMasked()) {
-                        case MotionEvent.ACTION_DOWN:
-                            initialX = v.getLeft();
-                            initialY = v.getTop();
-                            initialTouchX = event.getRawX();
-                            initialTouchY = event.getRawY();
-                            lastAction = MotionEvent.ACTION_DOWN;
-                            isDragging = false;
-                            break;
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = v.getLeft();
+                        initialY = v.getTop();
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        lastAction = MotionEvent.ACTION_DOWN;
+                        isDragging = false;
 
-                        case MotionEvent.ACTION_MOVE:
-                            if (!isDragging) {
-                                isDragging = true;
-                            }
+                        break;
 
-                            int dx = (int) (event.getRawX() - initialTouchX);
-                            int dy = (int) (event.getRawY() - initialTouchY);
+                    case MotionEvent.ACTION_MOVE:
+                        if (!isDragging) {
+                            isDragging = true;
+                        }
 
-                            newX = initialX + dx;
-                            newY = initialY + dy;
+                        int dx = (int) (event.getRawX() - initialTouchX);
+                        int dy = (int) (event.getRawY() - initialTouchY);
 
-                            // Update the position of the ImageView
-                            v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
-                            lastAction = MotionEvent.ACTION_MOVE;
-                            break;
+                        newX = initialX + dx;
+                        newY = initialY + dy;
 
-                        case MotionEvent.ACTION_UP:
-                            lastAction = MotionEvent.ACTION_UP;
-                            int Xdistance = (newX - lastnewX);
-                            int Ydistance = (newY - lastnewY);
-                            if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
-                                MemberOption mo = new MemberOption();
-                                mo.show(getSupportFragmentManager(), "MemberOption");
-                            }else{
-                                lastnewX = newX;
-                                lastnewY = newY;
-                            }
-                            isDragging = false;
-                            break;
+                        int parentWidth = ((ViewGroup) v.getParent()).getWidth();
+                        int parentHeight = ((ViewGroup) v.getParent()).getHeight();
+                        int childWidth = v.getWidth();
+                        int childHeight = v.getHeight();
 
-                        default:
-                            return false;
-                    }
+                        newX = Math.max(0, Math.min(newX, parentWidth - childWidth));
+                        newY = Math.max(0, Math.min(newY, parentHeight - childHeight));
+
+                        // Update the position of the ImageView
+                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        lastAction = MotionEvent.ACTION_UP;
+                        int Xdistance = (newX - lastnewX);
+                        int Ydistance = (newY - lastnewY);
+                        if (Math.abs(Xdistance) < 10 && Math.abs(Ydistance) < 10) {
+                            MemberOption mo = new MemberOption();
+                            mo.show(getSupportFragmentManager(), "MemberOption");
+                        } else {
+                            lastnewX = newX;
+                            lastnewY = newY;
+                        }
+                        isDragging = false;
+                        break;
+
+                    default:
+                        return false;
+                }
                 return true;
             }
         });
-//        add_worktime_btn.setOnClickListener(v -> {
-//            MemberOption mo = new MemberOption();
-//            mo.show(getSupportFragmentManager(), "MemberOption");
-//        });
+
     }
-
-
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        int width = ((ViewGroup) v.getParent()).getWidth() - v.getWidth();
-//        int height = ((ViewGroup) v.getParent()).getHeight() - v.getHeight();
-//
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            oldXvalue = event.getX();
-//            oldYvalue = event.getY();
-//            //  Log.i("Tag1", "Action Down X" + event.getX() + "," + event.getY());
-//            Log.i("Tag1", "Action Down rX " + event.getRawX() + "," + event.getRawY());
-//        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-//            v.setX(event.getRawX() - oldXvalue);
-//            v.setY(event.getRawY() - (oldYvalue + v.getHeight()));
-//            //  Log.i("Tag2", "Action Down " + me.getRawX() + "," + me.getRawY());
-//        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-//
-//            if (v.getX() > width && v.getY() > height) {
-//                v.setX(width);
-//                v.setY(height);
-//            } else if (v.getX() < 0 && v.getY() > height) {
-//                v.setX(0);
-//                v.setY(height);
-//            } else if (v.getX() > width && v.getY() < 0) {
-//                v.setX(width);
-//                v.setY(0);
-//            } else if (v.getX() < 0 && v.getY() < 0) {
-//                v.setX(0);
-//                v.setY(0);
-//            } else if (v.getX() < 0 || v.getX() > width) {
-//                if (v.getX() < 0) {
-//                    v.setX(0);
-//                    v.setY(event.getRawY() - oldYvalue - v.getHeight());
-//                } else {
-//                    v.setX(width);
-//                    v.setY(event.getRawY() - oldYvalue - v.getHeight());
-//                }
-//            } else if (v.getY() < 0 || v.getY() > height) {
-//                if (v.getY() < 0) {
-//                    v.setX(event.getRawX() - oldXvalue);
-//                    v.setY(0);
-//                } else {
-//                    v.setX(event.getRawX() - oldXvalue);
-//                    v.setY(height);
-//                }
-//            }
-//        }
-//        return true;
-//    }
 
 
 //    //-------몰입화면 설정
