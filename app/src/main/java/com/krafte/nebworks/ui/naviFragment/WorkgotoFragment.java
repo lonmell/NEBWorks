@@ -400,13 +400,13 @@ public class WorkgotoFragment extends Fragment {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 int currentMonth = 0;
                 if (month < Integer.parseInt(Month)) {
-//                    changeDateState = true;
                     currentMonth = (Integer.parseInt(Month) - (month + 1));
-                    cal.add(Calendar.MONTH, - currentMonth);
+                    cal.add(Calendar.MONTH, - (Integer.parseInt(Month) - (month + 1)));
+                    cal.add(Calendar.DAY_OF_MONTH, - (Integer.parseInt(Day) - (dayOfMonth)));
                 } else {
-//                    changeDateState = true;
                     currentMonth = ((month + 1)  - Integer.parseInt(Month));
-                    cal.add(Calendar.MONTH, currentMonth);
+                    cal.add(Calendar.MONTH, ((month + 1)  - Integer.parseInt(Month)));
+                    cal.add(Calendar.DAY_OF_MONTH, ((dayOfMonth)  - Integer.parseInt(Day)));
                 }
                 Year = String.valueOf(year);
                 Month = String.valueOf(month + 1);
