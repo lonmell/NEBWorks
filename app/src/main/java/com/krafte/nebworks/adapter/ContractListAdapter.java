@@ -90,7 +90,7 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
             if(item.getContract_yn().equals("0")){
                 holder.profile_img.setCardBackgroundColor(Color.parseColor("#DD6540"));
                 holder.profile_tv.setText("미작성");
-                holder.address.setText("근로계약서 작성");
+                holder.address.setText("근로계약서 미작성");
                 holder.address.setTextColor(Color.parseColor("#DD6540"));
             }else if(item.getContract_yn().equals("1")){
                 if(!(item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && (item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())) {
@@ -98,15 +98,18 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
                     holder.profile_tv.setText("서명\n대기중");
                     holder.address.setText("근로계약서 작성");
                     holder.address.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    holder.call_icon.setVisibility(View.GONE);
                 } else if(!(item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && !(item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())){
                     holder.profile_img.setCardBackgroundColor(Color.parseColor("#DBDBDB"));
                     holder.profile_tv.setText("완료");
                     holder.address.setText("근로계약서 작성");
                     holder.address.setTextColor(Color.parseColor("#DBDBDB"));
+                    holder.call_icon.setVisibility(View.GONE);
                 }else if((item.getOwner_sign_id().equals("null")||item.getOwner_sign_id().isEmpty()) && (item.getWorker_sign_id().equals("null")||item.getWorker_sign_id().isEmpty())){
                     holder.profile_img.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     holder.profile_tv.setText("작성중");
                     holder.address.setText("근로계약서 작성중");
+                    holder.call_icon.setVisibility(View.GONE);
                     holder.address.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 }
             }
