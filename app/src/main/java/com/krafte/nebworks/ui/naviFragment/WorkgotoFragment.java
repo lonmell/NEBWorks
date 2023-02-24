@@ -746,14 +746,15 @@ public class WorkgotoFragment extends Fragment {
 
             int newX;
             int newY;
-            private int lastnewX;
-            private int lastnewY;
+            private int lastnewX = 0;
+            private int lastnewY = 0;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
+                        dlog.i("MotionEvent ACTION_DOWN");
                         initialX = v.getLeft();
                         initialY = v.getTop();
                         initialTouchX = event.getRawX();
@@ -763,6 +764,7 @@ public class WorkgotoFragment extends Fragment {
                         break;
 
                     case MotionEvent.ACTION_MOVE:
+                        dlog.i("MotionEvent ACTION_MOVE");
                         if (!isDragging) {
                             isDragging = true;
                         }
@@ -772,11 +774,12 @@ public class WorkgotoFragment extends Fragment {
 
                         newX = initialX + dx;
                         newY = initialY + dy;
+
+                        if(lastnewX == 0){ lastnewX = newX; }
+                        if(lastnewY == 0){ lastnewY = newY; }
+
                         dlog.i("newX : " + newX);
                         dlog.i("newY : " + newY);
-//                        // Update the position of the ImageView
-//                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
-//                        lastAction = MotionEvent.ACTION_MOVE;
 
                         int parentWidth = ((ViewGroup) v.getParent()).getWidth();
                         int parentHeight = ((ViewGroup) v.getParent()).getHeight();
@@ -788,14 +791,14 @@ public class WorkgotoFragment extends Fragment {
 
                         // Update the position of the ImageView
                         v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
-
                         break;
 
                     case MotionEvent.ACTION_UP:
+                        dlog.i("MotionEvent ACTION_UP");
                         lastAction = MotionEvent.ACTION_UP;
                         int Xdistance = (newX - lastnewX);
                         int Ydistance = (newY - lastnewY);
-                        if(Math.abs(Xdistance) < 5 && Math.abs(Ydistance) < 5){
+                        if (Math.abs(Xdistance) < 10 && Math.abs(Ydistance) < 10) {
                             if (USER_INFO_AUTH.isEmpty()) {
                                 isAuth();
                             } else {

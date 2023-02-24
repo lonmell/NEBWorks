@@ -24,6 +24,7 @@ import com.krafte.nebworks.ui.feed.FeedListActivity;
 import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.ui.member.MemberManagement;
+import com.krafte.nebworks.ui.naviFragment.WorkstatusFragment;
 import com.krafte.nebworks.ui.paymanagement.PayManagementActivity;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -212,6 +213,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         } else if (click_action.equals("Contract1")) {
             shardpref.putInt("SELECT_POSITION", 0);
             notificationIntent = new Intent(this, ContractFragmentActivity.class);
+        } else if (click_action.equals("status1")) {
+            shardpref.putInt("SELECT_POSITION", 0);
+            notificationIntent = new Intent(this, WorkstatusFragment.class);
         }
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -272,6 +276,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         } else if (click_action.equals("Contract1")) {
             shardpref.putInt("SELECT_POSITION", 0);
             intent = new Intent(this, ContractFragmentActivity.class);
+        } else if (click_action.equals("status1")) {
+            shardpref.putInt("SELECT_POSITION", 0);
+            intent = new Intent(this, WorkstatusFragment.class);
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

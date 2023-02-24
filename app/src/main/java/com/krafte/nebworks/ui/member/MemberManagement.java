@@ -779,8 +779,8 @@ public class MemberManagement extends AppCompatActivity {
 
             int newX;
             int newY;
-            private int lastnewX;
-            private int lastnewY;
+            private int lastnewX = 0;
+            private int lastnewY = 0;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -806,6 +806,9 @@ public class MemberManagement extends AppCompatActivity {
 
                         newX = initialX + dx;
                         newY = initialY + dy;
+
+                        if(lastnewX == 0){ lastnewX = newX; }
+                        if(lastnewY == 0){ lastnewY = newY; }
 
                         int parentWidth = ((ViewGroup) v.getParent()).getWidth();
                         int parentHeight = ((ViewGroup) v.getParent()).getHeight();

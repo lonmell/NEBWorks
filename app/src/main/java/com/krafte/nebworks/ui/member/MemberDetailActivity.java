@@ -745,6 +745,7 @@ public class MemberDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    /*출퇴근 리스트 END*/
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
         dlog.i("PlaceWorkCheck place_id : " + place_id);

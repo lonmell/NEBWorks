@@ -10,6 +10,7 @@ import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -379,7 +380,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                String HOUR = String.valueOf(hourOfDay);
+                String HOUR = String.valueOf(hourOfDay == 00?12:hourOfDay);
                 String MIN = String.valueOf(minute);
                 binding.timeSetpicker.clearFocus();
                 if (!SELECTTIME) {
@@ -395,6 +396,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 }
             }
         });
+
         //날짜입력
         binding.cvCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -461,6 +463,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         try {
             //데이터 입력세팅
             imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
             String thumnail_url = shardpref.getString("thumnail_url", "");
             String name = shardpref.getString("name", "");
             String writer_id = shardpref.getString("writer_id", "");
@@ -592,11 +595,22 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             binding.inputWorktitle.clearFocus();
             binding.inputWorkcontents.clearFocus();
 
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public static void clearFocus(Activity activity) {
+        View v = activity.getCurrentFocus();
+        if (v == null) {
+            return;
+        }
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        v.clearFocus();
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
 
     @Override
     public void onDestroy() {

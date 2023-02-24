@@ -9,7 +9,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +33,6 @@ import com.krafte.nebworks.adapter.WorkCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectMemberActivity;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.bottomsheet.TaskAddOption;
-import com.krafte.nebworks.bottomsheet.WorkgotoBottomSheet;
 import com.krafte.nebworks.data.CalendarSetData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
@@ -39,8 +40,6 @@ import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
-import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
-import com.krafte.nebworks.dataInterface.WorkCalendersetData;
 import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -768,10 +767,87 @@ public class TaskListActivity extends AppCompatActivity {
 
     CardView add_worktime_btn;
     TextView addbtn_tv;
+    private boolean isDragging = false;
+
     private void setAddBtnSetting() {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("할일추가");
+        add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
+            private int lastAction;
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            int newX;
+            int newY;
+            private int lastnewX = 0;
+            private int lastnewY = 0;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = v.getLeft();
+                        initialY = v.getTop();
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        lastAction = MotionEvent.ACTION_DOWN;
+                        isDragging = false;
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        if (!isDragging) {
+                            isDragging = true;
+                        }
+
+                        int dx = (int) (event.getRawX() - initialTouchX);
+                        int dy = (int) (event.getRawY() - initialTouchY);
+
+                        newX = initialX + dx;
+                        newY = initialY + dy;
+
+                        if(lastnewX == 0){ lastnewX = newX; }
+                        if(lastnewY == 0){ lastnewY = newY; }
+
+                        dlog.i("newX : " + newX);
+                        dlog.i("newY : " + newY);
+
+                        int parentWidth = ((ViewGroup) v.getParent()).getWidth();
+                        int parentHeight = ((ViewGroup) v.getParent()).getHeight();
+                        int childWidth = v.getWidth();
+                        int childHeight = v.getHeight();
+
+                        newX = Math.max(0, Math.min(newX, parentWidth - childWidth));
+                        newY = Math.max(0, Math.min(newY, parentHeight - childHeight));
+
+                        // Update the position of the ImageView
+                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
+
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        lastAction = MotionEvent.ACTION_UP;
+                        int Xdistance = (newX - lastnewX);
+                        int Ydistance = (newY - lastnewY);
+                        if (Math.abs(Xdistance) < 10 && Math.abs(Ydistance) < 10) {
+                            TaskAddOption to = new TaskAddOption();
+                            to.show(getSupportFragmentManager(),"TaskAddOption");
+                        }else{
+                            lastnewX = newX;
+                            lastnewY = newY;
+                        }
+                        isDragging = false;
+                        break;
+
+                    default:
+                        return false;
+                }
+                return true;
+            }
+        });
         add_worktime_btn.setOnClickListener(v -> {
             TaskAddOption to = new TaskAddOption();
             to.show(getSupportFragmentManager(),"TaskAddOption");

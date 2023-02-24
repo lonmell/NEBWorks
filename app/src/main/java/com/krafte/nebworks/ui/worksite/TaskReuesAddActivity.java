@@ -357,7 +357,7 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                String HOUR = String.valueOf(hourOfDay);
+                String HOUR = String.valueOf(hourOfDay == 0 ? 12 : hourOfDay);
                 String MIN = String.valueOf(minute);
                 binding.timeSetpicker.clearFocus();
                 if (!SELECTTIME) {
