@@ -302,7 +302,7 @@
                 android:layout_toStartOf="@+id/clear_nick"
                 android:background="@color/white"
                 android:fontFamily="@font/inter_regular"
-                android:hint="닉네임을 자유롭게 입력해주세요"
+                android:hint="이름을 자유롭게 입력해주세요"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="#000000"
