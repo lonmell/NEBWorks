@@ -92,7 +92,6 @@ public class PlaceSearchActivity extends AppCompatActivity {
             gpsTracker = new GpsTracker(this);
             latitude = gpsTracker.getLatitude();
             longitude = gpsTracker.getLongitude();
-//        Glide.with(this).load(R.raw.walk_loading2).into(loading_view);
 
             binding.searchStore.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -122,9 +121,7 @@ public class PlaceSearchActivity extends AppCompatActivity {
             for (int i = 0; i < mList.size(); i++) {
                 if (mList.get(i).getOwner_phone().toLowerCase().contains(searchText.toLowerCase())) {
                     dlog.i("searchFilter contain : " + mList.get(i).getOwner_phone() + "/" + mList.get(i).getOwner_phone().toLowerCase().contains(searchText.toLowerCase()));
-//                    mList.clear();
                     searchmList.add(mList.get(i));
-//                    break;
                 }
             }
             binding.searchCnt.setText(String.valueOf(searchmList.size()));
@@ -142,7 +139,24 @@ public class PlaceSearchActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        SetWorkplaceList();
+        if(binding.searchStore.getText().toString().length() == 0){
+            SetWorkplaceList();
+        }else{
+            binding.searchStore.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    searchFilter(s.toString());
+                }
+            });
+        }
+
     }
 
     @Override

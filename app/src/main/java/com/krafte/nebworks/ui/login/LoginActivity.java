@@ -121,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Kakao 가입/로그인시 불러오는 값
     String GET_NAME = "";
+    String GET_NICKNAME = "";
     String GET_ACCOUNT_EMAIL = "";
     String GET_PROFILE_URL = "";
     String GET_USER_PHONE = "";
@@ -264,7 +265,8 @@ public class LoginActivity extends AppCompatActivity {
 //                            Toast.makeText(getApplicationContext(), "$response", Toast.LENGTH_SHORT).show();
                             Handler handler = new Handler();
                             handler.postDelayed(() -> {
-                                GET_NAME = nidProfileResponse.getProfile().getNickname();
+                                GET_NAME = nidProfileResponse.getProfile().getName();
+                                GET_NICKNAME = nidProfileResponse.getProfile().getNickname();
                                 GET_ACCOUNT_EMAIL = nidProfileResponse.getProfile().getEmail();
                                 GET_PROFILE_URL = nidProfileResponse.getProfile().getProfileImage();
                                 GET_USER_PHONE = "";
@@ -284,8 +286,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                 dlog.i( "Kakao id =" + nidProfileResponse.getProfile().getId());
                                 dlog.i( "GET_NAME =" + GET_NAME);
+                                dlog.i( "GET_NICKNAME =" + GET_NICKNAME);
                                 dlog.i( "GET_ACCOUNT_EMAIL =" + GET_ACCOUNT_EMAIL);
-
                                 dlog.i( "GET_PROFILE_URL =" + GET_PROFILE_URL);
                                 dlog.i( "GET_USER_PHONE =" + GET_USER_PHONE);
                                 dlog.i( "GET_USER_BIRTH =" + GET_USER_BIRTH);
@@ -299,7 +301,7 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
             //                        UserCheckData.getInstance().setUser_id(getid);
                                     UserCheckData.getInstance().setUser_name(GET_NAME);
-                                    UserCheckData.getInstance().setUser_nick_name(GET_NAME);
+                                    UserCheckData.getInstance().setUser_nick_name(GET_NICKNAME);
                                     UserCheckData.getInstance().setUser_account(GET_ACCOUNT_EMAIL);
                                     UserCheckData.getInstance().setUser_password("");
                                     UserCheckData.getInstance().setUser_gender(GET_USER_SEX);

@@ -193,11 +193,11 @@ public class CommunityDetailActivity extends AppCompatActivity {
             AddLike(feed_id);
         });
 
-//        if (writer_id.equals(USER_INFO_ID)) {
-//            binding.listSetting.setVisibility(View.GONE);
-//        } else {
-//            binding.listSetting.setVisibility(View.VISIBLE);
-//        }
+        if (!writer_id.equals(USER_INFO_ID)) {//신고하기 기능 추가되면 삭제
+            binding.listSetting.setVisibility(View.GONE);
+        } else {
+            binding.listSetting.setVisibility(View.VISIBLE);
+        }
 
         binding.listSetting.setOnClickListener(v -> {
             if (!settingft) {
@@ -606,6 +606,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                     dlog.i("Comment insert success");
                                     binding.addCommentTxt.setText("");
                                     binding.addCommentTxt.clearFocus();
+                                    subcomment_id = "";
                                     imm.hideSoftInputFromWindow(binding.addCommentTxt.getWindowToken(), 0);
                                     GetCommentList(true);
                                 }
