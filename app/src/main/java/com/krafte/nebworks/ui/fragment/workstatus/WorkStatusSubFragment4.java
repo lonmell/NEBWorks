@@ -225,6 +225,9 @@ public class WorkStatusSubFragment4 extends Fragment {
                                                 jsonObject.getString("worktime"),
                                                 jsonObject.getString("commuting")
                                         ));
+                                    } else {
+                                        binding.nodataArea.setVisibility(View.VISIBLE);
+                                        binding.allMemberlist.setVisibility(View.GONE);
                                     }
                                 }
                                 mAdapter.notifyDataSetChanged();

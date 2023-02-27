@@ -728,7 +728,9 @@ public class MainFragment extends AppCompatActivity {
             drawerLayout.closeDrawer(drawerView);
             binding.title.setText("할일");
             shardpref.putString("Tap", "1");
+            pm.Main(mContext);
             shardpref.putInt("SELECT_POSITION",1);
+            shardpref.putInt("SELECT_POSITION_sub", 1);
             binding.tabLayout.getTabAt(1).select();
         } else if (view.getId() == R.id.select_nav08) {//할일추가하기 - 작성페이지로
             drawerLayout.closeDrawer(drawerView);
