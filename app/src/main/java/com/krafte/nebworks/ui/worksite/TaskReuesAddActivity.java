@@ -8,8 +8,12 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -154,21 +158,21 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             //Singleton Area
-            place_id            = PlaceCheckData.getInstance().getPlace_id();
-            place_name          = PlaceCheckData.getInstance().getPlace_name();
-            place_owner_id      = PlaceCheckData.getInstance().getPlace_owner_id();
-            place_owner_name    = PlaceCheckData.getInstance().getPlace_owner_name();
-            place_address       = PlaceCheckData.getInstance().getPlace_address();
-            place_latitude      = PlaceCheckData.getInstance().getPlace_latitude();
-            place_longitude     = PlaceCheckData.getInstance().getPlace_longitude();
-            place_start_time    = PlaceCheckData.getInstance().getPlace_start_time();
-            place_end_time      = PlaceCheckData.getInstance().getPlace_end_time();
-            place_img_path      = PlaceCheckData.getInstance().getPlace_img_path();
-            place_start_date    = PlaceCheckData.getInstance().getPlace_start_date();
-            place_created_at    = PlaceCheckData.getInstance().getPlace_created_at();
-            return_page         = ReturnPageData.getInstance().getPage();
+            place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            place_name          = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
+            place_owner_id      = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
+            place_owner_name    = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_name());
+            place_address       = shardpref.getString("place_address", PlaceCheckData.getInstance().getPlace_address());
+            place_latitude      = shardpref.getString("place_latitude", PlaceCheckData.getInstance().getPlace_latitude());
+            place_longitude     = shardpref.getString("place_longitude", PlaceCheckData.getInstance().getPlace_longitude());
+            place_start_time    = shardpref.getString("place_start_time", PlaceCheckData.getInstance().getPlace_start_time());
+            place_end_time      = shardpref.getString("place_end_time", PlaceCheckData.getInstance().getPlace_end_time());
+            place_img_path      = shardpref.getString("place_img_path", PlaceCheckData.getInstance().getPlace_img_path());
+            place_start_date    = shardpref.getString("place_start_date", PlaceCheckData.getInstance().getPlace_start_date());
+            place_created_at    = shardpref.getString("place_created_at", PlaceCheckData.getInstance().getPlace_created_at());
+            return_page         = shardpref.getString("return_page", ReturnPageData.getInstance().getPage());
 
-            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
             USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
 
             //shardpref Area
@@ -1006,6 +1010,11 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         end_time = binding.inputTime02.getText().toString();
         overdate = overdate.replace("년 ", "-").replace("월 ", "-").replace("일", "").trim();
 
+        String[] splitStartTime = start_time.split(" ")[1].split(":");
+        String[] splitEndTime = end_time.split(" ")[1].split(":");
+        String[] splitStartDate = binding.inputDate01.getText().toString().replace("월", "").replace("일", "").split(" ");
+        String[] splitEndDate = binding.inputDate02.getText().toString().replace("월", "").replace("일", "").split(" ");
+
         if (WorkTitle.equals("")) {
             dlog.i("WorkTitle");
             BtnOneCircleFun(true);
@@ -1035,6 +1044,10 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             dlog.i("StarTime");
             BtnOneCircleFun(true);
             Toast.makeText(this, "마감시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1]) || Integer.parseInt(splitStartDate[0]) > Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) > Integer.parseInt(splitEndDate[1])) {
+            BtnOneCircleFun(true);
+            Toast_Nomal("시작날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.");
             return false;
         } else {
             dlog.i("제목2 : " + WorkTitle);
@@ -1081,6 +1094,20 @@ public class TaskReuesAddActivity extends AppCompatActivity {
     private void BtnOneCircleFun(boolean tf){
         binding.bottomBtnBox.setClickable(tf);
         binding.bottomBtnBox.setEnabled(tf);
+    }
+
+    public void Toast_Nomal(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
+        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 
     @Override

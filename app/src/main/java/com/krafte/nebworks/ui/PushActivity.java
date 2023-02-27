@@ -70,14 +70,14 @@ public class PushActivity extends AppCompatActivity {
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         mContext = this;
         dlog.DlogContext(mContext);
+        shardpref = new PreferenceHelper(mContext);
 
         setBtnEvent();
         //Singleton Area
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        place_owner_id  = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
 
         //shardpref Area
-        shardpref = new PreferenceHelper(mContext);
         type = shardpref.getString("type", "");
         channelId1 = shardpref.getBoolean("channelId1", false);
         channelId2 = shardpref.getBoolean("channelId2", false);

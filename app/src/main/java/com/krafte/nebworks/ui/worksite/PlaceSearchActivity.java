@@ -87,7 +87,7 @@ public class PlaceSearchActivity extends AppCompatActivity {
 
             //shardpref Area
             shardpref       = new PreferenceHelper(mContext);
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
 
             gpsTracker = new GpsTracker(this);
             latitude = gpsTracker.getLatitude();

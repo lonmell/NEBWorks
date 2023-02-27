@@ -154,8 +154,8 @@ public class FeedEditActivity extends AppCompatActivity {
         //UI 데이터 세팅
         try {
             //Singleton Area
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+            place_id        = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
 
             //shardpref Area
             feed_id = shardpref.getString("edit_feed_id", "0");

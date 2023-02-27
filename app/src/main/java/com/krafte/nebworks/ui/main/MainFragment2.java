@@ -452,8 +452,8 @@ public class MainFragment2 extends AppCompatActivity {
             dbc.PlacegetData(place_id);
             runOnUiThread(() -> {
                 getFCMToken();
-                String user_id = UserCheckData.getInstance().getUser_id();
-                String owner_id = PlaceCheckData.getInstance().getPlace_id();
+                String user_id = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+                String owner_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
                 if(user_id.equals(owner_id)){
                     UserCheckData.getInstance().setUser_auth("0");
                 }else{
@@ -483,7 +483,7 @@ public class MainFragment2 extends AppCompatActivity {
     //본인 토큰 생성
     @SuppressLint("LongLogTag")
     public void getFCMToken() {
-        type = PlaceCheckData.getInstance().getPlace_owner_id().equals(USER_INFO_ID) ? "0" : "1";
+        type = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id()).equals(USER_INFO_ID) ? "0" : "1";
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {

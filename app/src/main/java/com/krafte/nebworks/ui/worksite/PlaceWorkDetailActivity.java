@@ -164,11 +164,11 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
 
         setBtnEvent();
         //Singleton Area
-        place_id        = PlaceCheckData.getInstance().getPlace_id();
-        place_name      = PlaceCheckData.getInstance().getPlace_name();
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
-        USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+        place_id        = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+        place_name      = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
+        USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
         USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
         //shardpref Area

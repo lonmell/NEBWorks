@@ -137,17 +137,18 @@ public class TaskApprovalFragment extends AppCompatActivity {
 
 
         //Singleton Area
-        USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME      = UserCheckData.getInstance().getUser_name();
+        USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        USER_INFO_NAME      = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
         USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
-        place_id            = PlaceCheckData.getInstance().getPlace_id();
+        place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
 
         //shardpref Area
         SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
         wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
         gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
         return_page         = shardpref.getString("return_page","");
-        ReturnPageData.getInstance().setPage("BusinessApprovalActivity");
+        shardpref.putString("return_page", "BusinessApprovalActivity");
+//                ReturnPageData.getInstance().setPage("BusinessApprovalActivity");
 //        shardpref.putString("returnPage", "BusinessApprovalActivity");
 
         change_place_id = place_id;

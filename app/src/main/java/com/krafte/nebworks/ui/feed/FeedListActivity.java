@@ -86,11 +86,11 @@ public class FeedListActivity extends AppCompatActivity {
         setBtnEvent();
         shardpref = new PreferenceHelper(mContext);
         //Singleton Area
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
         USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-        place_id        = PlaceCheckData.getInstance().getPlace_id();
-        returnPage      = ReturnPageData.getInstance().getPage();
+        place_id        = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+        returnPage      = shardpref.getString("return_page", ReturnPageData.getInstance().getPage());
 
         //shardpref Area
 
