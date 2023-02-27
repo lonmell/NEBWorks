@@ -150,10 +150,10 @@ public class PushActivity extends AppCompatActivity {
         binding.activeOnArea05.setOnClickListener(v -> {
             if (binding.activeOnBt05.isChecked()) {
                 binding.activeOnBt05.setChecked(false);
-                channelId4 = false;
+                channelId5 = false;
             } else {
                 binding.activeOnBt05.setChecked(true);
-                channelId4 = true;
+                channelId5 = true;
             }
         });
     }
@@ -204,7 +204,7 @@ public class PushActivity extends AppCompatActivity {
                     binding.activeOnBt02.setChecked(channelId2);
                     binding.activeOnBt03.setChecked(channelId3);
                     binding.activeOnBt04.setChecked(channelId4);
-                    binding.activeOnBt04.setChecked(channelId5);
+                    binding.activeOnBt05.setChecked(channelId5);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
