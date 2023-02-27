@@ -80,10 +80,10 @@ public class TaskReuseActivity extends AppCompatActivity {
             shardpref   = new PreferenceHelper(mContext);
 
             //Singleton Area
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            place_id        = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
+            USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
             //shardpref Area

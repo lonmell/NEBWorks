@@ -181,10 +181,10 @@ public class ProfileEditActivity extends AppCompatActivity {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
 
             //Singleton Area
-            place_id = PlaceCheckData.getInstance().getPlace_id();
-            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-            USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
+            place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
+            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
 
@@ -647,12 +647,12 @@ public class ProfileEditActivity extends AppCompatActivity {
             });
         }else{
             try {
-                mem_id = UserCheckData.getInstance().getUser_id();
-                mem_name = UserCheckData.getInstance().getUser_name();
-                mem_nick = UserCheckData.getInstance().getUser_nick_name();
-                mem_phone = UserCheckData.getInstance().getUser_phone();
-                mem_gender = UserCheckData.getInstance().getUser_gender();
-                mem_img_path = UserCheckData.getInstance().getUser_img_path();
+                mem_id = shardpref.getString("mem_id", UserCheckData.getInstance().getUser_id());
+                mem_name = shardpref.getString("mem_name", UserCheckData.getInstance().getUser_name());
+                mem_nick = shardpref.getString("mem_nick", UserCheckData.getInstance().getUser_nick_name());
+                mem_phone = shardpref.getString("mem_phone", UserCheckData.getInstance().getUser_phone());
+                mem_gender = shardpref.getString("mem_gender", UserCheckData.getInstance().getUser_gender());
+                mem_img_path = shardpref.getString("mem_img_path", UserCheckData.getInstance().getUser_img_path());
 
                 dlog.i("------UserCheck-------");
                 USER_INFO_ID = mem_id;

@@ -103,21 +103,21 @@ public class TaskDetailActivity extends AppCompatActivity {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             //Singleton Area
-            place_id            = PlaceCheckData.getInstance().getPlace_id();
-            place_name          = PlaceCheckData.getInstance().getPlace_name();
-            place_owner_id      = PlaceCheckData.getInstance().getPlace_owner_id();
-            place_owner_name    = PlaceCheckData.getInstance().getPlace_owner_name();
-            place_address       = PlaceCheckData.getInstance().getPlace_address();
-            place_latitude      = PlaceCheckData.getInstance().getPlace_latitude();
-            place_longitude     = PlaceCheckData.getInstance().getPlace_longitude();
-            place_start_time    = PlaceCheckData.getInstance().getPlace_start_time();
-            place_end_time      = PlaceCheckData.getInstance().getPlace_end_time();
-            place_img_path      = PlaceCheckData.getInstance().getPlace_img_path();
-            place_start_date    = PlaceCheckData.getInstance().getPlace_start_date();
-            place_created_at    = PlaceCheckData.getInstance().getPlace_created_at();
-            return_page         = ReturnPageData.getInstance().getPage();
+            place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            place_name          = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
+            place_owner_id      = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
+            place_owner_name    = shardpref.getString("place_owner_name", PlaceCheckData.getInstance().getPlace_owner_name());
+            place_address       = shardpref.getString("place_address", PlaceCheckData.getInstance().getPlace_address());
+            place_latitude      = shardpref.getString("place_latitude",PlaceCheckData.getInstance().getPlace_latitude());
+            place_longitude     = shardpref.getString("place_longitude", PlaceCheckData.getInstance().getPlace_longitude());
+            place_start_time    = shardpref.getString("place_start_time", PlaceCheckData.getInstance().getPlace_start_time());
+            place_end_time      = shardpref.getString("place_end_time", PlaceCheckData.getInstance().getPlace_end_time());
+            place_img_path      = shardpref.getString("place_img_path", PlaceCheckData.getInstance().getPlace_img_path());
+            place_start_date    = shardpref.getString("place_start_date", PlaceCheckData.getInstance().getPlace_start_date());
+            place_created_at    = shardpref.getString("place_created_at", PlaceCheckData.getInstance().getPlace_created_at());
+            return_page         = shardpref.getString("return_page", ReturnPageData.getInstance().getPage());
 
-            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
+            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
             USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
 
             //shardpref Area
@@ -197,8 +197,8 @@ public class TaskDetailActivity extends AppCompatActivity {
                 int a = 0;
                 for(String str : user_id.replace("["," ").replace("]"," ").split(",")){
                     dlog.i("acceptTv str : " + str.replace("["," ").replace("]"," "));
-                    USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-                    dlog.i("USER_INFO_ID : " + UserCheckData.getInstance().getUser_id());
+                    USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+                    dlog.i("USER_INFO_ID : " + shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id()));
                     dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").contains(USER_INFO_ID));
                     if(str.replace("[","").replace("]","").contains(USER_INFO_ID)){
                         //배정 아이디가 포함되는 직원이 한명이라도 있을때는 업무 보고하기 버튼 보이기
@@ -217,8 +217,8 @@ public class TaskDetailActivity extends AppCompatActivity {
             int a = 0;
             for(String str : user_id.replace("["," ").replace("]"," ").split(",")){
                 dlog.i("acceptTv str : " + str.replace("["," ").replace("]"," "));
-                USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-                dlog.i("USER_INFO_ID : " + UserCheckData.getInstance().getUser_id());
+                USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+                dlog.i("USER_INFO_ID : " + shardpref.getString("USER_INFO_ID",UserCheckData.getInstance().getUser_id()));
                 dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").contains(USER_INFO_ID));
                 if(str.replace("[","").replace("]","").contains(USER_INFO_ID)){
                     //배정 아이디가 포함되는 직원이 한명이라도 있을때는 업무 보고하기 버튼 보이기

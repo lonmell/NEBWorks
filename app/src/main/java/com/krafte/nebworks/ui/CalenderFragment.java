@@ -117,8 +117,8 @@ public class CalenderFragment extends Fragment {
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
 
-        USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-        place_id            = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
 
         shardpref.putString("calendar_year", year);
         shardpref.putString("calendar_month", month);

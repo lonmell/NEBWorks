@@ -191,9 +191,9 @@ public class HomeFragment2 extends Fragment {
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
             //Singleton Area
-            place_id = PlaceCheckData.getInstance().getPlace_id();
-            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             //shardpref Area
@@ -535,28 +535,28 @@ public class HomeFragment2 extends Fragment {
         Thread th = new Thread(() -> {
             activity.runOnUiThread(() -> {
                 try {
-                    place_name = PlaceCheckData.getInstance().getPlace_name();
-                    place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
-                    place_owner_name = PlaceCheckData.getInstance().getPlace_owner_name();
-                    registr_num = PlaceCheckData.getInstance().getRegistr_num();
-                    store_kind = PlaceCheckData.getInstance().getStore_kind();
-                    place_address = PlaceCheckData.getInstance().getPlace_address();
-                    place_latitude = Double.parseDouble(PlaceCheckData.getInstance().getPlace_latitude());
-                    place_longitude = Double.parseDouble(PlaceCheckData.getInstance().getPlace_longitude());
-                    place_pay_day = PlaceCheckData.getInstance().getPlace_pay_day();
-                    place_test_period = PlaceCheckData.getInstance().getPlace_test_period();
-                    place_vacation_select = PlaceCheckData.getInstance().getPlace_vacation_select();
-                    place_insurance = PlaceCheckData.getInstance().getPlace_insurance();
-                    place_start_time = PlaceCheckData.getInstance().getPlace_start_time();
-                    place_end_time = PlaceCheckData.getInstance().getPlace_end_time();
-                    place_save_kind = PlaceCheckData.getInstance().getPlace_save_kind();
-                    place_wifi_name = PlaceCheckData.getInstance().getPlace_wifi_name();
-                    place_img_path = PlaceCheckData.getInstance().getPlace_img_path();
-                    place_start_date = PlaceCheckData.getInstance().getPlace_start_date();
-                    place_created_at = PlaceCheckData.getInstance().getPlace_created_at();
-                    place_icnt = PlaceCheckData.getInstance().getPlace_icnt();
-                    place_ocnt = PlaceCheckData.getInstance().getPlace_ocnt();
-                    place_totalcnt = PlaceCheckData.getInstance().getPlace_totalcnt();
+                    place_name = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
+                    place_owner_id = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
+                    place_owner_name = shardpref.getString("place_owner_name", PlaceCheckData.getInstance().getPlace_owner_name());
+                    registr_num = shardpref.getString("registr_name", PlaceCheckData.getInstance().getRegistr_num());
+                    store_kind = shardpref.getString("store_kind", PlaceCheckData.getInstance().getStore_kind());
+                    place_address = shardpref.getString("place_address", PlaceCheckData.getInstance().getPlace_address());
+                    place_latitude = Double.parseDouble(shardpref.getString("place_latitude", PlaceCheckData.getInstance().getPlace_latitude()));
+                    place_longitude = Double.parseDouble(shardpref.getString("place_longitude", PlaceCheckData.getInstance().getPlace_longitude()));
+                    place_pay_day = shardpref.getString("place_pay_day", PlaceCheckData.getInstance().getPlace_pay_day());
+                    place_test_period = shardpref.getString("place_test_period", PlaceCheckData.getInstance().getPlace_test_period());
+                    place_vacation_select = shardpref.getString("place_vacation_select", PlaceCheckData.getInstance().getPlace_vacation_select());
+                    place_insurance = shardpref.getString("place_insurance", PlaceCheckData.getInstance().getPlace_insurance());
+                    place_start_time = shardpref.getString("place_start_time", PlaceCheckData.getInstance().getPlace_start_time());
+                    place_end_time = shardpref.getString("place_end_time", PlaceCheckData.getInstance().getPlace_end_time());
+                    place_save_kind = shardpref.getString("place_save_kind", PlaceCheckData.getInstance().getPlace_save_kind());
+                    place_wifi_name = shardpref.getString("place_wifi_name", PlaceCheckData.getInstance().getPlace_wifi_name());
+                    place_img_path = shardpref.getString("place_img_path", PlaceCheckData.getInstance().getPlace_img_path());
+                    place_start_date = shardpref.getString("place_start_date", PlaceCheckData.getInstance().getPlace_start_date());
+                    place_created_at = shardpref.getString("place_created_at", PlaceCheckData.getInstance().getPlace_created_at());
+                    place_icnt = shardpref.getString("place_icnt", PlaceCheckData.getInstance().getPlace_icnt());
+                    place_ocnt = shardpref.getString("place_ocnt", PlaceCheckData.getInstance().getPlace_ocnt());
+                    place_totalcnt = shardpref.getString("place_totalcnt", PlaceCheckData.getInstance().getPlace_totalcnt());
 
                     Glide.with(mContext).load(place_img_path)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -601,19 +601,19 @@ public class HomeFragment2 extends Fragment {
             dbc.UserCheck(place_id, USER_INFO_ID);
             activity.runOnUiThread(() -> {
                 try {
-                    mem_id = UserCheckData.getInstance().getUser_id();
-                    mem_name = UserCheckData.getInstance().getUser_name();
-                    mem_phone = UserCheckData.getInstance().getUser_phone();
-                    mem_gender = UserCheckData.getInstance().getUser_gender();
-                    mem_img_path = UserCheckData.getInstance().getUser_img_path();
-                    mem_jumin = UserCheckData.getInstance().getUser_jumin();
-                    mem_join_date = UserCheckData.getInstance().getUser_join_date();
-                    mem_state = UserCheckData.getInstance().getUser_state();
-                    mem_jikgup = UserCheckData.getInstance().getUser_jikgup();
-                    mem_pay = UserCheckData.getInstance().getUser_pay();
-                    jongeob = UserCheckData.getInstance().getUser_jongeob();
-                    String kind = UserCheckData.getInstance().getUser_kind();
-                    contract_id = UserCheckData.getInstance().getUser_contract_id();
+                    mem_id = shardpref.getString("mem_id", UserCheckData.getInstance().getUser_id());
+                    mem_name = shardpref.getString("mem_name", UserCheckData.getInstance().getUser_name());
+                    mem_phone = shardpref.getString("mem_phone", UserCheckData.getInstance().getUser_phone());
+                    mem_gender = shardpref.getString("mem_gender", UserCheckData.getInstance().getUser_gender());
+                    mem_img_path = shardpref.getString("mem_img_path", UserCheckData.getInstance().getUser_img_path());
+                    mem_jumin = shardpref.getString("mem_jumin", UserCheckData.getInstance().getUser_jumin());
+                    mem_join_date = shardpref.getString("mem_join_date", UserCheckData.getInstance().getUser_join_date());
+                    mem_state = shardpref.getString("mem_state", UserCheckData.getInstance().getUser_state());
+                    mem_jikgup = shardpref.getString("mem_jikgup", UserCheckData.getInstance().getUser_jikgup());
+                    mem_pay = shardpref.getString("mem_pay", UserCheckData.getInstance().getUser_pay());
+                    jongeob = shardpref.getString("jongeob", UserCheckData.getInstance().getUser_jongeob());
+                    String kind = shardpref.getString("kind", UserCheckData.getInstance().getUser_kind());
+                    contract_id = shardpref.getString("contract_id", UserCheckData.getInstance().getUser_contract_id());
 
                     if (kind.equals("4")) {
                         binding.noMemberLine.setVisibility(View.VISIBLE);

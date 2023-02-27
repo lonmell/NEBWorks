@@ -151,9 +151,9 @@ public class FeedAddActivity extends AppCompatActivity {
         //UI 데이터 세팅
         try {
             setBtnEvent();
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+            place_id        = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 0);
@@ -415,17 +415,17 @@ public class FeedAddActivity extends AppCompatActivity {
 
     public void UserCheck() {
         try{
-            mem_id = UserCheckData.getInstance().getUser_id();
-            mem_name = UserCheckData.getInstance().getUser_name();
-            mem_phone = UserCheckData.getInstance().getUser_phone();
-            mem_gender = UserCheckData.getInstance().getUser_gender();
-            mem_img_path = UserCheckData.getInstance().getUser_img_path();
-            mem_jumin = UserCheckData.getInstance().getUser_jumin();
-            mem_kind = UserCheckData.getInstance().getUser_kind();
-            mem_join_date = UserCheckData.getInstance().getUser_join_date();
-            mem_state = UserCheckData.getInstance().getUser_state();
-            mem_jikgup = UserCheckData.getInstance().getUser_jikgup();
-            mem_pay = UserCheckData.getInstance().getUser_pay();
+            mem_id = shardpref.getString("mem_id", UserCheckData.getInstance().getUser_id());
+            mem_name = shardpref.getString("mem_name", UserCheckData.getInstance().getUser_name());
+            mem_phone = shardpref.getString("mem_phone", UserCheckData.getInstance().getUser_phone());
+            mem_gender = shardpref.getString("mem_gender", UserCheckData.getInstance().getUser_gender());
+            mem_img_path = shardpref.getString("mem_img_path", UserCheckData.getInstance().getUser_img_path());
+            mem_jumin = shardpref.getString("mem_jumin", UserCheckData.getInstance().getUser_jumin());
+            mem_kind = shardpref.getString("mem_kind", UserCheckData.getInstance().getUser_kind());
+            mem_join_date = shardpref.getString("mem_join_date", UserCheckData.getInstance().getUser_join_date());
+            mem_state = shardpref.getString("mem_state", UserCheckData.getInstance().getUser_state());
+            mem_jikgup = shardpref.getString("mem_jikgup", UserCheckData.getInstance().getUser_jikgup());
+            mem_pay = shardpref.getString("mem_pay", UserCheckData.getInstance().getUser_pay());
 
             dlog.i("------UserCheck-------");
             USER_INFO_ID = mem_id;
