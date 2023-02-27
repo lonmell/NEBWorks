@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".pop.feedReportPopActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:gravity="center"
+                android:text="[아르바이트생이 너무 괜...]\n게시글을 신고하시겠습니까?"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="13dp"
+                android:gravity="center"
+                android:text="신고사유를 입력해주시면\n담당자가 확인 후 조치하도록 하겠습니다."
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:id="@+id/select01"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="13dp"
+                android:layout_marginBottom="11dp"
+                android:background="@drawable/default_gray_round"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/select_radio01"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/select_empty_round"
+                    android:button="@null"
+                    android:clickable="false" />
+
+                <TextView
+                    android:id="@+id/select01_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@+id/select_radio01"
+                    android:text="욕설 및 비방"
+                    android:textColor="#54585A"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/select02"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:layout_marginBottom="11dp"
+                android:background="@drawable/default_gray_round"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/select_radio02"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/select_empty_round"
+                    android:button="@null"
+                    android:clickable="false" />
+
+                <TextView
+                    android:id="@+id/select02_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@+id/select_radio02"
+                    android:text="광고성 게시글"
+                    android:textColor="#54585A"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/select03"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:layout_marginBottom="11dp"
+                android:background="@drawable/default_gray_round"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/select_radio03"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/select_empty_round"
+                    android:button="@null"
+                    android:clickable="false" />
+
+                <TextView
+                    android:id="@+id/select03_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@+id/select_radio03"
+                    android:text="기타"
+                    android:textColor="#54585A"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
+            </RelativeLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:layout_marginBottom="11dp"
+                android:text=""
+                android:fontFamily="@font/pretendard_regular"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:hint="신고사유를 입력해주세요"
+                android:paddingStart="15dp"
+                android:background="@drawable/default_gray_round"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RelativeLayout
+                    android:id="@+id/pop_left_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/pop_left_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="팝업 왼쪽버튼"
+                        android:textColor="#696969"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText,TextContrastCheck" />
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="#dcdcdc"/>
+                <RelativeLayout
+                    android:id="@+id/pop_right_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/pop_right_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="팝업 오른쪽버튼"
+                        android:textColor="@color/new_blue"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/pretendard_bold"
+                        tools:ignore="HardcodedText,TextContrastCheck" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

@@ -712,6 +712,9 @@ public class IntroActivity extends AppCompatActivity {
                                             dlog.i("UserCheck Exception : " + e);
                                         }
                                     }
+                                }else{
+                                    Toast_Nomal("사용자 데이터를 찾을 수 없습니다.");
+                                    pm.Login(mContext);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

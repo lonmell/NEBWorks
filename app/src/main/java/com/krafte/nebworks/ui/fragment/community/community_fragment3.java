@@ -111,10 +111,11 @@ public class community_fragment3 extends Fragment {
         //Shared
         try {
             //Singleton Area
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
+            place_id        = shardpref.getString("place_id","");
+            place_owner_id  = shardpref.getString("place_owner_id","");
+
 
             //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);

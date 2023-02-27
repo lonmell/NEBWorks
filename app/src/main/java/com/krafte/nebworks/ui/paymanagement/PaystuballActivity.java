@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
@@ -129,15 +128,14 @@ public class PaystuballActivity extends AppCompatActivity {
         icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_full_round_check);
 
         //Singleton Area
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
+        USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME","");
         USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-        place_id        = PlaceCheckData.getInstance().getPlace_id();
-        place_name      = PlaceCheckData.getInstance().getPlace_name();
-        place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
-        //shardpref Area
+        place_id        = shardpref.getString("place_id","");
+        place_name      = shardpref.getString("place_name","");
+        place_owner_id  = shardpref.getString("place_owner_id","");
 
-        //-------------------
+        //shardpref Area
         select_month            = shardpref.getString("select_month","");
         stub_store_name         = shardpref.getString("store_name","");
         stub_place_id           = shardpref.getString("stub_place_id","0");
@@ -176,11 +174,7 @@ public class PaystuballActivity extends AppCompatActivity {
                 String message = "["+PlaceCheckData.getInstance().getPlace_name()+"] \n ["+stub_user_name+"] 님의 " + select_month + "월 급여명세서가 도착했습니다.";
                 getUserToken(stub_user_id,"1",message);
             }else{
-                if(USER_INFO_AUTH.equals("0")){
-                    pm.PayManagement(mContext);
-                }else{
-                    pm.PayManagement2(mContext);
-                }
+                pm.PayManagement(mContext);
             }
         });
     }

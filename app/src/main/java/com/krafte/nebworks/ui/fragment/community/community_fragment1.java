@@ -21,10 +21,8 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.adapter.SelectCateAdapter;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.PlaceNotiData;
 import com.krafte.nebworks.data.StringData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.FobiddenInterface;
 import com.krafte.nebworks.databinding.CommunityFragment1Binding;
@@ -126,11 +124,11 @@ public class community_fragment1 extends Fragment {
         //Shared
         try {
             //Singleton Area
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_id        = shardpref.getString("place_id","");
+            place_owner_id  = shardpref.getString("place_owner_id","");
 
             //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);
@@ -166,7 +164,6 @@ public class community_fragment1 extends Fragment {
 
         setCateList();
         getFobiddenWord();
-
     }
 
     private void setBtnEvent() {

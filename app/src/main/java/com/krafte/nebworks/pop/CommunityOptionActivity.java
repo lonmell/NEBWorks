@@ -70,8 +70,6 @@ public class CommunityOptionActivity extends Activity {
             binding.feedDelete.setText("게시글 삭제");
         }
 
-
-
     }
 
     private void setBtnEvent() {

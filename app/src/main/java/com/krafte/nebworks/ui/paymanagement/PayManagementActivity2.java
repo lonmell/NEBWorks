@@ -27,11 +27,7 @@ import com.krafte.nebworks.adapter.PaymentMemberAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.PaymentData;
-import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
-import com.krafte.nebworks.dataInterface.PayCalendersetData;
-import com.krafte.nebworks.dataInterface.WorkCalenderInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
 import com.krafte.nebworks.databinding.ActivityPaymanagement2Binding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
@@ -47,7 +43,6 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -119,10 +114,10 @@ public class PayManagementActivity2 extends AppCompatActivity {
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
             //Singleton Area
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+            place_id        = shardpref.getString("place_id","");
+            place_owner_id  = shardpref.getString("place_owner_id","");
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
+            USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME","");
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
             //shardpref Area

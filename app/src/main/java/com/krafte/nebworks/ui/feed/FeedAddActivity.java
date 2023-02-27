@@ -421,7 +421,6 @@ public class FeedAddActivity extends AppCompatActivity {
             mem_gender = UserCheckData.getInstance().getUser_gender();
             mem_img_path = UserCheckData.getInstance().getUser_img_path();
             mem_jumin = UserCheckData.getInstance().getUser_jumin();
-            mem_kind = UserCheckData.getInstance().getUser_kind();
             mem_join_date = UserCheckData.getInstance().getUser_join_date();
             mem_state = UserCheckData.getInstance().getUser_state();
             mem_jikgup = UserCheckData.getInstance().getUser_jikgup();
@@ -430,7 +429,6 @@ public class FeedAddActivity extends AppCompatActivity {
             dlog.i("------UserCheck-------");
             USER_INFO_ID = mem_id;
             dlog.i("프로필 사진 url : " + mem_img_path);
-            dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
             dlog.i("성명 : " + mem_name);
             dlog.i("부서 : " + mem_jikgup);
             dlog.i("급여 : " + mem_pay);

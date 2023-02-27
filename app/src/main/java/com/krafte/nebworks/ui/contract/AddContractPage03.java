@@ -23,7 +23,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractBasicInterface;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
@@ -86,14 +85,15 @@ public class AddContractPage03 extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         //Singleton Area
-        place_id        = PlaceCheckData.getInstance().getPlace_id();
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+
 
         //shardpref Area
         shardpref           = new PreferenceHelper(mContext);
         worker_id           = shardpref.getString("worker_id", "0");
         contract_place_id   = shardpref.getString("contract_place_id", "0");
         contract_user_id    = shardpref.getString("contract_user_id", "0");
+        place_id            = shardpref.getString("place_id", "0");
+        USER_INFO_ID        = shardpref.getString("USER_INFO_ID", "0");
 
         setBtnEvent();
 

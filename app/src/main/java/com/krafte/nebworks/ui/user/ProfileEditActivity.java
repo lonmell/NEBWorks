@@ -310,6 +310,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 user_name = s.toString();
             }
         });
+
         binding.userPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -380,18 +381,20 @@ public class ProfileEditActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 phone = s.toString();
-                if (!editstate.equals("edit")) {
-                    if (mem_phone.equals(phone)) {
-                        binding.getAuthResult.setVisibility(View.GONE);
-                        binding.linear02.setVisibility(View.GONE);
-                    } else {
-                        binding.getAuthResult.setVisibility(View.VISIBLE);
-                        binding.linear02.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    binding.getAuthResult.setVisibility(View.GONE);
-                    binding.linear02.setVisibility(View.GONE);
-                }
+//                if (!editstate.equals("edit")) {
+//                    if (mem_phone.equals(phone)) {
+//                        binding.getAuthResult.setVisibility(View.GONE);
+//                        binding.linear02.setVisibility(View.GONE);
+//                    } else {
+//                        binding.getAuthResult.setVisibility(View.VISIBLE);
+//                        binding.linear02.setVisibility(View.VISIBLE);
+//                    }
+//                } else {
+//                    binding.getAuthResult.setVisibility(View.GONE);
+//                    binding.linear02.setVisibility(View.GONE);
+//                }
+                binding.getAuthResult.setVisibility(View.GONE);
+                binding.linear02.setVisibility(View.GONE);
             }
         });
         binding.getAuthResult.setOnClickListener(v -> {
@@ -724,12 +727,14 @@ public class ProfileEditActivity extends AppCompatActivity {
         } else if (ProfileUrl.isEmpty()) {
 //            Toast.makeText(mContext, "프로필 사진을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (!CertiSuccessTF) {
-            Toast.makeText(mContext, "번호 인증이 필요합니다.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
+        }else {
             return true;
         }
+
+//         else if (!CertiSuccessTF) {
+//            Toast.makeText(mContext, "번호 인증이 필요합니다.", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
     }
 
     public void SaveUser() {

@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface FeedCommentListInterface {
     String URL = "http://krafte.net/NEBWorks/comment/";
-
+    //http://krafte.net/NEBWorks/comment/get.php?feed_id=201&user_id=199
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(

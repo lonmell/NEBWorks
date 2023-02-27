@@ -21,7 +21,6 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ContractListAdapter;
 import com.krafte.nebworks.data.ContractData;
 import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractListInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -111,9 +110,9 @@ public class ContractFragment1 extends Fragment {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
         //Singleton Area
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
         USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-        place_id        = PlaceCheckData.getInstance().getPlace_id();
+        place_id        = shardpref.getString("place_id","");
 
         //shardpref Area
 

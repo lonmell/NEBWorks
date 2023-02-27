@@ -23,12 +23,9 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.adapter.SelectCateAdapter;
 import com.krafte.nebworks.adapter.TaxListAdapter;
-import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.PlaceNotiData;
-import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.StringData;
 import com.krafte.nebworks.data.TaxMemberData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.TaxMemListInterface;
 import com.krafte.nebworks.databinding.ActivityCommunityAllBinding;
@@ -101,9 +98,9 @@ public class MoreListCommunityActivity extends AppCompatActivity {
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
         //Singleton Area
-        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-        returnPage = ReturnPageData.getInstance().getPage();
-        place_id = PlaceCheckData.getInstance().getPlace_id();
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        returnPage = shardpref.getString("returnPage", "");
+        place_id = shardpref.getString("place_id", "");
 
         //shardpref Area
         com_kind = shardpref.getInt("com_kind", 0); // -- 0 : 인기게시글 / 1 : 전체게시글

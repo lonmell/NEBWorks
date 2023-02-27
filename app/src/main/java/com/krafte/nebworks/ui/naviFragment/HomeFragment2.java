@@ -612,7 +612,6 @@ public class HomeFragment2 extends Fragment {
                     mem_jikgup = UserCheckData.getInstance().getUser_jikgup();
                     mem_pay = UserCheckData.getInstance().getUser_pay();
                     jongeob = UserCheckData.getInstance().getUser_jongeob();
-                    String kind = UserCheckData.getInstance().getUser_kind();
                     contract_id = UserCheckData.getInstance().getUser_contract_id();
 
                     if (kind.equals("4")) {

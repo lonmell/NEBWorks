@@ -26,9 +26,6 @@ import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
 import com.krafte.nebworks.adapter.WorkplaceMemberAdapter;
 import com.krafte.nebworks.bottomsheet.MemberOption;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
-import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.ReturnPageData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
@@ -126,13 +123,13 @@ public class MemberManagement extends AppCompatActivity {
             icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.menu_blue_bar);
 
             //Singleton Area
-            place_id = PlaceCheckData.getInstance().getPlace_id().equals("0") ? shardpref.getString("place_id", "0") : PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id().equals("0") ? shardpref.getString("getPlace_owner_id", "0") : PlaceCheckData.getInstance().getPlace_owner_id();
-            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-            USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
+            place_id = shardpref.getString("place_id", "0");
+            place_owner_id = shardpref.getString("getPlace_owner_id", "0");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "0");
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            return_page = ReturnPageData.getInstance().getPage();
-            ReturnPageData.getInstance().setPage("BusinessApprovalActivity");
+            return_page = shardpref.getString("return_page", "");
+            shardpref.putString("BusinessApprovalActivity", "");
 
             //shardpref Area
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);

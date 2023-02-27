@@ -27,8 +27,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.InOutInsertInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -107,9 +105,9 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
 
             shardpref           = new PreferenceHelper(mContext);
 
-            place_id            = PlaceCheckData.getInstance().getPlace_id();
-            USER_INFO_ID        = UserCheckData.getInstance().getUser_id();
-            mem_name            = UserCheckData.getInstance().getUser_name();
+            place_id            = shardpref.getString("place_id", "");
+            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", "");
+            mem_name            = shardpref.getString("USER_INFO_NAME", "");
 
             //데이터 가져오기
             place_end_time  = shardpref.getString("place_end_time", "");
@@ -146,6 +144,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
              * * */
             switch (state) {
                 case "1":
+                case "3":
                 case "4":
                     inout_insert.setText("확인");
                     time_area.setVisibility(View.VISIBLE);
@@ -156,11 +155,11 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     Setinout_tv2.setVisibility(View.VISIBLE);
                     inout_icon.setBackgroundResource(R.drawable.ic_in_enable);
                     break;
-                case "3":
-                    inout_insert.setText("확인");
-                    Setinout_tv2.setVisibility(View.VISIBLE);
-                    inout_icon.setBackgroundResource(R.drawable.ic_out_ok);
-                    break;
+//                case "3":
+//                    inout_insert.setText("확인");
+//                    Setinout_tv2.setVisibility(View.VISIBLE);
+//                    inout_icon.setBackgroundResource(R.drawable.ic_out_ok);
+//                    break;
             }
             Setinout_tv.setText(inout_tv);
             Setinout_tv2.setText(inout_tv2);

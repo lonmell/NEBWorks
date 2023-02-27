@@ -23,10 +23,8 @@ import com.krafte.nebworks.adapter.CateAdapter;
 import com.krafte.nebworks.adapter.OwnerCommunityAdapter;
 import com.krafte.nebworks.adapter.PagingAdapter;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.SecondTapCommunityData;
 import com.krafte.nebworks.data.StringData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.databinding.CommunityFragment2Binding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
@@ -120,11 +118,12 @@ public class community_fragment2  extends Fragment {
         //Shared
         try {
             //Singleton Area
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_EMAIL = UserCheckData.getInstance().getUser_account();
+            USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
+            USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_id        = shardpref.getString("place_id","");
+            place_owner_id  = shardpref.getString("place_owner_id","");
+
 
             //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);
