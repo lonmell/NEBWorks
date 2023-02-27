@@ -30,7 +30,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
@@ -39,8 +38,6 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.bottomsheet.SelectStringBottomSheet;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FeedNotiAddInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiEditInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
@@ -155,11 +152,11 @@ public class CommunityAddActivity extends AppCompatActivity {
 
 
         //Singleton Area
-        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
-        USER_INFO_NICKNAME = UserCheckData.getInstance().getUser_nick_name();
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+        USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-        place_id = PlaceCheckData.getInstance().getPlace_id();
+        place_id = shardpref.getString("place_id", "");
 
         //shardpref Area
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
@@ -210,10 +207,12 @@ public class CommunityAddActivity extends AppCompatActivity {
         binding.selectCategoryTxt.setText(category.isEmpty() ? "#정보에요" : category);
         binding.writeTitle.setText(title);
         binding.writeContents.setText(contents);
-        Glide.with(mContext).load(feed_img_path)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(binding.limitImg);
+
+
+//        Glide.with(mContext).load(feed_img_path)
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into(binding.limitImg);
 
         nickname_select = 1;
         user_input_name = USER_INFO_NICKNAME;
@@ -459,8 +458,12 @@ public class CommunityAddActivity extends AppCompatActivity {
         String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
         boardkind = "자유게시판";
         category = binding.selectCategoryTxt.getText().toString();
-
-        dlog.i("-----AddStroeNoti Check-----");
+        String fix_yn = "";
+        if(uriList.size() != 0 && ProfileUrl.size() == 0){
+            fix_yn = "n";
+            inputImage = String.valueOf(uriList).replace("[", "").replace("]", "").replace(" ", "");
+        }
+        dlog.i("-----EditStroeNoti Check-----");
         dlog.i("feed_id : " + feed_id);
         dlog.i("title : " + title);
         dlog.i("content : " + content);
@@ -468,14 +471,20 @@ public class CommunityAddActivity extends AppCompatActivity {
         dlog.i("BoardKind : " + boardkind);
         dlog.i("category : " + category);
         dlog.i("nickname_select : " + nickname_select);
-        dlog.i("-----AddStroeNoti Check-----");
+        dlog.i("saveBitmap1 : " + saveBitmap1);
+        dlog.i("saveBitmap2 : " + saveBitmap2);
+        dlog.i("saveBitmap3 : " + saveBitmap3);
+        dlog.i("uriList : " + uriList);
+        dlog.i("ProfileUrl : " + ProfileUrl);
+        dlog.i("uriList size : " + uriList.size());
+        dlog.i("-----EditStroeNoti Check-----");
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedNotiEditInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiEditInterface api = retrofit.create(FeedNotiEditInterface.class);
-        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", inputImage, "", "", "", "2", boardkind, category, String.valueOf(nickname_select), "");
+        Call<String> call = api.getData(feed_id, place_id, title, content, USER_INFO_ID, "", inputImage, "", "", "", "2", boardkind, category, String.valueOf(nickname_select), fix_yn);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -485,11 +494,13 @@ public class CommunityAddActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("EditStroeNoti jsonResponse length : " + jsonResponse.length());
+                            dlog.i("EditStroeNoti jsonResponse : " + jsonResponse);
                             try {
                                 if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
-                                    if (!ProfileUrl.isEmpty()) {
+                                    dlog.i("ProfileUrl.size()  : " + ProfileUrl.size() );
+                                    if (saveBitmap1 != null) {
+                                        dlog.i("saveBitmap1 : " + saveBitmap1);
                                         if (uriList.size() == 1) {
                                             if (!uriList.get(0).toString().equals("")) {
                                                 saveBitmapAndGetURI(0);
@@ -512,7 +523,6 @@ public class CommunityAddActivity extends AppCompatActivity {
                                                 saveBitmapAndGetURI(2);
                                             }
                                         }
-
                                     }
                                     Toast.makeText(mContext, "글 수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     shardpref.putString("feed_id", feed_id);
@@ -779,81 +789,85 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     @SuppressLint({"SimpleDateFormat", "LongLogTag"})
     public Uri saveBitmapAndGetURI(int i) {
-        //Create Bitmap
-        binding.loginAlertText.setVisibility(View.VISIBLE);
-        ByteArrayOutputStream bao = new ByteArrayOutputStream();
-        if (i == 0) {
-            saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 90, bao);
-        } else if (i == 1) {
-            saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 90, bao);
-        } else if (i == 2) {
-            saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 90, bao);
-        }
-        byte[] ba = bao.toByteArray();
-        String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
-
-        //Create Bitmap -> File
-        new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String file_name = ProfileUrl.get(i).replace("http://krafte.net/NEBWorks/image/feed_img/", "");
-        String fullFileName = BACKUP_PATH;
-
-        dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
-        dlog.i("(saveBitmapAndGetURI)USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("(saveBitmapAndGetURI)fullFileName : " + fullFileName);
-
-        File file_path;
-        try {
-            file_path = new File(fullFileName);
-            if (!file_path.isDirectory()) {
-                file_path.mkdirs();
-            }
-            dlog.i("(saveBitmapAndGetURI)file_path : " + file_path);
-            dlog.i("(saveBitmapAndGetURI)file_name : " + ProfileUrl.get(i));
-            file = new File(file_path, file_name);
-            FileOutputStream out = new FileOutputStream(file);
+        try{
+            //Create Bitmap
+            binding.loginAlertText.setVisibility(View.VISIBLE);
+            ByteArrayOutputStream bao = new ByteArrayOutputStream();
             if (i == 0) {
-                saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 90, bao);
             } else if (i == 1) {
-                saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 90, bao);
             } else if (i == 2) {
-                saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 90, bao);
             }
+            byte[] ba = bao.toByteArray();
+            String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
 
-            saveBitmapToFile(file);
+            //Create Bitmap -> File
+            new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
+            String file_name = ProfileUrl.get(i).replace("http://krafte.net/NEBWorks/image/feed_img/", "");
+            String fullFileName = BACKUP_PATH;
 
-            dlog.e("사인 저장 경로 : " + ProfileUrl);
-            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
-            RetrofitInterface retrofitInterface = ApiClient.getApiClient().create(RetrofitInterface.class);
-            Call<String> call = retrofitInterface.request(body);
+            dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
+            dlog.i("(saveBitmapAndGetURI)USER_INFO_ID : " + USER_INFO_ID);
+            dlog.i("(saveBitmapAndGetURI)fullFileName : " + fullFileName);
 
-            call.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    Log.e("uploaded_file()", "성공 : call = " + call + "response = " + response);
+            File file_path;
+            try {
+                file_path = new File(fullFileName);
+                if (!file_path.isDirectory()) {
+                    file_path.mkdirs();
+                }
+                dlog.i("(saveBitmapAndGetURI)file_path : " + file_path);
+                dlog.i("(saveBitmapAndGetURI)file_name : " + ProfileUrl.get(i));
+                file = new File(file_path, file_name);
+                FileOutputStream out = new FileOutputStream(file);
+                if (i == 0) {
+                    saveBitmap1.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                } else if (i == 1) {
+                    saveBitmap2.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                } else if (i == 2) {
+                    saveBitmap3.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                }
 
-                    if (fileDelete(String.valueOf(file))) {
-                        Log.e("uploaded_file()", "기존 이미지 삭제 완료");
-                    } else {
-                        Log.e("uploaded_file()", "이미지 삭제 오류");
+                saveBitmapToFile(file);
+
+                dlog.e("사인 저장 경로 : " + ProfileUrl);
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_name, requestFile);
+                RetrofitInterface retrofitInterface = ApiClient.getApiClient().create(RetrofitInterface.class);
+                Call<String> call = retrofitInterface.request(body);
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Log.e("uploaded_file()", "성공 : call = " + call + "response = " + response);
+
+                        if (fileDelete(String.valueOf(file))) {
+                            Log.e("uploaded_file()", "기존 이미지 삭제 완료");
+                        } else {
+                            Log.e("uploaded_file()", "이미지 삭제 오류");
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
-                    Log.e("uploaded_file()", "에러 : " + t.getMessage());
-                }
-            });
-            Log.d("(saveBitmapAndGetURI)이미지 경로 : ", Uri.fromFile(file).toString());
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.e("uploaded_file()", "에러 : " + t.getMessage());
+                    }
+                });
+                Log.d("(saveBitmapAndGetURI)이미지 경로 : ", Uri.fromFile(file).toString());
 
-            out.close();
-            binding.loginAlertText.setVisibility(View.GONE);
-            dlog.i("(saveBitmapAndGetURI)file : " + file);
-        } catch (FileNotFoundException exception) {
-            dlog.e("FileNotFoundException : " + exception.getMessage());
-        } catch (IOException exception) {
-            dlog.e("IOException : " + exception.getMessage());
+                out.close();
+                binding.loginAlertText.setVisibility(View.GONE);
+                dlog.i("(saveBitmapAndGetURI)file : " + file);
+            } catch (FileNotFoundException exception) {
+                dlog.e("FileNotFoundException : " + exception.getMessage());
+            } catch (IOException exception) {
+                dlog.e("IOException : " + exception.getMessage());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return null;
     }

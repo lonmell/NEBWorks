@@ -137,6 +137,7 @@
         <activity android:name=".ui.feed.FeedDetailActivity" />
         <activity android:name=".ui.feed.FeedEditActivity" />
 
+
         <!-- login -->
         <activity android:name=".ui.login.LoginActivity" />
 
@@ -340,6 +341,9 @@
 
         <activity
             android:name=".pop.WriteAddressActivity" />
+
+        <activity android:name=".pop.feedReportPopActivity"
+            android:theme="@android:style/Theme.Dialog" />
 
     </application>
 

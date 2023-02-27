@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
@@ -142,14 +141,12 @@ public class AddPaystubActivity extends AppCompatActivity {
         icon_on = mContext.getApplicationContext().getResources().getDrawable(R.drawable.ic_full_round);
 
         //Singleton Area
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME  = UserCheckData.getInstance().getUser_name();
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
+        USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME","");
         USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-        place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+        place_owner_id  = shardpref.getString("place_owner_id","");
 
         //shardpref Area
-
-        //-------------------
         select_month = shardpref.getString("select_month","");
         select_user_id = shardpref.getString("select_user_id","");
         select_place_id = shardpref.getString("select_place_id","");

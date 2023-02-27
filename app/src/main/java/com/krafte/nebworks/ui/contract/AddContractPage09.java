@@ -23,8 +23,6 @@ import com.kakao.sdk.template.model.Social;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd09Binding;
@@ -88,9 +86,7 @@ public class AddContractPage09 extends AppCompatActivity {
         dlog.DlogContext(mContext);
 
         //Singleton Area
-        place_id        = PlaceCheckData.getInstance().getPlace_id();
-        place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
-        USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
+
 
         //shardpref Area
         shardpref       = new PreferenceHelper(mContext);
@@ -98,6 +94,9 @@ public class AddContractPage09 extends AppCompatActivity {
         contract_id     = shardpref.getString("contract_id","0");
         contract_email  = shardpref.getString("contract_email","0");
         worker_name     = shardpref.getString("worker_name", "");
+        place_id        = shardpref.getString("place_id", "");
+        place_owner_id  = shardpref.getString("place_owner_id", "");
+        USER_INFO_ID    = shardpref.getString("USER_INFO_ID", "");
 
         // Kakao SDK 객체 초기화
         KakaoSdk.init(this, getString(R.string.kakao_native_key));

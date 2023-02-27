@@ -27,8 +27,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.adapter.WorkCommentListAdapter;
-import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCommentData;
 import com.krafte.nebworks.dataInterface.AddLikeInterface;
 import com.krafte.nebworks.dataInterface.FeedCommentEidtInterface;
@@ -39,6 +37,8 @@ import com.krafte.nebworks.dataInterface.UpdateViewInterfcae;
 import com.krafte.nebworks.databinding.ActivityCommunityDetailBinding;
 import com.krafte.nebworks.pop.CommunityOptionActivity;
 import com.krafte.nebworks.pop.PhotoPopActivity;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
+import com.krafte.nebworks.pop.feedReportPopActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -116,7 +116,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
     MultiImageAdapter adapter;
     String subcomment_id = "";
     String subcomment_name = "";
+
     boolean settingft = false;
+
 
     @SuppressLint({"LongLogTag", "UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -138,12 +140,12 @@ public class CommunityDetailActivity extends AppCompatActivity {
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
         //Singleton Area
-        USER_INFO_ID = UserCheckData.getInstance().getUser_id();
-        USER_INFO_NAME = UserCheckData.getInstance().getUser_name();
-        USER_INFO_NICKNAME = UserCheckData.getInstance().getUser_nick_name();
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", "");
+        USER_INFO_NICKNAME = shardpref.getString("USER_INFO_NICKNAME", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-        place_id = PlaceCheckData.getInstance().getPlace_id();
-        USER_INFO_PROFILE = UserCheckData.getInstance().getUser_img_path();
+        place_id = shardpref.getString("place_id", "");
+        USER_INFO_PROFILE = shardpref.getString("USER_INFO_PROFILE", "");
 
         //shardpref Area
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
@@ -191,34 +193,78 @@ public class CommunityDetailActivity extends AppCompatActivity {
             AddLike(feed_id);
         });
 
-        if (!writer_id.equals(USER_INFO_ID)) {
-            binding.listSetting.setVisibility(View.GONE);
-        } else {
-            binding.listSetting.setVisibility(View.VISIBLE);
-        }
+//        if (writer_id.equals(USER_INFO_ID)) {
+//            binding.listSetting.setVisibility(View.GONE);
+//        } else {
+//            binding.listSetting.setVisibility(View.VISIBLE);
+//        }
 
         binding.listSetting.setOnClickListener(v -> {
-            shardpref.putString("feed_id", feed_id);
-            shardpref.putString("place_id", place_id);
-            shardpref.putString("title", title);
-            shardpref.putString("contents", contents);
-            shardpref.putString("writer_id", writer_id);
-            shardpref.putString("writer_name", writer_name);
-            shardpref.putString("writer_img_path", writer_img_path);
-            shardpref.putString("feed_img_path", feed_img_path);
-            shardpref.putString("jikgup", jikgup);
-            shardpref.putString("view_cnt", view_cnt);
-            shardpref.putString("comment_cnt", comment_cnt);
-            shardpref.putString("category", category);
-            shardpref.putString("state", "EditCommunity");
-            Intent intent = new Intent(mContext, CommunityOptionActivity.class);
-            intent.putExtra("state", "EditCommunity");
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+            if (!settingft) {
+                shardpref.putString("feed_id", feed_id);
+                shardpref.putString("place_id", place_id);
+                shardpref.putString("title", title);
+                shardpref.putString("contents", contents);
+                shardpref.putString("writer_id", writer_id);
+                shardpref.putString("writer_name", writer_name);
+                shardpref.putString("writer_img_path", writer_img_path);
+                shardpref.putString("feed_img_path", feed_img_path);
+                shardpref.putString("jikgup", jikgup);
+                shardpref.putString("view_cnt", view_cnt);
+                shardpref.putString("comment_cnt", comment_cnt);
+                shardpref.putString("category", category);
+                shardpref.putString("state", "EditCommunity");
+                dlog.i("edit_feed_id : " + shardpref.getString("edit_feed_id", "0"));
+                settingft = true;
+                binding.settingDetail.setVisibility(View.VISIBLE);
+                if (writer_id.equals(USER_INFO_ID)) {
+                    binding.delFeedbtn.setVisibility(View.VISIBLE);
+                } else {
+                    binding.delFeedbtn.setVisibility(View.GONE);
+                }
+            } else {
+                shardpref.remove("feed_id");
+                shardpref.remove("title");
+                shardpref.remove("contents");
+                shardpref.remove("writer_img_path");
+                shardpref.remove("feed_img_path");
+                shardpref.remove("jikgup");
+                shardpref.remove("view_cnt");
+                shardpref.remove("comment_cnt");
+                shardpref.remove("category");
+                shardpref.remove("state");
+                settingft = false;
+                binding.settingDetail.setVisibility(View.GONE);
+            }
+        });
+
+        binding.editFeedbtn.setOnClickListener(v -> {
+            if (writer_id.equals(USER_INFO_ID)) {
+                Intent intent = new Intent(mContext, CommunityAddActivity.class);
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            } else {
+                Intent intent = new Intent(mContext, feedReportPopActivity.class);
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }
+        });
+        binding.delFeedbtn.setOnClickListener(v -> {
+            click_htn = "icon_trash";
+            Intent intent = new Intent(this, TwoButtonPopActivity.class);
+            intent.putExtra("data", "해당 게시글을 삭제하시겠습니까?");
+            intent.putExtra("flag", "게시글삭제");
+            intent.putExtra("left_btn_txt", "취소");
+            intent.putExtra("right_btn_txt", "삭제");
+            startActivity(intent);
+            overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -233,12 +279,26 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("feed_id");
+        shardpref.remove("title");
+        shardpref.remove("contents");
+        shardpref.remove("writer_img_path");
+        shardpref.remove("feed_img_path");
+        shardpref.remove("jikgup");
+        shardpref.remove("view_cnt");
+        shardpref.remove("comment_cnt");
+        shardpref.remove("category");
+        shardpref.remove("state");
+    }
+    @Override
     public void onResume() {
         super.onResume();
         //UI 데이터 세팅
         try {
             GETFeed();
-
+            binding.settingDetail.setVisibility(View.GONE);
             dlog.i("onResume state : " + shardpref.getString("editstate", ""));
             if (shardpref.getString("editstate", "").equals("EditComment")) {
                 dlog.i("----------댓글 수정의 경우----------");
@@ -575,14 +635,16 @@ public class CommunityDetailActivity extends AppCompatActivity {
     private void setBtnEvent() {
         binding.addCommentBtn.setOnClickListener(v -> {
             comment = binding.addCommentTxt.getText().toString();
-            if (comment_id.isEmpty()) {
-                AddComment(feed_id, comment, USER_INFO_ID);
+            if (comment.equals("")) {
+                Toast_Nomal("작성된 내용이 없습니다.");
             } else {
-                EditComment(comment_id, comment);
+                if (comment_id.isEmpty()) {
+                    AddComment(feed_id, comment, USER_INFO_ID);
+                } else {
+                    EditComment(comment_id, comment);
+                }
             }
-
         });
-
     }
 
     String mem_id = "";
@@ -592,32 +654,20 @@ public class CommunityDetailActivity extends AppCompatActivity {
     String mem_gender = "";
     String mem_jumin = "";
     String mem_join_date = "";
-    String mem_state = "";
-    String mem_jikgup = "";
-    String mem_pay = "";
     String mem_img_path = "";
-    String io_state = "";
 
     public void UserCheck() {
         try {
-            mem_id = UserCheckData.getInstance().getUser_id();
-            mem_name = UserCheckData.getInstance().getUser_name();
-            mem_phone = UserCheckData.getInstance().getUser_phone();
-            mem_gender = UserCheckData.getInstance().getUser_gender();
-            mem_img_path = UserCheckData.getInstance().getUser_img_path();
-            mem_jumin = UserCheckData.getInstance().getUser_jumin();
-            mem_kind = UserCheckData.getInstance().getUser_kind();
-            mem_join_date = UserCheckData.getInstance().getUser_join_date();
-            mem_state = UserCheckData.getInstance().getUser_state();
-            mem_jikgup = UserCheckData.getInstance().getUser_jikgup();
-            mem_pay = UserCheckData.getInstance().getUser_pay();
+            mem_id = shardpref.getString("USER_INFO_ID", "");
+            mem_name = shardpref.getString("USER_INFO_NAME", "");
+            mem_phone = shardpref.getString("USER_INFO_PHONE", "");
+            mem_gender = shardpref.getString("USER_INFO_GENDER", "");
+            mem_img_path = shardpref.getString("USER_INFO_PROFILE", "");
+            mem_jumin = shardpref.getString("USER_INFO_BIRTH", "");
+            mem_join_date = shardpref.getString("USER_INFO_JOIN_DATE", "");
 
             dlog.i("------UserCheck-------");
             dlog.i("프로필 사진 url : " + mem_img_path);
-            dlog.i("직원소속구분분 : " + (mem_kind.equals("0") ? "정직원" : "협력업체"));
-            dlog.i("성명 : " + mem_name);
-            dlog.i("부서 : " + mem_jikgup);
-            dlog.i("급여 : " + mem_pay);
             dlog.i("USER_INFO_PROFILE : " + USER_INFO_PROFILE);
             dlog.i("------UserCheck-------");
         } catch (Exception e) {
@@ -692,7 +742,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                             Intent intent = new Intent(mContext, CommunityOptionActivity.class);
                                             WriteName = writer_name;
 
-                                            intent.putExtra("state", "EditComment2");
+                                            intent.putExtra("state", "EditComment");
                                             intent.putExtra("feed_id", feed_id);
                                             intent.putExtra("comment_id", comment_id);
                                             intent.putExtra("write_id", write_id);

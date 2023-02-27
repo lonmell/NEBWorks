@@ -135,6 +135,7 @@ public class TwoButtonPopActivity extends Activity {
         right_btn_txt = intent.getStringExtra("right_btn_txt");
         naverIdLoginSDK = NaverIdLoginSDK.INSTANCE;
 
+        dlog.i("flag : " + flag);
         USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "");
         if (USER_LOGIN_METHOD.equals("Google")) {
             dlog.i("USER_LOGIN_METHOD : " + USER_LOGIN_METHOD);
@@ -394,7 +395,7 @@ public class TwoButtonPopActivity extends Activity {
                 pm.FeedList(mContext);
             }else if (flag.equals("채널")) {
                 pm.AuthSelect(mContext);
-            }else if (flag.equals("게시글삭제2")) {
+            } else if (flag.equals("게시글삭제2")) {
                 shardpref.putInt("SELECT_POSITION", 3);
                 if(USER_INFO_AUTH.equals("0")){
                     pm.Main(mContext);
@@ -486,6 +487,7 @@ public class TwoButtonPopActivity extends Activity {
 
     //댓글삭제
     public void CommentDelete(String id) {
+        dlog.i("CommentDelete get id = " + id);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedCommentDelInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -500,8 +502,8 @@ public class TwoButtonPopActivity extends Activity {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+                            dlog.i("CommentDelete jsonResponse length : " + jsonResponse.length());
+                            dlog.i("CommentDelete jsonResponse : " + jsonResponse);
                             try {
                                 if(jsonResponse.replace("\"","").equals("")){
                                     Toast_Nomal(shardpref.getString("comment_title","") + " 댓글 삭제가 완료되었습니다");

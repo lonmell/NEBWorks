@@ -25,8 +25,6 @@ import androidx.core.net.ParseException;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.InoutPopActivity;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
-import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.databinding.ActivityEmployeeProcessBinding;
 import com.krafte.nebworks.util.DateCurrent;
@@ -40,7 +38,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -106,8 +103,8 @@ public class EmployeeProcess extends AppCompatActivity {
         shardpref = new PreferenceHelper(mContext);
         try {
             //Singleton Area
-            place_id = PlaceCheckData.getInstance().getPlace_id();
-            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+            place_id = shardpref.getString("place_id", "0");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
 
             //shardpref Area
             kind = shardpref.getString("kind", "0");
@@ -125,7 +122,12 @@ public class EmployeeProcess extends AppCompatActivity {
             }
 
             binding.processDate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
-            binding.processTitle.setText(mem_name + "님\n 오늘도 화이팅하세요!");
+            if (kind.equals("0")) {
+                binding.processTitle.setText(mem_name + "님\n 오늘도 화이팅하세요!");
+            } else {
+                binding.processTitle.setText(mem_name + "님\n 오늘도 수고하셨습니다.");
+            }
+
 
             binding.closeProcess.setOnClickListener(v -> {
                 super.onBackPressed();
@@ -149,11 +151,9 @@ public class EmployeeProcess extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
     @Override
-    public void onResume() {
-        super.onResume();
-        BtnOneCircleFun(true);
+    public void onStart(){
+        super.onStart();
         getPlaceData();
         MoveMyLocation();
         handler.postDelayed(() -> {
@@ -169,7 +169,7 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("GET_TIME : " + simpleDate.format(mDate));
             dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
             dlog.i("거리 : " + getDistance);
-            if (getDistance <= 20 && getMySSID.equals(place_wifi_name)) {
+            if (getDistance <= 30 && getMySSID.equals(place_wifi_name)) {
                 if (kind.equals("0")) {
                     title = "출근처리";
                 } else {
@@ -182,13 +182,19 @@ public class EmployeeProcess extends AppCompatActivity {
                 if (kind.equals("0")) {
                     title = "출근처리 불가";
                 } else {
-                    title = "퇴근근처리 불가";
+                    title = "퇴근처리 불가";
                 }
-                binding.inoutAble.setText("출근처리불가");
+                binding.inoutAble.setText(title);
                 binding.inoutAble.setTextColor(Color.parseColor("#DD6540"));
 //            Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
             }
-        }, 1000); //0.5초 후 인트로 실행
+        }, 500); //0.5초 후 핸들러 실행
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        BtnOneCircleFun(true);
+
     }
 
     private void outTime() {
@@ -250,7 +256,7 @@ public class EmployeeProcess extends AppCompatActivity {
             dlog.i("kind : " + kind);
 
             if (kind.equals("0")) {
-                if (getDistance <= 20 && getMySSID.equals(place_wifi_name)) {
+                if (getDistance <= 30 && getMySSID.equals(place_wifi_name)) {
                     //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
                     io_state = "출근처리";
                     InOutPop(GET_TIME, "1", place_name, io_state, "", "0");
@@ -258,7 +264,7 @@ public class EmployeeProcess extends AppCompatActivity {
                     InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.", "0");
                 }
             } else {
-                if (getDistance <= 20 && getMySSID.equals(place_wifi_name)) {
+                if (getDistance <= 30 && getMySSID.equals(place_wifi_name)) {
                     io_state = "퇴근처리";
                     dlog.i("compareDate2 :" + compareDate2());
                     //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
