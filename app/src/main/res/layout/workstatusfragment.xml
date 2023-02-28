@@ -305,7 +305,12 @@
                                     android:id="@+id/status_child_fragment_container"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_below="@+id/status_select_area" />
+                                    android:layout_below="@+id/status_select_area" >
+
+                                    <include
+                                        android:id="@+id/add_btn"
+                                        layout="@layout/addbtn" />
+                                </com.krafte.nebworks.util.SwipeFrameLayout>
 
                                 <RelativeLayout
                                     android:id="@+id/calendar_area"
@@ -635,9 +640,6 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <include
-            android:id="@+id/add_btn"
-            layout="@layout/addbtn"/>
     </RelativeLayout>
     <include layout="@layout/navbar" />
 </androidx.drawerlayout.widget.DrawerLayout>

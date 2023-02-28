@@ -34,6 +34,7 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
     RetrofitConnect rc = new RetrofitConnect();
     String month = "";
     DateCurrent dc = new DateCurrent();
+    String vaca_state = "";
 
     public MemberInoutAdapter(Context context, ArrayList<WorkGotoListData.WorkGotoListData_list> data, String month) {
         this.mData = data;
@@ -70,31 +71,61 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
 
             dlog.i("item.getWorkdiff() : " + item.getWorkdiff());
             dlog.i("item.getState() : " + item.getState());
+            vaca_state = item.getVaca_accept().equals("휴가")?"휴가":"";
 
             if (!item.getWorkdiff().equals("null")) {
-                holder.time.setText(item.getWorkdiff());
+                if(vaca_state.equals("")){
+                    holder.time.setText(item.getWorkdiff());
+                }else{
+                    holder.time.setText(vaca_state + "\n" + item.getWorkdiff());
+                }
             } else {
                 if (item.getState().equals("휴무")) {
                     holder.time.setTextColor(Color.parseColor("#6395EC"));
                     holder.time.setText(item.getState());
                 } else if (item.getState().equals("결근")) {
-                    holder.time.setTextColor(Color.parseColor("#DD6540"));
-                    holder.time.setText(item.getState());
+                    if(vaca_state.equals("")){
+                        holder.time.setTextColor(Color.parseColor("#DD6540"));
+                        holder.time.setText(item.getState());
+                    }else{
+                        holder.time.setTextColor(Color.parseColor("#6395EC"));
+                        holder.time.setText(vaca_state);
+                    }
                 } else {
                     if(item.getSieob1().equals("지각")){
-                        holder.time.setText(item.getSieob1());
-                        holder.time.setTextColor(Color.parseColor("#DD6540"));
+                        if(vaca_state.equals("")){
+                            holder.time.setTextColor(Color.parseColor("#DD6540"));
+                            holder.time.setText(item.getSieob1());
+                        }else{
+                            holder.time.setTextColor(Color.parseColor("#6395EC"));
+                            holder.time.setText(vaca_state);
+                        }
                     }else if(item.getSieob1().equals("조기퇴근")){
-                        holder.time.setText(item.getSieob1());
-                        holder.time.setTextColor(Color.parseColor("#DD6540"));
+                        if(vaca_state.equals("")){
+                            holder.time.setTextColor(Color.parseColor("#DD6540"));
+                            holder.time.setText(item.getSieob1());
+                        }else{
+                            holder.time.setTextColor(Color.parseColor("#6395EC"));
+                            holder.time.setText(vaca_state);
+                        }
                     }else if(item.getSieob1().equals("추가근무/퇴근")){
-                        holder.time.setText(item.getSieob1());
-                        holder.time.setTextColor(Color.parseColor("#6395EC"));
+                        if(vaca_state.equals("")){
+                            holder.time.setTextColor(Color.parseColor("#DD6540"));
+                            holder.time.setText(item.getSieob1());
+                        }else{
+                            holder.time.setTextColor(Color.parseColor("#6395EC"));
+                            holder.time.setText(vaca_state);
+                        }
                     }else{
-                        holder.time.setText("");
+                        if(vaca_state.equals("휴가")){
+                            holder.time.setTextColor(Color.parseColor("#6395EC"));
+                        }
+                        holder.time.setText(vaca_state);
                     }
                 }
             }
+
+
             if (!item.getSieob1().equals("null")) {
                 holder.in_time.setTextColor(Color.parseColor("#DD6540"));
             } else {

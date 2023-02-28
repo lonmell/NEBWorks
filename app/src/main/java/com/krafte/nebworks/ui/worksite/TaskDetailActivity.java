@@ -206,7 +206,7 @@ public class TaskDetailActivity extends AppCompatActivity {
                     }
                     dlog.i("a.size() : " + a);
                     if(a > 0){
-                        binding.acceptBtnBox.setVisibility(View.VISIBLE);
+                        binding.acceptBtnBox.setVisibility(TaskKind.equals("3")?View.GONE:View.VISIBLE);
                     }else{
                         binding.acceptBtnBox.setVisibility(View.GONE);
                     }
@@ -226,12 +226,13 @@ public class TaskDetailActivity extends AppCompatActivity {
                 }
                 dlog.i("a.size() : " + a);
                 if(a > 0){
-                    binding.acceptBtnBox.setVisibility(View.VISIBLE);
+                    binding.acceptBtnBox.setVisibility(TaskKind.equals("3")?View.GONE:View.VISIBLE);
                 }else{
                     binding.acceptBtnBox.setVisibility(View.GONE);
                 }
             }
         }else{
+            binding.acceptBtnBox.setVisibility(TaskKind.equals("3")?View.GONE:View.VISIBLE);
             binding.acceptTv.setText("보고 확인하기");
         }
 
@@ -265,37 +266,51 @@ public class TaskDetailActivity extends AppCompatActivity {
         }
 
         if (getYoil.isEmpty()) { // 반복 업무 X
-            String[] startTimeSplit = start_time.split(" ");
-            String[] splitStartTime = startTimeSplit[1].split(":");
-            if (Integer.parseInt(splitStartTime[0]) < 12) {
-                binding.startTime.setText(startTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
-            } else {
-                binding.startTime.setText(startTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+            if(start_time.length() <= 10){//날짜만 있는 경우
+                binding.startTime.setText(start_time);
+            }else{
+                String[] startTimeSplit = start_time.split(" ");
+                String[] splitStartTime = startTimeSplit[1].split(":");
+                if (Integer.parseInt(splitStartTime[0]) < 12) {
+                    binding.startTime.setText(startTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                } else {
+                    binding.startTime.setText(startTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                }
             }
 
-            String[] endTimeSplit = end_time.split(" ");
-            String[] splitEndTime = endTimeSplit[1].split(":");
-            if (Integer.parseInt(splitEndTime[0]) < 12) {
-                binding.endTime.setText(endTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
-            } else {
-                binding.endTime.setText(endTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+            if(end_time.length() <= 10){//날짜만 있는 경우
+                binding.endTime.setText(end_time);
+            }else{
+                String[] endTimeSplit = end_time.split(" ");
+                String[] splitEndTime = endTimeSplit[1].split(":");
+                if (Integer.parseInt(splitEndTime[0]) < 12) {
+                    binding.endTime.setText(endTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                } else {
+                    binding.endTime.setText(endTimeSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                }
             }
         } else { // 반복 업무 O
-            String[] splitStartTime = start_time.split(":");
-            if (Integer.parseInt(splitStartTime[0]) < 12) {
-                binding.startTime.setText(String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
-            } else {
-                binding.startTime.setText(String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+            if(start_time.length() <= 10){//날짜만 있는 경우
+                binding.startTime.setText(start_time);
+            }else{
+                String[] splitStartTime = start_time.split(":");
+                if (Integer.parseInt(splitStartTime[0]) < 12) {
+                    binding.startTime.setText(String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                } else {
+                    binding.startTime.setText(String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1])));
+                }
             }
-
-            String[] splitEndTime = end_time.split(":");
-            if (Integer.parseInt(splitEndTime[0]) < 12) {
-                binding.endTime.setText(String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
-            } else {
-                binding.endTime.setText(String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+            if(end_time.length() <= 10){//날짜만 있는 경우
+                binding.endTime.setText(end_time);
+            }else{
+                String[] splitEndTime = end_time.split(":");
+                if (Integer.parseInt(splitEndTime[0]) < 12) {
+                    binding.endTime.setText(String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                } else {
+                    binding.endTime.setText(String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1])));
+                }
             }
         }
-
 //        binding.startTime.setText(start_time);
 //        binding.endTime.setText(end_time);
 

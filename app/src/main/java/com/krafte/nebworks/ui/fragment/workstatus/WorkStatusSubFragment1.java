@@ -224,6 +224,7 @@ public class WorkStatusSubFragment1 extends Fragment {
                                         "9:20",
                                         "18:32",
                                         "9:30 ~ 18:30",
+                                        "",
                                         ""
                                 ));
                             } else {
@@ -262,7 +263,8 @@ public class WorkStatusSubFragment1 extends Fragment {
                                                 jsonObject.getString("in_time"),
                                                 jsonObject.getString("out_time"),
                                                 jsonObject.getString("worktime"),
-                                                jsonObject.getString("commuting")
+                                                jsonObject.getString("commuting"),
+                                                jsonObject.getString("vaca_accept")
                                         ));
                                     }
                                     mAdapter.notifyDataSetChanged();

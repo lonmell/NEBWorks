@@ -13,10 +13,11 @@ public class WorkGotoListData {
         String sieob2 = "";
         String jongeob1 = "";
         String jongeob2 = "";
+        String vaca_accept = "";
 
         public WorkGotoListData_list( String day, String yoil, String in_time,
                 String out_time, String workdiff, String state, String sieob1, String sieob2,
-                String jongeob1, String jongeob2) {
+                String jongeob1, String jongeob2, String vaca_accept) {
             this.day = day;
             this.yoil = yoil;
             this.in_time = in_time;
@@ -27,6 +28,7 @@ public class WorkGotoListData {
             this.sieob2 = sieob2;
             this.jongeob1 = jongeob1;
             this.jongeob2 = jongeob2;
+            this.vaca_accept = vaca_accept;
         }
 
         public String getDay() {
@@ -107,6 +109,14 @@ public class WorkGotoListData {
 
         public void setJongeob2(String jongeob2) {
             this.jongeob2 = jongeob2;
+        }
+
+        public String getVaca_accept() {
+            return vaca_accept;
+        }
+
+        public void setVaca_accept(String vaca_accept) {
+            this.vaca_accept = vaca_accept;
         }
     }
 }
