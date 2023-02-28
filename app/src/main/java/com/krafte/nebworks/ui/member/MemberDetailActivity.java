@@ -717,7 +717,8 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                     jsonObject.getString("sieob2"),
                                                     jsonObject.getString("jongeob1"),
                                                     jsonObject.getString("jongeob2"),
-                                                    jsonObject.getString("vaca_accept")
+                                                    jsonObject.getString("vaca_accept"),
+                                                    jsonObject.getString("hdd")
                                             ));
                                         }
                                         inoutmAdapter.notifyDataSetChanged();

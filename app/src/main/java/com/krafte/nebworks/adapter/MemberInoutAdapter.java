@@ -35,6 +35,7 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
     String month = "";
     DateCurrent dc = new DateCurrent();
     String vaca_state = "";
+    String hdd_state = "";
 
     public MemberInoutAdapter(Context context, ArrayList<WorkGotoListData.WorkGotoListData_list> data, String month) {
         this.mData = data;
@@ -64,6 +65,7 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
             }
             String today = dc.GET_MONTH + "월 " + dc.GET_DAY + "일";
             String toItemday = month + "월 " + item.getDay() + "일";
+
             if(today.equals(toItemday)){
                 holder.today_area.setCardBackgroundColor(Color.parseColor("#E0EAFB"));
             }
