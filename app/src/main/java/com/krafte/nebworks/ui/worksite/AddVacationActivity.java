@@ -184,9 +184,17 @@ public class AddVacationActivity extends AppCompatActivity {
         } else if (end_time.isEmpty()) {
             Toast_Nomal("종료날짜를 입력해주세요.");
             return false;
-        } else if (Integer.parseInt(splitStartDate[0]) > Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) > Integer.parseInt(splitEndDate[1]) || Integer.parseInt(splitStartDate[2]) > Integer.parseInt(splitEndDate[2])) {
-            Toast_Nomal("시작날짜가 종료날짜보다 큽니다. 다시 설정해주세요.");
-            return false;
+        } else if (Integer.parseInt(splitStartDate[2]) > Integer.parseInt(splitEndDate[2])) {
+            if (Integer.parseInt(splitStartDate[1]) > Integer.parseInt(splitEndDate[1])) {
+                if (Integer.parseInt(splitStartDate[0]) > Integer.parseInt(splitEndDate[0])) {
+                    Toast_Nomal("시작날짜가 종료날짜보다 큽니다. 다시 설정해주세요.");
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
