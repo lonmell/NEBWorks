@@ -275,7 +275,7 @@ public class AddMemberDetail extends AppCompatActivity {
             }
         });
 
-        binding.inputbox02.setText(mem_phone);
+        binding.inputbox02.setText(mem_phone.replace("-",""));
         binding.inputbox02.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

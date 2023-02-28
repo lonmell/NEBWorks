@@ -761,7 +761,9 @@ public class MemberManagement extends AppCompatActivity {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("직원추가");
-        add_worktime_btn.setVisibility(place_owner_id.equals(USER_INFO_ID) ? View.VISIBLE : View.GONE);
+        dlog.i("place_owner_id : " + place_owner_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        add_worktime_btn.setVisibility(USER_INFO_AUTH.equals("0")? View.VISIBLE : View.GONE);
 
         // 제한된 영역
         int maxX = (int) binding.layoutTotal.getScaleX();

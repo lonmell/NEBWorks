@@ -167,7 +167,7 @@ public class WorkStatusSubFragment1 extends Fragment {
         toDay = sdf.format(cal.getTime());
         toDay = shardpref.getString("FtoDay",toDay);
         dlog.i("오늘 :" + toDay);
-        change_place_id = shardpref.getString("change_place_id","").isEmpty()?PlaceCheckData.getInstance().getPlace_id():shardpref.getString("change_place_id","");
+        change_place_id = shardpref.getString("change_place_id","").equals("")?place_id:shardpref.getString("change_place_id","");
         dlog.i("change_place_id :"  + change_place_id);
         SetAllMemberList();
     }

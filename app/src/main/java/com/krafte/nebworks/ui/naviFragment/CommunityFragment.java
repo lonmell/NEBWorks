@@ -151,6 +151,7 @@ public class CommunityFragment extends Fragment {
                 ChangePage(1);
             }
         });
+        binding.selectFragmentbtn3.setVisibility(View.GONE);
         binding.selectFragmentbtn3.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();

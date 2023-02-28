@@ -146,7 +146,7 @@ public class WorkstatusFragment extends Fragment {
             place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
             USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-
+            shardpref.remove("change_place_id");
             //shardpref Area
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
 
@@ -167,6 +167,7 @@ public class WorkstatusFragment extends Fragment {
             setBtnEvent();
             setAddBtnSetting();
             SendToday();
+
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }

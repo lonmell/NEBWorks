@@ -281,7 +281,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
 
                 //0:대기, 1:승인, 2:반려
                 String state = "";
-                if(item.getApproval_state().equals("") || item.getApproval_state().equals("3")){
+                if(item.getApproval_state().equals("") || item.getApproval_state().equals("null")){
                     state = "";
                 }else if(item.getApproval_state().equals("0")){
                     state = "승인대기";
