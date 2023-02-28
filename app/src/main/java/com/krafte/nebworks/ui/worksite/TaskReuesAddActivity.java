@@ -775,23 +775,56 @@ public class TaskReuesAddActivity extends AppCompatActivity {
     }
 
     //업무 저장(추가)
+    String[] splitStartSplit;
+    String[] splitEndSplit;
+
     String getStartDate = "";
     String getEndDate = "";
     RetrofitConnect rc = new RetrofitConnect();
     private void SaveAddWork() {
         dlog.i("------------------SaveAddWork------------------");
         if (RepeatCheck) {
-            start_time = starttime;
-            end_time = endtime;
+            start_time = starttime.replace("오전", "").replace("오후", "");
+            end_time = endtime.replace("오전", "").replace("오후", "");
+            splitStartSplit = start_time.split(":");
+            splitEndSplit = end_time.split(":");
+            if (splitStartSplit[0].equals("0") || splitStartSplit[0].equals("00")) {
+                splitStartSplit[0] = "24";
+            }
+            if (splitEndSplit[0].equals("0") || splitEndSplit[0].equals("00")) {
+                splitEndSplit[0] = "24";
+            }
+            start_time = String.format("%02d:%02d", Integer.parseInt(splitStartSplit[0]), Integer.parseInt(splitStartSplit[1]));
+            end_time = String.format("%02d:%02d", Integer.parseInt(splitEndSplit[0]), Integer.parseInt(splitEndSplit[1]));
         } else {
-            start_time = getStartDate + " " + starttime;
-            end_time = getEndDate + " " + endtime;
+            start_time = getStartDate + " " + starttime.replace("오전", "").replace("오후", "");
+            end_time = getEndDate + " " + endtime.replace("오전", "").replace("오후", "");
+            if (getStartDate.isEmpty() || getEndDate.isEmpty()) {
+                splitStartSplit = start_time.split(":");
+                splitEndSplit = end_time.split(":");
+                if (splitStartSplit[0].equals("0") || splitStartSplit[0].equals("00")) {
+                    splitStartSplit[0] = "24";
+                }
+                if (splitEndSplit[0].equals("0") || splitEndSplit[0].equals("00")) {
+                    splitEndSplit[0] = "24";
+                }
+                start_time = String.format("%02d:%02d", Integer.parseInt(splitStartSplit[0]), Integer.parseInt(splitStartSplit[1]));
+                end_time = String.format("%02d:%02d", Integer.parseInt(splitEndSplit[0]), Integer.parseInt(splitEndSplit[1]));
+            } else {
+                splitStartSplit = start_time.split(" ");
+                String[] splitStartTime = splitStartSplit[1].split(":");
+                splitEndSplit = end_time.split(" ");
+                String[] splitEndTime = splitEndSplit[1].split(":");
+                if (splitStartTime[0].equals("0") || splitStartTime[0].equals("00")) {
+                    splitStartTime[0] = "24";
+                }
+                if (splitEndTime[0].equals("0") || splitEndTime[0].equals("00")) {
+                    splitEndTime[0] = "24";
+                }
+                start_time = splitStartSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1]));
+                end_time = splitEndSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1]));
+            }
         }
-        start_time = start_time.replace("오전", "");
-        start_time = start_time.replace("오후", "");
-
-        end_time = end_time.replace("오전", "");
-        end_time = end_time.replace("오후", "");
 
         dlog.i("make_kind : " + make_kind);
         dlog.i("task_no : " + task_no);
@@ -1009,6 +1042,9 @@ public class TaskReuesAddActivity extends AppCompatActivity {
         start_time = binding.inputTime01.getText().toString();
         end_time = binding.inputTime02.getText().toString();
         overdate = overdate.replace("년 ", "-").replace("월 ", "-").replace("일", "").trim();
+
+        String[] splitStart = binding.inputTime01.getText().toString().split(" ");
+        String[] splitEnd = binding.inputTime02.getText().toString().split(" ");
 
         String[] splitStartTime = start_time.split(" ")[1].split(":");
         String[] splitEndTime = end_time.split(" ")[1].split(":");

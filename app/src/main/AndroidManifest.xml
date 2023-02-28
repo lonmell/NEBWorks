@@ -344,6 +344,8 @@
 
         <activity android:name=".pop.feedReportPopActivity"
             android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".ui.worksite.AddVacationActivity" />
 
     </application>
 

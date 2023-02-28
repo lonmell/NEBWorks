@@ -954,10 +954,8 @@ public class HomeFragment2 extends Fragment {
                             dlog.i("SetNoticeListview Thread run! ");
                             dlog.i("GET SIZE : " + Response.length());
                             binding.mainTaskList.setVisibility(View.GONE);
-                            binding.limitTasktv.setVisibility(View.VISIBLE);
                         } else {
                             binding.mainTaskList.setVisibility(View.VISIBLE);
-                            binding.limitTasktv.setVisibility(View.GONE);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
                                 if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {

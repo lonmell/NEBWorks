@@ -53,6 +53,7 @@ import com.krafte.nebworks.ui.user.MyListActivity;
 import com.krafte.nebworks.ui.user.ProfileEditActivity;
 import com.krafte.nebworks.ui.user.SearchAccountActivity;
 import com.krafte.nebworks.ui.user.VerificationActivity;
+import com.krafte.nebworks.ui.worksite.AddVacationActivity;
 import com.krafte.nebworks.ui.worksite.PlaceAddActivity;
 import com.krafte.nebworks.ui.worksite.PlaceAddActivity2;
 import com.krafte.nebworks.ui.worksite.PlaceAddCompletion;
@@ -710,6 +711,14 @@ public class PageMoveClass implements MovePage {
     @Override
     public void PaystubAll(Context context) {
         Intent intent = new Intent(context, PaystuballActivity.class);
+        context.startActivity(intent);
+        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void AddVacation(Context context) {
+        Intent intent = new Intent(context, AddVacationActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

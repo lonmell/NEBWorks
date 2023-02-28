@@ -180,4 +180,6 @@ public interface MovePage {
     void AddPaystubAlba(Context context);
 
     void PaystubAll(Context context);
+
+    void AddVacation(Context context);
 }

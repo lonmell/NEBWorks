@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.adapter.Tap2ListAdapter;
@@ -635,35 +636,8 @@ public class WorkgotoFragment extends Fragment {
                                 binding.nodataArea.setVisibility(View.GONE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if (USER_INFO_AUTH.equals("0")) {
-                                        Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
-                                                jsonObject.getString("id"),
-                                                jsonObject.getString("writer_id"),
-                                                jsonObject.getString("kind"),
-                                                jsonObject.getString("title"),
-                                                jsonObject.getString("contents"),
-                                                jsonObject.getString("complete_kind"),
-                                                Collections.singletonList(jsonObject.getString("users")),
-                                                jsonObject.getString("task_date"),
-                                                jsonObject.getString("start_time"),
-                                                jsonObject.getString("end_time"),
-                                                jsonObject.getString("sun"),
-                                                jsonObject.getString("mon"),
-                                                jsonObject.getString("tue"),
-                                                jsonObject.getString("wed"),
-                                                jsonObject.getString("thu"),
-                                                jsonObject.getString("fri"),
-                                                jsonObject.getString("sat"),
-                                                jsonObject.getString("img_path"),
-                                                jsonObject.getString("complete_yn"),
-                                                jsonObject.getString("incomplete_reason"),
-                                                jsonObject.getString("approval_state"),
-                                                jsonObject.getString("task_overdate"),
-                                                jsonObject.getString("reject_reason"),
-                                                jsonObject.getString("updated_at")
-                                        ));
-                                    } else {
-                                        if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
+                                    if (!jsonObject.getString("complete_kind").equals("3")) {
+                                        if (USER_INFO_AUTH.equals("0")) {
                                             Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
                                                     jsonObject.getString("id"),
                                                     jsonObject.getString("writer_id"),
@@ -690,6 +664,35 @@ public class WorkgotoFragment extends Fragment {
                                                     jsonObject.getString("reject_reason"),
                                                     jsonObject.getString("updated_at")
                                             ));
+                                        } else {
+                                            if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
+                                                Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
+                                                        jsonObject.getString("id"),
+                                                        jsonObject.getString("writer_id"),
+                                                        jsonObject.getString("kind"),
+                                                        jsonObject.getString("title"),
+                                                        jsonObject.getString("contents"),
+                                                        jsonObject.getString("complete_kind"),
+                                                        Collections.singletonList(jsonObject.getString("users")),
+                                                        jsonObject.getString("task_date"),
+                                                        jsonObject.getString("start_time"),
+                                                        jsonObject.getString("end_time"),
+                                                        jsonObject.getString("sun"),
+                                                        jsonObject.getString("mon"),
+                                                        jsonObject.getString("tue"),
+                                                        jsonObject.getString("wed"),
+                                                        jsonObject.getString("thu"),
+                                                        jsonObject.getString("fri"),
+                                                        jsonObject.getString("sat"),
+                                                        jsonObject.getString("img_path"),
+                                                        jsonObject.getString("complete_yn"),
+                                                        jsonObject.getString("incomplete_reason"),
+                                                        jsonObject.getString("approval_state"),
+                                                        jsonObject.getString("task_overdate"),
+                                                        jsonObject.getString("reject_reason"),
+                                                        jsonObject.getString("updated_at")
+                                                ));
+                                            }
                                         }
                                     }
                                 }

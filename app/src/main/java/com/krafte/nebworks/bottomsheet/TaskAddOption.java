@@ -75,6 +75,10 @@ public class TaskAddOption extends BottomSheetDialogFragment {
             pm.TaskReuse(mContext);
             ClosePop();
         });
+        binding.vacationAdd.setOnClickListener(v -> {
+            pm.AddVacation(mContext);
+            ClosePop();
+        });
         binding.cancel.setOnClickListener(v -> {
             ClosePop();
         });
