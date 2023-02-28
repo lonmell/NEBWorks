@@ -878,13 +878,41 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         dlog.i("getEndDate : " + getEndDate);
         today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
 
+        String[] splitStartSplit;
+        String[] splitEndSplit;
+
         if (RepeatCheck) {
             start_time = starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime.replace("오전","").replace("오후","").trim();
             end_time = endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime.replace("오전","").replace("오후","").trim();;
+            splitStartSplit = start_time.split(":");
+            splitEndSplit = end_time.split(":");
+            if (splitStartSplit[0].equals("0") || splitStartSplit[0].equals("00")) {
+                splitStartSplit[0] = "24";
+            }
+            if (splitEndSplit[0].equals("0") || splitEndSplit[0].equals("00")) {
+                splitEndSplit[0] = "24";
+            }
+            start_time = String.format("%02d:%02d", Integer.parseInt(splitStartSplit[0]), Integer.parseInt(splitStartSplit[1]));
+            end_time = String.format("%02d:%02d", Integer.parseInt(splitEndSplit[0]), Integer.parseInt(splitEndSplit[1]));
         } else {
             start_time = (getStartDate.isEmpty()?today:getStartDate) + " " + (starttime.isEmpty()?binding.inputTime01.getText().toString().replace("오전","").replace("오후","").trim():starttime.replace("오전","").replace("오후","").trim());
             end_time = (getEndDate.isEmpty()?today:getEndDate) + " " + (endtime.isEmpty()?binding.inputTime02.getText().toString().replace("오전","").replace("오후","").trim():endtime.replace("오전","").replace("오후","").trim());
+            splitStartSplit = start_time.split(" ");
+            String[] splitStartTime = splitStartSplit[1].split(":");
+            splitEndSplit = end_time.split(" ");
+            String[] splitEndTime = splitEndSplit[1].split(":");
+            if (splitStartTime[0].equals("0") || splitStartTime[0].equals("00")) {
+                splitStartTime[0] = "24";
+            }
+            if (splitEndTime[0].equals("0") || splitEndTime[0].equals("00")) {
+                splitEndTime[0] = "24";
+            }
+            start_time = splitStartSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitStartTime[0]), Integer.parseInt(splitStartTime[1]));
+            end_time = splitEndSplit[0] + " " + String.format("%02d:%02d", Integer.parseInt(splitEndTime[0]), Integer.parseInt(splitEndTime[1]));
         }
+
+        dlog.i("Split: " + Arrays.toString(splitStartSplit) + " " + Arrays.toString(splitEndSplit));
+        dlog.i("time: " + start_time + " " + end_time);
 
         dlog.i("make_kind : " + make_kind);
         dlog.i("task_no : " + task_no);
