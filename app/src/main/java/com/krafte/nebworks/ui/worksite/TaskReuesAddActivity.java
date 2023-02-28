@@ -1045,9 +1045,17 @@ public class TaskReuesAddActivity extends AppCompatActivity {
             BtnOneCircleFun(true);
             Toast.makeText(this, "마감시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1]) || Integer.parseInt(splitStartDate[0]) > Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) > Integer.parseInt(splitEndDate[1])) {
+        } else if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1])) {
+            if (Integer.parseInt(splitStartDate[0]) < Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) < Integer.parseInt(splitEndDate[1])) {
+                return true;
+            } else {
+                BtnOneCircleFun(true);
+                Toast_Nomal("시작 시간이가 종료 시간보다 큽니다. 다시 설정해주세요.");
+                return false;
+            }
+        } else if (Integer.parseInt(splitStartDate[0]) > Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) > Integer.parseInt(splitEndDate[1])) {
             BtnOneCircleFun(true);
-            Toast_Nomal("시작날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.");
+            Toast_Nomal("시작 날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.");
             return false;
         } else {
             dlog.i("제목2 : " + WorkTitle);
