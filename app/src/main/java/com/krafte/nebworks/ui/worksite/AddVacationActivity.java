@@ -20,17 +20,18 @@ import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.TaskInputInterface;
-import com.krafte.nebworks.dataInterface.TaskSaveInterface;
 import com.krafte.nebworks.databinding.ActivityAddVacationBinding;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.List;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -120,6 +121,9 @@ public class AddVacationActivity extends AppCompatActivity {
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 binding.eventStarttime.setText(year + "-" + Month + "-" + Day);
                 getYMPicker = binding.eventStarttime.getText().toString().substring(0, 7);
+                if (!binding.eventStarttime.getText().toString().isEmpty()) {
+                    getDays();
+                }
             }
         }, mYear, mMonth, mDay);
 
@@ -127,6 +131,9 @@ public class AddVacationActivity extends AppCompatActivity {
             if (binding.eventStarttime.getText().toString().isEmpty()) {
                 String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
                 binding.eventStarttime.setText(today);
+                if (!binding.eventEndttime.getText().toString().isEmpty()) {
+                    getDays();
+                }
             } else {
                 shardpref.putInt("timeSelect_flag", 1);
                 if (binding.eventStarttime.isClickable()) {
@@ -145,6 +152,9 @@ public class AddVacationActivity extends AppCompatActivity {
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 binding.eventEndttime.setText(year + "-" + Month + "-" + Day);
                 getYMPicker = binding.eventEndttime.getText().toString().substring(0, 7);
+                if (!binding.eventStarttime.getText().toString().isEmpty()) {
+                    getDays();
+                }
             }
         }, mYear, mMonth, mDay);
 
@@ -152,6 +162,9 @@ public class AddVacationActivity extends AppCompatActivity {
             if (binding.eventEndttime.getText().toString().isEmpty()) {
                 String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
                 binding.eventEndttime.setText(today);
+                if (!binding.eventStarttime.getText().toString().isEmpty()) {
+                    getDays();
+                }
             } else {
                 shardpref.putInt("timeSelect_flag", 2);
                 if (binding.eventEndttime.isClickable()) {
@@ -169,6 +182,25 @@ public class AddVacationActivity extends AppCompatActivity {
                 addVacation();
             }
         });
+    }
+
+    private void getDays() {
+        String start = binding.eventStarttime.getText().toString();
+        String end = binding.eventEndttime.getText().toString();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date startDate = dateFormat.parse(start);
+            Date endDate = dateFormat.parse(end);
+
+            dlog.i("startDate , endDate" + startDate +  " " + endDate);
+
+            long diffSec = (endDate.getTime() - startDate.getTime()) / 1000;
+
+            binding.vacationDayCnt.setText(diffSec / (24 * 60 * 60) + 1 + "일");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean saveCheck() {
