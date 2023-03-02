@@ -62,6 +62,10 @@ public class ChangePWActivity2 extends AppCompatActivity {
         binding.findEmailImg.setBackgroundResource(R.drawable.ic_find_pw);
         binding.copyemailArea.setVisibility(View.GONE);
         binding.findPwtv.setText("이메일도 찾기");
+//        binding.findEmailTv01.setText("고객님의 비밀번호가\n변경되었습니다");
+//        binding.findEmailTv02.setText("비밀번호가 정상적으로 변경되었습니다.\n다시 로그인을 진행해주세요.");
+        binding.findEmailTv01.setVisibility(View.GONE);
+        binding.findEmailTv02.setVisibility(View.GONE);
     }
 
 

@@ -129,6 +129,7 @@
                         android:background="@drawable/select_empty_round" />
 
                     <TextView
+                        android:id="@+id/accept_box01"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -169,6 +170,7 @@
                         android:background="@drawable/select_empty_round" />
 
                     <TextView
+                        android:id="@+id/accept_box02"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -209,6 +211,7 @@
                         android:background="@drawable/select_empty_round" />
 
                     <TextView
+                        android:id="@+id/accept_box03"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -249,6 +252,7 @@
                         android:background="@drawable/select_empty_round" />
 
                     <TextView
+                        android:id="@+id/accept_box04"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
@@ -267,6 +271,8 @@
                         android:layout_alignParentEnd="true"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
+                        android:visibility="invisible"
+                        android:clickable="false"
                         android:text="@string/contract_tv02"
                         android:textColor="@color/new_blue"
                         android:textSize="15sp" />

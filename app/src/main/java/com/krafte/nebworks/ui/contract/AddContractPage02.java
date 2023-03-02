@@ -2,7 +2,9 @@ package com.krafte.nebworks.ui.contract;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.databinding.ActivityContractAdd02Binding;
+import com.krafte.nebworks.pop.TermViewActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -31,11 +34,18 @@ public class AddContractPage02 extends AppCompatActivity {
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
 
+    boolean allcheck = false;
     boolean select01tf = false;
     boolean select02tf = false;
     boolean select03tf = false;
     boolean select04tf = false;
     boolean select05tf = false;
+
+    Boolean CertiSuccessTF = false;
+
+    //사용자 정보 체크
+    TelephonyManager telephonyManager; //--통신사 체크
+    String TelecomName = "";
 
     @SuppressLint({"LongLogTag", "UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -51,12 +61,65 @@ public class AddContractPage02 extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
+        telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+        TelecomName = telephonyManager.getNetworkOperatorName();
+        dlog.i("통신사 : " + TelecomName);
+
         setBtnEvent();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        String termaccept = shardpref.getString("termaccept","");
+        if(!termaccept.isEmpty()){
+            dlog.i("termaccept : " + termaccept);
+            if(termaccept.equals("accept01")){
+                select01tf = true;
+                binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                if(select01tf && select02tf && select03tf && select04tf){
+                    select05tf = true;
+                    binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
+                }
+            }else if(termaccept.equals("accept02")){
+                select02tf = true;
+                binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                if(select01tf && select02tf && select03tf && select04tf){
+                    select05tf = true;
+                    binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
+                }
+            }else if(termaccept.equals("accept03")){
+                select03tf = true;
+                binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                if(select01tf && select02tf && select03tf && select04tf){
+                    select05tf = true;
+                    binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
+                }
+
+                select04tf = true;
+                binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                if(select01tf && select02tf && select03tf && select04tf){
+                    select05tf = true;
+                    binding.allCheck.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
+                    binding.check04.setBackgroundResource(R.drawable.ic_full_round_check);
+                }
+            }
+        }
     }
 
     private void setBtnEvent(){
@@ -85,7 +148,7 @@ public class AddContractPage02 extends AppCompatActivity {
                 binding.check04.setBackgroundResource(R.drawable.ic_empty_round);
             }
         });
-        binding.accept01.setOnClickListener(v -> {
+        binding.acceptBox01.setOnClickListener(v -> {
             if(!select01tf){
                 select01tf = true;
                 binding.check01.setBackgroundResource(R.drawable.ic_full_round_check);
@@ -104,7 +167,7 @@ public class AddContractPage02 extends AppCompatActivity {
                 binding.check01.setBackgroundResource(R.drawable.ic_empty_round);
             }
         });
-        binding.accept02.setOnClickListener(v -> {
+        binding.acceptBox02.setOnClickListener(v -> {
             if(!select02tf){
                 select02tf = true;
                 binding.check02.setBackgroundResource(R.drawable.ic_full_round_check);
@@ -123,7 +186,7 @@ public class AddContractPage02 extends AppCompatActivity {
                 binding.check02.setBackgroundResource(R.drawable.ic_empty_round);
             }
         });
-        binding.accept03.setOnClickListener(v -> {
+        binding.acceptBox03.setOnClickListener(v -> {
             if(!select03tf){
                 select03tf = true;
                 binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
@@ -142,7 +205,7 @@ public class AddContractPage02 extends AppCompatActivity {
                 binding.check03.setBackgroundResource(R.drawable.ic_empty_round);
             }
         });
-        binding.accept04.setOnClickListener(v -> {
+        binding.acceptBox04.setOnClickListener(v -> {
             if(!select04tf){
                 select04tf = true;
                 binding.check03.setBackgroundResource(R.drawable.ic_full_round_check);
@@ -176,6 +239,26 @@ public class AddContractPage02 extends AppCompatActivity {
             }else{
                 super.onBackPressed();
             }
+        });
+
+
+        binding.accept01Tv.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, TermViewActivity.class);
+            intent.putExtra("data", TelecomName);
+            intent.putExtra("flag", "1");
+            startActivity(intent);
+        });
+        binding.accept02Tv.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, TermViewActivity.class);
+            intent.putExtra("data", TelecomName);
+            intent.putExtra("flag", "2");
+            startActivity(intent);
+        });
+        binding.accept03Tv.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, TermViewActivity.class);
+            intent.putExtra("data", TelecomName);
+            intent.putExtra("flag", "3");
+            startActivity(intent);
         });
     }
 

@@ -519,8 +519,6 @@ public class PlaceListActivity extends AppCompatActivity {
         });
     }
 
-
-
     public void ConfirmUserPlacemember(String place_id, String myid, String owner_id, String place_name) {
         dlog.i("---------SetAllMemberList Check---------");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
