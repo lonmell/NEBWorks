@@ -381,18 +381,18 @@ public class ProfileEditActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 phone = s.toString();
-//                if (!editstate.equals("edit")) {
-//                    if (mem_phone.equals(phone)) {
-//                        binding.getAuthResult.setVisibility(View.GONE);
-//                        binding.linear02.setVisibility(View.GONE);
-//                    } else {
-//                        binding.getAuthResult.setVisibility(View.VISIBLE);
-//                        binding.linear02.setVisibility(View.VISIBLE);
-//                    }
-//                } else {
-//                    binding.getAuthResult.setVisibility(View.GONE);
-//                    binding.linear02.setVisibility(View.GONE);
-//                }
+                if (!editstate.equals("edit")) {
+                    if (mem_phone.equals(phone)) {
+                        binding.getAuthResult.setVisibility(View.GONE);
+                        binding.linear02.setVisibility(View.GONE);
+                    } else {
+                        binding.getAuthResult.setVisibility(View.VISIBLE);
+                        binding.linear02.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    binding.getAuthResult.setVisibility(View.GONE);
+                    binding.linear02.setVisibility(View.GONE);
+                }   
                 binding.getAuthResult.setVisibility(View.GONE);
                 binding.linear02.setVisibility(View.GONE);
             }
