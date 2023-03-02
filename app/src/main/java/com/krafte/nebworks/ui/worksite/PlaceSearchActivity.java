@@ -139,6 +139,8 @@ public class PlaceSearchActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+        dlog.i("onResume!");
+        Setaddress = binding.searchStore.getText().toString();
         if(binding.searchStore.getText().toString().length() == 0){
             SetWorkplaceList();
         }else{
@@ -156,7 +158,9 @@ public class PlaceSearchActivity extends AppCompatActivity {
                 }
             });
         }
-
+        if (!Setaddress.isEmpty()) {
+            SetWorkplaceList();
+        }
     }
 
     @Override
@@ -250,6 +254,8 @@ public class PlaceSearchActivity extends AppCompatActivity {
                         mAdapter.notifyDataSetChanged();
                         if(binding.searchStore.getText().length() == 0){
                             searchFilter("");
+                        } else {
+                            searchFilter(Setaddress);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
