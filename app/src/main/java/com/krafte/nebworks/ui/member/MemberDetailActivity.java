@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -715,7 +716,9 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                     jsonObject.getString("sieob1"),
                                                     jsonObject.getString("sieob2"),
                                                     jsonObject.getString("jongeob1"),
-                                                    jsonObject.getString("jongeob2")
+                                                    jsonObject.getString("jongeob2"),
+                                                    jsonObject.getString("vaca_accept"),
+                                                    jsonObject.getString("hdd")
                                             ));
                                         }
                                         inoutmAdapter.notifyDataSetChanged();
@@ -796,7 +799,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         binding.payTv.setText(String.valueOf(myFormatter.format(Integer.parseInt(workpay))) + "원");
                                         binding.payDiffBar.setMax(Integer.parseInt(allwcnt));
                                         binding.payDiffBar.setProgress(Integer.parseInt(workpay));
-//                                        binding.payDiffBar.setOnTouchListener((v, event) -> {if(event.getAction() == MotionEvent.ACTION_DOWN){return false;} return true;});
+                                        binding.payDiffBar.setOnTouchListener((v, event) -> {if(event.getAction() == MotionEvent.ACTION_DOWN){return false;} return true;});
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }

@@ -167,7 +167,7 @@ public class WorkStatusSubFragment1 extends Fragment {
         toDay = sdf.format(cal.getTime());
         toDay = shardpref.getString("FtoDay",toDay);
         dlog.i("오늘 :" + toDay);
-        change_place_id = shardpref.getString("change_place_id","").isEmpty()?PlaceCheckData.getInstance().getPlace_id():shardpref.getString("change_place_id","");
+        change_place_id = shardpref.getString("change_place_id","").equals("")?place_id:shardpref.getString("change_place_id","");
         dlog.i("change_place_id :"  + change_place_id);
         SetAllMemberList();
     }
@@ -224,6 +224,8 @@ public class WorkStatusSubFragment1 extends Fragment {
                                         "9:20",
                                         "18:32",
                                         "9:30 ~ 18:30",
+                                        "",
+                                        "",
                                         ""
                                 ));
                             } else {
@@ -262,7 +264,9 @@ public class WorkStatusSubFragment1 extends Fragment {
                                                 jsonObject.getString("in_time"),
                                                 jsonObject.getString("out_time"),
                                                 jsonObject.getString("worktime"),
-                                                jsonObject.getString("commuting")
+                                                jsonObject.getString("commuting"),
+                                                jsonObject.getString("vaca_accept"),
+                                                jsonObject.getString("hdd")
                                         ));
                                     }
                                     mAdapter.notifyDataSetChanged();

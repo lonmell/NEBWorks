@@ -594,7 +594,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
-            click_action = "Member0";
+            click_action = "status1";
             dlog.i("-----PushFcmSend-----");
             dlog.i("topic : " + topic);
             dlog.i("title : " + title);

@@ -24,7 +24,6 @@ import com.krafte.nebworks.ui.feed.FeedListActivity;
 import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.ui.member.MemberManagement;
-import com.krafte.nebworks.ui.naviFragment.WorkstatusFragment;
 import com.krafte.nebworks.ui.paymanagement.PayManagementActivity;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -186,6 +185,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private void sendNotification(String title, String message, String click_action) {
         //ForGround
         Log.i(TAG, "notificationIntent : " + notificationIntent);
+        Log.i(TAG, "message : " + message);
+        Log.i(TAG, "click_action : " + click_action);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
         if (click_action.equals("PlaceList0") || click_action.equals("PlaceList1")) {
@@ -214,8 +215,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             shardpref.putInt("SELECT_POSITION", 0);
             notificationIntent = new Intent(this, ContractFragmentActivity.class);
         } else if (click_action.equals("status1")) {
-            shardpref.putInt("SELECT_POSITION", 0);
-            notificationIntent = new Intent(this, WorkstatusFragment.class);
+            shardpref.putInt("SELECT_POSITION", 2);
+            notificationIntent = new Intent(this, MainFragment.class);
         }
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -249,6 +250,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private void showNotification(String title, String message, String click_action) {
         Log.i(TAG, "click_action : " + click_action);
         Log.i(TAG, "intent : " + intent);
+        Log.i(TAG, "message : " + message);
+        Log.i(TAG, "click_action : " + click_action);
         //푸시를 클릭했을때 이동//
         // 0. Pending Intent
         if (click_action.equals("PlaceList0") || click_action.equals("PlaceList1")) {
@@ -277,8 +280,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             shardpref.putInt("SELECT_POSITION", 0);
             intent = new Intent(this, ContractFragmentActivity.class);
         } else if (click_action.equals("status1")) {
-            shardpref.putInt("SELECT_POSITION", 0);
-            intent = new Intent(this, WorkstatusFragment.class);
+            shardpref.putInt("SELECT_POSITION", 2);
+            notificationIntent = new Intent(this, MainFragment.class);
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

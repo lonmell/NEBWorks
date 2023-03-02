@@ -123,23 +123,27 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
 
 
             holder.worktime.setText(item.getWorktime().equals("null")?"":item.getWorktime());
-
-
+            holder.vacationtv.setText(" " + (item.getVaca_accept().equals("휴가승인")?"휴가":""));
             yoil.addAll(Arrays.asList(item.getYoil().split(",")));
 
-            if (item.getKind().equals("0")) {
-                state = "근무 중";
-            } else if (item.getKind().equals("1")) {
-                state = "퇴근";
-            } else if (item.getKind().equals("2") && item.getCommuting().equals("미출근")) {
-                //출근시간 지남
-                state = item.getCommuting();
-                holder.warnning.setVisibility(View.VISIBLE);
-                holder.worktime_title.setTextColor(Color.parseColor("#DD6540"));
-                holder.worktime.setTextColor(Color.parseColor("#DD6540"));
-                holder.worktime.setText(state);
+            if(item.getVaca_accept().equals("휴가승인")){
+                holder.linear02.setVisibility(View.GONE);
+            }else {
+                if (item.getKind().equals("0")) {
+                    state = "근무 중";
+                } else if (item.getKind().equals("1")) {
+                    state = "퇴근";
+                } else if (item.getKind().equals("2") && item.getCommuting().equals("미출근")) {
+                    //출근시간 지남
+                    state = item.getCommuting();
+                    holder.warnning.setVisibility(View.VISIBLE);
+                    holder.worktime_title.setTextColor(Color.parseColor("#DD6540"));
+                    holder.worktime.setTextColor(Color.parseColor("#DD6540"));
+                    holder.worktime.setText(state);
 //                holder.worktime.setText(state + "[" + (item.getWorktime().equals("null")?"":item.getWorktime()) + "]");
+                }
             }
+
 //            else if (item.getKind().equals("2") && item.getCommuting().equals("")) {
 //                //아직 출근시간 아님
 ////                state = "출근시간 아님";
@@ -212,7 +216,7 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, worktime, inTime, outTime,  worktime_title;
+        TextView name, worktime, inTime, outTime,  worktime_title, vacationtv;
         CardView add_detail, warnning;
         RelativeLayout list_setting, item_total;
         LinearLayout linear01, linear02;
@@ -232,7 +236,8 @@ public class WorkTapMemberAdapter extends RecyclerView.Adapter<WorkTapMemberAdap
             linear02        = itemView.findViewById(R.id.linear02);
             user_thumnail   = itemView.findViewById(R.id.user_thumnail);
             worktime_title  = itemView.findViewById(R.id.worktime_title);
-            warnning         = itemView.findViewById(R.id.warnning);
+            warnning        = itemView.findViewById(R.id.warnning);
+            vacationtv      = itemView.findViewById(R.id.vacationtv);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");

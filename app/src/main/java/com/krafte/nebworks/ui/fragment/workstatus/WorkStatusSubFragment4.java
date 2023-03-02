@@ -223,7 +223,9 @@ public class WorkStatusSubFragment4 extends Fragment {
                                                 jsonObject.getString("in_time"),
                                                 jsonObject.getString("out_time"),
                                                 jsonObject.getString("worktime"),
-                                                jsonObject.getString("commuting")
+                                                jsonObject.getString("commuting"),
+                                                jsonObject.getString("vaca_accept"),
+                                                jsonObject.getString("hdd")
                                         ));
                                     } else {
                                         binding.nodataArea.setVisibility(View.VISIBLE);

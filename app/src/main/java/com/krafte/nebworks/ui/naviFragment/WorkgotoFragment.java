@@ -25,7 +25,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.adapter.Tap2ListAdapter;
@@ -636,7 +635,6 @@ public class WorkgotoFragment extends Fragment {
                                 binding.nodataArea.setVisibility(View.GONE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if (!jsonObject.getString("complete_kind").equals("3")) {
                                         if (USER_INFO_AUTH.equals("0")) {
                                             Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
                                                     jsonObject.getString("id"),
@@ -694,7 +692,6 @@ public class WorkgotoFragment extends Fragment {
                                                 ));
                                             }
                                         }
-                                    }
                                 }
                                 for (int a = 0; a < Response.length(); a++) {
                                     dlog.i("approval_state 1 : " + Response.getJSONObject(a).getString("approval_state"));

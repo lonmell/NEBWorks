@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.MainTaskData;
-import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
@@ -92,11 +91,15 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
             String endmin = "";
 
             if (item.getEnd_time().length() > 6) {
-                String[] splitEndDate = item.getEnd_time().split(" ");
-                String[] endDate = splitEndDate[0].split("-");
-                endhour = splitEndDate[1].split(":")[0] + "시 ";
-                endmin = splitEndDate[1].split(":")[1] + "분";
-                holder.date.setText(endDate[0] + "년 " + endDate[1] + "월 " + endDate[2] + "일" + " | " + "마감 " + endhour + endmin);
+                if(item.getStart_time().length() <= 10){
+                    holder.date.setText(item.getStart_time()+" 마감");
+                }else{
+                    String[] splitEndDate = item.getEnd_time().split(" ");
+                    String[] endDate = splitEndDate[0].split("-");
+                    endhour = splitEndDate[1].split(":")[0] + "시 ";
+                    endmin = splitEndDate[1].split(":")[1] + "분";
+                    holder.date.setText(endDate[0] + "년 " + endDate[1] + "월 " + endDate[2] + "일" + " | " + "마감 " + endhour + endmin + "분 까지");
+                }
             } else {
                 String date[] = item.getEnd_time().split(":");
                 holder.date.setText("[반복할일]" + " 마감 " + date[0] + "시 " + date[1] + "분 까지");

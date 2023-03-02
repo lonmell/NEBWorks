@@ -171,7 +171,9 @@ public class WorkstatusBottomSheet extends BottomSheetDialogFragment {
                                             jsonObject.getString("in_time"),
                                             jsonObject.getString("out_time"),
                                             jsonObject.getString("worktime"),
-                                            jsonObject.getString("commuting")
+                                            jsonObject.getString("commuting"),
+                                            jsonObject.getString("vaca_accept"),
+                                            jsonObject.getString("hdd")
                                     ));
                                 }
                                 mAdapter.notifyDataSetChanged();

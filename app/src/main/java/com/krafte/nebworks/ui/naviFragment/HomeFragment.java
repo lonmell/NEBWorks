@@ -52,7 +52,6 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -219,28 +218,29 @@ public class HomeFragment extends Fragment {
         shardpref.remove("item_user_name");
         UserCheck();
         SetAllMemberList();
-
-        timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //5초마다 실행
-                PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
-            }
-        };
-        timer.schedule(timerTask,1000,5000);
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+//        timer = new Timer();
+//        TimerTask timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                //5초마다 실행
+//                PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+//            }
+//        };
+//        timer.schedule(timerTask,1000,5000);
+//        timer.cancel();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        timer.cancel();
+//        timer.cancel();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
+//        timer.cancel();
     }
 
     public void setBtnEvent() {
@@ -554,12 +554,23 @@ public class HomeFragment extends Fragment {
                                         if (kind.equals("0")) {
                                             binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
                                             binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
-                                            binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
-                                            binding.restCnt.setText(Response.getJSONObject(0).getString("rest_cnt"));
+                                            //결근 숫자에서 휴가숫자는 빠지지 않기때문에 결근-휴가수를 빼줘야한다
+                                            if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0){
+                                                binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
+                                            } else if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0){
+                                                binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
+                                                        -Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
+                                            }
+//                                            binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
+//                                                    - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
+                                            binding.restCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("rest_cnt"))
+                                                    + Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
+
                                             dlog.i("-----MainData1-----");
                                             dlog.i("i_cnt : " + Response.getJSONObject(0).getString("i_cnt"));
                                             dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
                                             dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
+                                            dlog.i("vaca_cnt : " + Response.getJSONObject(0).getString("vaca_cnt"));
                                             dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
                                             int allPay = 0;
                                             for (int i = 0; i < Response.length(); i++) {
