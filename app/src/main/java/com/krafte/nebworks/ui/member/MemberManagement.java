@@ -366,26 +366,28 @@ public class MemberManagement extends AppCompatActivity {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if (memkind == -1) {
-                                        total_member_cnt++;
-                                        mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-                                                jsonObject.getString("id"),
-                                                jsonObject.getString("place_name"),
-                                                jsonObject.getString("account"),
-                                                jsonObject.getString("name"),
-                                                jsonObject.getString("phone"),
-                                                jsonObject.getString("gender"),
-                                                jsonObject.getString("img_path"),
-                                                jsonObject.getString("jumin"),
-                                                jsonObject.getString("kind"),
-                                                jsonObject.getString("join_date"),
-                                                jsonObject.getString("state"),
-                                                jsonObject.getString("jikgup"),
-                                                jsonObject.getString("pay"),
-                                                jsonObject.getString("worktime"),
-                                                jsonObject.getString("contract_cnt")
-                                        ));
-                                    } else if (memkind == 1) {
-                                        if (jsonObject.getString("kind").equals("1") && (!jsonObject.getString("jikgup").equals("null") || !jsonObject.getString("pay").equals("null"))) {
+                                        if(USER_INFO_AUTH.equals("1")){
+                                            total_member_cnt++;
+                                            if(!jsonObject.getString("kind").equals("0")){
+                                                mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                        jsonObject.getString("id"),
+                                                        jsonObject.getString("place_name"),
+                                                        jsonObject.getString("account"),
+                                                        jsonObject.getString("name"),
+                                                        jsonObject.getString("phone"),
+                                                        jsonObject.getString("gender"),
+                                                        jsonObject.getString("img_path"),
+                                                        jsonObject.getString("jumin"),
+                                                        jsonObject.getString("kind"),
+                                                        jsonObject.getString("join_date"),
+                                                        jsonObject.getString("state"),
+                                                        jsonObject.getString("jikgup"),
+                                                        jsonObject.getString("pay"),
+                                                        jsonObject.getString("worktime"),
+                                                        jsonObject.getString("contract_cnt")
+                                                ));
+                                            }
+                                        }else{
                                             total_member_cnt++;
                                             mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
                                                     jsonObject.getString("id"),
@@ -404,48 +406,138 @@ public class MemberManagement extends AppCompatActivity {
                                                     jsonObject.getString("worktime"),
                                                     jsonObject.getString("contract_cnt")
                                             ));
+                                        }
+                                    } else if (memkind == 1) {
+                                        if (jsonObject.getString("kind").equals("1") && (!jsonObject.getString("jikgup").equals("null") || !jsonObject.getString("pay").equals("null"))) {
+                                            if(USER_INFO_AUTH.equals("1")){
+                                                total_member_cnt++;
+                                                if(!jsonObject.getString("kind").equals("0")){
+                                                    mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                            jsonObject.getString("id"),
+                                                            jsonObject.getString("place_name"),
+                                                            jsonObject.getString("account"),
+                                                            jsonObject.getString("name"),
+                                                            jsonObject.getString("phone"),
+                                                            jsonObject.getString("gender"),
+                                                            jsonObject.getString("img_path"),
+                                                            jsonObject.getString("jumin"),
+                                                            jsonObject.getString("kind"),
+                                                            jsonObject.getString("join_date"),
+                                                            jsonObject.getString("state"),
+                                                            jsonObject.getString("jikgup"),
+                                                            jsonObject.getString("pay"),
+                                                            jsonObject.getString("worktime"),
+                                                            jsonObject.getString("contract_cnt")
+                                                    ));
+                                                }
+                                            }else{
+                                                total_member_cnt++;
+                                                mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                        jsonObject.getString("id"),
+                                                        jsonObject.getString("place_name"),
+                                                        jsonObject.getString("account"),
+                                                        jsonObject.getString("name"),
+                                                        jsonObject.getString("phone"),
+                                                        jsonObject.getString("gender"),
+                                                        jsonObject.getString("img_path"),
+                                                        jsonObject.getString("jumin"),
+                                                        jsonObject.getString("kind"),
+                                                        jsonObject.getString("join_date"),
+                                                        jsonObject.getString("state"),
+                                                        jsonObject.getString("jikgup"),
+                                                        jsonObject.getString("pay"),
+                                                        jsonObject.getString("worktime"),
+                                                        jsonObject.getString("contract_cnt")
+                                                ));
+                                            }
                                         }
                                     } else if (memkind == 2) {
                                         if (jsonObject.getString("jikgup").equals("null") || jsonObject.getString("pay").equals("null")) {
-                                            total_member_cnt++;
-                                            mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-                                                    jsonObject.getString("id"),
-                                                    jsonObject.getString("place_name"),
-                                                    jsonObject.getString("account"),
-                                                    jsonObject.getString("name"),
-                                                    jsonObject.getString("phone"),
-                                                    jsonObject.getString("gender"),
-                                                    jsonObject.getString("img_path"),
-                                                    jsonObject.getString("jumin"),
-                                                    jsonObject.getString("kind"),
-                                                    jsonObject.getString("join_date"),
-                                                    jsonObject.getString("state"),
-                                                    jsonObject.getString("jikgup"),
-                                                    jsonObject.getString("pay"),
-                                                    jsonObject.getString("worktime"),
-                                                    jsonObject.getString("contract_cnt")
-                                            ));
+                                            if(USER_INFO_AUTH.equals("1")){
+                                                total_member_cnt++;
+                                                if(!jsonObject.getString("kind").equals("0")){
+                                                    mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                            jsonObject.getString("id"),
+                                                            jsonObject.getString("place_name"),
+                                                            jsonObject.getString("account"),
+                                                            jsonObject.getString("name"),
+                                                            jsonObject.getString("phone"),
+                                                            jsonObject.getString("gender"),
+                                                            jsonObject.getString("img_path"),
+                                                            jsonObject.getString("jumin"),
+                                                            jsonObject.getString("kind"),
+                                                            jsonObject.getString("join_date"),
+                                                            jsonObject.getString("state"),
+                                                            jsonObject.getString("jikgup"),
+                                                            jsonObject.getString("pay"),
+                                                            jsonObject.getString("worktime"),
+                                                            jsonObject.getString("contract_cnt")
+                                                    ));
+                                                }
+                                            }else{
+                                                total_member_cnt++;
+                                                mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                        jsonObject.getString("id"),
+                                                        jsonObject.getString("place_name"),
+                                                        jsonObject.getString("account"),
+                                                        jsonObject.getString("name"),
+                                                        jsonObject.getString("phone"),
+                                                        jsonObject.getString("gender"),
+                                                        jsonObject.getString("img_path"),
+                                                        jsonObject.getString("jumin"),
+                                                        jsonObject.getString("kind"),
+                                                        jsonObject.getString("join_date"),
+                                                        jsonObject.getString("state"),
+                                                        jsonObject.getString("jikgup"),
+                                                        jsonObject.getString("pay"),
+                                                        jsonObject.getString("worktime"),
+                                                        jsonObject.getString("contract_cnt")
+                                                ));
+                                            }
                                         }
                                     } else if (memkind == 3) {
                                         if (jsonObject.getString("kind").equals("4")) {
-                                            total_member_cnt++;
-                                            mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
-                                                    jsonObject.getString("id"),
-                                                    jsonObject.getString("place_name"),
-                                                    jsonObject.getString("account"),
-                                                    jsonObject.getString("name"),
-                                                    jsonObject.getString("phone"),
-                                                    jsonObject.getString("gender"),
-                                                    jsonObject.getString("img_path"),
-                                                    jsonObject.getString("jumin"),
-                                                    jsonObject.getString("kind"),
-                                                    jsonObject.getString("join_date"),
-                                                    jsonObject.getString("state"),
-                                                    jsonObject.getString("jikgup"),
-                                                    jsonObject.getString("pay"),
-                                                    jsonObject.getString("worktime"),
-                                                    jsonObject.getString("contract_cnt")
-                                            ));
+                                            if(USER_INFO_AUTH.equals("1")){
+                                                total_member_cnt++;
+                                                if(!jsonObject.getString("kind").equals("0")){
+                                                    mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                            jsonObject.getString("id"),
+                                                            jsonObject.getString("place_name"),
+                                                            jsonObject.getString("account"),
+                                                            jsonObject.getString("name"),
+                                                            jsonObject.getString("phone"),
+                                                            jsonObject.getString("gender"),
+                                                            jsonObject.getString("img_path"),
+                                                            jsonObject.getString("jumin"),
+                                                            jsonObject.getString("kind"),
+                                                            jsonObject.getString("join_date"),
+                                                            jsonObject.getString("state"),
+                                                            jsonObject.getString("jikgup"),
+                                                            jsonObject.getString("pay"),
+                                                            jsonObject.getString("worktime"),
+                                                            jsonObject.getString("contract_cnt")
+                                                    ));
+                                                }
+                                            }else{
+                                                total_member_cnt++;
+                                                mAdapter.addItem(new WorkPlaceMemberListData.WorkPlaceMemberListData_list(
+                                                        jsonObject.getString("id"),
+                                                        jsonObject.getString("place_name"),
+                                                        jsonObject.getString("account"),
+                                                        jsonObject.getString("name"),
+                                                        jsonObject.getString("phone"),
+                                                        jsonObject.getString("gender"),
+                                                        jsonObject.getString("img_path"),
+                                                        jsonObject.getString("jumin"),
+                                                        jsonObject.getString("kind"),
+                                                        jsonObject.getString("join_date"),
+                                                        jsonObject.getString("state"),
+                                                        jsonObject.getString("jikgup"),
+                                                        jsonObject.getString("pay"),
+                                                        jsonObject.getString("worktime"),
+                                                        jsonObject.getString("contract_cnt")
+                                                ));
+                                            }
                                         }
                                     }
                                 }
@@ -456,7 +548,7 @@ public class MemberManagement extends AppCompatActivity {
                                 } else {
                                     binding.nodataArea.setVisibility(View.GONE);
                                     binding.allMemberlist.setVisibility(View.VISIBLE);
-                                    binding.memberCnt.setText(Response.length() + "명");
+                                    binding.memberCnt.setText(total_member_cnt + "명");
                                 }
 
                                 mAdapter.setOnItemClickListener2(new WorkplaceMemberAdapter.OnItemClickListener2() {

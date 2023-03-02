@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fobiddenlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/input_area"/>
+        android:layout_above="@+id/input_area"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:id="@+id/input_area"

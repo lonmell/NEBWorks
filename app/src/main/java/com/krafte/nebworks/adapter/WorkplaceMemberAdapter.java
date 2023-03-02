@@ -94,6 +94,9 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
         WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(position);
 
         try{
+//            if(USER_INFO_AUTH.equals("1") && item.getKind().equals("0")){
+//                holder.total_item.setVisibility(View.GONE);
+//            }
             dlog.DlogContext(mContext);
             /*
              * 직급
@@ -109,6 +112,11 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     .into(holder.member_profile);
             if(item.getKind().equals("0")){
                 //승인대기상태
+                if(place_owner_id.equals(USER_INFO_ID)){
+
+                }else{
+
+                }
                 holder.linear04.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
                 holder.linear01.setVisibility(View.GONE);
                 holder.linear02.setVisibility(View.GONE);
@@ -159,7 +167,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
             }else{
                 dlog.DlogContext(mContext);
-                if(item.getState().equals("null") && item.getContract_cnt().equals("0") ){
+                if(item.getState().equals("null") && item.getContract_cnt().equals("0")){
                     //직원 상세정보가 없을때
                     holder.add_detail.setVisibility(View.VISIBLE);
                     holder.linear04.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
@@ -278,7 +286,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name,jikgup,pay,state_tv,contract_area_tv,add_detail_tv,contract_state_tv;
         CardView add_detail,state,contract_state,contract_area;
-        RelativeLayout list_setting;
+        RelativeLayout list_setting, total_item;
         LinearLayout linear01,linear02,linear04;
         ImageView member_profile;
 
@@ -304,6 +312,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
             contract_area_tv    = itemView.findViewById(R.id.contract_area_tv);
             contract_state_tv   = itemView.findViewById(R.id.contract_state_tv);
             member_profile      = itemView.findViewById(R.id.member_profile);
+            total_item          = itemView.findViewById(R.id.total_item);
 
             shardpref      = new PreferenceHelper(mContext);
             USER_INFO_ID   = shardpref.getString("USER_INFO_ID", "");

@@ -129,7 +129,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     //본인이 생성한 매장
                     holder.money_area.setVisibility(View.INVISIBLE);
                     holder.store_kind_state.setVisibility(View.VISIBLE);
-                    holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+                    holder.item_area.setCardBackgroundColor(Color.parseColor("#ffffff"));
                 } else {
                     //다른사람이 생성한 매장 ( 초대 받았을 경우 )
                     if (item.getAccept_state().equals("0")) {
@@ -160,7 +160,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                         holder.money_area.setVisibility(View.INVISIBLE);
                         holder.store_kind_state.setVisibility(View.VISIBLE);
                         holder.state_tv.setText("승인대기중");
-                        holder.item_area.setCardBackgroundColor(Color.parseColor("#F2F2F2"));
+                        holder.item_area.setCardBackgroundColor(Color.parseColor("#ffffff"));
                         holder.list_setting.setVisibility(View.INVISIBLE);
                         holder.list_setting.setClickable(false);
                     } else {

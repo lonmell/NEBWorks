@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -449,11 +452,16 @@ public class PlaceListActivity extends AppCompatActivity {
                                             shardpref.putInt("accept_state", Integer.parseInt(accept_state));
                                             ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
                                             shardpref.putInt("SELECT_POSITION", 0);
-                                            if (USER_INFO_AUTH.equals("0")) {
-                                                pm.Main(mContext);
-                                            } else {
-                                                pm.Main2(mContext);
+                                            if(accept_state.equals("1")){
+                                                if (USER_INFO_AUTH.equals("0")) {
+                                                    pm.Main(mContext);
+                                                } else {
+                                                    pm.Main2(mContext);
+                                                }
+                                            }else{
+                                                Toast_Nomal("승인 대기중인 매장입니다.");
                                             }
+
                                         }
                                     } catch (JSONException e) {
                                         dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
@@ -857,5 +865,20 @@ public class PlaceListActivity extends AppCompatActivity {
                 quitApp();
             }
         }
+    }
+
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }
