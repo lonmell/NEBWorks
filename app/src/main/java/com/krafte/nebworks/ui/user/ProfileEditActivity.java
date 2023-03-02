@@ -187,6 +187,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+            dlog.i("editstate : " + editstate);
 
             setBtnEvent();
             if (USER_INFO_EMAIL.isEmpty() || USER_INFO_ID.isEmpty()) {
@@ -381,20 +382,18 @@ public class ProfileEditActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 phone = s.toString();
-//                if (!editstate.equals("edit")) {
-//                    if (mem_phone.equals(phone)) {
-//                        binding.getAuthResult.setVisibility(View.GONE);
-//                        binding.linear02.setVisibility(View.GONE);
-//                    } else {
-//                        binding.getAuthResult.setVisibility(View.VISIBLE);
-//                        binding.linear02.setVisibility(View.VISIBLE);
-//                    }
-//                } else {
-//                    binding.getAuthResult.setVisibility(View.GONE);
-//                    binding.linear02.setVisibility(View.GONE);
-//                }
-                binding.getAuthResult.setVisibility(View.GONE);
-                binding.linear02.setVisibility(View.GONE);
+                if (!editstate.equals("edit")) {
+                    if (mem_phone.equals(phone)) {
+                        binding.getAuthResult.setVisibility(View.GONE);
+                        binding.linear02.setVisibility(View.GONE);
+                    } else {
+                        binding.getAuthResult.setVisibility(View.VISIBLE);
+                        binding.linear02.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    binding.getAuthResult.setVisibility(View.GONE);
+                    binding.linear02.setVisibility(View.GONE);
+                }
             }
         });
         binding.getAuthResult.setOnClickListener(v -> {
