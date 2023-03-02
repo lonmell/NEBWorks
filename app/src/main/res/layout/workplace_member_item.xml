@@ -8,6 +8,7 @@
     android:orientation="horizontal"
     android:paddingTop="15dp"
     android:paddingBottom="15dp"
+    android:id="@+id/total_item"
     tools:ignore="HardcodedText,RtlSymmetry">
 
     <androidx.cardview.widget.CardView
