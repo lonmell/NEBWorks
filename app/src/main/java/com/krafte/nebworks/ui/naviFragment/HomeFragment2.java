@@ -982,32 +982,34 @@ public class HomeFragment2 extends Fragment {
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
                                 if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
-                                    mAdapter.addItem(new MainTaskData.MainTaskData_list(
-                                            jsonObject.getString("id"),
-                                            jsonObject.getString("writer_id"),
-                                            jsonObject.getString("kind"),
-                                            jsonObject.getString("title"),
-                                            jsonObject.getString("contents"),
-                                            jsonObject.getString("complete_kind"),
-                                            Collections.singletonList(jsonObject.getString("users")),
-                                            jsonObject.getString("task_date"),
-                                            jsonObject.getString("start_time"),
-                                            jsonObject.getString("end_time"),
-                                            jsonObject.getString("sun"),
-                                            jsonObject.getString("mon"),
-                                            jsonObject.getString("tue"),
-                                            jsonObject.getString("wed"),
-                                            jsonObject.getString("thu"),
-                                            jsonObject.getString("fri"),
-                                            jsonObject.getString("sat"),
-                                            jsonObject.getString("img_path"),
-                                            jsonObject.getString("complete_yn"),
-                                            jsonObject.getString("incomplete_reason"),
-                                            jsonObject.getString("approval_state"),
-                                            jsonObject.getString("task_overdate"),
-                                            jsonObject.getString("reject_reason"),
-                                            jsonObject.getString("updated_at")
-                                    ));
+                                    if (!jsonObject.getString("complete_kind").equals("3")) {
+                                        mAdapter.addItem(new MainTaskData.MainTaskData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("writer_id"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("title"),
+                                                jsonObject.getString("contents"),
+                                                jsonObject.getString("complete_kind"),
+                                                Collections.singletonList(jsonObject.getString("users")),
+                                                jsonObject.getString("task_date"),
+                                                jsonObject.getString("start_time"),
+                                                jsonObject.getString("end_time"),
+                                                jsonObject.getString("sun"),
+                                                jsonObject.getString("mon"),
+                                                jsonObject.getString("tue"),
+                                                jsonObject.getString("wed"),
+                                                jsonObject.getString("thu"),
+                                                jsonObject.getString("fri"),
+                                                jsonObject.getString("sat"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("complete_yn"),
+                                                jsonObject.getString("incomplete_reason"),
+                                                jsonObject.getString("approval_state"),
+                                                jsonObject.getString("task_overdate"),
+                                                jsonObject.getString("reject_reason"),
+                                                jsonObject.getString("updated_at")
+                                        ));
+                                    }
                                 }
                                 mAdapter.setOnItemClickListener(new MainTaskLAdapter.OnItemClickListener() {
                                     @Override
