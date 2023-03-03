@@ -74,18 +74,11 @@ public class EmployeeProcess extends AppCompatActivity {
     long now = System.currentTimeMillis();
     Date mDate = new Date(now);
     @SuppressLint("SimpleDateFormat")
-    java.text.SimpleDateFormat simpleDate = new java.text.SimpleDateFormat("yyyy-MM-dd");
-
-    @SuppressLint("SimpleDateFormat")
-    java.text.SimpleDateFormat simpleDate_age = new java.text.SimpleDateFormat("yyyy");
-
-    @SuppressLint("SimpleDateFormat")
     java.text.SimpleDateFormat simpleDate_time = new java.text.SimpleDateFormat("HH:mm:ss");
 
     String GET_TIME = simpleDate_time.format(mDate);
     String title = "";
     String io_state = "";
-    String input_date = "";
     String getMySSID = "";
 
     @Override
@@ -143,10 +136,7 @@ public class EmployeeProcess extends AppCompatActivity {
 
             outTime();
 
-            getMySSID = getNetworkName(mContext).replace("\"", "");
-            if (getMySSID.equals("<unknown ssid>")) {
-                getMySSID = "";
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -154,49 +144,77 @@ public class EmployeeProcess extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        getPlaceData();
-        MoveMyLocation();
-        handler.postDelayed(() -> {
-            dlog.i("location_cnt : " + location_cnt);
-            long now = System.currentTimeMillis();
-            Date mDate = new Date(now);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-            dlog.i("location_cnt : " + location_cnt);
-            dlog.i("GET_TIME : " + simpleDate.format(mDate));
-            dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-            dlog.i("거리 : " + getDistance);
-            if (getDistance <= 30 && getMySSID.equals(place_wifi_name)) {
-                if (kind.equals("0")) {
-                    title = "출근처리";
-                } else {
-                    title = "퇴근처리";
-                }
-                binding.inoutAble.setText(kind.equals("0") ? "출근처리가능" : "퇴근처리가능");
-                binding.inoutAble.setTextColor(Color.parseColor("#6395EC"));
-                dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
-            } else {
-                if (kind.equals("0")) {
-                    title = "출근처리 불가";
-                } else {
-                    title = "퇴근처리 불가";
-                }
-                binding.inoutAble.setText(title);
-                binding.inoutAble.setTextColor(Color.parseColor("#DD6540"));
-//            Toast_Nomal("매장 출근의 설정된 거리보다 멀리 있습니다.");
-            }
-        }, 500); //0.5초 후 핸들러 실행
+
     }
+
     @Override
     public void onResume() {
         super.onResume();
         BtnOneCircleFun(true);
-
+        TFFunction();
     }
 
+
+    private void TFFunction(){
+        getPlaceData();
+        MoveMyLocation();
+        getMySSID = getNetworkName(mContext).replace("\"", "");
+        if (getMySSID.equals("<unknown ssid>")) {
+            getMySSID = "";
+        }
+        handler.postDelayed(() -> {
+//            dlog.i("location_cnt : " + location_cnt);
+            long now = System.currentTimeMillis();
+            Date mDate = new Date(now);
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+//            latitude = gpsTracker.getLatitude();
+//            longitude = gpsTracker.getLongitude();
+//            getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+//            dlog.i("location_cnt : " + location_cnt);
+            dlog.i("GET_TIME : " + simpleDate.format(mDate));
+//            dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
+//            dlog.i("거리 : " + getDistance);
+            if(place_iomethod.equals("y")){
+                if (getMySSID.equals(place_wifi_name)) {
+                    if (kind.equals("0")) {
+                        title = "출근처리 가능";
+                    } else {
+                        title = "퇴근처리 가능";
+                    }
+                    dlog.i("title 1: " + title);
+                    dlog.i("getMySSID 1: " + getMySSID);
+                    binding.inoutAble.setText(kind.equals("0") ? "출근처리가능" : "퇴근처리가능");
+                    binding.inoutAble.setTextColor(Color.parseColor("#6395EC"));
+                    dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+                } else {
+                    if (kind.equals("0")) {
+                        title = "출근처리 불가";
+                    } else {
+                        title = "퇴근처리 불가";
+                    }
+                    dlog.i("title 2: " + title);
+                    dlog.i("getMySSID 2: " + getMySSID);
+                    binding.inoutAble.setText(title);
+                    binding.inoutAble.setTextColor(Color.parseColor("#DD6540"));
+                    TFFunction();
+                }
+            }else if(place_iomethod.equals("n")){
+                if (kind.equals("0")) {
+                    title = "출근처리 가능";
+                } else {
+                    title = "퇴근처리 가능";
+                }
+                dlog.i("title 1: " + title);
+                dlog.i("getMySSID 1: " + getMySSID);
+                binding.inoutAble.setText(kind.equals("0") ? "출근처리가능" : "퇴근처리가능");
+                binding.inoutAble.setTextColor(Color.parseColor("#6395EC"));
+                dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+            }else{
+                TFFunction();
+            }
+        }, 500); //0.5초 후 핸들러 실행
+    }
     private void outTime() {
         String[] now = dc.GET_TIME.split(" ");
         String[] outTimeSplit = jongeob.split(":");
@@ -208,7 +226,7 @@ public class EmployeeProcess extends AppCompatActivity {
         int t = outTime - times;
 
         if (t < 0) {
-            binding.ioTime.setText("퇴근시간이 지났습니다.");
+            binding.ioTime.setText("설정된 퇴근시간을 초과하셨습니다.");
         } else {
             int hour = t / (60 * 60);
             int minute = t / 60 - (hour * 60);
@@ -246,35 +264,53 @@ public class EmployeeProcess extends AppCompatActivity {
             Date mDate = new Date(now);
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-            dlog.i("location_cnt : " + location_cnt);
+//            latitude = gpsTracker.getLatitude();
+//            longitude = gpsTracker.getLongitude();
+//            getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+//            dlog.i("location_cnt : " + location_cnt);
             dlog.i("GET_TIME : " + simpleDate.format(mDate));
-            dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-            dlog.i("getDistance : " + getDistance);
+//            dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
+//            dlog.i("getDistance : " + getDistance);
             dlog.i("kind : " + kind);
 
             if (kind.equals("0")) {
-                if (getDistance <= 30 && getMySSID.equals(place_wifi_name)) {
-                    //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+                if(place_iomethod.equals("y")){
+                    if (getMySSID.equals(place_wifi_name)) {
+                        //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+                        io_state = "출근처리";
+                        InOutPop(GET_TIME, "1", place_name, io_state, "", "0");
+                    } else {
+                        InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요", "0");
+                    }
+                }else if(place_iomethod.equals("n")){
                     io_state = "출근처리";
                     InOutPop(GET_TIME, "1", place_name, io_state, "", "0");
-                } else {
-                    InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.", "0");
                 }
             } else {
-                if (getDistance <= 30 && getMySSID.equals(place_wifi_name)) {
+                if(place_iomethod.equals("y")){
+                    if (getMySSID.equals(place_wifi_name)) {
+                        io_state = "퇴근처리";
+                        dlog.i("compareDate2 :" + compareDate2());
+                        //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+//                        if (compareDate2()) {
+//                            InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
+//                        } else {
+//                            InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.", "1");//퇴근시간 전일때
+//                        }
+                        InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
+                    } else {
+                        InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요", "1");
+                    }
+                }else if(place_iomethod.equals("n")){
                     io_state = "퇴근처리";
                     dlog.i("compareDate2 :" + compareDate2());
                     //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
-                    if (compareDate2()) {
-                        InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
-                    } else {
-                        InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.", "1");//퇴근시간 전일때
-                    }
-                } else {
-                    InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.", "1");
+//                    if (compareDate2()) {
+//                        InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
+//                    } else {
+//                        InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.", "1");//퇴근시간 전일때
+//                    }
+                    InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
                 }
             }
         });
@@ -307,6 +343,7 @@ public class EmployeeProcess extends AppCompatActivity {
     String place_vacation_select = "";
     String place_insurance = "";
     String place_wifi_name = "";
+    String place_iomethod = "";
 
     private void getPlaceData() {
         dlog.i("PlaceCheck place_id : " + place_id);
@@ -338,9 +375,11 @@ public class EmployeeProcess extends AppCompatActivity {
                                     place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
                                     place_insurance = Response.getJSONObject(0).getString("insurance");
                                     place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
+                                    place_iomethod = Response.getJSONObject(0).getString("io_method");
                                     shardpref.putString("place_wifi_name", place_wifi_name);
                                     shardpref.putString("place_latitude", String.valueOf(place_latitude));
                                     shardpref.putString("place_longitude", String.valueOf(place_longitude));
+                                    dlog.i("place_iomethod : " + place_iomethod);
                                     binding.storeName.setText(place_name);
                                 }
                             } catch (JSONException e) {

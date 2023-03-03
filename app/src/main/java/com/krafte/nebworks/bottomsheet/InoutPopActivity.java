@@ -29,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.InOutInsertInterface;
+import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
@@ -69,7 +70,6 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     DateCurrent dc = new DateCurrent();
 
     String USER_INFO_AUTH = "";
-    String place_id = "";
     String USER_INFO_ID = "";
 
     String time = "";
@@ -81,12 +81,17 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     String mem_name = "";
     String kind = "";
 
-    Double place_latitude = 0.0;
-    Double place_longitude = 0.0;
-
+    String place_id = "";
     String place_owner_id = "";
     String place_name = "";
+    Double place_latitude = 0.0;
+    Double place_longitude = 0.0;
+    String place_pay_day = "";
+    String place_test_period = "";
+    String place_vacation_select = "";
+    String place_insurance = "";
     String place_wifi_name = "";
+    String place_iomethod = "";
 
     //xml 
     ImageView inout_icon;
@@ -103,27 +108,27 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             dlog.DlogContext(mContext);
             fragmentManager = getParentFragmentManager();
 
-            shardpref           = new PreferenceHelper(mContext);
+            shardpref = new PreferenceHelper(mContext);
 
-            place_id            = shardpref.getString("place_id", "");
-            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", "");
-            mem_name            = shardpref.getString("USER_INFO_NAME", "");
+            place_id = shardpref.getString("place_id", "");
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
+            mem_name = shardpref.getString("USER_INFO_NAME", "");
 
             //데이터 가져오기
-            place_end_time  = shardpref.getString("place_end_time", "");
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
-            time            = shardpref.getString("time", "");
-            state           = shardpref.getString("state", "");
-            store_name      = shardpref.getString("store_name", "");
-            inout_tv        = shardpref.getString("inout_tv", "");
-            inout_tv2       = shardpref.getString("inout_tv2", "");
-            kind            = shardpref.getString("kind", "");
-            place_end_time  = place_end_time.substring(0, 5);
+            place_end_time = shardpref.getString("place_end_time", "");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+            time = shardpref.getString("time", "");
+            state = shardpref.getString("state", "");
+            store_name = shardpref.getString("store_name", "");
+            inout_tv = shardpref.getString("inout_tv", "");
+            inout_tv2 = shardpref.getString("inout_tv2", "");
+            kind = shardpref.getString("kind", "");
+            place_end_time = place_end_time.substring(0, 5);
             place_wifi_name = shardpref.getString("place_wifi_name", "");
-            place_latitude  = Double.parseDouble(shardpref.getString("place_latitude", ""));
+            place_latitude = Double.parseDouble(shardpref.getString("place_latitude", ""));
             place_longitude = Double.parseDouble(shardpref.getString("place_longitude", ""));
-            place_owner_id  = shardpref.getString("place_owner_id", "");
-            place_name      = shardpref.getString("place_name","");
+            place_owner_id = shardpref.getString("place_owner_id", "");
+            place_name = shardpref.getString("place_name", "");
 
             inout_icon = view.findViewById(R.id.inout_icon);
             Setinout_tv = view.findViewById(R.id.inout_tv);
@@ -181,28 +186,26 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        MoveMyLocation();
-        dlog.i("location_cnt : " + location_cnt);
+        retry();
+    }
+
+    private void TFFunction() {
+
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-        latitude = gpsTracker.getLatitude();
-        longitude = gpsTracker.getLongitude();
-        getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-        dlog.i("location_cnt : " + location_cnt);
         dlog.i("GET_TIME : " + simpleDate.format(mDate));
-        dlog.i("위도 : " + latitude + ", 경도 : " + longitude);
-        getMySSID = getNetworkName(mContext).replace("\"","");
-        if(getMySSID.equals("<unknown ssid>")){
+        getMySSID = getNetworkName(mContext).replace("\"", "");
+        if (getMySSID.equals("<unknown ssid>")) {
             getMySSID = "";
         }
         dlog.i("getMySSID : " + getMySSID);
         dlog.i("place_wifi_name : " + place_wifi_name);
-
     }
+
 
     @Override
     public void onStop() {
@@ -239,38 +242,41 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
 
     int getDistance = 0;
     int location_cnt = 0;
+
     private void setBtnEvent() {
         close_btn.setOnClickListener(v -> {
             dismiss();
         });
         inout_insert.setOnClickListener(v -> {
             if (!state.equals("2")) {
-                if(state.equals("4")){
+                if (state.equals("4")) {
                     dlog.i("setBtnEvent kind : " + kind);
                     if (kind.equals("0")) {
-                        if (getDistance <= 20) {
-                            dlog.i("ssid tf : " + getMySSID.equals(place_wifi_name));
-                            if(getMySSID.equals(place_wifi_name)){
+                        dlog.i("ssid tf : " + getMySSID.equals(place_wifi_name));
+                        if (place_iomethod.equals("y")) {
+                            if (getMySSID.equals(place_wifi_name)) {
                                 InOutInsert();
-                            }else{
+                            } else {
+                                retry();
                                 Toast_Nomal("매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요");
                             }
-                        } else {
-                            Toast_Nomal("설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.");
+                        }else if(place_iomethod.equals("n")){
+                            InOutInsert();
                         }
                     } else {
-                        if (getDistance <= 20) {
-                            dlog.i("ssid tf : " + getMySSID.equals(place_wifi_name));
-                            if(getMySSID.equals(place_wifi_name)){
+                        dlog.i("ssid tf : " + getMySSID.equals(place_wifi_name));
+                        if (place_iomethod.equals("y")) {
+                            if (getMySSID.equals(place_wifi_name)) {
                                 InOutInsert();
-                            }else{
+                            } else {
+                                retry();
                                 Toast_Nomal("매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요");
                             }
-                        } else {
-                            Toast_Nomal("설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.");
+                        }else if(place_iomethod.equals("n")){
+                            InOutInsert();
                         }
                     }
-                }else{
+                } else {
                     InOutInsert();
                 }
             } else {
@@ -286,21 +292,22 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         return info.getSSID();
     }
 
-    private void retry(){
-        MoveMyLocation();
-        dlog.i("location_cnt : " + location_cnt);
+    private void retry() {
+        getPlaceData();
+//        MoveMyLocation();
+//        dlog.i("location_cnt : " + location_cnt);
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-        latitude = gpsTracker.getLatitude();
-        longitude = gpsTracker.getLongitude();
-        getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
-        dlog.i("location_cnt : " + location_cnt);
+//        latitude = gpsTracker.getLatitude();
+//        longitude = gpsTracker.getLongitude();
+//        getDistance = Integer.parseInt(String.valueOf(Math.round(getDistance(place_latitude, place_longitude, latitude, longitude))));
+//        dlog.i("location_cnt : " + location_cnt);
         dlog.i("GET_TIME : " + simpleDate.format(mDate));
         dlog.i("retry kind : " + kind);
-        getMySSID = getNetworkName(mContext).replace("\"","");
-        if(getMySSID.equals("<unknown ssid>")){
+        getMySSID = getNetworkName(mContext).replace("\"", "");
+        if (getMySSID.equals("<unknown ssid>")) {
             getMySSID = "";
         }
         dlog.i("retry place_latitude : " + place_latitude);
@@ -313,9 +320,9 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         dlog.i("retry ssid tf : " + getMySSID.equals(place_wifi_name));
 
         if (kind.equals("0")) {
-            if (getDistance <= 20) {
-                //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
-                if(getMySSID.equals(place_wifi_name)){
+            //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+            if(place_iomethod.equals("y")){
+                if (getMySSID.equals(place_wifi_name)) {
                     state = "1";
                     inout_insert.setText("확인");
                     time_area.setVisibility(View.VISIBLE);
@@ -323,7 +330,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     inout_icon.setBackgroundResource(R.drawable.ic_inout_ok);
                     inout_tv = "출근처리";
                     inout_tv2 = "";
-                }else{
+                } else {
                     state = "2";
                     kind = "0";
                     inout_insert.setText("재시도");
@@ -333,29 +340,29 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     inout_tv = "출근처리 불가";
                     inout_tv2 = "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요";
                 }
-            } else {
-                state = "2";
-                kind = "0";
-                inout_insert.setText("재시도");
-                Setinout_tv2.setVisibility(View.VISIBLE);
-                inout_icon.setBackgroundResource(R.drawable.ic_in_enable);
-                inout_tv = "출근처리 불가";
-                inout_tv2 = "설정된 근무지에서만 출근이 가능합니다.\n" + "근무지와 너무 멀어 출근처리가 불가합니다.";
+            }else if(place_iomethod.equals("n")){
+                state = "1";
+                inout_insert.setText("확인");
+                time_area.setVisibility(View.VISIBLE);
+                Setinout_tv2.setVisibility(View.GONE);
+                inout_icon.setBackgroundResource(R.drawable.ic_inout_ok);
+                inout_tv = "출근처리";
+                inout_tv2 = "";
             }
         } else {
-            if (getDistance <= 20) {
+            if(place_iomethod.equals("y")){
                 io_state = "퇴근처리";
-                dlog.i("compareDate2 :" +  compareDate2());
+                dlog.i("compareDate2 :" + compareDate2());
                 //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
-                if(getMySSID.equals(place_wifi_name)){
-                    if(compareDate2()){
+                if (getMySSID.equals(place_wifi_name)) {
+                    if (compareDate2()) {
                         state = "4";
                         inout_insert.setText("확인");
                         Setinout_tv2.setVisibility(View.VISIBLE);
                         inout_icon.setBackgroundResource(R.drawable.ic_out_ok);
                         inout_tv = "퇴근처리";
                         inout_tv2 = "";
-                    }else{
+                    } else {
                         state = "3";
                         inout_insert.setText("확인");
                         Setinout_tv2.setVisibility(View.VISIBLE);
@@ -363,7 +370,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                         inout_tv = "퇴근처리";
                         inout_tv2 = "등록된 퇴근시간이 아닙니다.";
                     }
-                }else{
+                } else {
                     state = "2";
                     kind = "1";
                     inout_insert.setText("재시도");
@@ -372,20 +379,30 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     inout_tv = "퇴근처리 불가";
                     inout_tv2 = "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요";
                 }
-            } else {
-                state = "2";
-                kind = "1";
-                inout_insert.setText("재시도");
-                Setinout_tv2.setVisibility(View.VISIBLE);
-                inout_icon.setBackgroundResource(R.drawable.ic_in_enable);
-                inout_tv = "퇴근처리 불가";
-                inout_tv2 = "설정된 근무지에서만 퇴근이 가능합니다.\n" + "근무지와 너무 멀어 퇴근처리가 불가합니다.";
+            }else if(place_iomethod.equals("n")){
+                io_state = "퇴근처리";
+                if (compareDate2()) {
+                    state = "4";
+                    inout_insert.setText("확인");
+                    Setinout_tv2.setVisibility(View.VISIBLE);
+                    inout_icon.setBackgroundResource(R.drawable.ic_out_ok);
+                    inout_tv = "퇴근처리";
+                    inout_tv2 = "";
+                } else {
+                    state = "3";
+                    inout_insert.setText("확인");
+                    Setinout_tv2.setVisibility(View.VISIBLE);
+                    inout_icon.setBackgroundResource(R.drawable.ic_out_ok);
+                    inout_tv = "퇴근처리";
+                    inout_tv2 = "등록된 퇴근시간이 아닙니다.";
+                }
             }
         }
         Setinout_tv.setText(inout_tv);
         Setinout_tv2.setText(inout_tv2);
         in_time.setText(time);
     }
+
     private void ClosePop() {
         //데이터 전달하기
         shardpref.remove("change_place_id");
@@ -433,7 +450,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             System.out.println(sdf.format(date1));
             System.out.println(sdf.format(date2));
 
-            returntf =  date1.after(date2);
+            returntf = date1.after(date2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -441,6 +458,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
+
     private void InOutInsert() {
         String change_place_id = "";
         change_place_id = shardpref.getString("change_place_id", "");
@@ -471,34 +489,24 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                                 dlog.i("LoginCheck jsonResponse : " + response.body());
                                 try {
                                     if (jsonResponse.replace("[", "").replace("]", "").replace("\"", "").equals("success")) {
-//                                        if (!place_owner_id.equals(USER_INFO_ID)) {
-////                                            getEmployerToken();
-//                                        }
                                         /*
                                          * 1 - 출근처리
                                          * 2 - 출근처리 불가
                                          * 3 - 퇴근처리 하시겠습니까? - 등록된 퇴근시간 아닐때
                                          * 4 - 퇴근처리
                                          * * */
-                                        if(kind.equals("0")){
+                                        if (kind.equals("0")) {
                                             String input_date = dc.GET_YEAR + "." + dc.GET_MONTH + "." + dc.GET_DAY;
                                             String in_time = dc.GET_TIME.substring(11);
-                                            shardpref.putString("input_date",input_date);
-                                            shardpref.putString("in_time",in_time);
-                                            message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 출근처리가 완료되었습니다.";
-                                        }else{
-//                                            if(state.equals("3")){
-//                                                shardpref.remove("input_date");
-//                                                message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 조기퇴근이 완료되었습니다.";
-//                                            }else{
-//                                                shardpref.remove("input_date");
-//                                                message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
-//                                            }
+                                            shardpref.putString("input_date", input_date);
+                                            shardpref.putString("in_time", in_time);
+                                            message = "[" + place_name + "] 매장에서 [" + mem_name + "] 님의 출근처리가 완료되었습니다.";
+                                        } else {
                                             shardpref.remove("input_date");
-                                            message = "["+place_name+"] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
+                                            message = "[" + place_name + "] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
                                         }
-                                        getUserToken("0",message);
-                                        AddPush("출퇴근 알림",message);
+                                        getUserToken("0", message);
+                                        AddPush("출퇴근 알림", message);
                                         ClosePop();
                                     }
                                 } catch (Exception e) {
@@ -519,6 +527,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     }
 
     String message = "";
+
     //근로자 > 점주 ( 초대수락 FCM )
     public void getUserToken(String type, String message) {
         dlog.i("-----getManagerToken-----");
@@ -590,6 +599,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
 
     DBConnection dbConnection = new DBConnection();
     String click_action = "";
+
     //근로자 > 점주 ( 초대수락 FCM )
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
@@ -616,7 +626,54 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         }
     }
 
+    private void getPlaceData() {
+        dlog.i("PlaceCheck place_id : " + place_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceThisDataInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceThisDataInterface api = retrofit.create(PlaceThisDataInterface.class);
+        Call<String> call = api.getData(place_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    place_name = Response.getJSONObject(0).getString("name");
+                                    place_owner_id = Response.getJSONObject(0).getString("owner_id");
+                                    place_latitude = Double.parseDouble(Response.getJSONObject(0).getString("latitude"));
+                                    place_longitude = Double.parseDouble(Response.getJSONObject(0).getString("longitude"));
+                                    place_pay_day = Response.getJSONObject(0).getString("pay_day");
+                                    place_test_period = Response.getJSONObject(0).getString("test_period");
+                                    place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
+                                    place_insurance = Response.getJSONObject(0).getString("insurance");
+                                    place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
+                                    place_iomethod = Response.getJSONObject(0).getString("io_method");
+                                    dlog.i("place_iomethod : " + place_iomethod);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     //역 지오코딩 ( 위,경도 >> 주소 ) START
     @SuppressLint({"SetTextI18n", "LongLogTag"})
@@ -691,6 +748,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
 
         return distance;
     }
+
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, null);
