@@ -55,6 +55,8 @@ public class MemberOption extends BottomSheetDialogFragment {
         binding.certi01.setBackgroundResource(R.drawable.ic_pencil_icon);
         binding.certi02.setBackgroundResource(R.drawable.ic_mail_icon);
 
+        binding.vacationAdd.setVisibility(View.GONE);
+
         place_name = shardpref.getString("place_name","");
 
         return binding.getRoot();
