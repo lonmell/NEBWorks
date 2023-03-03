@@ -8,10 +8,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -602,7 +603,13 @@ public class HomeFragment extends Fragment {
                             dlog.i("setWifiOnOff jsonResponse : " + jsonResponse);
                             try {
                                 if (jsonResponse.replace("\"","").equals("success")) {
-                                    Toast.makeText(mContext, "와이파이 설정이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                                    String statetv = "";
+                                    if(state.equals("y")){
+                                        statetv = "활성화 되었습니다";
+                                    }else{
+                                        statetv = "비활성화 되었습니다";
+                                    }
+                                    Toast_Nomal("와이파이 설정이 " + statetv);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -992,5 +999,19 @@ public class HomeFragment extends Fragment {
         startActivity(intent);
         activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    public void Toast_Nomal(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) binding.getRoot().findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(mContext);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }
