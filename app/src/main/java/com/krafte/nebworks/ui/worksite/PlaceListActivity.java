@@ -166,13 +166,19 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        dlog.i("onResume!");
         shardpref.remove("page_state");
         event           = shardpref.getString("event", "");
+        boolean deletePlace           = shardpref.getBoolean("delete_place", false);
         if (!event.isEmpty()) {
             binding.logoutArea.setVisibility(View.GONE);
         } else {
             binding.logoutArea.setVisibility(View.VISIBLE);
             binding.backBtn.setVisibility(View.GONE);
+        }
+        if (deletePlace) {
+            GetPlaceList();
+            shardpref.remove("delete_place");
         }
     }
 
