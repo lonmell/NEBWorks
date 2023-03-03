@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:text="매장추가"
             android:textColor="#000000"
@@ -45,7 +45,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
-            android:fontFamily="@font/inter_regular"
+            android:fontFamily="@font/pretendard_regular"
             android:gravity="center"
             android:text="임시저장"
             android:textColor="#8F9191"
@@ -56,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="와이파이등록"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/pretendard_bold"
         android:textSize="25dp"
         android:layout_margin="20dp"
         android:textColor="#000000"/>
@@ -72,7 +72,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="처음 설정한 와이파이"
             android:textColor="#000000"
             android:textSize="16dp" />
@@ -103,7 +103,7 @@
             android:layout_alignBottom="@+id/wifi_icon"
             android:text="wifi name"
             android:singleLine="true"
-            android:fontFamily="@font/inter_regular"
+            android:fontFamily="@font/pretendard_regular"
             android:textSize="22sp"
             android:gravity="start|center"
             android:textColor="#000000"
@@ -121,7 +121,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="검색된 와이파이 (와이파이 변경시 선택)"
             android:textColor="#000000"
             android:textSize="16dp" />
@@ -144,7 +144,7 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="15dp"
-        android:fontFamily="@font/inter_regular"
+        android:fontFamily="@font/pretendard_regular"
         android:text="와이파이 변경시 선택"
         android:textColor="#a7a7a7"
         android:textSize="16dp" />
@@ -186,17 +186,17 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:layout_alignParentBottom="true"
-            app:cardBackgroundColor="#6395EC"
+            app:cardBackgroundColor="@color/new_blue"
             app:cardCornerRadius="5dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/pretendard_regular"
                 android:gravity="center"
                 android:text="저장하기"
-                android:textColor="#000000"
-                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
                 tools:ignore="HardcodedText,TextContrastCheck" />
 
         </androidx.cardview.widget.CardView>

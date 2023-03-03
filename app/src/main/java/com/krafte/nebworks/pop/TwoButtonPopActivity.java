@@ -598,6 +598,7 @@ public class TwoButtonPopActivity extends Activity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 if(jsonResponse.replace("\"","").equals("success")){
+                                    shardpref.putBoolean("delete_place", true);
                                     Toast_Nomal("해당 매장이 삭제완료되었습니다.");
                                     ClosePop();
                                 }
