@@ -139,7 +139,7 @@
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
             android:padding="5dp"
-            android:text="출근전"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="15sp" />
 
@@ -164,7 +164,7 @@
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
             android:padding="5dp"
-            android:text="퇴근전"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="15sp" />
     </LinearLayout>

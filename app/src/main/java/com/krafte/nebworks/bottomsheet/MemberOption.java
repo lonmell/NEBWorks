@@ -58,7 +58,7 @@ public class MemberOption extends BottomSheetDialogFragment {
         binding.vacationAdd.setVisibility(View.GONE);
 
         place_name = shardpref.getString("place_name","");
-
+        binding.vacationAdd.setVisibility(View.GONE);
         return binding.getRoot();
     }
 

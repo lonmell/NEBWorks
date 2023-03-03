@@ -53,6 +53,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+
+/*
+* 2023-03-03 방창배 수정 / 사용자 현재 위치 와 매장 거리로 출퇴근 제한 삭제 /
+* */
 public class InoutPopActivity extends BottomSheetDialogFragment {
     private static final String TAG = "InoutPopActivity";
     Context mContext;
@@ -241,8 +245,6 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     }
 
     int getDistance = 0;
-    int location_cnt = 0;
-
     private void setBtnEvent() {
         close_btn.setOnClickListener(v -> {
             dismiss();
@@ -314,7 +316,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         dlog.i("retry place_longitude : " + place_longitude);
         dlog.i("retry latitude : " + latitude);
         dlog.i("retry longitude : " + longitude);
-        dlog.i("retry getDistance : " + getDistance);
+//        dlog.i("retry getDistance : " + getDistance);
         dlog.i("retry getMySSID : " + getMySSID);
         dlog.i("retry place_wifi_name : " + place_wifi_name);
         dlog.i("retry ssid tf : " + getMySSID.equals(place_wifi_name));
