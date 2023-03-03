@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:text="매장등록이 완료되었습니다."
             android:textColor="@color/black"
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:fontFamily="@font/inter_regular"
+            android:fontFamily="@font/pretendard_regular"
             android:gravity="center"
             android:text="매장등록이 완료되었습니다.\n직원의 추가 등을 통해 매장을 운영해보세요"
             android:textColor="@color/black"
@@ -48,14 +48,14 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_above="@+id/place_list_go"
-        app:cardBackgroundColor="@color/blue">
+        app:cardBackgroundColor="@color/new_blue">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/pretendard_bold"
             android:text="해당 매장 메인으로"
             android:textSize="16sp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:gravity="center"/>
     </androidx.cardview.widget.CardView>
@@ -71,7 +71,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="매장 목록으로"
                     android:textSize="16sp"
                     android:textStyle="bold"
