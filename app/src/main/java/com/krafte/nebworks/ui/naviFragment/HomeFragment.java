@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,8 @@ import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
+import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
+import com.krafte.nebworks.dataInterface.UpdateIoMethod;
 import com.krafte.nebworks.databinding.HomefragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
@@ -206,6 +209,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getPlaceData();
+        getWifiState();
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
         timer = new Timer();
     }
@@ -409,6 +413,14 @@ public class HomeFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        binding.wifiSwitch.setOnClickListener(v -> {
+            if (binding.wifiSwitch.isChecked()) {
+                setWifiOnOff("y");
+            } else {
+                setWifiOnOff("n");
+            }
+        });
     }
 
 
@@ -522,6 +534,89 @@ public class HomeFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void getWifiState() {
+        dlog.i("PlaceCheck place_id : " + place_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceThisDataInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceThisDataInterface api = retrofit.create(PlaceThisDataInterface.class);
+        Call<String> call = api.getData(place_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    if(Response.getJSONObject(0).getString("io_method").equals("y")) {
+                                        binding.wifiSwitch.setChecked(true);
+                                    } else {
+                                        binding.wifiSwitch.setChecked(false);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void setWifiOnOff(String state) {
+        dlog.i("--------setWifiOnOff--------");
+        dlog.i("PlaceWorkCheck id : " + place_id);
+        dlog.i("PlaceWorkCheck state : " + state);
+        dlog.i("--------setWifiOnOff--------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UpdateIoMethod.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UpdateIoMethod api = retrofit.create(UpdateIoMethod.class);
+        Call<String> call = api.getData(place_id, state);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("setWifiOnOff jsonResponse length : " + jsonResponse.length());
+                            dlog.i("setWifiOnOff jsonResponse : " + jsonResponse);
+                            try {
+                                if (jsonResponse.replace("\"","").equals("success")) {
+                                    Toast.makeText(mContext, "와이파이 설정이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
     }
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
