@@ -20,6 +20,7 @@ public interface WorkPartSaveInterface
             @Field("jongeob")     String jongeob,
             @Field("breaktime01") String breaktime01,
             @Field("breaktime02") String breaktime02,
-            @Field("breaktime")   String breaktime
+            @Field("breaktime")   String breaktime,
+            @Field("kind")        String kind
     );
 }

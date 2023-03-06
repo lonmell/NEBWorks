@@ -29,6 +29,8 @@ import com.kakao.sdk.common.util.KakaoCustomTabsClient;
 import com.kakao.sdk.talk.TalkApiClient;
 import com.kakao.sdk.user.UserApiClient;
 import com.krafte.nebworks.R;
+import com.krafte.nebworks.data.ReturnPageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.DelWorkhourInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FcmTokenDelInterface;
@@ -307,6 +309,17 @@ public class TwoButtonPopActivity extends Activity {
                     setResult(RESULT_OK, intent);
                     overridePendingTransition(0, R.anim.translate_down);
                     super.onBackPressed();
+                } else if (flag.equals("추가근무")){
+                    finish();
+                    intent = new Intent();
+                    intent.putExtra("result", "Close Popup");
+                    setResult(RESULT_OK, intent);
+                    overridePendingTransition(0, R.anim.translate_down);
+
+                    shardpref.putString("item_user_id", UserCheckData.getInstance().getUser_id());
+                    shardpref.putString("item_user_name", UserCheckData.getInstance().getUser_name());
+                    ReturnPageData.getInstance().setPage("EmployeeProcess");
+                    pm.AddWorkPart(mContext);
                 }
             }catch (Exception e){
                 e.printStackTrace();

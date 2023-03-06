@@ -478,7 +478,14 @@ public class HomeFragment2 extends Fragment {
                         pm.EmployeeProcess(mContext);
                     }
                 } else {
-                    Toast_Nomal("근무시작 시간이 배정되지 않았습니다.");
+                    shardpref.putString("mem_name",UserCheckData.getInstance().getUser_name());
+                    Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                    intent.putExtra("data", "근무시작 시간이 배정되지 않았습니다.\n추가근무를 생성하시겠습니까?");
+                    intent.putExtra("flag", "추가근무");
+                    intent.putExtra("left_btn_txt", "닫기");
+                    intent.putExtra("right_btn_txt", "추가하기");
+                    startActivity(intent);
+//                    Toast_Nomal("근무시작 시간이 배정되지 않았습니다.");
                 }
             }
         });

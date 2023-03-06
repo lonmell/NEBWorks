@@ -150,11 +150,11 @@ public class WorkstatusFragment extends Fragment {
             //shardpref Area
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
 
-            if (USER_INFO_AUTH.equals("1")) {
-                if (!place_owner_id.equals(USER_INFO_ID)) {
-                    binding.addBtn.getRoot().setVisibility(View.GONE);
-                }
-            }
+//            if (USER_INFO_AUTH.equals("1")) {
+//                if (!place_owner_id.equals(USER_INFO_ID)) {
+//                    binding.addBtn.getRoot().setVisibility(View.GONE);
+//                }
+//            }
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             SELECT_POSITION = 1;
             fg = WorkStatusSubFragment1.newInstance();
@@ -530,80 +530,6 @@ public class WorkstatusFragment extends Fragment {
         }
     }
 
-//    public void MainWorkCnt(String place_id, String user_id) {
-//        dlog.i("MainWorkCnt place_id : " + place_id);
-//        dlog.i("MainWorkCnt user_id : " + user_id);
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(MainWorkCntInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        MainWorkCntInterface api = retrofit.create(MainWorkCntInterface.class);
-//        Call<String> call = api.getData(place_id, user_id);
-//        call.enqueue(new Callback<String>() {
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    String jsonResponse = rc.getBase64decode(response.body());
-//                    dlog.i("MainWorkCnt jsonResponse length : " + jsonResponse.length());
-//                    dlog.i("MainWorkCnt jsonResponse : " + jsonResponse);
-//                    Log.e("onSuccess : ", response.body());
-//                    try {
-//                        //Array데이터를 받아올 때
-//                        JSONArray Response = new JSONArray(jsonResponse);
-//                        if (Response.length() != 0) {
-//                            String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
-//                            String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt");
-//                            String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
-//                            String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
-//                            String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
-//                            String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
-//                            String contract_cnt = Response.getJSONObject(0).getString("contract_cnt");
-//                            String owner_sign_id = Response.getJSONObject(0).getString("owner_sign_id");
-//                            String worker_sign_id = Response.getJSONObject(0).getString("worker_sign_id");
-//
-//                            binding.cnt01.setText(Response.getJSONObject(0).getString("i_cnt"));
-//                            if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0){
-//                                binding.cnt02.setText(Response.getJSONObject(0).getString("absence_cnt"));
-//                            } else if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0){
-//                                binding.cnt02.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
-//                                        -Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
-//                            }
-//
-//                            binding.cnt03.setText(Response.getJSONObject(0).getString("o_cnt"));
-////                            binding.cnt04.setText(Response.getJSONObject(0).getString("vaca_cnt"));.
-//                            binding.cnt04.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("rest_cnt"))
-//                                    + Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
-//                            dlog.i("------PlaceWorkCheck------");
-//                            dlog.i("i_cnt : " + Response.getJSONObject(0).getString("i_cnt"));
-//                            dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
-//                            dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
-//                            dlog.i("vaca_cnt : " + Response.getJSONObject(0).getString("vaca_cnt"));
-//                            shardpref.putString("i_cnt", Response.getJSONObject(0).getString("i_cnt"));
-//                            dlog.i("------PlaceWorkCheck-------");
-//
-//                            dlog.i("-----MainWorkCnt-----");
-//                            dlog.i("task_complete_cnt : " + task_complete_cnt);
-//                            dlog.i("task_incomplete_cnt : " + task_incomplete_cnt);
-//                            dlog.i("waiting_cnt : " + waiting_cnt);
-//                            dlog.i("approval_cnt : " + approval_cnt);
-//                            dlog.i("reject_cnt : " + reject_cnt);
-//                            dlog.i("contract_cnt : " + contract_cnt);
-//                            dlog.i("owner_sign_id : " + owner_sign_id);
-//                            dlog.i("worker_sign_id : " + worker_sign_id);
-//                            dlog.i("-----MainWorkCnt-----");
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                dlog.e("에러 = " + t.getMessage());
-//            }
-//        });
-//    }
     public void PlaceWorkCheck(String place_id) {
         dlog.i("PlaceWorkCheck place_id : " + place_id);
         dlog.i("PlaceWorkCheck USER_INFO_ID : " + USER_INFO_ID);
@@ -644,7 +570,7 @@ public class WorkstatusFragment extends Fragment {
                                         dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
                                         dlog.i("vaca_cnt : " + Response.getJSONObject(0).getString("vaca_cnt"));
                                         dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
-                                        shardpref.putString("i_cnt", Response.getJSONObject(0).getString("i_cnt"));
+                                        shardpref.putString("i_cnt", Response.getJSONObject(0).getString("j_cnt"));
                                         dlog.i("------PlaceWorkCheck2-------");
                                     } catch (Exception e) {
                                         dlog.i("PlaceWorkCheck Exception : " + e);

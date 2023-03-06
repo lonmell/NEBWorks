@@ -24,7 +24,6 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class SelectYoilActivity extends BottomSheetDialogFragment {
     private ActivitySelectyoilBinding binding;
@@ -42,9 +41,11 @@ public class SelectYoilActivity extends BottomSheetDialogFragment {
     ArrayList<StringData.StringData_list> mList;
     ArrayList<StringData.StringData_list> searchmList;
     List<String> selectYoil = new ArrayList<>();
+    List<String> exceptYoil = new ArrayList<>();
     ListYoilStringAdapter mAdapter;
 
     String dayOfWeek = "";
+    String setYoilobject = "";//--근로자가 추가근무를 추가할때 정규근로요일을 제외하기 위한 변수
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -65,15 +66,40 @@ public class SelectYoilActivity extends BottomSheetDialogFragment {
         setItem.add("일요일");
 
         dayOfWeek = shardpref.getString("select_yoil", "");
-        if (!dayOfWeek.equals("")) {
-            String[] dayOfWeekSplit = dayOfWeek.split(",");
-            for (int i = 0; i < dayOfWeekSplit.length; i++) {
-                dayOfWeekSplit[i] = dayOfWeekSplit[i] + "요일";
+        setYoilobject = shardpref.getString("setYoilobject", "");
+        dlog.i("1 dayOfWeek: " + dayOfWeek);
+        dlog.i("2 selectYoil: " + selectYoil);
+
+
+
+        if (!setYoilobject.equals("")) {
+            String[] setYoilobjectSplit = setYoilobject.split(",");
+            for (int i = 0; i < setYoilobjectSplit.length; i++) {
+                setYoilobjectSplit[i] = setYoilobjectSplit[i] + "요일";
             }
-            selectYoil.addAll(Arrays.asList(dayOfWeekSplit));
-            dlog.i("selectYoil: " + selectYoil);
+            exceptYoil.addAll(Arrays.asList(setYoilobjectSplit));
+            dlog.i("exceptYoil: " + exceptYoil);
+            shardpref.remove("setYoilobject");
+        }else{
+            //추가근무를 설정할때는 기존 근무를 가져오지 않는다 - 리스트에서 기존 근무를 체크 표시 하지 않고 AddWorkPartActivity에 체크데이터에 포함하지 않음
+           if (!dayOfWeek.equals("")) {
+                String[] dayOfWeekSplit = dayOfWeek.split(",");
+                for (int i = 0; i < dayOfWeekSplit.length; i++) {
+                    dayOfWeekSplit[i] = dayOfWeekSplit[i] + "요일";
+                }
+                selectYoil.addAll(Arrays.asList(dayOfWeekSplit));
+                dlog.i("selectYoil: " + selectYoil);
+            }
         }
 
+        //기존 근무
+        for (int i = 0; i < setItem.size(); i++) {
+            for (int i2 = 0; i2 < exceptYoil.size(); i2++) {
+                if (!setItem.get(i).contains(exceptYoil.get(i2))) {
+                    setItem.remove(exceptYoil.get(i2));
+                }
+            }
+        }
 
         mList = new ArrayList<>();
         searchmList = new ArrayList<>();
@@ -89,10 +115,10 @@ public class SelectYoilActivity extends BottomSheetDialogFragment {
         mAdapter.setOnItemClickListener(new ListYoilStringAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                dlog.i("Get onItem : " + mList.get(position));
-                if(selectYoil.contains(mList.get(position).getItem())){
+                dlog.i("Get onItem : " + mList.get(position).getItem());
+                if (selectYoil.contains(mList.get(position).getItem())) {
                     selectYoil.remove(mList.get(position).getItem());
-                }else{
+                } else {
                     selectYoil.add(mList.get(position).getItem());
                 }
             }

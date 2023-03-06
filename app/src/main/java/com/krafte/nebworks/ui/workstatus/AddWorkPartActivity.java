@@ -93,6 +93,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
     //--매장 정보 수정할때
 
     boolean workPartState = false;
+    String ContractWorkKind = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +169,11 @@ public class AddWorkPartActivity extends AppCompatActivity {
             dlog.i("item_user_name : " + item_user_name);
             binding.memName.setText(item_user_name);
             binding.selectMem.setClickable(false);
+            String rpd = ReturnPageData.getInstance().getPage();
+            ContractWorkKind = "1";
+            if(rpd.equals("EmployeeProcess")){
+                ContractWorkKind = "1";
+            }
         }else if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")){
             //점주가 추가할때
             //부여할 사용자 가져오기
@@ -205,6 +211,22 @@ public class AddWorkPartActivity extends AppCompatActivity {
                 }
             }
             binding.selectMem.setClickable(true);
+        }else if(!place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+            //근로자가 본인것 추가할때
+            binding.memName.setVisibility(View.VISIBLE);
+            binding.memCnt.setVisibility(View.GONE);
+            binding.memSelect.setVisibility(View.GONE);
+            item_user_id = USER_INFO_ID;
+            item_user_name = USER_INFO_NAME;
+            dlog.i("item_user_id : " + item_user_id);
+            dlog.i("item_user_name : " + item_user_name);
+            binding.memName.setText(item_user_name);
+            binding.selectMem.setClickable(false);
+            workPartState = true;
+            String rpd = ReturnPageData.getInstance().getPage();
+            if(rpd.equals("EmployeeProcess")){
+                ContractWorkKind = "2";
+            }
         }
 
         if (workPartState) {
@@ -213,7 +235,6 @@ public class AddWorkPartActivity extends AppCompatActivity {
 
         //시간 지정하기
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
         dlog.i("-----onResume-----");
     }
 
@@ -222,6 +243,11 @@ public class AddWorkPartActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    @Override
+    public void onDestroy(){
+        ReturnPageData.getInstance().setPage("Main2");
+        super.onDestroy();
+    }
 
     boolean SELECTTIME01 = false; // 근무시간 false - 시작시간 / true - 종료시간
     boolean SELECTTIME02 = false; // 휴식시간 false - 시작시간 / true - 종료시간
@@ -257,7 +283,6 @@ public class AddWorkPartActivity extends AppCompatActivity {
             sya.setOnItemClickListener(new SelectYoilActivity.OnItemClickListener() {
                 @Override
                 public void onItemClick(View v, String category) {
-//                    binding.yoilTv.setText(category.replace("[", "").replace("]", ""));
                     setYoil = category.replace("요일", "").replace(" ", "");
                     dlog.i("setYoil : " + setYoil);
                     List<Integer> listYoil = new ArrayList<>();
@@ -322,6 +347,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
                 }
             });
         });
+
         binding.selectMem.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, SelectMemberPop.class);
             mContext.startActivity(intent);
@@ -513,7 +539,22 @@ public class AddWorkPartActivity extends AppCompatActivity {
                                         JSONObject jsonObject = Response.getJSONObject(i);
                                         objectList.add(jsonObject);
                                     }
-                                    setWorkTimeContent(objectList);
+                                    String rpd = ReturnPageData.getInstance().getPage();
+                                    if(rpd.equals("EmployeeProcess")){
+                                        StringBuilder sb = new StringBuilder();
+                                        setYoil = objectList.get(0).getString("yoil");
+                                        for (int i = 1; i < objectList.size(); i++) {
+                                            sb.append(",");
+                                            sb.append(objectList.get(i).getString("yoil"));
+                                        }
+                                        setYoil += sb.toString();
+                                        dlog.i("setYoilobject: " + setYoil);
+                                        shardpref.putString("setYoilobject",setYoil);
+
+                                    }else{
+                                        setWorkTimeContent(objectList);
+                                    }
+
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -578,7 +619,9 @@ public class AddWorkPartActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkPartSaveInterface api = retrofit.create(WorkPartSaveInterface.class);
-        Call<String> call = api.getData(change_place_id, user_id, setYoil.replace("[", "").replace("]", ""), total_work_time_get, sieob_get, jong_eob_get, break_time_get01, break_time_get02, diff_break_time_get);
+        Call<String> call = api.getData(change_place_id, user_id, setYoil.replace("[", "").replace("]", "")
+                , total_work_time_get, sieob_get, jong_eob_get, break_time_get01
+                , break_time_get02, diff_break_time_get,ContractWorkKind);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -592,12 +635,21 @@ public class AddWorkPartActivity extends AppCompatActivity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
                                 if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("success")) {
-                                    Toast_Nomal("근무시간이 업데이트 되었습니다.");
+                                    if(ReturnPageData.getInstance().getPage().equals("EmployeeProcess")){
+                                        Toast_Nomal("추가 근무가 생성되었습니다");
+                                    }else{
+                                        Toast_Nomal("근무시간이 업데이트 되었습니다.");
+                                    }
+
                                     shardpref.remove("item_user_id");
                                     shardpref.remove("item_user_name");
                                     shardpref.putInt("SELECT_POSITION", 2);
                                     if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
-                                        pm.Main2(mContext);
+                                        if(ReturnPageData.getInstance().getPage().equals("EmployeeProcess")){
+                                            pm.EmployeeProcess(mContext);
+                                        }else{
+                                            pm.Main2(mContext);
+                                        }
                                     }else if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")){
                                         if(ReturnPageData.getInstance().getPage().equals("AddMemberDetail")){
                                             shardpref.putInt("SELECT_POSITION",0);
@@ -607,6 +659,12 @@ public class AddWorkPartActivity extends AppCompatActivity {
                                             shardpref.putInt("SELECT_POSITION_sub",0);
                                         }
                                         pm.Main(mContext);
+                                    }else if(!place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+                                        if(ReturnPageData.getInstance().getPage().equals("EmployeeProcess")){
+                                            pm.EmployeeProcess(mContext);
+                                        }else{
+                                            pm.Main2(mContext);
+                                        }
                                     }
 //                                    getPartTimeYoil(setYoil);
                                 }

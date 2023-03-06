@@ -42,10 +42,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/all_memberlist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
         <LinearLayout
             android:id="@+id/nodata_area"
             android:layout_width="match_parent"
