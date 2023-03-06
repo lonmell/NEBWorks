@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -29,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.loader.content.CursorLoader;
 
 import com.bumptech.glide.Glide;
@@ -112,6 +114,7 @@ public class PlaceEditActivity extends AppCompatActivity {
 //    double longitube = 0.1;
     String zipcode = "0";
 
+    boolean etcState = false;
 
     //시작시간
     int SelectStartTime = 1;
@@ -253,7 +256,25 @@ public class PlaceEditActivity extends AppCompatActivity {
             dlog.i("area03 click!");
             StoreDivisionPopActivity storedivi = new StoreDivisionPopActivity();
             storedivi.show(getSupportFragmentManager(), "StoreDivisionPopActivity");
-            storedivi.setOnItemClickListener((v1, category) -> binding.inputbox03.setText(category));
+            storedivi.setOnItemClickListener((v1, category) -> {
+                binding.inputbox03.setText(category);
+                if (category.isEmpty()) {
+                    binding.inputbox03.setBackgroundResource(R.drawable.default_input_round);
+                    binding.inputbox03.setTextColor(Color.parseColor("#696969"));
+                    binding.placeKindDownArrow.setBackgroundResource(R.drawable.down_arrow);
+                } else {
+                    binding.inputbox03.setBackgroundResource(R.drawable.default_select_on_round);
+                    binding.inputbox03.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+                    binding.placeKindDownArrow.setBackgroundResource(R.drawable.down_arrow_blue);
+                }
+                if (category.equals("기타")) {
+                    binding.etcInputBox.setVisibility(View.VISIBLE);
+                    etcState = true;
+                } else {
+                    binding.etcInputBox.setVisibility(View.GONE);
+                    etcState = false;
+                }
+            });
         });
         //급여정산일
         binding.inputbox05.setOnClickListener(v -> {
@@ -692,6 +713,10 @@ public class PlaceEditActivity extends AppCompatActivity {
         accept_state = binding.inputbox03.getText().toString();
 
         SearchRestrnum(binding.inputbox02.getText().toString());
+
+        if (etcState) {
+            accept_state = binding.etcInputBox.getText().toString();
+        }
 
         if (boheom.size() == 0) {
             boheom.add("없음");
