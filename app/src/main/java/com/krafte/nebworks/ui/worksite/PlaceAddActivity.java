@@ -167,6 +167,8 @@ public class PlaceAddActivity extends AppCompatActivity {
     boolean SELECTTIME = false;
     String page_state = "";
 
+    boolean etcState = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -318,6 +320,13 @@ public class PlaceAddActivity extends AppCompatActivity {
                     binding.inputbox03.setBackgroundResource(R.drawable.default_select_on_round);
                     binding.inputbox03.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                     binding.placeKindDownArrow.setBackgroundResource(R.drawable.down_arrow_blue);
+                }
+                if (category.equals("기타")) {
+                    binding.etcInputBox.setVisibility(View.VISIBLE);
+                    etcState = true;
+                } else {
+                    binding.etcInputBox.setVisibility(View.GONE);
+                    etcState = false;
                 }
             });
         });
@@ -680,6 +689,10 @@ public class PlaceAddActivity extends AppCompatActivity {
         restday = binding.inputbox07.getText().toString();
         registr_num = binding.inputbox02.getText().toString().replace("-", "");
         accept_state = binding.inputbox03.getText().toString();
+
+        if (etcState) {
+            accept_state = binding.etcInputBox.getText().toString();
+        }
 
         SearchRestrnum(binding.inputbox02.getText().toString().replace("-", ""));
         if (boheom.size() == 0) {
