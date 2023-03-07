@@ -143,6 +143,8 @@ public class WorkStatusSubFragment1 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        cal = Calendar.getInstance();
+        toDay = sdf.format(cal.getTime());
     }
 
     @Override
@@ -163,10 +165,8 @@ public class WorkStatusSubFragment1 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        cal = Calendar.getInstance();
-        toDay = sdf.format(cal.getTime());
         toDay = shardpref.getString("FtoDay",toDay);
-        dlog.i("오늘 :" + toDay);
+        dlog.i("post 날짜 :" + toDay);
         change_place_id = shardpref.getString("change_place_id","").equals("")?place_id:shardpref.getString("change_place_id","");
         dlog.i("change_place_id :"  + change_place_id);
         SetAllMemberList();
