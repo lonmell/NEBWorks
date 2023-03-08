@@ -177,7 +177,12 @@ public class PlaceListActivity extends AppCompatActivity {
             binding.backBtn.setVisibility(View.GONE);
         }
         if (deletePlace) {
-            GetPlaceList();
+            if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty() && !USER_INFO_ID.isEmpty()){
+                GetPlaceList();
+            } else {
+                binding.storeCnt.setText("0개");
+                binding.noData.setVisibility(View.VISIBLE);
+            }
             shardpref.remove("delete_place");
         }
     }
@@ -354,7 +359,7 @@ public class PlaceListActivity extends AppCompatActivity {
                 .build();
         PlaceListInterface api = retrofit.create(PlaceListInterface.class);
         Call<String> call = api.getData("", USER_INFO_ID, USER_INFO_AUTH);
-        //
+
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
             @Override

@@ -261,6 +261,7 @@ public class MainFragment extends AppCompatActivity {
             binding.notiArea.setOnClickListener(v -> {
                 pm.FeedList(mContext);
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -747,10 +748,6 @@ public class MainFragment extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav10) {
             dlog.i("근로계약서 전체 관리");
             pm.ContractFragment(mContext);
-        } else if (view.getId() == R.id.select_nav13){
-            //고객센터1877-1979
-            Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:1877-1979"));
-            mContext.startActivity(mIntent);
         }else if (view.getId() == R.id.select_nav14){
             //로그아웃
             Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
@@ -761,10 +758,22 @@ public class MainFragment extends AppCompatActivity {
             mContext.startActivity(intent);
             ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        } else if (view.getId() == R.id.select_nav13){
+            //고객센터
+            //노션링크
+            String Contract_uri = "https://slow-buzzard-a6e.notion.site/e64cd314fdfb4a2090a7880f046a7e7c";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
+            startActivity(intent);
         } else if (view.getId() == R.id.select_nav15){
             //탈퇴하기
             pm.UserDel(mContext);
         }
+
+//        else if (view.getId() == R.id.select_nav13){
+//            //고객센터1877-1979
+//            Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:1877-1979"));
+//            mContext.startActivity(mIntent);
+//        }
 
     }
 

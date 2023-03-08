@@ -19,8 +19,6 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
@@ -108,12 +106,16 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         try {
             holder.first_line.setVisibility(position == 0?View.VISIBLE:View.GONE);
 
-            Glide.with(mContext).load(item.getImg_path().equals("null")?"":item.getImg_path())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .placeholder(R.drawable.identificon)
-                    .into(holder.store_thumnail);
-
+            dlog.i("item.getImg_path() : " + item.getImg_path());
+//            Glide.with(mContext).load(item.getImg_path().equals("null")?"":item.getImg_path())
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .skipMemoryCache(true)
+//                    .placeholder(R.drawable.identificon)
+//                    .into(holder.store_thumnail);
+//            if(item.getImg_path().equals("null")){
+//                holder.i_o_btn.setVisibility(View.GONE);
+//            }
+            holder.i_o_btn.setVisibility(View.GONE);
             holder.title.setText(item.getName());
 
             if (item.getOwner_id().equals(USER_INFO_ID)) {
@@ -202,7 +204,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         ImageView store_thumnail;
         TextView title, name, address, state_tv;
         TextView item_peoplecnt, total_money;
-        CardView store_kind_state, item_area, store_invite_accept;
+        CardView store_kind_state, item_area, store_invite_accept, i_o_btn;
         RelativeLayout list_setting, list_img_area, place_state;
         LinearLayout money_area, total_item, first_line;
 
@@ -224,6 +226,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
             state_tv            = itemView.findViewById(R.id.state_tv);
             total_money         = itemView.findViewById(R.id.total_money);
             first_line          = itemView.findViewById(R.id.first_line);
+            i_o_btn             = itemView.findViewById(R.id.i_o_btn);
 
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);

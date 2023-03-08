@@ -31,9 +31,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:layout_marginEnd="25dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="15dp"
                     android:orientation="vertical">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,7 +53,7 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="15dp"
                             android:elevation="10dp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:cardBackgroundColor="@color/blue"
                             app:cardCornerRadius="60dp"
                             app:cardElevation="5dp">
@@ -70,7 +70,6 @@
                             android:id="@+id/place_info_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
                             app:layout_constraintStart_toEndOf="@id/i_o_btn"
                             android:orientation="vertical">
 
