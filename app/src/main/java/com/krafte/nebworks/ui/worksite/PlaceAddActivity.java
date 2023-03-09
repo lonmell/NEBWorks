@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.worksite;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +43,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.SelectStringBottomSheet;
 import com.krafte.nebworks.bottomsheet.StoreDivisionPopActivity;
@@ -291,9 +294,7 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
 
         binding.searchLocation.setOnClickListener(v -> {
-            Intent i = new Intent(this, PinSelectLocationActivity.class);
-            startActivityForResult(i, PINSELECT_LOCATION_ACTIVITY);
-            overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+            permissionCheck();
         });
 
         //사업자번호 체크
@@ -1210,6 +1211,33 @@ public class PlaceAddActivity extends AppCompatActivity {
         return 0;
     }
     /*지오 코딩용 소스 (예비용) - 주소 >> 위도,경도로 변경하는 소스  END*/
+
+
+    //권한체크
+    private void permissionCheck() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+//                Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
+                dlog.i("permissionCheck() : Permission Granted");
+                Intent i = new Intent(mContext, PinSelectLocationActivity.class);
+                startActivityForResult(i, PINSELECT_LOCATION_ACTIVITY);
+                overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+//                Toast.makeText(mContext, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                dlog.i("permissionCheck() : Permission Denied");
+            }
+        };
+
+        TedPermission.create()
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("위치정보권한을 허용해주세요")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                .check();
+    }
 
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();

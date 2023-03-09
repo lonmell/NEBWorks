@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.worksite;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +36,8 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
@@ -64,6 +67,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -449,10 +453,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             });
 
             binding.uploadSuccessImg.setOnClickListener(v -> {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, GALLEY_CODE);
+                permissionCheck();
             });
 
             binding.workadd01Txt.setText(complete_kind.equals("1") ? "매장사진" : "체크");
@@ -488,6 +489,34 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             Log.i(TAG, "Exception : " + e);
         }
 
+    }
+
+    private void permissionCheck() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+//                Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, GALLEY_CODE);
+                dlog.i("permissionCheck() : Permission Granted");
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+//                Toast.makeText(mContext, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                dlog.i("permissionCheck() : Permission Denied");
+            }
+        };
+
+        TedPermission.create()
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("파일 이용권한을 허용해주세요")
+                .setPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
     }
 
     private void setBtnEvent() {

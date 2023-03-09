@@ -168,7 +168,7 @@ public class PlaceListActivity extends AppCompatActivity {
         super.onResume();
         dlog.i("onResume!");
         shardpref.remove("page_state");
-        event           = shardpref.getString("event", "");
+        event                         = shardpref.getString("event", "");
         boolean deletePlace           = shardpref.getBoolean("delete_place", false);
         if (!event.isEmpty()) {
             binding.logoutArea.setVisibility(View.GONE);
@@ -193,6 +193,7 @@ public class PlaceListActivity extends AppCompatActivity {
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });
+
         binding.addPlace.setOnTouchListener(new View.OnTouchListener() {
             private int lastAction;
             private int initialX;
@@ -202,8 +203,8 @@ public class PlaceListActivity extends AppCompatActivity {
 
             int newX;
             int newY;
-            private int lastnewX;
-            private int lastnewY;
+            private int lastnewX = 0;
+            private int lastnewY = 0;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -228,11 +229,12 @@ public class PlaceListActivity extends AppCompatActivity {
 
                         newX = initialX + dx;
                         newY = initialY + dy;
+
+                        if(lastnewX == 0){ lastnewX = newX; }
+                        if(lastnewY == 0){ lastnewY = newY; }
+
                         dlog.i("newX : " + newX);
                         dlog.i("newY : " + newY);
-//                        // Update the position of the ImageView
-//                        v.layout(newX, newY, newX + v.getWidth(), newY + v.getHeight());
-//                        lastAction = MotionEvent.ACTION_MOVE;
 
                         int parentWidth = ((ViewGroup) v.getParent()).getWidth();
                         int parentHeight = ((ViewGroup) v.getParent()).getHeight();
@@ -247,10 +249,13 @@ public class PlaceListActivity extends AppCompatActivity {
 
                         break;
 
+
                     case MotionEvent.ACTION_UP:
                         lastAction = MotionEvent.ACTION_UP;
                         int Xdistance = (newX - lastnewX);
                         int Ydistance = (newY - lastnewY);
+                        dlog.i("Math.abs(Xdistance) : " + Math.abs(Xdistance));
+                        dlog.i("Math.abs(Ydistance) : " + Math.abs(Ydistance));
                         if (Math.abs(Xdistance) < 10 && Math.abs(Ydistance) < 10) {
                             onStartAuth();
                         }else{

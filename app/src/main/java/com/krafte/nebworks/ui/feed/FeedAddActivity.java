@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.feed;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.ClipData;
@@ -35,6 +36,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MultiImageAdapter;
 import com.krafte.nebworks.data.PlaceCheckData;
@@ -320,11 +323,7 @@ public class FeedAddActivity extends AppCompatActivity {
 
         //------게시글 이미지 등록 / 갤러리 열기
         binding.limitImg.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, GALLEY_CODE);
+            permissionCheck();
         });
 
         binding.closeBtn.setOnClickListener(v -> {
@@ -398,6 +397,36 @@ public class FeedAddActivity extends AppCompatActivity {
                 binding.selectFixTv.setTextColor(Color.parseColor("#54585A"));
             }
         });
+    }
+
+
+    private void permissionCheck() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+//                Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, GALLEY_CODE);
+                dlog.i("permissionCheck() : Permission Granted");
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+//                Toast.makeText(mContext, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                dlog.i("permissionCheck() : Permission Denied");
+            }
+        };
+
+        TedPermission.create()
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("파일 이용권한을 허용해주세요")
+                .setPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
     }
 
     String mem_id = "";

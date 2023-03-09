@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.worksite;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WifiAdapter;
 import com.krafte.nebworks.data.PlaceListData;
@@ -106,7 +109,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
             binding.noData.setVisibility(View.VISIBLE);
 
             getPlaceId();
-            wifiScan();
+            permissionCheck();
 
             binding.save2btn.setOnClickListener(v -> {
                 UpdatePlace(0);
@@ -124,6 +127,30 @@ public class PlaceAddActivity2 extends AppCompatActivity {
         shardpref.remove("pin_store_address");
         shardpref.remove("pin_store_addressdetail");
         shardpref.remove("pin_zipcode");
+    }
+
+
+    private void permissionCheck() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+//                Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
+                wifiScan();
+                dlog.i("permissionCheck() : Permission Granted");
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+//                Toast.makeText(mContext, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                dlog.i("permissionCheck() : Permission Denied");
+            }
+        };
+
+        TedPermission.create()
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("와이파이 권한을 허용해주세요")
+                .setPermissions(Manifest.permission.ACCESS_WIFI_STATE)
+                .check();
     }
 
     public void getPlaceId() {

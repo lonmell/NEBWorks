@@ -918,7 +918,7 @@ public class LoginActivity extends AppCompatActivity {
         TedPermission.create()
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage(
-                        "권한을 거부할 경우 본 서비스를 이용하실 수 없습니다.\n" +
+                        "권한을 거부할 경우 서비스 이용에\n제한이 있을 수 있습니다" +
                                 "\n" +
                                 "[설정] > [권한]에서 권한을 켜주세요.")
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
