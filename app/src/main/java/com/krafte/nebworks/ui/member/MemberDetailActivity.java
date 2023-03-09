@@ -410,8 +410,10 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 binding.contractState.setTextColor(Color.parseColor("#6395EC"));
                                 binding.contractState.setText("작성완료");
                                 binding.contractAllGo.setOnClickListener(v -> {
-                                    shardpref.putString("contract_id", contract_id);
-                                    pm.ContractAll(mContext);
+                                    if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                                        shardpref.putString("contract_id", contract_id);
+                                        pm.ContractAll(mContext);
+                                    }
                                 });
                             } else {
                                 if (worker_sign_id.equals("null") && owner_sign_id.equals("null")) {
@@ -419,18 +421,21 @@ public class MemberDetailActivity extends AppCompatActivity {
                                     binding.contractState.setText("미처리");
                                     //미처리 일때 근로계약서 리스트 페이지로
                                     binding.contractAllGo.setOnClickListener(v -> {
-                                        if (USER_INFO_AUTH.equals("0")) {
-                                            pm.AddContractPage01(mContext);
-                                        } else {
-                                            Toast.makeText(mContext, "작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
+                                        if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                                            if (USER_INFO_AUTH.equals("0")) {
+                                                pm.AddContractPage01(mContext);
+                                            } else {
+                                                Toast.makeText(mContext, "작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
+                                            }
                                         }
                                     });
                                 } else {
                                     binding.contractState.setTextColor(Color.parseColor("#DD6540"));
                                     binding.contractState.setText("작성중");
                                     binding.contractAllGo.setOnClickListener(v -> {
-                                        shardpref.putString("contract_id", contract_id);
-                                        shardpref.putString("progress_pos", getprogress_pos);
+                                        if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                                            shardpref.putString("contract_id", contract_id);
+                                            shardpref.putString("progress_pos", getprogress_pos);
                                             /* item.getContract_id()
                                             *   현재 진행중인 페이지
                                                 0 or null - 작성안됨
@@ -442,37 +447,38 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 6 - 서명
                                                 7 - 완료
                                             * */
-                                        if (USER_INFO_AUTH.equals("0")) {
-                                            if (getprogress_pos.equals("0")) {
-                                                pm.AddContractPage03(mContext);
-                                            } else if (getprogress_pos.equals("1")) {
-                                                //근무 기본사항 부터
-                                                pm.AddContractPage04(mContext);
-                                            } else if (getprogress_pos.equals("2")) {
-                                                //급여 기본사항 부터
-                                                pm.AddContractPage05(mContext);
-                                            } else if (getprogress_pos.equals("3")) {
-                                                //특약 부터
-                                                pm.AddContractPage06(mContext);
-                                            } else if (getprogress_pos.equals("4")) {
-                                                //근로자 인적사항 부터
-                                                pm.AddContractPage07(mContext);
-                                            } else if (getprogress_pos.equals("5")) {
-                                                //서명 부터
-                                                pm.AddContractPage08(mContext);
-                                            } else if (getprogress_pos.equals("7")) {
-                                                //해당 근로계약서 전체 상세 페이지로
-                                                shardpref.putString("contract_id", contract_id);
-                                                pm.ContractAll(mContext);
-                                            }
-                                        } else {
-                                            //근로자일경우
-                                            if (getprogress_pos.equals("6")) {
-                                                pm.ContractWorkerAccept(mContext);
-                                            } else if (getprogress_pos.equals("7")) {
-                                                //해당 근로계약서 전체 상세 페이지로
-                                                shardpref.putString("contract_id", contract_id);
-                                                pm.ContractAll(mContext);
+                                            if (USER_INFO_AUTH.equals("0")) {
+                                                if (getprogress_pos.equals("0")) {
+                                                    pm.AddContractPage03(mContext);
+                                                } else if (getprogress_pos.equals("1")) {
+                                                    //근무 기본사항 부터
+                                                    pm.AddContractPage04(mContext);
+                                                } else if (getprogress_pos.equals("2")) {
+                                                    //급여 기본사항 부터
+                                                    pm.AddContractPage05(mContext);
+                                                } else if (getprogress_pos.equals("3")) {
+                                                    //특약 부터
+                                                    pm.AddContractPage06(mContext);
+                                                } else if (getprogress_pos.equals("4")) {
+                                                    //근로자 인적사항 부터
+                                                    pm.AddContractPage07(mContext);
+                                                } else if (getprogress_pos.equals("5")) {
+                                                    //서명 부터
+                                                    pm.AddContractPage08(mContext);
+                                                } else if (getprogress_pos.equals("7")) {
+                                                    //해당 근로계약서 전체 상세 페이지로
+                                                    shardpref.putString("contract_id", contract_id);
+                                                    pm.ContractAll(mContext);
+                                                }
+                                            } else {
+                                                //근로자일경우
+                                                if (getprogress_pos.equals("6")) {
+                                                    pm.ContractWorkerAccept(mContext);
+                                                } else if (getprogress_pos.equals("7")) {
+                                                    //해당 근로계약서 전체 상세 페이지로
+                                                    shardpref.putString("contract_id", contract_id);
+                                                    pm.ContractAll(mContext);
+                                                }
                                             }
                                         }
                                     });
@@ -523,7 +529,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
                             if (Response.length() != 0) {
-                                String mem_id = Response.getJSONObject(0).getString("id");
+                                mem_id = Response.getJSONObject(0).getString("id");
                                 String name = Response.getJSONObject(0).getString("name");
                                 String place_name = Response.getJSONObject(0).getString("place_name");
                                 String join_date = Response.getJSONObject(0).getString("join_date").replace("-", ".");
@@ -540,6 +546,11 @@ public class MemberDetailActivity extends AppCompatActivity {
                                     owner_phone = Response.getJSONObject(0).getString("owner_phone").substring(0, 3) + "-"
                                             + Response.getJSONObject(0).getString("owner_phone").substring(3, 7) + "-"
                                             + Response.getJSONObject(0).getString("owner_phone").substring(7, 11);
+                                }
+                                if (!phone.isEmpty()) {
+                                    phone = Response.getJSONObject(0).getString("phone").substring(0, 3) + "-"
+                                            + Response.getJSONObject(0).getString("phone").substring(3, 7) + "-"
+                                            + Response.getJSONObject(0).getString("phone").substring(7, 11);
                                 }
                                 String jikgup = Response.getJSONObject(0).getString("jikgup");
 
@@ -573,9 +584,15 @@ public class MemberDetailActivity extends AppCompatActivity {
                                     binding.userPhone.setText(phone);
                                     CallNum = phone;
                                 } else {
-                                    binding.callNumber.setText("사장님께 전화걸기");
-                                    binding.userPhone.setText(owner_phone);
-                                    CallNum = owner_phone;
+                                    if (mem_id.equals(USER_INFO_ID)) {
+                                        binding.callNumber.setText("사장님께 전화걸기");
+                                        binding.userPhone.setText(owner_phone);
+                                        CallNum = owner_phone;
+                                    } else {
+                                        binding.callNumber.setText("전화걸기");
+                                        binding.userPhone.setText(phone);
+                                        CallNum = phone;
+                                    }
                                 }
 
                                 binding.userCall.setOnClickListener(v -> {

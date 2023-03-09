@@ -196,18 +196,20 @@ public class MoreFragment extends Fragment {
                 pm.ProfileEdit(mContext);
             }
         });
+
         binding.settingList02Txt.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                pm.NotifyList(mContext);
+                pm.Push(mContext);
             }
         });
+
         binding.settingList03Txt.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                pm.Push(mContext);
+                pm.NotifyList(mContext);
             }
         });
 
