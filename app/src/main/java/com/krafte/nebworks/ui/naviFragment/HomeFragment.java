@@ -65,11 +65,13 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * 2022 11 03 방창배 작성 / 점주용 페이지
+ * 2023 03 08 매장 이미지 추가 기능 작성
  */
 
 public class HomeFragment extends Fragment {
     private final static String TAG = "HomeFragment";
     private HomefragmentBinding binding;
+    int GALLEY_CODE = 10;
 
     Context mContext;
     Activity activity;
@@ -123,6 +125,7 @@ public class HomeFragment extends Fragment {
     ArrayList<MainNotiData.MainNotiData_list> mList2;
     MainNotiLAdapter mAdapter2 = null;
 
+
     public static HomeFragment newInstance(int number) {
         HomeFragment fragment = new HomeFragment();
         Bundle bundle = new Bundle();
@@ -164,11 +167,11 @@ public class HomeFragment extends Fragment {
         try {
             dlog.DlogContext(mContext);
             //Singleton Area
-            place_id        = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
-            place_owner_id  = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+            place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            place_owner_id = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             String date = dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 기준";
             binding.payDate.setText(date);
@@ -178,7 +181,7 @@ public class HomeFragment extends Fragment {
 
             //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);
-            isAuth    = shardpref.getInt("isAuth", 0);
+            isAuth = shardpref.getInt("isAuth", 0);
 
             setBtnEvent();
             dlog.i("HomeFragment START!");
@@ -205,6 +208,7 @@ public class HomeFragment extends Fragment {
     }
 
     Timer timer;
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
@@ -249,6 +253,20 @@ public class HomeFragment extends Fragment {
     }
 
     public void setBtnEvent() {
+
+        binding.itemArea.setOnClickListener(v -> {
+//            Intent intent = new Intent(mContext, PlacePhotoActivity.class);
+//            startActivity(intent);
+//            activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                shardpref.putString("USER_INFO_AUTH", "0");
+                shardpref.putString("event", "out_store");
+                pm.PlaceList(mContext);
+            }
+        });
         binding.cardview00.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -257,19 +275,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.payLayout.setOnClickListener(v-> {
+        binding.payLayout.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                if(USER_INFO_AUTH.equals("0")){
+                if (USER_INFO_AUTH.equals("0")) {
                     pm.PayManagement(mContext);
-                }else{
+                } else {
                     pm.PayManagement2(mContext);
                 }
             }
         });
 
-        binding.itemArea.setOnClickListener(v -> {
+        binding.placeState.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
@@ -327,9 +345,9 @@ public class HomeFragment extends Fragment {
                 isAuth();
             } else {
                 dlog.i("급여관리");
-                if(USER_INFO_AUTH.equals("0")){
+                if (USER_INFO_AUTH.equals("0")) {
                     pm.PayManagement(mContext);
-                }else{
+                } else {
                     pm.PayManagement2(mContext);
                 }
             }
@@ -426,9 +444,9 @@ public class HomeFragment extends Fragment {
 
 
     /*
-    * 20230105 HomFragment에서만 한번 사용자 id , 매장 id를 사용해
-    * 사용자 정보를 체크, 이후 다른 페이지에서는 Singleton 전역변수로 사용
-    * */
+     * 20230105 HomFragment에서만 한번 사용자 id , 매장 id를 사용해
+     * 사용자 정보를 체크, 이후 다른 페이지에서는 Singleton 전역변수로 사용
+     * */
     public void UserCheck() {
         Thread th = new Thread(() -> {
 //            dbc.UserCheck(place_id, USER_INFO_ID);
@@ -558,7 +576,7 @@ public class HomeFragment extends Fragment {
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-                                    if(Response.getJSONObject(0).getString("io_method").equals("y")) {
+                                    if (Response.getJSONObject(0).getString("io_method").equals("y")) {
                                         binding.wifiSwitch.setChecked(true);
                                     } else {
                                         binding.wifiSwitch.setChecked(false);
@@ -602,11 +620,11 @@ public class HomeFragment extends Fragment {
                             dlog.i("setWifiOnOff jsonResponse length : " + jsonResponse.length());
                             dlog.i("setWifiOnOff jsonResponse : " + jsonResponse);
                             try {
-                                if (jsonResponse.replace("\"","").equals("success")) {
+                                if (jsonResponse.replace("\"", "").equals("success")) {
                                     String statetv = "";
-                                    if(state.equals("y")){
+                                    if (state.equals("y")) {
                                         statetv = "활성화 되었습니다";
-                                    }else{
+                                    } else {
                                         statetv = "비활성화 되었습니다";
                                     }
                                     Toast_Nomal("와이파이 설정이 " + statetv);
@@ -657,11 +675,11 @@ public class HomeFragment extends Fragment {
                                             binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
                                             binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
                                             //결근 숫자에서 휴가숫자는 빠지지 않기때문에 결근-휴가수를 빼줘야한다
-                                            if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0){
+                                            if (Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0) {
                                                 binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
-                                            } else if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0){
+                                            } else if (Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0) {
                                                 binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
-                                                        -Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
+                                                        - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
                                             }
 //                                            binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
 //                                                    - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
@@ -724,9 +742,9 @@ public class HomeFragment extends Fragment {
                                                         isAuth();
                                                     } else {
                                                         shardpref.putString("Tap", "1");
-                                                        if(USER_INFO_AUTH.equals("0")){
+                                                        if (USER_INFO_AUTH.equals("0")) {
                                                             pm.PayManagement(mContext);
-                                                        }else{
+                                                        } else {
                                                             pm.PayManagement2(mContext);
                                                         }
                                                     }
@@ -986,9 +1004,8 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void CountingSubscribeTopic() {
 
-    }
+
 
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
@@ -1001,7 +1018,7 @@ public class HomeFragment extends Fragment {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
-    public void Toast_Nomal(String message){
+    public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) binding.getRoot().findViewById(R.id.toast_layout));
         TextView toast_textview = layout.findViewById(R.id.toast_textview);

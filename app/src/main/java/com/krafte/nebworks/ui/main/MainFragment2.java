@@ -2,8 +2,10 @@ package com.krafte.nebworks.ui.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -788,6 +790,11 @@ public class MainFragment2 extends AppCompatActivity {
             }else{
                 pm.Login(mContext);
             }
+        } else if (view.getId() == R.id.select_nav13){
+            //고객센터//노션링크
+            String Contract_uri = "https://slow-buzzard-a6e.notion.site/e64cd314fdfb4a2090a7880f046a7e7c";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
+            startActivity(intent);
         }
     }
 

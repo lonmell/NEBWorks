@@ -416,13 +416,13 @@ public class TwoButtonPopActivity extends Activity {
                     pm.Main2(mContext);
                 }
             } else if (flag.equals("업데이트")){
-                shardpref.putString("UPDATEYN","N");
                 finish();
                 Intent intent = new Intent();
                 intent.putExtra("result", "Close Popup");
                 setResult(RESULT_OK, intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 super.onBackPressed();
+                pm.Login(mContext);
             }else{
                 finish();
                 Intent intent = new Intent();
