@@ -509,7 +509,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         TedPermission.create()
                 .setPermissionListener(permissionlistener)
-                .setDeniedMessage("파일 이용권한을 허용해주세요")
+                .setDeniedMessage("[설정] > [권한]에서 파일 이용권한이 필요합니다")
                 .setPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)

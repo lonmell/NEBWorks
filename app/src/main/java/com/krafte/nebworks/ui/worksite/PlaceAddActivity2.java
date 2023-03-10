@@ -148,7 +148,7 @@ public class PlaceAddActivity2 extends AppCompatActivity {
 
         TedPermission.create()
                 .setPermissionListener(permissionlistener)
-                .setDeniedMessage("와이파이 권한을 허용해주세요")
+                .setDeniedMessage("[설정] > [권한]에서 와이파이 권한이 필요합니다")
                 .setPermissions(Manifest.permission.ACCESS_WIFI_STATE)
                 .check();
     }

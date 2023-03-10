@@ -316,10 +316,9 @@ public class TaskReportActivity extends AppCompatActivity {
             }
 
         });
-        binding.taskKind01.setOnClickListener(v -> {
-            permissionCheck();
-
-        });
+//        binding.taskKind01.setOnClickListener(v -> {
+//            permissionCheck();
+//        });
 
         binding.select01Box.setOnClickListener(v -> {
             complete_yn = "y";
@@ -352,11 +351,8 @@ public class TaskReportActivity extends AppCompatActivity {
 
         //------게시글 이미지 등록 / 갤러리 열기
         binding.limitImg.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, GALLEY_CODE);
+            permissionCheck();
+
         });
     }
 
@@ -365,9 +361,10 @@ public class TaskReportActivity extends AppCompatActivity {
             @Override
             public void onPermissionGranted() {
 //                Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, GALLEY_CODE);
                 dlog.i("permissionCheck() : Permission Granted");
             }
@@ -381,7 +378,7 @@ public class TaskReportActivity extends AppCompatActivity {
 
         TedPermission.create()
                 .setPermissionListener(permissionlistener)
-                .setDeniedMessage("파일 이용권한을 허용해주세요")
+                .setDeniedMessage("[설정] > [권한]에서 파일 이용권한이 필요합니다")
                 .setPermissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)

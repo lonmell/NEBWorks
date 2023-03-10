@@ -1234,7 +1234,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         TedPermission.create()
                 .setPermissionListener(permissionlistener)
-                .setDeniedMessage("위치정보권한을 허용해주세요")
+                .setDeniedMessage("[설정] > [권한]에서 위치정보권한이 필요합니다")
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
                 .check();
     }

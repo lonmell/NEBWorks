@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.naviFragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -27,6 +28,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MainMemberLAdapter;
 import com.krafte.nebworks.adapter.MainNotiLAdapter;
@@ -465,28 +468,7 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                UserCheck();
-                dlog.i("UserCheckData.getInstance().getUser_sieob() : " + UserCheckData.getInstance().getUser_sieob());
-                if (!UserCheckData.getInstance().getUser_sieob().equals("null")) {
-                    if (kind.equals("-1") || kind.equals("0")) {
-                        if (kind.equals("-1")) {
-                            kind = "0";
-                        } else {
-                            kind = "1";
-                        }
-                        shardpref.putString("kind", kind);
-                        pm.EmployeeProcess(mContext);
-                    }
-                } else {
-                    shardpref.putString("mem_name",UserCheckData.getInstance().getUser_name());
-                    Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-                    intent.putExtra("data", "근무시작 시간이 배정되지 않았습니다.\n추가근무를 생성하시겠습니까?");
-                    intent.putExtra("flag", "추가근무");
-                    intent.putExtra("left_btn_txt", "닫기");
-                    intent.putExtra("right_btn_txt", "추가하기");
-                    startActivity(intent);
-//                    Toast_Nomal("근무시작 시간이 배정되지 않았습니다.");
-                }
+                permissionCheck();
             }
         });
 
@@ -558,6 +540,50 @@ public class HomeFragment2 extends Fragment {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
             startActivity(intent);
         });
+    }
+
+    private void permissionCheck() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+//                Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
+                UserCheck();
+                dlog.i("UserCheckData.getInstance().getUser_sieob() : " + UserCheckData.getInstance().getUser_sieob());
+                if (!UserCheckData.getInstance().getUser_sieob().equals("null")) {
+                    if (kind.equals("-1") || kind.equals("0")) {
+                        if (kind.equals("-1")) {
+                            kind = "0";
+                        } else {
+                            kind = "1";
+                        }
+                        shardpref.putString("kind", kind);
+                        pm.EmployeeProcess(mContext);
+                    }
+                } else {
+                    shardpref.putString("mem_name",UserCheckData.getInstance().getUser_name());
+                    Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                    intent.putExtra("data", "근무시작 시간이 배정되지 않았습니다.\n추가근무를 생성하시겠습니까?");
+                    intent.putExtra("flag", "추가근무");
+                    intent.putExtra("left_btn_txt", "닫기");
+                    intent.putExtra("right_btn_txt", "추가하기");
+                    startActivity(intent);
+//                    Toast_Nomal("근무시작 시간이 배정되지 않았습니다.");
+                }
+                dlog.i("permissionCheck() : Permission Granted");
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+//                Toast.makeText(mContext, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                dlog.i("permissionCheck() : Permission Denied");
+            }
+        };
+
+        TedPermission.create()
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("[설정] > [권한]에서 위치액세스 권한이 필요합니다")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                .check();
     }
 
     public void getPlaceData() {

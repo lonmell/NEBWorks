@@ -290,8 +290,8 @@ public class TwoButtonPopActivity extends Activity {
                     shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
                     pm.Main(mContext);
                 } else if (flag.equals("할일")) {
-                    shardpref.putInt("SELECT_POSITION",SELECT_POSITION);
-                    shardpref.putInt("SELECT_POSITION_sub",SELECT_POSITION_sub);
+                    shardpref.putInt("SELECT_POSITION",1);
+                    shardpref.putInt("SELECT_POSITION_sub",0);
                     if (USER_INFO_AUTH.equals("0")) {
                         pm.Main(mContext);
                     } else {
@@ -406,7 +406,7 @@ public class TwoButtonPopActivity extends Activity {
                 setResult(RESULT_OK, intent);
                 overridePendingTransition(0, R.anim.translate_down);
                 pm.FeedList(mContext);
-            }else if (flag.equals("채널")) {
+            } else if (flag.equals("채널")) {
                 pm.AuthSelect(mContext);
             } else if (flag.equals("게시글삭제2")) {
                 shardpref.putInt("SELECT_POSITION", 3);
@@ -429,7 +429,7 @@ public class TwoButtonPopActivity extends Activity {
                 intent.putExtra("result", "Close Popup");
                 setResult(RESULT_OK, intent);
                 overridePendingTransition(0, R.anim.translate_down);
-                super.onBackPressed();
+//                super.onBackPressed();
             }
         });
     }

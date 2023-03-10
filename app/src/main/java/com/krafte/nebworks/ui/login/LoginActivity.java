@@ -155,12 +155,13 @@ public class LoginActivity extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
+
         try {
             aes256Util = new AES256Util("dkwj12fisne349vnlkw904mlk13490nv");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        permissionCheck();
+
         KakaoSetting();
         GoogleSetting();
         NaverSetting();
@@ -177,6 +178,8 @@ public class LoginActivity extends AppCompatActivity {
         GET_ACCOUNT_EMAIL   = shardpref.getString("USER_INFO_EMAIL","");
         USER_INFO_PW        = shardpref.getString("USER_INFO_PW","");
         USER_LOGIN_METHOD   = shardpref.getString("USER_LOGIN_METHOD", "-99");
+
+        permissionCheck();
 
         if (!USER_LOGIN_METHOD.equals("-99")) {
             if (!GET_ACCOUNT_EMAIL.equals("-99")) {
@@ -200,6 +203,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         BtnOneCircleFun(true);
+
     }
 
     private void KakaoSetting() {
@@ -920,7 +924,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setDeniedMessage(
                         "권한을 거부할 경우 서비스 이용에\n제한이 있을 수 있습니다" +
                                 "\n" +
-                                "[설정] > [권한]에서 권한을 켜주세요.")
+                                "[설정] > [권한]에서 권한이 필요합니다")
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.ACCESS_WIFI_STATE,

@@ -217,6 +217,16 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 //근로자일때 일부 UI 안보이게 해야함
                 binding.memberSelectArea.setVisibility(View.GONE);
             }
+
+            //업무완료 방식 기본설정
+            TaskKind = "1";
+            dlog.i("select01Box click [TaskKind : " + TaskKind + "]");
+            binding.select01Box.setBackgroundResource(R.drawable.default_select_round);
+            binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
+            binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+            binding.select02.setTextColor(Color.parseColor("#000000"));
+            binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -264,34 +274,34 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         });
 
         binding.needReport.setOnClickListener(v -> {
-            if (!NeedReportTF) {
-                NeedReportTF = true;
-                binding.needReport.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
-                binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
-                binding.reportVisible.setVisibility(View.VISIBLE);
-                binding.reportBtn.setBackgroundResource(R.drawable.task_check_white);
-                TaskKind = "1";
-                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
-                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
-                binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
-                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
-                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
-            } else {
-                NeedReportTF = false;
-                binding.needReport.setBackgroundColor(Color.parseColor("#F5F6F8"));
-                binding.reportTv.setTextColor(Color.parseColor("#000000"));
-                binding.reportBtn.setBackgroundResource(R.drawable.task_check_none);
-                binding.reportVisible.setVisibility(View.GONE);
-
-                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
-                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
-
-                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
-                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
-            }
+//            if (!NeedReportTF) {
+//                NeedReportTF = true;
+//                binding.needReport.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+//                binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
+//                binding.reportVisible.setVisibility(View.VISIBLE);
+//                binding.reportBtn.setBackgroundResource(R.drawable.task_check_white);
+//                TaskKind = "1";
+//                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
+//                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+//                binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
+//                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+//                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
+//            } else {
+//                NeedReportTF = false;
+//                binding.needReport.setBackgroundColor(Color.parseColor("#F5F6F8"));
+//                binding.reportTv.setTextColor(Color.parseColor("#000000"));
+//                binding.reportBtn.setBackgroundResource(R.drawable.task_check_none);
+//                binding.reportVisible.setVisibility(View.GONE);
+//
+//                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+//                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
+//
+//                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
+//                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
+//            }
         });
 
         binding.select01Box.setOnClickListener(v -> {
@@ -1430,9 +1440,9 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 //        super.onBackPressed();
         Intent intent = new Intent(this, TwoButtonPopActivity.class);
         intent.putExtra("flag","할일");
-        intent.putExtra("data","할일 작성을 취소하시겠습니까?");
-        intent.putExtra("left_btn_txt", "뒤로가기");
-        intent.putExtra("right_btn_txt", "취소");
+        intent.putExtra("data","할일 작성을 종료하시겠습니까?");
+        intent.putExtra("left_btn_txt", "닫기");
+        intent.putExtra("right_btn_txt", "종료");
         startActivity(intent);
         overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
