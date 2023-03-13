@@ -576,10 +576,24 @@ public class FeedAddActivity extends AppCompatActivity {
             BtnOneCircleFun(true);
             Toast.makeText(mContext, "기간을 모두 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1]) || Integer.parseInt(splitStartTime[2]) > Integer.parseInt(splitEndTime[2])) {
-            BtnOneCircleFun(true);
-            Toast.makeText(mContext, "시작날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.", Toast.LENGTH_SHORT).show();
-            return false;
+        } else if (!noti_event_start.isEmpty() || !noti_event_end.isEmpty()) {
+            if (noti_event_start.isEmpty()) {
+                BtnOneCircleFun(true);
+                Toast.makeText(mContext, "시작날짜를 설정해주세요.", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (noti_event_end.isEmpty()) {
+                BtnOneCircleFun(true);
+                Toast.makeText(mContext, "종료날짜를 설정해주세요.", Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1]) || Integer.parseInt(splitStartTime[2]) > Integer.parseInt(splitEndTime[2])) {
+                    BtnOneCircleFun(true);
+                    Toast.makeText(mContext, "시작날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.", Toast.LENGTH_SHORT).show();
+                    return false;
+                } else {
+                    return true;
+                }
+            }
         } else {
             return true;
         }
