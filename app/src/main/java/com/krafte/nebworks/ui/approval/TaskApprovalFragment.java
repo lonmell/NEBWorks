@@ -502,8 +502,9 @@ public class TaskApprovalFragment extends AppCompatActivity {
             Day = toDay.substring(8, 10);
             getYMPicker = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+            select_date = Year + "-" + Month + "-" + Day;
+            GetApprovalList(Tap,select_date);
         }
-//        SetCalenderData();
     }
 
     RetrofitConnect rc = new RetrofitConnect();
