@@ -242,6 +242,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     } else {
                         holder.member_name.setText(join_membertv);
                     }
+
                     user_id.removeAll(user_id);
                     user_name.removeAll(user_name);
                     user_img_path.removeAll(user_img_path);
@@ -473,6 +474,10 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                             dlog.i("users Response : " + Response.length());
                             if (Response.length() == 0) {
                                 Log.i(TAG, "GET SIZE : " + Response.length());
+                                shardpref.remove("users");
+                                shardpref.remove("usersn");
+                                shardpref.remove("usersimg");
+                                shardpref.remove("usersjikgup");
                             } else {
                                 user_id.removeAll(user_id);
                                 user_name.removeAll(user_name);
@@ -487,6 +492,10 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                                         user_img_jikgup.add(jsonObject.getString("jikgup"));
                                     }
                                 }
+                                shardpref.putString("users", user_id.toString());
+                                shardpref.putString("usersn", user_name.toString());
+                                shardpref.putString("usersimg", user_img_path.toString());
+                                shardpref.putString("usersjikgup", user_img_jikgup.toString());
                             }
 //                        item.getApproval_state()
                             shardpref.putString("task_no", item.getId());
@@ -495,10 +504,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                             shardpref.putString("title", item.getTitle());
                             shardpref.putString("contents", item.getContents());
                             shardpref.putString("complete_kind", item.getComplete_kind());
-                            shardpref.putString("users", user_id.toString());
-                            shardpref.putString("usersn", user_name.toString());
-                            shardpref.putString("usersimg", user_img_path.toString());
-                            shardpref.putString("usersjikgup", user_img_jikgup.toString());
                             shardpref.putString("task_date", item.getTask_date());
                             shardpref.putString("start_time", item.getStart_time());
                             shardpref.putString("end_time", item.getEnd_time());
