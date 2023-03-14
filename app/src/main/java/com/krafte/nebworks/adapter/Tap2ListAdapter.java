@@ -169,6 +169,8 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
 //                holder.member_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
                 if (Response.length() == 0) {
                     Log.i(TAG, "GET SIZE 1: " + Response.length());
+                    holder.member_name.setText("배정받은 직원이 없습니다");
+                    holder.join_member_arae.setVisibility(View.INVISIBLE);
                 } else {
                     Log.i(TAG, "GET SIZE 2: " + Response.length());
                     for (int i = 0; i < Response.length(); i++) {
@@ -403,7 +405,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
         LinearLayout item_total, member_img_array;
         TextView work_title, work_start_time, work_end_time, member_name;
         RecyclerView member_list;
-        RelativeLayout list_setting;
+        RelativeLayout list_setting,join_member_arae;
 
         CardView workimg_url01, workimg_url02, workimg_url03, workimg_url04;
         ImageView workimg1, workimg2, workimg3;
@@ -429,6 +431,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             workimg3            = itemView.findViewById(R.id.workimg3);
             other_cnt           = itemView.findViewById(R.id.other_cnt);
             approval_state      = itemView.findViewById(R.id.approval_state);
+            join_member_arae    = itemView.findViewById(R.id.join_member_arae);
 
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
