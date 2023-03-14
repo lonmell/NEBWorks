@@ -98,11 +98,11 @@ public class MainTaskLAdapter extends RecyclerView.Adapter<MainTaskLAdapter.View
                     String[] endDate = splitEndDate[0].split("-");
                     endhour = splitEndDate[1].split(":")[0] + "시 ";
                     endmin = splitEndDate[1].split(":")[1] + "분";
-                    holder.date.setText(endDate[0] + "년 " + endDate[1] + "월 " + endDate[2] + "일" + " | " + "마감 " + endhour + endmin + "분 까지");
+                    holder.date.setText(endDate[0] + "년 " + endDate[1] + "월 " + endDate[2] + "일" + " | " + "마감 " + endhour + endmin + "까지");
                 }
             } else {
                 String date[] = item.getEnd_time().split(":");
-                holder.date.setText("[반복할일]" + " 마감 " + date[0] + "시 " + date[1] + "분 까지");
+                holder.date.setText("[반복할일]" + " 마감 " + date[0] + "시 " + date[1] + " 까지");
             }
 
             if(position == 0){
