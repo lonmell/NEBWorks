@@ -19,19 +19,27 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
+import com.krafte.nebworks.dataInterface.FCMSelectInterface;
+import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.TaskInputInterface;
 import com.krafte.nebworks.databinding.ActivityAddVacationBinding;
+import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,12 +59,15 @@ public class AddVacationActivity extends AppCompatActivity {
     String place_id;
     String place_name;
     String USER_INFO_ID;
+    String USER_INFO_NAME;
     String overdate;
     String user_id;
 
     String change_place_id = "";
     String change_place_name = "";
     String change_place_owner_id = "";
+
+    String place_owner_id = "";
 
     String start_time = "-99";
     String end_time = "-99";
@@ -70,10 +81,14 @@ public class AddVacationActivity extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
+        place_owner_id  = shardpref.getString("place_owner_id","");
+
+        dlog.i("place_owner_id: " + place_owner_id);
 
         place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
         place_name          = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
         USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        USER_INFO_NAME        = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
         overdate            = shardpref.getString("overdate", "");
         user_id             = shardpref.getString("users", "");
 
@@ -280,6 +295,7 @@ public class AddVacationActivity extends AppCompatActivity {
                             dlog.i("jsonResponse : " + jsonResponse);
                             if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                 dlog.i("SelectEmployeeid : " + user_id);
+                                getManagerToken("0", place_id, place_name, USER_INFO_NAME);
                                 finish();
                             } else if (jsonResponse.replace("\"", "").equals("fail") || jsonResponse.replace("\"", "").equals("fail")) {
                                 Toast.makeText(mContext, "동일한 휴가가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
@@ -301,6 +317,97 @@ public class AddVacationActivity extends AppCompatActivity {
         try {
             th.join();
 //            getFCMToken();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getManagerToken(String type, String place_id, String place_name, String user_name) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(FCMSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        FCMSelectInterface api = retrofit.create(FCMSelectInterface.class);
+        Call<String> call = api.getData(place_owner_id, type);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                String jsonResponse = rc.getBase64decode(response.body());
+                dlog.i("jsonResponse length : " + jsonResponse.length());
+                dlog.i("jsonResponse : " + jsonResponse);
+                try {
+                    JSONArray Response = new JSONArray(jsonResponse);
+                    if (Response.length() > 0) {
+                        dlog.i("-----getManagerToken-----");
+                        dlog.i("user_id : " + Response.getJSONObject(0).getString("user_id"));
+                        dlog.i("token : " + Response.getJSONObject(0).getString("token"));
+                        String id = Response.getJSONObject(0).getString("id");
+                        String token = Response.getJSONObject(0).getString("token");
+                        dlog.i("-----getManagerToken-----");
+                        boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
+                        if (!token.isEmpty() && channelId1) {
+                            String message = "[" + place_name + "] 에서 " + user_name + "님의 휴가 신청이 도착했습니다.";
+                            AddPush("휴가신청" ,message, place_owner_id);
+                            PushFcmSend(id, "", message, token, "2", place_id);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 = " + t.getMessage());
+            }
+        });
+    }
+
+    public void AddPush(String title, String content, String user_id) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PushLogInputInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PushLogInputInterface api = retrofit.create(PushLogInputInterface.class);
+        Call<String> call = api.getData(place_id, "", title, content, place_owner_id, user_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.i("AddStroeNoti Callback : " + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.i("AddStroeNoti jsonResponse length : " + response.body().length());
+                            dlog.i("AddStroeNoti jsonResponse : " + response.body());
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+    DBConnection dbConnection = new DBConnection();
+    String click_action = "";
+    private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
+        @SuppressLint("SetTextI18n")
+        Thread th = new Thread(() -> {
+            click_action = "TaskList1";
+            dbConnection.FcmTestFunction(topic, title, message, token, click_action, tag, place_id);
+            runOnUiThread(() -> {
+            });
+        });
+        th.start();
+        try {
+            th.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
