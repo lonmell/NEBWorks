@@ -341,7 +341,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
                         binding.taskKind00.setVisibility(View.VISIBLE);
                         binding.imgList.setVisibility(View.GONE);
 
-                        binding.taskKind00.setTextColor(Color.parseColor(complete_yn.equals("y")?"#6395EC":"#FF0000"));
+                        binding.taskKind00.setTextColor(ContextCompat.getColor(mContext, complete_yn.equals("y")?R.color.new_blue: R.color.red));
                         binding.taskKind00.setText(complete_yn.equals("y")?"완료":"미완료");
                     } else if (complete_kind.equals("1")) {
                         binding.taskKind00.setVisibility(View.GONE);

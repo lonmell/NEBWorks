@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
@@ -77,7 +78,7 @@ public class PagingAdapter extends RecyclerView.Adapter<PagingAdapter.ViewHolder
             holder.item_name.setText(item.getItem());
 
             if(before_item.equals(item.getItem())){
-                holder.item_area2.setCardBackgroundColor(Color.parseColor("#6395EC"));
+                holder.item_area2.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             }else{
                 holder.item_area2.setCardBackgroundColor(Color.parseColor("#dcdcdc"));
             }

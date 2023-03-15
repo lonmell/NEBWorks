@@ -241,7 +241,7 @@
                                 android:gravity="start|center"
                                 android:paddingStart="15dp"
                                 android:text="총 0명 근무 중"
-                                android:textColor="@color/blue"
+                                android:textColor="@color/new_blue"
                                 android:textSize="14sp"
                                 android:visibility="visible" />
 

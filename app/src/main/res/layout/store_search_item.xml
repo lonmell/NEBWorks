@@ -19,7 +19,7 @@
         android:layout_marginEnd="15dp"
         android:elevation="10dp"
         android:visibility="gone"
-        app:cardBackgroundColor="@color/blue"
+        app:cardBackgroundColor="@color/new_blue"
         app:cardCornerRadius="60dp"
         app:cardElevation="0dp">
 
@@ -92,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            app:cardBackgroundColor="@color/blue"
+            app:cardBackgroundColor="@color/new_blue"
             app:cardCornerRadius="5dp">
             <TextView
                 android:layout_width="match_parent"
@@ -101,8 +101,8 @@
                 android:singleLine="true"
                 android:text="근무 신청"
                 android:textColor="#ffffff"
-                android:fontFamily="@font/inter_regular"
-                android:textSize="12sp"
+                android:fontFamily="@font/pretendard_regular"
+                android:textSize="15sp"
                 tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
         </androidx.cardview.widget.CardView>
     </RelativeLayout>

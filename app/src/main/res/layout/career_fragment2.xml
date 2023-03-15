@@ -71,7 +71,7 @@
                         android:id="@+id/scard01"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        app:cardBackgroundColor="@color/blue"
+                        app:cardBackgroundColor="@color/new_blue"
                         android:layout_gravity="center"
                         app:cardElevation="0dp"
                         app:cardCornerRadius="70dp">

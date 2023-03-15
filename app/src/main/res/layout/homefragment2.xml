@@ -54,7 +54,7 @@
                             android:layout_marginEnd="15dp"
                             android:elevation="10dp"
                             android:visibility="gone"
-                            app:cardBackgroundColor="@color/blue"
+                            app:cardBackgroundColor="@color/new_blue"
                             app:cardCornerRadius="60dp"
                             app:cardElevation="5dp">
 
@@ -326,7 +326,7 @@
                                 android:paddingStart="10dp"
                                 android:paddingEnd="10dp"
                                 android:text="초대 수락"
-                                android:textColor="@color/blue"
+                                android:textColor="@color/new_blue"
                                 android:textSize="15sp"
                                 tools:ignore="HardcodedText" />
 

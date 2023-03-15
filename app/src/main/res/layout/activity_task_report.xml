@@ -72,7 +72,7 @@
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/pretendard_bold"
                 android:text="입력하지 않을 경우 즉시 게시됩니다."
-                android:textColor="@color/blue"
+                android:textColor="@color/new_blue"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -343,7 +343,7 @@
         android:layout_height="50dp"
         android:layout_margin="20dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/blue">
+        android:background="@color/new_blue">
 
         <TextView
             android:id="@+id/accept_tv"

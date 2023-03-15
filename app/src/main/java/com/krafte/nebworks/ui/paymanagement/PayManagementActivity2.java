@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -326,11 +327,11 @@ public class PayManagementActivity2 extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if (Tap.equals("0")) {
-            binding.line01.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.line01.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.line02.setBackgroundColor(Color.parseColor("#ffffff"));
         } else {
             binding.line01.setBackgroundColor(Color.parseColor("#ffffff"));
-            binding.line02.setBackgroundColor(Color.parseColor("#6395EC"));
+            binding.line02.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
         }
         if (chng_icon) {
 //            SetCalenderData(Year, Month);
