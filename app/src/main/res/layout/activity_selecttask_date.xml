@@ -165,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="55dp"
-            android:background="@color/blue"
+            android:background="@color/new_blue"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="34dp"
             android:layout_marginEnd="20dp">
@@ -176,7 +176,7 @@
                 android:gravity="center"
                 android:textSize="16sp"
                 android:fontFamily="@font/pretendard_bold"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

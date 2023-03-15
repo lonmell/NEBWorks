@@ -20,7 +20,7 @@
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
             android:layout_height="59dp"
-            android:background="@color/blue">
+            android:background="@color/new_blue">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/top_bar"
-            android:background="@color/blue"
+            android:background="@color/new_blue"
             android:orientation="vertical">
             <FrameLayout
                 android:id="@+id/frame_layout"
@@ -141,7 +141,7 @@
                         android:id="@+id/best_feed_two"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/blue"
+                        android:background="@color/new_blue"
                         android:orientation="vertical"
                         android:elevation="0dp"
                         android:padding="10dp">

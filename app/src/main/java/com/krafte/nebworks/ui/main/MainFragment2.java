@@ -724,12 +724,10 @@ public class MainFragment2 extends AppCompatActivity {
 //            shardpref.putString("Tap", "0");
 //            pm.PayManagement(mContext);
             shardpref.putString("Tap", "0");
-            binding.title.setText("급여관리");
             binding.tabLayout.getTabAt(1).select();
             shardpref.putInt("SELECT_POSITION", 1);
         } else if (view.getId() == R.id.select_nav06) {
             shardpref.putString("Tap", "1");
-            binding.title.setText("급여관리");
             if(USER_INFO_AUTH.equals("0")){
                 pm.PayManagement(mContext);
             }else{

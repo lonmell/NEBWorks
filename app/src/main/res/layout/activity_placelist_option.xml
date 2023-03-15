@@ -28,7 +28,7 @@
                     android:layout_height="45dp"
                     android:text="매장 수정"
                     android:gravity="center"
-                    android:textColor="#1483FE"
+                    android:textColor="@color/new_blue"
                     android:fontFamily="@font/inter_regular" />
                 <LinearLayout
                     android:layout_width="match_parent"

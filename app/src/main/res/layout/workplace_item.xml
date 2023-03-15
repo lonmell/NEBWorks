@@ -38,7 +38,7 @@
                 android:layout_marginBottom="5dp"
                 android:elevation="10dp"
                 android:visibility="visible"
-                app:cardBackgroundColor="@color/blue"
+                app:cardBackgroundColor="@color/new_blue"
                 app:cardCornerRadius="60dp"
                 app:cardElevation="0dp">
 

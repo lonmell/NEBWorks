@@ -130,7 +130,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
                         android:text="개인사업자"
-                        android:textColor="#6395EC"
+                        android:textColor="@color/new_blue"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -350,7 +350,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:gravity="center"
                         android:text="5인미만"
-                        android:textColor="#6395EC"
+                        android:textColor="@color/new_blue"
                         android:textSize="15sp" />
                 </LinearLayout>
 

@@ -237,7 +237,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                                             }
                                             binding.feedTitle.setText(title);
                                             if (place_owner_id.equals(writer_id)) {
-                                                binding.userName.setText("매니저");
+                                                binding.userName.setText("대표님");
                                             } else {
                                                 binding.userName.setText(writer_name + "(" + jikgup + ")");
                                             }

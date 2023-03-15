@@ -72,7 +72,7 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/gangwonedu_bold"
                     android:text="0월"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/new_blue"
                     android:textSize="28sp" />
             </LinearLayout>
 
