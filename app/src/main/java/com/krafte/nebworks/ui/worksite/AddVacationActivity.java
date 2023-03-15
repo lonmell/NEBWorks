@@ -1,8 +1,5 @@
 package com.krafte.nebworks.ui.worksite;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -14,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.bottomsheet.PlaceListBottomSheet;
@@ -35,11 +35,9 @@ import org.json.JSONException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -355,9 +353,7 @@ public class AddVacationActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러 = " + t.getMessage());
