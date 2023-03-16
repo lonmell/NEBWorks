@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface WorkPartGetInterface
 {
-    String URL = "http://krafte.net/NEBWorks/work_status/";
+    String URL = "https://nepworks.net/NEBWorks/work_status/";
 
     @FormUrlEncoded
     @POST("get_contractworkhour.php")

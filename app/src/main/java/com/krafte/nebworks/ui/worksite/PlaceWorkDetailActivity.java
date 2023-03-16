@@ -662,7 +662,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
                             String jsonResponse = rc.getBase64decode(response.body());
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
-//                            dlog.i("http://krafte.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
+//                            dlog.i("https://nepworks.net/kogas/task_approval/post.php?place_id="+place_id+"&task_id="+task_id+"&task_date="+task_date+"&user_id="+USER_INFO_ID);
                             if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("결재 요청이 완료되었습니다.");
                                 shardpref.putInt("SELECT_POSITION",1);
@@ -780,7 +780,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
 
                     final String IMG_FILE_EXTENSION = ".JPEG";
                     String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                    ProfileUrl = "http://krafte.net/NEBWorks/image/task_img/" + file_name;
+                    ProfileUrl = "https://nepworks.net/NEBWorks/image/task_img/" + file_name;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -840,7 +840,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
 
-            ProfileUrl = "http://krafte.net/NEBWorks/image/task_img/" + file_name;
+            ProfileUrl = "https://nepworks.net/NEBWorks/image/task_img/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("사인 저장 경로 : " + ProfileUrl);
@@ -898,7 +898,7 @@ public class PlaceWorkDetailActivity extends AppCompatActivity {
     }
 
     public static class ApiClient {
-        private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
+        private static final String BASE_URL = "https://nepworks.net/NEBWorks/image/";
         private static Retrofit retrofit;
 
         public static Retrofit getApiClient() {

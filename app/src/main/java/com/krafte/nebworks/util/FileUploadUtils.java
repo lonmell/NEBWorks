@@ -20,7 +20,7 @@ public class FileUploadUtils {
                 .addFormDataPart("files", file.getName(), RequestBody.create(MultipartBody.FORM, file))
                 .build();
         Request request = new Request.Builder()
-                .url("http://krafte.net/kogas/file/feed_file") // Server URL 은 본인 IP를 입력
+                .url("https://nepworks.net/kogas/file/feed_file") // Server URL 은 본인 IP를 입력
                 .post(requestBody)
                 .build();
 

@@ -7,8 +7,8 @@ import retrofit2.http.POST;
 
 public interface paymanaInterface
 {
-    String URL = "http://krafte.net/NEBWorks/pay/";
-    //http://krafte.net/NEBWorks/pay/paymanager.php?flag=1&place_id=183&GET_DATE=2023-02&user_id=199&basic_pay=&second_pay=&overwork_hour=&overwork_pay=&meal_allowance_yn=&meal_pay=&store_insurance_yn=&other_memo=&all_payment=&selectym=
+    String URL = "https://nepworks.net/NEBWorks/pay/";
+    //https://nepworks.net/NEBWorks/pay/paymanager.php?flag=1&place_id=183&GET_DATE=2023-02&user_id=199&basic_pay=&second_pay=&overwork_hour=&overwork_pay=&meal_allowance_yn=&meal_pay=&store_insurance_yn=&other_memo=&all_payment=&selectym=
     @FormUrlEncoded
     @POST("paymanager.php")
     Call<String> getData(

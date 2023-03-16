@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface TaskApprovalInterface
 {
-    String URL = "http://krafte.net/NEBWorks/task_approval/";
+    String URL = "https://nepworks.net/NEBWorks/task_approval/";
 
     @FormUrlEncoded
     @POST("post.php")

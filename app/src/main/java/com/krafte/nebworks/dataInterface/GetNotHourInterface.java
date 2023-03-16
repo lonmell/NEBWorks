@@ -6,8 +6,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface GetNotHourInterface {
-    String URL = "http://krafte.net/NEBWorks/member/";
-    //http://krafte.net/NEBWorks/member/getNotHour.php?place_id=24
+    String URL = "https://nepworks.net/NEBWorks/member/";
+    //https://nepworks.net/NEBWorks/member/getNotHour.php?place_id=24
     @FormUrlEncoded
     @POST("getNotHour.php")
     Call<String> getData(

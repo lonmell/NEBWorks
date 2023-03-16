@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface TermGetInterface
 {
-    String URL = "http://krafte.net/NEBWorks/contract/";
+    String URL = "https://nepworks.net/NEBWorks/contract/";
 
     @FormUrlEncoded
     @POST("term_get.php")

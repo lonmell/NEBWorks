@@ -6,8 +6,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface ContractListInterface {
-    String URL = "http://krafte.net/NEBWorks/contract/";
-    //http://krafte.net/NEBWorks/contract/get.php?place_id=97
+    String URL = "https://nepworks.net/NEBWorks/contract/";
+    //https://nepworks.net/NEBWorks/contract/get.php?place_id=97
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(

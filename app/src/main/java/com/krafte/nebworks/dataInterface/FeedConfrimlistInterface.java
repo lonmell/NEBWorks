@@ -7,8 +7,8 @@ import retrofit2.http.POST;
 
 public interface FeedConfrimlistInterface
 {
-    String URL = "http://krafte.net/NEBWorks/feed/";
-    //http://krafte.net/NEBWorks/feed/post_confirm_comment.php?feed_id=24&writer_id=
+    String URL = "https://nepworks.net/NEBWorks/feed/";
+    //https://nepworks.net/NEBWorks/feed/post_confirm_comment.php?feed_id=24&writer_id=
     @FormUrlEncoded
     @POST("get_confirm_comment.php")
     Call<String> getData(

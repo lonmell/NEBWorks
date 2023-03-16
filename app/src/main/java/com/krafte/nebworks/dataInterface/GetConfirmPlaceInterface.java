@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface GetConfirmPlaceInterface {
-    String URL = "http://krafte.net/NEBWorks/place/";
+    String URL = "https://nepworks.net/NEBWorks/place/";
 
     @FormUrlEncoded
     @POST("get_confirm_place.php")

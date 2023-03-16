@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface WifiUpdateInterface
 {
-    String URL = "http://krafte.net/NEBWorks/place/";
+    String URL = "https://nepworks.net/NEBWorks/place/";
 
     @FormUrlEncoded
     @POST("post_wifi.php")

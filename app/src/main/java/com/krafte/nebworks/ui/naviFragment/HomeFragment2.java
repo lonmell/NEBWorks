@@ -526,7 +526,7 @@ public class HomeFragment2 extends Fragment {
             if (contract_id.equals("0")) {
                 Toast_Nomal("작성된 근로계약서가 없습니다.");
             } else {
-                String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF2.php?id=" + contract_id;
+                String Contract_uri = "https://nepworks.net/NEBWorks/ContractPDF2.php?id=" + contract_id;
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
                 startActivity(intent);
             }
@@ -536,7 +536,7 @@ public class HomeFragment2 extends Fragment {
             dlog.i("inoutPrint USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("inoutPrint place_id : " + place_id);
             dlog.i("------inoutPrint------");
-            String Contract_uri = "https://krafte.net/NEBWorks/Commute.php?user_id=" + USER_INFO_ID + "&place_id=" + place_id + "&date=";
+            String Contract_uri = "https://nepworks.net/NEBWorks/Commute.php?user_id=" + USER_INFO_ID + "&place_id=" + place_id + "&date=";
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
             startActivity(intent);
         });

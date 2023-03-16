@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface FeedCommentEidtInterface {
-    String URL = "http://krafte.net/NEBWorks/comment/";
+    String URL = "https://nepworks.net/NEBWorks/comment/";
 
     @FormUrlEncoded
     @POST("update.php")
