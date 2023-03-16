@@ -6,8 +6,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface MainWorkCntInterface {
-    String URL = "http://krafte.net/NEBWorks/place/";
-    //http://krafte.net/NEBWorks/place/get_main2.php?place_id=24&user_id=16
+    String URL = "https://nepworks.net/NEBWorks/place/";
+    //https://nepworks.net/NEBWorks/place/get_main2.php?place_id=24&user_id=16
     @FormUrlEncoded
     @POST("get_main2.php")
     Call<String> getData(

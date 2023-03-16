@@ -348,7 +348,7 @@
                         android:layout_height="wrap_content"
                         android:numbersBackgroundColor="#ffffff"
                         android:visibility="gone"
-                        android:numbersSelectorColor="#6395EC"
+                        android:numbersSelectorColor="@color/new_blue"
                         android:numbersTextColor="@color/black"
                         android:theme="@style/NumberPicker"
                         android:timePickerMode="spinner" />
@@ -445,7 +445,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:numbersBackgroundColor="#ffffff"
-                        android:numbersSelectorColor="#6395EC"
+                        android:numbersSelectorColor="@color/new_blue"
                         android:numbersTextColor="@color/black"
                         android:visibility="gone"
                         android:theme="@style/NumberPicker"

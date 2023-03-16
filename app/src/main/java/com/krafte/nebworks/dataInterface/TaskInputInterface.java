@@ -7,8 +7,8 @@ import retrofit2.http.POST;
 
 public interface TaskInputInterface
 {
-    String URL = "http://krafte.net/NEBWorks/task/";
-    //http://krafte.net/NEBWorks/task/post.php?place_id=70&writer_id=47&kind=0&title=yucyxyxyx&contents=icucuxyxx&complete_kind=1&task_date=2022-11-22&start_time=17:55&end_time=21:55&sun=1&mon=1&tue=1&wed=1&thu=1&fri=1&sat=1&users=53,47
+    String URL = "https://nepworks.net/NEBWorks/task/";
+    //https://nepworks.net/NEBWorks/task/post.php?place_id=70&writer_id=47&kind=0&title=yucyxyxyx&contents=icucuxyxx&complete_kind=1&task_date=2022-11-22&start_time=17:55&end_time=21:55&sun=1&mon=1&tue=1&wed=1&thu=1&fri=1&sat=1&users=53,47
     @FormUrlEncoded
     @POST("post.php")
     Call<String> getData(

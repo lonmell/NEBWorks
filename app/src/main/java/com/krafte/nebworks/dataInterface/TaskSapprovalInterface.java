@@ -7,8 +7,8 @@ import retrofit2.http.POST;
 
 public interface TaskSapprovalInterface
 {
-    String URL = "http://krafte.net/NEBWorks/task_approval/";
-    // http://krafte.net/NEBWorks/task_approval/get.php?place_id=96&state=&approval_date=2022-11-25
+    String URL = "https://nepworks.net/NEBWorks/task_approval/";
+    // https://nepworks.net/NEBWorks/task_approval/get.php?place_id=96&state=&approval_date=2022-11-25
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(

@@ -201,7 +201,7 @@ public class AddContractPage08 extends AppCompatActivity {
     }
 
     private void UpdateOwnerSign(){
-        owner_sign_url = "http://krafte.net/NEBWorks/image/sign_img/" + USER_INFO_ID + "_" + ImgfileMaker + ".JPEG";
+        owner_sign_url = "https://nepworks.net/NEBWorks/image/sign_img/" + USER_INFO_ID + "_" + ImgfileMaker + ".JPEG";
         dlog.i("------UpdatePagePos------");
         dlog.i("contract_id : " + contract_id);
         dlog.i("owner_sign_url : " + owner_sign_url);
@@ -430,8 +430,8 @@ public class AddContractPage08 extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
 
-            owner_sign_url = "http://krafte.net/NEBWorks/image/sign_img/" + file_name;
-            feed_thumnail_path = "http://krafte.net/NEBWorks/image/sign_img/" + file_name;
+            owner_sign_url = "https://nepworks.net/NEBWorks/image/sign_img/" + file_name;
+            feed_thumnail_path = "https://nepworks.net/NEBWorks/image/sign_img/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("이미지 저장경로 : " + owner_sign_url);
@@ -473,7 +473,7 @@ public class AddContractPage08 extends AppCompatActivity {
     }
 
     public static class ApiClient {
-        private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
+        private static final String BASE_URL = "https://nepworks.net/NEBWorks/image/";
         private static Retrofit retrofit;
 
         public static Retrofit getApiClient() {

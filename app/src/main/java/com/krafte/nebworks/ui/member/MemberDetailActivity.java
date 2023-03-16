@@ -317,8 +317,8 @@ public class MemberDetailActivity extends AppCompatActivity {
             dlog.i("place_id : " + place_id);
             dlog.i("date : " + binding.setdate.getText().toString());
             dlog.i("-----inoutPrint-----");
-//            https://krafte.net/NEBWorks/Commute.php?user_id=64&place_id=97&date=2022-12
-            String Contract_uri = "https://krafte.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date=" + date;
+//            https://nepworks.net/NEBWorks/Commute.php?user_id=64&place_id=97&date=2022-12
+            String Contract_uri = "https://nepworks.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date=" + date;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
             startActivity(intent);
         });

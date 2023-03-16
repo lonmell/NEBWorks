@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 //관리자가 조회할때
 public interface TaskSelectMInterface
 {
-    String URL = "http://krafte.net/NEBWorks/task/";
+    String URL = "https://nepworks.net/NEBWorks/task/";
 
     @FormUrlEncoded
     @POST("get.php")

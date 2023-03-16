@@ -7,8 +7,8 @@ import retrofit2.http.POST;
 
 public interface TaskreuseSInterface
 {
-    String URL = "http://krafte.net/NEBWorks/task_reuse/";
-    //http://krafte.net/NEBWorks/task_reuse/get.php?place_id=116
+    String URL = "https://nepworks.net/NEBWorks/task_reuse/";
+    //https://nepworks.net/NEBWorks/task_reuse/get.php?place_id=116
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(

@@ -6,9 +6,9 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface NonmemberInterface {
-    String URL = "http://krafte.net/NEBWorks/user/";
+    String URL = "https://nepworks.net/NEBWorks/user/";
 
-    //http://krafte.net/NEBWorks/user/post_nonmember.php
+    //https://nepworks.net/NEBWorks/user/post_nonmember.php
     @FormUrlEncoded
     @POST("post_nonmember.php")
     Call<String> getData(

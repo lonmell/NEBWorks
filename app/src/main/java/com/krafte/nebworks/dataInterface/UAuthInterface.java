@@ -12,7 +12,7 @@ import retrofit2.http.POST;
  * */
 public interface UAuthInterface
 {
-    String URL = "http://krafte.net/NEBWorks/user/";
+    String URL = "https://nepworks.net/NEBWorks/user/";
 
     @FormUrlEncoded
     @POST("update_auth.php")

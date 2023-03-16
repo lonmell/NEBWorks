@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface UserTokenInterface {
-    String URL = "http://krafte.net/app_php/";
+    String URL = "https://nepworks.net/app_php/";
 
     @FormUrlEncoded
     @POST("mobile_fcmtoken_manager.php")

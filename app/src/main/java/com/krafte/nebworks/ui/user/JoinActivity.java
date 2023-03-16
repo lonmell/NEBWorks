@@ -663,7 +663,7 @@ public class JoinActivity extends AppCompatActivity {
                 binding.checkValidationTxt1.setText("숫자,특수문자가 포함되어야 합니다.");
             } else {
                 binding.checkValidationTxt1.setVisibility(View.VISIBLE);
-                binding.checkValidationTxt1.setTextColor(Color.parseColor("#6395EC"));
+                binding.checkValidationTxt1.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.checkValidationTxt1.setText("규칙에 맞는 비밀번호 입니다.");
             }
         } else if (pos == 1) {
@@ -672,7 +672,7 @@ public class JoinActivity extends AppCompatActivity {
             String pw2 = binding.editPwConfirm.getText().toString();
             if (pw1.equals(pw2)) {
                 binding.checkValidationTxt3.setVisibility(View.VISIBLE);
-                binding.checkValidationTxt3.setTextColor(Color.parseColor("#6395EC"));
+                binding.checkValidationTxt3.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.checkValidationTxt3.setText("비밀번호가 동일합니다.");
             } else {
                 binding.checkValidationTxt3.setVisibility(View.VISIBLE);
