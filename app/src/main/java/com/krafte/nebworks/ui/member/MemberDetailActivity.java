@@ -28,6 +28,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aspose.cells.SaveFormat;
+import com.aspose.cells.Workbook;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
@@ -52,6 +54,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -145,17 +150,17 @@ public class MemberDetailActivity extends AppCompatActivity {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             //shardpref Area
-            stub_place_id       = shardpref.getString("stub_place_id", "0");
-            stub_user_id        = shardpref.getString("stub_user_id", "0");
-            stub_user_account   = shardpref.getString("stub_user_account", "");
-            change_place_name   = shardpref.getString("change_place_name", "");
-            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
+            stub_place_id = shardpref.getString("stub_place_id", "0");
+            stub_user_id = shardpref.getString("stub_user_id", "0");
+            stub_user_account = shardpref.getString("stub_user_account", "");
+            change_place_name = shardpref.getString("change_place_name", "");
+            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
-            gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
-            return_page         = shardpref.getString("return_page", "");
-            item_user_id        = shardpref.getString("item_user_id", "");
-            stub_user_name      = shardpref.getString("stub_user_name", "");
+            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
+            return_page = shardpref.getString("return_page", "");
+            item_user_id = shardpref.getString("item_user_id", "");
+            stub_user_name = shardpref.getString("stub_user_name", "");
 
             dlog.i("stub_user_name : " + stub_user_name);
             setBtnEvent();
@@ -312,15 +317,16 @@ public class MemberDetailActivity extends AppCompatActivity {
 
         binding.inoutPrint.setOnClickListener(v -> {
             String date = Year + "-" + Month;
-            dlog.i("-----inoutPrint-----");
-            dlog.i("user_id : " + stub_user_id);
-            dlog.i("place_id : " + place_id);
-            dlog.i("date : " + binding.setdate.getText().toString());
-            dlog.i("-----inoutPrint-----");
-//            http://krafte.net/NEBWorks/Commute.php?user_id=64&place_id=97&date=2022-12
-            String Contract_uri = "http://krafte.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date=" + date;
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
-            startActivity(intent);
+//            dlog.i("-----inoutPrint-----");
+//            dlog.i("user_id : " + stub_user_id);
+//            dlog.i("place_id : " + place_id);
+//            dlog.i("date : " + binding.setdate.getText().toString());
+//            dlog.i("-----inoutPrint-----");
+////            http://krafte.net/NEBWorks/Commute.php?user_id=64&place_id=97&date=2022-12
+//            String Contract_uri = "http://krafte.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date=" + date;
+//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
+//            startActivity(intent);
+            getExcelGotoList(stub_place_id, stub_user_id, Year + "-" + Month);
         });
 
         binding.todayTodo.setOnClickListener(v -> {
@@ -765,6 +771,108 @@ public class MemberDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
+    public void getExcelGotoList(String place_id, String user_id, String getYMdate) {
+        dlog.i("-----SetGotoWorkDayList-----");
+        dlog.i("place_id : " + place_id);
+        dlog.i("user_id : " + user_id);
+        dlog.i("getYMdate : " + getYMdate);
+        dlog.i("-----SetGotoWorkDayList-----");
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag", "SetTextI18n"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(WorkGotoListInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            WorkGotoListInterface api = retrofit.create(WorkGotoListInterface.class);
+            Call<String> call = api.getData(place_id, user_id, getYMdate);
+            call.enqueue(new Callback<String>() {
+                @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.e("SetGotoWorkDayList function START");
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.e("response 1: " + response.isSuccessful());
+                            dlog.e("response 2: " + jsonResponse);
+                            if (jsonResponse.equals("[]")) {
+                                binding.noDataTxt.setVisibility(View.VISIBLE);
+                            } else {
+                                binding.noDataTxt.setVisibility(View.GONE);
+                                try {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    Log.i(TAG, "SetNoticeListview Thread run! ");
+
+                                    if (Response.length() == 0) {
+                                        Log.i(TAG, "(gotoWorkData_list)GET SIZE : " + Response.length());
+                                    } else {
+                                        // 새 통합 문서 만들기
+                                        File file_path;
+                                        String SD_PATH = "/sdcard/Download/nepworks/";
+                                        try {
+                                            file_path = new File(SD_PATH);
+                                            if (!file_path.isDirectory()) {//해당 경로의 파일이 없으면 생성시켜준다
+                                                file_path.mkdirs();
+                                            }
+                                            dlog.i("(binding.inoutPrint)file_path : " + file_path);
+                                            dlog.i("(binding.inoutPrint)file_name : " + "TESTXSECL1234.pdf");
+
+                                            Workbook workbook = new Workbook();
+                                            // 셀에 값 추가
+                                            for (int i = 0; i < Response.length(); i++) {
+                                                JSONObject jsonObject = Response.getJSONObject(i);
+//                                            inoutmAdapter.addItem(new WorkGotoListData.WorkGotoListData_list(
+//                                                    jsonObject.getString("day"),
+//                                                    jsonObject.getString("yoil"),
+//                                                    jsonObject.getString("in_time"),
+//                                                    jsonObject.getString("out_time"),
+//                                                    jsonObject.getString("workdiff"),
+//                                                    jsonObject.getString("state"),
+//                                                    jsonObject.getString("sieob1"),
+//                                                    jsonObject.getString("sieob2"),
+//                                                    jsonObject.getString("jongeob1"),
+//                                                    jsonObject.getString("jongeob2"),
+//                                                    jsonObject.getString("vaca_accept"),
+//                                                    jsonObject.getString("hdd")
+//                                            ));
+                                                workbook.getWorksheets().get(i).getCells().get("A1").putValue(jsonObject.getString("day"));
+                                            }
+
+                                            // Excel XLSX 파일로 저장
+                                            workbook.save(SD_PATH + "TESTXSECL1234.pdf", SaveFormat.PDF);
+                                        } catch (FileNotFoundException exception) {
+                                            dlog.e("FileNotFoundException : " + exception.getMessage());
+                                        } catch (IOException exception) {
+                                            dlog.e("IOException : " + exception.getMessage());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                    });
+
+                }
+
+                @Override
+                @SuppressLint("LongLogTag")
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러2 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     /*출퇴근 리스트 END*/
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
@@ -816,7 +924,12 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         binding.payTv.setText(String.valueOf(myFormatter.format(Integer.parseInt(workpay))) + "원");
                                         binding.payDiffBar.setMax(Integer.parseInt(allwcnt));
                                         binding.payDiffBar.setProgress(Integer.parseInt(workpay));
-                                        binding.payDiffBar.setOnTouchListener((v, event) -> {if(event.getAction() == MotionEvent.ACTION_DOWN){return false;} return true;});
+                                        binding.payDiffBar.setOnTouchListener((v, event) -> {
+                                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                                return false;
+                                            }
+                                            return true;
+                                        });
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }
@@ -841,6 +954,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     String getcontract_id = "";
     String getcontract_kind = "";
     String getprogress_pos = "";
+
     private void SetContractList() {
         dlog.i("-----SetContractList1-----");
         dlog.i("place_id : " + place_id);
@@ -906,16 +1020,16 @@ public class MemberDetailActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav05) {
             shardpref.putString("Tap", "0");
-            if(USER_INFO_AUTH.equals("0")){
+            if (USER_INFO_AUTH.equals("0")) {
                 pm.PayManagement(mContext);
-            }else{
+            } else {
                 pm.PayManagement2(mContext);
             }
         } else if (view.getId() == R.id.select_nav06) {
             shardpref.putString("Tap", "1");
-            if(USER_INFO_AUTH.equals("0")){
+            if (USER_INFO_AUTH.equals("0")) {
                 pm.PayManagement(mContext);
-            }else{
+            } else {
                 pm.PayManagement2(mContext);
             }
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지
