@@ -325,7 +325,11 @@ public class MemberDetailActivity extends AppCompatActivity {
 
         binding.todayTodo.setOnClickListener(v -> {
             shardpref.putInt("SELECT_POSITION", 1);
-            pm.Main2(mContext);
+            if (USER_INFO_AUTH.equals("0")) {
+                pm.Main(mContext);
+            } else {
+                pm.Main2(mContext);
+            }
         });
     }
 
