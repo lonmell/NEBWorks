@@ -924,6 +924,7 @@ public class HomeFragment2 extends Fragment {
                                             for (int i = 0; i < Response.length(); i++) {
                                                 allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                             }
+                                            allPay = allPay - Integer.parseInt(Response.getJSONObject(0).getString("deductpay").replace(",", ""));
                                         } else if (kind.equals("4")) {
                                             dlog.i("kind 4 Result : " + jsonResponse);
 

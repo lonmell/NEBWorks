@@ -280,6 +280,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                                 for (int i = 0; i < Response.length(); i++) {
                                     allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                 }
+                                allPay = allPay - Integer.parseInt(Response.getJSONObject(0).getString("deductpay").replace(",", ""));
                                 DecimalFormat myFormatter = new DecimalFormat("###,###");
                                 holder.total_money.setText(myFormatter.format(allPay) + "원");
                                 dlog.i("allPay : " + myFormatter.format(allPay));

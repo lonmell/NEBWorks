@@ -696,6 +696,7 @@ public class HomeFragment extends Fragment {
                                             for (int i = 0; i < Response.length(); i++) {
                                                 allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                             }
+                                            allPay = allPay - Integer.parseInt(Response.getJSONObject(0).getString("deductpay").replace(",", ""));
                                             DecimalFormat myFormatter = new DecimalFormat("###,###");
                                             binding.paynum.setText(myFormatter.format(allPay) + "원");
                                             binding.payText.setText("급여 이체 " + myFormatter.format(allPay) + "원");
