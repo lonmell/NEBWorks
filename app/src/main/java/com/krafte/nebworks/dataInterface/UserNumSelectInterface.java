@@ -7,8 +7,8 @@ import retrofit2.http.POST;
 
 public interface UserNumSelectInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/user/";
-    //https://nepworks.net/NEBWorks/user/getNamePhone.php?name=김도운&phone=01085529025
+    String URL = "http://krafte.net/NEBWorks/user/";
+    //http://krafte.net/NEBWorks/user/getNamePhone.php?name=김도운&phone=01085529025
     @FormUrlEncoded
     @POST("getNamePhone.php")
     Call<String> getData(

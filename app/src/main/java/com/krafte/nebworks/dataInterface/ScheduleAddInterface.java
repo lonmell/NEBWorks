@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface ScheduleAddInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/task/";
+    String URL = "http://krafte.net/NEBWorks/task/";
 
     @FormUrlEncoded
     @POST("post_schedule.php")

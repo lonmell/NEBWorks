@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 //업무를 임시 저장할때
 public interface TaskSaveInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/task_temp/";
+    String URL = "http://krafte.net/NEBWorks/task_temp/";
 
     @FormUrlEncoded
     @POST("post_update.php")

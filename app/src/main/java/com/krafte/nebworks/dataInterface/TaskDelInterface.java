@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface TaskDelInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/task/";
+    String URL = "http://krafte.net/NEBWorks/task/";
 
     @FormUrlEncoded
     @POST("delete.php")

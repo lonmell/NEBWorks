@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface UserSaveInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/user/";
+    String URL = "http://krafte.net/NEBWorks/user/";
 
     @FormUrlEncoded
     @POST("update.php")

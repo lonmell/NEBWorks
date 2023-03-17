@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gangwonedu_bold"
                     android:gravity="start|center"
-                    android:text="김이름"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="28sp"
                     tools:ignore="HardcodedText" />

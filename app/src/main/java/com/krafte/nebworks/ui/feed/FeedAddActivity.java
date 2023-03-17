@@ -683,7 +683,7 @@ public class FeedAddActivity extends AppCompatActivity {
                         //파일 이름 만들기
                         final String IMG_FILE_EXTENSION = ".JPEG";
                         String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                        ProfileUrl.add("https://nepworks.net/NEBWorks/image/feed_img/" + file_name);
+                        ProfileUrl.add("http://krafte.net/NEBWorks/image/feed_img/" + file_name);
                         dlog.i("한개일때uriList : " + uriList);
                         dlog.i("한개일때 imgUrl: " + ProfileUrl);
                     } else {      // 이미지를 여러장 선택한 경우
@@ -704,7 +704,7 @@ public class FeedAddActivity extends AppCompatActivity {
                                     int ImgNum = Integer.parseInt(ImgfileMaker) + i;
                                     String file_name = USER_INFO_ID + "_" + ImgNum + IMG_FILE_EXTENSION;
                                     dlog.i("multiple choice file_name : " + file_name);
-                                    ProfileUrl.add("https://nepworks.net/NEBWorks/image/feed_img/" + file_name);
+                                    ProfileUrl.add("http://krafte.net/NEBWorks/image/feed_img/" + file_name);
                                 } catch (Exception e) {
                                     Log.e(TAG, "File select error", e);
                                 }
@@ -830,7 +830,7 @@ public class FeedAddActivity extends AppCompatActivity {
         //Create Bitmap -> File
         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String file_name = ProfileUrl.get(i).replace("https://nepworks.net/NEBWorks/image/feed_img/", "");
+        String file_name = ProfileUrl.get(i).replace("http://krafte.net/NEBWorks/image/feed_img/", "");
         String fullFileName = BACKUP_PATH;
 
         dlog.i("(saveBitmapAndGetURI)ex_storage : " + ex_storage);
@@ -908,7 +908,7 @@ public class FeedAddActivity extends AppCompatActivity {
     }
 
     public static class ApiClient {
-        private static final String BASE_URL = "https://nepworks.net/NEBWorks/image/";
+        private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
         private static Retrofit retrofit;
 
         public static Retrofit getApiClient() {

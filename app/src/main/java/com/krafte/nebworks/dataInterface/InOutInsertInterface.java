@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface InOutInsertInterface {
-    String URL = "https://nepworks.net/NEBWorks/commute/";
+    String URL = "http://krafte.net/NEBWorks/commute/";
 
     @FormUrlEncoded
     @POST("post.php")

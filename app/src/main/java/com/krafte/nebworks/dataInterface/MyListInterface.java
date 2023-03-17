@@ -7,9 +7,9 @@ import retrofit2.http.POST;
 
 public interface MyListInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/user/";
+    String URL = "http://krafte.net/NEBWorks/user/";
 
-    //https://nepworks.net/NEBWorks/user/get_mylist.php?user_id=199&kind=0
+    //http://krafte.net/NEBWorks/user/get_mylist.php?user_id=199&kind=0
     @FormUrlEncoded
     @POST("get_mylist.php")
     Call<String> getData(

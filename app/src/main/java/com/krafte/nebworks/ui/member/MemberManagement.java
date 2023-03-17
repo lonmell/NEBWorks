@@ -613,7 +613,7 @@ public class MemberManagement extends AppCompatActivity {
 
     public void MemDel(String mem_id) {
 //        매장 멤버 삭제 (매장에서 나가기, 매장에서 내보내기)
-//        https://nepworks.net/kogas/place/delete_member.php?place_id=28&user_id=24
+//        http://krafte.net/kogas/place/delete_member.php?place_id=28&user_id=24
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MemberOutPlaceInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())

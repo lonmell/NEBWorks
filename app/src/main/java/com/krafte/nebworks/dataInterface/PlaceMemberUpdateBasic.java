@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 
 public interface PlaceMemberUpdateBasic
 {
-    String URL = "https://nepworks.net/NEBWorks/place/";
+    String URL = "http://krafte.net/NEBWorks/place/";
 
     @FormUrlEncoded
     @POST("update_member_basic.php")

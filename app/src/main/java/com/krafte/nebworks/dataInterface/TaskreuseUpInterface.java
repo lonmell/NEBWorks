@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface TaskreuseUpInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/task_reuse/";
+    String URL = "http://krafte.net/NEBWorks/task_reuse/";
 
     @FormUrlEncoded
     @POST("update.php")

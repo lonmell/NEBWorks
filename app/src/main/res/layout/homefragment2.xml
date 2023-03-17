@@ -358,7 +358,7 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/gangwonedu_bold"
                         android:gravity="center"
-                        android:text="김이름님 오늘도 화이팅하세요!"
+                        android:text="님 오늘도 화이팅하세요!"
                         android:textColor="@color/black"
                         android:textSize="22sp" />
 

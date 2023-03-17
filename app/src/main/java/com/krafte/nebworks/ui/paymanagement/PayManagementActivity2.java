@@ -368,7 +368,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
                 .build();
         paymanaInterface api = retrofit.create(paymanaInterface.class);
         Call<String> call = api.getData("1", place_id, GET_DATE, SelectId, "", "", "", "", "", "", "", "", "", "");
-//        String url = "https://nepworks.net/NEBWorks/pay/paymanager.php?flag=1&place_id="+place_id+"&GET_DATE="+GET_DATE+"&user_id="+SelectId+"&basic_pay=&second_pay=&overwork_hour=&overwork_pay=&meal_allowance_yn=&meal_pay=&store_insurance_yn=&other_memo=&all_payment=&selectym=";
+//        String url = "http://krafte.net/NEBWorks/pay/paymanager.php?flag=1&place_id="+place_id+"&GET_DATE="+GET_DATE+"&user_id="+SelectId+"&basic_pay=&second_pay=&overwork_hour=&overwork_pay=&meal_allowance_yn=&meal_pay=&store_insurance_yn=&other_memo=&all_payment=&selectym=";
 //        dlog.i("url : " + url);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})

@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface TermDelInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/contract/";
+    String URL = "http://krafte.net/NEBWorks/contract/";
 
     @FormUrlEncoded
     @POST("term_delete.php")

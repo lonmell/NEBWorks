@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface TaxMemListInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/tax/";
+    String URL = "http://krafte.net/NEBWorks/tax/";
 
     @FormUrlEncoded
     @POST("get.php")

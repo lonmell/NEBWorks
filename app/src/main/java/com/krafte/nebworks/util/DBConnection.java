@@ -128,7 +128,7 @@ public class DBConnection {
 
                 // url에 접속 성공하면 (200)HttpsURLConnection.HTTP_OK
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    // // // Log.i(TAG, "conn.getResponseCode() = " + conn.getResponseCode());
+                    Log.i(TAG, "conn.getResponseCode() = " + conn.getResponseCode());
                     // 결과 값 읽어오는 부분
                     BufferedReader br = new BufferedReader(new InputStreamReader(
                             conn.getInputStream(), StandardCharsets.UTF_8
@@ -150,7 +150,7 @@ public class DBConnection {
                         JSONObject jsonObject = jsonResponse.getJSONObject(i);
                         String code = jsonObject.getString("version_code");
                         lastVersion.setLast_version(code);
-                        // Log.i(TAG,"code : " + lastVersion.getLast_version());
+                         Log.i(TAG,"JSONObject code : " + lastVersion.getLast_version());
                     }
                 }
                 // 연결 끊기

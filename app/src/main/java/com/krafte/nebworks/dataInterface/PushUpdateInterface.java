@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface PushUpdateInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/push/";
+    String URL = "http://krafte.net/NEBWorks/push/";
 
     @FormUrlEncoded
     @POST("update.php")

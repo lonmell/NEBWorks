@@ -7,8 +7,8 @@ import retrofit2.http.POST;
 
 public interface MemberOutPlaceInterface2
 {
-    String URL = "https://nepworks.net/NEBWorks/place/";
-    //https://nepworks.net/NEBWorks/place/delete_member.php?place_id=166&user_id=207
+    String URL = "http://krafte.net/NEBWorks/place/";
+    //http://krafte.net/NEBWorks/place/delete_member.php?place_id=166&user_id=207
     @FormUrlEncoded
     @POST("delete_member2.php")
     Call<String> getData(

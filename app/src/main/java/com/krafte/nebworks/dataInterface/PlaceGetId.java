@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface PlaceGetId
 {
-    String URL = "https://nepworks.net/NEBWorks/place/";
+    String URL = "http://krafte.net/NEBWorks/place/";
 
     @FormUrlEncoded
     @POST("get_placeid.php")
