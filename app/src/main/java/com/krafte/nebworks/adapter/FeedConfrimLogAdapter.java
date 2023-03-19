@@ -73,11 +73,14 @@ public class FeedConfrimLogAdapter extends RecyclerView.Adapter<FeedConfrimLogAd
         FeedConfirmData.FeedConfirmData_list item = mData.get(position);
 
         try{
+            dlog.i("item.getImg_path() : (" + position + ") = " +  item.getImg_path());
             Glide.with(mContext).load(item.getImg_path())
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .placeholder(R.drawable.certi02)
                     .skipMemoryCache(true)
                     .into(holder.profile_img);
+
+
             holder.name.setText(item.getName());
             holder.date.setText(item.getCreated_at().substring(0,10) + " 확인");
         }catch (Exception e){

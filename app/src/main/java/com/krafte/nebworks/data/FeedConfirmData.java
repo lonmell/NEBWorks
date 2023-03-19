@@ -17,6 +17,7 @@ public class FeedConfirmData {
             this.write_id = write_id;
             this.name = name;
             this.created_at = created_at;
+            this.img_path = img_path;
         }
 
         public String getId() {
