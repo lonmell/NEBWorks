@@ -63,6 +63,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
@@ -336,7 +337,11 @@ public class MemberDetailActivity extends AppCompatActivity {
 //            String Contract_uri = "http://krafte.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date=" + date;
 //            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
 //            startActivity(intent);
-            permissionCheck();
+            if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                permissionCheck();
+            }else{
+                Toast_Nomal("다운로드 권한이 없습니다.");
+            }
         });
 
         binding.todayTodo.setOnClickListener(v -> {
@@ -858,7 +863,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             WritableSheet sheetA = workbook.createSheet("출근기록부", 0);
 
                                             //--타이틀 부분 START
-                                            WritableFont title = new WritableFont(WritableFont.ARIAL, 17);
+                                            WritableFont title = new WritableFont(WritableFont.ARIAL, 16);
                                             WritableCellFormat cellFormat = new WritableCellFormat(title);
                                             cellFormat.setAlignment(Alignment.CENTRE);
 
@@ -868,14 +873,32 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             cellFormat_1.setAlignment(Alignment.LEFT);
                                             cellFormat_1.setAlignment(Alignment.CENTRE);
 
-                                            WritableFont font2 = new WritableFont(WritableFont.ARIAL, 13);
+                                            WritableFont font_2 = new WritableFont(WritableFont.ARIAL, 13);
+                                            font_2.setColour(Colour.BLACK);
+                                            WritableCellFormat cellFormat_2 = new WritableCellFormat(font_2);
+                                            cellFormat_2.setAlignment(Alignment.LEFT);
+                                            cellFormat_2.setAlignment(Alignment.CENTRE);
+
+                                            WritableFont font2 = new WritableFont(WritableFont.ARIAL, 15);
                                             font2.setColour(Colour.WHITE);
                                             font2.setBoldStyle(WritableFont.BOLD);
                                             WritableCellFormat cellFormat2 = new WritableCellFormat(font2);
                                             cellFormat2.setAlignment(Alignment.CENTRE);
-                                            cellFormat2.setBackground(Colour.BLUE);
+                                            cellFormat2.setBackground(Colour.PALE_BLUE);
 
-                                            sheetA.setColumnView(1, 15);sheetA.setRowView(1, 30);
+                                            CellView cellView = new CellView();
+                                            cellView.setSize(40); // 셀 높이를 500으로 변경
+                                            sheetA.setColumnView(1, cellView); // 첫번째 열의 셀 높이 변경
+                                            sheetA.setColumnView(2, cellView);
+                                            sheetA.setColumnView(3, cellView);
+                                            sheetA.setColumnView(4, cellView);
+                                            sheetA.setColumnView(5, cellView);
+                                            sheetA.setColumnView(6, cellView);
+                                            sheetA.setColumnView(7, cellView);
+                                            sheetA.setColumnView(8, cellView);
+                                            sheetA.setColumnView(9, cellView);
+
+                                            sheetA.setColumnView(1, 15);
                                             sheetA.setColumnView(2, 15);
                                             sheetA.setColumnView(3, 15);
                                             sheetA.setColumnView(4, 15);
@@ -898,18 +921,18 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             Label label5 = new Label(4, 5, USER_INFO_NAME, cellFormat);
                                             sheetA.addCell(label5);
 
-                                            Label label6 = new Label(1, 6, "■ 세부내용", cellFormat2);
+                                            Label label6 = new Label(1, 7, "■ 세부내용", cellFormat_2);
                                             sheetA.addCell(label6);
 
                                             //--타이틀 부분 END
 
-                                            Label menu1 = new Label(1, 7, "일", cellFormat2);
+                                            Label menu1 = new Label(1, 9, "일", cellFormat2);
                                             sheetA.addCell(menu1);
-                                            Label menu2 = new Label(2, 7, "출 근", cellFormat2);
+                                            Label menu2 = new Label(2, 9, "출 근", cellFormat2);
                                             sheetA.addCell(menu2);
-                                            Label menu3 = new Label(3, 7, "퇴 근", cellFormat2);
+                                            Label menu3 = new Label(3, 9, "퇴 근", cellFormat2);
                                             sheetA.addCell(menu3);
-                                            Label menu4 = new Label(4, 7, "비 고", cellFormat2);
+                                            Label menu4 = new Label(4, 9, "비 고", cellFormat2);
                                             sheetA.addCell(menu4);
 
                                             Label contents1,contents2,contents3,contents4;
@@ -943,247 +966,21 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 } else {
                                                     State = vaca_state + " " + (jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state"));
                                                 }
-                                                contents1 = new Label(1, i+8, toItemday, cellFormat);
+                                                sheetA.setColumnView(i+10, cellView); // 첫번째 열의 셀 높이 변경
+                                                contents1 = new Label(1, i+10, toItemday, cellFormat);
                                                 sheetA.addCell(contents1);
-                                                contents2 = new Label(2, i+8, InTime, cellFormat);
+                                                contents2 = new Label(2, i+10, InTime, cellFormat);
                                                 sheetA.addCell(contents2);
-                                                contents3 = new Label(3, i+8, OutTime, cellFormat);
+                                                contents3 = new Label(3, i+10, OutTime, cellFormat);
                                                 sheetA.addCell(contents3);
-                                                contents4 = new Label(4, i+8, State, cellFormat);
+                                                contents4 = new Label(4, i+10, State, cellFormat);
                                                 sheetA.addCell(contents4);
-
                                             }
 
                                             // close workbook
                                             workbook.write();
                                             workbook.close();
-
-
-//                                            XSSFWorkbook workbook = new XSSFWorkbook();
-//
-//                                            dlog.i("(binding.inoutPrint)file_path : " + file_path);
-//                                            // 새로운 엑셀 파일 생성
-//                                            // 시트 생성
-//                                            XSSFSheet sheet = workbook.createSheet("Sheet1");
-//                                            sheet.setColumnWidth(1, 100 * 20);
-//
-//                                            //sheet.autoSizeColumn(0);
-//                                            //--타이틀 부분 START
-//                                            CellStyle title_style = workbook.createCellStyle();
-//                                            Font titlefont = workbook.createFont();
-//                                            titlefont.setFontHeightInPoints((short) 20);
-//                                            titlefont.setColor(IndexedColors.BLACK.getIndex());
-//                                            titlefont.setBold(true);
-//                                            title_style.setAlignment(HorizontalAlignment.CENTER);
-//                                            title_style.setVerticalAlignment(VerticalAlignment.CENTER);
-//                                            title_style.setFont(titlefont);
-//
-//                                            XSSFRow title_row = sheet.createRow(1);
-//                                            title_row.setHeightInPoints(25);
-//
-//                                            XSSFCell titleCell1 = title_row.createCell(1);
-//
-//                                            sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 4));
-//                                            titleCell1.setCellValue("출근기록부");
-//                                            titleCell1.setCellStyle(title_style);
-//                                            //--타이틀 부분 END
-//
-//                                            //--타이틀 UNDER 부분 START
-//                                            CellStyle titleunder_style = workbook.createCellStyle();
-//                                            Font titleunderfont = workbook.createFont();
-//                                            titleunderfont.setFontHeightInPoints((short) 10);
-//                                            titleunderfont.setColor(IndexedColors.GREY_40_PERCENT.getIndex());
-//                                            titleunder_style.setFont(titleunderfont);
-//
-//                                            XSSFRow titleunder_row = sheet.createRow(2);
-//                                            XSSFCell titleunderCell = titleunder_row.createCell(1);
-//                                            titleunderCell.setCellValue(change_place_name);
-//                                            titleunderCell.setCellStyle(titleunder_style);
-//                                            //--타이틀 UNDER 부분 END
-//
-//                                            //--부 타이틀 START
-//                                            XSSFRow subrow = sheet.createRow(4);
-//                                            subrow.setHeightInPoints(25);
-//
-//                                            XSSFCell subCell = subrow.createCell(1);
-//                                            XSSFCell subCell2 = subrow.createCell(3);
-//                                            sheet.addMergedRegion(new CellRangeAddress(4, 4, 1, 2));
-//                                            sheet.addMergedRegion(new CellRangeAddress(4, 4, 3, 4));
-//                                            sheet.setColumnWidth(1, 100 * 20);
-//                                            sheet.setColumnWidth(3, 100 * 20);
-//
-//                                            CellStyle sub_style = workbook.createCellStyle();
-//                                            CellStyle sub_style2 = workbook.createCellStyle();
-//                                            Font sublefont = workbook.createFont();
-//                                            Font sublefont2 = workbook.createFont();
-//                                            sublefont.setFontHeightInPoints((short) 13);
-//                                            sublefont.setColor(IndexedColors.WHITE.getIndex());
-//                                            sublefont.setBold(true);
-//
-//                                            sublefont2.setFontHeightInPoints((short) 13);
-//                                            sublefont2.setColor(IndexedColors.BLACK.getIndex());
-//                                            sublefont2.setBold(true);
-//
-//                                            sub_style.setAlignment(HorizontalAlignment.CENTER);
-//                                            sub_style.setVerticalAlignment(VerticalAlignment.CENTER);
-//                                            sub_style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//                                            sub_style.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-//                                            sub_style.setAlignment(HorizontalAlignment.CENTER);
-//                                            sub_style.setFont(sublefont);
-//
-//                                            sub_style2.setAlignment(HorizontalAlignment.CENTER);
-//                                            sub_style2.setVerticalAlignment(VerticalAlignment.CENTER);
-//                                            sub_style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//                                            sub_style2.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-//                                            sub_style2.setAlignment(HorizontalAlignment.CENTER);
-//                                            sub_style2.setFont(sublefont2);
-//
-//                                            subCell.setCellValue("출근 연월");
-//                                            subCell2.setCellValue(getYMdate + "월");
-//                                            subCell.setCellStyle(sub_style);
-//                                            subCell2.setCellStyle(sub_style2);
-//                                            //--부 타이틀 END
-//
-//                                            //--부 타이틀2 START
-//                                            XSSFRow subrow2 = sheet.createRow(5);
-//                                            XSSFCell subCell3 = subrow2.createCell(1);
-//                                            XSSFCell subCell4 = subrow2.createCell(3);
-//                                            sheet.addMergedRegion(new CellRangeAddress(5, 5, 1, 2));
-//                                            sheet.addMergedRegion(new CellRangeAddress(5, 5, 3, 4));
-//                                            sheet.setColumnWidth(1, 100 * 20);
-//                                            sheet.setColumnWidth(3, 100 * 20);
-//
-//                                            subCell3.setCellValue("이   름");
-//                                            subCell4.setCellValue(USER_INFO_NAME);
-//                                            subCell3.setCellStyle(sub_style);
-//                                            subCell4.setCellStyle(sub_style2);
-//                                            //--부 타이틀2 END
-//
-//
-//                                            //-- 첫번째 라인
-//                                            // 행 생성
-//                                            XSSFRow row = sheet.createRow(7);
-//                                            sheet.setColumnWidth(1, 90 * 20);
-//                                            sheet.setColumnWidth(2, 100 * 40);
-//                                            sheet.setColumnWidth(3, 100 * 40);
-//                                            sheet.setColumnWidth(4, 100 * 40);
-//                                            row.setHeightInPoints(25);
-//
-//                                            // 셀 생성
-//                                            cell1 = row.createCell(1);
-//                                            cell2 = row.createCell(2);
-//                                            cell3 = row.createCell(3);
-//                                            cell4 = row.createCell(4);
-//
-//                                            //--고정내용 부분 START
-//                                            CellStyle menu_style = workbook.createCellStyle();
-//                                            Font menufont = workbook.createFont();
-//                                            menufont.setFontHeightInPoints((short) 12);
-//                                            menufont.setColor(IndexedColors.WHITE.getIndex());
-//                                            menufont.setBold(true);
-//                                            menu_style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//                                            menu_style.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-//                                            menu_style.setFont(menufont);
-//                                            menu_style.setAlignment(HorizontalAlignment.CENTER);
-//                                            menu_style.setVerticalAlignment(VerticalAlignment.CENTER);
-//
-//                                            cell1.setCellValue("일");
-//                                            cell2.setCellValue("출근");
-//                                            cell3.setCellValue("퇴근");
-//                                            cell4.setCellValue("비고");
-//
-//                                            cell1.setCellStyle(menu_style);
-//                                            cell2.setCellStyle(menu_style);
-//                                            cell3.setCellStyle(menu_style);
-//                                            cell4.setCellStyle(menu_style);
-//                                            //--고정내용 부분 END
-//
-//                                            // 셀에 값 추가
-//                                            dlog.i("Workbook Response.length() : " + Response.length());
-//                                            for (int i = 0; i < Response.length(); i++) {
-//                                                JSONObject jsonObject = Response.getJSONObject(i);
-////                                            inoutmAdapter.addItem(new WorkGotoListData.WorkGotoListData_list(
-////                                                    jsonObject.getString("day"),
-////                                                    jsonObject.getString("yoil"),
-////                                                    jsonObject.getString("in_time"),
-////                                                    jsonObject.getString("out_time"),
-////                                                    jsonObject.getString("workdiff"),
-////                                                    jsonObject.getString("state"),
-////                                                    jsonObject.getString("sieob1"),
-////                                                    jsonObject.getString("sieob2"),
-////                                                    jsonObject.getString("jongeob1"),
-////                                                    jsonObject.getString("jongeob2"),
-////                                                    jsonObject.getString("vaca_accept"),
-////                                                    jsonObject.getString("hdd")
-////                                            ));
-//                                                //--두번째 라인부터
-//                                                XSSFRow row1 = sheet.createRow(i + 8);
-//                                                CellStyle contents_style = workbook.createCellStyle();
-//                                                contents_style.setAlignment(HorizontalAlignment.CENTER);
-//                                                contents_style.setVerticalAlignment(VerticalAlignment.CENTER);
-//
-//                                                String toItemday = jsonObject.getString("day");
-//                                                //휴가표시
-//                                                vaca_state = jsonObject.getString("vaca_accept").equals("휴가") ? "휴가" : "";
-//
-//                                                if (!jsonObject.getString("in_time").equals("null")) {
-//                                                    InTime = jsonObject.getString("in_time");
-//                                                } else {
-//                                                    InTime = "";
-//                                                }
-//
-//                                                if (!jsonObject.getString("out_time").equals("null")) {
-//                                                    OutTime = jsonObject.getString("out_time");
-//                                                } else {
-//                                                    OutTime = "";
-//                                                }
-//
-//                                                if (vaca_state.equals("")) {
-//                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
-//                                                } else {
-//                                                    State = vaca_state + " " + (jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state"));
-//                                                }
-//                                                CellStyle style = workbook.createCellStyle();
-//                                                style.setAlignment(HorizontalAlignment.LEFT);
-//                                                cell1 = row1.createCell(1);
-//                                                cell2 = row1.createCell(2);
-//                                                cell3 = row1.createCell(3);
-//                                                cell4 = row1.createCell(4);
-//
-//                                                cell1.setCellValue(toItemday);
-//                                                cell1.setCellStyle(style);
-//
-//                                                cell2.setCellValue(InTime);
-//                                                cell3.setCellValue(OutTime);
-//                                                cell4.setCellValue(State);
-////
-//                                                cell1.setCellStyle(contents_style);
-//                                                cell2.setCellStyle(contents_style);
-//                                                cell3.setCellStyle(contents_style);
-//                                                cell4.setCellStyle(contents_style);
-//                                            }
-//
-//                                            // Excel XLSX 파일로 저장
-//                                            try {
-//                                                String fileName = change_place_name + " " + getYMdate + "월 출결표.xlsx";
-//                                                file = new File(SD_PATH, fileName);
-//                                                FileOutputStream outputStream = new FileOutputStream(file);
-//                                                workbook.write(outputStream);
-//                                                workbook.close();
-//                                                Toast_Nomal("Download파일에 Excel파일이 생성되었습니다.");
-//                                            } catch (FileNotFoundException exception) {
-//                                                dlog.e("FileNotFoundException : " + exception.getMessage());
-//                                                Toast_Nomal("파일 생성이 실패했습니다");
-//                                            } catch (FileAlreadyExistsException existsException) {
-//                                                Toast_Nomal("파일 생성이 실패했습니다");
-//                                            } catch (IOException e) {
-//                                                dlog.e("IOException : " + e.getMessage());
-//                                                e.printStackTrace();
-//                                            } catch (Exception e) {
-//                                                dlog.e("Exception : " + e.getMessage());
-//                                                e.printStackTrace();
-//                                            }
-
+                                            Toast_Nomal("Download파일에 Excel파일이 생성되었습니다.");
 
                                         } catch (Exception e) {
                                             e.printStackTrace();
