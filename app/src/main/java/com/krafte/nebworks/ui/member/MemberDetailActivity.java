@@ -866,18 +866,21 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             WritableFont title = new WritableFont(WritableFont.ARIAL, 16);
                                             WritableCellFormat cellFormat = new WritableCellFormat(title);
                                             cellFormat.setAlignment(Alignment.CENTRE);
+                                            cellFormat.setLocked(true);
 
                                             WritableFont font_1 = new WritableFont(WritableFont.ARIAL, 12);
                                             font_1.setColour(Colour.GRAY_50);
                                             WritableCellFormat cellFormat_1 = new WritableCellFormat(font_1);
                                             cellFormat_1.setAlignment(Alignment.LEFT);
                                             cellFormat_1.setAlignment(Alignment.CENTRE);
+                                            cellFormat_1.setLocked(true);
 
                                             WritableFont font_2 = new WritableFont(WritableFont.ARIAL, 13);
                                             font_2.setColour(Colour.BLACK);
                                             WritableCellFormat cellFormat_2 = new WritableCellFormat(font_2);
                                             cellFormat_2.setAlignment(Alignment.LEFT);
                                             cellFormat_2.setAlignment(Alignment.CENTRE);
+                                            cellFormat_2.setLocked(true);
 
                                             WritableFont font2 = new WritableFont(WritableFont.ARIAL, 15);
                                             font2.setColour(Colour.WHITE);
@@ -885,6 +888,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             WritableCellFormat cellFormat2 = new WritableCellFormat(font2);
                                             cellFormat2.setAlignment(Alignment.CENTRE);
                                             cellFormat2.setBackground(Colour.PALE_BLUE);
+                                            cellFormat2.setLocked(true);
 
                                             CellView cellView = new CellView();
                                             cellView.setSize(40); // 셀 높이를 500으로 변경
@@ -941,9 +945,10 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 JSONObject jsonObject = Response.getJSONObject(i);
 
                                                 //--두번째 라인부터
-                                                WritableFont contents = new WritableFont(WritableFont.ARIAL, 17);
+                                                WritableFont contents = new WritableFont(WritableFont.ARIAL, 15);
                                                 WritableCellFormat cellFormat_con = new WritableCellFormat(contents);
                                                 cellFormat_con.setAlignment(Alignment.CENTRE);
+                                                cellFormat_con.setLocked(true);
 
                                                 String toItemday = jsonObject.getString("day");
                                                 //휴가표시
@@ -967,13 +972,13 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                     State = vaca_state + " " + (jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state"));
                                                 }
                                                 sheetA.setColumnView(i+10, cellView); // 첫번째 열의 셀 높이 변경
-                                                contents1 = new Label(1, i+10, toItemday, cellFormat);
+                                                contents1 = new Label(1, i+10, toItemday, cellFormat_con);
                                                 sheetA.addCell(contents1);
-                                                contents2 = new Label(2, i+10, InTime, cellFormat);
+                                                contents2 = new Label(2, i+10, InTime, cellFormat_con);
                                                 sheetA.addCell(contents2);
-                                                contents3 = new Label(3, i+10, OutTime, cellFormat);
+                                                contents3 = new Label(3, i+10, OutTime, cellFormat_con);
                                                 sheetA.addCell(contents3);
-                                                contents4 = new Label(4, i+10, State, cellFormat);
+                                                contents4 = new Label(4, i+10, State, cellFormat_con);
                                                 sheetA.addCell(contents4);
                                             }
 
