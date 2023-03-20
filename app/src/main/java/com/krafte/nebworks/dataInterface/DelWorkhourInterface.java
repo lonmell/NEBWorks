@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface DelWorkhourInterface {
-    String URL = "https://nepworks.net/NEBWorks/work_status/";
+    String URL = "http://krafte.net/NEBWorks/work_status/";
 
     @FormUrlEncoded
     @POST("delete.php")

@@ -7,9 +7,9 @@ import retrofit2.http.POST;
 
 public interface PlaceMemberAddInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/place/";
+    String URL = "http://krafte.net/NEBWorks/place/";
 
-    //https://nepworks.net/NEBWorks/place/add_member.php?place_id=97&user_id=64&jumin=&kind=0&join_date=2022-12-05
+    //http://krafte.net/NEBWorks/place/add_member.php?place_id=97&user_id=64&jumin=&kind=0&join_date=2022-12-05
     @FormUrlEncoded
     @POST("add_member.php")
     Call<String> getData(

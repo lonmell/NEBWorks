@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface WorkCalenderInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/";
+    String URL = "http://krafte.net/NEBWorks/";
 
     @FormUrlEncoded
     @POST("create_calender.php")

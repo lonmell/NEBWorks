@@ -258,7 +258,7 @@ public class InviteMemberActivity extends AppCompatActivity {
 
     FeedTemplate feedTemplate = new FeedTemplate(
             new Content("NEBWorks 에서 사용자님을 초대합니다. 회원가입 후 초대된 매장에 자동 가입됩니다.",
-                    "https://nepworks.net/NEBWorks/identificon.png",
+                    "http://krafte.net/NEBWorks/identificon.png",
                     new Link("https://www.naver.com",
                             "https://www.naver.com"),
                     "#회원가입 #매장초대 #협업툴"
@@ -266,7 +266,7 @@ public class InviteMemberActivity extends AppCompatActivity {
             new ItemContent("",
                     "",
                     "사장님!넵",
-                    "https://nepworks.net/NEBWorks/identificon.png",
+                    "http://krafte.net/NEBWorks/identificon.png",
                     "협업 툴"
             ),
             new Social(1004, 1004, 1004),

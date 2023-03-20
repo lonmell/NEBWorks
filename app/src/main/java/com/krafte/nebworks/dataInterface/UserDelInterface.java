@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface UserDelInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/user/";
+    String URL = "http://krafte.net/NEBWorks/user/";
 
     @FormUrlEncoded
     @POST("delete.php")

@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface UpdateCommuteInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/commute/";
+    String URL = "http://krafte.net/NEBWorks/commute/";
 
     @FormUrlEncoded
     @POST("update.php")

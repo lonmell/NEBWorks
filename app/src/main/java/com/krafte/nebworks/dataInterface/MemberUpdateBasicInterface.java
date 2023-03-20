@@ -7,9 +7,9 @@ import retrofit2.http.POST;
 
 public interface MemberUpdateBasicInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/place/";
+    String URL = "http://krafte.net/NEBWorks/place/";
 
-    //https://nepworks.net/NEBWorks/place/update_member_basic.php
+    //http://krafte.net/NEBWorks/place/update_member_basic.php
     @FormUrlEncoded
     @POST("update_member_basic.php")
     Call<String> getData(

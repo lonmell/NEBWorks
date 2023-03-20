@@ -882,7 +882,7 @@ public class PlaceEditActivity extends AppCompatActivity {
 
                     final String IMG_FILE_EXTENSION = ".JPEG";
                     String file_name = USER_INFO_ID + "_" + ImgfileMaker + IMG_FILE_EXTENSION;
-                    ProfileUrl = "https://nepworks.net/NEBWorks/image/place_img/" + file_name;
+                    ProfileUrl = "http://krafte.net/NEBWorks/image/place_img/" + file_name;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -997,7 +997,7 @@ public class PlaceEditActivity extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             saveBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
 
-            ProfileUrl = "https://nepworks.net/NEBWorks/image/place_img/" + file_name;
+            ProfileUrl = "http://krafte.net/NEBWorks/image/place_img/" + file_name;
             saveBitmapToFile(file);
 
             dlog.e("사인 저장 경로 : " + ProfileUrl);
@@ -1053,7 +1053,7 @@ public class PlaceEditActivity extends AppCompatActivity {
     }
 
     public static class ApiClient {
-        private static final String BASE_URL = "https://nepworks.net/NEBWorks/image/";
+        private static final String BASE_URL = "http://krafte.net/NEBWorks/image/";
         private static Retrofit retrofit;
 
         public static Retrofit getApiClient() {

@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 
 public interface ContractWorkerInterface {
-    String URL = "https://nepworks.net/NEBWorks/contract/";
+    String URL = "http://krafte.net/NEBWorks/contract/";
 
     @FormUrlEncoded
     @POST("update_worker.php")

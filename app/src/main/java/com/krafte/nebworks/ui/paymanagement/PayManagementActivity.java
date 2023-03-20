@@ -422,7 +422,7 @@ public class PayManagementActivity extends AppCompatActivity {
                         binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
 
                         if (Response.length() == 0) {
-                            binding.nodataArea.setVisibility(View.VISIBLE);
+                            binding.nodataArea.setVisibility(View.GONE);
                             Log.i(TAG, "GET SIZE : " + rc.paymentData_lists.size());
                         } else {
                             binding.nodataArea.setVisibility(View.GONE);
@@ -479,7 +479,7 @@ public class PayManagementActivity extends AppCompatActivity {
                                 }
                             }
                             if(row_cnt == 0){
-                                binding.nodataArea.setVisibility(View.VISIBLE);
+                                binding.nodataArea.setVisibility(View.GONE);
                             }
                             mAdapter.notifyDataSetChanged();
                             mAdapter.setOnItemClickListener((v, position) -> {

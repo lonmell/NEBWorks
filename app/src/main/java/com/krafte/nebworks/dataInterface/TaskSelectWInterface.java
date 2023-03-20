@@ -8,8 +8,8 @@ import retrofit2.http.POST;
 //근로자가 조회할때
 public interface TaskSelectWInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/task/";
-    //https://nepworks.net/NEBWorks/task/get.php?place_id=166&user_id=199&selected_date=2023-02-15
+    String URL = "http://krafte.net/NEBWorks/task/";
+    //http://krafte.net/NEBWorks/task/get.php?place_id=166&user_id=199&selected_date=2023-02-15
     @FormUrlEncoded
     @POST("get.php")
     Call<String> getData(

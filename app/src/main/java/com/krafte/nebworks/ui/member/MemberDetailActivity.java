@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.member;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.MemberInoutAdapter;
@@ -52,10 +56,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
+import jxl.CellView;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.format.Alignment;
+import jxl.format.Colour;
+import jxl.write.Label;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -145,17 +162,17 @@ public class MemberDetailActivity extends AppCompatActivity {
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             //shardpref Area
-            stub_place_id       = shardpref.getString("stub_place_id", "0");
-            stub_user_id        = shardpref.getString("stub_user_id", "0");
-            stub_user_account   = shardpref.getString("stub_user_account", "");
-            change_place_name   = shardpref.getString("change_place_name", "");
-            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
+            stub_place_id = shardpref.getString("stub_place_id", "0");
+            stub_user_id = shardpref.getString("stub_user_id", "0");
+            stub_user_account = shardpref.getString("stub_user_account", "");
+            change_place_name = shardpref.getString("change_place_name", "");
+            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
-            gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
-            return_page         = shardpref.getString("return_page", "");
-            item_user_id        = shardpref.getString("item_user_id", "");
-            stub_user_name      = shardpref.getString("stub_user_name", "");
+            wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
+            gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
+            return_page = shardpref.getString("return_page", "");
+            item_user_id = shardpref.getString("item_user_id", "");
+            stub_user_name = shardpref.getString("stub_user_name", "");
 
             dlog.i("stub_user_name : " + stub_user_name);
             setBtnEvent();
@@ -311,16 +328,20 @@ public class MemberDetailActivity extends AppCompatActivity {
         });
 
         binding.inoutPrint.setOnClickListener(v -> {
-            String date = Year + "-" + Month;
-            dlog.i("-----inoutPrint-----");
-            dlog.i("user_id : " + stub_user_id);
-            dlog.i("place_id : " + place_id);
-            dlog.i("date : " + binding.setdate.getText().toString());
-            dlog.i("-----inoutPrint-----");
-//            https://nepworks.net/NEBWorks/Commute.php?user_id=64&place_id=97&date=2022-12
-            String Contract_uri = "https://nepworks.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date=" + date;
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
-            startActivity(intent);
+//            dlog.i("-----inoutPrint-----");
+//            dlog.i("user_id : " + stub_user_id);
+//            dlog.i("place_id : " + place_id);
+//            dlog.i("date : " + binding.setdate.getText().toString());
+//            dlog.i("-----inoutPrint-----");
+////            http://krafte.net/NEBWorks/Commute.php?user_id=64&place_id=97&date=2022-12
+//            String Contract_uri = "http://krafte.net/NEBWorks/Commute.php?user_id=" + stub_user_id + "&place_id=" + place_id + "&date=" + date;
+//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
+//            startActivity(intent);
+            if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                permissionCheck();
+            }else{
+                Toast_Nomal("다운로드 권한이 없습니다.");
+            }
         });
 
         binding.todayTodo.setOnClickListener(v -> {
@@ -346,7 +367,6 @@ public class MemberDetailActivity extends AppCompatActivity {
         SetAllMemberList(stub_place_id, stub_user_id);
         SetContractList();
         MainWorkCnt(stub_place_id, stub_user_id);
-
     }
 
     @Override
@@ -663,9 +683,11 @@ public class MemberDetailActivity extends AppCompatActivity {
                         try {
                             //Array데이터를 받아올 때
                             JSONArray Response = new JSONArray(jsonResponse);
-                            Navname = Response.getJSONObject(0).getString("name");
-                            Navimg_path = Response.getJSONObject(0).getString("img_path");
-                            Navgetjikgup = Response.getJSONObject(0).getString("jikgup");
+                            if (Response.length() != 0) {
+                                Navname = Response.getJSONObject(0).getString("name");
+                                Navimg_path = Response.getJSONObject(0).getString("img_path");
+                                Navgetjikgup = Response.getJSONObject(0).getString("jikgup");
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -769,6 +791,257 @@ public class MemberDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    File file;
+
+    @SuppressLint("SdCardPath")
+    String SD_PATH = "/storage/emulated/0/Download";
+    //    String SD_PATH = "/sdcard/Download/nepworks/";
+    String vaca_state = "";
+    String State = "";
+    String InTime = "";
+    String OutTime = "";
+//    XSSFCell cell1, cell2, cell3, cell4;
+
+    public void getExcelGotoList(String place_id, String user_id, String getYMdate) {
+        dlog.i("-----SetGotoWorkDayList-----");
+        dlog.i("place_id : " + place_id);
+        dlog.i("user_id : " + user_id);
+        dlog.i("getYMdate : " + getYMdate);
+        dlog.i("-----SetGotoWorkDayList-----");
+        @SuppressLint({"NotifyDataSetChanged", "LongLogTag", "SetTextI18n"}) Thread th = new Thread(() -> {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(WorkGotoListInterface.URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+            WorkGotoListInterface api = retrofit.create(WorkGotoListInterface.class);
+            Call<String> call = api.getData(place_id, user_id, getYMdate);
+            call.enqueue(new Callback<String>() {
+                @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            dlog.e("SetGotoWorkDayList function START");
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.e("response 1: " + response.isSuccessful());
+                            dlog.e("response 2: " + jsonResponse);
+                            if (jsonResponse.equals("[]")) {
+                                binding.noDataTxt.setVisibility(View.VISIBLE);
+                            } else {
+                                binding.noDataTxt.setVisibility(View.GONE);
+                                try {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    Log.i(TAG, "SetNoticeListview Thread run! ");
+
+                                    if (Response.length() == 0) {
+                                        Log.i(TAG, "(gotoWorkData_list)GET SIZE : " + Response.length());
+                                    } else {
+                                        // 새 통합 문서 만들기
+                                        File file_path;
+
+                                        try {
+                                            file_path = new File(SD_PATH);
+                                            if (!file_path.isDirectory()) {//해당 경로의 파일이 없으면 생성시켜준다
+                                                file_path.mkdirs();
+                                            }
+
+                                            File sd = Environment.getExternalStorageDirectory();
+                                            String csvFile = change_place_name + " " + getYMdate + "월 출결표.xls";
+
+                                            File directory = new File(sd.getAbsolutePath());
+
+                                            //create directory if not exist
+                                            if (!directory.isDirectory()) {
+                                                directory.mkdirs();
+                                            }
+
+                                            //file path
+                                            File file = new File(SD_PATH, csvFile);
+                                            WorkbookSettings wbSettings = new WorkbookSettings();
+                                            wbSettings.setLocale(new Locale(Locale.GERMAN.getLanguage(), Locale.GERMAN.getCountry()));
+                                            WritableWorkbook workbook;
+                                            workbook = Workbook.createWorkbook(file, wbSettings);
+
+                                            //Excel sheetA first sheetA
+                                            WritableSheet sheetA = workbook.createSheet("출근기록부", 0);
+
+                                            //--타이틀 부분 START
+                                            WritableFont title = new WritableFont(WritableFont.ARIAL, 16);
+                                            WritableCellFormat cellFormat = new WritableCellFormat(title);
+                                            cellFormat.setAlignment(Alignment.CENTRE);
+                                            cellFormat.setLocked(true);
+
+                                            WritableFont font_1 = new WritableFont(WritableFont.ARIAL, 12);
+                                            font_1.setColour(Colour.GRAY_50);
+                                            WritableCellFormat cellFormat_1 = new WritableCellFormat(font_1);
+                                            cellFormat_1.setAlignment(Alignment.LEFT);
+                                            cellFormat_1.setAlignment(Alignment.CENTRE);
+                                            cellFormat_1.setLocked(true);
+
+                                            WritableFont font_2 = new WritableFont(WritableFont.ARIAL, 13);
+                                            font_2.setColour(Colour.BLACK);
+                                            WritableCellFormat cellFormat_2 = new WritableCellFormat(font_2);
+                                            cellFormat_2.setAlignment(Alignment.LEFT);
+                                            cellFormat_2.setAlignment(Alignment.CENTRE);
+                                            cellFormat_2.setLocked(true);
+
+                                            WritableFont font2 = new WritableFont(WritableFont.ARIAL, 15);
+                                            font2.setColour(Colour.WHITE);
+                                            font2.setBoldStyle(WritableFont.BOLD);
+                                            WritableCellFormat cellFormat2 = new WritableCellFormat(font2);
+                                            cellFormat2.setAlignment(Alignment.CENTRE);
+                                            cellFormat2.setBackground(Colour.PALE_BLUE);
+                                            cellFormat2.setLocked(true);
+
+                                            CellView cellView = new CellView();
+                                            cellView.setSize(40); // 셀 높이를 500으로 변경
+                                            sheetA.setColumnView(1, cellView); // 첫번째 열의 셀 높이 변경
+                                            sheetA.setColumnView(2, cellView);
+                                            sheetA.setColumnView(3, cellView);
+                                            sheetA.setColumnView(4, cellView);
+                                            sheetA.setColumnView(5, cellView);
+                                            sheetA.setColumnView(6, cellView);
+                                            sheetA.setColumnView(7, cellView);
+                                            sheetA.setColumnView(8, cellView);
+                                            sheetA.setColumnView(9, cellView);
+
+                                            sheetA.setColumnView(1, 15);
+                                            sheetA.setColumnView(2, 15);
+                                            sheetA.setColumnView(3, 15);
+                                            sheetA.setColumnView(4, 15);
+                                            sheetA.setColumnView(5, 15);
+
+                                            sheetA.mergeCells(1, 2, 4, 2);
+                                            Label label = new Label(1, 2, "출근기록부", cellFormat);
+                                            sheetA.addCell(label);
+
+                                            Label label_1 = new Label(1, 3, change_place_name, cellFormat_1);
+                                            sheetA.addCell(label_1);
+
+                                            Label label2 = new Label(1, 5, "출근 연월", cellFormat2);
+                                            sheetA.addCell(label2);
+                                            Label label3 = new Label(2, 5, getYMdate, cellFormat);
+                                            sheetA.addCell(label3);
+
+                                            Label label4 = new Label(3, 5, "이     름", cellFormat2);
+                                            sheetA.addCell(label4);
+                                            Label label5 = new Label(4, 5, USER_INFO_NAME, cellFormat);
+                                            sheetA.addCell(label5);
+
+                                            Label label6 = new Label(1, 7, "■ 세부내용", cellFormat_2);
+                                            sheetA.addCell(label6);
+
+                                            //--타이틀 부분 END
+
+                                            Label menu1 = new Label(1, 9, "일", cellFormat2);
+                                            sheetA.addCell(menu1);
+                                            Label menu2 = new Label(2, 9, "출 근", cellFormat2);
+                                            sheetA.addCell(menu2);
+                                            Label menu3 = new Label(3, 9, "퇴 근", cellFormat2);
+                                            sheetA.addCell(menu3);
+                                            Label menu4 = new Label(4, 9, "비 고", cellFormat2);
+                                            sheetA.addCell(menu4);
+
+                                            Label contents1,contents2,contents3,contents4;
+
+                                            for (int i = 0; i < Response.length(); i++) {
+                                                JSONObject jsonObject = Response.getJSONObject(i);
+
+                                                //--두번째 라인부터
+                                                WritableFont contents = new WritableFont(WritableFont.ARIAL, 15);
+                                                WritableCellFormat cellFormat_con = new WritableCellFormat(contents);
+                                                cellFormat_con.setAlignment(Alignment.CENTRE);
+                                                cellFormat_con.setLocked(true);
+
+                                                String toItemday = jsonObject.getString("day");
+                                                //휴가표시
+                                                vaca_state = jsonObject.getString("vaca_accept").equals("휴가") ? "휴가" : "";
+
+                                                if (!jsonObject.getString("in_time").equals("null")) {
+                                                    InTime = jsonObject.getString("in_time");
+                                                } else {
+                                                    InTime = "";
+                                                }
+
+                                                if (!jsonObject.getString("out_time").equals("null")) {
+                                                    OutTime = jsonObject.getString("out_time");
+                                                } else {
+                                                    OutTime = "";
+                                                }
+
+                                                if (vaca_state.equals("")) {
+                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
+                                                } else {
+                                                    State = vaca_state + " " + (jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state"));
+                                                }
+                                                sheetA.setColumnView(i+10, cellView); // 첫번째 열의 셀 높이 변경
+                                                contents1 = new Label(1, i+10, toItemday, cellFormat_con);
+                                                sheetA.addCell(contents1);
+                                                contents2 = new Label(2, i+10, InTime, cellFormat_con);
+                                                sheetA.addCell(contents2);
+                                                contents3 = new Label(3, i+10, OutTime, cellFormat_con);
+                                                sheetA.addCell(contents3);
+                                                contents4 = new Label(4, i+10, State, cellFormat_con);
+                                                sheetA.addCell(contents4);
+                                            }
+
+                                            // close workbook
+                                            workbook.write();
+                                            workbook.close();
+                                            Toast_Nomal("Download파일에 Excel파일이 생성되었습니다.");
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                    });
+
+                }
+
+                @Override
+                @SuppressLint("LongLogTag")
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    dlog.e("에러2 = " + t.getMessage());
+                }
+            });
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void permissionCheck() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                getExcelGotoList(stub_place_id, stub_user_id, Year + "-" + Month);
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+
+            }
+        };
+
+        TedPermission.create()
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("[설정] > [권한]에서 파일 이용권한이 필요합니다")
+                .setPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+    }
+
     /*출퇴근 리스트 END*/
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
@@ -820,7 +1093,12 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         binding.payTv.setText(String.valueOf(myFormatter.format(Integer.parseInt(workpay))) + "원");
                                         binding.payDiffBar.setMax(Integer.parseInt(allwcnt));
                                         binding.payDiffBar.setProgress(Integer.parseInt(workpay));
-                                        binding.payDiffBar.setOnTouchListener((v, event) -> {if(event.getAction() == MotionEvent.ACTION_DOWN){return false;} return true;});
+                                        binding.payDiffBar.setOnTouchListener((v, event) -> {
+                                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                                return false;
+                                            }
+                                            return true;
+                                        });
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
                                     }
@@ -845,6 +1123,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     String getcontract_id = "";
     String getcontract_kind = "";
     String getprogress_pos = "";
+
     private void SetContractList() {
         dlog.i("-----SetContractList1-----");
         dlog.i("place_id : " + place_id);
@@ -866,19 +1145,22 @@ public class MemberDetailActivity extends AppCompatActivity {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        getcontract_id = Response.getJSONObject(0).getString("contract_yn");
-                        getcontract_kind = Response.getJSONObject(0).getString("kind");
-                        getprogress_pos = Response.getJSONObject(0).getString("progress_pos");
-                        shardpref.putString("worker_id", stub_user_id);
-                        shardpref.putString("worker_name", Navname);
-                        shardpref.putString("contract_place_id", place_id);
-                        shardpref.putString("contract_user_id", stub_user_id);
-                        dlog.i("-----SetContractList2-----");
-                        dlog.i("worker_id : " + stub_user_id);
-                        dlog.i("worker_name : " + Navname);
-                        dlog.i("contract_place_id : " + place_id);
-                        dlog.i("contract_user_id : " + stub_user_id);
-                        dlog.i("-----SetContractList2-----");
+                        if (Response.length() != 0) {
+                            getcontract_id = Response.getJSONObject(0).getString("contract_yn");
+                            getcontract_kind = Response.getJSONObject(0).getString("kind");
+                            getprogress_pos = Response.getJSONObject(0).getString("progress_pos");
+                            shardpref.putString("worker_id", stub_user_id);
+                            shardpref.putString("worker_name", Navname);
+                            shardpref.putString("contract_place_id", place_id);
+                            shardpref.putString("contract_user_id", stub_user_id);
+                            dlog.i("-----SetContractList2-----");
+                            dlog.i("worker_id : " + stub_user_id);
+                            dlog.i("worker_name : " + Navname);
+                            dlog.i("contract_place_id : " + place_id);
+                            dlog.i("contract_user_id : " + stub_user_id);
+                            dlog.i("-----SetContractList2-----");
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -910,16 +1192,16 @@ public class MemberDetailActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(drawerView);
         } else if (view.getId() == R.id.select_nav05) {
             shardpref.putString("Tap", "0");
-            if(USER_INFO_AUTH.equals("0")){
+            if (USER_INFO_AUTH.equals("0")) {
                 pm.PayManagement(mContext);
-            }else{
+            } else {
                 pm.PayManagement2(mContext);
             }
         } else if (view.getId() == R.id.select_nav06) {
             shardpref.putString("Tap", "1");
-            if(USER_INFO_AUTH.equals("0")){
+            if (USER_INFO_AUTH.equals("0")) {
                 pm.PayManagement(mContext);
-            }else{
+            } else {
                 pm.PayManagement2(mContext);
             }
         } else if (view.getId() == R.id.select_nav07) {//캘린더보기 | 할일페이지

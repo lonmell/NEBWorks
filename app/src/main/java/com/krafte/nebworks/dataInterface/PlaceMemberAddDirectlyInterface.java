@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface PlaceMemberAddDirectlyInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/place/";
+    String URL = "http://krafte.net/NEBWorks/place/";
 
     @FormUrlEncoded
     @POST("add_member_directly.php")

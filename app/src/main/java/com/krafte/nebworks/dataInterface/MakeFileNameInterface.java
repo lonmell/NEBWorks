@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface MakeFileNameInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/image/";
+    String URL = "http://krafte.net/NEBWorks/image/";
 
     @FormUrlEncoded
     @POST("get_img_id.php")

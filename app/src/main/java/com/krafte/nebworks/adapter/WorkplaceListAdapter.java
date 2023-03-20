@@ -255,6 +255,9 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
 
     public void PlaceWorkCheck(String place_id, String auth, String kind, ViewHolder holder) {
         dlog.i("PlaceWorkCheck place_id : " + place_id);
+        dlog.i("PlaceWorkCheck auth : " + auth);
+        dlog.i("PlaceWorkCheck USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("PlaceWorkCheck kind : " + kind);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MainContentsInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -273,7 +276,6 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     try {
                         if (!jsonResponse.equals("[]")) {
                             JSONArray Response = new JSONArray(jsonResponse);
-
                             try {
                                 dlog.i("-----MainData-----");
                                 int allPay = 0;

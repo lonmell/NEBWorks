@@ -199,7 +199,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/fragment_commute_bottom_sheet.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/gotowork_list_item.xml" value="0.2623931623931624" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/homefragment.xml" value="0.5" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/homefragment2.xml" value="0.22" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/homefragment2.xml" value="0.5" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/list_string_item.xml" value="0.24188034188034188" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/list_string_yoil_item.xml" value="0.24700854700854702" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/list_yoilstring_item.xml" value="0.24700854700854702" />
@@ -293,7 +293,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Embedded JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

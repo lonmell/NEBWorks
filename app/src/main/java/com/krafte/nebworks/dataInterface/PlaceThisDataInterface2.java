@@ -7,8 +7,8 @@ import retrofit2.http.POST;
 
 public interface PlaceThisDataInterface2
 {
-    String URL = "https://nepworks.net//v2/place/";
-    //https://nepworks.net/NEBWorks/place/get.php?place_id=50
+    String URL = "http://krafte.net//v2/place/";
+    //http://krafte.net/NEBWorks/place/get.php?place_id=50
     @FormUrlEncoded
     @POST("get/")
     Call<String> getData(

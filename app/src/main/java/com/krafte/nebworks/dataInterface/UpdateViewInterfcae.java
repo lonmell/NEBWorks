@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface UpdateViewInterfcae
 {
-    String URL = "https://nepworks.net/NEBWorks/feed/";
+    String URL = "http://krafte.net/NEBWorks/feed/";
 
     @FormUrlEncoded
     @POST("update_view_cnt.php")

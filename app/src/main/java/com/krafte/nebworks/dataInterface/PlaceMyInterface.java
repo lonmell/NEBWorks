@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface PlaceMyInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/place/";
+    String URL = "http://krafte.net/NEBWorks/place/";
 
     @FormUrlEncoded
     @POST("get.php")

@@ -157,7 +157,7 @@ public class AddContractPage09 extends AppCompatActivity {
 
     FeedTemplate feedTemplate = new FeedTemplate(
             new Content(kakaotitle,
-                    "https://nepworks.net/NEBWorks/identificon.png",
+                    "http://krafte.net/NEBWorks/identificon.png",
                     new Link("https://www.naver.com",
                             "https://www.naver.com"),
                     "#근로계약서"
@@ -165,7 +165,7 @@ public class AddContractPage09 extends AppCompatActivity {
             new ItemContent("",
                     "",
                     "사장님!넵",
-                    "https://nepworks.net/NEBWorks/identificon.png",
+                    "http://krafte.net/NEBWorks/identificon.png",
                     "협업 툴"
             ),
             new Social(1004, 1004, 1004),

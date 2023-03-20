@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface RegistrSearchInterface
 {
-    String URL = "https://nepworks.net/NEBWorks/";
+    String URL = "http://krafte.net/NEBWorks/";
 
     @FormUrlEncoded
     @POST("Registrnum_state.php")
