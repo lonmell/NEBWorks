@@ -96,6 +96,11 @@ public class ContractAllDataActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
             startActivity(intent);
         });
+        binding.inoutPrint2.setOnClickListener(v -> {
+            String Contract_uri = "http://krafte.net/NEBWorks/ContractPDF2.php?id="+contract_id;
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
+            startActivity(intent);
+        });
     }
 
     private void GetAllContract(){
