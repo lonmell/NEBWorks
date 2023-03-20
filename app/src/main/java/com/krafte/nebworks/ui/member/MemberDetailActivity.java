@@ -437,6 +437,8 @@ public class MemberDetailActivity extends AppCompatActivity {
                                     if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
                                         shardpref.putString("contract_id", contract_id);
                                         pm.ContractAll(mContext);
+                                    }else{
+                                        Toast_Nomal("권한이 없습니다.");
                                     }
                                 });
                             } else {
@@ -795,13 +797,11 @@ public class MemberDetailActivity extends AppCompatActivity {
     File file;
 
     @SuppressLint("SdCardPath")
-    String SD_PATH = "/storage/emulated/0/Download";
-    //    String SD_PATH = "/sdcard/Download/nepworks/";
+    String SD_PATH = "/storage/emulated/0/Download";//--엑셀 파일 다운로드경로
     String vaca_state = "";
     String State = "";
     String InTime = "";
     String OutTime = "";
-//    XSSFCell cell1, cell2, cell3, cell4;
 
     public void getExcelGotoList(String place_id, String user_id, String getYMdate) {
         dlog.i("-----SetGotoWorkDayList-----");
@@ -867,8 +867,9 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             WritableSheet sheetA = workbook.createSheet("출근기록부", 0);
 
                                             //--타이틀 부분 START
-                                            WritableFont title = new WritableFont(WritableFont.ARIAL, 16);
+                                            WritableFont title = new WritableFont(WritableFont.ARIAL, 17);
                                             WritableCellFormat cellFormat = new WritableCellFormat(title);
+                                            title.setBoldStyle(WritableFont.BOLD);
                                             cellFormat.setAlignment(Alignment.CENTRE);
                                             cellFormat.setLocked(true);
 
@@ -876,23 +877,28 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             font_1.setColour(Colour.GRAY_50);
                                             WritableCellFormat cellFormat_1 = new WritableCellFormat(font_1);
                                             cellFormat_1.setAlignment(Alignment.LEFT);
-                                            cellFormat_1.setAlignment(Alignment.CENTRE);
                                             cellFormat_1.setLocked(true);
 
-                                            WritableFont font_2 = new WritableFont(WritableFont.ARIAL, 13);
+                                            WritableFont font_2 = new WritableFont(WritableFont.ARIAL, 14);
                                             font_2.setColour(Colour.BLACK);
                                             WritableCellFormat cellFormat_2 = new WritableCellFormat(font_2);
                                             cellFormat_2.setAlignment(Alignment.LEFT);
                                             cellFormat_2.setAlignment(Alignment.CENTRE);
                                             cellFormat_2.setLocked(true);
 
-                                            WritableFont font2 = new WritableFont(WritableFont.ARIAL, 15);
-                                            font2.setColour(Colour.WHITE);
-                                            font2.setBoldStyle(WritableFont.BOLD);
+                                            WritableFont font2 = new WritableFont(WritableFont.ARIAL, 14);
+                                            font2.setColour(Colour.BLACK);
                                             WritableCellFormat cellFormat2 = new WritableCellFormat(font2);
                                             cellFormat2.setAlignment(Alignment.CENTRE);
-                                            cellFormat2.setBackground(Colour.PALE_BLUE);
+                                            cellFormat2.setBackground(Colour.GRAY_25);
                                             cellFormat2.setLocked(true);
+
+                                            WritableFont font2_1 = new WritableFont(WritableFont.ARIAL, 14);
+                                            font2_1.setColour(Colour.BLACK);
+                                            font2_1.setBoldStyle(WritableFont.BOLD);
+                                            WritableCellFormat cellFormat2_1 = new WritableCellFormat(font2_1);
+                                            cellFormat2_1.setAlignment(Alignment.CENTRE);
+                                            cellFormat2_1.setLocked(true);
 
                                             CellView cellView = new CellView();
                                             cellView.setSize(40); // 셀 높이를 500으로 변경
@@ -912,35 +918,35 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             sheetA.setColumnView(4, 15);
                                             sheetA.setColumnView(5, 15);
 
-                                            sheetA.mergeCells(1, 2, 4, 2);
-                                            Label label = new Label(1, 2, "출근기록부", cellFormat);
+                                            sheetA.mergeCells(1, 3, 4, 3);//--타이틀 합체
+                                            Label label = new Label(1, 3, "출근기록부", cellFormat);
                                             sheetA.addCell(label);
 
-                                            Label label_1 = new Label(1, 3, change_place_name, cellFormat_1);
+                                            Label label_1 = new Label(1, 4, change_place_name, cellFormat_1);
                                             sheetA.addCell(label_1);
 
-                                            Label label2 = new Label(1, 5, "출근 연월", cellFormat2);
+                                            Label label2 = new Label(1, 6, "출근 연월", cellFormat2);
                                             sheetA.addCell(label2);
-                                            Label label3 = new Label(2, 5, getYMdate, cellFormat);
+                                            Label label3 = new Label(2, 6, getYMdate, cellFormat2_1);
                                             sheetA.addCell(label3);
 
-                                            Label label4 = new Label(3, 5, "이     름", cellFormat2);
+                                            Label label4 = new Label(3, 6, "이     름", cellFormat2);
                                             sheetA.addCell(label4);
-                                            Label label5 = new Label(4, 5, USER_INFO_NAME, cellFormat);
+                                            Label label5 = new Label(4, 6, USER_INFO_NAME, cellFormat2_1);
                                             sheetA.addCell(label5);
 
-                                            Label label6 = new Label(1, 7, "■ 세부내용", cellFormat_2);
+                                            Label label6 = new Label(1, 8, "■ 세부내용", cellFormat_2);
                                             sheetA.addCell(label6);
 
                                             //--타이틀 부분 END
 
-                                            Label menu1 = new Label(1, 9, "일", cellFormat2);
+                                            Label menu1 = new Label(1, 10, "일", cellFormat2);
                                             sheetA.addCell(menu1);
-                                            Label menu2 = new Label(2, 9, "출 근", cellFormat2);
+                                            Label menu2 = new Label(2, 10, "출 근", cellFormat2);
                                             sheetA.addCell(menu2);
-                                            Label menu3 = new Label(3, 9, "퇴 근", cellFormat2);
+                                            Label menu3 = new Label(3, 10, "퇴 근", cellFormat2);
                                             sheetA.addCell(menu3);
-                                            Label menu4 = new Label(4, 9, "비 고", cellFormat2);
+                                            Label menu4 = new Label(4, 10, "비 고", cellFormat2);
                                             sheetA.addCell(menu4);
 
                                             Label contents1,contents2,contents3,contents4;
@@ -953,6 +959,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 WritableCellFormat cellFormat_con = new WritableCellFormat(contents);
                                                 cellFormat_con.setAlignment(Alignment.CENTRE);
                                                 cellFormat_con.setLocked(true);
+
 
                                                 String toItemday = jsonObject.getString("day");
                                                 //휴가표시
@@ -973,23 +980,52 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 if (vaca_state.equals("")) {
                                                     State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
                                                 } else {
-                                                    State = vaca_state + " " + (jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state"));
+                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
                                                 }
-                                                sheetA.setColumnView(i+10, cellView); // 첫번째 열의 셀 높이 변경
-                                                contents1 = new Label(1, i+10, toItemday, cellFormat_con);
+                                                dlog.i("vaca_state : " + vaca_state);
+                                                sheetA.setColumnView(i+11, cellView); // 첫번째 열의 셀 높이 변경
+                                                contents1 = new Label(1, i+11, toItemday, cellFormat_con);
                                                 sheetA.addCell(contents1);
-                                                contents2 = new Label(2, i+10, InTime, cellFormat_con);
+                                                contents2 = new Label(2, i+11, InTime, cellFormat_con);
                                                 sheetA.addCell(contents2);
-                                                contents3 = new Label(3, i+10, OutTime, cellFormat_con);
+                                                contents3 = new Label(3, i+11, OutTime, cellFormat_con);
                                                 sheetA.addCell(contents3);
-                                                contents4 = new Label(4, i+10, State, cellFormat_con);
+                                                contents4 = new Label(4, i+11, State, cellFormat_con);
                                                 sheetA.addCell(contents4);
                                             }
 
                                             // close workbook
                                             workbook.write();
+//
+//                                            //--pdf 만들기 START
+//                                            // 엑셀 파일 읽기
+//                                            Workbook workbook2 = Workbook.getWorkbook(new File(SD_PATH + "/"  + change_place_name + " " + getYMdate + "월 출결표.xls"));
+//                                            Sheet sheet = workbook2.getSheet(0);
+//                                            // PDF 파일 생성
+//                                            Document document = new Document();
+//                                            PdfWriter.getInstance(document, new FileOutputStream(SD_PATH + "/" + change_place_name + " " + getYMdate + "월 출결표.pdf"));
+//                                            document.open();
+//
+//                                            // 테이블 생성
+//                                            PdfPTable table = new PdfPTable(sheet.getColumns());
+//                                            for (int row = 0; row < sheet.getRows(); row++) {
+//                                                for (int col = 0; col < sheet.getColumns(); col++) {
+//                                                    Cell cell = sheet.getCell(col, row);
+//                                                    table.addCell(cell.getContents());
+//                                                }
+//                                            }
+//
+//                                            // 테이블을 문서에 추가
+//                                            document.add(table);
+//
+//                                            // 문서 닫기
+//                                            document.close();
+//                                            //--pdf 만들기 END
+
                                             workbook.close();
-                                            Toast_Nomal("Download파일에 Excel파일이 생성되었습니다.");
+
+                                            Toast_Nomal("다운로드 폴더에 Excel파일이 생성되었습니다.");
+
 
                                         } catch (Exception e) {
                                             e.printStackTrace();
