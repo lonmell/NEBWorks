@@ -63,6 +63,8 @@
                     android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="임시저장"
+                    android:visibility="invisible"
+                    android:clickable="false"
                     android:textColor="@color/new_blue"
                     android:textSize="15sp"
                     tools:ignore="HardcodedText" />

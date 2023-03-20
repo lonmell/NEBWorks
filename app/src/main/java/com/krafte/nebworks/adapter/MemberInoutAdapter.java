@@ -82,7 +82,7 @@ public class MemberInoutAdapter extends RecyclerView.Adapter<MemberInoutAdapter.
                     holder.time.setText(vaca_state + "\n" + item.getWorkdiff());
                 }
             } else {
-                if (item.getState().equals("휴무")) {
+                if (item.getState().equals("휴무") || item.getState().equals("공휴일")) {
                     holder.time.setTextColor(Color.parseColor("#6395EC"));
                     holder.time.setText(item.getState());
                 } else if (item.getState().equals("결근")) {
