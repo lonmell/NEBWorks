@@ -56,6 +56,10 @@ public class AddContractPage07 extends AppCompatActivity {
     PreferenceHelper shardpref;
     String place_id = "";
     String worker_id = "";
+    String worker_name = "";
+    String worker_phone = "";
+    String worker_email = "";
+
     String USER_INFO_ID = "";
 
     //Other
@@ -95,6 +99,10 @@ public class AddContractPage07 extends AppCompatActivity {
         //shardpref Area
         shardpref           = new PreferenceHelper(mContext);
         worker_id           = shardpref.getString("worker_id","0");
+        worker_name         = shardpref.getString("worker_name","0");
+        worker_phone        = shardpref.getString("worker_phone","0");
+        worker_email        = shardpref.getString("worker_email","0");
+
         contract_id         = shardpref.getString("contract_id","0");
         contract_place_id   = shardpref.getString("contract_place_id","0");
         contract_user_id    = shardpref.getString("contract_user_id","0");
@@ -206,9 +214,9 @@ public class AddContractPage07 extends AppCompatActivity {
             String name     = UserCheckData.getInstance().getUser_name();
             String phone    = UserCheckData.getInstance().getUser_phone();
             String account  = UserCheckData.getInstance().getUser_account();
-            binding.input01.setText(name);
-            binding.input05.setText(phone);
-            binding.input06.setText(account);
+            binding.input01.setText(worker_name);
+            binding.input05.setText(worker_phone);
+            binding.input06.setText(worker_email);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -346,6 +354,5 @@ public class AddContractPage07 extends AppCompatActivity {
             }
         });
     }
-
 
 }

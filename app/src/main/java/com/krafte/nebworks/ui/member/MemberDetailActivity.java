@@ -58,6 +58,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -437,8 +440,6 @@ public class MemberDetailActivity extends AppCompatActivity {
                                     if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
                                         shardpref.putString("contract_id", contract_id);
                                         pm.ContractAll(mContext);
-                                    }else{
-                                        Toast_Nomal("권한이 없습니다.");
                                     }
                                 });
                             } else {
@@ -453,6 +454,8 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             } else {
                                                 Toast.makeText(mContext, "작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
                                             }
+                                        }else{
+                                            Toast_Nomal("권한이 없습니다.");
                                         }
                                     });
                                 } else {
@@ -803,6 +806,19 @@ public class MemberDetailActivity extends AppCompatActivity {
     String InTime = "";
     String OutTime = "";
 
+    private String getYoil(int year, int month, int day){
+        // 1. LocalDate 생성
+        LocalDate date = LocalDate.of(year, month, day);
+        System.out.println(date); // 2021-12-25
+
+        // 2. DayOfWeek 객체 구하기
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+
+        // 4. 텍스트 요일 구하기 (한글)
+        return dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+    }
+
     public void getExcelGotoList(String place_id, String user_id, String getYMdate) {
         dlog.i("-----SetGotoWorkDayList-----");
         dlog.i("place_id : " + place_id);
@@ -961,7 +977,8 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 cellFormat_con.setLocked(true);
 
 
-                                                String toItemday = jsonObject.getString("day");
+//                                                String toItemday = jsonObject.getString("day");
+                                                String toItemday = jsonObject.getString("day") + "(" + getYoil(Integer.parseInt(Year),Integer.parseInt(Month),Integer.parseInt(jsonObject.getString("day"))) + ")";
                                                 //휴가표시
                                                 vaca_state = jsonObject.getString("vaca_accept").equals("휴가") ? "휴가" : "";
 
@@ -977,11 +994,22 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                     OutTime = "";
                                                 }
 
-                                                if (vaca_state.equals("")) {
-                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
-                                                } else {
-                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
+//                                                if (vaca_state.equals("")) {
+//                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
+//                                                } else {
+//                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
+//                                                }
+                                                if(jsonObject.getString("sieob1").equals("null")){
+                                                    State = (jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state"));
+                                                }else{
+                                                    if(jsonObject.getString("state").equals("null") || jsonObject.getString("state").isEmpty()){
+                                                        State = jsonObject.getString("sieob1");
+                                                    }else{
+                                                        State = jsonObject.getString("state") + jsonObject.getString("sieob1");
+                                                    }
                                                 }
+
+
                                                 dlog.i("vaca_state : " + vaca_state);
                                                 sheetA.setColumnView(i+11, cellView); // 첫번째 열의 셀 높이 변경
                                                 contents1 = new Label(1, i+11, toItemday, cellFormat_con);
@@ -990,7 +1018,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 sheetA.addCell(contents2);
                                                 contents3 = new Label(3, i+11, OutTime, cellFormat_con);
                                                 sheetA.addCell(contents3);
-                                                contents4 = new Label(4, i+11, State, cellFormat_con);
+                                                contents4 = new Label(4, i+11, State.replace("퇴근","").replace("출근",""), cellFormat_con);
                                                 sheetA.addCell(contents4);
                                             }
 

@@ -116,6 +116,8 @@ public class ContractListAdapter extends RecyclerView.Adapter<ContractListAdapte
             holder.item_total.setOnClickListener(v -> {
                 shardpref.putString("worker_id",item.getUser_id());
                 shardpref.putString("worker_name",item.getName());
+                shardpref.putString("worker_phone",item.getPhone());
+                shardpref.putString("worker_email",item.getAccount());
                 shardpref.putString("contract_place_id",item.getPlace_id());
                 shardpref.putString("contract_user_id",item.getUser_id());
                 if(item.getContract_yn().equals("0")){

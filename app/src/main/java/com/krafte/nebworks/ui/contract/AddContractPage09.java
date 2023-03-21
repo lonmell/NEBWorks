@@ -138,6 +138,15 @@ public class AddContractPage09 extends AppCompatActivity {
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("worker_id");
+        shardpref.remove("worker_name");
+        shardpref.remove("worker_phone");
+        shardpref.remove("worker_email");
+    }
+
+    @Override
     public void onBackPressed(){
 
         if(!shardpref.getString("progress_pos","").isEmpty()){

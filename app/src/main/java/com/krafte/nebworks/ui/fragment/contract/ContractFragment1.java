@@ -221,7 +221,9 @@ public class ContractFragment1 extends Fragment {
                                                 jsonObject.getString("owner_sign_id"),
                                                 jsonObject.getString("worker_sign_id"),
                                                 jsonObject.getString("progress_pos"),
-                                                jsonObject.getString("contract_id")
+                                                jsonObject.getString("contract_id"),
+                                                jsonObject.getString("phone"),
+                                                jsonObject.getString("account")
                                         ));
                                     }else if(USER_INFO_AUTH.equals("1")){
                                         if(jsonObject.getString("user_id").equals(USER_INFO_ID)){
@@ -238,7 +240,9 @@ public class ContractFragment1 extends Fragment {
                                                     jsonObject.getString("owner_sign_id"),
                                                     jsonObject.getString("worker_sign_id"),
                                                     jsonObject.getString("progress_pos"),
-                                                    jsonObject.getString("contract_id")
+                                                    jsonObject.getString("contract_id"),
+                                                    jsonObject.getString("phone"),
+                                                    jsonObject.getString("account")
                                             ));
                                         }
                                     }
