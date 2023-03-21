@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractWorkerInterface;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd07Binding;
@@ -106,8 +105,8 @@ public class AddContractPage07 extends AppCompatActivity {
         contract_id         = shardpref.getString("contract_id","0");
         contract_place_id   = shardpref.getString("contract_place_id","0");
         contract_user_id    = shardpref.getString("contract_user_id","0");
-        place_id        = shardpref.getString("place_id","0");
-        USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
+        place_id            = shardpref.getString("place_id","0");
+        USER_INFO_ID        = shardpref.getString("USER_INFO_ID","0");
 
         setBtnEvent();
     }
@@ -211,9 +210,6 @@ public class AddContractPage07 extends AppCompatActivity {
 
     public void UserCheck() {
         try{
-            String name     = UserCheckData.getInstance().getUser_name();
-            String phone    = UserCheckData.getInstance().getUser_phone();
-            String account  = UserCheckData.getInstance().getUser_account();
             binding.input01.setText(worker_name);
             binding.input05.setText(worker_phone);
             binding.input06.setText(worker_email);

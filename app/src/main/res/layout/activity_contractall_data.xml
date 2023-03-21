@@ -1566,7 +1566,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginVertical="20dp"
-                app:cardBackgroundColor="@color/new_blue"
+                app:cardBackgroundColor="@color/blue"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="0dp">
 
