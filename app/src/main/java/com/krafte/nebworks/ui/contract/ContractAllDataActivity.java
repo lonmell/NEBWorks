@@ -2,12 +2,9 @@ package com.krafte.nebworks.ui.contract;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Gravity;
@@ -41,31 +38,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Locale;
 
 import jxl.CellView;
-import jxl.Image;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
 import jxl.format.Colour;
 import jxl.write.Label;
-import jxl.write.WritableCell;
-import jxl.write.WritableCellFeatures;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WritableImage;
@@ -331,6 +319,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
 
             File sd = Environment.getExternalStorageDirectory();
             String csvFile = place_name + "_" + worker_name + "_근로계약서.xls";
+
 
             File directory = new File(sd.getAbsolutePath());
 

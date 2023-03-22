@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -862,14 +861,25 @@ public class MemberDetailActivity extends AppCompatActivity {
                                                 file_path.mkdirs();
                                             }
 
-                                            File sd = Environment.getExternalStorageDirectory();
+//                                            File sd = Environment.getExternalStorageDirectory();
                                             String csvFile = change_place_name + " " + getYMdate + "월 출결표.xls";
 
-                                            File directory = new File(sd.getAbsolutePath());
+//                                            File directory = new File(sd.getAbsolutePath());
+//
+//                                            //create directory if not exist
+//                                            if (!directory.isDirectory()) {
+//                                                directory.mkdirs();
+//                                            }
+                                            File file_list = new File(SD_PATH);
 
-                                            //create directory if not exist
-                                            if (!directory.isDirectory()) {
-                                                directory.mkdirs();
+                                            // 파일 경로에 있는 모든 파일 목록 가져오기
+                                            File[] fileList = file_list.listFiles();
+
+                                            // 동일한 이름을 가진 파일 삭제
+                                            for (File f : fileList) {
+                                                if (f.getName().equals(csvFile)) {
+                                                    f.delete();
+                                                }
                                             }
 
                                             //file path
