@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+
+import jxl.Cell;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Gravity;
@@ -57,6 +59,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import jxl.CellReferenceHelper;
 import jxl.CellView;
 import jxl.Image;
 import jxl.Workbook;
@@ -71,6 +74,8 @@ import jxl.write.WritableFont;
 import jxl.write.WritableImage;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -523,6 +528,8 @@ public class ContractAllDataActivity extends AppCompatActivity {
             Label label_26_1 = new Label(3, 35, "(서명)", cellFormat_1);
             sheetA.addCell(label_26_1);
 
+            sheetA.mergeCells(1, 36, 4, 36);
+            sheetA.setRowView(36, 1000);
             new Thread(() -> {
                 try {
                     URL url = new URL(owner_sign);
@@ -531,8 +538,12 @@ public class ContractAllDataActivity extends AppCompatActivity {
                     connection.connect();
                     InputStream input = connection.getInputStream();
                     Bitmap bitmap = BitmapFactory.decodeStream(input);
-                    WritableImage image = new WritableImage(3, 36, 3, 3, BitmapConvertFile(bitmap, SD_PATH, "owner_sign"));
+                    File imageFile = BitmapConvertFile(bitmap, SD_PATH, "owner_sign");
+                    WritableImage image = new WritableImage(1, 36, 2, 1, imageFile);
                     sheetA.addImage(image);
+                    if (imageFile.exists()) {
+                        imageFile.delete();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -554,6 +565,8 @@ public class ContractAllDataActivity extends AppCompatActivity {
             Label label_29_1 = new Label(3, 39, "(서명)", cellFormat_1);
             sheetA.addCell(label_29_1);
 
+            sheetA.mergeCells(1, 40, 4, 40);
+            sheetA.setRowView(40, 1000);
             new Thread(() -> {
                 try {
                     URL url2 = new URL(worker_sign);
@@ -562,9 +575,12 @@ public class ContractAllDataActivity extends AppCompatActivity {
                     connection2.connect();
                     InputStream input2 = connection2.getInputStream();
                     Bitmap bitmap2 = BitmapFactory.decodeStream(input2);
-
-                    WritableImage image2 = new WritableImage(3, 40, 3, 3, BitmapConvertFile(bitmap2, SD_PATH, "worker_sign"));
+                    File imageFile2 = BitmapConvertFile(bitmap2, SD_PATH, "worker_sign");
+                    WritableImage image2 = new WritableImage(1, 40, 2, 1, imageFile2);
                     sheetA.addImage(image2);
+                    if (imageFile2.exists()) {
+                        imageFile2.delete();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -611,7 +627,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
     }
 
     private File BitmapConvertFile(Bitmap bitmap, String strFilePath, String name) {
-        File file = new File(strFilePath, name);
+        File file = new File(strFilePath, name + ".png");
 
         OutputStream out = null;
         try {
