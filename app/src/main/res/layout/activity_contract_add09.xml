@@ -295,6 +295,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+
         <TextView
             android:id="@+id/contract_owner1"
             android:text="(사업주) 사업체 명: ~~~~~~ (전화:01000000000)"
@@ -410,7 +411,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:orientation="vertical">
 
         <RelativeLayout
