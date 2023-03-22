@@ -3,8 +3,12 @@ package com.krafte.nebworks.ui.contract;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,7 +23,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.common.util.KakaoCustomTabsClient;
 import com.kakao.sdk.link.LinkClient;
@@ -45,6 +55,7 @@ import com.krafte.nebworks.util.RetrofitConnect;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -140,6 +151,10 @@ public class AddContractPage09 extends AppCompatActivity {
             onPageOver();
         });
 
+        binding.pdfDownload.setOnClickListener(v-> {
+            requestCapture();
+        });
+
 //        binding.backBtn.setOnClickListener(v -> {
 //            shardpref.remove("progress_pos");
 //            if(!shardpref.getString("progress_pos","").isEmpty()){
@@ -167,7 +182,7 @@ public class AddContractPage09 extends AppCompatActivity {
 //                //이메일 타이틀이 있을때
 //            }
 //        }
-        createExcel();
+//        createExcel();
         RemoveShared();
         pm.ContractFragment(mContext);
     }
@@ -462,6 +477,8 @@ public class AddContractPage09 extends AppCompatActivity {
                                     created_at = Response.getJSONObject(0).getString("created_at");
                                     updated_at = Response.getJSONObject(0).getString("updated_at");
                                     test_period = Response.getJSONObject(0).getString("test_period");
+
+                                    getContractImage();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -479,7 +496,101 @@ public class AddContractPage09 extends AppCompatActivity {
         });
     }
 
+    public void getContractImage() {
+        binding.subTitle.setText(place_name + "(이하 \"사업주\"라함) 과(와) " + worker_name + "(이하 \"근로자\"라 함) 은(는) 다음과 같이 근로계약을 체결한다.");
+        binding.contract1.setText("1. 근로계약 기간: " + contract_start + "부터 " + contract_end + "까지");
+        binding.contract2.setText("2. 근무 장소: " + address + address_detail);
+        binding.contract3.setText("3. 업무의 내용; " + work_contents);
+        binding.contract4.setText("4. 소정근로기간: " + work_start + "부터 " + work_end + "까지 " + "(휴게시간: " + rest_start + "~" + rest_end + ")");
+
+        String[] workYoil = work_yoil.split(",");
+        binding.contract5.setText("5. 근무일/휴일: 매주 " + workYoil.length + "일(또는 매일단위) 근무, 주휴일 매주 " + rest_yoil + "요일");
+        binding.contract61.setText("- 월(일, 시간)급: " + payment + "원");
+        binding.contract66.setText("- 임금지급일: 매월 (매주 또는 매일) " + pay_loop + "일 (휴일의 경우 전일 지급)");
+        if (pay_type.equals("0")) {
+            binding.contract67.setText("- 지급방법: 근로자에게 직접 지급(○), 근로자 명의 예금통장에 입금(  )");
+        } else {
+            binding.contract67.setText("- 지급방법: 근로자에게 직접 지급(  ), 근로자 명의 예금통장에 입금(○)");
+        }
+
+        if (insurance.contains("4대보험")) {
+            binding.contract81.setText("■ 고용보험 ■ 산재보험 ■ 국민연금 ■ 건강보험");
+        } else {
+            binding.contract81.setText("□ 고용보험 □ 산재보험 □ 국민연금 □ 건강보험");
+        }
+
+        binding.contractDate.setText(created_at);
+        binding.contractOwner1.setText("(사업주) 사업체 명: " + place_name + " (전화: " + owner_phone + ")");
+        binding.contractOwner2.setText("주소: " + address + " " + address_detail);
+        binding.contractOwner3.setText("대표자: " + owner_name);
+
+        binding.contractWorker1.setText("(근로자) 주소: " + worker_address + " " + worker_address_detail);
+        binding.contractWorker2.setText("연락처: " + worker_phone);
+        binding.contractWorker3.setText("성명: " + worker_name);
+
+        Glide.with(mContext).load(owner_sign)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.contractOwnerSignImg);
+        Glide.with(mContext).load(worker_sign)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.contractWorkerSignImg);
+    }
+
     String SD_PATH = "/storage/emulated/0/Download";//--엑셀 파일 다운로드경로
+
+    public void requestCapture() {
+        View view = binding.contractImageLayout;
+        Bitmap bm = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bm);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null) {
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(Color.WHITE);
+        }
+        view.draw(canvas);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        File f = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.jpg");
+        try {
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+
+            Document document = new Document();
+
+            PdfWriter.getInstance(document, new FileOutputStream(SD_PATH + "/" + place_name + "_" + worker_name + "_근로계약서.pdf"));
+            document.open();
+
+            Image image = Image.getInstance(f.toString());
+            float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                    - document.rightMargin() - 0) / image.getWidth()) * 100;
+            image.scalePercent(scaler);
+            image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+            document.add(image);
+            document.close();
+            Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
+
+            f.delete();
+
+//            File file = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.pdf");
+//            Uri uri = FileProvider.getUriForFile(this, "com.krafte.nebworks.provider", file);
+//            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+//            intent.setType("application/pdf");
+//            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            intent.putExtra(Intent.EXTRA_STREAM, uri);
+//            Intent chooser = Intent.createChooser(intent, "share");
+//            mContext.startActivity(chooser);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     public void createExcel() {
         File file_path;
