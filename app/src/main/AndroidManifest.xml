@@ -1,51 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- 인터넷 권한 설정 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 인터넷 연결 확인 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- 카메라 권한설정 -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!-- 단말기 정보 가져오기 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 연결 확인 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 카메라 권한설정 -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 단말기 정보 가져오기 -->
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 전화와 메시지를 보내기 위한 퍼미션 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 전화와 메시지를 보내기 위한 퍼미션 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.DIAL_PHONE" />
-    <!-- 내부에 저장된 파일 읽는 권한 -->
+    <uses-permission android:name="android.permission.DIAL_PHONE" /> <!-- 내부에 저장된 파일 읽는 권한 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" /> -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" /> -->
     <!-- //모든 파일 액세스 권한은 앱의 핵심기능이 아니면 앱 정책에 위반됨 -->
     <!-- 전체화면캡쳐 -->
-    <uses-permission android:name="android.intent.action.MEDIA_MOUNTED" />
-    <!-- 포그라운드 알림 권한 요청 -->
+    <uses-permission android:name="android.intent.action.MEDIA_MOUNTED" /> <!-- 포그라운드 알림 권한 요청 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <!--전화와 메시지를 보내기 위한 퍼미션-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 전화와 메시지를 보내기 위한 퍼미션 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.DIAL_PHONE" />
-
-    <!--와이파이 퍼미션-->
+    <uses-permission android:name="android.permission.DIAL_PHONE" /> <!-- 와이파이 퍼미션 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION " />
 
-<!--    android:fullBackupContent="@xml/backup_rules"-->
     <application
         android:name=".app.KakaoApplication"
         android:allowBackup="false"
-        android:fullBackupContent="false"
-        tools:replace="android:allowBackup"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:directBootAware="true"
+        android:fullBackupContent="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_main"
         android:label="@string/app_name"
@@ -58,7 +43,15 @@
         android:theme="@style/Theme.Kogas"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute"
+        tools:replace="android:allowBackup"
         tools:targetApi="31">
+        <activity
+            android:name=".ContractImageActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -68,7 +61,6 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_native_key" /> <!-- FCM START -->
         <!-- - 안드로이드 8.0 이상 푸시 처리 추가 코드 -->
-
         <service
             android:name=".FirebaseMessagingService"
             android:enabled="true"
@@ -77,15 +69,12 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service> <!-- FCM END -->
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/identificon" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/black" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
@@ -104,9 +93,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="NOTIFICATION_CLICK" />
-                <category android:name="android.intent.category.DEFAULT"/>
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -125,61 +117,46 @@
                     android:scheme="@string/kakao_2_native_key" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.PushActivity" />
-
-        <!--approval-->
+        <activity android:name=".ui.PushActivity" /> <!-- approval -->
         <activity android:name=".ui.approval.TaskApprovalFragment" />
-        <activity android:name=".ui.approval.TaskApprovalDetail" />
-
-        <!-- feed -->
+        <activity android:name=".ui.approval.TaskApprovalDetail" /> <!-- feed -->
         <activity android:name=".ui.feed.FeedAddActivity" />
         <activity android:name=".ui.feed.FeedDetailActivity" />
-        <activity android:name=".ui.feed.FeedEditActivity" />
-
-
-        <!-- login -->
-        <activity android:name=".ui.login.LoginActivity" />
-
-        <!-- main -->
+        <activity android:name=".ui.feed.FeedEditActivity" /> <!-- login -->
+        <activity android:name=".ui.login.LoginActivity" /> <!-- main -->
         <activity android:name=".ui.main.MainFragment" />
         <activity android:name=".ui.main.MainFragment2" />
-        <activity android:name=".ui.main.EmployeeProcess" />
-
-        <!--notify-->
+        <activity android:name=".ui.main.EmployeeProcess" /> <!-- notify -->
         <activity android:name=".ui.notify.NotifyListActivity" />
-        <activity android:name=".ui.feed.FeedListActivity" />
-
-        <!-- member -->
+        <activity android:name=".ui.feed.FeedListActivity" /> <!-- member -->
         <activity android:name=".ui.member.MemberManagement" />
         <activity android:name=".ui.member.AuthSelectActivity" />
         <activity android:name=".ui.member.AdddirectlyMember" />
-        <activity android:name=".ui.member.AddMemberDetail" />
-<!--        <activity android:name=".ui.member.InviteMemberActivity" />-->
-        <activity android:name=".ui.member.InviteMemberActivity"
+        <activity android:name=".ui.member.AddMemberDetail" /> <!-- <activity android:name=".ui.member.InviteMemberActivity" /> -->
+        <activity
+            android:name=".ui.member.InviteMemberActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <!-- "kakao{YOUR_NATIVE_APP_KEY}://kakaolink" 형식의 앱 실행 스킴을 설정하는데 사용 -->
-                <data android:host="kakaolink"
+                <data
+                    android:host="kakaolink"
                     android:scheme="@string/kakao_2_native_key" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.member.MemberDetailActivity" />
-
-        <!--paymanagement-->
+        <activity android:name=".ui.member.MemberDetailActivity" /> <!-- paymanagement -->
         <activity android:name=".ui.paymanagement.PayManagementActivity" />
         <activity android:name=".ui.paymanagement.PayManagementActivity2" />
         <activity android:name=".ui.paymanagement.AddPaystubActivity" />
-        <activity android:name=".ui.paymanagement.PaystuballActivity" />
-
-        <!-- state -->
-
+        <activity android:name=".ui.paymanagement.PaystuballActivity" /> <!-- state -->
         <!-- worksite -->
-        <activity android:name=".ui.worksite.PlaceListActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".ui.worksite.PlaceListActivity"
+            android:launchMode="singleTop" />
         <activity android:name=".ui.worksite.PlaceAddActivity" />
         <activity android:name=".ui.worksite.PlaceAddActivity2" />
         <activity android:name=".ui.worksite.TaskAddWorkActivity" />
@@ -193,12 +170,8 @@
         <activity android:name=".ui.worksite.TaskDetailActivity" />
         <activity android:name=".ui.worksite.TaskReportActivity" />
         <activity android:name=".ui.worksite.TaskReportDetailActivity" />
-        <activity android:name=".ui.worksite.TaskListActivity" />
-
-        <!-- Other -->
-        <activity android:name=".ui.PinSelectLocationActivity" />
-
-        <!-- user -->
+        <activity android:name=".ui.worksite.TaskListActivity" /> <!-- Other -->
+        <activity android:name=".ui.PinSelectLocationActivity" /> <!-- user -->
         <activity android:name=".ui.user.ProfileEditActivity" />
         <activity android:name=".ui.user.DeleteUserActivity" />
         <activity android:name=".ui.user.SearchAccountActivity" />
@@ -208,72 +181,61 @@
         <activity android:name=".ui.user.ChangePWActivity" />
         <activity android:name=".ui.user.ChangePWActivity2" />
         <activity android:name=".ui.user.MyListActivity" />
-
-        <activity android:name=".ui.user.FobiddenListActivity" />
-
-        <!-- career -->
+        <activity android:name=".ui.user.FobiddenListActivity" /> <!-- career -->
         <activity
             android:name=".ui.career.CareerActivity"
-            android:theme="@style/Theme.Kogas" />
-
-        <!-- community -->
+            android:theme="@style/Theme.Kogas" /> <!-- community -->
         <activity android:name=".ui.community.CommunityAddActivity" />
         <activity android:name=".ui.community.MoreListCommunityActivity" />
         <activity android:name=".ui.community.OwnerFeedDetailActivity" />
-        <activity android:name=".ui.community.CommunityDetailActivity" />
-
-        <!--contract-->
-        <activity android:name=".ui.contract.ContractFragmentActivity"/>
-        <activity android:name=".ui.contract.ContractAllDataActivity"/>
-
-        <!--관리자-->
-        <activity android:name=".ui.contract.AddContractPage01"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".ui.contract.AddContractPage02"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".ui.contract.AddContractPage03"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".ui.contract.AddContractPage04"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".ui.contract.AddContractPage05"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".ui.contract.AddContractPage06"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".ui.contract.AddContractPage07"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".ui.contract.AddContractPage08"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".ui.contract.AddContractPage09"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!--근로자-->
-        <activity android:name=".ui.contract.ContractWorkerAccept"/>
-        <activity android:name=".ui.contract.ContractWorkerSignActivity"/>
-
-        <!-- workstatus-->
+        <activity android:name=".ui.community.CommunityDetailActivity" /> <!-- contract -->
+        <activity android:name=".ui.contract.ContractFragmentActivity" />
+        <activity android:name=".ui.contract.ContractAllDataActivity" /> <!-- 관리자 -->
+        <activity
+            android:name=".ui.contract.AddContractPage01"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.contract.AddContractPage02"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.contract.AddContractPage03"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.contract.AddContractPage04"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.contract.AddContractPage05"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.contract.AddContractPage06"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.contract.AddContractPage07"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.contract.AddContractPage08"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.contract.AddContractPage09"
+            android:windowSoftInputMode="adjustPan" /> <!-- 근로자 -->
+        <activity android:name=".ui.contract.ContractWorkerAccept" />
+        <activity android:name=".ui.contract.ContractWorkerSignActivity" /> <!-- workstatus -->
         <activity android:name=".ui.workstatus.AddWorkPartActivity" />
-        <activity android:name=".ui.workstatus.AddDatePartActivity" />
-
-        <!-- 팝업 영역 -->
+        <activity android:name=".ui.workstatus.AddDatePartActivity" /> <!-- 팝업 영역 -->
         <activity
             android:name=".pop.TwoButtonPopActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".pop.OneButtonPopActivity"
             android:theme="@android:style/Theme.Dialog" />
-
         <activity
             android:name=".bottomsheet.WorkTimePicker"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".pop.Tap1OptionActivity"
-            android:theme="@android:style/Theme.Dialog" />
-
-<!--        <activity-->
-<!--            android:name=".pop.InoutPopActivity"-->
-<!--            android:theme="@android:style/Theme.Dialog" />-->
-
+            android:theme="@android:style/Theme.Dialog" /> <!-- <activity -->
+        <!-- android:name=".pop.InoutPopActivity" -->
+        <!-- android:theme="@android:style/Theme.Dialog" /> -->
         <activity
             android:name=".pop.CommunityOptionActivity"
             android:theme="@android:style/Theme.Dialog"
@@ -281,75 +243,61 @@
         <activity
             android:name=".pop.Tap2OptionActivity"
             android:theme="@android:style/Theme.Dialog" />
-
         <activity
             android:name=".pop.Tap3OptionActivity"
             android:theme="@android:style/Theme.Dialog" />
-
-        <activity
-            android:name=".pop.PhotoPopActivity"/>
-
+        <activity android:name=".pop.PhotoPopActivity" />
         <activity
             android:name=".pop.PlaceBottomNaviActivity"
             android:theme="@android:style/Theme.Dialog" />
-
         <activity
             android:name=".pop.TaskListPopActivity"
             android:theme="@android:style/Theme.Dialog" />
-
         <activity
             android:name=".pop.OneButtonTItlePopActivity"
             android:theme="@android:style/Theme.Dialog" />
-
         <activity
             android:name=".pop.JoinPopActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".pop.AlertPopActivity"
             android:theme="@android:style/Theme.Dialog" />
-        <activity
-            android:name=".pop.TermViewActivity"/>
-
+        <activity android:name=".pop.TermViewActivity" />
         <activity
             android:name=".bottomsheet.MemberOption"
             android:theme="@android:style/Theme.Dialog" />
-
         <activity
             android:name=".pop.WorkMemberOptionActivity"
             android:theme="@android:style/Theme.Dialog" />
-
-        <activity
-            android:name=".pop.SelectMemberPop" />
-
-        <activity
-            android:name=".pop.RepeatSetPop" />
-
-        <activity
-            android:name=".pop.MemberListPop" />
-
+        <activity android:name=".pop.SelectMemberPop" />
+        <activity android:name=".pop.RepeatSetPop" />
+        <activity android:name=".pop.MemberListPop" />
         <activity
             android:name=".ui.WebViewActivity"
-            android:theme="@android:style/Theme.Dialog"/>
-
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".pop.SignPopActivity"
             android:theme="@android:style/Theme.Dialog" />
-
+        <activity android:name=".pop.LawPopActivity" />
+        <activity android:name=".pop.WriteAddressActivity" />
         <activity
-            android:name=".pop.LawPopActivity" />
-
-        <activity
-            android:name=".pop.WriteAddressActivity" />
-
-        <activity android:name=".pop.feedReportPopActivity"
+            android:name=".pop.feedReportPopActivity"
             android:theme="@android:style/Theme.Dialog" />
-
-        <activity android:name=".pop.PlacePhotoActivity"
-            android:theme="@android:style/Theme.Dialog" />
-
         <activity
-            android:name=".ui.worksite.AddVacationActivity" />
+            android:name=".pop.PlacePhotoActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".ui.worksite.AddVacationActivity" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.krafte.nebworks.provider"
+
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider" />
+        </provider>
     </application>
 
 </manifest>
