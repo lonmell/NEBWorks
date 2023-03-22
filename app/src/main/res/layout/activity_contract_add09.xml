@@ -10,11 +10,13 @@
     tools:context=".ui.contract.AddContractPage06"
     tools:ignore="HardcodedText,ImageContrastCheck,TextContrastCheck">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/contract_image_layout"
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:paddingHorizontal="25dp">
 
         <TextView
@@ -408,6 +410,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
+        android:visibility="invisible"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -577,6 +580,7 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/next"
         android:layout_width="match_parent"
