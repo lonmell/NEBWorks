@@ -3,7 +3,6 @@ package com.krafte.nebworks.ui.contract;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -538,6 +536,7 @@ public class AddContractPage09 extends AppCompatActivity {
                 .into(binding.contractWorkerSignImg);
     }
 
+    @SuppressLint("SdCardPath")
     String SD_PATH = "/storage/emulated/0/Download";//--엑셀 파일 다운로드경로
 
     public void requestCapture() {

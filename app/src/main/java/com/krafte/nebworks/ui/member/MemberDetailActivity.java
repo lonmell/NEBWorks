@@ -1042,7 +1042,6 @@ public class MemberDetailActivity extends AppCompatActivity {
                                             workbook.close();
 
 
-
 //                                            // XLS 파일 읽기
 //                                            FileInputStream input = new FileInputStream(SD_PATH + "/"  + change_place_name + " " + getYMdate + "월 출결표.xls");
 //                                            Workbook workbook2 = Workbook.getWorkbook(input);
@@ -1164,7 +1163,6 @@ public class MemberDetailActivity extends AppCompatActivity {
                             try {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
-
                                     try {
                                         int allPay = 0;//pay_diff_bar
                                         String getPay = "";
