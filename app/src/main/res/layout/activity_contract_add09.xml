@@ -32,7 +32,7 @@
         <TextView
             android:id="@+id/sub_title"
             tools:text="주식회사크래프트(이하 사업주 라 함)과(와) 근로자(이하 근로자 라함) 은 다음과 같이 근로계약을 체결한다."
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -43,7 +43,6 @@
         <TextView
             android:id="@+id/contract1"
             tools:text="1.근로계약기간: 2023년 02월 01부터 2023년 04월 01까지"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/sub_title"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -54,7 +53,6 @@
         <TextView
             android:id="@+id/contract1_1"
             android:text="※ 근로계약기간을 정하지 않는 경우에는 근로개시일만 기재"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract1"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -65,7 +63,6 @@
         <TextView
             android:id="@+id/contract2"
             tools:text="2.근무장소: 대궁ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract1_1"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -75,7 +72,6 @@
         <TextView
             android:id="@+id/contract3"
             tools:text="3.업무의 내용: ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract2"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -86,7 +82,6 @@
         <TextView
             android:id="@+id/contract4"
             tools:text="=4.소정근로기간: ~~~~~~~~~~~"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract3"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -97,7 +92,6 @@
         <TextView
             android:id="@+id/contract5"
             tools:text="=5.근무일/휴일: ~~~~~~~~~~~"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract4"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -108,7 +102,6 @@
         <TextView
             android:id="@+id/contract6"
             android:text="6.임금"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract5"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -119,7 +112,6 @@
         <TextView
             android:id="@+id/contract6_1"
             tools:text="- 월(일, 시간)급: 2,100,000원"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract6"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -130,7 +122,6 @@
         <TextView
             android:id="@+id/contract6_2"
             android:text="- 상여금: 있음(  ), 없음 (○)"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract6_1"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -141,7 +132,6 @@
         <TextView
             android:id="@+id/contract6_3"
             android:text="- 기타수당(재 수당 등): 있음(  )                     원, 없음(○)"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract6_2"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -152,7 +142,6 @@
         <TextView
             android:id="@+id/contract6_4"
             android:text="-                           원                            원"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract6_3"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -163,7 +152,6 @@
         <TextView
             android:id="@+id/contract6_5"
             android:text="-                           원                            원"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract6_4"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -174,7 +162,6 @@
         <TextView
             android:id="@+id/contract6_6"
             tools:text="- 임금지급일: ~~~~~~~~~~~~~~~~~~~"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract6_5"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -185,7 +172,6 @@
         <TextView
             android:id="@+id/contract6_7"
             tools:text="- 지급방법: ~~~~~~~~~~~~~~~~~~~"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract6_6"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -196,7 +182,6 @@
         <TextView
             android:id="@+id/contract7"
             android:text="7.연차유급휴가"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract6_7"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -207,7 +192,6 @@
         <TextView
             android:id="@+id/contract7_1"
             android:text="- 연차유급휴가는 근로기준법에서 정하는 바에 따라 부여함"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract7"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -218,7 +202,6 @@
         <TextView
             android:id="@+id/contract8"
             android:text="8.사회보험 적용여부"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract7_1"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -229,7 +212,6 @@
         <TextView
             android:id="@+id/contract8_1"
             tools:text="■ 고용보험 ■ 산재보험 ■ 국민연금 ■ 건강보험"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract8"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -240,7 +222,6 @@
         <TextView
             android:id="@+id/contract9"
             android:text="9.근로계약서 교부"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract8_1"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -251,7 +232,6 @@
         <TextView
             android:id="@+id/contract9_1"
             android:text="- 사업주는 근로계약을 채결함과 동시에 본 계약서를 사본하여 근로자의 교부요구와 관계없이 근로자에게 교부함 (근로기준법 제17조) 이행"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract9"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -262,7 +242,6 @@
         <TextView
             android:id="@+id/contract10"
             android:text="10. 기타"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract9_1"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -273,7 +252,6 @@
         <TextView
             android:id="@+id/contract10_1"
             android:text="- 이 계약에 정함이 없는 사항은 근로기준법령에 의함"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract10"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -284,7 +262,7 @@
         <TextView
             android:id="@+id/contract_date"
             android:text="2023년 3월 20일"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract10_1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -296,7 +274,7 @@
         <TextView
             android:id="@+id/contract_owner1"
             android:text="(사업주) 사업체 명: ~~~~~~ (전화:01000000000)"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract_date"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -307,7 +285,6 @@
         <TextView
             android:id="@+id/contract_owner2"
             android:text="주소: ~~~~~~~~~~~~~ "
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract_owner1"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -318,7 +295,6 @@
         <TextView
             android:id="@+id/contract_owner3"
             android:text="대표자: ~~~~~"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract_owner2"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -329,7 +305,6 @@
         <TextView
             android:id="@+id/contract_owner_sign"
             android:text="(서명)"
-            android:layout_marginTop="5dp"
             android:layout_marginStart="100dp"
             app:layout_constraintTop_toTopOf="@id/contract_owner3"
             app:layout_constraintBottom_toBottomOf="@id/contract_owner3"
@@ -350,7 +325,7 @@
         <TextView
             android:id="@+id/contract_worker1"
             android:text="(사업주) 사업체 명: ~~~~~~ (전화:01000000000)"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="15dp"
             app:layout_constraintTop_toBottomOf="@id/contract_owner_sign"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -361,7 +336,6 @@
         <TextView
             android:id="@+id/contract_worker2"
             android:text="주소: ~~~~~~~~~~~~~ "
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract_worker1"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -372,7 +346,6 @@
         <TextView
             android:id="@+id/contract_worker3"
             android:text="성명: ~~~~~"
-            android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/contract_worker2"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/black"
@@ -383,7 +356,6 @@
         <TextView
             android:id="@+id/contract_worker_sign"
             android:text="(서명)"
-            android:layout_marginTop="5dp"
             android:layout_marginStart="100dp"
             app:layout_constraintTop_toTopOf="@id/contract_worker3"
             app:layout_constraintBottom_toBottomOf="@id/contract_worker3"
