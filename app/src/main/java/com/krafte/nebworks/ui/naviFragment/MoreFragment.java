@@ -282,6 +282,7 @@ public class MoreFragment extends Fragment {
                                 binding.jikgup.setText((getjikgup.equals("null")?"미정":getjikgup));
                                 Glide.with(mContext).load(img_path)
                                         .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .placeholder(R.drawable.certi02)
                                         .skipMemoryCache(true)
                                         .into(binding.userProfile);
                             }

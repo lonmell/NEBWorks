@@ -73,7 +73,7 @@ public class WebViewActivity  extends Activity {
                 browser.loadUrl("javascript:sample2_execDaumPostcode();");
             }
         });
-        browser.loadUrl("http://krafte.net/app_php/daum.html");
+        browser.loadUrl("https://krafte.net/app_php/daum.html");
     }
 
     // SSL Error Tolerant Web View Client

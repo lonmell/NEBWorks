@@ -142,9 +142,9 @@
             android:layout_centerVertical="true"
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
-            android:text="다음으로 6/6"
+            android:text="서명완료 후 근로자에게 알림 보내기"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="16sp"
             tools:ignore="HardcodedText" />
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -7,11 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-
-import jxl.Cell;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Gravity;
@@ -34,7 +31,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.krafte.nebworks.BuildConfig;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ContractTermAdapter;
 import com.krafte.nebworks.data.TermData;
@@ -52,7 +48,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,7 +57,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import jxl.CellReferenceHelper;
 import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -75,8 +69,6 @@ import jxl.write.WritableFont;
 import jxl.write.WritableImage;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -687,32 +679,6 @@ public class ContractAllDataActivity extends AppCompatActivity {
 
             // close workbook
             workbook.write();
-//
-//                                            //--pdf 만들기 START
-//                                            // 엑셀 파일 읽기
-//                                            Workbook workbook2 = Workbook.getWorkbook(new File(SD_PATH + "/"  + change_place_name + " " + getYMdate + "월 출결표.xls"));
-//                                            Sheet sheet = workbook2.getSheet(0);
-//                                            // PDF 파일 생성
-//                                            Document document = new Document();
-//                                            PdfWriter.getInstance(document, new FileOutputStream(SD_PATH + "/" + change_place_name + " " + getYMdate + "월 출결표.pdf"));
-//                                            document.open();
-//
-//                                            // 테이블 생성
-//                                            PdfPTable table = new PdfPTable(sheet.getColumns());
-//                                            for (int row = 0; row < sheet.getRows(); row++) {
-//                                                for (int col = 0; col < sheet.getColumns(); col++) {
-//                                                    Cell cell = sheet.getCell(col, row);
-//                                                    table.addCell(cell.getContents());
-//                                                }
-//                                            }
-//
-//                                            // 테이블을 문서에 추가
-//                                            document.add(table);
-//
-//                                            // 문서 닫기
-//                                            document.close();
-//                                            //--pdf 만들기 END
-
             workbook.close();
 
             Toast_Nomal("다운로드 폴더에 Excel파일이 생성되었습니다.");

@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
@@ -25,6 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,8 +37,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
+import com.krafte.nebworks.adapter.MemberCvInoutAdater;
 import com.krafte.nebworks.adapter.MemberInoutAdapter;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
@@ -55,7 +63,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -65,16 +75,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import jxl.CellView;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.format.Alignment;
-import jxl.format.Colour;
-import jxl.write.Label;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -136,6 +136,8 @@ public class MemberDetailActivity extends AppCompatActivity {
 
     ArrayList<WorkGotoListData.WorkGotoListData_list> inoutmList;
     MemberInoutAdapter inoutmAdapter;
+    MemberCvInoutAdater cvInoutAdater;
+
 
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SimpleDateFormat"})
@@ -193,6 +195,9 @@ public class MemberDetailActivity extends AppCompatActivity {
             } else if (place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")) {
                 binding.contractPhoneInfo.setVisibility(View.VISIBLE);
             }
+            Glide.with(this).load(R.raw.neb_loding_whtie)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(binding.loadingView2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -340,6 +345,7 @@ public class MemberDetailActivity extends AppCompatActivity {
 //            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
 //            startActivity(intent);
             if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                binding.loginAlertText2.setVisibility(View.VISIBLE);
                 permissionCheck();
             } else {
                 Toast_Nomal("다운로드 권한이 없습니다.");
@@ -382,6 +388,15 @@ public class MemberDetailActivity extends AppCompatActivity {
     /*업무카운팅 START*/
     RetrofitConnect rc = new RetrofitConnect();
     String contract_id = "";
+    String task_complete_cnt = "";
+    String task_incomplete_cnt = "";
+    String approval_total_cnt = "";
+    String waiting_cnt = "";
+    String approval_cnt = "";
+    String reject_cnt = "";
+    String contract_cnt = "";
+    String owner_sign_id = "";
+    String worker_sign_id = "";
 
     public void MainWorkCnt(String place_id, String user_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
@@ -404,15 +419,15 @@ public class MemberDetailActivity extends AppCompatActivity {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
                         if (Response.length() != 0) {
-                            String task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
-                            String task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt");
-                            String approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
-                            String waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
-                            String approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
-                            String reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
-                            String contract_cnt = Response.getJSONObject(0).getString("contract_cnt");
-                            String owner_sign_id = Response.getJSONObject(0).getString("owner_sign_id");
-                            String worker_sign_id = Response.getJSONObject(0).getString("worker_sign_id");
+                            task_complete_cnt = Response.getJSONObject(0).getString("task_complete_cnt");
+                            task_incomplete_cnt = Response.getJSONObject(0).getString("task_incomplete_cnt");
+                            approval_total_cnt = Response.getJSONObject(0).getString("approval_total_cnt");
+                            waiting_cnt = Response.getJSONObject(0).getString("waiting_cnt");
+                            approval_cnt = Response.getJSONObject(0).getString("approval_cnt");
+                            reject_cnt = Response.getJSONObject(0).getString("reject_cnt");
+                            contract_cnt = Response.getJSONObject(0).getString("contract_cnt");
+                            owner_sign_id = Response.getJSONObject(0).getString("owner_sign_id");
+                            worker_sign_id = Response.getJSONObject(0).getString("worker_sign_id");
 
                             contract_id = Response.getJSONObject(0).getString("id");
 
@@ -432,87 +447,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                             binding.workdata03.setText(waiting_cnt);
                             binding.workdata04.setText(approval_cnt);
                             binding.workdata05.setText(reject_cnt);
-                            if (!worker_sign_id.equals("null") && !owner_sign_id.equals("null")) {
-                                binding.contractState.setTextColor(Color.parseColor("#6395EC"));
-                                binding.contractState.setText("작성완료");
-                                binding.contractAllGo.setOnClickListener(v -> {
-                                    if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
-                                        shardpref.putString("contract_id", contract_id);
-                                        pm.ContractAll(mContext);
-                                    }
-                                });
-                            } else {
-                                if (worker_sign_id.equals("null") && owner_sign_id.equals("null")) {
-                                    binding.contractState.setTextColor(Color.parseColor("#DD6540"));
-                                    binding.contractState.setText("미처리");
-                                    //미처리 일때 근로계약서 리스트 페이지로
-                                    binding.contractAllGo.setOnClickListener(v -> {
-                                        if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
-                                            if (USER_INFO_AUTH.equals("0")) {
-                                                pm.AddContractPage01(mContext);
-                                            } else {
-                                                Toast.makeText(mContext, "작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            Toast_Nomal("권한이 없습니다.");
-                                        }
-                                    });
-                                } else {
-                                    binding.contractState.setTextColor(Color.parseColor("#DD6540"));
-                                    binding.contractState.setText("작성중");
-                                    binding.contractAllGo.setOnClickListener(v -> {
-                                        if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
-                                            shardpref.putString("contract_id", contract_id);
-                                            shardpref.putString("progress_pos", getprogress_pos);
-                                            /* item.getContract_id()
-                                            *   현재 진행중인 페이지
-                                                0 or null - 작성안됨
-                                                1 - 사업장 기본사항
-                                                2 - 근무 기본사항
-                                                3 - 급여 기본사항
-                                                4 - 특약
-                                                5 - 근로자 인적사항
-                                                6 - 서명
-                                                7 - 완료
-                                            * */
-                                            if (USER_INFO_AUTH.equals("0")) {
-                                                if (getprogress_pos.equals("0")) {
-                                                    pm.AddContractPage03(mContext);
-                                                } else if (getprogress_pos.equals("1")) {
-                                                    //근무 기본사항 부터
-                                                    pm.AddContractPage04(mContext);
-                                                } else if (getprogress_pos.equals("2")) {
-                                                    //급여 기본사항 부터
-                                                    pm.AddContractPage05(mContext);
-                                                } else if (getprogress_pos.equals("3")) {
-                                                    //특약 부터
-                                                    pm.AddContractPage06(mContext);
-                                                } else if (getprogress_pos.equals("4")) {
-                                                    //근로자 인적사항 부터
-                                                    pm.AddContractPage07(mContext);
-                                                } else if (getprogress_pos.equals("5")) {
-                                                    //서명 부터
-                                                    pm.AddContractPage08(mContext);
-                                                } else if (getprogress_pos.equals("7")) {
-                                                    //해당 근로계약서 전체 상세 페이지로
-                                                    shardpref.putString("contract_id", contract_id);
-                                                    pm.ContractAll(mContext);
-                                                }
-                                            } else {
-                                                //근로자일경우
-                                                if (getprogress_pos.equals("6")) {
-                                                    pm.ContractWorkerAccept(mContext);
-                                                } else if (getprogress_pos.equals("7")) {
-                                                    //해당 근로계약서 전체 상세 페이지로
-                                                    shardpref.putString("contract_id", contract_id);
-                                                    pm.ContractAll(mContext);
-                                                }
-                                            }
-                                        }
-                                    });
-                                }
-//                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
-                            }
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -644,6 +579,95 @@ public class MemberDetailActivity extends AppCompatActivity {
                                     shardpref.putString("mem_pay", pay);
                                     pm.AddMemberDetail(mContext);
                                 });
+
+
+                                if (!worker_sign_id.equals("null") && !owner_sign_id.equals("null")) {
+                                    binding.contractState.setTextColor(Color.parseColor("#6395EC"));
+                                    binding.contractState.setText("작성완료");
+                                    binding.contractAllGo.setOnClickListener(v -> {
+                                        if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                                            shardpref.putString("contract_id", contract_id);
+                                            pm.ContractAll(mContext);
+                                        }
+                                    });
+                                } else {
+                                    if (worker_sign_id.equals("null") && owner_sign_id.equals("null")) {
+                                        binding.contractState.setTextColor(Color.parseColor("#DD6540"));
+                                        binding.contractState.setText("미처리");
+                                        //미처리 일때 근로계약서 리스트 페이지로
+                                        binding.contractAllGo.setOnClickListener(v -> {
+                                            if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                                                if (USER_INFO_AUTH.equals("0")) {
+                                                    shardpref.putString("worker_id", mem_id);
+                                                    shardpref.putString("worker_name", name);
+                                                    shardpref.putString("worker_phone", CallNum.replace("-",""));
+                                                    shardpref.putString("worker_email", stub_user_account);
+                                                    shardpref.putString("contract_place_id", place_id);
+                                                    shardpref.putString("contract_user_id", mem_id);
+                                                    pm.AddContractPage01(mContext);
+                                                } else {
+                                                    Toast.makeText(mContext, "작성된 근로계약서가 없습니다. ", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } else {
+                                                Toast_Nomal("권한이 없습니다.");
+                                            }
+                                        });
+                                    } else {
+                                        binding.contractState.setTextColor(Color.parseColor("#DD6540"));
+                                        binding.contractState.setText("작성중");
+                                        binding.contractAllGo.setOnClickListener(v -> {
+                                            if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
+                                                shardpref.putString("contract_id", contract_id);
+                                                shardpref.putString("progress_pos", getprogress_pos);
+                                            /* item.getContract_id()
+                                            *   현재 진행중인 페이지
+                                                0 or null - 작성안됨
+                                                1 - 사업장 기본사항
+                                                2 - 근무 기본사항
+                                                3 - 급여 기본사항
+                                                4 - 특약
+                                                5 - 근로자 인적사항
+                                                6 - 서명
+                                                7 - 완료
+                                            * */
+                                                if (USER_INFO_AUTH.equals("0")) {
+                                                    if (getprogress_pos.equals("0")) {
+                                                        pm.AddContractPage03(mContext);
+                                                    } else if (getprogress_pos.equals("1")) {
+                                                        //근무 기본사항 부터
+                                                        pm.AddContractPage04(mContext);
+                                                    } else if (getprogress_pos.equals("2")) {
+                                                        //급여 기본사항 부터
+                                                        pm.AddContractPage05(mContext);
+                                                    } else if (getprogress_pos.equals("3")) {
+                                                        //특약 부터
+                                                        pm.AddContractPage06(mContext);
+                                                    } else if (getprogress_pos.equals("4")) {
+                                                        //근로자 인적사항 부터
+                                                        pm.AddContractPage07(mContext);
+                                                    } else if (getprogress_pos.equals("5")) {
+                                                        //서명 부터
+                                                        pm.AddContractPage08(mContext);
+                                                    } else if (getprogress_pos.equals("7")) {
+                                                        //해당 근로계약서 전체 상세 페이지로
+                                                        shardpref.putString("contract_id", contract_id);
+                                                        pm.ContractAll(mContext);
+                                                    }
+                                                } else {
+                                                    //근로자일경우
+                                                    if (getprogress_pos.equals("6")) {
+                                                        pm.ContractWorkerAccept(mContext);
+                                                    } else if (getprogress_pos.equals("7")) {
+                                                        //해당 근로계약서 전체 상세 페이지로
+                                                        shardpref.putString("contract_id", contract_id);
+                                                        pm.ContractAll(mContext);
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+//                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -774,6 +798,44 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
+                                //--캡쳐할 리스트
+                                try {
+                                    binding.cvPlaceName.setText(change_place_name);
+                                    binding.cvInoutdate.setText(Year + "-" + Month);
+                                    binding.cvName.setText(USER_INFO_NAME);
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    inoutmList = new ArrayList<>();
+                                    cvInoutAdater = new MemberCvInoutAdater(mContext, inoutmList, Year, Month);
+                                    binding.cvInoutList.setAdapter(cvInoutAdater);
+                                    binding.cvInoutList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+                                    Log.i(TAG, "SetNoticeListview Thread run! ");
+
+                                    if (Response.length() == 0) {
+                                        Log.i(TAG, "(gotoWorkData_list)GET SIZE : " + Response.length());
+                                    } else {
+                                        for (int i = 0; i < Response.length(); i++) {
+                                            JSONObject jsonObject = Response.getJSONObject(i);
+                                            cvInoutAdater.addItem(new WorkGotoListData.WorkGotoListData_list(
+                                                    jsonObject.getString("day"),
+                                                    jsonObject.getString("yoil"),
+                                                    jsonObject.getString("in_time"),
+                                                    jsonObject.getString("out_time"),
+                                                    jsonObject.getString("workdiff"),
+                                                    jsonObject.getString("state"),
+                                                    jsonObject.getString("sieob1"),
+                                                    jsonObject.getString("sieob2"),
+                                                    jsonObject.getString("jongeob1"),
+                                                    jsonObject.getString("jongeob2"),
+                                                    jsonObject.getString("vaca_accept"),
+                                                    jsonObject.getString("hdd")
+                                            ));
+                                        }
+                                        cvInoutAdater.notifyDataSetChanged();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
 
@@ -818,308 +880,12 @@ public class MemberDetailActivity extends AppCompatActivity {
         return dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
     }
 
-    public void getExcelGotoList(String place_id, String user_id, String getYMdate) {
-        dlog.i("-----SetGotoWorkDayList-----");
-        dlog.i("place_id : " + place_id);
-        dlog.i("user_id : " + user_id);
-        dlog.i("getYMdate : " + getYMdate);
-        dlog.i("-----SetGotoWorkDayList-----");
-        @SuppressLint({"NotifyDataSetChanged", "LongLogTag", "SetTextI18n"}) Thread th = new Thread(() -> {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(WorkGotoListInterface.URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .build();
-            WorkGotoListInterface api = retrofit.create(WorkGotoListInterface.class);
-            Call<String> call = api.getData(place_id, user_id, getYMdate);
-            call.enqueue(new Callback<String>() {
-                @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            dlog.e("SetGotoWorkDayList function START");
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.e("response 1: " + response.isSuccessful());
-                            dlog.e("response 2: " + jsonResponse);
-                            if (jsonResponse.equals("[]")) {
-                                binding.noDataTxt.setVisibility(View.VISIBLE);
-                            } else {
-                                binding.noDataTxt.setVisibility(View.GONE);
-                                try {
-                                    JSONArray Response = new JSONArray(jsonResponse);
-                                    Log.i(TAG, "SetNoticeListview Thread run! ");
-
-                                    if (Response.length() == 0) {
-                                        Log.i(TAG, "(gotoWorkData_list)GET SIZE : " + Response.length());
-                                    } else {
-                                        // 새 통합 문서 만들기
-                                        File file_path;
-
-                                        try {
-                                            file_path = new File(SD_PATH);
-                                            if (!file_path.isDirectory()) {//해당 경로의 파일이 없으면 생성시켜준다
-                                                file_path.mkdirs();
-                                            }
-
-//                                            File sd = Environment.getExternalStorageDirectory();
-                                            String csvFile = change_place_name + " " + getYMdate + "월 출결표.xls";
-
-//                                            File directory = new File(sd.getAbsolutePath());
-//
-//                                            //create directory if not exist
-//                                            if (!directory.isDirectory()) {
-//                                                directory.mkdirs();
-//                                            }
-                                            File file_list = new File(SD_PATH);
-
-                                            // 파일 경로에 있는 모든 파일 목록 가져오기
-                                            File[] fileList = file_list.listFiles();
-
-                                            // 동일한 이름을 가진 파일 삭제
-                                            for (File f : fileList) {
-                                                if (f.getName().equals(csvFile)) {
-                                                    f.delete();
-                                                }
-                                            }
-
-                                            //file path
-                                            File file = new File(SD_PATH, csvFile);
-                                            WorkbookSettings wbSettings = new WorkbookSettings();
-                                            wbSettings.setLocale(new Locale(Locale.GERMAN.getLanguage(), Locale.GERMAN.getCountry()));
-                                            WritableWorkbook workbook;
-                                            workbook = Workbook.createWorkbook(file, wbSettings);
-
-                                            //Excel sheetA first sheetA
-                                            WritableSheet sheetA = workbook.createSheet("출근기록부", 0);
-
-                                            //--타이틀 부분 START
-                                            WritableFont title = new WritableFont(WritableFont.ARIAL, 17);
-                                            WritableCellFormat cellFormat = new WritableCellFormat(title);
-                                            title.setBoldStyle(WritableFont.BOLD);
-                                            cellFormat.setAlignment(Alignment.CENTRE);
-                                            cellFormat.setLocked(true);
-
-                                            WritableFont font_1 = new WritableFont(WritableFont.ARIAL, 12);
-                                            font_1.setColour(Colour.GRAY_50);
-                                            WritableCellFormat cellFormat_1 = new WritableCellFormat(font_1);
-                                            cellFormat_1.setAlignment(Alignment.LEFT);
-                                            cellFormat_1.setLocked(true);
-
-                                            WritableFont font_2 = new WritableFont(WritableFont.ARIAL, 14);
-                                            font_2.setColour(Colour.BLACK);
-                                            WritableCellFormat cellFormat_2 = new WritableCellFormat(font_2);
-                                            cellFormat_2.setAlignment(Alignment.LEFT);
-                                            cellFormat_2.setAlignment(Alignment.CENTRE);
-                                            cellFormat_2.setLocked(true);
-
-                                            WritableFont font2 = new WritableFont(WritableFont.ARIAL, 14);
-                                            font2.setColour(Colour.BLACK);
-                                            WritableCellFormat cellFormat2 = new WritableCellFormat(font2);
-                                            cellFormat2.setAlignment(Alignment.CENTRE);
-                                            cellFormat2.setBackground(Colour.GRAY_25);
-                                            cellFormat2.setLocked(true);
-
-                                            WritableFont font2_1 = new WritableFont(WritableFont.ARIAL, 14);
-                                            font2_1.setColour(Colour.BLACK);
-                                            font2_1.setBoldStyle(WritableFont.BOLD);
-                                            WritableCellFormat cellFormat2_1 = new WritableCellFormat(font2_1);
-                                            cellFormat2_1.setAlignment(Alignment.CENTRE);
-                                            cellFormat2_1.setLocked(true);
-
-                                            CellView cellView = new CellView();
-                                            cellView.setSize(40); // 셀 높이를 40으로 변경
-                                            sheetA.setColumnView(1, cellView); // 첫번째 열의 셀 높이 변경
-                                            sheetA.setColumnView(2, cellView);
-                                            sheetA.setColumnView(3, cellView);
-                                            sheetA.setColumnView(4, cellView);
-                                            sheetA.setColumnView(5, cellView);
-                                            sheetA.setColumnView(6, cellView);
-                                            sheetA.setColumnView(7, cellView);
-                                            sheetA.setColumnView(8, cellView);
-                                            sheetA.setColumnView(9, cellView);
-
-                                            sheetA.setColumnView(1, 20);
-                                            sheetA.setColumnView(2, 20);
-                                            sheetA.setColumnView(3, 20);
-                                            sheetA.setColumnView(4, 20);
-                                            sheetA.setColumnView(5, 20);
-                                            sheetA.setColumnView(6, 20);
-                                            sheetA.setColumnView(7, 20);
-                                            sheetA.setColumnView(8, 20);
-                                            sheetA.setColumnView(9, 20);
-
-                                            sheetA.mergeCells(2, 1, 5, 1);//--타이틀 합체
-                                            Label label = new Label(2, 1, "출근기록부", cellFormat);
-                                            sheetA.addCell(label);
-
-                                            Label label_1 = new Label(2, 3, change_place_name, cellFormat_1);
-                                            sheetA.addCell(label_1);
-
-                                            Label label2 = new Label(2, 5, "출근 연월", cellFormat2);
-                                            sheetA.addCell(label2);
-                                            Label label3 = new Label(3, 5, getYMdate, cellFormat2_1);
-                                            sheetA.addCell(label3);
-
-                                            Label label4 = new Label(4, 5, "이     름", cellFormat2);
-                                            sheetA.addCell(label4);
-                                            Label label5 = new Label(5, 5, USER_INFO_NAME, cellFormat2_1);
-                                            sheetA.addCell(label5);
-
-                                            Label label6 = new Label(2, 7, "■ 세부내용", cellFormat_2);
-                                            sheetA.addCell(label6);
-
-                                            //--타이틀 부분 END
-
-                                            Label menu1 = new Label(2, 9, "일", cellFormat2);
-                                            sheetA.addCell(menu1);
-                                            Label menu2 = new Label(3, 9, "출 근", cellFormat2);
-                                            sheetA.addCell(menu2);
-                                            Label menu3 = new Label(4, 9, "퇴 근", cellFormat2);
-                                            sheetA.addCell(menu3);
-                                            Label menu4 = new Label(5, 9, "비 고", cellFormat2);
-                                            sheetA.addCell(menu4);
-
-                                            Label contents1, contents2, contents3, contents4;
-
-                                            for (int i = 0; i < Response.length(); i++) {
-                                                JSONObject jsonObject = Response.getJSONObject(i);
-
-                                                //--두번째 라인부터
-                                                WritableFont contents = new WritableFont(WritableFont.ARIAL, 15);
-                                                WritableCellFormat cellFormat_con = new WritableCellFormat(contents);
-                                                cellFormat_con.setAlignment(Alignment.CENTRE);
-                                                cellFormat_con.setLocked(true);
-
-
-//                                                String toItemday = jsonObject.getString("day");
-                                                String toItemday = jsonObject.getString("day") + "(" + getYoil(Integer.parseInt(Year), Integer.parseInt(Month), Integer.parseInt(jsonObject.getString("day"))) + ")";
-                                                //휴가표시
-                                                vaca_state = jsonObject.getString("vaca_accept").equals("휴가") ? "휴가" : "";
-
-                                                if (!jsonObject.getString("in_time").equals("null")) {
-                                                    InTime = jsonObject.getString("in_time");
-                                                } else {
-                                                    InTime = "";
-                                                }
-
-                                                if (!jsonObject.getString("out_time").equals("null")) {
-                                                    OutTime = jsonObject.getString("out_time");
-                                                } else {
-                                                    OutTime = "";
-                                                }
-
-//                                                if (vaca_state.equals("")) {
-//                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
-//                                                } else {
-//                                                    State = jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state");
-//                                                }
-                                                if (jsonObject.getString("sieob1").equals("null")) {
-                                                    State = (jsonObject.getString("state").equals("null") ? "" : jsonObject.getString("state"));
-                                                } else {
-                                                    if (jsonObject.getString("state").equals("null") || jsonObject.getString("state").isEmpty()) {
-                                                        State = jsonObject.getString("sieob1");
-                                                    } else {
-                                                        State = jsonObject.getString("state") + jsonObject.getString("sieob1");
-                                                    }
-                                                }
-
-
-                                                dlog.i("vaca_state : " + vaca_state);
-                                                sheetA.setColumnView(i + 10, cellView); // 첫번째 열의 셀 높이 변경
-                                                contents1 = new Label(2, i + 10, toItemday, cellFormat_con);
-                                                sheetA.addCell(contents1);
-                                                contents2 = new Label(3, i + 10, InTime, cellFormat_con);
-                                                sheetA.addCell(contents2);
-                                                contents3 = new Label(4, i + 10, OutTime, cellFormat_con);
-                                                sheetA.addCell(contents3);
-                                                contents4 = new Label(5, i + 10, State.replace("퇴근", "").replace("출근", ""), cellFormat_con);
-                                                sheetA.addCell(contents4);
-                                            }
-
-                                            // close workbook
-
-                                            workbook.write();
-                                            workbook.close();
-
-
-//                                            // XLS 파일 읽기
-//                                            FileInputStream input = new FileInputStream(SD_PATH + "/"  + change_place_name + " " + getYMdate + "월 출결표.xls");
-//                                            Workbook workbook2 = Workbook.getWorkbook(input);
-//                                            Sheet sheet = workbook2.getSheet(0);
-//
-//
-//                                            workbook2.close();
-
-//                                            //--pdf 만들기 START
-//                                            // 엑셀 파일 읽기
-//                                            Workbook workbook2 = Workbook.getWorkbook(new File(SD_PATH + "/"  + change_place_name + " " + getYMdate + "월 출결표.xls"));
-//                                            Sheet sheet = workbook2.getSheet(0);
-//                                            // PDF 파일 생성
-//                                            Document document = new Document();
-//                                            PdfWriter.getInstance(document, new FileOutputStream(SD_PATH + "/" + change_place_name + " " + getYMdate + "월 출결표.pdf"));
-//                                            document.open();
-//
-//
-//                                            // 폰트 설정
-//                                            com.itextpdf.text.pdf.BaseFont baseFont = com.itextpdf.text.pdf.BaseFont.createFont("font/pretendard_regular.otf", "Identity-H", com.itextpdf.text.pdf.BaseFont.NOT_EMBEDDED);
-//                                            Font font = new Font(baseFont, 12, Font.NORMAL);
-//
-////                                            // 테이블 생성
-////                                            PdfPTable table = new PdfPTable(sheet.getColumns());
-////                                            for (int row = 0; row < sheet.getRows(); row++) {
-////                                                for (int col = 0; col < sheet.getColumns(); col++) {
-////                                                    Cell cell = sheet.getCell(col, row);
-////                                                    table.addCell(cell.getContents());
-////                                                }
-////                                            }
-//                                            // 셀 내용 추가
-//                                            for (int row = 0; row < sheet.getRows(); row++) {
-//                                                for (int col = 0; col < sheet.getColumns(); col++) {
-//                                                    Cell cell = sheet.getCell(col, row);
-//                                                    Paragraph paragraph = new Paragraph(cell.getContents(), font);
-//                                                    document.add(paragraph);
-//                                                }
-//                                            }
-//
-//                                            // 문서 닫기
-//                                            document.close();
-                                            //--pdf 만들기 END
-
-                                            Toast_Nomal("다운로드 폴더에 Excel파일이 생성되었습니다.");
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                    });
-
-                }
-
-                @Override
-                @SuppressLint("LongLogTag")
-                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    dlog.e("에러2 = " + t.getMessage());
-                }
-            });
-        });
-        th.start();
-        try {
-            th.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void permissionCheck() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                getExcelGotoList(stub_place_id, stub_user_id, Year + "-" + Month);
+//                getExcelGotoList(stub_place_id, stub_user_id, Year + "-" + Month);
+                getScrollView(Year + "-" + Month);
             }
 
             @Override
@@ -1137,6 +903,59 @@ public class MemberDetailActivity extends AppCompatActivity {
                 .check();
     }
 
+    private void getScrollView(String getYMdate){
+        try{
+            NestedScrollView nestedScrollView = findViewById(R.id.scroll_content);
+            ViewGroup viewGroup = (ViewGroup) nestedScrollView.getChildAt(0);
+            int height = viewGroup.getHeight();
+            int width = viewGroup.getWidth();
+
+            Document document = new Document();
+//            String filePath = SD_PATH + "/captured.pdf";
+            String filePath = SD_PATH + "/" + change_place_name + "_" + getYMdate + "월 출결표.pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            int pageHeight = 2100;
+            int numberOfPages = (int) Math.ceil((double) height / pageHeight);
+
+            for (int i = 0; i < numberOfPages; i++) {
+                int top = pageHeight * i;
+                int bottom = Math.min(height, top + pageHeight);
+
+                Bitmap bitmap = Bitmap.createBitmap(width, bottom - top, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                canvas.translate(0, -top);
+                viewGroup.draw(canvas);
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                Image image = Image.getInstance(byteArray);
+                float scaler = ((document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin() - 0) / image.getWidth()) * 100;
+                image.scalePercent(scaler);
+
+                document.newPage();
+                document.add(image);
+            }
+
+            document.close();
+            binding.loginAlertText2.setVisibility(View.GONE);
+
+            File file = new File(SD_PATH, change_place_name + "_" + getYMdate + "월 출결표.pdf");
+            Uri uri = FileProvider.getUriForFile(this, "com.krafte.nebworks.provider", file);
+            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            intent.setType("application/pdf");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            Intent chooser = Intent.createChooser(intent, "share");
+            mContext.startActivity(chooser);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
     /*출퇴근 리스트 END*/
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
