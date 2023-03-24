@@ -514,7 +514,7 @@
                                     android:layout_centerInParent="true"
                                     android:layout_marginEnd="10dp"
                                     android:gravity="center"
-                                    android:text="월 출결표 출력"
+                                    android:text="근로계약서 출력"
                                     android:fontFamily="@font/pretendard_bold"
                                     android:textColor="@color/white"
                                     android:textSize="15sp" />
@@ -2048,7 +2048,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:layout_marginVertical="20dp"
-                    app:cardBackgroundColor="@color/blue"
+                    app:cardBackgroundColor="@color/new_blue"
                     app:cardCornerRadius="5dp"
                     app:cardElevation="0dp">
 
@@ -2060,7 +2060,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:gravity="center"
-                        android:text="근로계약서 다운로드"
+                        android:text="근로계약서 출력"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
                 </androidx.cardview.widget.CardView>

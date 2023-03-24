@@ -115,9 +115,9 @@ public class ContractAllDataActivity extends AppCompatActivity {
         place_name = shardpref.getString("place_name", "-1");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
 
-        if(USER_INFO_AUTH.equals("0")){
-            binding.editContractArea.setVisibility(View.VISIBLE);
-        }
+//        if(USER_INFO_AUTH.equals("0")){
+//            binding.editContractArea.setVisibility(View.VISIBLE);
+//        }
         sharedRemove();
         setBtnEvent();
     }
