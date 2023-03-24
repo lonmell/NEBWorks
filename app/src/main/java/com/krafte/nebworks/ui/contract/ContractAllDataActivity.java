@@ -37,6 +37,7 @@ import com.krafte.nebworks.data.TermData;
 import com.krafte.nebworks.dataInterface.ContractGetAllInterface;
 import com.krafte.nebworks.dataInterface.TermGetInterface;
 import com.krafte.nebworks.databinding.ActivityContractallDataBinding;
+import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -83,6 +84,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
     // shared 저장값
     PreferenceHelper shardpref;
     String contract_id = "";
+    String USER_INFO_AUTH = "1";
 
     //Other
     PageMoveClass pm = new PageMoveClass();
@@ -111,7 +113,12 @@ public class ContractAllDataActivity extends AppCompatActivity {
         shardpref = new PreferenceHelper(mContext);
         contract_id = shardpref.getString("contract_id","");
         place_name = shardpref.getString("place_name", "-1");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
 
+        if(USER_INFO_AUTH.equals("0")){
+            binding.editContractArea.setVisibility(View.VISIBLE);
+        }
+        sharedRemove();
         setBtnEvent();
     }
 
@@ -121,6 +128,16 @@ public class ContractAllDataActivity extends AppCompatActivity {
         GetAllContract();
     }
 
+    private void sharedRemove(){
+        shardpref.remove("worker_id");
+        shardpref.remove("worker_name");
+        shardpref.remove("worker_phone");
+        shardpref.remove("worker_email");
+        shardpref.remove("contract_place_id");
+        shardpref.remove("contract_user_id");
+        shardpref.remove("contract_id");
+    }
+
     private void setBtnEvent(){
         binding.inoutPrint.setOnClickListener(v -> {
             requestCapture();
@@ -128,7 +145,24 @@ public class ContractAllDataActivity extends AppCompatActivity {
         binding.inoutPrint2.setOnClickListener(v -> {
             requestCapture();
         });
+
+        binding.editContract.setOnClickListener(v -> {
+            shardpref.putString("worker_id",worker_id);
+            shardpref.putString("worker_name",worker_name);
+            shardpref.putString("worker_phone",worker_phone.replace("-",""));
+            shardpref.putString("worker_email",worker_email);
+            shardpref.putString("contract_place_id",place_id);
+            shardpref.putString("contract_user_id",worker_id);
+            shardpref.putString("contract_id",contract_id);
+            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+            intent.putExtra("data", "해당 직원의 근로계약서를 \n 다시 작성합니다");
+            intent.putExtra("flag", "근로계약서수정");
+            intent.putExtra("left_btn_txt", "닫기");
+            intent.putExtra("right_btn_txt", "수정하기");
+            startActivity(intent);
+        });
     }
+
 
     String id = "";
     String place_id = "";

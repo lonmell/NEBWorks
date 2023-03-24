@@ -320,6 +320,8 @@ public class TwoButtonPopActivity extends Activity {
                     shardpref.putString("item_user_name", UserCheckData.getInstance().getUser_name());
                     ReturnPageData.getInstance().setPage("EmployeeProcess");
                     pm.AddWorkPart(mContext);
+                } else if(flag.equals("근로계약서수정")){
+                    pm.AddContractPage03(mContext);
                 }
             }catch (Exception e){
                 e.printStackTrace();
