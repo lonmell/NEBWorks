@@ -574,7 +574,6 @@ public class AddContractPage09 extends AppCompatActivity {
             Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
 
             f.delete();
-
 //            File file = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.pdf");
 //            Uri uri = FileProvider.getUriForFile(this, "com.krafte.nebworks.provider", file);
 //            Intent intent = new Intent(android.content.Intent.ACTION_SEND);

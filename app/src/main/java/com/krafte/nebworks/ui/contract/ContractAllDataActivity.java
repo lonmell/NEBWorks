@@ -196,6 +196,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
     String add_terms = "";
     String worker_name = "";
     String worker_jumin = "";
+    String worker_jumin2 = "";
     String worker_address = "";
     String worker_address_detail = "";
     String worker_phone = "";
@@ -261,6 +262,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
                                     add_terms        = Response.getJSONObject(0).getString("add_terms");
                                     worker_name      = Response.getJSONObject(0).getString("worker_name");
                                     worker_jumin     = Response.getJSONObject(0).getString("worker_jumin");
+                                    worker_jumin2     = Response.getJSONObject(0).getString("worker_jumin2");
                                     worker_address   = Response.getJSONObject(0).getString("worker_address");
                                     worker_address_detail = Response.getJSONObject(0).getString("worker_address_detail");
                                     worker_phone     = Response.getJSONObject(0).getString("worker_phone");
@@ -320,7 +322,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
                                     }
                                     binding.input09.setText(add_contents);
                                     binding.input10.setText(worker_name);
-                                    binding.input11.setText(worker_jumin);
+                                    binding.input11.setText(worker_jumin2);
                                     binding.input12.setText(worker_address);
                                     binding.input13.setText(worker_address_detail);
                                     binding.input14.setText(worker_phone);
