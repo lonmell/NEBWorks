@@ -688,14 +688,14 @@ public class PlaceAddActivity extends AppCompatActivity {
         payday = binding.inputbox05.getText().toString();
         test_day = binding.inputbox06.getText().toString();
         restday = binding.inputbox07.getText().toString();
-        registr_num = binding.inputbox02.getText().toString().replace("-", "");
+        registr_num = binding.inputbox02.getText().toString();
         accept_state = binding.inputbox03.getText().toString();
 
         if (etcState) {
             accept_state = binding.etcInputBox.getText().toString();
         }
 
-        SearchRestrnum(binding.inputbox02.getText().toString().replace("-", ""));
+        SearchRestrnum(binding.inputbox02.getText().toString());
         if (boheom.size() == 0) {
             boheom.add("없음");
         }
@@ -738,6 +738,9 @@ public class PlaceAddActivity extends AppCompatActivity {
         } else if (USER_INFO_ID.equals("0")) {
             Toast.makeText(mContext, "사용자 정보를 가져올수 없습니다.", Toast.LENGTH_SHORT).show();
             pm.Login(mContext);
+            return false;
+        } else if (binding.inputbox02.getText().toString().replace("-", "").length() != 10) {
+            Toast.makeText(mContext, "사업자 번호는 10자리입니다.", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
