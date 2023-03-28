@@ -228,6 +228,7 @@
         <activity
             android:name=".pop.OneButtonPopActivity"
             android:theme="@android:style/Theme.Dialog" />
+
         <activity
             android:name=".bottomsheet.WorkTimePicker"
             android:windowSoftInputMode="adjustPan" />
@@ -278,7 +279,9 @@
         <activity
             android:name=".pop.SignPopActivity"
             android:theme="@android:style/Theme.Dialog" />
+
         <activity android:name=".pop.LawPopActivity" />
+
         <activity android:name=".pop.WriteAddressActivity" />
         <activity
             android:name=".pop.feedReportPopActivity"

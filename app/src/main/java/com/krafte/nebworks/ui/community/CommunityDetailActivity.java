@@ -331,6 +331,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     public void GETFeed() {
+        String boardkind = shardpref.getString("boardkind","자유게시판");
+
         uriList.clear();
         dlog.i("GETFeed place_id : " + place_id);
         dlog.i("GETFeed feed_id : " + feed_id);
@@ -339,7 +341,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, feed_id, "", "2", USER_INFO_ID);
+        Call<String> call = api.getData(place_id, feed_id, "", "2", USER_INFO_ID,boardkind);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override

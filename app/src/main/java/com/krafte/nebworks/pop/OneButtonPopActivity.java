@@ -20,17 +20,20 @@ import com.krafte.nebworks.ui.login.LoginActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.JoinActivity;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
+import com.krafte.nebworks.util.PreferenceHelper;
 
 public class OneButtonPopActivity extends Activity {
     private ActivityOnebuttonPopBinding binding;
     private static final String TAG = "OneButtonPopActivity";
     Context mContext;
-
+    PreferenceHelper shardpref;
 
     private String title            = "";
     private String data             = "";
     private String left_btn_txt     = "";
     Intent intent;
+
+    String USER_INFO_PLATFORM = "";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -46,6 +49,7 @@ public class OneButtonPopActivity extends Activity {
         setContentView(binding.getRoot()); // 2
 
         mContext = this;
+        shardpref = new PreferenceHelper(mContext);
 
         //데이터 가져오기
         intent = getIntent();
@@ -111,15 +115,13 @@ public class OneButtonPopActivity extends Activity {
                 overridePendingTransition(0, R.anim.translate_down);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             } else if(data.equals("이미 가입한 내역이 있습니다.")){
-                intent = new Intent(mContext, ChangePWActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, R.anim.translate_down);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            } else if(data.equals("가입하지 않은 사용자입니다.")){
-                intent = new Intent(mContext, JoinActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, R.anim.translate_down);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                USER_INFO_PLATFORM = shardpref.getString("USER_INFO_PLATFORM","0");
+                if(USER_INFO_PLATFORM.equals("NEB")){
+                    intent = new Intent(mContext, ChangePWActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, R.anim.translate_down);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                }
             }
 //            else{
 //                //데이터 전달하기

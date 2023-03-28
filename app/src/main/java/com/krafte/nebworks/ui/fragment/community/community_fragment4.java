@@ -48,9 +48,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 
-public class community_fragment1 extends Fragment {
+/*
+* 2023-03-28 방창배 작성 - 근로자 게시판
+*
+* */
+public class community_fragment4 extends Fragment {
     private CommunityFragment1Binding binding;
-    private final static String TAG = "WorkStatusSubFragment1";
+    private final static String TAG = "community_fragment4";
     Context mContext;
     Activity activity;
 
@@ -86,8 +90,8 @@ public class community_fragment1 extends Fragment {
     String format = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
 
-    public static community_fragment1 newInstance() {
-        return new community_fragment1();
+    public static community_fragment4 newInstance() {
+        return new community_fragment4();
     }
 
     String str;
@@ -129,6 +133,8 @@ public class community_fragment1 extends Fragment {
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
             place_id        = shardpref.getString("place_id","");
             place_owner_id  = shardpref.getString("place_owner_id","");
+            
+            binding.title.setText("알바끼리 잡담");
 
             //shardpref Area
             shardpref.putInt("SELECT_POSITION", 0);
@@ -258,7 +264,7 @@ public class community_fragment1 extends Fragment {
                             getWord.add(Response.getJSONObject(i).getString("word"));
                         }
                         shardpref.putString("FobiddenWord",String.valueOf(getWord));
-                        shardpref.putString("boardkind","자유게시판");
+                        shardpref.putString("boardkind","근로자게시판");
                         setRecyclerView();
                         setRecyclerView2();
                     } catch (JSONException e) {
@@ -286,7 +292,7 @@ public class community_fragment1 extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "3", "2", USER_INFO_ID,"자유게시판");
+        Call<String> call = api.getData(place_id, "", "3", "2", USER_INFO_ID,"근로자게시판");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -295,8 +301,8 @@ public class community_fragment1 extends Fragment {
                 Log.e(TAG, "position 0 response 1: " + response.isSuccessful());
                 if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
                     String jsonResponse = rc.getBase64decode(response.body());
-                    dlog.i("jsonResponse length : " + jsonResponse.length());
-                    dlog.i("jsonResponse : " + jsonResponse);
+                    dlog.i("community_fragment4 jsonResponse length : " + jsonResponse.length());
+                    dlog.i("community_fragment4 jsonResponse : " + jsonResponse);
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
@@ -345,7 +351,7 @@ public class community_fragment1 extends Fragment {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if (Integer.parseInt(jsonObject.getString("view_cnt")) > 50
-                                            && jsonObject.getString("boardkind").equals("자유게시판")) {
+                                            && jsonObject.getString("boardkind").equals("근로자게시판")) {
                                         total_cnt++;
                                         BestmAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                                 jsonObject.getString("id"),
@@ -426,7 +432,7 @@ public class community_fragment1 extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "2", "2", USER_INFO_ID,"자유게시판");
+        Call<String> call = api.getData(place_id, "", "2", "2", USER_INFO_ID,"근로자게시판");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -480,7 +486,7 @@ public class community_fragment1 extends Fragment {
                                 binding.noDataTxt2.setVisibility(View.GONE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if (jsonObject.getString("boardkind").equals("자유게시판")) {
+                                    if (jsonObject.getString("boardkind").equals("근로자게시판")) {
                                         if(!selectCate.isEmpty()){
                                             dlog.i("selectCate : " + selectCate);
                                             dlog.i("category : " + jsonObject.getString("category"));

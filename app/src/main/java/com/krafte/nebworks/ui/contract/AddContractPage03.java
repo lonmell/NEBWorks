@@ -208,14 +208,14 @@ public class AddContractPage03 extends AppCompatActivity {
                         e.printStackTrace();
                         return;
                     }
-                    if (textlength01 == 4 && before != 1) {
+                    if (textlength01 == 3 && before != 1) {
                         binding.input02.setText(binding.input02.getText().toString() + "-");
                         binding.input02.setSelection(binding.input02.getText().length());
-                    } else if (textlength01 == 7 && before != 1) {
+                    } else if (textlength01 == 6 && before != 1) {
                         binding.input02.setText(binding.input02.getText().toString() + "-");
                         binding.input02.setSelection(binding.input02.getText().length());
                     } else if (textlength01 == 8 && !binding.input02.getText().toString().contains("-")) {
-                        binding.input02.setText(binding.input02.getText().toString().substring(0, 4) + "-" + binding.input02.getText().toString().substring(4, 6) + "-" + binding.input02.getText().toString().substring(6, 10));
+                        binding.input02.setText(binding.input02.getText().toString().substring(0, 3) + "-" + binding.input02.getText().toString().substring(3, 5) + "-" + binding.input02.getText().toString().substring(5, 10));
                         binding.input02.setSelection(binding.input02.getText().length());
                     }
                 }
