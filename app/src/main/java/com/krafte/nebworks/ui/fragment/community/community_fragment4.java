@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +70,7 @@ public class community_fragment4 extends Fragment {
 
     //Other
     //position 0
+    ArrayList<PlaceNotiData.PlaceNotiData_list> searchmList = new ArrayList<>();
     ArrayList<PlaceNotiData.PlaceNotiData_list> BestmList = new ArrayList<>();
     CommunityAdapter BestmAdapter = null;
     ArrayList<PlaceNotiData.PlaceNotiData_list> mList = new ArrayList<>();
@@ -191,6 +194,23 @@ public class community_fragment4 extends Fragment {
             } else {
                 shardpref.putInt("com_kind", 1);
                 pm.MoreListCommunity(mContext);
+            }
+        });
+
+        binding.searchCommunity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchFilter(s.toString());
             }
         });
     }
@@ -384,6 +404,10 @@ public class community_fragment4 extends Fragment {
                                 binding.bestList.setVisibility(View.GONE);
                             }
                             BestmAdapter.notifyDataSetChanged();
+                            String searchTv = binding.searchCommunity.getText().toString();
+                            if(searchTv.length() > 0){
+                                searchFilter(searchTv);
+                            }
                         }
                         BestmAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                             @Override
@@ -554,6 +578,10 @@ public class community_fragment4 extends Fragment {
                                 binding.allList.setVisibility(View.VISIBLE);
                                 binding.noDataTxt2.setVisibility(View.GONE);
                             }
+                            String searchTv = binding.searchCommunity.getText().toString();
+                            if(searchTv.length() > 0){
+                                searchFilter(searchTv);
+                            }
                         }
                         mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                             @Override
@@ -607,5 +635,45 @@ public class community_fragment4 extends Fragment {
         startActivity(intent);
         activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void searchFilter(String searchText) {
+        if(searchText.length() != 0 && mList.size() != 0){
+            searchmList.clear();
+            dlog.i("searchFilter 1");
+            dlog.i("mList.size() : " + mList.size());
+            for (int i = 0; i < mList.size(); i++) {
+                if (mList.get(i).getTitle().toLowerCase().contains(searchText.toLowerCase())) {
+                    dlog.i("searchFilter contain : " + mList.get(i).getTitle() + "/" + mList.get(i).getTitle().toLowerCase().contains(searchText.toLowerCase()));
+//                    mList.clear();
+                    searchmList.add(mList.get(i));
+//                    break;
+                }
+            }
+            mAdapter.filterList(searchmList);
+            mAdapter.notifyDataSetChanged();
+        }else{
+            dlog.i("searchFilter 2");
+            mAdapter.filterList(mList);
+            mAdapter.notifyDataSetChanged();
+        }
+        if(searchText.length() != 0 && BestmList.size() != 0){
+            searchmList.clear();
+            dlog.i("searchFilter 1");
+            dlog.i("mList.size() : " + BestmList.size());
+            for (int i = 0; i < BestmList.size(); i++) {
+                if (BestmList.get(i).getTitle().toLowerCase().contains(searchText.toLowerCase())) {
+                    dlog.i("searchFilter contain : " + BestmList.get(i).getTitle() + "/" + BestmList.get(i).getTitle().toLowerCase().contains(searchText.toLowerCase()));
+                    searchmList.add(mList.get(i));
+                }
+            }
+            mAdapter.filterList(searchmList);
+            mAdapter.notifyDataSetChanged();
+        }else{
+            dlog.i("searchFilter 2");
+            mAdapter.filterList(BestmList);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

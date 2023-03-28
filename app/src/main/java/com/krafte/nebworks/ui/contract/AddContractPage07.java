@@ -247,10 +247,9 @@ public class AddContractPage07 extends AppCompatActivity {
 
     public void UserCheck() {
         try{
-            binding.input01.setText(worker_name);
-            binding.input05.setText(worker_phone);
-            binding.input06.setText(worker_email);
-
+            binding.input01.setText(worker_name.equals("null")?"":worker_name);
+            binding.input05.setText(worker_phone.equals("null")?"":worker_phone);
+            binding.input06.setText(worker_email.equals("null")?"":worker_email);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -420,16 +419,18 @@ public class AddContractPage07 extends AppCompatActivity {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     id               = Response.getJSONObject(0).getString("id");
-                                    worker_name      = Response.getJSONObject(0).getString("worker_name");
+                                    worker_name      = Response.getJSONObject(0).getString("worker_name").equals("null")?"":Response.getJSONObject(0).getString("worker_name");
                                     worker_jumin     = Response.getJSONObject(0).getString("worker_jumin");
                                     worker_address   = Response.getJSONObject(0).getString("worker_address");
                                     worker_address_detail = Response.getJSONObject(0).getString("worker_address_detail");
                                     worker_phone     = Response.getJSONObject(0).getString("worker_phone");
                                     worker_email     = Response.getJSONObject(0).getString("worker_email");
 
-                                    binding.input02.setText(worker_jumin);
-                                    binding.input03.setText(worker_address);
-                                    binding.input04.setText(worker_address_detail);
+                                    binding.input02.setText(worker_jumin.equals("null")?"":worker_jumin);
+                                    binding.input03.setText(worker_address.equals("null")?"":worker_address);
+                                    binding.input04.setText(worker_address_detail.equals("null")?"":worker_address_detail);
+
+
                                 }
                             } catch(JSONException e){
                                 e.printStackTrace();

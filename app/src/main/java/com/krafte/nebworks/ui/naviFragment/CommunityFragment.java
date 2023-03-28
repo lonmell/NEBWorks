@@ -142,11 +142,20 @@ public class CommunityFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("boardkind");
+        shardpref.remove("FobiddenWord");
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
     }
 
     public void setBtnEvent() {
+
+
         binding.selectFragmentbtn1.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -310,7 +319,7 @@ public class CommunityFragment extends Fragment {
                             if (USER_INFO_AUTH.isEmpty()) {
                                 isAuth();
                             } else {
-                                if (paging_position == 0) {
+                                if (paging_position == 0 || paging_position == 3) {
                                     shardpref.putString("state","AddCommunity");
                                     pm.CommunityAdd(mContext);
                                 } else if (paging_position == 1) {

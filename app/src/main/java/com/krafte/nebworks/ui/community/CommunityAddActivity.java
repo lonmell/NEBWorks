@@ -219,6 +219,7 @@ public class CommunityAddActivity extends AppCompatActivity {
 
         nickname_select = 1;
         user_input_name = USER_INFO_NICKNAME;
+        boardkind = shardpref.getString("boardkind","자유게시판");
 
         setBtnEvent();
     }
@@ -391,7 +392,6 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     //피드 게시글 업로드
     public void AddFeedCommunity() {
-        boardkind = "자유게시판";
         String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + title);
@@ -480,7 +480,7 @@ public class CommunityAddActivity extends AppCompatActivity {
         String title = binding.writeTitle.getText().toString();
         String content = binding.writeContents.getText().toString();
         String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
-        boardkind = "자유게시판";
+
         category = binding.selectCategoryTxt.getText().toString();
         String fix_yn = "";
         if(uriList.size() != 0 && ProfileUrl.size() == 0){

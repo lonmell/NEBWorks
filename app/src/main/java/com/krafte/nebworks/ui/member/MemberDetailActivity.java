@@ -913,6 +913,13 @@ public class MemberDetailActivity extends AppCompatActivity {
             Document document = new Document();
 //            String filePath = SD_PATH + "/captured.pdf";
             String filePath = SD_PATH + "/" + change_place_name + "_" + getYMdate + "월 출결표.pdf";
+            //파일을 생성하기전 해당 경로의 파일을 한번 삭제한다
+            File f = new File(filePath);
+            if (f.delete()) {
+                System.out.println("파일이 삭제되었습니다.");
+            } else {
+                System.out.println("파일을 삭제할 수 없습니다.");
+            }
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
             document.open();
 

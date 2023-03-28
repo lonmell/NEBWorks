@@ -341,8 +341,8 @@ public class AddContractPage03 extends AppCompatActivity {
                                     binding.input01.setText(owner_name);
 //                                    binding.input02.setText(registr_num);
                                     dlog.i("registr_num 1: " + registr_num);
-                                    dlog.i("registr_num : " + registr_num.substring(0, 4) + "-" + registr_num.substring(4, 6) + "-" + registr_num.substring(6, 10));
-                                    binding.input02.setText(registr_num.substring(0, 4) + "-" + registr_num.substring(4, 6) + "-" + registr_num.substring(6, 10));
+                                    dlog.i("registr_num : " + registr_num.substring(0, 3) + "-" + registr_num.substring(3, 5) + "-" + registr_num.substring(5, 10));
+                                    binding.input02.setText(registr_num.substring(0, 3) + "-" + registr_num.substring(3, 5) + "-" + registr_num.substring(5, 10));
                                     binding.input04.setText(address);
                                     binding.input05.setText(address_detail);
                                 }
@@ -421,7 +421,7 @@ public class AddContractPage03 extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         RegistrSearchInterface api = retrofit.create(RegistrSearchInterface.class);
-        Call<String> call = api.getData(registr_num);
+        Call<String> call = api.getData(registr_num.replace("-",""));
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

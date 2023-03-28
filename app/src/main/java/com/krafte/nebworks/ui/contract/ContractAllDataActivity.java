@@ -413,6 +413,13 @@ public class ContractAllDataActivity extends AppCompatActivity {
 
         File f = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.jpg");
         try {
+            //파일을 생성하기전 해당 경로의 파일을 한번 삭제한다
+            if (f.delete()) {
+                System.out.println("파일이 삭제되었습니다.");
+            } else {
+                System.out.println("파일을 삭제할 수 없습니다.");
+            }
+
             f.createNewFile();
             FileOutputStream fo = new FileOutputStream(f);
             fo.write(bytes.toByteArray());
@@ -429,7 +436,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
             image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
             document.add(image);
             document.close();
-            Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
 
             f.delete();
 

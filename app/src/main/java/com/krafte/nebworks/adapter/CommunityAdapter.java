@@ -286,4 +286,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
         return position;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterList(ArrayList<PlaceNotiData.PlaceNotiData_list> filteredList) {
+        mData = filteredList;
+        notifyDataSetChanged();
+    }
+
 }
