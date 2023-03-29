@@ -82,11 +82,11 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add04.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add05.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add06.xml" value="0.22" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add07.xml" value="0.33" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add07.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add08.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_add09.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contract_fragment.xml" value="0.24615384615384617" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contractall_data.xml" value="0.22" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contractall_data.xml" value="0.19591078066914497" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contractworker_accept.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_contractworker_sign.xml" value="0.18" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_datecoustompicker.xml" value="0.2" />
@@ -132,6 +132,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placenoti_add.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placephoto_pop.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_placework_detail.xml" value="0.25" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_platformpop.xml" value="0.75" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_profileedit.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_push.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/activity_pushlog.xml" value="0.25908507909362977" />
@@ -188,6 +189,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/communityfragment.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/contract_fragment.xml" value="0.24615384615384617" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/contractlist_item.xml" value="0.67" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/custom_icon_toast.xml" value="0.45427350427350427" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/custom_normal_toast.xml" value="0.25854700854700857" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/cv_memberinout_item.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/NEBWorks/app/src/main/res/layout/datepicker_coustom_item.xml" value="0.18" />

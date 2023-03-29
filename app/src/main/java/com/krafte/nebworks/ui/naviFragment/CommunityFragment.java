@@ -31,6 +31,7 @@ import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.fragment.community.community_fragment1;
 import com.krafte.nebworks.ui.fragment.community.community_fragment2;
 import com.krafte.nebworks.ui.fragment.community.community_fragment3;
+import com.krafte.nebworks.ui.fragment.community.community_fragment4;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -111,9 +112,18 @@ public class CommunityFragment extends Fragment {
 
             ChangePage(0);
             setAddBtnSetting();
+
+            if(USER_INFO_AUTH.equals("0")){
+                binding.selectFragmentbtn2.setVisibility(View.VISIBLE);
+                binding.selectFragmentbtn4.setVisibility(View.GONE);
+            }else{
+                binding.selectFragmentbtn2.setVisibility(View.GONE);
+                binding.selectFragmentbtn4.setVisibility(View.VISIBLE);
+            }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
+
 
         return binding.getRoot();
 //        return rootView;
@@ -132,11 +142,20 @@ public class CommunityFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("boardkind");
+        shardpref.remove("FobiddenWord");
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
     }
 
     public void setBtnEvent() {
+
+
         binding.selectFragmentbtn1.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -144,6 +163,7 @@ public class CommunityFragment extends Fragment {
                 ChangePage(0);
             }
         });
+
         binding.selectFragmentbtn2.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -159,6 +179,13 @@ public class CommunityFragment extends Fragment {
                 ChangePage(2);
             }
         });
+        binding.selectFragmentbtn4.setOnClickListener(v -> {
+            if (USER_INFO_AUTH.isEmpty()) {
+                isAuth();
+            } else {
+                ChangePage(3);
+            }
+        });
     }
 
     private void ChangePage(int i) {
@@ -168,6 +195,8 @@ public class CommunityFragment extends Fragment {
         binding.selectFragmentline2.setBackgroundColor(Color.parseColor("#FFFFFF"));
         binding.selectFragmenttv3.setTextColor(Color.parseColor("#696969"));
         binding.selectFragmentline3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        binding.selectFragmenttv4.setTextColor(Color.parseColor("#696969"));
+        binding.selectFragmentline4.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         binding.addBtn.addWorktimeBtn.setVisibility(View.GONE);
 
@@ -187,6 +216,12 @@ public class CommunityFragment extends Fragment {
             binding.selectFragmenttv3.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.selectFragmentline3.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             fg = community_fragment3.newInstance();
+            setChildFragment(fg);
+        } else if (i == 3) {
+            binding.selectFragmenttv4.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.selectFragmentline4.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
+            binding.addBtn.addWorktimeBtn.setVisibility(View.VISIBLE);
+            fg = community_fragment4.newInstance();
             setChildFragment(fg);
         }
     }
@@ -284,7 +319,7 @@ public class CommunityFragment extends Fragment {
                             if (USER_INFO_AUTH.isEmpty()) {
                                 isAuth();
                             } else {
-                                if (paging_position == 0) {
+                                if (paging_position == 0 || paging_position == 3) {
                                     shardpref.putString("state","AddCommunity");
                                     pm.CommunityAdd(mContext);
                                 } else if (paging_position == 1) {

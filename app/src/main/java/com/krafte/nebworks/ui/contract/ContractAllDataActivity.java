@@ -196,6 +196,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
     String add_terms = "";
     String worker_name = "";
     String worker_jumin = "";
+    String worker_jumin2 = "";
     String worker_address = "";
     String worker_address_detail = "";
     String worker_phone = "";
@@ -261,6 +262,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
                                     add_terms        = Response.getJSONObject(0).getString("add_terms");
                                     worker_name      = Response.getJSONObject(0).getString("worker_name");
                                     worker_jumin     = Response.getJSONObject(0).getString("worker_jumin");
+                                    worker_jumin2     = Response.getJSONObject(0).getString("worker_jumin2");
                                     worker_address   = Response.getJSONObject(0).getString("worker_address");
                                     worker_address_detail = Response.getJSONObject(0).getString("worker_address_detail");
                                     worker_phone     = Response.getJSONObject(0).getString("worker_phone");
@@ -320,7 +322,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
                                     }
                                     binding.input09.setText(add_contents);
                                     binding.input10.setText(worker_name);
-                                    binding.input11.setText(worker_jumin);
+                                    binding.input11.setText(worker_jumin2);
                                     binding.input12.setText(worker_address);
                                     binding.input13.setText(worker_address_detail);
                                     binding.input14.setText(worker_phone);
@@ -411,6 +413,13 @@ public class ContractAllDataActivity extends AppCompatActivity {
 
         File f = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.jpg");
         try {
+            //파일을 생성하기전 해당 경로의 파일을 한번 삭제한다
+            if (f.delete()) {
+                System.out.println("파일이 삭제되었습니다.");
+            } else {
+                System.out.println("파일을 삭제할 수 없습니다.");
+            }
+
             f.createNewFile();
             FileOutputStream fo = new FileOutputStream(f);
             fo.write(bytes.toByteArray());
@@ -427,7 +436,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
             image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
             document.add(image);
             document.close();
-            Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
 
             f.delete();
 

@@ -115,9 +115,16 @@ public class ChangePWActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    public void onBackPressed(){
+//        super.onBackPressed();
+        pm.Login(mContext);
+    }
+
+
     private void setBtnEvent(){
         binding.backBtn.setOnClickListener(v -> {
-           super.onBackPressed();
+           pm.Login(mContext);
         });
         binding.inputPw.addTextChangedListener(new TextWatcher() {
             @Override

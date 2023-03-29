@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
+import com.krafte.nebworks.dataInterface.ContractGetAllInterface;
 import com.krafte.nebworks.dataInterface.ContractWorkerInterface;
 import com.krafte.nebworks.dataInterface.ContractidInterface;
 import com.krafte.nebworks.databinding.ActivityContractAdd07Binding;
@@ -33,6 +36,7 @@ import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -111,7 +115,7 @@ public class AddContractPage07 extends AppCompatActivity {
         setBtnEvent();
     }
 
-
+    int textlength01 = 0;
     @Override
     public void onDestroy(){
         super.onDestroy();
@@ -138,7 +142,9 @@ public class AddContractPage07 extends AppCompatActivity {
             binding.input03.setText(pin_store_address);
             binding.input04.setText(pin_store_addressdetail);
         }
+        GetWorkerContract();
     }
+
     //지오코딩 ( 주소 >> 위도경도 )
     List<Address> list = new ArrayList<>();
     double latitude = 0;
@@ -185,6 +191,37 @@ public class AddContractPage07 extends AppCompatActivity {
                 super.onBackPressed();
             }
         });
+
+        binding.input02.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.input02.isFocusable() && !s.toString().equals("")) {
+                    try {
+                        textlength01 = binding.input02.getText().toString().length();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    if (textlength01 == 6 && before != 1) {
+                        binding.input02.setText(binding.input02.getText().toString() + "-");
+                        binding.input02.setSelection(binding.input02.getText().length());
+                    } else if (textlength01 == 8 && !binding.input02.getText().toString().contains("-")) {
+                        binding.input02.setText(binding.input02.getText().toString().substring(0, 6) + "-" + binding.input02.getText().toString().substring(7, 13));
+                        binding.input02.setSelection(binding.input02.getText().length());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     //이미지 업로드에 필요한 소스 START
@@ -210,9 +247,9 @@ public class AddContractPage07 extends AppCompatActivity {
 
     public void UserCheck() {
         try{
-            binding.input01.setText(worker_name);
-            binding.input05.setText(worker_phone);
-            binding.input06.setText(worker_email);
+            binding.input01.setText(worker_name.equals("null")?"":worker_name);
+            binding.input05.setText(worker_phone.equals("null")?"":worker_phone);
+            binding.input06.setText(worker_email.equals("null")?"":worker_email);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -346,6 +383,66 @@ public class AddContractPage07 extends AppCompatActivity {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
+
+
+    String id = "";
+    String worker_jumin = "";
+    String worker_address = "";
+    String worker_address_detail = "";
+
+
+    private void GetWorkerContract(){
+        dlog.i("------GetAllContract------");
+        dlog.i("contract_id : " + contract_id);
+        dlog.i("------GetAllContract------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ContractGetAllInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        ContractGetAllInterface api = retrofit.create(ContractGetAllInterface.class);
+        Call<String> call = api.getData(contract_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetAllContract jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetAllContract jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    id               = Response.getJSONObject(0).getString("id");
+                                    worker_name      = Response.getJSONObject(0).getString("worker_name").equals("null")?"":Response.getJSONObject(0).getString("worker_name");
+                                    worker_jumin     = Response.getJSONObject(0).getString("worker_jumin");
+                                    worker_address   = Response.getJSONObject(0).getString("worker_address");
+                                    worker_address_detail = Response.getJSONObject(0).getString("worker_address_detail");
+                                    worker_phone     = Response.getJSONObject(0).getString("worker_phone");
+                                    worker_email     = Response.getJSONObject(0).getString("worker_email");
+
+                                    binding.input02.setText(worker_jumin.equals("null")?"":worker_jumin);
+                                    binding.input03.setText(worker_address.equals("null")?"":worker_address);
+                                    binding.input04.setText(worker_address_detail.equals("null")?"":worker_address_detail);
+
+
+                                }
+                            } catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
                 dlog.e("에러1 = " + t.getMessage());
             }
         });

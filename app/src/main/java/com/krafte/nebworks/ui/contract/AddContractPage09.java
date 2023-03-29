@@ -3,6 +3,7 @@ package com.krafte.nebworks.ui.contract;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -574,15 +576,14 @@ public class AddContractPage09 extends AppCompatActivity {
             Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
 
             f.delete();
-
-//            File file = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.pdf");
-//            Uri uri = FileProvider.getUriForFile(this, "com.krafte.nebworks.provider", file);
-//            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-//            intent.setType("application/pdf");
-//            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            intent.putExtra(Intent.EXTRA_STREAM, uri);
-//            Intent chooser = Intent.createChooser(intent, "share");
-//            mContext.startActivity(chooser);
+            File file = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.pdf");
+            Uri uri = FileProvider.getUriForFile(this, "com.krafte.nebworks.provider", file);
+            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            intent.setType("application/pdf");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            Intent chooser = Intent.createChooser(intent, "share");
+            mContext.startActivity(chooser);
 
         } catch (Exception e) {
             e.printStackTrace();

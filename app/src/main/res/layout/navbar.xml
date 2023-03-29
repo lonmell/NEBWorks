@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer2"
-    android:layout_width="360dp"
+    android:layout_width="280dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="#ffffff"
@@ -59,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
+                android:gravity="center"
                 android:layout_toStartOf="@+id/my_stting_area"
                 android:layout_toEndOf="@+id/user_profile_box"
                 android:orientation="vertical">
@@ -71,7 +72,8 @@
                     android:gravity="start|center"
                     android:text="user_name"
                     android:textColor="@color/black"
-                    android:textSize="28sp"
+                    android:textSize="20sp"
+                    android:singleLine="true"
                     tools:ignore="HardcodedText" />
 
                 <TextView

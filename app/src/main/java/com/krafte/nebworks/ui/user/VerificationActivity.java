@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -413,18 +414,27 @@ public class VerificationActivity extends AppCompatActivity {
                                     String email = Response.getJSONObject(0).getString("account");
                                     String gender = Response.getJSONObject(0).getString("gender");
                                     String img_path = Response.getJSONObject(0).getString("img_path");
+                                    String platform = Response.getJSONObject(0).getString("platform");
+
                                     shardpref.putString("USER_INFO_ID", id);
                                     shardpref.putString("USER_INFO_PHONE", UPhone);
                                     shardpref.putString("USER_INFO_EMAIL", email);
                                     shardpref.putString("USER_INFO_NAME", Uname);
                                     shardpref.putString("USER_INFO_GENDER", gender);
                                     shardpref.putString("USER_INFO_IMG", img_path);
+                                    shardpref.putString("USER_INFO_PLATFORM", platform);
                                     shardpref.putString("returnpage","VerificationActivity");
-                                    Intent intent = new Intent(mContext, OneButtonPopActivity.class);
-                                    intent.putExtra("data", "이미 가입한 내역이 있습니다.");
-                                    intent.putExtra("left_btn_txt", "확인");
-                                    startActivity(intent);
-                                    overridePendingTransition(R.anim.translate_up, 0);
+
+                                    if(platform.equals("NEB")){
+                                        Intent intent = new Intent(mContext, OneButtonPopActivity.class);
+                                        intent.putExtra("data", "이미 가입한 내역이 있습니다.");
+                                        intent.putExtra("left_btn_txt", "확인");
+                                        startActivity(intent);
+                                        overridePendingTransition(R.anim.translate_up, 0);
+                                    }else{
+                                        Toast_ICON(platform + "간편로그인으로 가입된 계정이 있습니다.\n" + email,platform);
+                                    }
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -650,6 +660,29 @@ public class VerificationActivity extends AppCompatActivity {
         //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
         toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
         toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
+
+    public void Toast_ICON(String message, String icon) {
+        BtnOneCircleFun(true);
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_icon_toast, (ViewGroup) findViewById(R.id.icon_toast_layout));
+        ImageView platform_icon = layout.findViewById(R.id.platform_icon);
+        if(icon.equals("Google")){
+            platform_icon.setBackgroundResource(R.drawable.google);
+        }else if(icon.equals("Kakao")){
+            platform_icon.setBackgroundResource(R.drawable.kakao);
+        }else if(icon.equals("Naver")){
+            platform_icon.setBackgroundResource(R.drawable.naver_icon2);
+        }
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_LONG); //메시지 표시 시간
         toast.setView(layout);
         toast.show();
     }

@@ -59,6 +59,8 @@ public class MoreListCommunityActivity extends AppCompatActivity {
     String USER_INFO_AUTH = "";
     String returnPage = "";
     String place_id = "";
+    String boardkind = "";
+
     int com_kind = 0;
 
     ArrayList<PlaceNotiData.PlaceNotiData_list> BestmList = new ArrayList<>();
@@ -106,6 +108,8 @@ public class MoreListCommunityActivity extends AppCompatActivity {
         com_kind = shardpref.getInt("com_kind", 0); // -- 0 : 인기게시글 / 1 : 전체게시글
         returnPage = shardpref.getString("returnPage", "");
         USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        boardkind = shardpref.getString("boardkind","자유게시판");
+
         setAddBtnSetting();
 
         String pagetitle = "";
@@ -224,7 +228,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "3", "2", USER_INFO_ID);
+        Call<String> call = api.getData(place_id, "", "3", "2", USER_INFO_ID,boardkind);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -276,7 +280,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
                                     if (Integer.parseInt(jsonObject.getString("view_cnt")) > 50
-                                            && jsonObject.getString("boardkind").equals("자유게시판")) {
+                                            && jsonObject.getString("boardkind").equals(boardkind)) {
                                         total_cnt++;
                                         BestmAdapter.addItem(new PlaceNotiData.PlaceNotiData_list(
                                                 jsonObject.getString("id"),
@@ -354,7 +358,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "2", "2", USER_INFO_ID);
+        Call<String> call = api.getData(place_id, "", "2", "2", USER_INFO_ID,boardkind);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override

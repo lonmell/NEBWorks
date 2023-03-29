@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +66,7 @@ public class community_fragment1 extends Fragment {
 
     //Other
     //position 0
+    ArrayList<PlaceNotiData.PlaceNotiData_list> searchmList = new ArrayList<>();
     ArrayList<PlaceNotiData.PlaceNotiData_list> BestmList = new ArrayList<>();
     CommunityAdapter BestmAdapter = null;
     ArrayList<PlaceNotiData.PlaceNotiData_list> mList = new ArrayList<>();
@@ -72,6 +75,8 @@ public class community_fragment1 extends Fragment {
     ArrayList<String> setCate = new ArrayList<>();
     ArrayList<StringData.StringData_list> mData = new ArrayList<>();
     SelectCateAdapter cateAdapter = null;
+
+
 
     List<String> getWord = new ArrayList<>();
     RetrofitConnect rc = new RetrofitConnect();
@@ -187,6 +192,23 @@ public class community_fragment1 extends Fragment {
                 pm.MoreListCommunity(mContext);
             }
         });
+
+        binding.searchCommunity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchFilter(s.toString());
+            }
+        });
     }
 
     String selectCate = "";
@@ -208,9 +230,7 @@ public class community_fragment1 extends Fragment {
         binding.selectCategory.setAdapter(cateAdapter);
         binding.selectCategory.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
         for(String str : setCate.toString().replace("[","").replace("]","").trim().split(",")){
-            cateAdapter.addItem(new StringData.StringData_list(
-                    str
-            ));
+            cateAdapter.addItem(new StringData.StringData_list(str));
         }
         cateAdapter.notifyDataSetChanged();
         cateAdapter.setOnItemClickListener(new SelectCateAdapter.OnItemClickListener() {
@@ -258,6 +278,7 @@ public class community_fragment1 extends Fragment {
                             getWord.add(Response.getJSONObject(i).getString("word"));
                         }
                         shardpref.putString("FobiddenWord",String.valueOf(getWord));
+                        shardpref.putString("boardkind","자유게시판");
                         setRecyclerView();
                         setRecyclerView2();
                     } catch (JSONException e) {
@@ -285,7 +306,7 @@ public class community_fragment1 extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "3", "2", USER_INFO_ID);
+        Call<String> call = api.getData(place_id, "", "3", "2", USER_INFO_ID,"자유게시판");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -377,6 +398,10 @@ public class community_fragment1 extends Fragment {
                                 binding.bestList.setVisibility(View.GONE);
                             }
                             BestmAdapter.notifyDataSetChanged();
+                            String searchTv = binding.searchCommunity.getText().toString();
+                            if(searchTv.length() > 0){
+                                searchFilter(searchTv);
+                            }
                         }
                         BestmAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                             @Override
@@ -425,7 +450,7 @@ public class community_fragment1 extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData(place_id, "", "2", "2", USER_INFO_ID);
+        Call<String> call = api.getData(place_id, "", "2", "2", USER_INFO_ID,"자유게시판");
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -547,6 +572,10 @@ public class community_fragment1 extends Fragment {
                                 binding.allList.setVisibility(View.VISIBLE);
                                 binding.noDataTxt2.setVisibility(View.GONE);
                             }
+                            String searchTv = binding.searchCommunity.getText().toString();
+                            if(searchTv.length() > 0){
+                                searchFilter(searchTv);
+                            }
                         }
                         mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                             @Override
@@ -600,5 +629,30 @@ public class community_fragment1 extends Fragment {
         startActivity(intent);
         activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void searchFilter(String searchText) {
+        if(searchText.length() != 0 && mList.size() != 0){
+            searchmList.clear();
+            dlog.i("searchFilter 1");
+            dlog.i("mList.size() : " + mList.size());
+            for (int i = 0; i < mList.size(); i++) {
+                if (mList.get(i).getTitle().toLowerCase().contains(searchText.toLowerCase())) {
+                    dlog.i("searchFilter contain : " + mList.get(i).getTitle() + "/" + mList.get(i).getTitle().toLowerCase().contains(searchText.toLowerCase()));
+//                    mList.clear();
+                    searchmList.add(mList.get(i));
+//                    break;
+                }
+            }
+            mAdapter.filterList(searchmList);
+            mAdapter.notifyDataSetChanged();
+        }else{
+            dlog.i("searchFilter 2");
+            mAdapter.filterList(mList);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

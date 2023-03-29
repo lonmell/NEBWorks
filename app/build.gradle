@@ -10,8 +10,8 @@ android {
         applicationId "com.krafte.nebworks"
         minSdk 26
         targetSdk 32
-        versionCode 48
-        versionName "48"
+        versionCode 51
+        versionName "51"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -19,9 +19,9 @@ android {
         debug{
             //코드 난독화 + 프로가드 파일 예외처리 ↓ ( 코드 난독화 + 리소스 축소화는 난독화를 true 하지 않으면 리소스 축소를 할수 없음.)
             //디버그할때는 빌드 속도를 높이기 위해서 난독화, 리소스 축소화는 false
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             proguardFiles 'proguard-rules.pro'
         }

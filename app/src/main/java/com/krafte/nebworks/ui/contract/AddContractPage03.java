@@ -214,8 +214,8 @@ public class AddContractPage03 extends AppCompatActivity {
                     } else if (textlength01 == 6 && before != 1) {
                         binding.input02.setText(binding.input02.getText().toString() + "-");
                         binding.input02.setSelection(binding.input02.getText().length());
-                    } else if (textlength01 == 10 && !binding.input02.getText().toString().contains("-")) {
-                        binding.input02.setText(binding.input02.getText().toString().substring(0, 3) + "-" + binding.input02.getText().toString().substring(4, 6) + "-" + binding.input02.getText().toString().substring(6, 10));
+                    } else if (textlength01 == 8 && !binding.input02.getText().toString().contains("-")) {
+                        binding.input02.setText(binding.input02.getText().toString().substring(0, 3) + "-" + binding.input02.getText().toString().substring(3, 5) + "-" + binding.input02.getText().toString().substring(5, 10));
                         binding.input02.setSelection(binding.input02.getText().length());
                     }
                 }
@@ -339,7 +339,10 @@ public class AddContractPage03 extends AppCompatActivity {
                                     String address_detail = Response.getJSONObject(0).getString("address_detail");
 
                                     binding.input01.setText(owner_name);
-                                    binding.input02.setText(registr_num);
+//                                    binding.input02.setText(registr_num);
+                                    dlog.i("registr_num 1: " + registr_num);
+                                    dlog.i("registr_num : " + registr_num.substring(0, 3) + "-" + registr_num.substring(3, 5) + "-" + registr_num.substring(5, 10));
+                                    binding.input02.setText(registr_num.substring(0, 3) + "-" + registr_num.substring(3, 5) + "-" + registr_num.substring(5, 10));
                                     binding.input04.setText(address);
                                     binding.input05.setText(address_detail);
                                 }
@@ -418,7 +421,7 @@ public class AddContractPage03 extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         RegistrSearchInterface api = retrofit.create(RegistrSearchInterface.class);
-        Call<String> call = api.getData(registr_num);
+        Call<String> call = api.getData(registr_num.replace("-",""));
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
