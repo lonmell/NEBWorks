@@ -99,7 +99,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
 
     //xml 
     ImageView inout_icon;
-    TextView Setinout_tv, Setinout_tv2, in_time, close_btn, inout_insert;
+    TextView Setinout_tv, Setinout_tv2, in_time, close_btn, inout_insert, inout_settv;
     LinearLayout time_area;
 
     @SuppressLint("SetTextI18n")
@@ -141,6 +141,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             close_btn = view.findViewById(R.id.close_btn);
             inout_insert = view.findViewById(R.id.inout_insert);
             time_area = view.findViewById(R.id.time_area);
+            inout_settv = view.findViewById(R.id.inout_settv);
 
             setBtnEvent();
 
@@ -172,7 +173,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
             }
             Setinout_tv.setText(inout_tv);
             Setinout_tv2.setText(inout_tv2);
-            in_time.setText(time);
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -332,6 +333,9 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                     inout_icon.setBackgroundResource(R.drawable.ic_inout_ok);
                     inout_tv = "출근처리";
                     inout_tv2 = "";
+                    inout_settv.setText("출근시간");
+                    String dcin_time = dc.GET_TIME.substring(11);
+                    in_time.setText(dcin_time);
                 } else {
                     state = "2";
                     kind = "0";
@@ -350,9 +354,15 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                 inout_icon.setBackgroundResource(R.drawable.ic_inout_ok);
                 inout_tv = "출근처리";
                 inout_tv2 = "";
+                inout_settv.setText("출근시간");
+                String dcin_time = dc.GET_TIME.substring(11);
+                in_time.setText(dcin_time);
             }
         } else {
             if(place_iomethod.equals("y")){
+                inout_settv.setText("퇴근시간");
+                String dcin_time = dc.GET_TIME.substring(11);
+                in_time.setText(dcin_time);
                 io_state = "퇴근처리";
                 dlog.i("compareDate2 :" + compareDate2());
                 //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
@@ -383,6 +393,9 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                 }
             }else if(place_iomethod.equals("n")){
                 io_state = "퇴근처리";
+                inout_settv.setText("퇴근시간");
+                String dcin_time = dc.GET_TIME.substring(11);
+                in_time.setText(dcin_time);
                 if (compareDate2()) {
                     state = "4";
                     inout_insert.setText("확인");
@@ -417,7 +430,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         shardpref.remove("jongeob");
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
-        pm.Main2(mContext);
+//        pm.Main2(mContext);
         dismiss();
     }
 
@@ -504,7 +517,12 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
                                             shardpref.putString("in_time", in_time);
                                             message = "[" + place_name + "] 매장에서 [" + mem_name + "] 님의 출근처리가 완료되었습니다.";
                                         } else {
+                                            inout_settv.setText("퇴근시간");
+                                            String input_date = dc.GET_YEAR + "." + dc.GET_MONTH + "." + dc.GET_DAY;
+                                            String in_time = dc.GET_TIME.substring(11);
                                             shardpref.remove("input_date");
+                                            shardpref.putString("input_date", input_date);
+                                            shardpref.putString("in_time", in_time);
                                             message = "[" + place_name + "] 매장에서 [" + mem_name + "] 님의 퇴근처리가 완료되었습니다.";
                                         }
                                         getUserToken("0", message);

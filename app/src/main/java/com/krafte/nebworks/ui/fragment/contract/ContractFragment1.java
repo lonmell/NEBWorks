@@ -252,6 +252,11 @@ public class ContractFragment1 extends Fragment {
                                 mAdapter.setOnItemClickListener(new ContractListAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(View v, int position) {
+                                        //백그라운드에 오래있다가 데이터가 휘발되었을 경우대비( 2023-03-29 방창배 )
+                                        if(mList.size() == 0){
+                                            SetContractList();
+                                        }
+
                                         String place_name = PlaceCheckData.getInstance().getPlace_name();
                                         String message = "[" + place_name + "]에서 " + "[" + mList.get(position).getName() + "]의 근로계약서 작성 요청이 도착했습니다.";
                                         getUserToken(PlaceCheckData.getInstance().getPlace_owner_id(), "0", message);

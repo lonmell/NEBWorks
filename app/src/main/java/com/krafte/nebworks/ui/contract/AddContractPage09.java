@@ -573,7 +573,7 @@ public class AddContractPage09 extends AppCompatActivity {
             image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
             document.add(image);
             document.close();
-            Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "PDF 파일 저장성공", Toast.LENGTH_SHORT).show();
 
             f.delete();
             File file = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.pdf");

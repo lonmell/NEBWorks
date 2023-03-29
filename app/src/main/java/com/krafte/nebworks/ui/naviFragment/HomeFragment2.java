@@ -10,7 +10,10 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.net.ParseException;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +38,7 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MainMemberLAdapter;
 import com.krafte.nebworks.adapter.MainNotiLAdapter;
 import com.krafte.nebworks.adapter.MainTaskLAdapter;
+import com.krafte.nebworks.bottomsheet.InoutPopActivity;
 import com.krafte.nebworks.data.MainMemberLData;
 import com.krafte.nebworks.data.MainNotiData;
 import com.krafte.nebworks.data.MainTaskData;
@@ -44,6 +49,7 @@ import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
+import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
@@ -66,6 +72,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -133,7 +140,9 @@ public class HomeFragment2 extends Fragment {
     String input_date = "";
     String in_time = "";
     String jongeob = "";
+
     int allPay = 0;
+    String today = "";
 
     //Other 클래스
     PageMoveClass pm = new PageMoveClass();
@@ -238,10 +247,20 @@ public class HomeFragment2 extends Fragment {
                     shardpref.putString("stub_user_id", USER_INFO_ID);
                     shardpref.putString("stub_user_account", USER_INFO_EMAIL);
                     shardpref.putString("change_place_name", place_name);
+                    timer.cancel();
                     pm.MemberDetail(mContext);
                 }
             });
 
+
+
+            //-- 출퇴근 2023-03-29 -- EmployeeProcess에서 옮김
+            cal = Calendar.getInstance();
+            today = sdf.format(cal.getTime());
+            dlog.i("오늘 :" + today);
+            dlog.i("jongeob :" + jongeob.substring(3));
+
+            outTime();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -270,8 +289,8 @@ public class HomeFragment2 extends Fragment {
     public void onResume() {
         super.onResume();
         shardpref.remove("Tap");
+        TFFunction();
 
-        InOutLogMember();
         UserCheck();
         allPay = 0;
         taskList();
@@ -289,6 +308,7 @@ public class HomeFragment2 extends Fragment {
                 //5초마다 실행
                 PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
                 WritePaymentList(place_id, USER_INFO_ID, today);// 근로자 정보 및 최종급여
+                InOutLogMember();
             }
         };
         timer.schedule(timerTask, 1000, 6000);
@@ -442,6 +462,7 @@ public class HomeFragment2 extends Fragment {
                 shardpref.putString("stub_place_id", place_id);
                 shardpref.putString("stub_user_id", USER_INFO_ID);
                 shardpref.putString("stub_user_account", USER_INFO_EMAIL);
+                timer.cancel();
                 pm.MemberDetail(mContext);
             }
         });
@@ -451,6 +472,7 @@ public class HomeFragment2 extends Fragment {
             } else {
                 shardpref.putString("USER_INFO_AUTH", "1");
                 shardpref.putString("event", "out_store");
+                timer.cancel();
                 pm.PlaceList(mContext);
             }
         });
@@ -459,6 +481,7 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
+                timer.cancel();
                 pm.MemberManagement(mContext);
             }
         });
@@ -486,8 +509,10 @@ public class HomeFragment2 extends Fragment {
             } else {
                 dlog.i("급여관리");
                 if (USER_INFO_AUTH.equals("0")) {
+                    timer.cancel();
                     pm.PayManagement(mContext);
                 } else {
+                    timer.cancel();
                     pm.PayManagement2(mContext);
                 }
             }
@@ -498,6 +523,7 @@ public class HomeFragment2 extends Fragment {
                 isAuth();
             } else {
                 dlog.i("근로계약서 전체 관리");
+                timer.cancel();
                 pm.ContractFragment(mContext);
             }
         });
@@ -506,6 +532,7 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
+                timer.cancel();
                 pm.FeedList(mContext);
             }
         });
@@ -515,6 +542,7 @@ public class HomeFragment2 extends Fragment {
                 isAuth();
             } else {
                 shardpref.putInt("SELECT_POSITION", 1);
+                timer.cancel();
                 pm.Main2(mContext);
             }
         });
@@ -542,6 +570,73 @@ public class HomeFragment2 extends Fragment {
         });
     }
 
+
+
+    String place_iomethod = "";
+    String getMySSID = "";
+    Handler handler = new Handler();
+    String title = "";
+    long now = System.currentTimeMillis();
+    Date mDate = new Date(now);
+    @SuppressLint("SimpleDateFormat")
+    java.text.SimpleDateFormat simpleDate_time = new java.text.SimpleDateFormat("HH:mm:ss");
+
+    String GET_TIME = simpleDate_time.format(mDate);
+
+    public String getNetworkName(Context context) {
+        WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        return info.getSSID();
+    }
+
+    private void TFFunction(){
+        getPlaceData2();
+        MoveMyLocation();
+        getMySSID = getNetworkName(mContext).replace("\"", "");
+        if (getMySSID.equals("<unknown ssid>")) {
+            getMySSID = "";
+        }
+        handler.postDelayed(() -> {
+            long now = System.currentTimeMillis();
+            Date mDate = new Date(now);
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+            dlog.i("GET_TIME : " + simpleDate.format(mDate));
+            if(place_iomethod.equals("y")){
+                if (getMySSID.equals(place_wifi_name)) {
+                    if (kind.equals("0")) {
+                        title = "출근처리 가능";
+                    } else {
+                        title = "퇴근처리 가능";
+                    }
+                    dlog.i("title 1: " + title);
+                    dlog.i("getMySSID 1: " + getMySSID);
+                    dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+                } else {
+                    if (kind.equals("0")) {
+                        title = "출근처리 불가";
+                    } else {
+                        title = "퇴근처리 불가";
+                    }
+                    dlog.i("title 2: " + title);
+                    dlog.i("getMySSID 2: " + getMySSID);
+                    TFFunction();
+                }
+            }else if(place_iomethod.equals("n")){
+                if (kind.equals("0")) {
+                    title = "출근처리 가능";
+                } else {
+                    title = "퇴근처리 가능";
+                }
+                dlog.i("title 1: " + title);
+                dlog.i("getMySSID 1: " + getMySSID);
+                dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+            }else{
+                TFFunction();
+            }
+        }, 500); //0.5초 후 핸들러 실행
+    }
+
     private void permissionCheck() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
@@ -556,8 +651,52 @@ public class HomeFragment2 extends Fragment {
                         } else {
                             kind = "1";
                         }
-                        shardpref.putString("kind", kind);
-                        pm.EmployeeProcess(mContext);
+//                        shardpref.putString("kind", kind);
+//                        pm.EmployeeProcess(mContext);
+                    }
+
+                    MoveMyLocation();
+                    long now = System.currentTimeMillis();
+                    Date mDate = new Date(now);
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
+                    dlog.i("GET_TIME : " + simpleDate.format(mDate));
+                    dlog.i("kind : " + kind);
+
+                    if (kind.equals("0")) {
+                        if(place_iomethod.equals("y")){
+                            if (getMySSID.equals(place_wifi_name)) {
+                                //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+                                io_state = "출근처리";
+                                InOutPop(GET_TIME, "1", place_name, io_state, "", "0");
+                            } else {
+                                InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요", "0");
+                            }
+                        }else if(place_iomethod.equals("n")){
+                            io_state = "출근처리";
+                            InOutPop(GET_TIME, "1", place_name, io_state, "", "0");
+                        }
+                    } else {
+                        if(place_iomethod.equals("y")){
+                            if (getMySSID.equals(place_wifi_name)) {
+                                io_state = "퇴근처리";
+                                dlog.i("compareDate2 :" + compareDate2());
+                                //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+//                        if (compareDate2()) {
+//                            InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
+//                        } else {
+//                            InOutPop(GET_TIME, "3", place_name, io_state, "등록된 퇴근시간이 아닙니다.", "1");//퇴근시간 전일때
+//                        }
+                                InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
+                            } else {
+                                InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요", "1");
+                            }
+                        }else if(place_iomethod.equals("n")){
+                            io_state = "퇴근처리";
+                            dlog.i("compareDate2 :" + compareDate2());
+                            //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
+                            InOutPop(GET_TIME, "4", place_name, io_state, "", "1");
+                        }
                     }
                 } else {
                     shardpref.putString("mem_name",UserCheckData.getInstance().getUser_name());
@@ -584,6 +723,51 @@ public class HomeFragment2 extends Fragment {
                 .setDeniedMessage("[설정] > [권한]에서 위치액세스 권한이 필요합니다")
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
                 .check();
+    }
+
+    public boolean compareDate2() throws ParseException {
+        boolean returntf = false;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date date1 = sdf.parse(today);
+            Date date2 = sdf.parse(jongeob.substring(3));
+            System.out.println(sdf.format(date1));
+            System.out.println(sdf.format(date2));
+
+            returntf = date1.after(date2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returntf;
+    }
+    private void outTime() {
+        String[] now = dc.GET_TIME.split(" ");
+        String[] outTimeSplit = jongeob.split(":");
+        String[] time = now[1].split(":");
+
+        int times = Integer.parseInt(time[0]) * 3600 + Integer.parseInt(time[1]) * 60;
+        int outTime = Integer.parseInt(outTimeSplit[0]) * 3600 + Integer.parseInt(outTimeSplit[1]) * 60;
+
+        int t = outTime - times;
+
+        if (t < 0) {
+            binding.ioTime.setText("설정된 퇴근시간을 초과하셨습니다.");
+        } else {
+            int hour = t / (60 * 60);
+            int minute = t / 60 - (hour * 60);
+
+            binding.ioTime.setText("퇴근까지 " + hour + "시간 " + minute + "분");
+        }
+    }
+    private void InOutPop(String time, String state, String store_name, String inout_tv, String inout_tv2, String kind) {
+        shardpref.putString("kind", kind);
+        shardpref.putString("time", time);
+        shardpref.putString("state", state);
+        shardpref.putString("store_name", store_name);
+        shardpref.putString("inout_tv", inout_tv);
+        shardpref.putString("inout_tv2", inout_tv2);
+        InoutPopActivity ipp = new InoutPopActivity();
+        ipp.show(getChildFragmentManager(), "InoutPopActivity");
     }
 
     public void getPlaceData() {
@@ -881,6 +1065,7 @@ public class HomeFragment2 extends Fragment {
                                                         if (USER_INFO_AUTH.isEmpty()) {
                                                             isAuth();
                                                         } else {
+                                                            timer.cancel();
                                                             pm.FeedList(mContext);
                                                         }
                                                     }
@@ -1289,13 +1474,6 @@ public class HomeFragment2 extends Fragment {
             latitude = gpsTracker.getLatitude();
             longitude = gpsTracker.getLongitude();
 
-//            mapViewContainer.addView(mapView);
-//
-//            /*현재 내 위치로 지도 중앙을 이동, 위치 트래킹 기능 on*/
-//            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-//            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, true);
-//            mapView.setZoomLevel(0, true);
-//            mapView.zoomIn(true);
             reverseCoding(latitude, longitude);
         } catch (Exception e) {
             dlog.i("Exception : " + e);
@@ -1331,14 +1509,6 @@ public class HomeFragment2 extends Fragment {
                 String addresslines = address.getAddressLine(0);
                 String subaddresslines = address1.getAddressLine(0);
 
-//                String city = address.getLocality() == null ? "" : address.getLocality();
-//                String state = address.getAdminArea() == null ? "" : address.getAdminArea();
-//
-//                String country = address.getCountryName() == null ? "" : address.getCountryName();
-//                String jibun = address.getFeatureName() == null ? "" : address.getFeatureName();
-//                String postalCode = address.getPostalCode() == null ? "" : address.getPostalCode();
-//                String roadAddress = address.getSubAdminArea() == null ? "" : address.getSubAdminArea();
-
                 Setaddress = addresslines.replace("대한민국", "").trim();
                 String dong = address1.getThoroughfare() == null ? "" : address1.getThoroughfare();
                 String jibun = address1.getFeatureName() == null ? "" : address1.getFeatureName();
@@ -1347,11 +1517,6 @@ public class HomeFragment2 extends Fragment {
                 dlog.i("Setaddress : " + Setaddress);
                 dlog.i("subaddresslines : " + subaddresslines);
 
-//                //MainAddrerss
-//                address01.setText(Setaddress);
-//
-//                //subAddress
-//                address02.setText("[지번] " + subaddresslines);
                 shardpref.putString("pin_store_address", Setaddress);
                 shardpref.putString("pin_store_addressdetail", subaddresslines);
                 shardpref.putString("pin_zipcode", postalCode);
@@ -1390,6 +1555,57 @@ public class HomeFragment2 extends Fragment {
         return distance;
     }
 
+    private void getPlaceData2() {
+        dlog.i("PlaceCheck place_id : " + place_id);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PlaceThisDataInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        PlaceThisDataInterface api = retrofit.create(PlaceThisDataInterface.class);
+        Call<String> call = api.getData(place_id);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
+                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    place_name = Response.getJSONObject(0).getString("name");
+                                    place_owner_id = Response.getJSONObject(0).getString("owner_id");
+                                    place_latitude = Double.parseDouble(Response.getJSONObject(0).getString("latitude"));
+                                    place_longitude = Double.parseDouble(Response.getJSONObject(0).getString("longitude"));
+                                    place_pay_day = Response.getJSONObject(0).getString("pay_day");
+                                    place_test_period = Response.getJSONObject(0).getString("test_period");
+                                    place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
+                                    place_insurance = Response.getJSONObject(0).getString("insurance");
+                                    place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
+                                    place_iomethod = Response.getJSONObject(0).getString("io_method");
+                                    shardpref.putString("place_wifi_name", place_wifi_name);
+                                    shardpref.putString("place_latitude", String.valueOf(place_latitude));
+                                    shardpref.putString("place_longitude", String.valueOf(place_longitude));
+                                    dlog.i("place_iomethod : " + place_iomethod);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
 
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();

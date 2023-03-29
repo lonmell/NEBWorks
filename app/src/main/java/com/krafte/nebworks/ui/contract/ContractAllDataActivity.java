@@ -835,6 +835,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
 
         }
     }
+
     private void ChangeSize010203(int i){
         binding.sizeBox01.setBackgroundResource(R.drawable.default_gray_round);
         binding.sizeRound01.setBackgroundResource(R.drawable.select_empty_round);

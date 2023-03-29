@@ -216,6 +216,7 @@ public class EmployeeProcess extends AppCompatActivity {
             }
         }, 500); //0.5초 후 핸들러 실행
     }
+
     private void outTime() {
         String[] now = dc.GET_TIME.split(" ");
         String[] outTimeSplit = jongeob.split(":");
