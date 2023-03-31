@@ -34,7 +34,6 @@ import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
-import com.krafte.nebworks.util.GpsTracker;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
@@ -196,21 +195,14 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         retry();
     }
 
-    private void TFFunction() {
 
-        long now = System.currentTimeMillis();
-        Date mDate = new Date(now);
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-        dlog.i("GET_TIME : " + simpleDate.format(mDate));
-        getMySSID = getNetworkName(mContext).replace("\"", "");
-        if (getMySSID.equals("<unknown ssid>")) {
-            getMySSID = "";
-        }
-        dlog.i("getMySSID : " + getMySSID);
-        dlog.i("place_wifi_name : " + place_wifi_name);
+    public interface OnClickListener {
+        void onClick(View v, String kind) ;
     }
-
+    private OnClickListener mListener = null ;
+    public void setOnClickListener(OnClickListener listener) {
+        this.mListener = listener ;
+    }
 
     @Override
     public void onStop() {
@@ -219,38 +211,20 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         shardpref.remove("kind");
     }
 
-    //list_settingitem01
-    public interface OnClickListener {
-        void onClick(View v, String user_id, String user_name);
-    }
-
-    private PaySelectMemberActivity.OnClickListener mListener = null;
-
-    public void setOnClickListener(PaySelectMemberActivity.OnClickListener listener) {
-        this.mListener = listener;
-    }
-
-    GpsTracker gpsTracker;
     double latitude = 0;
     double longitude = 0;
 
-    private void MoveMyLocation() {
-        try {
-            gpsTracker = new GpsTracker(mContext);
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            reverseCoding(latitude, longitude);
-        } catch (Exception e) {
-            dlog.i("Exception : " + e);
-        }
-    }
-
-    int getDistance = 0;
     private void setBtnEvent() {
         close_btn.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onClick(v,kind);
+            }
             dismiss();
         });
         inout_insert.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onClick(v,kind);
+            }
             if (!state.equals("2")) {
                 if (state.equals("4")) {
                     dlog.i("setBtnEvent kind : " + kind);

@@ -24,6 +24,7 @@ public class PlaceCheckData {
     private static String place_icnt = "0";
     private static String place_ocnt = "0";
     private static String place_totalcnt = "0";
+    private static String place_iomethod = "0";
 
     public String getPlace_id() {
         return place_id;
@@ -207,6 +208,14 @@ public class PlaceCheckData {
 
     public void setPlace_totalcnt(String place_totalcnt) {
         this.place_totalcnt = place_totalcnt;
+    }
+
+    public String getPlace_iomethod() {
+        return place_iomethod;
+    }
+
+    public void setPlace_iomethod(String place_iomethod) {
+        PlaceCheckData.place_iomethod = place_iomethod;
     }
 
     private static PlaceCheckData instance = null;

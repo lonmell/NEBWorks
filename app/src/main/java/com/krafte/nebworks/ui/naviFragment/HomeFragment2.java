@@ -49,7 +49,6 @@ import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberUpdateBasic;
-import com.krafte.nebworks.dataInterface.PlaceThisDataInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
 import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
@@ -141,6 +140,9 @@ public class HomeFragment2 extends Fragment {
     String in_time = "";
     String jongeob = "";
 
+    String mem_io_kind = "";
+    String mem_io_time = "";
+
     int allPay = 0;
     String today = "";
 
@@ -210,9 +212,27 @@ public class HomeFragment2 extends Fragment {
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
+
             //shardpref Area
             accept_state = shardpref.getInt("accept_state", -99);
             input_date = shardpref.getString("input_date", "-1");
+
+            //--매장 처음 들어올때 미리 조회 해둔 데이터 START
+            mem_io_kind = shardpref.getString("member_io_kind","-1");
+            mem_io_time = shardpref.getString("member_io_time","0");
+            if (mem_io_kind.equals("1")) {
+                kind = "-1";
+                binding.ioImg.setBackgroundResource(R.drawable.workinout01);
+                binding.inTime.setVisibility(View.GONE);
+                binding.inTimeTxt.setVisibility(View.GONE);
+            } else {
+                binding.ioImg.setBackgroundResource(R.drawable.workinout02);
+                binding.inTime.setVisibility(View.VISIBLE);
+                binding.inTimeTxt.setVisibility(View.VISIBLE);
+            }
+            binding.inTime.setText(mem_io_time);
+            //--매장 처음 들어올때 미리 조회 해둔 데이터 END
+
             shardpref.putInt("SELECT_POSITION", 0);
             if (USER_INFO_AUTH.isEmpty()) {
                 setDummyData();
@@ -252,13 +272,10 @@ public class HomeFragment2 extends Fragment {
                 }
             });
 
-
-
             //-- 출퇴근 2023-03-29 -- EmployeeProcess에서 옮김
             cal = Calendar.getInstance();
             today = sdf.format(cal.getTime());
-            dlog.i("오늘 :" + today);
-            dlog.i("jongeob :" + jongeob.substring(3));
+
 
             outTime();
         } catch (Exception e) {
@@ -285,33 +302,33 @@ public class HomeFragment2 extends Fragment {
     }
 
 
+    int inoutimg = 0;
+
     @Override
     public void onResume() {
         super.onResume();
         shardpref.remove("Tap");
-        TFFunction();
-
-        UserCheck();
         allPay = 0;
+        UserCheck();
         taskList();
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1"); // 공지
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "2"); // 출퇴근 현황
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "3"); // 급여현황
-        PlaceWorkCheck(place_id, USER_INFO_AUTH, "4"); // 근로자 정보 및 최종급여
-
         String today = dc.GET_YEAR + "-" + dc.GET_MONTH;
-        WritePaymentList(place_id, USER_INFO_ID, today);
+
+        PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
+
+
+        TFFunction();
+        InOutLogMember();
+
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 //5초마다 실행
                 PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
-                WritePaymentList(place_id, USER_INFO_ID, today);// 근로자 정보 및 최종급여
                 InOutLogMember();
             }
         };
-        timer.schedule(timerTask, 1000, 6000);
+        timer.schedule(timerTask, 4000, 6000);
     }
 
     @Override
@@ -402,8 +419,6 @@ public class HomeFragment2 extends Fragment {
                         if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
                             //그날 최초 출근
                             kind = "-1";
-//                            InOutInsert("0");
-//                            binding.oArea.setVisibility(View.GONE);
                             binding.ioArea.setVisibility(View.VISIBLE);
                         } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
                             if (response.isSuccessful() && response.body() != null) {
@@ -414,19 +429,17 @@ public class HomeFragment2 extends Fragment {
                                     kind = Response.getJSONObject(0).getString("kind");
                                     String io_time = Response.getJSONObject(0).getString("io_time");
                                     dlog.i("InOutLogMember kind : " + kind);
+                                    dlog.i("InOutLogMember io_timeio_time : " + kind);
                                     if (kind.equals("1")) {
                                         kind = "-1";
-//                                        binding.oArea.setVisibility(View.GONE);
                                         binding.ioImg.setBackgroundResource(R.drawable.workinout01);
                                         binding.inTime.setVisibility(View.GONE);
                                         binding.inTimeTxt.setVisibility(View.GONE);
                                         binding.ioArea.setVisibility(View.VISIBLE);
                                     } else {
-//                                        binding.oArea.setVisibility(View.VISIBLE);
                                         binding.ioImg.setBackgroundResource(R.drawable.workinout02);
                                         binding.inTime.setVisibility(View.VISIBLE);
                                         binding.inTimeTxt.setVisibility(View.VISIBLE);
-//                                        binding.ioArea.setVisibility(View.GONE);
                                     }
                                     binding.inTime.setText(io_time);
                                 } catch (Exception e) {
@@ -450,6 +463,7 @@ public class HomeFragment2 extends Fragment {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러 1 = " + t.getMessage());
+                Toast_Nomal("출퇴근 정보를 가져올수 없습니다");
             }
         });
     }
@@ -571,10 +585,10 @@ public class HomeFragment2 extends Fragment {
     }
 
 
-
     String place_iomethod = "";
     String getMySSID = "";
     Handler handler = new Handler();
+    Handler handler2 = new Handler();
     String title = "";
     long now = System.currentTimeMillis();
     Date mDate = new Date(now);
@@ -589,9 +603,8 @@ public class HomeFragment2 extends Fragment {
         return info.getSSID();
     }
 
-    private void TFFunction(){
-        getPlaceData2();
-        MoveMyLocation();
+    private void TFFunction() {
+//        MoveMyLocation();
         getMySSID = getNetworkName(mContext).replace("\"", "");
         if (getMySSID.equals("<unknown ssid>")) {
             getMySSID = "";
@@ -602,7 +615,7 @@ public class HomeFragment2 extends Fragment {
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
             dlog.i("GET_TIME : " + simpleDate.format(mDate));
-            if(place_iomethod.equals("y")){
+            if (place_iomethod.equals("y")) {
                 if (getMySSID.equals(place_wifi_name)) {
                     if (kind.equals("0")) {
                         title = "출근처리 가능";
@@ -622,7 +635,7 @@ public class HomeFragment2 extends Fragment {
                     dlog.i("getMySSID 2: " + getMySSID);
                     TFFunction();
                 }
-            }else if(place_iomethod.equals("n")){
+            } else if (place_iomethod.equals("n")) {
                 if (kind.equals("0")) {
                     title = "출근처리 가능";
                 } else {
@@ -631,18 +644,17 @@ public class HomeFragment2 extends Fragment {
                 dlog.i("title 1: " + title);
                 dlog.i("getMySSID 1: " + getMySSID);
                 dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
-            }else{
+            } else {
                 TFFunction();
             }
         }, 500); //0.5초 후 핸들러 실행
+
     }
 
     private void permissionCheck() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-//                Toast.makeText(mContext, "Permission Granted", Toast.LENGTH_SHORT).show();
-                UserCheck();
                 dlog.i("UserCheckData.getInstance().getUser_sieob() : " + UserCheckData.getInstance().getUser_sieob());
                 if (!UserCheckData.getInstance().getUser_sieob().equals("null")) {
                     if (kind.equals("-1") || kind.equals("0")) {
@@ -664,7 +676,7 @@ public class HomeFragment2 extends Fragment {
                     dlog.i("kind : " + kind);
 
                     if (kind.equals("0")) {
-                        if(place_iomethod.equals("y")){
+                        if (place_iomethod.equals("y")) {
                             if (getMySSID.equals(place_wifi_name)) {
                                 //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
                                 io_state = "출근처리";
@@ -672,12 +684,12 @@ public class HomeFragment2 extends Fragment {
                             } else {
                                 InOutPop(GET_TIME, "2", place_name, "출근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요", "0");
                             }
-                        }else if(place_iomethod.equals("n")){
+                        } else if (place_iomethod.equals("n")) {
                             io_state = "출근처리";
                             InOutPop(GET_TIME, "1", place_name, io_state, "", "0");
                         }
                     } else {
-                        if(place_iomethod.equals("y")){
+                        if (place_iomethod.equals("y")) {
                             if (getMySSID.equals(place_wifi_name)) {
                                 io_state = "퇴근처리";
                                 dlog.i("compareDate2 :" + compareDate2());
@@ -691,7 +703,7 @@ public class HomeFragment2 extends Fragment {
                             } else {
                                 InOutPop(GET_TIME, "2", place_name, "퇴근처리 불가", "매장에 설정된 와이파이가 아닙니다.\n" + "와이파이를 확인해주세요", "1");
                             }
-                        }else if(place_iomethod.equals("n")){
+                        } else if (place_iomethod.equals("n")) {
                             io_state = "퇴근처리";
                             dlog.i("compareDate2 :" + compareDate2());
                             //가게 등록한 와이파이와 현재 디바이스에서 접속중인 와이파이 비교
@@ -699,7 +711,7 @@ public class HomeFragment2 extends Fragment {
                         }
                     }
                 } else {
-                    shardpref.putString("mem_name",UserCheckData.getInstance().getUser_name());
+                    shardpref.putString("mem_name", UserCheckData.getInstance().getUser_name());
                     Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
                     intent.putExtra("data", "근무시작 시간이 배정되지 않았습니다.\n추가근무를 생성하시겠습니까?");
                     intent.putExtra("flag", "추가근무");
@@ -740,6 +752,7 @@ public class HomeFragment2 extends Fragment {
         }
         return returntf;
     }
+
     private void outTime() {
         String[] now = dc.GET_TIME.split(" ");
         String[] outTimeSplit = jongeob.split(":");
@@ -759,6 +772,7 @@ public class HomeFragment2 extends Fragment {
             binding.ioTime.setText("퇴근까지 " + hour + "시간 " + minute + "분");
         }
     }
+
     private void InOutPop(String time, String state, String store_name, String inout_tv, String inout_tv2, String kind) {
         shardpref.putString("kind", kind);
         shardpref.putString("time", time);
@@ -768,6 +782,14 @@ public class HomeFragment2 extends Fragment {
         shardpref.putString("inout_tv2", inout_tv2);
         InoutPopActivity ipp = new InoutPopActivity();
         ipp.show(getChildFragmentManager(), "InoutPopActivity");
+        ipp.setOnClickListener(new InoutPopActivity.OnClickListener() {
+            @Override
+            public void onClick(View v, String kind) {
+                handler2.postDelayed(() -> {
+                    InOutLogMember();
+                }, 500); //0.5초 후 인트로 실행
+            }
+        });
     }
 
     public void getPlaceData() {
@@ -796,6 +818,7 @@ public class HomeFragment2 extends Fragment {
                     place_icnt = shardpref.getString("place_icnt", PlaceCheckData.getInstance().getPlace_icnt());
                     place_ocnt = shardpref.getString("place_ocnt", PlaceCheckData.getInstance().getPlace_ocnt());
                     place_totalcnt = shardpref.getString("place_totalcnt", PlaceCheckData.getInstance().getPlace_totalcnt());
+                    place_iomethod = shardpref.getString("place_iomethod", PlaceCheckData.getInstance().getPlace_iomethod());
 
                     Glide.with(mContext).load(place_img_path)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -971,9 +994,6 @@ public class HomeFragment2 extends Fragment {
     Calendar cal;
     String format = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
-    String toDay = "";
-    int state_null = 0;
-    String writer_id = "";
 
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
         dlog.i("----------PlaceWorkCheck----------");
@@ -1002,42 +1022,7 @@ public class HomeFragment2 extends Fragment {
                                 if (!jsonResponse.equals("[]") && !jsonResponse.equals("null")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     try {
-                                        if (kind.equals("0")) {
-//                                            mList = new ArrayList<>();
-//                                            mAdapter = new MainTaskLAdapter(mContext, mList);
-//                                            binding.mainTaskList.setAdapter(mAdapter);
-//                                            binding.mainTaskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-//                                            dlog.i("Task Get SIZE : " + Response.length());
-//                                            if (Response.length() == 0) {
-//                                                dlog.i("SetNoticeListview Thread run! ");
-//                                                dlog.i("GET SIZE : " + Response.length());
-//                                                binding.mainTaskList.setVisibility(View.GONE);
-//                                                binding.limitTasktv.setVisibility(View.VISIBLE);
-//                                            } else {
-//                                                binding.mainTaskList.setVisibility(View.VISIBLE);
-//                                                binding.limitTasktv.setVisibility(View.GONE);
-//                                                for (int i = 0; i < Response.length(); i++) {
-//                                                    JSONObject jsonObject = Response.getJSONObject(i);
-//                                                    mAdapter.addItem(new MainTaskData.MainTaskData_list(
-//                                                            jsonObject.getString("title"),
-//                                                            jsonObject.getString("end_date"),
-//                                                            jsonObject.getString("end_hour"),
-//                                                            jsonObject.getString("end_min")
-//                                                    ));
-//                                                }
-//
-//                                                mAdapter.setOnItemClickListener(new MainTaskLAdapter.OnItemClickListener() {
-//                                                    @Override
-//                                                    public void onItemClick(View v, int position) {
-//                                                        if (USER_INFO_AUTH.isEmpty()) {
-//                                                            isAuth();
-//                                                        } else {}
-//                                                    }
-//                                                });
-//
-//                                            }
-//                                            mAdapter.notifyDataSetChanged();
-                                        } else if (kind.equals("1")) {
+                                        if (kind.equals("1")) {
                                             mList2 = new ArrayList<>();
                                             mAdapter2 = new MainNotiLAdapter(mContext, mList2);
                                             binding.mainNotiList.setAdapter(mAdapter2);
@@ -1076,15 +1061,12 @@ public class HomeFragment2 extends Fragment {
                                             binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
                                             binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
                                             //결근 숫자에서 휴가숫자는 빠지지 않기때문에 결근-휴가수를 빼줘야한다
-                                            if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0){
+                                            if (Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0) {
                                                 binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
-                                            } else if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0){
+                                            } else if (Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0) {
                                                 binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
-                                                        -Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
+                                                        - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
                                             }
-//                                            binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
-//                                                    -Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
-//                                            binding.restCnt.setText(Response.getJSONObject(0).getString("vaca_cnt"));
                                             binding.restCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("rest_cnt"))
                                                     + Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
                                             dlog.i("-----MainData-----");
@@ -1092,24 +1074,12 @@ public class HomeFragment2 extends Fragment {
                                             dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
                                             dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
                                             dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("vaca_cnt"));
-//                                            binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
-//                                            binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
-//                                            binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
-//                                                    - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
-//                                            binding.restCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("rest_cnt"))
-//                                                    + Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
-//                                            dlog.i("-----MainData-----");
-//                                            dlog.i("i_cnt : " + Response.getJSONObject(0).getString("i_cnt"));
-//                                            dlog.i("o_cnt : " + Response.getJSONObject(0).getString("o_cnt"));
-//                                            dlog.i("absence_cnt : " + Response.getJSONObject(0).getString("absence_cnt"));
-//                                            dlog.i("vaca_cnt : " + Response.getJSONObject(0).getString("vaca_cnt"));
-//                                            dlog.i("rest_cnt : " + Response.getJSONObject(0).getString("rest_cnt"));
-//                                            dlog.i("-----MainData-----");
                                         } else if (kind.equals("3")) {
                                             for (int i = 0; i < Response.length(); i++) {
                                                 allPay += Integer.parseInt(Response.getJSONObject(i).getString("recent_pay").replace(",", ""));
                                             }
                                             allPay = allPay - Integer.parseInt(Response.getJSONObject(0).getString("deductpay").replace(",", ""));
+                                            WritePaymentList(place_id, USER_INFO_ID, today);// 근로자 정보 및 최종급여
                                         } else if (kind.equals("4")) {
                                             dlog.i("kind 4 Result : " + jsonResponse);
 
@@ -1235,7 +1205,8 @@ public class HomeFragment2 extends Fragment {
                                     public void onItemClick(View v, int position) {
                                         if (USER_INFO_AUTH.isEmpty()) {
                                             isAuth();
-                                        } else {}
+                                        } else {
+                                        }
                                     }
                                 });
                             }
@@ -1280,9 +1251,9 @@ public class HomeFragment2 extends Fragment {
                     try {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
-                        if(Response.toString().equals("[]")){
+                        if (Response.toString().equals("[]")) {
                             HomeFragment2.super.onResume();
-                        }else{
+                        } else {
                             dlog.i("workhour : " + Response.getJSONObject(0).getString("workhour"));
                             dlog.i("jikgup : " + Response.getJSONObject(0).getString("jikgup"));
                             dlog.i("payment : " + Response.getJSONObject(0).getString("payment"));
@@ -1298,6 +1269,9 @@ public class HomeFragment2 extends Fragment {
                                 binding.realPaynum.setText(myFormatter.format(allPay) + "원");
                             }
                         }
+                        PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");
+                        PlaceWorkCheck(place_id, USER_INFO_AUTH, "2");
+                        PlaceWorkCheck(place_id, USER_INFO_AUTH, "4");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -1555,57 +1529,6 @@ public class HomeFragment2 extends Fragment {
         return distance;
     }
 
-    private void getPlaceData2() {
-        dlog.i("PlaceCheck place_id : " + place_id);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PlaceThisDataInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        PlaceThisDataInterface api = retrofit.create(PlaceThisDataInterface.class);
-        Call<String> call = api.getData(place_id);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    activity.runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("GetPlaceList jsonResponse length : " + jsonResponse.length());
-                            dlog.i("GetPlaceList jsonResponse : " + jsonResponse);
-                            try {
-                                if (!jsonResponse.equals("[]")) {
-                                    JSONArray Response = new JSONArray(jsonResponse);
-                                    place_name = Response.getJSONObject(0).getString("name");
-                                    place_owner_id = Response.getJSONObject(0).getString("owner_id");
-                                    place_latitude = Double.parseDouble(Response.getJSONObject(0).getString("latitude"));
-                                    place_longitude = Double.parseDouble(Response.getJSONObject(0).getString("longitude"));
-                                    place_pay_day = Response.getJSONObject(0).getString("pay_day");
-                                    place_test_period = Response.getJSONObject(0).getString("test_period");
-                                    place_vacation_select = Response.getJSONObject(0).getString("vacation_select");
-                                    place_insurance = Response.getJSONObject(0).getString("insurance");
-                                    place_wifi_name = Response.getJSONObject(0).getString("wifi_name");
-                                    place_iomethod = Response.getJSONObject(0).getString("io_method");
-                                    shardpref.putString("place_wifi_name", place_wifi_name);
-                                    shardpref.putString("place_latitude", String.valueOf(place_latitude));
-                                    shardpref.putString("place_longitude", String.valueOf(place_longitude));
-                                    dlog.i("place_iomethod : " + place_iomethod);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러1 = " + t.getMessage());
-            }
-        });
-    }
 
     public void Toast_Nomal(String message) {
         LayoutInflater inflater = getLayoutInflater();

@@ -11,10 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.krafte.nebworks.adapter.ApprovalAdapter;
+import com.krafte.nebworks.adapter.CalendarDayAdaper;
 import com.krafte.nebworks.adapter.PayCalenderAdapter;
 import com.krafte.nebworks.adapter.WorkCalenderAdapter;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
@@ -23,7 +21,6 @@ import com.krafte.nebworks.bottomsheet.WorkstatusBottomSheet;
 import com.krafte.nebworks.data.CalendarSetData;
 import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.TaskCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.dataInterface.PayCalendersetData;
@@ -40,8 +37,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,6 +88,26 @@ public class CalenderFragment extends Fragment {
     //Task all data
     ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> payList2 = new ArrayList<>();
 
+
+    List<String> allDate = new ArrayList<>();
+
+
+    //월
+    List<String> monDate = new ArrayList<>();
+    //화
+    List<String> tueDate = new ArrayList<>();
+    //수
+    List<String> wedDate = new ArrayList<>();
+    //목
+    List<String> thuDate = new ArrayList<>();
+    //금
+    List<String> friDate = new ArrayList<>();
+    //토
+    List<String> satDate = new ArrayList<>();
+    //일
+    List<String> sunDate = new ArrayList<>();
+    String SetDay = "";
+
     // state 1: WorkGoto
     public CalenderFragment(String year, String month, int state) {
         this.year = year;
@@ -117,8 +138,8 @@ public class CalenderFragment extends Fragment {
         shardpref = new PreferenceHelper(mContext);
         dlog.DlogContext(mContext);
 
-        USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
-        place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
 
         shardpref.putString("calendar_year", year);
         shardpref.putString("calendar_month", month);
@@ -126,23 +147,129 @@ public class CalenderFragment extends Fragment {
         binding.calendarYear.setText(year + "년");
         binding.calendarMonth.setText(month + "월");
 
-        Log.d(TAG, "state: " + state);
-        switch (state) {
-            case 1:
-                SetWorkGotoCalenderData();
-                break;
-            case 2:
-                SetWorkStatusCalenderData(year, month);
-                break;
-            case 3:
-                SetApprovalCalenderData();
-                break;
-            case 4:
-                SetPayCalenderData(year, month);
-                break;
+//        Log.d(TAG, "state: " + state);
+//        switch (state) {
+//            case 1:
+//                SetWorkGotoCalenderData();
+//                break;
+//            case 2:
+//                SetWorkStatusCalenderData(year, month);
+//                break;
+//            case 3:
+//                SetApprovalCalenderData();
+//                break;
+//            case 4:
+//                SetPayCalenderData(year, month);
+//                break;
+//        }
+        Calendar cal = Calendar.getInstance();
+        cal.set(Integer.parseInt(year),Integer.parseInt(month)-1,1);
+        // 3. 숫자 요일 구하기
+        dlog.i(month + "월은 : 1 ~ " + cal.getActualMaximum(Calendar.DAY_OF_MONTH) + "까지");
+        for(int i = 0; i < cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++){
+            allDate.add(i,String.valueOf(i+1));
         }
+
+        monDate.add(0,"");tueDate.add(0,"");
+        wedDate.add(0,"");thuDate.add(0,"");
+        friDate.add(0,"");satDate.add(0,"");
+        sunDate.add(0,"");
+        for(int i = 0; i < cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++){
+            LocalDate date = LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(allDate.get(i)));
+            System.out.println(date);
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+            int dayOfWeekNumber = dayOfWeek.getValue();
+            switch (dayOfWeekNumber) {
+                case 1:
+                    SetDay = year + "-" + month + "-" + allDate.get(i);
+                    dlog.i("monDate SetDay : " + SetDay);
+                    dlog.i("monDate getWeekOfYear(SetDay) : " + getWeekOfYear(SetDay));
+                    monDate.add(getWeekOfYear(SetDay)-1,allDate.get(i));
+                    break;
+                case 2:
+                    SetDay = year + "-" + month + "-" + allDate.get(i);
+                    tueDate.add(getWeekOfYear(SetDay)-1,allDate.get(i));
+                    break;
+                case 3:
+                    SetDay = year + "-" + month + "-" + allDate.get(i);
+                    wedDate.add(getWeekOfYear(SetDay)-1,allDate.get(i));
+                    break;
+                case 4:
+                    SetDay = year + "-" + month + "-" + allDate.get(i);
+                    thuDate.add(getWeekOfYear(SetDay)-1,allDate.get(i));
+                    break;
+                case 5:
+                    SetDay = year + "-" + month + "-" + allDate.get(i);
+                    friDate.add(getWeekOfYear(SetDay)-1,allDate.get(i));
+                    break;
+                case 6:
+                    SetDay = year + "-" + month + "-" + allDate.get(i);
+                    satDate.add(getWeekOfYear(SetDay)-1,allDate.get(i));
+                    break;
+                case 7:
+                    SetDay = year + "-" + month + "-" + allDate.get(i);
+                    sunDate.add(getWeekOfYear(SetDay)-1,allDate.get(i));
+                    break;
+            }
+        }
+        dlog.i("allDate : " + String.valueOf(allDate));
+        SetWorkGotoCalenderData();
+
         return binding.getRoot();
     }
+
+    private int getWeekOfYear(String date) {
+        Calendar calendar = Calendar.getInstance();
+        String[] dates = date.split("-");
+        int year = Integer.parseInt(dates[0]);
+        int month = Integer.parseInt(dates[1]);
+        int day = Integer.parseInt(dates[2]);
+        dlog.i("getWeekOfYear date : " + String.valueOf(year) + "-" + String.valueOf(month) + "-" + (String.valueOf(day).length() == 1?"0"+String.valueOf(day):String.valueOf(day)));
+        calendar.set(year, month-1, Integer.parseInt(String.valueOf(day).length() == 1?"0"+String.valueOf(day):String.valueOf(day)));
+        return calendar.get(Calendar.WEEK_OF_MONTH);
+    }
+
+    CalendarDayAdaper cadayAdapter1,cadayAdapter2,cadayAdapter3,cadayAdapter4,cadayAdapter5,cadayAdapter6,cadayAdapter7;
+
+    private void SetCalendar() {
+        dlog.i("monDate : " + String.valueOf(monDate));
+        cadayAdapter1 = new CalendarDayAdaper(mContext, sunDate, workGotoList2);
+        binding.sunList.setAdapter(cadayAdapter1);
+        binding.sunList.setNestedScrollingEnabled(false);
+        cadayAdapter1.notifyDataSetChanged();
+
+        cadayAdapter2 = new CalendarDayAdaper(mContext, monDate, workGotoList2);
+        binding.monList.setNestedScrollingEnabled(false);
+        binding.monList.setAdapter(cadayAdapter2);
+        cadayAdapter2.notifyDataSetChanged();
+
+        cadayAdapter3 = new CalendarDayAdaper(mContext, tueDate, workGotoList2);
+        binding.tueList.setNestedScrollingEnabled(false);
+        binding.tueList.setAdapter(cadayAdapter3);
+        cadayAdapter3.notifyDataSetChanged();
+
+        cadayAdapter4 = new CalendarDayAdaper(mContext, wedDate, workGotoList2);
+        binding.wedList.setNestedScrollingEnabled(false);
+        binding.wedList.setAdapter(cadayAdapter4);
+        cadayAdapter4.notifyDataSetChanged();
+
+        cadayAdapter5 = new CalendarDayAdaper(mContext, thuDate, workGotoList2);
+        binding.thuList.setNestedScrollingEnabled(false);
+        binding.thuList.setAdapter(cadayAdapter5);
+        cadayAdapter5.notifyDataSetChanged();
+
+        cadayAdapter6 = new CalendarDayAdaper(mContext, friDate, workGotoList2);
+        binding.friList.setNestedScrollingEnabled(false);
+        binding.friList.setAdapter(cadayAdapter6);
+        cadayAdapter6.notifyDataSetChanged();
+
+        cadayAdapter7 = new CalendarDayAdaper(mContext, satDate, workGotoList2);
+        binding.satList.setNestedScrollingEnabled(false);
+        binding.satList.setAdapter(cadayAdapter7);
+        cadayAdapter7.notifyDataSetChanged();
+    }
+
 
     private void SetWorkGotoCalenderData() {
         workGotoList2.clear();
@@ -183,7 +310,8 @@ public class CalenderFragment extends Fragment {
                                             Collections.singletonList(jsonObject.getString("task"))
                                     ));
                                 }
-                                GetWorkGotoCalenderList(year, month, workGotoList2);
+//                                GetWorkGotoCalenderList(year, month, workGotoList2);
+                                SetCalendar();
                             }
 
                         } catch (JSONException e) {
@@ -203,6 +331,7 @@ public class CalenderFragment extends Fragment {
 
     ArrayList<String> kind = new ArrayList<>();
     ArrayList<String> title = new ArrayList<>();
+
     public void GetWorkGotoCalenderList(String Year, String Month, ArrayList<CalendarSetData.CalendarSetData_list> mList2) {
         Log.d(TAG, year);
 
@@ -221,16 +350,16 @@ public class CalenderFragment extends Fragment {
                 Log.e(TAG, "response 2: " + response.body());
                 activity.runOnUiThread(() -> {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.i(TAG,"onResume place_id :" + place_id);
-                        Log.i(TAG,"onResume USER_INFO_ID :" + USER_INFO_ID);
-                        Log.i(TAG,"onResume mList2 :" + mList2);
+                        Log.i(TAG, "onResume place_id :" + place_id);
+                        Log.i(TAG, "onResume USER_INFO_ID :" + USER_INFO_ID);
+                        Log.i(TAG, "onResume mList2 :" + mList2);
                         try {
                             String select_date = Year + "-" + Month;
                             JSONArray Response = new JSONArray(response.body());
                             workGotoList = new ArrayList<>();
                             workCalenderAdapter = new WorkCalenderAdapter(mContext, workGotoList, mList2, place_id, USER_INFO_ID, select_date, Month);
-                            binding.createCalender.setAdapter(workCalenderAdapter);
-                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+//                            binding.createCalender.setAdapter(workCalenderAdapter);
+//                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                             Log.i(TAG, "SetNoticeListview Thread run! ");
 
                             if (Response.length() == 0) {
@@ -255,31 +384,23 @@ public class CalenderFragment extends Fragment {
                                     public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
                                         Log.i(TAG, "data :" + data);
                                         try {
-                                                kind = new ArrayList<>();
-                                                title = new ArrayList<>();
-                                                for (int i = 0; i < mList2.size(); i++) {
-                                                    if (data.equals(mList2.get(i).getDay().length() == 1 ? "0" + mList2.get(i).getDay() : mList2.get(i).getDay())) {
-                                                        JSONArray Response = new JSONArray(mList2.get(i).getTask().toString().replace("[[", "[").replace("]]", "]"));
-                                                        for (int i3 = 0; i3 < Response.length(); i3++) {
-                                                            JSONObject jsonObject = Response.getJSONObject(i3);
-                                                            kind.add(jsonObject.getString("kind"));
-                                                            title.add(jsonObject.getString("title"));
-                                                        }
+                                            kind = new ArrayList<>();
+                                            title = new ArrayList<>();
+                                            for (int i = 0; i < mList2.size(); i++) {
+                                                if (data.equals(mList2.get(i).getDay().length() == 1 ? "0" + mList2.get(i).getDay() : mList2.get(i).getDay())) {
+                                                    JSONArray Response = new JSONArray(mList2.get(i).getTask().toString().replace("[[", "[").replace("]]", "]"));
+                                                    for (int i3 = 0; i3 < Response.length(); i3++) {
+                                                        JSONObject jsonObject = Response.getJSONObject(i3);
+                                                        kind.add(jsonObject.getString("kind"));
+                                                        title.add(jsonObject.getString("title"));
                                                     }
                                                 }
-                                                shardpref.putString("task_date", WorkDay);
-                                                Log.i(TAG, "WorkDay :" + WorkDay);
+                                            }
+                                            shardpref.putString("task_date", WorkDay);
+                                            Log.i(TAG, "WorkDay :" + WorkDay);
 
-                                                shardpref.putString("change_place_id", change_place_id.isEmpty() ? place_id : change_place_id);
-                                                shardpref.putString("change_member_id", change_member_id.isEmpty() ? "" : change_member_id);
-//                                            Intent intent = new Intent(mContext, TaskListPopActivity.class);
-//                                            intent.putStringArrayListExtra("kind", kind);
-//                                            intent.putStringArrayListExtra("title", title);
-//                                            intent.putExtra("date", data);
-//                                            intent.putExtra("yoil", yoil);
-//                                            intent.putExtra("write_name","");
-//                                            startActivity(intent);
-//                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                            shardpref.putString("change_place_id", change_place_id.isEmpty() ? place_id : change_place_id);
+                                            shardpref.putString("change_member_id", change_member_id.isEmpty() ? "" : change_member_id);
                                             if (!WorkDay.contains("null")) {
                                                 WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
                                                 wgb.show(getChildFragmentManager(), "WorkgotoBottomSheet");
@@ -399,8 +520,8 @@ public class CalenderFragment extends Fragment {
                             JSONArray Response = new JSONArray(response.body());
                             workGotoList = new ArrayList<>();
                             workStatusCalenderAdapter = new WorkStatusCalenderAdapter(mContext, workGotoList, mList2, place_id, USER_INFO_ID, select_date, Month);
-                            binding.createCalender.setAdapter(workStatusCalenderAdapter);
-                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+//                            binding.createCalender.setAdapter(workStatusCalenderAdapter);
+//                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                             dlog.i("SetNoticeListview Thread run! ");
 
                             if (Response.length() == 0) {
@@ -512,6 +633,7 @@ public class CalenderFragment extends Fragment {
 
     ArrayList<String> akind = new ArrayList<>();
     ArrayList<String> atitle = new ArrayList<>();
+
     public void GetApprovalCalenderList(String Year, String Month, ArrayList<CalendarSetData.CalendarSetData_list> mList2, String date) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkCalenderInterface.URL)
@@ -537,8 +659,8 @@ public class CalenderFragment extends Fragment {
                             JSONArray Response = new JSONArray(response.body());
                             ApprovalList2 = new ArrayList<>();
                             ApprovalAdapter = new WorkCalenderAdapter(mContext, ApprovalList2, ApprovalList, place_id, USER_INFO_ID, select_date, Month);
-                            binding.createCalender.setAdapter(ApprovalAdapter);
-                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+//                            binding.createCalender.setAdapter(ApprovalAdapter);
+//                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                             dlog.i("SetNoticeListview Thread run! ");
 
                             if (Response.length() == 0) {
@@ -700,8 +822,8 @@ public class CalenderFragment extends Fragment {
                             JSONArray Response = new JSONArray(response.body());
                             payList = new ArrayList<>();
                             payAdapter = new PayCalenderAdapter(mContext, payList, payList2, place_id, USER_INFO_ID, select_date, Month);
-                            binding.createCalender.setAdapter(payAdapter);
-                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
+//                            binding.createCalender.setAdapter(payAdapter);
+//                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                             dlog.i("SetNoticeListview Thread run! ");
 
                             if (Response.length() == 0) {

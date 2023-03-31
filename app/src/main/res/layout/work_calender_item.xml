@@ -8,83 +8,83 @@
     android:layout_marginEnd="5dp"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/yoil_area"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal"
-        android:weightSum="7">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/yoil_area"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:weightSum="7">-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:text="일"
-            android:textColor="#FF0000"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:fontFamily="@font/inter_regular"-->
+<!--            android:gravity="center"-->
+<!--            android:text="일"-->
+<!--            android:textColor="#FF0000"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:text="월"
-            android:textColor="@color/black"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:fontFamily="@font/inter_regular"-->
+<!--            android:gravity="center"-->
+<!--            android:text="월"-->
+<!--            android:textColor="@color/black"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:text="화"
-            android:textColor="@color/black"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:fontFamily="@font/inter_regular"-->
+<!--            android:gravity="center"-->
+<!--            android:text="화"-->
+<!--            android:textColor="@color/black"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:text="수"
-            android:textColor="@color/black"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:fontFamily="@font/inter_regular"-->
+<!--            android:gravity="center"-->
+<!--            android:text="수"-->
+<!--            android:textColor="@color/black"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:text="목"
-            android:textColor="@color/black"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:fontFamily="@font/inter_regular"-->
+<!--            android:gravity="center"-->
+<!--            android:text="목"-->
+<!--            android:textColor="@color/black"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:text="금"
-            android:textColor="@color/black"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:fontFamily="@font/inter_regular"-->
+<!--            android:gravity="center"-->
+<!--            android:text="금"-->
+<!--            android:textColor="@color/black"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="@font/inter_regular"
-            android:gravity="center"
-            android:text="토"
-            android:textColor="#5B93FF"
-            tools:ignore="HardcodedText" />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:fontFamily="@font/inter_regular"-->
+<!--            android:gravity="center"-->
+<!--            android:text="토"-->
+<!--            android:textColor="#5B93FF"-->
+<!--            tools:ignore="HardcodedText" />-->
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"

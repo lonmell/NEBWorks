@@ -106,17 +106,27 @@
             android:text="관리중인 매장"
             android:textColor="#000000"
             android:textSize="22sp" />
-
-        <TextView
-            android:id="@+id/store_cnt"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/store_cnt_tv"
-            android:fontFamily="@font/pretendard_bold"
-            android:text="0"
-            android:textColor="@color/new_blue"
-            android:textSize="22sp" />
+            android:layout_toEndOf="@+id/store_cnt_tv">
+            <TextView
+                android:id="@+id/store_cnt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="0"
+                android:textColor="@color/new_blue"
+                android:textSize="22sp" />
+            <ImageView
+                android:id="@+id/basic_loading"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -152,31 +162,6 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="34dp"
             android:background="@drawable/addstorebtn" />
-
-        <RelativeLayout
-            android:id="@+id/login_alert_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#4D000000"
-            android:clickable="false"
-            android:visibility="gone">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerInParent="true"
-                app:cardBackgroundColor="#ffffff"
-                app:cardCornerRadius="120dp"
-                app:cardElevation="0dp">
-
-                <ImageView
-                    android:id="@+id/loading_view"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    tools:ignore="ContentDescription" />
-            </androidx.cardview.widget.CardView>
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/no_data"

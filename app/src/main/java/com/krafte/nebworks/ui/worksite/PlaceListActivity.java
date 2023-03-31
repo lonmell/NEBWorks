@@ -20,16 +20,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkplaceListAdapter;
 import com.krafte.nebworks.bottomsheet.StoreListBottomSheet;
+import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
+import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityWorksiteBinding;
@@ -133,6 +137,10 @@ public class PlaceListActivity extends AppCompatActivity {
 
             setBtnEvent();
             LoginCheck(USER_INFO_EMAIL);
+            binding.basicLoading.setVisibility(View.INVISIBLE);
+            Glide.with(this).load(R.raw.basic_loading1)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(binding.basicLoading);
 
             //사용자 ID로 FCM 보낼수 있도록 토픽 세팅
             FirebaseMessaging.getInstance().subscribeToTopic("P" + USER_INFO_ID).addOnCompleteListener(task -> {
@@ -442,17 +450,83 @@ public class PlaceListActivity extends AppCompatActivity {
                                         String save_kind = Response.getJSONObject(pos).getString("save_kind");
                                         String accept_state = Response.getJSONObject(pos).getString("accept_state");
                                         String place_imgpath = Response.getJSONObject(pos).getString("img_path");
-                                        dlog.i("owner_id : " + owner_id);
-                                        dlog.i("place_name : " + place_name);
-                                        dlog.i("myid : " + myid);
-                                        dlog.i("place_id : " + place_id);
-                                        dlog.i("save_kind : " + save_kind);
-                                        dlog.i("accept_state : " + accept_state);
-                                        dlog.i("place_imgpath : " + place_imgpath);
 
-                                        shardpref.putString("place_id", place_id);
-                                        shardpref.putString("place_name", place_name);
+                                        //--매장 전체 정보 저장 START
+                                        shardpref.putString("place_id", Response.getJSONObject(pos).getString("id"));
+                                        PlaceCheckData.getInstance().setPlace_name(Response.getJSONObject(pos).getString("name"));
+
+                                        shardpref.putString("place_name", Response.getJSONObject(pos).getString("name"));
+                                        PlaceCheckData.getInstance().setPlace_name(Response.getJSONObject(pos).getString("name"));
+
+                                        shardpref.putString("place_owner_id", Response.getJSONObject(pos).getString("owner_id"));
+                                        PlaceCheckData.getInstance().setPlace_owner_id(Response.getJSONObject(pos).getString("owner_id"));
+
+                                        shardpref.putString("place_owner_name", Response.getJSONObject(pos).getString("owner_name"));
+                                        PlaceCheckData.getInstance().setPlace_owner_name(Response.getJSONObject(pos).getString("owner_name"));
+
+                                        shardpref.putString("registr_name", Response.getJSONObject(pos).getString("registr_num"));
+                                        PlaceCheckData.getInstance().setRegistr_num(Response.getJSONObject(pos).getString("registr_num"));
+
+                                        shardpref.putString("store_kind", Response.getJSONObject(pos).getString("store_kind"));
+                                        PlaceCheckData.getInstance().setStore_kind(Response.getJSONObject(pos).getString("store_kind"));
+
+                                        shardpref.putString("place_address", Response.getJSONObject(pos).getString("address"));
+                                        PlaceCheckData.getInstance().setPlace_address(Response.getJSONObject(pos).getString("address"));
+
+                                        shardpref.putString("place_latitude", Response.getJSONObject(pos).getString("latitude"));
+                                        PlaceCheckData.getInstance().setPlace_latitude(Response.getJSONObject(pos).getString("latitude"));
+
+                                        shardpref.putString("place_longitude", Response.getJSONObject(pos).getString("longitude"));
+                                        PlaceCheckData.getInstance().setPlace_longitude(Response.getJSONObject(pos).getString("longitude"));
+
+                                        shardpref.putString("place_pay_day", Response.getJSONObject(pos).getString("pay_day"));
+                                        PlaceCheckData.getInstance().setPlace_pay_day(Response.getJSONObject(pos).getString("pay_day"));
+
+                                        shardpref.putString("place_test_period", Response.getJSONObject(pos).getString("test_period"));
+                                        PlaceCheckData.getInstance().setPlace_test_period(Response.getJSONObject(pos).getString("test_period"));
+
+                                        shardpref.putString("place_vacation_select", Response.getJSONObject(pos).getString("vacation_select"));
+                                        PlaceCheckData.getInstance().setPlace_vacation_select(Response.getJSONObject(pos).getString("vacation_select"));
+
+                                        shardpref.putString("place_insurance", Response.getJSONObject(pos).getString("insurance"));
+                                        PlaceCheckData.getInstance().setPlace_insurance(Response.getJSONObject(pos).getString("insurance"));
+
+                                        shardpref.putString("place_start_time", Response.getJSONObject(pos).getString("start_time"));
+                                        PlaceCheckData.getInstance().setPlace_start_time(Response.getJSONObject(pos).getString("start_time"));
+
+                                        shardpref.putString("place_end_time", Response.getJSONObject(pos).getString("end_time"));
+                                        PlaceCheckData.getInstance().setPlace_end_time(Response.getJSONObject(pos).getString("end_time"));
+
+                                        shardpref.putString("place_save_kind", Response.getJSONObject(pos).getString("save_kind"));
+                                        PlaceCheckData.getInstance().setPlace_save_kind(Response.getJSONObject(pos).getString("save_kind"));
+
+                                        shardpref.putString("place_wifi_name", Response.getJSONObject(pos).getString("wifi_name"));
+                                        PlaceCheckData.getInstance().setPlace_wifi_name(Response.getJSONObject(pos).getString("wifi_name"));
+
+                                        shardpref.putString("place_iomethod", Response.getJSONObject(pos).getString("io_method"));
+                                        PlaceCheckData.getInstance().setPlace_iomethod(Response.getJSONObject(pos).getString("io_method"));
+
+                                        shardpref.putString("place_img_path", Response.getJSONObject(pos).getString("img_path"));
+                                        PlaceCheckData.getInstance().setPlace_img_path(Response.getJSONObject(pos).getString("img_path"));
+
+                                        shardpref.putString("place_start_date", Response.getJSONObject(pos).getString("start_date"));
+                                        PlaceCheckData.getInstance().setPlace_start_date(Response.getJSONObject(pos).getString("start_date"));
+
+                                        shardpref.putString("place_created_at", Response.getJSONObject(pos).getString("created_at"));
+                                        PlaceCheckData.getInstance().setPlace_created_at(Response.getJSONObject(pos).getString("created_at"));
+
+                                        shardpref.putString("place_icnt", Response.getJSONObject(pos).getString("i_cnt"));
+                                        PlaceCheckData.getInstance().setPlace_icnt(Response.getJSONObject(pos).getString("i_cnt"));
+
+                                        shardpref.putString("place_ocnt", Response.getJSONObject(pos).getString("o_cnt"));
+                                        PlaceCheckData.getInstance().setPlace_ocnt(Response.getJSONObject(pos).getString("o_cnt"));
+
+                                        shardpref.putString("place_totalcnt", Response.getJSONObject(pos).getString("total_cnt"));
+                                        PlaceCheckData.getInstance().setPlace_totalcnt(Response.getJSONObject(pos).getString("total_cnt"));
+                                        //--매장 전체 정보 저장 END
+
                                         shardpref.putString("place_imgpath", place_imgpath);
+
                                         if (save_kind.equals("0")) {
                                             //임시저장된 매장
                                             pm.PlaceEditGo(mContext);
@@ -472,7 +546,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                                 if (USER_INFO_AUTH.equals("0")) {
                                                     pm.Main(mContext);
                                                 } else {
-                                                    pm.Main2(mContext);
+                                                    InOutLogMember(place_id);
                                                 }
                                             }else{
                                                 Toast_Nomal("승인 대기중인 매장입니다.");
@@ -483,6 +557,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                         dlog.i("GetPlaceList OnItemClickListener Exception :" + e);
                                     }
                                 });
+                                binding.basicLoading.setVisibility(View.GONE);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -495,6 +570,62 @@ public class PlaceListActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                Toast_Nomal("데이터를 읽을 수 없습니다.");
+                binding.basicLoading.setVisibility(View.GONE);
+            }
+        });
+
+    }
+    String kind = "";
+    String io_time = "";
+    public void InOutLogMember(String place_id) {//출퇴근상황 / 날짜가 변경됬을때는 퇴근중이 아닌 미출근 / 휴무날에는 휴무로 표시해야함
+        dlog.i("--------InOutLogMember--------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("--------InOutLogMember--------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(InOutLogInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        InOutLogInterface api = retrofit.create(InOutLogInterface.class);
+        Call<String> call = api.getData(place_id, USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("InOutLogMember jsonResponse : " + jsonResponse);
+                        if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
+                            //그날 최초 출근
+                            kind = "-1";
+                            shardpref.putString("member_io_kind",kind);
+                            shardpref.remove("member_io_time");
+                        } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                dlog.i("InOutLogMember jsonResponse length : " + jsonResponse.length());
+                                dlog.i("InOutLogMember jsonResponse : " + jsonResponse);
+                                try {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    kind = Response.getJSONObject(0).getString("kind");
+                                    io_time = Response.getJSONObject(0).getString("io_time");
+                                    shardpref.putString("member_io_kind",kind);
+                                    shardpref.putString("member_io_time",io_time);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        pm.Main2(mContext);
+                    });
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러 1 = " + t.getMessage());
             }
         });
     }

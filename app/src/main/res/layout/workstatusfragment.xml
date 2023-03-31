@@ -8,12 +8,13 @@
     android:background="#00ff0000"
     android:orientation="vertical"
     android:theme="@style/Theme.Kogas"
-    tools:ignore="HardcodedText,UsingOnClickInXml"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".ui.main.MainFragment"
+    tools:ignore="HardcodedText,UsingOnClickInXml">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -66,22 +67,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <!--                    <RelativeLayout-->
-                        <!--                        android:layout_width="match_parent"-->
-                        <!--                        android:layout_height="120dp"-->
-                        <!--                        android:background="@color/white"-->
-                        <!--                        android:layout_alignParentBottom="true"/>-->
-
                         <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:cardCornerRadius="0dp"
                             app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="0dp"
                             app:cardElevation="0dp">
+
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
@@ -113,9 +110,9 @@
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/calendar"
                                         android:visibility="gone"
+                                        app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        app:layout_constraintBottom_toBottomOf="parent"/>
+                                        app:layout_constraintTop_toTopOf="parent" />
 
                                     <LinearLayout
                                         android:id="@+id/date_layout"
@@ -123,11 +120,11 @@
                                         android:layout_height="wrap_content"
                                         android:layout_centerHorizontal="true"
                                         android:orientation="horizontal"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"
+                                        android:visibility="visible"
                                         app:layout_constraintBottom_toBottomOf="parent"
-                                        android:visibility="visible">
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent">
 
                                         <RelativeLayout
                                             android:id="@+id/prev_date"
@@ -171,10 +168,10 @@
                                     <RelativeLayout
                                         android:layout_width="45dp"
                                         android:layout_height="45dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"
+                                        android:layout_alignParentEnd="true"
                                         app:layout_constraintBottom_toBottomOf="parent"
-                                        android:layout_alignParentEnd="true">
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent">
 
                                         <ImageView
                                             android:id="@+id/change_icon"
@@ -184,6 +181,7 @@
                                             android:background="@drawable/calendar_resize" />
                                     </RelativeLayout>
                                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                                 <LinearLayout
                                     android:id="@+id/status_select_area"
                                     android:layout_width="match_parent"
@@ -305,27 +303,10 @@
                                     android:id="@+id/status_child_fragment_container"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_below="@+id/status_select_area" >
+                                    android:layout_below="@+id/status_select_area">
 
 
                                 </com.krafte.nebworks.util.SwipeFrameLayout>
-
-                                <RelativeLayout
-                                    android:id="@+id/calendar_area"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_alignTop="@+id/status_select_area"
-                                    android:background="@color/white"
-                                    android:visibility="gone">
-<!--                                    <androidx.recyclerview.widget.RecyclerView-->
-<!--                                        android:id="@+id/create_calender"-->
-<!--                                        android:layout_width="match_parent"-->
-<!--                                        android:layout_height="match_parent"/>-->
-                                    <androidx.viewpager2.widget.ViewPager2
-                                        android:id="@+id/calender_viewpager"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"/>
-                                </RelativeLayout>
                             </RelativeLayout>
                         </androidx.cardview.widget.CardView>
 
@@ -343,9 +324,9 @@
                         android:id="@+id/main_toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:elevation="0dp"
                         android:theme="@style/AppTheme"
                         app:contentInsetStart="0dp"
-                        android:elevation="0dp"
                         app:layout_scrollFlags="scroll|enterAlways">
 
                         <LinearLayout
@@ -353,9 +334,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
-                            android:orientation="vertical"
                             android:elevation="0dp"
+                            android:orientation="vertical"
                             android:padding="10dp">
+
                             <RelativeLayout
                                 android:id="@+id/title_area"
                                 android:layout_width="wrap_content"
@@ -382,21 +364,23 @@
                                         android:textStyle="bold" />
 
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_marginStart="20dp"
-                                    android:gravity="end"
-                                    android:layout_toEndOf="@+id/title_tv">
+                                    android:layout_toEndOf="@+id/title_tv"
+                                    android:gravity="end">
+
                                     <androidx.cardview.widget.CardView
                                         android:id="@+id/change_place"
                                         android:layout_width="150dp"
                                         android:layout_height="36dp"
+                                        android:layout_gravity="center|end"
                                         app:cardBackgroundColor="@color/blue_200"
                                         app:cardCornerRadius="5dp"
-                                        android:layout_gravity="center|end"
                                         app:cardElevation="0dp">
 
                                         <RelativeLayout
@@ -411,10 +395,10 @@
                                                 android:layout_alignParentStart="true"
                                                 android:layout_marginStart="10dp"
                                                 android:layout_marginEnd="10dp"
-                                                android:singleLine="true"
                                                 android:layout_toStartOf="@+id/down_arrow"
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="start|center"
+                                                android:singleLine="true"
                                                 android:text="매장선택"
                                                 android:textColor="@color/new_blue" />
 
@@ -432,16 +416,17 @@
                                 </LinearLayout>
 
                             </RelativeLayout>
+
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/place_status"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
-                                app:cardBackgroundColor="@color/blue_100"
                                 android:layout_marginStart="20dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginEnd="20dp"
                                 android:layout_marginBottom="20dp"
-                                android:layout_marginTop="5dp"
+                                app:cardBackgroundColor="@color/blue_100"
                                 app:cardCornerRadius="10dp">
 
                                 <LinearLayout
@@ -469,8 +454,8 @@
                                             android:id="@+id/all_member_go"
                                             android:layout_width="69dp"
                                             android:layout_height="26dp"
-                                            android:layout_gravity="end"
                                             android:layout_alignParentEnd="true"
+                                            android:layout_gravity="end"
                                             app:cardBackgroundColor="#97AEEB"
                                             app:cardCornerRadius="5dp"
                                             app:cardElevation="0dp">
@@ -481,8 +466,8 @@
                                                 android:fontFamily="@font/inter_bold"
                                                 android:gravity="center"
                                                 android:text="전체 보기"
-                                                android:textSize="12sp"
-                                                android:textColor="@color/white" />
+                                                android:textColor="@color/white"
+                                                android:textSize="12sp" />
                                         </androidx.cardview.widget.CardView>
                                     </RelativeLayout>
 
@@ -508,8 +493,8 @@
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="center"
                                                 android:text="근무중"
-                                                android:textSize="15sp"
-                                                android:textColor="@color/new_blue" />
+                                                android:textColor="@color/new_blue"
+                                                android:textSize="15sp" />
 
                                             <TextView
                                                 android:layout_width="match_parent"
@@ -519,8 +504,8 @@
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="center"
                                                 android:text="미출근"
-                                                android:textSize="15sp"
-                                                android:textColor="@color/new_blue" />
+                                                android:textColor="@color/new_blue"
+                                                android:textSize="15sp" />
 
                                             <LinearLayout
                                                 android:layout_width="1dp"
@@ -535,8 +520,8 @@
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="center"
                                                 android:text="퇴근"
-                                                android:textSize="15sp"
-                                                android:textColor="@color/new_blue" />
+                                                android:textColor="@color/new_blue"
+                                                android:textSize="15sp" />
 
                                             <TextView
                                                 android:layout_width="match_parent"
@@ -546,8 +531,8 @@
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="center"
                                                 android:text="휴무"
-                                                android:textSize="15sp"
-                                                android:textColor="@color/new_blue" />
+                                                android:textColor="@color/new_blue"
+                                                android:textSize="15sp" />
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -566,8 +551,8 @@
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="center|bottom"
                                                 android:text="0"
-                                                android:textSize="15sp"
-                                                android:textColor="@color/new_blue" />
+                                                android:textColor="@color/new_blue"
+                                                android:textSize="15sp" />
 
                                             <TextView
                                                 android:id="@+id/cnt02"
@@ -578,8 +563,8 @@
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="center|bottom"
                                                 android:text="0"
-                                                android:textSize="15sp"
-                                                android:textColor="@color/red" />
+                                                android:textColor="@color/red"
+                                                android:textSize="15sp" />
 
                                             <LinearLayout
                                                 android:layout_width="1dp"
@@ -595,8 +580,8 @@
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="center|bottom"
                                                 android:text="0"
-                                                android:textSize="15sp"
-                                                android:textColor="@color/new_blue" />
+                                                android:textColor="@color/new_blue"
+                                                android:textSize="15sp" />
 
                                             <TextView
                                                 android:id="@+id/cnt04"
@@ -607,8 +592,8 @@
                                                 android:fontFamily="@font/pretendard_bold"
                                                 android:gravity="center|bottom"
                                                 android:text="0"
-                                                android:textSize="15sp"
-                                                android:textColor="@color/new_blue" />
+                                                android:textColor="@color/new_blue"
+                                                android:textSize="15sp" />
                                         </LinearLayout>
                                     </LinearLayout>
 
@@ -620,6 +605,7 @@
                     </androidx.appcompat.widget.Toolbar>
                 </com.google.android.material.appbar.AppBarLayout>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
             <RelativeLayout
                 android:id="@+id/login_alert_text"
                 android:layout_width="match_parent"
@@ -637,9 +623,42 @@
 
             </RelativeLayout>
         </LinearLayout>
-        <include
-            android:id="@+id/add_btn"
-            layout="@layout/addbtn" />
+
+        <!--        <include-->
+        <!--            android:id="@+id/add_btn"-->
+        <!--            layout="@layout/addbtn" />-->
+        <RelativeLayout
+            android:id="@+id/calendar_area"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone">
+            <RelativeLayout
+                android:id="@+id/change_area"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="20dp"
+                android:layout_alignParentEnd="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/change_icon2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/calendar_resize" />
+            </RelativeLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/calender_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/change_area"
+                android:background="@color/white" />
+        </RelativeLayout>
     </RelativeLayout>
+
     <include layout="@layout/navbar" />
 </androidx.drawerlayout.widget.DrawerLayout>

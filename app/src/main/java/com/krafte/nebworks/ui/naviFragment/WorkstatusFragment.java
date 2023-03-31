@@ -98,6 +98,7 @@ public class WorkstatusFragment extends Fragment {
     String Day = "";
     String getYMPicker = "";
 
+
     public static WorkstatusFragment newInstance(int number) {
         WorkstatusFragment fragment = new WorkstatusFragment();
         Bundle bundle = new Bundle();
@@ -160,10 +161,9 @@ public class WorkstatusFragment extends Fragment {
             fg = WorkStatusSubFragment1.newInstance();
 
             fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2);
-//            calenderFragment.CalenderContext(mContext);
+
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
-
             setBtnEvent();
             setAddBtnSetting();
             SendToday();
@@ -218,6 +218,7 @@ public class WorkstatusFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);
@@ -245,6 +246,8 @@ public class WorkstatusFragment extends Fragment {
         } else {
             PlaceWorkCheck(place_id);
         }
+        fg = WorkStatusSubFragment1.newInstance();
+        setChildFragment(fg);
     }
     @Override
     public void onDestroy() {
@@ -384,8 +387,8 @@ public class WorkstatusFragment extends Fragment {
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 if (chng_icon) {
-                    binding.calenderViewpager.setSaveFromParentEnabled(false);
                     fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 2);
+                    binding.calenderViewpager.setSaveFromParentEnabled(false);
                     binding.calenderViewpager.setAdapter(fragmentStateAdapter);
                     binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
@@ -426,7 +429,7 @@ public class WorkstatusFragment extends Fragment {
             binding.inoutName.setText(place_name + " 출퇴근");
         }
         binding.changeIcon.setOnClickListener(v -> {
-            if (!chng_icon) {
+//            if (!chng_icon) {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
@@ -434,14 +437,32 @@ public class WorkstatusFragment extends Fragment {
                 binding.dateSelect.setVisibility(View.VISIBLE);
                 binding.setdate.setText(Year + "년 " + Month + "월");
 //                SetCalenderData(Year, Month);
-            } else {
+//            } else {
+//                chng_icon = false;
+//                binding.calendarArea.setVisibility(View.GONE);
+//                binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+//                binding.dateLayout.setVisibility(View.VISIBLE);
+//                binding.dateSelect.setVisibility(View.GONE);
+//                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+//            }
+        });
+        binding.changeIcon2.setOnClickListener(v -> {
+//            if (!chng_icon) {
+//                chng_icon = true;
+//                binding.calendarArea.setVisibility(View.VISIBLE);
+//                binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
+//                binding.dateLayout.setVisibility(View.GONE);
+//                binding.dateSelect.setVisibility(View.VISIBLE);
+//                binding.setdate.setText(Year + "년 " + Month + "월");
+////                SetCalenderData(Year, Month);
+//            } else {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                 binding.dateLayout.setVisibility(View.VISIBLE);
                 binding.dateSelect.setVisibility(View.GONE);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-            }
+//            }
         });
 
         binding.selectPlace.setText(place_name);
