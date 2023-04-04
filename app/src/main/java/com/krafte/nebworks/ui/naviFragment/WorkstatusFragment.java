@@ -32,7 +32,9 @@ import com.krafte.nebworks.data.CalendarSetStatusData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
+import com.krafte.nebworks.data.WorkGetallData;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
+import com.krafte.nebworks.dataInterface.WorkStatusGetallInterface;
 import com.krafte.nebworks.databinding.WorkstatusfragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.fragment.workstatus.WorkStatusSubFragment1;
@@ -48,9 +50,11 @@ import com.krafte.nebworks.util.SwipeFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,6 +67,7 @@ public class WorkstatusFragment extends Fragment {
     private WorkstatusfragmentBinding binding;
     Context mContext;
     Activity activity;
+    Timer timer = new Timer();
 
     //Other 클래스
     PageMoveClass pm = new PageMoveClass();
@@ -77,6 +82,7 @@ public class WorkstatusFragment extends Fragment {
     ArrayList<WorkCalenderData.WorkCalenderData_list> mList;
     //Task all data
     ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mList2 = new ArrayList<>();
+    ArrayList<WorkGetallData.WorkGetallData_list> workGotoList2 = new ArrayList<>();
 
     //shared
     String place_id = "";
@@ -97,7 +103,6 @@ public class WorkstatusFragment extends Fragment {
     String Month = "";
     String Day = "";
     String getYMPicker = "";
-
 
     public static WorkstatusFragment newInstance(int number) {
         WorkstatusFragment fragment = new WorkstatusFragment();
@@ -141,12 +146,13 @@ public class WorkstatusFragment extends Fragment {
 
         //UI 데이터 세팅
         try {
+
             //Singleton Area
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            place_name      = PlaceCheckData.getInstance().getPlace_name();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
+            place_id = PlaceCheckData.getInstance().getPlace_id();
+            place_name = PlaceCheckData.getInstance().getPlace_name();
+            place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             shardpref.remove("change_place_id");
             //shardpref Area
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
@@ -158,12 +164,10 @@ public class WorkstatusFragment extends Fragment {
 //            }
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             SELECT_POSITION = 1;
+
             fg = WorkStatusSubFragment1.newInstance();
 
-            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2);
 
-            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
-            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
             setBtnEvent();
             setAddBtnSetting();
             SendToday();
@@ -217,8 +221,6 @@ public class WorkstatusFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);
@@ -246,9 +248,17 @@ public class WorkstatusFragment extends Fragment {
         } else {
             PlaceWorkCheck(place_id);
         }
+
         fg = WorkStatusSubFragment1.newInstance();
         setChildFragment(fg);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        SetWorkStatusCalenderData();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -257,7 +267,7 @@ public class WorkstatusFragment extends Fragment {
 
     public void setBtnEvent() {
         binding.statusFragmentbtn1.setOnClickListener(v -> {
-            if(USER_INFO_AUTH.isEmpty()) {
+            if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
                 binding.statusFragmentline1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
@@ -270,7 +280,7 @@ public class WorkstatusFragment extends Fragment {
             }
         });
         binding.statusFragmentbtn2.setOnClickListener(v -> {
-            if(USER_INFO_AUTH.isEmpty()) {
+            if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -283,7 +293,7 @@ public class WorkstatusFragment extends Fragment {
             }
         });
         binding.statusFragmentbtn3.setOnClickListener(v -> {
-            if(USER_INFO_AUTH.isEmpty()) {
+            if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -296,7 +306,7 @@ public class WorkstatusFragment extends Fragment {
             }
         });
         binding.statusFragmentbtn4.setOnClickListener(v -> {
-            if(USER_INFO_AUTH.isEmpty()) {
+            if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
                 binding.statusFragmentline1.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -311,7 +321,7 @@ public class WorkstatusFragment extends Fragment {
 
 
         binding.prevDate.setOnClickListener(v -> {
-            if(USER_INFO_AUTH.isEmpty()) {
+            if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
                 if (chng_icon) {
@@ -338,7 +348,7 @@ public class WorkstatusFragment extends Fragment {
             }
         });
         binding.nextDate.setOnClickListener(v -> {
-            if(USER_INFO_AUTH.isEmpty()) {
+            if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
                 if (chng_icon) {
@@ -374,18 +384,20 @@ public class WorkstatusFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 if (month < Integer.parseInt(Month)) {
-                    cal.add(Calendar.MONTH, - (Integer.parseInt(Month) - (month + 1)));
-                    cal.add(Calendar.DAY_OF_MONTH, - (Integer.parseInt(Day) - (dayOfMonth)));
+                    cal.add(Calendar.MONTH, -(Integer.parseInt(Month) - (month + 1)));
+                    cal.add(Calendar.DAY_OF_MONTH, -(Integer.parseInt(Day) - (dayOfMonth)));
                 } else {
-                    cal.add(Calendar.MONTH, ((month + 1)  - Integer.parseInt(Month)));
-                    cal.add(Calendar.DAY_OF_MONTH, ((dayOfMonth)  - Integer.parseInt(Day)));
+                    cal.add(Calendar.MONTH, ((month + 1) - Integer.parseInt(Month)));
+                    cal.add(Calendar.DAY_OF_MONTH, ((dayOfMonth) - Integer.parseInt(Day)));
                 }
-                dlog.i("getCalenderTime: " + cal.getTime()) ;
+                dlog.i("getCalenderTime: " + cal.getTime());
                 Year = String.valueOf(year);
                 Month = String.valueOf(month + 1);
                 Day = String.valueOf(dayOfMonth);
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
+                dlog.i("datePickerDialog workGotoList2 : " + workGotoList2);
+
                 if (chng_icon) {
                     fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 2);
                     binding.calenderViewpager.setSaveFromParentEnabled(false);
@@ -403,7 +415,7 @@ public class WorkstatusFragment extends Fragment {
         }, mYear, mMonth, mDay);
 
         binding.setdate.setOnClickListener(view -> {
-            if(USER_INFO_AUTH.isEmpty()) {
+            if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
                 if (binding.setdate.isClickable()) {
@@ -429,40 +441,21 @@ public class WorkstatusFragment extends Fragment {
             binding.inoutName.setText(place_name + " 출퇴근");
         }
         binding.changeIcon.setOnClickListener(v -> {
-//            if (!chng_icon) {
-                chng_icon = true;
-                binding.calendarArea.setVisibility(View.VISIBLE);
-                binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
-                binding.dateLayout.setVisibility(View.GONE);
-                binding.dateSelect.setVisibility(View.VISIBLE);
-                binding.setdate.setText(Year + "년 " + Month + "월");
-//                SetCalenderData(Year, Month);
-//            } else {
-//                chng_icon = false;
-//                binding.calendarArea.setVisibility(View.GONE);
-//                binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
-//                binding.dateLayout.setVisibility(View.VISIBLE);
-//                binding.dateSelect.setVisibility(View.GONE);
-//                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-//            }
+            chng_icon = true;
+            binding.calendarArea.setVisibility(View.VISIBLE);
+            binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
+            binding.dateLayout.setVisibility(View.GONE);
+            binding.dateSelect.setVisibility(View.VISIBLE);
+            binding.setdate.setText(Year + "년 " + Month + "월");
         });
+
         binding.changeIcon2.setOnClickListener(v -> {
-//            if (!chng_icon) {
-//                chng_icon = true;
-//                binding.calendarArea.setVisibility(View.VISIBLE);
-//                binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
-//                binding.dateLayout.setVisibility(View.GONE);
-//                binding.dateSelect.setVisibility(View.VISIBLE);
-//                binding.setdate.setText(Year + "년 " + Month + "월");
-////                SetCalenderData(Year, Month);
-//            } else {
-                chng_icon = false;
-                binding.calendarArea.setVisibility(View.GONE);
-                binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
-                binding.dateLayout.setVisibility(View.VISIBLE);
-                binding.dateSelect.setVisibility(View.GONE);
-                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-//            }
+            chng_icon = false;
+            binding.calendarArea.setVisibility(View.GONE);
+            binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+            binding.dateLayout.setVisibility(View.VISIBLE);
+            binding.dateSelect.setVisibility(View.GONE);
+            binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
         });
 
         binding.selectPlace.setText(place_name);
@@ -470,24 +463,24 @@ public class WorkstatusFragment extends Fragment {
 
         binding.changePlace.setOnClickListener(v -> {
             PlaceListBottomSheet plb = new PlaceListBottomSheet();
-            plb.show(getChildFragmentManager(),"PlaceListBottomSheet");
+            plb.show(getChildFragmentManager(), "PlaceListBottomSheet");
             plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
-                shardpref.putString("change_place_id",place_id);
+                shardpref.putString("change_place_id", place_id);
                 dlog.i("change_place_id : " + place_id);
                 binding.selectPlace.setText(place_name);
                 binding.changePlace.setTag(place_name);
 //                SetCalenderData(Year, Month);
                 PlaceWorkCheck(place_id);
-                if(SELECT_POSITION == 1){
+                if (SELECT_POSITION == 1) {
                     fg = WorkStatusSubFragment1.newInstance();
                     setChildFragment(fg);
-                } else  if(SELECT_POSITION == 2){
+                } else if (SELECT_POSITION == 2) {
                     fg = WorkStatusSubFragment2.newInstance();
                     setChildFragment(fg);
-                } else  if(SELECT_POSITION == 3){
+                } else if (SELECT_POSITION == 3) {
                     fg = WorkStatusSubFragment3.newInstance();
                     setChildFragment(fg);
-                } else  if(SELECT_POSITION == 4){
+                } else if (SELECT_POSITION == 4) {
                     fg = WorkStatusSubFragment4.newInstance();
                     setChildFragment(fg);
                 }
@@ -541,6 +534,70 @@ public class WorkstatusFragment extends Fragment {
         SendToday();
     }
 
+    private void SetWorkStatusCalenderData() {
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+        String getYMDate = Year + "-" + Month;
+        Log.i(TAG, "------SetWorkStatusCalenderData------");
+        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
+        Log.i(TAG, "select_date : " + Year);
+        Log.i(TAG, "------SetWorkStatusCalenderData------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WorkStatusGetallInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        WorkStatusGetallInterface api = retrofit.create(WorkStatusGetallInterface.class);
+        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
+        call2.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
+                activity.runOnUiThread(() -> {
+                    //캘린더 내용 (업무가) 있을때
+                    if (response2.isSuccessful() && response2.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response2.body());
+                        Log.i(TAG, "SetWorkStatusCalenderData jsonResponse length : " + jsonResponse.length());
+                        Log.i(TAG, "SetWorkStatusCalenderData jsonResponse : " + jsonResponse);
+                        Log.i(TAG, "SetWorkStatusCalenderData function START");
+                        try {
+                            JSONArray Response2 = new JSONArray(jsonResponse);
+                            if (Response2.length() == 0) {
+                                Log.i(TAG, "GET SIZE : " + Response2.length());
+//                                GetWorkGotoCalenderList(year, month, workGotoList2);
+                            } else {
+                                for (int i = 0; i < Response2.length(); i++) {
+                                    JSONObject jsonObject = Response2.getJSONObject(i);
+                                    workGotoList2.add(new WorkGetallData.WorkGetallData_list(
+                                            jsonObject.getString("task_month"),
+                                            jsonObject.getString("day"),
+                                            jsonObject.getString("id"),
+                                            jsonObject.getString("place_id"),
+                                            jsonObject.getString("kind"),
+                                            jsonObject.getString("title"),
+                                            jsonObject.getString("task_date")
+                                    ));
+                                }
+                            }
+                            dlog.i("workGotoList2 : " + workGotoList2);
+                            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
+                            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            @SuppressLint("LongLogTag")
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러2 = " + t.getMessage());
+            }
+        });
+
+    }
+
     private void setChildFragment(Fragment child) {
         FragmentTransaction childFt = getChildFragmentManager().beginTransaction();
 
@@ -576,11 +633,11 @@ public class WorkstatusFragment extends Fragment {
                                     try {
                                         binding.cnt01.setText(Response.getJSONObject(0).getString("i_cnt"));
                                         //결근 숫자에서 휴가숫자는 빠지지 않기때문에 결근-휴가수를 빼줘야한다
-                                        if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0){
+                                        if (Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0) {
                                             binding.cnt02.setText(Response.getJSONObject(0).getString("absence_cnt"));
-                                        } else if(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0){
+                                        } else if (Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0) {
                                             binding.cnt02.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
-                                                    -Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
+                                                    - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
                                         }
                                         binding.cnt03.setText(Response.getJSONObject(0).getString("o_cnt"));
                                         binding.cnt04.setText(Response.getJSONObject(0).getString("vaca_cnt"));
@@ -596,9 +653,9 @@ public class WorkstatusFragment extends Fragment {
                                     } catch (Exception e) {
                                         dlog.i("PlaceWorkCheck Exception : " + e);
                                     }
-                                }else{
+                                } else {
 //                                    MainWorkCnt(place_id,USER_INFO_ID);
-                                    shardpref.putString("i_cnt","0");
+                                    shardpref.putString("i_cnt", "0");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -663,8 +720,12 @@ public class WorkstatusFragment extends Fragment {
                         newX = initialX + dx;
                         newY = initialY + dy;
 
-                        if(lastnewX == 0){ lastnewX = newX; }
-                        if(lastnewY == 0){ lastnewY = newY; }
+                        if (lastnewX == 0) {
+                            lastnewX = newX;
+                        }
+                        if (lastnewY == 0) {
+                            lastnewY = newY;
+                        }
 
                         int parentWidth = ((ViewGroup) v.getParent()).getWidth();
                         int parentHeight = ((ViewGroup) v.getParent()).getHeight();
@@ -688,7 +749,7 @@ public class WorkstatusFragment extends Fragment {
                             } else {
                                 pm.AddWorkPart(mContext);
                             }
-                        }else{
+                        } else {
                             lastnewX = newX;
                             lastnewY = newY;
                         }
@@ -705,8 +766,8 @@ public class WorkstatusFragment extends Fragment {
 
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요!");
+        intent.putExtra("flag", "더미");
+        intent.putExtra("data", "먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);

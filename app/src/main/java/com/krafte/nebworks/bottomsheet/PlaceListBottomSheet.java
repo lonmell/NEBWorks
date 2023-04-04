@@ -169,7 +169,9 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
                                                     jsonObject.getString("total_cnt"),
                                                     jsonObject.getString("i_cnt"),
                                                     jsonObject.getString("o_cnt"),
-                                                    jsonObject.getString("created_at")
+                                                    jsonObject.getString("created_at"),
+                                                    jsonObject.getString("io_kind"),
+                                                    jsonObject.getString("io_time")
                                             ));
                                         }
                                     }
@@ -197,9 +199,6 @@ public class PlaceListBottomSheet extends BottomSheetDialogFragment {
                                             dlog.i("accept_state : " + accept_state);
                                             dlog.i("place_imgpath : " + place_imgpath);
 
-//                                            shardpref.putString("place_id", place_id);
-//                                            shardpref.putString("place_name", place_name);
-//                                            shardpref.putString("place_imgpath", place_imgpath);
                                             if (mListener01 != null) {
                                                 mListener01.onClick(v,place_id,place_name,owner_id);
                                             }

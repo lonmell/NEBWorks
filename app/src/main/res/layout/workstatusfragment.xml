@@ -627,37 +627,41 @@
         <!--        <include-->
         <!--            android:id="@+id/add_btn"-->
         <!--            layout="@layout/addbtn" />-->
-        <RelativeLayout
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/calendar_area"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:visibility="gone">
             <RelativeLayout
-                android:id="@+id/change_area"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginEnd="20dp"
-                android:layout_alignParentEnd="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/change_icon2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/calendar_resize" />
-            </RelativeLayout>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/calender_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/change_area"
-                android:background="@color/white" />
-        </RelativeLayout>
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:id="@+id/change_area"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_alignParentEnd="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/change_icon2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/calendar_resize" />
+                </RelativeLayout>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/calender_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/change_area"
+                    android:background="@color/white" />
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
     </RelativeLayout>
 
     <include layout="@layout/navbar" />

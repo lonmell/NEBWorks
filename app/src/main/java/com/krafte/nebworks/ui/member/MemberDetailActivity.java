@@ -369,12 +369,22 @@ public class MemberDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart(){
+        super.onStart();
         SetAllMemberList();
         SetAllMemberList(stub_place_id, stub_user_id);
         SetContractList();
         MainWorkCnt(stub_place_id, stub_user_id);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
     }
 
     @Override
@@ -447,7 +457,6 @@ public class MemberDetailActivity extends AppCompatActivity {
                             binding.workdata03.setText(waiting_cnt);
                             binding.workdata04.setText(approval_cnt);
                             binding.workdata05.setText(reject_cnt);
-
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -460,7 +469,6 @@ public class MemberDetailActivity extends AppCompatActivity {
                 dlog.e("에러 = " + t.getMessage());
             }
         });
-
     }
 
     /*업무카운팅 START*/
@@ -468,7 +476,6 @@ public class MemberDetailActivity extends AppCompatActivity {
     /*직원 정보 START*/
     String workpay = "";
     String CallNum = "";
-
     public void SetAllMemberList(String place_id, String user_id) {
         dlog.i("SetAllMemberList place_id : " + place_id);
         dlog.i("SetAllMemberList user_id : " + user_id);
@@ -1177,4 +1184,6 @@ public class MemberDetailActivity extends AppCompatActivity {
         toast.setView(layout);
         toast.show();
     }
+
+
 }

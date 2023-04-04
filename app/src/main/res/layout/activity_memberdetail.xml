@@ -54,17 +54,19 @@
                     android:layout_height="25dp"
                     android:layout_marginTop="10dp"
                     android:weightSum="4">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/blue"
                         android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:text="출근연월"
-                        android:background="@color/blue"
-                        android:layout_weight="1"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="TextContrastCheck" />
                     <TextView
                         android:id="@+id/cv_inoutdate"
                         android:layout_width="match_parent"
@@ -76,17 +78,19 @@
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/blue"
                         android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:text="이    름"
-                        android:layout_weight="1"
-                        android:background="@color/blue"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="TextContrastCheck" />
                     <TextView
                         android:id="@+id/cv_name"
                         android:layout_width="match_parent"
@@ -116,61 +120,71 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="10dp"
                     android:weightSum="5">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/blue"
                         android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:text="일"
-                        android:background="@color/blue"
-                        android:layout_weight="1"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="TextContrastCheck" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/blue"
                         android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:text="근무시간"
-                        android:background="@color/blue"
-                        android:layout_weight="1"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="TextContrastCheck" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/blue"
                         android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:text="출    근"
-                        android:background="@color/blue"
-                        android:layout_weight="1"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="TextContrastCheck" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/blue"
                         android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:text="퇴    근"
-                        android:layout_weight="1"
-                        android:background="@color/blue"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="TextContrastCheck" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/blue"
                         android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:text="비고"
-                        android:layout_weight="1"
-                        android:background="@color/blue"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="TextContrastCheck" />
                 </LinearLayout>
 
 
@@ -337,7 +351,8 @@
                                                                 android:gravity="center"
                                                                 android:text="전체 보기"
                                                                 android:textColor="@color/white"
-                                                                android:textSize="12sp" />
+                                                                android:textSize="12sp"
+                                                                tools:ignore="TextContrastCheck" />
                                                         </androidx.cardview.widget.CardView>
 
                                                     </RelativeLayout>
@@ -513,7 +528,8 @@
                                                             android:layout_width="20dp"
                                                             android:layout_height="20dp"
                                                             android:background="@drawable/find_right_arrow"
-                                                            android:rotation="-180" />
+                                                            android:rotation="-180"
+                                                            tools:ignore="ImageContrastCheck" />
                                                     </RelativeLayout>
 
                                                     <TextView
@@ -536,7 +552,8 @@
                                                         <ImageView
                                                             android:layout_width="20dp"
                                                             android:layout_height="20dp"
-                                                            android:background="@drawable/find_right_arrow" />
+                                                            android:background="@drawable/find_right_arrow"
+                                                            tools:ignore="ImageContrastCheck" />
                                                     </RelativeLayout>
                                                 </LinearLayout>
 
@@ -940,7 +957,8 @@
                                                 android:layout_centerVertical="true"
                                                 android:layout_marginEnd="10dp"
                                                 android:background="@drawable/down_arrow_blue"
-                                                android:rotation="-90" />
+                                                android:rotation="-90"
+                                                tools:ignore="ImageContrastCheck" />
                                         </RelativeLayout>
                                     </androidx.cardview.widget.CardView>
 

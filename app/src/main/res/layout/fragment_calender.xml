@@ -124,56 +124,49 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="40dp"
             android:layout_marginTop="10dp"
             android:weightSum="7">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/sun_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_weight="1"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mon_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_weight="1"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tue_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_weight="1"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/wed_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_weight="1"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/thu_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_weight="1"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fri_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_weight="1"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/sat_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_weight="1"/>
 

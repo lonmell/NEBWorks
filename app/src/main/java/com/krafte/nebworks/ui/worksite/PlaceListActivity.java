@@ -33,7 +33,6 @@ import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
 import com.krafte.nebworks.dataInterface.FeedNotiInterface;
-import com.krafte.nebworks.dataInterface.InOutLogInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityWorksiteBinding;
@@ -136,6 +135,17 @@ public class PlaceListActivity extends AppCompatActivity {
             }
 
             setBtnEvent();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        try{
             LoginCheck(USER_INFO_EMAIL);
             binding.basicLoading.setVisibility(View.INVISIBLE);
             Glide.with(this).load(R.raw.basic_loading1)
@@ -165,7 +175,7 @@ public class PlaceListActivity extends AppCompatActivity {
                 binding.storeCnt.setText("0개");
                 binding.noData.setVisibility(View.VISIBLE);
             }
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -174,24 +184,28 @@ public class PlaceListActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        dlog.i("onResume!");
-        shardpref.remove("page_state");
-        event                         = shardpref.getString("event", "");
-        boolean deletePlace           = shardpref.getBoolean("delete_place", false);
-        if (!event.isEmpty()) {
-            binding.logoutArea.setVisibility(View.GONE);
-        } else {
-            binding.logoutArea.setVisibility(View.VISIBLE);
-            binding.backBtn.setVisibility(View.GONE);
-        }
-        if (deletePlace) {
-            if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty() && !USER_INFO_ID.isEmpty()){
-                GetPlaceList();
+        try{
+            dlog.i("onResume!");
+            shardpref.remove("page_state");
+            event                         = shardpref.getString("event", "");
+            boolean deletePlace           = shardpref.getBoolean("delete_place", false);
+            if (!event.isEmpty()) {
+                binding.logoutArea.setVisibility(View.GONE);
             } else {
-                binding.storeCnt.setText("0개");
-                binding.noData.setVisibility(View.VISIBLE);
+                binding.logoutArea.setVisibility(View.VISIBLE);
+                binding.backBtn.setVisibility(View.GONE);
             }
-            shardpref.remove("delete_place");
+            if (deletePlace) {
+                if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty() && !USER_INFO_ID.isEmpty()){
+                    GetPlaceList();
+                } else {
+                    binding.storeCnt.setText("0개");
+                    binding.noData.setVisibility(View.VISIBLE);
+                }
+                shardpref.remove("delete_place");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -432,7 +446,9 @@ public class PlaceListActivity extends AppCompatActivity {
                                                 jsonObject.getString("total_cnt"),
                                                 jsonObject.getString("i_cnt"),
                                                 jsonObject.getString("o_cnt"),
-                                                jsonObject.getString("created_at")
+                                                jsonObject.getString("created_at"),
+                                                jsonObject.getString("io_kind"),
+                                                jsonObject.getString("io_time")
                                         ));
                                     }
                                 }
@@ -527,6 +543,9 @@ public class PlaceListActivity extends AppCompatActivity {
 
                                         shardpref.putString("place_imgpath", place_imgpath);
 
+                                        shardpref.getString("member_io_kind",Response.getJSONObject(pos).getString("io_kind"));
+                                        shardpref.getString("member_io_time",Response.getJSONObject(pos).getString("io_time"));
+
                                         if (save_kind.equals("0")) {
                                             //임시저장된 매장
                                             pm.PlaceEditGo(mContext);
@@ -543,11 +562,17 @@ public class PlaceListActivity extends AppCompatActivity {
                                             ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
                                             shardpref.putInt("SELECT_POSITION", 0);
                                             if(accept_state.equals("1")){
-                                                if (USER_INFO_AUTH.equals("0")) {
-                                                    pm.Main(mContext);
-                                                } else {
-                                                    InOutLogMember(place_id);
+                                                if(USER_INFO_AUTH.equals("")){
+                                                    LoginCheck(USER_INFO_EMAIL);
+                                                }else{
+                                                    if (USER_INFO_AUTH.equals("0")) {
+                                                        pm.Main(mContext);
+                                                    } else {
+                                                        pm.Main2(mContext);
+//                                                    InOutLogMember(place_id);
+                                                    }
                                                 }
+
                                             }else{
                                                 Toast_Nomal("승인 대기중인 매장입니다.");
                                             }
@@ -576,59 +601,7 @@ public class PlaceListActivity extends AppCompatActivity {
         });
 
     }
-    String kind = "";
-    String io_time = "";
-    public void InOutLogMember(String place_id) {//출퇴근상황 / 날짜가 변경됬을때는 퇴근중이 아닌 미출근 / 휴무날에는 휴무로 표시해야함
-        dlog.i("--------InOutLogMember--------");
-        dlog.i("place_id : " + place_id);
-        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-        dlog.i("--------InOutLogMember--------");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(InOutLogInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        InOutLogInterface api = retrofit.create(InOutLogInterface.class);
-        Call<String> call = api.getData(place_id, USER_INFO_ID);
-        call.enqueue(new Callback<String>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    runOnUiThread(() -> {
-                        String jsonResponse = rc.getBase64decode(response.body());
-                        dlog.i("InOutLogMember jsonResponse : " + jsonResponse);
-                        if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
-                            //그날 최초 출근
-                            kind = "-1";
-                            shardpref.putString("member_io_kind",kind);
-                            shardpref.remove("member_io_time");
-                        } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
-                            if (response.isSuccessful() && response.body() != null) {
-                                dlog.i("InOutLogMember jsonResponse length : " + jsonResponse.length());
-                                dlog.i("InOutLogMember jsonResponse : " + jsonResponse);
-                                try {
-                                    JSONArray Response = new JSONArray(jsonResponse);
-                                    kind = Response.getJSONObject(0).getString("kind");
-                                    io_time = Response.getJSONObject(0).getString("io_time");
-                                    shardpref.putString("member_io_kind",kind);
-                                    shardpref.putString("member_io_time",io_time);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                        pm.Main2(mContext);
-                    });
-                }
-            }
 
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e("에러 1 = " + t.getMessage());
-            }
-        });
-    }
 
     public void getNotReadFeedcnt() {
         Retrofit retrofit = new Retrofit.Builder()

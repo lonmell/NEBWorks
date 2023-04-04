@@ -94,9 +94,9 @@ public class WorkstatusBottomSheet extends BottomSheetDialogFragment {
             dlog.i("FtoDay : " + FtoDay);
             dlog.i("-----onCreateView-----");
 
-            String year = FtoDay.substring(0,4);
-            String month = FtoDay.substring(5,7);
-            String day = FtoDay.substring(8,10);
+            String year = select_date.substring(0,4);
+            String month = select_date.substring(5,7);
+            String day = select_date.substring(8);
             getYMPicker = year + "-" + month + "-" + day;
             binding.title.setText(month + "월 " + day + "일 근무자");
             setBtnEvent();

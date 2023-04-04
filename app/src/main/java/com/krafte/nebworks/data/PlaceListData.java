@@ -27,12 +27,15 @@ public class PlaceListData {
         String i_cnt;
         String o_cnt;
         String created_at;
+        String io_kind;
+        String io_time;
 
 
         public PlaceListData_list(String id, String name, String owner_id, String owner_name, String owner_phone, String registr_num,
                                     String store_kind, String address, String latitude, String longitude, String pay_day, String test_period,
                                     String vacation_select, String insurance, String start_time, String end_time, String save_kind,
-                                    String img_path, String accept_state, String total_cnt, String i_cnt, String o_cnt, String created_at) {
+                                    String img_path, String accept_state, String total_cnt, String i_cnt, String o_cnt, String created_at,
+                                    String io_kind, String io_time) {
             this.id = id;
             this.name = name;
             this.owner_id = owner_id;
@@ -56,6 +59,8 @@ public class PlaceListData {
             this.i_cnt = i_cnt;
             this.o_cnt = o_cnt;
             this.created_at = created_at;
+            this.io_kind = io_kind;
+            this.io_time = io_time;
         }
 
         public String getId() {
@@ -240,6 +245,22 @@ public class PlaceListData {
 
         public void setCreated_at(String created_at) {
             this.created_at = created_at;
+        }
+
+        public String getIo_kind() {
+            return io_kind;
+        }
+
+        public void setIo_kind(String io_kind) {
+            this.io_kind = io_kind;
+        }
+
+        public String getIo_time() {
+            return io_time;
+        }
+
+        public void setIo_time(String io_time) {
+            this.io_time = io_time;
         }
     }
 

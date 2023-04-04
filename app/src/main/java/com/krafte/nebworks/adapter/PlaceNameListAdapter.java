@@ -112,8 +112,8 @@ public class PlaceNameListAdapter extends RecyclerView.Adapter<PlaceNameListAdap
                 if (pos != RecyclerView.NO_POSITION) {
                     PlaceListData.PlaceListData_list item = mData.get(pos);
                     Log.i("PlaceNameListAdapter", "pos : " + pos);
-                    shardpref.putString("place_id", item.getId());
-                    shardpref.putString("place_owner_id", item.getOwner_id());
+//                    shardpref.putString("place_id", item.getId());
+//                    shardpref.putString("place_owner_id", item.getOwner_id());
                     if (mListener != null) {
                         mListener.onItemClick(view, pos);
                     }

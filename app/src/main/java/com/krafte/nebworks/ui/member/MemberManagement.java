@@ -189,7 +189,6 @@ public class MemberManagement extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -210,6 +209,7 @@ public class MemberManagement extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
     }
 
     public void getNotReadFeedcnt() {

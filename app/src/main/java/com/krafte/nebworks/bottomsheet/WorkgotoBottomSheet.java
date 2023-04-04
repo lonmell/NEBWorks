@@ -76,7 +76,7 @@ public class WorkgotoBottomSheet extends BottomSheetDialogFragment {
 
 
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_ID = shardpref.getString("change_member_id", "");
+            USER_INFO_ID = shardpref.getString("change_member_id", shardpref.getString("USER_INFO_ID",""));
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             place_id = shardpref.getString("change_place_id", "");
             select_date = shardpref.getString("task_date", "");
@@ -87,9 +87,9 @@ public class WorkgotoBottomSheet extends BottomSheetDialogFragment {
             dlog.i("-----onCreateView-----");
 
             String year = select_date.substring(0,4);
-            String month = select_date.substring(4,6);
-            String day = select_date.substring(7,9);
-            getYMPicker = year + "-" + month + "-" + day;
+            String month = select_date.substring(5,7);
+            String day = select_date.substring(8);
+            getYMPicker = year + "-" + month + "-" + (day.length() == 1?"0"+day:day);
             binding.title.setText(month + "월 " + day + "일 할일 목록");
             setBtnEvent();
             setRecyclerView();

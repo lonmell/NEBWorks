@@ -3,34 +3,57 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.CalendarSetData;
+import com.krafte.nebworks.data.WorkGetallData;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PreferenceHelper;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.ViewHolder> {
     private static final String TAG = "CalendarDayAdaper";
     private List<String> mData = null;
-    private ArrayList<CalendarSetData.CalendarSetData_list> mList;
+    private ArrayList<WorkGetallData.WorkGetallData_list> mList = new ArrayList<>();
+    private ArrayList<WorkGetallData.WorkGetallData_list> mList2 = new ArrayList<>();
+    private CalendarDayAdaper2 mAdapter;
+
     public static Activity activity;
 
     Context mContext;
     PreferenceHelper shardpref;
     Dlog dlog = new Dlog();
+    String month = "";
+    String year = "";
+    int kind = 0;
+
+
+    List<String> mTask_month = new ArrayList<>();
+    List<String> mDay = new ArrayList<>();
+    List<String> mId = new ArrayList<>();
+    List<String> mPlace_id = new ArrayList<>();
+    List<String> mKind = new ArrayList<>();
+    List<String> mTitle = new ArrayList<>();
+    List<String> mTask_date = new ArrayList<>();
 
     public interface OnItemClickListener {
-        void onItemClick(View v, int position);
+        void onItemClick(View v, int position, String data, String yoil, String WorkDay);
     }
 
     private OnItemClickListener mListener = null;
@@ -39,10 +62,14 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
         this.mListener = listener;
     }
 
-    public CalendarDayAdaper(Context context, List<String> data, ArrayList<CalendarSetData.CalendarSetData_list> mList) {
+    //-- kind : 1 - 요일별 데이터 배치 / 2 - 날짜별 데이터 배치
+    public CalendarDayAdaper(Context context, List<String> data, String month, String year, ArrayList<WorkGetallData.WorkGetallData_list> mList, int kind) {
         this.mData = data;
         this.mContext = context;
+        this.month = month;
+        this.year = year;
         this.mList = mList;
+        this.kind = kind;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull
@@ -65,6 +92,175 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
         String item = mData.get(position);
         try {
             holder.tv_date.setText(item);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // 실행할 함수 코드 작성
+//                    if (kind == 2) {
+//                        //근무현황
+//                        if (mList.size() != 0) {
+//                            mTask_month.clear();
+//                            mDay.clear();
+//                            mId.clear();
+//                            mPlace_id.clear();
+//                            mKind.clear();
+//                            mTitle.clear();
+//                            mTask_date.clear();
+//                            for (int i = 0; i < mList.size(); i++) {
+//                                if (mList.get(i).getTask_month().equals(month)) {
+//                                    if ((!mData.get(position).equals("")) && mList.get(i).getDay().equals(getYoil(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(mData.get(position))))) {
+//                                        dlog.i(mData.get(position) + " is " + getYoil(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(mData.get(position))));
+//                                        dlog.i("mList.get(i).getDay() is " + mList.get(i).getDay());
+//                                        mTask_month.add(mList.get(i).getTask_month());
+//                                        mDay.add(mList.get(i).getDay());
+//                                        mId.add(mList.get(i).getId());
+//                                        mPlace_id.add(mList.get(i).getPlace_id());
+//                                        mKind.add(mList.get(i).getKind());
+//                                        mTitle.add(mList.get(i).getTitle());
+//                                        mTask_date.add(mList.get(i).getTask_date());
+//                                    }
+//                                }
+//                            }
+//                            dlog.i("------------mList---------------");
+//                            mList2 = new ArrayList<>();
+//                            mAdapter = new CalendarDayAdaper2(mContext, mList2);
+//                            holder.task_list.setAdapter(mAdapter);
+//                            holder.task_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+//                            dlog.i("mTask_month.size() : " + mTask_month.size());
+//                            for (int i2 = 0; i2 < mTask_month.size(); i2++) {
+//                                mAdapter.addItem(new WorkGetallData.WorkGetallData_list(
+//                                        mTask_month.get(i2),
+//                                        mDay.get(i2),
+//                                        mId.get(i2),
+//                                        mPlace_id.get(i2),
+//                                        mKind.get(i2),
+//                                        mTitle.get(i2),
+//                                        mTask_date.get(i2)
+//                                ));
+//
+//                                dlog.i(mTask_month.get(i2) + "월 " + mDay.get(i2) + "일");
+//                                dlog.i(month + "월 " + item + "일");
+//                                dlog.i("mKind : " + mKind.get(i2));
+//                                dlog.i("mTitle : " + mTitle.get(i2));
+//                                dlog.i("mTask_date : " + mTask_date.get(i2));
+//
+//                                if (mList.get(i2).getKind().equals("holiday") && mList.get(i2).getTask_month().equals(month) && mList.get(i2).getDay().equals(item)) {
+//                                    holder.tv_date.setTextColor(Color.parseColor("#FF687A"));
+//                                }
+//                            }
+//                            dlog.i("------------mList---------------");
+//                            mAdapter.notifyDataSetChanged();
+//                        }
+//
+//                    } else {
+//                        if (mList.size() != 0) {
+//                            mTask_month.clear();
+//                            mDay.clear();
+//                            mId.clear();
+//                            mPlace_id.clear();
+//                            mKind.clear();
+//                            mTitle.clear();
+//                            mTask_date.clear();
+//                            for (int i = 0; i < mList.size(); i++) {
+//                                if (mList.get(i).getTask_month().equals(month)) {
+//                                    if (mList.get(i).getDay().equals(mData.get(position))) {
+//                                        mTask_month.add(mList.get(i).getTask_month());
+//                                        mDay.add(mList.get(i).getDay());
+//                                        mId.add(mList.get(i).getId());
+//                                        mPlace_id.add(mList.get(i).getPlace_id());
+//                                        mKind.add(mList.get(i).getKind());
+//                                        mTitle.add(mList.get(i).getTitle());
+//                                        mTask_date.add(mList.get(i).getTask_date());
+//                                    }
+//                                }
+//                            }
+//                            dlog.i("------------mList---------------");
+//                            mList2 = new ArrayList<>();
+//                            mAdapter = new CalendarDayAdaper2(mContext, mList2);
+//                            holder.task_list.setAdapter(mAdapter);
+//                            holder.task_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+//                            dlog.i("mTask_month.size() : " + mTask_month.size());
+//                            for (int i2 = 0; i2 < mTask_month.size(); i2++) {
+//                                mAdapter.addItem(new WorkGetallData.WorkGetallData_list(
+//                                        mTask_month.get(i2),
+//                                        mDay.get(i2),
+//                                        mId.get(i2),
+//                                        mPlace_id.get(i2),
+//                                        mKind.get(i2),
+//                                        mTitle.get(i2),
+//                                        mTask_date.get(i2)
+//                                ));
+//
+//                                dlog.i(mTask_month.get(i2) + "월 " + mDay.get(i2) + "일");
+//                                dlog.i(month + "월 " + item + "일");
+//                                dlog.i("mKind : " + mKind.get(i2));
+//                                dlog.i("mTitle : " + mTitle.get(i2));
+//                                dlog.i("mTask_date : " + mTask_date.get(i2));
+//
+//                                if (mList.get(i2).getKind().equals("holiday") && mList.get(i2).getTask_month().equals(month) && mList.get(i2).getDay().equals(item)) {
+//                                    holder.tv_date.setTextColor(Color.parseColor("#FF687A"));
+//                                }
+//                            }
+//                            dlog.i("------------mList---------------");
+//                            mAdapter.notifyDataSetChanged();
+//                        }
+//                    }
+
+                    if (mList.size() != 0) {
+                        mTask_month.clear();
+                        mDay.clear();
+                        mId.clear();
+                        mPlace_id.clear();
+                        mKind.clear();
+                        mTitle.clear();
+                        mTask_date.clear();
+                        for (int i = 0; i < mList.size(); i++) {
+                            if (mList.get(i).getTask_month().equals(month)) {
+                                if (mList.get(i).getDay().equals(mData.get(position))) {
+                                    mTask_month.add(mList.get(i).getTask_month());
+                                    mDay.add(mList.get(i).getDay());
+                                    mId.add(mList.get(i).getId());
+                                    mPlace_id.add(mList.get(i).getPlace_id());
+                                    mKind.add(mList.get(i).getKind());
+                                    mTitle.add(mList.get(i).getTitle());
+                                    mTask_date.add(mList.get(i).getTask_date());
+                                }
+                            }
+                        }
+                        dlog.i("------------mList---------------");
+                        mList2 = new ArrayList<>();
+                        mAdapter = new CalendarDayAdaper2(mContext, mList2);
+                        holder.task_list.setAdapter(mAdapter);
+                        holder.task_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                        dlog.i("mTask_month.size() : " + mTask_month.size());
+                        for (int i2 = 0; i2 < mTask_month.size(); i2++) {
+                            mAdapter.addItem(new WorkGetallData.WorkGetallData_list(
+                                    mTask_month.get(i2),
+                                    mDay.get(i2),
+                                    mId.get(i2),
+                                    mPlace_id.get(i2),
+                                    mKind.get(i2),
+                                    mTitle.get(i2),
+                                    mTask_date.get(i2)
+                            ));
+
+                            dlog.i(mTask_month.get(i2) + "월 " + mDay.get(i2) + "일");
+                            dlog.i(month + "월 " + item + "일");
+                            dlog.i("mKind : " + mKind.get(i2));
+                            dlog.i("mTitle : " + mTitle.get(i2));
+                            dlog.i("mTask_date : " + mTask_date.get(i2));
+
+                            if (mList.get(i2).getKind().equals("holiday") && mList.get(i2).getTask_month().equals(month) && mList.get(i2).getDay().equals(item)) {
+                                holder.tv_date.setTextColor(Color.parseColor("#FF687A"));
+                            }
+                        }
+                        dlog.i("------------mList---------------");
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                }
+            }, 300); // 0.3초 뒤에 실행됨 (3000ms = 3 seconds)
+
         } catch (Exception e) {
             dlog.i("Exception : " + e);
         }
@@ -79,20 +275,36 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_date;
+        RecyclerView task_list;
+        RelativeLayout rl_date;
+        List<String> mDay = new ArrayList<>();//-- String으로 받은 List날짜를 하나씩 분리
 
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            tv_date   = itemView.findViewById(R.id.tv_date);
+            tv_date = itemView.findViewById(R.id.tv_date);
+            task_list = itemView.findViewById(R.id.task_list);
+            rl_date = itemView.findViewById(R.id.rl_date);
 
             shardpref = new PreferenceHelper(mContext);
 
             dlog.DlogContext(mContext);
 
+            rl_date.setOnClickListener(v -> {
+                int pos = getBindingAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    if (mListener != null) {
+                        String yoil = getYoil(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(mData.get(pos)));
+                        dlog.i("onItemClick yoil : " + yoil);
+                        mListener.onItemClick(v, pos, mData.get(pos), yoil, year + "-" + month + "-" + mData.get(pos));
+                    }
+                    dlog.i("선택한 날짜1 : " + mData.get(pos).toString());
+                    dlog.i("선택한 pos : " + pos);
+                }
+            });
             itemView.setOnClickListener(view -> {
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
-
                 }
             });
         }
@@ -105,5 +317,18 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    private String getYoil(int year, int month, int day) {
+        // 1. LocalDate 생성
+        LocalDate date = LocalDate.of(year, month, day);
+        System.out.println(date); // 2021-12-25
+
+        // 2. DayOfWeek 객체 구하기
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+
+        // 4. 텍스트 요일 구하기 (한글)
+        return dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
     }
 }

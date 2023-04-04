@@ -38,7 +38,9 @@ import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
+import com.krafte.nebworks.data.WorkGetallData;
 import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
+import com.krafte.nebworks.dataInterface.WorkTaskGetallInterface;
 import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.CalenderFragment;
@@ -192,8 +194,7 @@ public class WorkgotoFragment extends Fragment {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
-            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1);
-//            calenderFragment.CalenderContext(mContext);
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, workGotoList2);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
 
@@ -249,6 +250,7 @@ public class WorkgotoFragment extends Fragment {
             RemoveShared();
             setAddBtnSetting();
             setRecyclerView();
+            SetWorkGotoCalenderData();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -575,7 +577,7 @@ public class WorkgotoFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         TaskSelectWInterface api = retrofit.create(TaskSelectWInterface.class);
-        Call<String> call = api.getData(change_place_id, change_member_id, select_date, USER_INFO_AUTH);
+        Call<String> call = api.getData(change_place_id, change_member_id, select_date.replace("월",""), USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -816,6 +818,70 @@ public class WorkgotoFragment extends Fragment {
                         return false;
                 }
                 return true;
+            }
+        });
+    }
+
+
+    ArrayList<WorkGetallData.WorkGetallData_list> workGotoList2 = new ArrayList<>();
+    private void SetWorkGotoCalenderData() {
+        workGotoList2.clear();
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
+        String getYMDate = Year + "-" + Month;
+        Log.i(TAG, "------SetWorkGotoCalenderData------");
+        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
+        Log.i(TAG, "select_date : " + getYMDate);
+        Log.i(TAG, "USER_INFO_AUTH : " + USER_INFO_AUTH);
+        Log.i(TAG, "------SetWorkGotoCalenderData------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WorkTaskGetallInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        WorkTaskGetallInterface api = retrofit.create(WorkTaskGetallInterface.class);
+        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate,USER_INFO_AUTH);
+        call2.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
+                activity.runOnUiThread(() -> {
+                    //캘린더 내용 (업무가) 있을때
+                    if (response2.isSuccessful() && response2.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response2.body());
+                        Log.i(TAG, "jsonResponse length : " + jsonResponse.length());
+                        Log.i(TAG, "jsonResponse : " + jsonResponse);
+                        Log.i(TAG, "SetWorkGotoCalenderData function START");
+                        try {
+                            JSONArray Response2 = new JSONArray(jsonResponse);
+                            if (Response2.length() == 0) {
+                                Log.i(TAG, "GET SIZE : " + Response2.length());
+//                                GetWorkGotoCalenderList(year, month, workGotoList2);
+                            } else {
+                                for (int i = 0; i < Response2.length(); i++) {
+                                    JSONObject jsonObject = Response2.getJSONObject(i);
+                                    workGotoList2.add(new WorkGetallData.WorkGetallData_list(
+                                            jsonObject.getString("task_month"),
+                                            jsonObject.getString("day"),
+                                            jsonObject.getString("id"),
+                                            jsonObject.getString("place_id"),
+                                            jsonObject.getString("kind"),
+                                            jsonObject.getString("title"),
+                                            jsonObject.getString("task_date")
+                                    ));
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            @SuppressLint("LongLogTag")
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러2 = " + t.getMessage());
             }
         });
     }

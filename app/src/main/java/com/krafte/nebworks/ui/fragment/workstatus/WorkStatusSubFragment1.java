@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.WorkTapMemberAdapter;
 import com.krafte.nebworks.bottomsheet.CommuteBottomSheet;
-import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkStatusTapData;
@@ -67,10 +66,8 @@ public class WorkStatusSubFragment1 extends Fragment {
     ArrayList<WorkStatusTapData.WorkStatusTapData_list> mList;
     WorkTapMemberAdapter mAdapter = null;
     RetrofitConnect rc = new RetrofitConnect();
-    GetResultData resultData = new GetResultData();
     PageMoveClass pm = new PageMoveClass();
     DateCurrent dc = new DateCurrent();
-    int listitemsize = 0;
     Dlog dlog = new Dlog();
     int total_member_cnt = 0;
     String toDay = "";
@@ -83,7 +80,6 @@ public class WorkStatusSubFragment1 extends Fragment {
         return new WorkStatusSubFragment1();
     }
 
-    String str;
 
     /*Fragment 콜백함수*/
     @Override

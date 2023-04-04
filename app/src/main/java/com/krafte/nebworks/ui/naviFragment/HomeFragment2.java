@@ -89,6 +89,7 @@ public class HomeFragment2 extends Fragment {
     private final static String TAG = "HomeFragment2";
     private Homefragment2Binding binding;
 
+    Timer timer = new Timer();
     Context mContext;
     Activity activity;
 
@@ -220,6 +221,8 @@ public class HomeFragment2 extends Fragment {
             //--매장 처음 들어올때 미리 조회 해둔 데이터 START
             mem_io_kind = shardpref.getString("member_io_kind","-1");
             mem_io_time = shardpref.getString("member_io_time","0");
+            dlog.i("mem_io_kind : " + mem_io_kind);
+            dlog.i("mem_io_time : " + mem_io_time);
             if (mem_io_kind.equals("1")) {
                 kind = "-1";
                 binding.ioImg.setBackgroundResource(R.drawable.workinout01);
@@ -229,8 +232,9 @@ public class HomeFragment2 extends Fragment {
                 binding.ioImg.setBackgroundResource(R.drawable.workinout02);
                 binding.inTime.setVisibility(View.VISIBLE);
                 binding.inTimeTxt.setVisibility(View.VISIBLE);
+                binding.inTime.setText(mem_io_time);
             }
-            binding.inTime.setText(mem_io_time);
+
             //--매장 처음 들어올때 미리 조회 해둔 데이터 END
 
             shardpref.putInt("SELECT_POSITION", 0);
@@ -267,7 +271,6 @@ public class HomeFragment2 extends Fragment {
                     shardpref.putString("stub_user_id", USER_INFO_ID);
                     shardpref.putString("stub_user_account", USER_INFO_EMAIL);
                     shardpref.putString("change_place_name", place_name);
-                    timer.cancel();
                     pm.MemberDetail(mContext);
                 }
             });
@@ -275,8 +278,7 @@ public class HomeFragment2 extends Fragment {
             //-- 출퇴근 2023-03-29 -- EmployeeProcess에서 옮김
             cal = Calendar.getInstance();
             today = sdf.format(cal.getTime());
-
-
+            InOutLogMember();
             outTime();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -290,34 +292,14 @@ public class HomeFragment2 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        getPlaceData();
-    }
-
-    Timer timer = new Timer();
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        timer.cancel();
-    }
-
-
-    int inoutimg = 0;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        shardpref.remove("Tap");
         allPay = 0;
+        shardpref.remove("Tap");
+        getPlaceData();
+
         UserCheck();
         taskList();
         String today = dc.GET_YEAR + "-" + dc.GET_MONTH;
-
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "3");
-
-
-        TFFunction();
-        InOutLogMember();
 
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
@@ -329,12 +311,30 @@ public class HomeFragment2 extends Fragment {
             }
         };
         timer.schedule(timerTask, 4000, 6000);
+        if (timer != null) {//-- 다른 프레그먼트로 넘어가면 멈춤
+            timer.cancel();
+            timer = null;
+        }
+        TFFunction();
+    }
+
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        shardpref.remove("member_io_kind");
+        shardpref.remove("member_io_time");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
     }
 
     public void setDummyData() {
@@ -419,7 +419,10 @@ public class HomeFragment2 extends Fragment {
                         if (jsonResponse.replace("[", "").replace("]", "").length() == 0) {
                             //그날 최초 출근
                             kind = "-1";
+                            binding.ioImg.setBackgroundResource(R.drawable.workinout01);
                             binding.ioArea.setVisibility(View.VISIBLE);
+                            binding.inTime.setVisibility(View.GONE);
+                            binding.inTimeTxt.setVisibility(View.GONE);
                         } else if (jsonResponse.replace("[", "").replace("]", "").length() > 0) {
                             if (response.isSuccessful() && response.body() != null) {
                                 dlog.i("InOutLogMember jsonResponse length : " + jsonResponse.length());
@@ -435,13 +438,13 @@ public class HomeFragment2 extends Fragment {
                                         binding.ioImg.setBackgroundResource(R.drawable.workinout01);
                                         binding.inTime.setVisibility(View.GONE);
                                         binding.inTimeTxt.setVisibility(View.GONE);
-                                        binding.ioArea.setVisibility(View.VISIBLE);
                                     } else {
                                         binding.ioImg.setBackgroundResource(R.drawable.workinout02);
                                         binding.inTime.setVisibility(View.VISIBLE);
                                         binding.inTimeTxt.setVisibility(View.VISIBLE);
+                                        binding.inTime.setText(io_time);
                                     }
-                                    binding.inTime.setText(io_time);
+
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -476,7 +479,6 @@ public class HomeFragment2 extends Fragment {
                 shardpref.putString("stub_place_id", place_id);
                 shardpref.putString("stub_user_id", USER_INFO_ID);
                 shardpref.putString("stub_user_account", USER_INFO_EMAIL);
-                timer.cancel();
                 pm.MemberDetail(mContext);
             }
         });
@@ -486,7 +488,6 @@ public class HomeFragment2 extends Fragment {
             } else {
                 shardpref.putString("USER_INFO_AUTH", "1");
                 shardpref.putString("event", "out_store");
-                timer.cancel();
                 pm.PlaceList(mContext);
             }
         });
@@ -495,7 +496,6 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                timer.cancel();
                 pm.MemberManagement(mContext);
             }
         });
@@ -523,10 +523,8 @@ public class HomeFragment2 extends Fragment {
             } else {
                 dlog.i("급여관리");
                 if (USER_INFO_AUTH.equals("0")) {
-                    timer.cancel();
                     pm.PayManagement(mContext);
                 } else {
-                    timer.cancel();
                     pm.PayManagement2(mContext);
                 }
             }
@@ -537,7 +535,6 @@ public class HomeFragment2 extends Fragment {
                 isAuth();
             } else {
                 dlog.i("근로계약서 전체 관리");
-                timer.cancel();
                 pm.ContractFragment(mContext);
             }
         });
@@ -546,7 +543,6 @@ public class HomeFragment2 extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                timer.cancel();
                 pm.FeedList(mContext);
             }
         });
@@ -556,7 +552,6 @@ public class HomeFragment2 extends Fragment {
                 isAuth();
             } else {
                 shardpref.putInt("SELECT_POSITION", 1);
-                timer.cancel();
                 pm.Main2(mContext);
             }
         });
@@ -614,7 +609,7 @@ public class HomeFragment2 extends Fragment {
             Date mDate = new Date(now);
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
-            dlog.i("GET_TIME : " + simpleDate.format(mDate));
+//            dlog.i("GET_TIME : " + simpleDate.format(mDate));
             if (place_iomethod.equals("y")) {
                 if (getMySSID.equals(place_wifi_name)) {
                     if (kind.equals("0")) {
@@ -622,17 +617,17 @@ public class HomeFragment2 extends Fragment {
                     } else {
                         title = "퇴근처리 가능";
                     }
-                    dlog.i("title 1: " + title);
-                    dlog.i("getMySSID 1: " + getMySSID);
-                    dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+//                    dlog.i("title 1: " + title);
+//                    dlog.i("getMySSID 1: " + getMySSID);
+//                    dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
                 } else {
                     if (kind.equals("0")) {
                         title = "출근처리 불가";
                     } else {
                         title = "퇴근처리 불가";
                     }
-                    dlog.i("title 2: " + title);
-                    dlog.i("getMySSID 2: " + getMySSID);
+//                    dlog.i("title 2: " + title);
+//                    dlog.i("getMySSID 2: " + getMySSID);
                     TFFunction();
                 }
             } else if (place_iomethod.equals("n")) {
@@ -641,14 +636,13 @@ public class HomeFragment2 extends Fragment {
                 } else {
                     title = "퇴근처리 가능";
                 }
-                dlog.i("title 1: " + title);
-                dlog.i("getMySSID 1: " + getMySSID);
-                dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
+//                dlog.i("title 1: " + title);
+//                dlog.i("getMySSID 1: " + getMySSID);
+//                dlog.i("binding.selectWorkse setOnClickListener kind : " + kind);
             } else {
                 TFFunction();
             }
         }, 500); //0.5초 후 핸들러 실행
-
     }
 
     private void permissionCheck() {
@@ -1050,7 +1044,6 @@ public class HomeFragment2 extends Fragment {
                                                         if (USER_INFO_AUTH.isEmpty()) {
                                                             isAuth();
                                                         } else {
-                                                            timer.cancel();
                                                             pm.FeedList(mContext);
                                                         }
                                                     }

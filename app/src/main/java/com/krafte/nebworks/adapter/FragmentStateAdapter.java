@@ -7,13 +7,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.krafte.nebworks.data.WorkGetallData;
 import com.krafte.nebworks.ui.CalenderFragment;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentStateAdapter {
     static final int START_POSITION = Integer.MAX_VALUE / 2;
     Calendar cal = Calendar.getInstance();
+    ArrayList<WorkGetallData.WorkGetallData_list> sendList;
     Context mContext;
     String year = "";
     String month = "";
@@ -24,9 +27,10 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
     boolean datePickerState = false;
 
     // state: 1: workGoto 2: workStatus 3: taskApproval
-    public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, int state) {
+    public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, int state, ArrayList<WorkGetallData.WorkGetallData_list> sendList) {
         super(fragmentActivity);
         this.state = state;
+        this.sendList = sendList;
     }
 
     public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, boolean datePickerState, String year, String month, int state) {
@@ -90,7 +94,7 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
 
         Log.d("FragmentStateAdapter", "year, month : " + this.year + " " + this.month);
 
-        return new CalenderFragment(this.year, this.month, state);
+        return new CalenderFragment(this.year, this.month, state, sendList);
     }
 
     public String returnMonth() {

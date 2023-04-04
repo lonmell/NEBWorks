@@ -75,10 +75,12 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/title_area"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
             android:layout_below="@+id/top_bar"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp">
@@ -86,6 +88,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:layout_toStartOf="@+id/change_place"
                 android:orientation="horizontal">
 
@@ -116,10 +119,10 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/change_place"
-                android:layout_width="121dp"
+                android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:layout_gravity="center"
                 app:cardBackgroundColor="@color/blue_200"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="0dp">
@@ -134,11 +137,14 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/pretendard_bold"
+                        android:layout_toStartOf="@+id/bottom_arrow"
+                        android:singleLine="true"
                         android:gravity="start|center"
                         android:text="매장선택"
                         android:textColor="@color/new_blue" />
 
                     <ImageView
+                        android:id="@+id/bottom_arrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -148,7 +154,7 @@
                         android:rotation="90" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
-        </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/contents_area"

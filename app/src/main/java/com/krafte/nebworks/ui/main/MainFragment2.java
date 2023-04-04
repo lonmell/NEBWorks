@@ -64,7 +64,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -415,16 +414,21 @@ public class MainFragment2 extends AppCompatActivity {
         });
     }
 
-    Timer timer = new Timer();
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart(){
+        super.onStart();
         setNavBarBtnEvent();
         UserCheck();
         SetAllMemberList();
         getNotReadFeedcnt();
-
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

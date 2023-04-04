@@ -248,7 +248,9 @@ public class PlaceSearchActivity extends AppCompatActivity {
                                     jsonObject.getString("total_cnt"),
                                     jsonObject.getString("i_cnt"),
                                     jsonObject.getString("o_cnt"),
-                                    jsonObject.getString("created_at")
+                                    jsonObject.getString("created_at"),
+                                    jsonObject.getString("io_kind"),
+                                    jsonObject.getString("io_time")
                             ));
                         }
                         mAdapter.notifyDataSetChanged();
