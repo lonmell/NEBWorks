@@ -168,6 +168,11 @@ public class CommunityDetailActivity extends AppCompatActivity {
         DataCheck();
         UpdateView(feed_id);
 
+        Glide.with(this).load(R.raw.basic_loading2)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.basicLoading);
+        binding.loginAlertText.setVisibility(View.GONE);
+
         binding.backBtn.setOnClickListener(v -> {
             RemoveShared();
             super.onBackPressed();
@@ -331,6 +336,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     public void GETFeed() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         String boardkind = shardpref.getString("boardkind","자유게시판");
 
         uriList.clear();
@@ -443,12 +449,14 @@ public class CommunityDetailActivity extends AppCompatActivity {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -459,6 +467,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
     }
 
     public void EditComment(String comt_id, String comment) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("feed_id : " + comt_id);
         dlog.i("comment : " + comment);
@@ -497,17 +506,20 @@ public class CommunityDetailActivity extends AppCompatActivity {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     public void UpdateView(String feed_id) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("-----UpdateView Check-----");
         dlog.i("feed_id : " + feed_id);
         dlog.i("-----UpdateView Check-----");
@@ -531,17 +543,20 @@ public class CommunityDetailActivity extends AppCompatActivity {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     public void AddLike(String feed_id) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("-----UpdateView Check-----");
         dlog.i("feed_id : " + feed_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -568,17 +583,20 @@ public class CommunityDetailActivity extends AppCompatActivity {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     public void AddComment(String feed_id, String comment, String writer_id) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
 //        comment = comment.replace(subcomment_name, "");
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("feed_id : " + feed_id);
@@ -618,12 +636,14 @@ public class CommunityDetailActivity extends AppCompatActivity {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -680,6 +700,7 @@ public class CommunityDetailActivity extends AppCompatActivity {
 
     //댓글 리스트 조회
     public void GetCommentList(boolean opnclo) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedCommentListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -777,12 +798,14 @@ public class CommunityDetailActivity extends AppCompatActivity {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

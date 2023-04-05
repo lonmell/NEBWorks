@@ -60,13 +60,13 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
+                    android:clickable="false"
                     android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
                     android:text="임시저장"
-                    android:visibility="invisible"
-                    android:clickable="false"
                     android:textColor="@color/new_blue"
                     android:textSize="15sp"
+                    android:visibility="invisible"
                     tools:ignore="HardcodedText" />
             </RelativeLayout>
 
@@ -328,12 +328,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/default_input_round"
                     android:fontFamily="@font/pretendard_regular"
                     android:gravity="start|center"
                     android:hint="매장 종류 입력"
-                    android:layout_marginTop="12dp"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:maxEms="12"
@@ -343,7 +342,8 @@
                     android:textColor="#696969"
                     android:textColorHint="#a9a9a9"
                     android:textSize="16sp"
-                    tools:ignore="HardcodedText,TouchTargetSizeCheck"/>
+                    android:visibility="gone"
+                    tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
             </LinearLayout>
 
@@ -514,10 +514,10 @@
                         android:layout_height="30dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="center"
                         android:text="일"
                         android:textColor="@color/black"
-                        android:fontFamily="@font/pretendard_bold"
                         android:textSize="16sp" />
                 </RelativeLayout>
 
@@ -575,10 +575,10 @@
                         android:layout_height="30dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="center"
                         android:text="일"
                         android:textColor="@color/black"
-                        android:fontFamily="@font/pretendard_bold"
                         android:textSize="16sp" />
                 </RelativeLayout>
             </LinearLayout>
@@ -625,6 +625,7 @@
                         android:textColorHint="#a9a9a9"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
                     <LinearLayout
                         android:id="@+id/down_arrow"
                         android:layout_width="40dp"
@@ -632,6 +633,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:gravity="center">
+
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -828,8 +830,8 @@
                         android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:text="~"
-                        android:textSize="14sp"
-                        android:textColor="#949494" />
+                        android:textColor="#949494"
+                        android:textSize="14sp" />
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/inputbox09box"
@@ -858,8 +860,8 @@
                     android:numbersSelectorColor="@color/new_blue"
                     android:numbersTextColor="@color/black"
                     android:theme="@style/NumberPicker"
-                    android:visibility="gone"
-                    android:timePickerMode="spinner" />
+                    android:timePickerMode="spinner"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

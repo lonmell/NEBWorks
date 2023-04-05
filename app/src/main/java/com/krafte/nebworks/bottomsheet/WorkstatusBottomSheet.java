@@ -94,11 +94,11 @@ public class WorkstatusBottomSheet extends BottomSheetDialogFragment {
             dlog.i("FtoDay : " + FtoDay);
             dlog.i("-----onCreateView-----");
 
-            String year = select_date.substring(0,4);
-            String month = select_date.substring(5,7);
-            String day = select_date.substring(8);
-            getYMPicker = year + "-" + month + "-" + day;
-            binding.title.setText(month + "월 " + day + "일 근무자");
+            String year = FtoDay.substring(0,4);
+            String month = FtoDay.substring(5,7);
+            String day = FtoDay.substring(8);
+            getYMPicker = year + "-" + month + "-" + (day.length() == 1?"0"+day:day);
+            binding.title.setText(month + "월 " + (day.length() == 1?"0"+day:day) + "일 근무자");
             setBtnEvent();
             setRecyclerView();
         }catch (Exception e){
@@ -129,7 +129,7 @@ public class WorkstatusBottomSheet extends BottomSheetDialogFragment {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             WorkStatusTapInterface api = retrofit.create(WorkStatusTapInterface.class);
-            Call<String> call = api.getData(place_id,USER_INFO_ID,"99",FtoDay);
+            Call<String> call = api.getData(place_id,USER_INFO_ID,"99",getYMPicker);
 
             call.enqueue(new Callback<String>() {
                 @Override

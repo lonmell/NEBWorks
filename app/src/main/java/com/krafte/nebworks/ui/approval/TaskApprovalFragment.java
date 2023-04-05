@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ApprovalAdapter;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
@@ -153,6 +155,11 @@ public class TaskApprovalFragment extends AppCompatActivity {
 
         change_place_id = place_id;
         change_member_id = "";
+
+        Glide.with(this).load(R.raw.basic_loading2)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.basicLoading);
+        binding.loginAlertText.setVisibility(View.GONE);
 
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
@@ -493,6 +500,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
 
     RetrofitConnect rc = new RetrofitConnect();
     public void GetApprovalList(String state,String approval_date) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("approval_date: " + approval_date);
         dlog.i("select_date : " + select_date);
         dlog.i("change_place_id : " + change_place_id);
@@ -587,16 +595,19 @@ public class TaskApprovalFragment extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
     ArrayList<WorkGetallData.WorkGetallData_list> workGotoList2 = new ArrayList<>();
     private void SetWorkGotoCalenderData() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         workGotoList2.clear();
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
         Log.i(TAG, "------SetWorkGotoCalenderData------");
@@ -646,12 +657,14 @@ public class TaskApprovalFragment extends AppCompatActivity {
                         }
                     }
                 });
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @Override
             @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러2 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

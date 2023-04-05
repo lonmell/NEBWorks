@@ -23,6 +23,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
 import com.krafte.nebworks.adapter.MultiImageAdapter;
@@ -196,6 +198,12 @@ public class TaskApprovalDetail extends AppCompatActivity {
         usersjikgup     = shardpref.getString("usersjikgup", "0");
 
         fileName = USER_INFO_ID;
+
+        Glide.with(this).load(R.raw.basic_loading2)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.basicLoading);
+        binding.loginAlertText.setVisibility(View.GONE);
+
         dateFormat = new SimpleDateFormat("HH:mm:ss", getResources().getConfiguration().locale);
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -516,6 +524,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
 
 
     public void setUpdateWorktodo(String kind) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         incomplete_reason = binding.rejectTv.getText().toString();
 
         dlog.i("-----setUpdateWorktodo-----");
@@ -549,11 +558,13 @@ public class TaskApprovalDetail extends AppCompatActivity {
                         Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
                     }
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -562,6 +573,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
     List<String> user_id = new ArrayList<>();
     List<String> task_member_id = new ArrayList<>();
     public void setTodoData(String selectdate, String task_no) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("setTodoMList place_id : " + place_id);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TaskSelectMInterface.URL)
@@ -617,12 +629,14 @@ public class TaskApprovalDetail extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

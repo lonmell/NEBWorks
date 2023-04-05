@@ -737,8 +737,8 @@ public class HomeFragment2 extends Fragment {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             Date date1 = sdf.parse(today);
             Date date2 = sdf.parse(jongeob.substring(3));
-            System.out.println(sdf.format(date1));
-            System.out.println(sdf.format(date2));
+//            System.out.println(sdf.format(date1));
+//            System.out.println(sdf.format(date2));
 
             returntf = date1.after(date2);
         } catch (Exception e) {

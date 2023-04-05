@@ -169,9 +169,9 @@ public class IntroActivity extends AppCompatActivity {
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
 
-        Glide.with(this).load(R.raw.neb_loding_whtie)
+        Glide.with(this).load(R.raw.basic_loading2)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(binding.loadingView);
+                .skipMemoryCache(true).into(binding.basicLoading);
         binding.loginAlertText.setVisibility(View.VISIBLE);
         initView();
 
@@ -693,20 +693,22 @@ public class IntroActivity extends AppCompatActivity {
                                                 shardpref.putString("USER_INFO_AUTH", user_auth);
                                                 UserCheckData.getInstance().setUser_id(id);
                                                 binding.loginAlertText.setVisibility(View.GONE);
-                                                if (name.isEmpty() || phone.isEmpty()) {
-                                                    shardpref.putString("editstate", "newPro");
-                                                    pm.ProfileEdit(mContext);
-                                                } else {
-                                                    getPlaceList(id, user_auth);
-                                                }
+//                                                if (name.isEmpty() || phone.isEmpty()) {
+//                                                    shardpref.putString("editstate", "newPro");
+//                                                    pm.ProfileEdit(mContext);
+//                                                } else {
+//                                                    getPlaceList(id, user_auth);
+//                                                }
+                                                getPlaceList(id, user_auth);
                                             } else {
                                                 binding.loginAlertText.setVisibility(View.GONE);
-                                                if (name.isEmpty() || phone.isEmpty()) {
-                                                    shardpref.putString("editstate", "newPro");
-                                                    pm.ProfileEdit(mContext);
-                                                } else {
-                                                    pm.AuthSelect(mContext);
-                                                }
+//                                                if (name.isEmpty() || phone.isEmpty()) {
+//                                                    shardpref.putString("editstate", "newPro");
+//                                                    pm.ProfileEdit(mContext);
+//                                                } else {
+//                                                    pm.AuthSelect(mContext);
+//                                                }
+                                                pm.AuthSelect(mContext);
                                             }
                                         } catch (Exception e) {
                                             dlog.i("UserCheck Exception : " + e);

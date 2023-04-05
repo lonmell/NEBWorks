@@ -172,7 +172,7 @@ public class CalenderFragment extends Fragment {
 
         for (int i = 0; i < cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             LocalDate date = LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(allDate.get(i)));
-            System.out.println(date);
+//            System.out.println(date);
             DayOfWeek dayOfWeek = date.getDayOfWeek();
 
             int dayOfWeekNumber = dayOfWeek.getValue();
@@ -213,9 +213,11 @@ public class CalenderFragment extends Fragment {
         SetCalendar();
     }
 
+
     @Override
     public void onResume(){
         super.onResume();
+
         if(sendList.size() == 0){
             switch (state) {
                 case 1:
@@ -231,9 +233,10 @@ public class CalenderFragment extends Fragment {
                     SetPayCalenderData();
                     break;
             }
+            SetCalendar();
         }
-    }
 
+    }
 
     private void SetClickEvent(String WorkDay) {
         switch (state) {

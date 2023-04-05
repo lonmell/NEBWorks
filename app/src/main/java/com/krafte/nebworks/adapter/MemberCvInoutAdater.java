@@ -208,7 +208,7 @@ public class MemberCvInoutAdater extends RecyclerView.Adapter<MemberCvInoutAdate
     private String getYoil(int year, int month, int day) {
         // 1. LocalDate 생성
         LocalDate date = LocalDate.of(year, month, day);
-        System.out.println(date); // 2021-12-25
+//        System.out.println(date); // 2021-12-25
 
         // 2. DayOfWeek 객체 구하기
         DayOfWeek dayOfWeek = date.getDayOfWeek();

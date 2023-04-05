@@ -31,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
@@ -174,6 +175,11 @@ public class CommunityAddActivity extends AppCompatActivity {
         user_input_name = USER_INFO_NAME;
         binding.addcommunityBtn.setText("등록");
         feed_thumnail_path = feed_img;
+
+        Glide.with(this).load(R.raw.basic_loading2)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.basicLoading);
+        binding.loginAlertText.setVisibility(View.GONE);
 
         dlog.i("user_input_name : " + user_input_name);
         dlog.i("state : " + state);
@@ -392,6 +398,7 @@ public class CommunityAddActivity extends AppCompatActivity {
 
     //피드 게시글 업로드
     public void AddFeedCommunity() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
         dlog.i("-----AddStroeNoti Check-----");
         dlog.i("title : " + title);
@@ -466,17 +473,20 @@ public class CommunityAddActivity extends AppCompatActivity {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     public void EditStroeNoti() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         String title = binding.writeTitle.getText().toString();
         String content = binding.writeContents.getText().toString();
         String inputImage = String.valueOf(ProfileUrl).replace("[", "").replace("]", "").replace(" ", "");
@@ -558,12 +568,14 @@ public class CommunityAddActivity extends AppCompatActivity {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

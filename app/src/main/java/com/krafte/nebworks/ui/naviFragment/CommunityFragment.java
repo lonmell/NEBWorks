@@ -22,10 +22,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.UserCheckData;
+import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.CommunityfragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.ui.fragment.community.community_fragment1;
@@ -35,6 +38,16 @@ import com.krafte.nebworks.ui.fragment.community.community_fragment4;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class CommunityFragment extends Fragment {
     private final static String TAG = "MoreFragment";
@@ -101,22 +114,26 @@ public class CommunityFragment extends Fragment {
         //UI 데이터 세팅
         try {
             //Singleton Area
-            USER_INFO_ID    = UserCheckData.getInstance().getUser_id();
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
-            returnPage      = ReturnPageData.getInstance().getPage();
-            place_id        = PlaceCheckData.getInstance().getPlace_id();
-            place_owner_id  = PlaceCheckData.getInstance().getPlace_owner_id();
+            USER_INFO_ID = UserCheckData.getInstance().getUser_id();
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+            returnPage = ReturnPageData.getInstance().getPage();
+            place_id = PlaceCheckData.getInstance().getPlace_id();
+            place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
 
             //shardpref Area
             returnPage = shardpref.getString("returnPage", "");
+            Glide.with(this).load(R.raw.basic_loading2)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(binding.basicLoading);
+            binding.loginAlertText.setVisibility(View.GONE);
 
             ChangePage(0);
             setAddBtnSetting();
 
-            if(USER_INFO_AUTH.equals("0")){
+            if (USER_INFO_AUTH.equals("0")) {
                 binding.selectFragmentbtn2.setVisibility(View.VISIBLE);
                 binding.selectFragmentbtn4.setVisibility(View.GONE);
-            }else{
+            } else {
                 binding.selectFragmentbtn2.setVisibility(View.GONE);
                 binding.selectFragmentbtn4.setVisibility(View.VISIBLE);
             }
@@ -142,7 +159,7 @@ public class CommunityFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         shardpref.remove("boardkind");
         shardpref.remove("FobiddenWord");
@@ -245,20 +262,6 @@ public class CommunityFragment extends Fragment {
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("게시글 작성");
-//        add_worktime_btn.setOnClickListener(v -> {
-//            if (USER_INFO_AUTH.isEmpty()) {
-//                isAuth();
-//            } else {
-//                if (paging_position == 0) {
-//                    shardpref.putString("state","AddCommunity");
-//                    pm.CommunityAdd(mContext);
-//                } else if (paging_position == 1) {
-//                    Toast_Nomal("사장님 게시글");
-//                } else if (paging_position == 2) {
-//                    Toast_Nomal("세금/노무");
-//                }
-//            }
-//        });
         // Set OnTouchListener to ImageView
         add_worktime_btn.setOnTouchListener(new View.OnTouchListener() {
             private int lastAction;
@@ -296,8 +299,12 @@ public class CommunityFragment extends Fragment {
                         newX = initialX + dx;
                         newY = initialY + dy;
 
-                        if(lastnewX == 0){ lastnewX = newX; }
-                        if(lastnewY == 0){ lastnewY = newY; }
+                        if (lastnewX == 0) {
+                            lastnewX = newX;
+                        }
+                        if (lastnewY == 0) {
+                            lastnewY = newY;
+                        }
 
                         int parentWidth = ((ViewGroup) v.getParent()).getWidth();
                         int parentHeight = ((ViewGroup) v.getParent()).getHeight();
@@ -319,16 +326,10 @@ public class CommunityFragment extends Fragment {
                             if (USER_INFO_AUTH.isEmpty()) {
                                 isAuth();
                             } else {
-                                if (paging_position == 0 || paging_position == 3) {
-                                    shardpref.putString("state","AddCommunity");
-                                    pm.CommunityAdd(mContext);
-                                } else if (paging_position == 1) {
-                                    Toast_Nomal("사장님 게시글");
-                                } else if (paging_position == 2) {
-                                    Toast_Nomal("세금/노무");
-                                }
+                                String Uaccount = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
+                                UserCheck(Uaccount);
                             }
-                        }else{
+                        } else {
                             lastnewX = newX;
                             lastnewY = newY;
                         }
@@ -343,8 +344,81 @@ public class CommunityFragment extends Fragment {
         });
     }
 
+    RetrofitConnect rc = new RetrofitConnect();
 
-    private void sharedRemove(){
+    public void UserCheck(String account) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
+        dlog.i("UserCheck account : " + account);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(account);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    activity.runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("UserCheck jsonResponse length : " + jsonResponse.length());
+                            dlog.i("UserCheck jsonResponse : " + jsonResponse);
+                            try {
+                                if (!jsonResponse.equals("[]")) {
+                                    JSONArray Response = new JSONArray(jsonResponse);
+                                    if (Response.length() != 0) {
+                                        String id = Response.getJSONObject(0).getString("id");
+                                        String name = Response.getJSONObject(0).getString("name");
+                                        String phone = Response.getJSONObject(0).getString("phone");
+                                        String platform = Response.getJSONObject(0).getString("platform");
+                                        String user_auth = Response.getJSONObject(0).getString("user_auth");
+                                        try {
+                                            dlog.i("------UserCheck-------");
+                                            dlog.i("성명 : " + name);
+                                            dlog.i("사용자 권한 : " + user_auth);
+                                            dlog.i("------UserCheck-------");
+                                            shardpref.putString("USER_INFO_AUTH", user_auth);
+                                            UserCheckData.getInstance().setUser_id(id);
+                                            binding.loginAlertText.setVisibility(View.GONE);
+                                            if (name.isEmpty() || phone.isEmpty()) {
+                                                shardpref.putString("editstate", "edit");
+                                                pm.ProfileEdit(mContext);
+                                            } else {
+                                                if (paging_position == 0 || paging_position == 3) {
+                                                    shardpref.putString("state", "AddCommunity");
+                                                    pm.CommunityAdd(mContext);
+                                                } else if (paging_position == 1) {
+                                                    Toast_Nomal("사장님 게시글");
+                                                } else if (paging_position == 2) {
+                                                    Toast_Nomal("세금/노무");
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            dlog.i("UserCheck Exception : " + e);
+                                        }
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    binding.loginAlertText.setVisibility(View.GONE);
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void sharedRemove() {
         shardpref.remove("writer_name");
         shardpref.remove("write_nickname");
         shardpref.remove("title");
@@ -383,8 +457,8 @@ public class CommunityFragment extends Fragment {
 
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요!");
+        intent.putExtra("flag", "더미");
+        intent.putExtra("data", "먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);

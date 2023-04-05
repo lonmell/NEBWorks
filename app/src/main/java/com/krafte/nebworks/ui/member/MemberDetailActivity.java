@@ -195,9 +195,9 @@ public class MemberDetailActivity extends AppCompatActivity {
             } else if (place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")) {
                 binding.contractPhoneInfo.setVisibility(View.VISIBLE);
             }
-            Glide.with(this).load(R.raw.neb_loding_whtie)
+            Glide.with(this).load(R.raw.basic_loading2)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(binding.loadingView2);
+                    .skipMemoryCache(true).into(binding.basicLoading);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -345,7 +345,7 @@ public class MemberDetailActivity extends AppCompatActivity {
 //            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
 //            startActivity(intent);
             if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
-                binding.loginAlertText2.setVisibility(View.VISIBLE);
+                binding.loginAlertText.setVisibility(View.VISIBLE);
                 permissionCheck();
             } else {
                 Toast_Nomal("다운로드 권한이 없습니다.");
@@ -877,7 +877,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     private String getYoil(int year, int month, int day) {
         // 1. LocalDate 생성
         LocalDate date = LocalDate.of(year, month, day);
-        System.out.println(date); // 2021-12-25
+//        System.out.println(date); // 2021-12-25
 
         // 2. DayOfWeek 객체 구하기
         DayOfWeek dayOfWeek = date.getDayOfWeek();
@@ -954,7 +954,7 @@ public class MemberDetailActivity extends AppCompatActivity {
             }
 
             document.close();
-            binding.loginAlertText2.setVisibility(View.GONE);
+            binding.loginAlertText.setVisibility(View.GONE);
 
             File file = new File(SD_PATH, change_place_name + "_" + getYMdate + "월 출결표.pdf");
             Uri uri = FileProvider.getUriForFile(this, "com.krafte.nebworks.provider", file);

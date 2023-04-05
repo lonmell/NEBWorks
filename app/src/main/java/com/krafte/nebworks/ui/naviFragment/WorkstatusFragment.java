@@ -24,6 +24,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
@@ -165,6 +167,10 @@ public class WorkstatusFragment extends Fragment {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             SELECT_POSITION = 1;
 
+            Glide.with(this).load(R.raw.basic_loading2)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(binding.basicLoading);
+            binding.loginAlertText.setVisibility(View.GONE);
             fg = WorkStatusSubFragment1.newInstance();
 
 
@@ -535,12 +541,13 @@ public class WorkstatusFragment extends Fragment {
     }
 
     private void SetWorkStatusCalenderData() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
         String getYMDate = Year + "-" + Month;
         Log.i(TAG, "------SetWorkStatusCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
-        Log.i(TAG, "select_date : " + Year);
+        Log.i(TAG, "select_date : " + getYMDate);
         Log.i(TAG, "------SetWorkStatusCalenderData------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkStatusGetallInterface.URL)
@@ -586,6 +593,7 @@ public class WorkstatusFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
+                    binding.loginAlertText.setVisibility(View.GONE);
                 });
             }
 
@@ -593,6 +601,7 @@ public class WorkstatusFragment extends Fragment {
             @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러2 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
 
@@ -609,6 +618,7 @@ public class WorkstatusFragment extends Fragment {
     }
 
     public void PlaceWorkCheck(String place_id) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("PlaceWorkCheck place_id : " + place_id);
         dlog.i("PlaceWorkCheck USER_INFO_ID : " + USER_INFO_ID);
         Retrofit retrofit = new Retrofit.Builder()
@@ -663,12 +673,14 @@ public class WorkstatusFragment extends Fragment {
                         }
                     });
                 }
+                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
