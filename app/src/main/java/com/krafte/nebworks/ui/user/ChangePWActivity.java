@@ -57,6 +57,7 @@ public class ChangePWActivity extends AppCompatActivity {
     String USER_INFO_NAME = "";
     String USER_INFO_PW = "";
     String USER_INFO_GENDER = "";
+    String USER_INFO_NICKNAME = "";
     String USER_INFO_IMG = "";
 
     String changePw1 = "";
@@ -94,6 +95,7 @@ public class ChangePWActivity extends AppCompatActivity {
         USER_INFO_PHONE     = shardpref.getString("USER_INFO_PHONE", "");
         USER_INFO_EMAIL     = shardpref.getString("USER_INFO_EMAIL", "");
         USER_INFO_NAME      = shardpref.getString("USER_INFO_NAME", "");
+        USER_INFO_NICKNAME  = shardpref.getString("USER_INFO_NICKNAME", "");
         USER_INFO_PW        = shardpref.getString("USER_INFO_PW", "");
         USER_INFO_GENDER    = shardpref.getString("USER_INFO_GENDER", "");
         USER_INFO_IMG       = shardpref.getString("USER_INFO_IMG", "");
@@ -226,6 +228,7 @@ public class ChangePWActivity extends AppCompatActivity {
         dlog.i("USER ID : " + USER_INFO_ID);
         dlog.i("프로필 사진 url : " + USER_INFO_IMG);
         dlog.i("성명 : " + USER_INFO_NAME);
+        dlog.i("닉네임 : " + USER_INFO_NICKNAME);
         dlog.i("비밀번호 : " + changePw2);
         dlog.i("휴대폰 : " + USER_INFO_PHONE);
         dlog.i("성별 : " + USER_INFO_GENDER);
@@ -236,7 +239,7 @@ public class ChangePWActivity extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         UserSaveInterface api = retrofit.create(UserSaveInterface.class);
-        Call<String> call = api.getData(USER_INFO_ID, USER_INFO_NAME, USER_INFO_EMAIL, USER_INFO_PW, USER_INFO_PHONE, USER_INFO_GENDER, USER_INFO_IMG);
+        Call<String> call = api.getData(USER_INFO_ID, USER_INFO_NAME, USER_INFO_NICKNAME, USER_INFO_EMAIL, USER_INFO_PW, USER_INFO_PHONE, USER_INFO_GENDER, USER_INFO_IMG);
         call.enqueue(new Callback<String>() {
             @SuppressLint("LongLogTag")
             @Override

@@ -15,6 +15,7 @@ public interface UserUpdateInterface
             @Field("id") String id,
             @Field("name") String name,
             @Field("nick_name") String nick_name,
+            @Field("password") String password,
             @Field("phone") String phone,
             @Field("gender") String gender,
             @Field("img_path") String img_path

@@ -154,6 +154,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     Drawable icon_on;
     String mem_id = "";
     String mem_kind = "";
+    String mem_account = "";
+    String mem_password = "";
     String mem_name = "";
     String mem_nick = "";
     String mem_phone = "";
@@ -173,7 +175,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        try{
+        try {
             mContext = this;
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
@@ -189,7 +191,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
-            user_nickname = shardpref.getString("USER_INFO_NICK","");
+            user_nickname = shardpref.getString("USER_INFO_NICK", "");
 
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
@@ -207,7 +209,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             myTimer = new MyTimer(60000, 1000);
 
             UserCheck();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -261,7 +263,6 @@ public class ProfileEditActivity extends AppCompatActivity {
                 super.onBackPressed();
             }
         });
-
 
 
         binding.clearImg.setOnClickListener(v -> {
@@ -583,160 +584,258 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
     public void UserCheck() {
-        if(editstate.equals("newPro")){
-            String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
-            dlog.i("---------UserCheck---------");
-            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
-            dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
-            dlog.i("---------UserCheck---------");
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(UserSelectInterface.URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .build();
-            UserSelectInterface api = retrofit.create(UserSelectInterface.class);
-            Call<String> call = api.getData(USER_INFO_EMAIL);
-            call.enqueue(new Callback<String>() {
-                @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    dlog.e("UserCheck function START");
-                    dlog.e("response 1: " + response.isSuccessful());
-                    runOnUiThread(() -> {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String jsonResponse = rc.getBase64decode(response.body());
-                            dlog.i("jsonResponse length : " + jsonResponse.length());
-                            dlog.i("jsonResponse : " + jsonResponse);
+        String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
+        dlog.i("---------UserCheck---------");
+        dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+        dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
+        dlog.i("---------UserCheck---------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UserSelectInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+        Call<String> call = api.getData(USER_INFO_EMAIL);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                dlog.e("UserCheck function START");
+                dlog.e("response 1: " + response.isSuccessful());
+                runOnUiThread(() -> {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String jsonResponse = rc.getBase64decode(response.body());
+                        dlog.i("jsonResponse length : " + jsonResponse.length());
+                        dlog.i("jsonResponse : " + jsonResponse);
+                        try {
+                            //Array데이터를 받아올 때
+                            JSONArray Response = new JSONArray(jsonResponse);
+
                             try {
-                                //Array데이터를 받아올 때
-                                JSONArray Response = new JSONArray(jsonResponse);
+                                mem_id = Response.getJSONObject(0).getString("id");
+                                mem_name = Response.getJSONObject(0).getString("name");
+                                mem_password = Response.getJSONObject(0).getString("password");
+                                mem_account = Response.getJSONObject(0).getString("account");
+                                mem_nick = Response.getJSONObject(0).getString("nick_name");
+                                mem_phone = Response.getJSONObject(0).getString("phone");
+                                mem_gender = Response.getJSONObject(0).getString("gender");
+                                mem_img_path = Response.getJSONObject(0).getString("img_path");
+                                mem_user_auth = Response.getJSONObject(0).getString("user_auth");
+                                dlog.i("------UserCheck-------");
+                                USER_INFO_ID = mem_id;
+                                USER_INFO_AUTH = mem_user_auth;
+                                dlog.i("프로필 사진 url : " + mem_img_path);
+                                dlog.i("성명 : " + mem_name);
+                                dlog.i("성별 : " + mem_gender);
+                                dlog.i("닉네임 : " + mem_nick);
+                                dlog.i("전화번호 : " + mem_phone);
+                                dlog.i("------UserCheck-------");
 
-                                try {
-                                    mem_id = Response.getJSONObject(0).getString("id");
-                                    mem_name = Response.getJSONObject(0).getString("name");
-                                    mem_nick = Response.getJSONObject(0).getString("nick_name");
-                                    mem_phone = Response.getJSONObject(0).getString("phone");
-                                    mem_gender = Response.getJSONObject(0).getString("gender");
-                                    mem_img_path = Response.getJSONObject(0).getString("img_path");
-                                    mem_user_auth = Response.getJSONObject(0).getString("user_auth");
-                                    dlog.i("------UserCheck-------");
-                                    USER_INFO_ID = mem_id;
-                                    USER_INFO_AUTH = mem_user_auth;
-                                    dlog.i("프로필 사진 url : " + mem_img_path);
-                                    dlog.i("성명 : " + mem_name);
-                                    dlog.i("성별 : " + mem_gender);
-                                    dlog.i("닉네임 : " + mem_nick);
-                                    dlog.i("전화번호 : " + mem_phone);
-                                    dlog.i("------UserCheck-------");
-
-                                    if (!mem_phone.isEmpty()) {
-                                        CertiSuccessTF = true;
-                                    }
-                                    dlog.i("START profileSetimg1");
-                                    binding.userName.setText(mem_name);
-                                    binding.userNick.setText(mem_nick.isEmpty() ? "" : mem_nick);
-                                    binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
-
-                                    if (mem_img_path != null) {
-                                        dlog.i("mem_img_path : " + mem_img_path.trim());
-                                        Glide.with(mContext).load(mem_img_path.trim())
-                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                .skipMemoryCache(true)
-                                                .into(binding.profileSetimg);
-                                        binding.imgPlus.setVisibility(View.GONE);
-                                        binding.clearImg.setVisibility(View.VISIBLE);
-                                        ProfileUrl = mem_img_path;
-                                    }
-
-                                    if (mem_gender.equals("1")) {
-                                        USER_INFO_GENDER = "1";
-                                        binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
-                                        binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
-
-                                        binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-                                        binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
-                                    } else {
-                                        USER_INFO_GENDER = "2";
-                                        binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-                                        binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
-
-                                        binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
-                                        binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
-                                    }
-
-                                } catch (Exception e) {
-                                    dlog.i("UserCheck Exception : " + e);
+                                if (!mem_phone.isEmpty()) {
+                                    CertiSuccessTF = true;
                                 }
+                                dlog.i("START profileSetimg1");
+                                binding.userName.setText(mem_name);
+                                binding.userNick.setText(mem_nick.isEmpty() ? "" : mem_nick);
+                                binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
+
+                                dlog.i("mem_img_path : " + mem_img_path.trim());
+                                Glide.with(mContext).load(mem_img_path.trim())
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .skipMemoryCache(true)
+                                        .into(binding.profileSetimg);
+                                binding.imgPlus.setVisibility(View.GONE);
+                                binding.clearImg.setVisibility(View.VISIBLE);
+                                ProfileUrl = mem_img_path;
+
+                                if (mem_gender.equals("1")) {
+                                    USER_INFO_GENDER = "1";
+                                    binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+                                    binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
+
+                                    binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+                                    binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
+                                } else {
+                                    USER_INFO_GENDER = "2";
+                                    binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+                                    binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
+
+                                    binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+                                    binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
+                                }
+
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                dlog.i("UserCheck Exception : " + e);
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    });
+                    }
+                });
 
-                }
-
-                @Override
-                @SuppressLint("LongLogTag")
-                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    Log.e(TAG, "에러2 = " + t.getMessage());
-                }
-            });
-        }else{
-            try {
-                mem_id = shardpref.getString("mem_id", UserCheckData.getInstance().getUser_id());
-                mem_name = shardpref.getString("mem_name", UserCheckData.getInstance().getUser_name());
-                mem_nick = shardpref.getString("mem_nick", UserCheckData.getInstance().getUser_nick_name());
-                mem_phone = shardpref.getString("mem_phone", UserCheckData.getInstance().getUser_phone());
-                mem_gender = shardpref.getString("mem_gender", UserCheckData.getInstance().getUser_gender());
-                mem_img_path = shardpref.getString("mem_img_path", UserCheckData.getInstance().getUser_img_path());
-
-                dlog.i("------UserCheck-------");
-                USER_INFO_ID = mem_id;
-                dlog.i("프로필 사진 url : " + mem_img_path);
-                dlog.i("성명 : " + mem_name);
-                dlog.i("성별 : " + mem_gender);
-                dlog.i("닉네임 : " + mem_nick);
-                dlog.i("전화번호 : " + mem_phone);
-                dlog.i("------UserCheck-------");
-
-                if (!mem_phone.isEmpty()) {
-                    CertiSuccessTF = true;
-                }
-                dlog.i("START profileSetimg1");
-                binding.userName.setText(mem_name);
-                binding.userNick.setText(mem_nick.isEmpty() ? "" : mem_nick);
-                binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
-
-                if (mem_img_path != null) {
-                    dlog.i("mem_img_path : " + mem_img_path.trim());
-                    Glide.with(mContext).load(mem_img_path.trim())
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true)
-                            .into(binding.profileSetimg);
-                    binding.imgPlus.setVisibility(View.GONE);
-                    binding.clearImg.setVisibility(View.VISIBLE);
-                    ProfileUrl = mem_img_path;
-                }
-
-                if (mem_gender.equals("1")) {
-                    USER_INFO_GENDER = "1";
-                    binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
-                    binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
-
-                    binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
-                    binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
-                } else {
-                    USER_INFO_GENDER = "2";
-                    binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
-                    binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
-
-                    binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
-                    binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
-                }
-
-            } catch (Exception e) {
-                dlog.i("UserCheck Exception : " + e);
             }
-        }
+
+            @Override
+            @SuppressLint("LongLogTag")
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "에러2 = " + t.getMessage());
+            }
+        });
+//        if(editstate.equals("newPro")){
+//            String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
+//            dlog.i("---------UserCheck---------");
+//            dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
+//            dlog.i("getMonth : " + (dc.GET_MONTH.length() == 1 ? "0" + dc.GET_MONTH : dc.GET_MONTH));
+//            dlog.i("---------UserCheck---------");
+//            Retrofit retrofit = new Retrofit.Builder()
+//                    .baseUrl(UserSelectInterface.URL)
+//                    .addConverterFactory(ScalarsConverterFactory.create())
+//                    .build();
+//            UserSelectInterface api = retrofit.create(UserSelectInterface.class);
+//            Call<String> call = api.getData(USER_INFO_EMAIL);
+//            call.enqueue(new Callback<String>() {
+//                @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
+//                @Override
+//                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                    dlog.e("UserCheck function START");
+//                    dlog.e("response 1: " + response.isSuccessful());
+//                    runOnUiThread(() -> {
+//                        if (response.isSuccessful() && response.body() != null) {
+//                            String jsonResponse = rc.getBase64decode(response.body());
+//                            dlog.i("jsonResponse length : " + jsonResponse.length());
+//                            dlog.i("jsonResponse : " + jsonResponse);
+//                            try {
+//                                //Array데이터를 받아올 때
+//                                JSONArray Response = new JSONArray(jsonResponse);
+//
+//                                try {
+//                                    mem_id = Response.getJSONObject(0).getString("id");
+//                                    mem_name = Response.getJSONObject(0).getString("name");
+//                                    mem_password = Response.getJSONObject(0).getString("password");
+//                                    mem_account = Response.getJSONObject(0).getString("account");
+//                                    mem_nick = Response.getJSONObject(0).getString("nick_name");
+//                                    mem_phone = Response.getJSONObject(0).getString("phone");
+//                                    mem_gender = Response.getJSONObject(0).getString("gender");
+//                                    mem_img_path = Response.getJSONObject(0).getString("img_path");
+//                                    mem_user_auth = Response.getJSONObject(0).getString("user_auth");
+//                                    dlog.i("------UserCheck-------");
+//                                    USER_INFO_ID = mem_id;
+//                                    USER_INFO_AUTH = mem_user_auth;
+//                                    dlog.i("프로필 사진 url : " + mem_img_path);
+//                                    dlog.i("성명 : " + mem_name);
+//                                    dlog.i("성별 : " + mem_gender);
+//                                    dlog.i("닉네임 : " + mem_nick);
+//                                    dlog.i("전화번호 : " + mem_phone);
+//                                    dlog.i("------UserCheck-------");
+//
+//                                    if (!mem_phone.isEmpty()) {
+//                                        CertiSuccessTF = true;
+//                                    }
+//                                    dlog.i("START profileSetimg1");
+//                                    binding.userName.setText(mem_name);
+//                                    binding.userNick.setText(mem_nick.isEmpty() ? "" : mem_nick);
+//                                    binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
+//
+//                                    if (mem_img_path != null) {
+//                                        dlog.i("mem_img_path : " + mem_img_path.trim());
+//                                        Glide.with(mContext).load(mem_img_path.trim())
+//                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                                                .skipMemoryCache(true)
+//                                                .into(binding.profileSetimg);
+//                                        binding.imgPlus.setVisibility(View.GONE);
+//                                        binding.clearImg.setVisibility(View.VISIBLE);
+//                                        ProfileUrl = mem_img_path;
+//                                    }
+//
+//                                    if (mem_gender.equals("1")) {
+//                                        USER_INFO_GENDER = "1";
+//                                        binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+//                                        binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
+//
+//                                        binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+//                                        binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
+//                                    } else {
+//                                        USER_INFO_GENDER = "2";
+//                                        binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+//                                        binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
+//
+//                                        binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+//                                        binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
+//                                    }
+//
+//                                } catch (Exception e) {
+//                                    dlog.i("UserCheck Exception : " + e);
+//                                }
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+//
+//                }
+//
+//                @Override
+//                @SuppressLint("LongLogTag")
+//                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                    Log.e(TAG, "에러2 = " + t.getMessage());
+//                }
+//            });
+//        }else{
+//            try {
+//                mem_id = shardpref.getString("mem_id", UserCheckData.getInstance().getUser_id());
+//                mem_name = shardpref.getString("mem_name", UserCheckData.getInstance().getUser_name());
+//                mem_nick = shardpref.getString("mem_nick", UserCheckData.getInstance().getUser_nick_name());
+//                mem_phone = shardpref.getString("mem_phone", UserCheckData.getInstance().getUser_phone());
+//                mem_gender = shardpref.getString("mem_gender", UserCheckData.getInstance().getUser_gender());
+//                mem_img_path = shardpref.getString("mem_img_path", UserCheckData.getInstance().getUser_img_path());
+//
+//                dlog.i("------UserCheck-------");
+//                USER_INFO_ID = mem_id;
+//                dlog.i("프로필 사진 url : " + mem_img_path);
+//                dlog.i("성명 : " + mem_name);
+//                dlog.i("성별 : " + mem_gender);
+//                dlog.i("닉네임 : " + mem_nick);
+//                dlog.i("전화번호 : " + mem_phone);
+//                dlog.i("------UserCheck-------");
+//
+//                if (!mem_phone.isEmpty()) {
+//                    CertiSuccessTF = true;
+//                }
+//                dlog.i("START profileSetimg1");
+//                binding.userName.setText(mem_name);
+//                binding.userNick.setText(mem_nick.isEmpty() ? "" : mem_nick);
+//                binding.userPhone.setText(mem_phone.isEmpty() ? "" : mem_phone);
+//
+//                if (mem_img_path != null) {
+//                    dlog.i("mem_img_path : " + mem_img_path.trim());
+//                    Glide.with(mContext).load(mem_img_path.trim())
+//                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                            .skipMemoryCache(true)
+//                            .into(binding.profileSetimg);
+//                    binding.imgPlus.setVisibility(View.GONE);
+//                    binding.clearImg.setVisibility(View.VISIBLE);
+//                    ProfileUrl = mem_img_path;
+//                }
+//
+//                if (mem_gender.equals("1")) {
+//                    USER_INFO_GENDER = "1";
+//                    binding.manTxt.setTextColor(Color.parseColor("#ffffff"));
+//                    binding.selectMan.setBackgroundResource(R.drawable.select_full_round);
+//
+//                    binding.womanTxt.setTextColor(Color.parseColor("#A1887F"));
+//                    binding.selectWoman.setBackgroundResource(R.drawable.select_empty_round);
+//                } else {
+//                    USER_INFO_GENDER = "2";
+//                    binding.manTxt.setTextColor(Color.parseColor("#A1887F"));
+//                    binding.selectMan.setBackgroundResource(R.drawable.select_empty_round);
+//
+//                    binding.womanTxt.setTextColor(Color.parseColor("#ffffff"));
+//                    binding.selectWoman.setBackgroundResource(R.drawable.select_full_round);
+//                }
+//
+//            } catch (Exception e) {
+//                dlog.i("UserCheck Exception : " + e);
+//            }
+//        }
     }
 
     private boolean CheckData() {
@@ -759,7 +858,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         } else if (ProfileUrl.isEmpty()) {
 //            Toast.makeText(mContext, "프로필 사진을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return true;
-        }else {
+        } else {
             return true;
         }
 
@@ -775,7 +874,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         dlog.i("프로필 사진 url : " + ProfileUrl);
         dlog.i("이전 프로필 사진 : " + ProfileUrl);
         dlog.i("성명 : " + user_name);
-        dlog.i("닉네임 : " + user_nickname);
+        dlog.i("닉네임 : " + mem_nick);
         dlog.i("전화번호 : " + phone);
         shardpref.putString("name", user_name);
         dlog.i("------SaveUser-------");
@@ -785,7 +884,8 @@ public class ProfileEditActivity extends AppCompatActivity {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             UserUpdateInterface api = retrofit.create(UserUpdateInterface.class);
-            Call<String> call = api.getData(USER_INFO_ID, (user_name.isEmpty() ? user_nickname : user_name), user_nickname, phone, USER_INFO_GENDER, ProfileUrl);
+//            Call<String> call = api.getData(USER_INFO_ID, (user_name.isEmpty() ? user_nickname : user_name), mem_nick, phone, USER_INFO_GENDER, ProfileUrl);
+            Call<String> call = api.getData(USER_INFO_ID, mem_name, mem_nick, mem_password, mem_phone, USER_INFO_GENDER, ProfileUrl);
             call.enqueue(new Callback<String>() {
                 @SuppressLint("LongLogTag")
                 @Override
@@ -808,13 +908,13 @@ public class ProfileEditActivity extends AppCompatActivity {
 //                                            pm.MoreBack(mContext);
                                             finish();
                                         } else {
-                                            String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL","");
+                                            String USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", "");
 //                                            UserCheck(USER_INFO_EMAIL);
-                                            if(!USER_INFO_AUTH.equals("-1")){
-                                                shardpref.putString("USER_INFO_AUTH",USER_INFO_AUTH);
+                                            if (!USER_INFO_AUTH.equals("-1")) {
+                                                shardpref.putString("USER_INFO_AUTH", USER_INFO_AUTH);
                                                 binding.loginAlertText.setVisibility(View.GONE);
                                                 pm.PlaceList(mContext);
-                                            }else{
+                                            } else {
                                                 binding.loginAlertText.setVisibility(View.GONE);
                                                 pm.AuthSelect(mContext);
                                             }
@@ -861,7 +961,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                             shardpref.putBoolean("USER_LOGIN_CONFIRM", true);
                             shardpref.putString("USER_INFO_EMAIL", USER_INFO_EMAIL);
                             shardpref.remove("editstate");
-                             kakaoChannel();
+                            kakaoChannel();
                             binding.loginAlertText.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
@@ -900,9 +1000,9 @@ public class ProfileEditActivity extends AppCompatActivity {
                                 if (!jsonResponse.equals("[]")) {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     if (Response.length() != 0) {
-                                        String id       = Response.getJSONObject(0).getString("id");
-                                        String name     = Response.getJSONObject(0).getString("name");
-                                        String phone    = Response.getJSONObject(0).getString("phone");
+                                        String id = Response.getJSONObject(0).getString("id");
+                                        String name = Response.getJSONObject(0).getString("name");
+                                        String phone = Response.getJSONObject(0).getString("phone");
                                         String platform = Response.getJSONObject(0).getString("platform");
                                         String user_auth = Response.getJSONObject(0).getString("user_auth");
                                         try {
@@ -910,11 +1010,11 @@ public class ProfileEditActivity extends AppCompatActivity {
                                             dlog.i("성명 : " + name);
                                             dlog.i("사용자 권한 : " + user_auth);
                                             dlog.i("------UserCheck-------");
-                                            if(!user_auth.equals("-1")){
-                                                shardpref.putString("USER_INFO_AUTH",user_auth);
+                                            if (!user_auth.equals("-1")) {
+                                                shardpref.putString("USER_INFO_AUTH", user_auth);
                                                 binding.loginAlertText.setVisibility(View.GONE);
                                                 pm.PlaceList(mContext);
-                                            }else{
+                                            } else {
                                                 binding.loginAlertText.setVisibility(View.GONE);
                                                 pm.AuthSelect(mContext);
                                             }

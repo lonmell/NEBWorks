@@ -411,7 +411,9 @@ public class VerificationActivity extends AppCompatActivity {
                                     JSONArray Response = new JSONArray(jsonResponse);
 
                                     String id = Response.getJSONObject(0).getString("id");
+                                    String nick_name = Response.getJSONObject(0).getString("nick_name");
                                     String email = Response.getJSONObject(0).getString("account");
+                                    String password = Response.getJSONObject(0).getString("password");
                                     String gender = Response.getJSONObject(0).getString("gender");
                                     String img_path = Response.getJSONObject(0).getString("img_path");
                                     String platform = Response.getJSONObject(0).getString("platform");
@@ -420,6 +422,7 @@ public class VerificationActivity extends AppCompatActivity {
                                     shardpref.putString("USER_INFO_PHONE", UPhone);
                                     shardpref.putString("USER_INFO_EMAIL", email);
                                     shardpref.putString("USER_INFO_NAME", Uname);
+                                    shardpref.putString("USER_INFO_NICKNAME", nick_name);
                                     shardpref.putString("USER_INFO_GENDER", gender);
                                     shardpref.putString("USER_INFO_IMG", img_path);
                                     shardpref.putString("USER_INFO_PLATFORM", platform);

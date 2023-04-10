@@ -14,6 +14,7 @@ public interface UserSaveInterface
     Call<String> getData(
             @Field("id") String id,
             @Field("name") String name,
+            @Field("nick_name") String nick_name,
             @Field("account") String kind,
             @Field("password") String employee_no,
             @Field("phone") String department,
