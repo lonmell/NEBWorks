@@ -182,13 +182,15 @@ public class ProfileEditActivity extends AppCompatActivity {
             USER_LOGIN_METHOD = shardpref.getString("USER_LOGIN_METHOD", "0");
             editstate = shardpref.getString("editstate", "");
             platform = shardpref.getString("platform", "");
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             //Singleton Area
             place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
             USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
+            user_nickname = shardpref.getString("USER_INFO_NICK","");
+
             dlog.i("USER_INFO_ID : " + USER_INFO_ID);
             dlog.i("USER_INFO_EMAIL : " + USER_INFO_EMAIL);
             dlog.i("editstate : " + editstate);

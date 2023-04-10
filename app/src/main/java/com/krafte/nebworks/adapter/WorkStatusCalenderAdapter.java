@@ -34,7 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class WorkStatusCalenderAdapter  extends RecyclerView.Adapter<WorkStatusCalenderAdapter.ViewHolder> {
+public class WorkStatusCalenderAdapter extends RecyclerView.Adapter<WorkStatusCalenderAdapter.ViewHolder> {
     private static final String TAG = "WorkStatusCalenderAdapter";
     private ArrayList<WorkCalenderData.WorkCalenderData_list> mData = null;
     private ArrayList<CalendarSetStatusData.CalendarSetStatusData_list> mData2 = null;

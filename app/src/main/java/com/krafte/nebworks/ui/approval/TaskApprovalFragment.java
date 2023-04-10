@@ -156,9 +156,9 @@ public class TaskApprovalFragment extends AppCompatActivity {
         change_place_id = place_id;
         change_member_id = "";
 
-        Glide.with(this).load(R.raw.basic_loading2)
+        Glide.with(this).load(R.raw.basic_loading)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(binding.basicLoading);
+                .skipMemoryCache(true).into(binding.loadingView);
         binding.loginAlertText.setVisibility(View.GONE);
 
         binding.backBtn.setOnClickListener(v -> {
@@ -609,7 +609,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
     private void SetWorkGotoCalenderData() {
         binding.loginAlertText.setVisibility(View.VISIBLE);
         workGotoList2.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);

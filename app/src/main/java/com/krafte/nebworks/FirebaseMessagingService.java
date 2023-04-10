@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.krafte.nebworks.data.FCMMessageData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
 import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
 import com.krafte.nebworks.ui.feed.FeedListActivity;
@@ -83,7 +84,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         channelId4 = shardpref.getBoolean("channelId4", false);
         channelId5 = shardpref.getBoolean("channelId5", false);
 
-        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ

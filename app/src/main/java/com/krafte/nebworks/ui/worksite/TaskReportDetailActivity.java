@@ -177,11 +177,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
         binding.bottomBtnBox.setOnClickListener(v -> {
             shardpref.putInt("SELECT_POSITION", 1);
             shardpref.remove("SELECT_POSITION_sub");
-            if(USER_INFO_AUTH.equals("0")){
-                pm.Main(mContext);
-            }else if(USER_INFO_AUTH.equals("1")){
-                pm.Main2(mContext);
-            }
+            pm.Main(mContext);
         });
 
         binding.goApproval.setOnClickListener(v -> {
@@ -246,11 +242,7 @@ public class TaskReportDetailActivity extends AppCompatActivity {
             binding.endTime.setText(end_time);
             binding.reportTime.setText(updated_at);
 
-            if(USER_INFO_AUTH.equals("0")){
-                binding.bottomBtnBox2.setVisibility(View.VISIBLE);
-            }else{
-                binding.bottomBtnBox2.setVisibility(View.GONE);
-            }
+            binding.bottomBtnBox2.setVisibility(View.GONE);
             item_user_id = new ArrayList<>();
             item_user_name = new ArrayList<>();
             item_user_img = new ArrayList<>();

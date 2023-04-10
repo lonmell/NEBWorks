@@ -243,7 +243,7 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
             paystub_resend           = itemView.findViewById(R.id.paystub_resend);
             send_money               = itemView.findViewById(R.id.send_money);
 
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","-1");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
             place_id        = shardpref.getString("place_id","-1");
             place_name      = PlaceCheckData.getInstance().getPlace_name();
             place_img       = PlaceCheckData.getInstance().getPlace_img_path();

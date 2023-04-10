@@ -148,7 +148,7 @@ public class PlaceListActivity extends AppCompatActivity {
         try{
             LoginCheck(USER_INFO_EMAIL);
             binding.basicLoading.setVisibility(View.INVISIBLE);
-            Glide.with(this).load(R.raw.basic_loading1)
+            Glide.with(this).load(R.raw.basic_loading)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(binding.basicLoading);
 

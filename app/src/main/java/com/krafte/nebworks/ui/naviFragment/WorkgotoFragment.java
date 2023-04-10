@@ -826,7 +826,7 @@ public class WorkgotoFragment extends Fragment {
     ArrayList<WorkGetallData.WorkGetallData_list> workGotoList2 = new ArrayList<>();
     private void SetWorkGotoCalenderData() {
         workGotoList2.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
         String getYMDate = Year + "-" + Month;
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Log.i(TAG, "place_id : " + place_id);

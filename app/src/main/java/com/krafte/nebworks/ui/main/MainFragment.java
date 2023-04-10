@@ -729,7 +729,13 @@ public class MainFragment extends AppCompatActivity {
             drawerLayout.closeDrawer(drawerView);
             binding.title.setText("할일");
             shardpref.putString("Tap", "1");
-            pm.Main(mContext);
+            if(USER_INFO_AUTH.equals("0")){
+                shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+                pm.Main(mContext);
+            }else{
+                shardpref.putInt("SELECT_POSITION", SELECT_POSITION);
+                pm.Main2(mContext);
+            }
             shardpref.putInt("SELECT_POSITION",1);
             shardpref.putInt("SELECT_POSITION_sub", 1);
             binding.tabLayout.getTabAt(1).select();
@@ -761,7 +767,8 @@ public class MainFragment extends AppCompatActivity {
         } else if (view.getId() == R.id.select_nav13){
             //고객센터
             //노션링크
-            String Contract_uri = "https://slow-buzzard-a6e.notion.site/e64cd314fdfb4a2090a7880f046a7e7c";
+            //String Contract_uri = "https://slow-buzzard-a6e.notion.site/e64cd314fdfb4a2090a7880f046a7e7c";
+            String Contract_uri = "http://nepworks.net/";
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Contract_uri));
             startActivity(intent);
         } else if (view.getId() == R.id.select_nav15){

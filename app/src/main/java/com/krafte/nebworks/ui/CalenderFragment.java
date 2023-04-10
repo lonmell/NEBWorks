@@ -364,7 +364,7 @@ public class CalenderFragment extends Fragment {
     //-- 할일 다시 조회
     private void SetWorkGotoCalenderData() {
         sendList.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
         String getYMDate = year + "-" + month;
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
@@ -426,7 +426,7 @@ public class CalenderFragment extends Fragment {
     //-- 근무현황 다시 조회
     private void SetWorkStatusCalenderData() {
         sendList.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = year + "-" + month;
         Log.i(TAG, "------SetWorkStatusCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
@@ -488,7 +488,7 @@ public class CalenderFragment extends Fragment {
     //급여 현황 다시 조회
     private void SetPayCalenderData() {
         sendList.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = year + "-" + month;
         Log.i(TAG, "------SetPayCalenderData------");
         Log.i(TAG, "place_id : " + place_id);

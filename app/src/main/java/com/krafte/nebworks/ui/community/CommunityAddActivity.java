@@ -176,9 +176,9 @@ public class CommunityAddActivity extends AppCompatActivity {
         binding.addcommunityBtn.setText("등록");
         feed_thumnail_path = feed_img;
 
-        Glide.with(this).load(R.raw.basic_loading2)
+        Glide.with(this).load(R.raw.basic_loading)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(binding.basicLoading);
+                .skipMemoryCache(true).into(binding.loadingView);
         binding.loginAlertText.setVisibility(View.GONE);
 
         dlog.i("user_input_name : " + user_input_name);

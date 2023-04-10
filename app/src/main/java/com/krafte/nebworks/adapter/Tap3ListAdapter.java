@@ -213,7 +213,7 @@ public class Tap3ListAdapter extends RecyclerView.Adapter<Tap3ListAdapter.ViewHo
 
             dlog.DlogContext(mContext);
             shardpref = new PreferenceHelper(mContext);
-            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID","0");
 
 

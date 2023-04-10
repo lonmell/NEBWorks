@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.TaskCheckData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ApprovalUpdateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;

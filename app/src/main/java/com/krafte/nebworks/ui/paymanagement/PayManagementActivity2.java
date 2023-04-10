@@ -27,6 +27,7 @@ import com.krafte.nebworks.adapter.PayCalenderAdapter;
 import com.krafte.nebworks.adapter.PaymentMemberAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.data.PaymentData;
+import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkGetallData;
 import com.krafte.nebworks.dataInterface.PayGetallInterface;
 import com.krafte.nebworks.dataInterface.paymanaInterface;
@@ -117,7 +118,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
             place_owner_id  = shardpref.getString("place_owner_id","");
             USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
             USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME","");
-            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
+            USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
 
             //shardpref Area
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
@@ -498,7 +499,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
     //급여 현황 다시 조회
     private void SetPayCalenderData() {
         mList2.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
         String getYMDate = Year + "-" + Month;
         Log.i(TAG, "------SetPayCalenderData------");
         Log.i(TAG, "place_id : " + place_id);

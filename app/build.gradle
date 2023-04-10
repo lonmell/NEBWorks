@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-
+    //-- compileSdk 33은 현재 XML 자동완성 기능이 꺼지는 등 문제가 생겨서 32로 변경함
     compileSdk 32
     defaultConfig {
         applicationId "com.krafte.nebworks"

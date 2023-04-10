@@ -429,6 +429,7 @@ public class SearchAccountActivity extends AppCompatActivity {
                                     JSONArray Response = new JSONArray(jsonResponse);
                                     String id = Response.getJSONObject(0).getString("id");
                                     String name = Response.getJSONObject(0).getString("name");
+                                    String nick_name = Response.getJSONObject(0).getString("nick_name");
                                     String account = Response.getJSONObject(0).getString("account");
                                     String password = Response.getJSONObject(0).getString("password");
                                     String phone = Response.getJSONObject(0).getString("phone");
@@ -439,6 +440,7 @@ public class SearchAccountActivity extends AppCompatActivity {
                                     dlog.i("Find Email : " + Response.getJSONObject(0).getString("account"));
                                     shardpref.putString("USER_INFO_ID",id);
                                     shardpref.putString("USER_INFO_NAME",name);
+                                    shardpref.putString("USER_INFO_NICKNAME", nick_name);
                                     shardpref.putString("USER_INFO_EMAIL",account);
                                     shardpref.putString("USER_INFO_PW",password);
                                     shardpref.putString("USER_INFO_PHONE",phone);

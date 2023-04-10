@@ -169,9 +169,9 @@ public class IntroActivity extends AppCompatActivity {
         shardpref.putInt("SELECT_POSITION", 0);
         shardpref.putInt("SELECT_POSITION_sub", 0);
 
-        Glide.with(this).load(R.raw.basic_loading2)
+        Glide.with(this).load(R.raw.basic_loading)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(binding.basicLoading);
+                .skipMemoryCache(true).into(binding.loadingView);
         binding.loginAlertText.setVisibility(View.VISIBLE);
         initView();
 

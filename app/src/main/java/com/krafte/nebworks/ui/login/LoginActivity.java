@@ -220,9 +220,9 @@ public class LoginActivity extends AppCompatActivity {
         binding.kakaoLoginArea.setOnClickListener(v -> {
             BtnOneCircleFun(false);
             binding.loginAlertText.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.raw.basic_loading2)
+            Glide.with(this).load(R.raw.basic_loading)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(binding.basicLoading);
+                    .skipMemoryCache(true).into(binding.loadingView);
             shardpref.putString("USER_LOGIN_METHOD", "Kakao");
             handler.postDelayed(() -> {
                 if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
@@ -370,9 +370,9 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.googleLoginArea.setOnClickListener(v -> {
             BtnOneCircleFun(false);
-            Glide.with(this).load(R.raw.basic_loading2)
+            Glide.with(this).load(R.raw.basic_loading)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(binding.basicLoading);
+                    .skipMemoryCache(true).into(binding.loadingView);
             shardpref.putString("USER_LOGIN_METHOD", "Google");
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -761,6 +761,7 @@ public class LoginActivity extends AppCompatActivity {
 //                                                    | InvalidKeyException e) {
 //                                                e.printStackTrace();
 //                                            }
+
                                             String repalcekey0 = "kraftmysecretkey";
                                             String replacekey1 = "nrkwl3nkv54";
                                             decodePw = aes256Util.decode(getPassword).replace(repalcekey0, "").replace(replacekey1, "");

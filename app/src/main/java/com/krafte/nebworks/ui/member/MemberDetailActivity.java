@@ -195,9 +195,9 @@ public class MemberDetailActivity extends AppCompatActivity {
             } else if (place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")) {
                 binding.contractPhoneInfo.setVisibility(View.VISIBLE);
             }
-            Glide.with(this).load(R.raw.basic_loading2)
+            Glide.with(this).load(R.raw.basic_loading)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(binding.basicLoading);
+                    .skipMemoryCache(true).into(binding.loadingView);
         } catch (Exception e) {
             e.printStackTrace();
         }

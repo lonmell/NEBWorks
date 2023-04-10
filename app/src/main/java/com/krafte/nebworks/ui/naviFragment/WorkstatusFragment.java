@@ -167,9 +167,9 @@ public class WorkstatusFragment extends Fragment {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             SELECT_POSITION = 1;
 
-            Glide.with(this).load(R.raw.basic_loading2)
+            Glide.with(this).load(R.raw.basic_loading)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(binding.basicLoading);
+                    .skipMemoryCache(true).into(binding.loadingView);
             binding.loginAlertText.setVisibility(View.GONE);
             fg = WorkStatusSubFragment1.newInstance();
 
@@ -542,7 +542,7 @@ public class WorkstatusFragment extends Fragment {
 
     private void SetWorkStatusCalenderData() {
         binding.loginAlertText.setVisibility(View.VISIBLE);
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "0");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = Year + "-" + Month;
         Log.i(TAG, "------SetWorkStatusCalenderData------");
         Log.i(TAG, "place_id : " + place_id);

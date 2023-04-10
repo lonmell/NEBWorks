@@ -168,9 +168,9 @@ public class CommunityDetailActivity extends AppCompatActivity {
         DataCheck();
         UpdateView(feed_id);
 
-        Glide.with(this).load(R.raw.basic_loading2)
+        Glide.with(this).load(R.raw.basic_loading)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(binding.basicLoading);
+                .skipMemoryCache(true).into(binding.loadingView);
         binding.loginAlertText.setVisibility(View.GONE);
 
         binding.backBtn.setOnClickListener(v -> {

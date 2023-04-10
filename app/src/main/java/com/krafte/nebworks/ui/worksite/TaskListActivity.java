@@ -858,7 +858,7 @@ public class TaskListActivity extends AppCompatActivity {
 
     ArrayList<WorkGetallData.WorkGetallData_list> workGotoList2 = new ArrayList<>();
     private void SetWorkGotoCalenderData() {
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","0");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);

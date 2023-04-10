@@ -122,9 +122,9 @@ public class CommunityFragment extends Fragment {
 
             //shardpref Area
             returnPage = shardpref.getString("returnPage", "");
-            Glide.with(this).load(R.raw.basic_loading2)
+            Glide.with(this).load(R.raw.basic_loading)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(binding.basicLoading);
+                    .skipMemoryCache(true).into(binding.loadingView);
             binding.loginAlertText.setVisibility(View.GONE);
 
             ChangePage(0);

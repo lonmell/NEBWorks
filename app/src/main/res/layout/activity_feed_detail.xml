@@ -363,10 +363,9 @@
 
         <ImageView
             android:id="@+id/loading_view"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerInParent="true"
             tools:ignore="ContentDescription" />
-
     </RelativeLayout>
 </RelativeLayout>

@@ -168,7 +168,6 @@ public class WorkStatusSubFragment1 extends Fragment {
         SetAllMemberList();
     }
 
-
     /*직원 전체 리스트 START*/
     public void SetAllMemberList() {
         total_member_cnt = 0;
@@ -327,6 +326,7 @@ public class WorkStatusSubFragment1 extends Fragment {
             e.printStackTrace();
         }
     }
+
     /*직원 전체 리스트 END*/
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);

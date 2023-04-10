@@ -280,9 +280,12 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                                     SendCnt = SendCnt + 1;
                                     String place_name = PlaceCheckData.getInstance().getPlace_name();
                                     String message = "[" + place_name + "]" + commute_date + "날짜의 출퇴근 데이터가 변경되었습니다";
-                                    getUserToken(commute_user_id, "1", message);
-                                    AddPush("직원출퇴근데이터변경", message, commute_user_id);
-                                    Toast.makeText(mContext, commute_date + "날짜의" + userName + " 직원의 출퇴근 데이터가 변경되었습니다", Toast.LENGTH_SHORT).show();
+                                    if(!commute_user_id.isEmpty()){
+                                        getUserToken(commute_user_id, "1", message);
+                                        AddPush("직원출퇴근데이터변경", message, commute_user_id);
+                                        Toast.makeText(mContext, commute_date + "날짜의" + userName + " 직원의 출퇴근 데이터가 변경되었습니다", Toast.LENGTH_SHORT).show();
+                                    }
+                                    dlog.i("UpdateCommute commute_user_id : " + commute_user_id);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

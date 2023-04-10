@@ -199,9 +199,9 @@ public class TaskApprovalDetail extends AppCompatActivity {
 
         fileName = USER_INFO_ID;
 
-        Glide.with(this).load(R.raw.basic_loading2)
+        Glide.with(this).load(R.raw.basic_loading)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(binding.basicLoading);
+                .skipMemoryCache(true).into(binding.loadingView);
         binding.loginAlertText.setVisibility(View.GONE);
 
         dateFormat = new SimpleDateFormat("HH:mm:ss", getResources().getConfiguration().locale);

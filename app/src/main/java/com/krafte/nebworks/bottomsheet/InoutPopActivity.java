@@ -449,6 +449,7 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     RetrofitConnect rc = new RetrofitConnect();
 
     private void InOutInsert() {
+        dismiss();
         String change_place_id = "";
         change_place_id = shardpref.getString("change_place_id", "");
         if (!change_place_id.isEmpty()) {
