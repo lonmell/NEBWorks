@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractBasicInterface;
@@ -50,7 +52,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class AddContractPage03 extends AppCompatActivity {
     private ActivityContractAdd03Binding binding;
-    private final static String TAG = "AddContractPage01";
+    private final static String TAG = "AddContractPage03";
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
 
     Context mContext;
@@ -94,6 +96,11 @@ public class AddContractPage03 extends AppCompatActivity {
         contract_user_id    = shardpref.getString("contract_user_id", "0");
         place_id            = shardpref.getString("place_id", "0");
         USER_INFO_ID        = shardpref.getString("USER_INFO_ID", "0");
+
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
 
         setBtnEvent();
 
@@ -313,6 +320,7 @@ public class AddContractPage03 extends AppCompatActivity {
     }
 
     public void GetPlaceList() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceListInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -346,6 +354,7 @@ public class AddContractPage03 extends AppCompatActivity {
                                     binding.input04.setText(address);
                                     binding.input05.setText(address_detail);
                                 }
+                                binding.loginAlertText.setVisibility(View.GONE);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -358,6 +367,7 @@ public class AddContractPage03 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -473,6 +483,7 @@ public class AddContractPage03 extends AppCompatActivity {
     }
 
     public void SaveContractBasic() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractBasicInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -497,6 +508,7 @@ public class AddContractPage03 extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            binding.loginAlertText.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -506,12 +518,14 @@ public class AddContractPage03 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     String contract_id = "";
     public void getContractId() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -531,6 +545,7 @@ public class AddContractPage03 extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        binding.loginAlertText.setVisibility(View.GONE);
                     });
                 }
             }
@@ -539,6 +554,7 @@ public class AddContractPage03 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

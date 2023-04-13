@@ -28,7 +28,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractGetAllInterface;
 import com.krafte.nebworks.dataInterface.ContractWorkerSignInterface;
 import com.krafte.nebworks.dataInterface.MakeFileNameInterface;
@@ -113,6 +112,11 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
         //shardpref Area
 
         contract_id = shardpref.getString("contract_id","");
+
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
 
         setBtnEvent();
 
@@ -220,6 +224,7 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
     }
 
     private void GetAllContract(){
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("------GetAllContract------");
         dlog.i("contract_id : " + contract_id);
         dlog.i("------GetAllContract------");
@@ -300,6 +305,7 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
                                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .skipMemoryCache(true)
                                             .into(binding.ownerSign);
+                                    binding.loginAlertText.setVisibility(View.GONE);
                                 }
                             } catch(JSONException e){
                                 e.printStackTrace();
@@ -313,6 +319,7 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
             @Override
             public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -358,6 +365,7 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
     }
 
     private void UpdateWorkSign(){
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         worker_sign_url = "http://krafte.net/NEBWorks/image/sign_img/" + USER_INFO_ID + "_" + ImgfileMaker + ".JPEG";
         dlog.i("------UpdatePagePos------");
         dlog.i("contract_id : " + contract_id);
@@ -387,6 +395,7 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
                             } catch(Exception e){
                                 e.printStackTrace();
                             }
+                            binding.loginAlertText.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -396,6 +405,7 @@ public class ContractWorkerSignActivity extends AppCompatActivity {
             @Override
             public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

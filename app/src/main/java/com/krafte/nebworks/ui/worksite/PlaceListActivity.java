@@ -313,7 +313,7 @@ public class PlaceListActivity extends AppCompatActivity {
             slb.show(getSupportFragmentManager(), "StoreListBottomSheet");
             slb.setOnClickListener01(v -> pm.PlaceSearch(mContext));
             slb.setOnClickListener02(v -> pm.PlaceAddGo(mContext));
-            slb.setOnClickListener03(v -> pm.Career(mContext));
+//            slb.setOnClickListener03(v -> pm.Career(mContext));
         }
     }
 

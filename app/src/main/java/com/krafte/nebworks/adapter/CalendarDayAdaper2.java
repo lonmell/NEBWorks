@@ -19,6 +19,8 @@ import com.krafte.nebworks.data.WorkGetallData;
 import com.krafte.nebworks.util.Dlog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CalendarDayAdaper2 extends RecyclerView.Adapter<CalendarDayAdaper2.ViewHolder> {
     private static final String TAG = "CalendarDayAdaper2";
@@ -26,12 +28,13 @@ public class CalendarDayAdaper2 extends RecyclerView.Adapter<CalendarDayAdaper2.
     Context mContext;
     Activity activity;
     Dlog dlog = new Dlog();
+    String setDay = "0";
+    List<String> title = new ArrayList<>();
 
-
-
-    public CalendarDayAdaper2(Context context, ArrayList<WorkGetallData.WorkGetallData_list> data) {
+    public CalendarDayAdaper2(Context context, ArrayList<WorkGetallData.WorkGetallData_list> data, String setDay) {
         this.mData = data;
         this.mContext = context;
+        this.setDay = setDay;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull
@@ -56,121 +59,138 @@ public class CalendarDayAdaper2 extends RecyclerView.Adapter<CalendarDayAdaper2.
         dlog.i("mData size :" + mData.size());
         dlog.i("mData title :" + item.getTitle());
         dlog.i("mData kind :" + item.getKind());
-        try{
-            if(mData.size() == 0){
-//                dlog.i("mData size :" + mData.size());
-//                dlog.i("mData title :" + item.getTitle());
-//                dlog.i("mData contents :" + item.getContents());
-            }else if(mData.size() == 1){
-                holder.task_tv1.setText(mData.get(0).getTitle());
-                if(mData.get(0).getKind().equals("holiday")){
-                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-            }else if(mData.size() == 2){
-                holder.task_tv1.setText(mData.get(0).getTitle());
-                holder.task_tv2.setText(mData.get(1).getTitle());
-                if(mData.get(0).getKind().equals("holiday")){
-                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(1).getKind().equals("holiday")){
-                    holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-            }else if(mData.size() == 3){
-                holder.task_tv1.setText(mData.get(0).getTitle());
-                holder.task_tv2.setText(mData.get(1).getTitle());
-                holder.task_tv3.setText(mData.get(2).getTitle());
-                if(mData.get(0).getKind().equals("holiday")){
-                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(1).getKind().equals("holiday")){
-                    holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(2).getKind().equals("holiday")){
-                    holder.task_tv3.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-            }else if(mData.size() == 4){
-                holder.task_tv1.setText(mData.get(0).getTitle());
-                holder.task_tv2.setText(mData.get(1).getTitle());
-                holder.task_tv3.setText(mData.get(2).getTitle());
-                holder.task_tv4.setText(mData.get(3).getTitle());
-                if(mData.get(0).getKind().equals("holiday")){
-                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(1).getKind().equals("holiday")){
-                    holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(2).getKind().equals("holiday")){
-                    holder.task_tv3.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(3).getKind().equals("holiday")){
-                    holder.task_tv4.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-            }else if(mData.size() == 5){
-                holder.task_tv1.setText(mData.get(0).getTitle());
-                holder.task_tv2.setText(mData.get(1).getTitle());
-                holder.task_tv3.setText(mData.get(2).getTitle());
-                holder.task_tv4.setText(mData.get(3).getTitle());
-                holder.task_tv5.setText(mData.get(4).getTitle());
-                if(mData.get(0).getKind().equals("holiday")){
-                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(1).getKind().equals("holiday")){
-                    holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(2).getKind().equals("holiday")){
-                    holder.task_tv3.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(3).getKind().equals("holiday")){
-                    holder.task_tv4.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
-                if(mData.get(4).getKind().equals("holiday")){
-                    holder.task_tv5.setTextColor(Color.parseColor("#FF687A"));
-                }else{
-                    holder.task_tv5.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                }
+        dlog.i("mData setDay :" + setDay);
+        dlog.i("mData setDay :" + item.getTask_date());
+        try {
+            title.addAll(Arrays.asList(item.getTitle().split(",")));
+
+            StringBuilder sb = new StringBuilder();
+            for (String a : title) {
+                sb.append(a).append("\r\n");
             }
-//            if(mData.size() == 0){
+            holder.task_tv1.setText("");
+            holder.task_tv1.setText(sb.toString());
+            dlog.i("sb.toString() : " + sb.toString());
+            if (item.getKind().equals("holiday")) {
+                holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
+            } else {
+                holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            }
+
+//            if (mData.size() == 0) {
 ////                dlog.i("mData size :" + mData.size());
 ////                dlog.i("mData title :" + item.getTitle());
 ////                dlog.i("mData contents :" + item.getContents());
-//            }else {
-//                holder.task_tv1.setText(item.getTitle());
-//                if(item.getKind().equals("holiday")){
+//            } else if (mData.size() == 1) {
+//                holder.task_tv1.setText(mData.get(0).getTitle());
+//                if (mData.get(0).getKind().equals("holiday")) {
 //                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
-//                }else{
+//                } else {
 //                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
 //                }
+//            } else if (mData.size() == 2) {
+//                holder.task_tv1.setText(mData.get(0).getTitle());
+//                holder.task_tv2.setText(mData.get(1).getTitle());
+//                if (mData.get(0).getKind().equals("holiday")) {
+//                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(1).getKind().equals("holiday")) {
+//                    holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//            } else if (mData.size() == 3) {
+//                holder.task_tv1.setText(mData.get(0).getTitle());
+//                holder.task_tv2.setText(mData.get(1).getTitle());
+//                holder.task_tv3.setText(mData.get(2).getTitle());
+//                if (mData.get(0).getKind().equals("holiday")) {
+//                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(1).getKind().equals("holiday")) {
+//                    holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(2).getKind().equals("holiday")) {
+//                    holder.task_tv3.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//            } else if (mData.size() == 4) {
+//                holder.task_tv1.setText(mData.get(0).getTitle());
+//                holder.task_tv2.setText(mData.get(1).getTitle());
+//                holder.task_tv3.setText(mData.get(2).getTitle());
+//                holder.task_tv4.setText(mData.get(3).getTitle());
+//                if (mData.get(0).getKind().equals("holiday")) {
+//                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(1).getKind().equals("holiday")) {
+//                    holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(2).getKind().equals("holiday")) {
+//                    holder.task_tv3.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(3).getKind().equals("holiday")) {
+//                    holder.task_tv4.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//            } else if (mData.size() == 5) {
+//                holder.task_tv1.setText(mData.get(0).getTitle());
+//                holder.task_tv2.setText(mData.get(1).getTitle());
+//                holder.task_tv3.setText(mData.get(2).getTitle());
+//                holder.task_tv4.setText(mData.get(3).getTitle());
+//                holder.task_tv5.setText(mData.get(4).getTitle());
+//                if (mData.get(0).getKind().equals("holiday")) {
+//                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(1).getKind().equals("holiday")) {
+//                    holder.task_tv2.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(2).getKind().equals("holiday")) {
+//                    holder.task_tv3.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(3).getKind().equals("holiday")) {
+//                    holder.task_tv4.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
+//                if (mData.get(4).getKind().equals("holiday")) {
+//                    holder.task_tv5.setTextColor(Color.parseColor("#FF687A"));
+//                } else {
+//                    holder.task_tv5.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//                }
 //            }
+////            if(mData.size() == 0){
+//////                dlog.i("mData size :" + mData.size());
+//////                dlog.i("mData title :" + item.getTitle());
+//////                dlog.i("mData contents :" + item.getContents());
+////            }else {
+////                holder.task_tv1.setText(item.getTitle());
+////                if(item.getKind().equals("holiday")){
+////                    holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));
+////                }else{
+////                    holder.task_tv1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+////                }
+////            }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             dlog.i("Exception :" + e);
         }
 
@@ -183,17 +203,18 @@ public class CalendarDayAdaper2 extends RecyclerView.Adapter<CalendarDayAdaper2.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView task_tv1,task_tv2,task_tv3,task_tv4,task_tv5;
+        TextView task_tv1, task_tv2, task_tv3, task_tv4, task_tv5;
         LinearLayout item_total;
+
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
 
             task_tv1 = itemView.findViewById(R.id.task_tv1);
-            task_tv2 = itemView.findViewById(R.id.task_tv2);
-            task_tv3 = itemView.findViewById(R.id.task_tv3);
-            task_tv4 = itemView.findViewById(R.id.task_tv4);
-            task_tv5 = itemView.findViewById(R.id.task_tv5);
+//            task_tv2 = itemView.findViewById(R.id.task_tv2);
+//            task_tv3 = itemView.findViewById(R.id.task_tv3);
+//            task_tv4 = itemView.findViewById(R.id.task_tv4);
+//            task_tv5 = itemView.findViewById(R.id.task_tv5);
             item_total = itemView.findViewById(R.id.item_total);
 
             dlog.DlogContext(mContext);

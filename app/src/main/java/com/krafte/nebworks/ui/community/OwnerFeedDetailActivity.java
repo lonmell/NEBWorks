@@ -3,10 +3,14 @@ package com.krafte.nebworks.ui.community;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.databinding.ActivityOwnerfeedDetailBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -58,6 +62,11 @@ public class OwnerFeedDetailActivity extends AppCompatActivity {
         oc_cate = shardpref.getString("oc_cate", "");
         oc_title = shardpref.getString("oc_title", "");
 
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
+
         binding.backBtn.setOnClickListener(v -> {
             RemoveShared();
             super.onBackPressed();
@@ -93,6 +102,7 @@ public class OwnerFeedDetailActivity extends AppCompatActivity {
     String hashtv = "";
 
     private void GetCrawling() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
             try {
@@ -117,6 +127,7 @@ public class OwnerFeedDetailActivity extends AppCompatActivity {
         th.start();
         try {
             th.join();
+            binding.loginAlertText.setVisibility(View.GONE);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

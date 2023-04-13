@@ -55,6 +55,8 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
 
     String beforegoToTime = "";
     String beforegoOffTime = "";
+    boolean SelectIn = false;
+    boolean SelectOut = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +105,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
         binding.commuteUser.setText(userName);
         binding.commuteWorkingHours.setText("근무시간 " + (workTime.equals("null") ? "미정" : workTime));
 
-        if (!goToWorkTime.equals("null")) {
+        if (!(goToWorkTime.replace("null","").length() == 0)) {
             String[] splitGoToWorkTime = goToWorkTime.split(":");
             dlog.i("splitGoToWorkTime[0]: " + Integer.parseInt(splitGoToWorkTime[0]));
             dlog.i("splitGoToWorkTime[1] : " + Integer.parseInt(splitGoToWorkTime[1]));
@@ -117,7 +119,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
             binding.gotoworkTextTime.setText("");
             beforegoToTime = "";
         }
-        if (!goOffWorkTime.equals("null")) {
+        if (!(goOffWorkTime.replace("null","").length() == 0)) {
             String[] splitGoOffWorkTime = goOffWorkTime.split(":");
             dlog.i("splitGoOffWorkTime[0]: " + Integer.parseInt(splitGoOffWorkTime[0]));
             dlog.i("splitGoOffWorkTime[1] : " + Integer.parseInt(splitGoOffWorkTime[1]));
@@ -139,7 +141,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
         binding.gotowork.setOnClickListener(v -> {
 
             SELECT_POSITION = true;
-
+            SelectIn = true;
             binding.commuteTimepicker.setVisibility(View.VISIBLE);
 
             binding.gotowork.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
@@ -153,7 +155,11 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
             binding.gooffworkTimeDel.setBackgroundResource(R.drawable.ic_baseline_cancel_24_black);
 
             if (!goToWorkTime.equals("-1")) {
-                if (!goToWorkTime.equals("null")) {
+                int hour = binding.commuteTimepicker.getHour();
+                int minute = binding.commuteTimepicker.getMinute();
+                goToWorkTime = hour + ":" + minute;
+                binding.gotoworkTextTime.setText((hour < 12 ? "오전" : "오후") + " " + hour + ":" + minute);
+                if (!(goToWorkTime.replace("null","").length() == 0)) {
                     String[] splitGoToWorkTime = goToWorkTime.split(":");
                     binding.commuteTimepicker.setHour(Integer.parseInt(splitGoToWorkTime[0]));
                     binding.commuteTimepicker.setMinute(Integer.parseInt(splitGoToWorkTime[1]));
@@ -168,7 +174,7 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
         binding.gooffwork.setOnClickListener(v -> {
 
             SELECT_POSITION = false;
-
+            SelectOut = true;
             binding.commuteTimepicker.setVisibility(View.VISIBLE);
 
             binding.gooffwork.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
@@ -182,7 +188,12 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
             binding.gotoworkTimeDel.setBackgroundResource(R.drawable.ic_baseline_cancel_24_black);
 
             if (!goOffWorkTime.equals("-1")) {
-                if (!goOffWorkTime.equals("null")) {
+                // 변경되기 전의 시간 값 가져오기
+                int hour = binding.commuteTimepicker.getHour();
+                int minute = binding.commuteTimepicker.getMinute();
+                goOffWorkTime = hour + ":" + minute;
+                binding.gooffworkTextTime.setText((hour < 12 ? "오전" : "오후") + " " + hour + ":" + minute);
+                if (!(goOffWorkTime.replace("null","").length() == 0)) {
                     String[] splitGoOffWorkTime = goOffWorkTime.split(":");
                     binding.commuteTimepicker.setHour(Integer.parseInt(splitGoOffWorkTime[0]));
                     binding.commuteTimepicker.setMinute(Integer.parseInt(splitGoOffWorkTime[1]));
@@ -238,9 +249,6 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
             if (!beforegoToTime.equals(goToWorkTime)) {
                 UpdateCommute("0", goToWorkTime);
             }
-            if (!beforegoOffTime.equals(goOffWorkTime)) {
-                UpdateCommute("1", goOffWorkTime);
-            }
             if (mListener != null) {
                 mListener.onItemClick(v);
             }
@@ -286,6 +294,11 @@ public class CommuteBottomSheet extends BottomSheetDialogFragment {
                                         Toast.makeText(mContext, commute_date + "날짜의" + userName + " 직원의 출퇴근 데이터가 변경되었습니다", Toast.LENGTH_SHORT).show();
                                     }
                                     dlog.i("UpdateCommute commute_user_id : " + commute_user_id);
+                                }
+                                if(kind.equals("0") && !(goOffWorkTime.replace("null","").length() == 0)){
+                                    if (!beforegoOffTime.equals(goOffWorkTime)) {
+                                        UpdateCommute("1", goOffWorkTime);
+                                    }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

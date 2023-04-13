@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.ContractPayInterface;
@@ -87,6 +89,11 @@ public class AddContractPage05 extends AppCompatActivity {
         place_id        = shardpref.getString("place_id","0");
         USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
 
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
+
         setBtnEvent();
     }
 
@@ -110,6 +117,7 @@ public class AddContractPage05 extends AppCompatActivity {
     boolean bokji04 = false;
     List<String> bokji = new ArrayList<>();
     String AddExp = "";
+
     private void setBtnEvent(){
         /*급여 지급방식*/
         ArrayList<String> stringCategory2 = new ArrayList<>();
@@ -261,6 +269,7 @@ public class AddContractPage05 extends AppCompatActivity {
 
 
     public void SaveContractPay() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractPayInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -279,6 +288,7 @@ public class AddContractPage05 extends AppCompatActivity {
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
                             try {
+                                binding.loginAlertText.setVisibility(View.GONE);
                                 if(jsonResponse.replace("\"","").equals("success")){
                                     Toast_Nomal("급여 기본사항이 업데이트 완료되었습니다.");
                                     InputTerm("근로자가 무단 결근 2일 이상 하거나 월 2일 이상\n결근하는 경우 근로계약을 해지 할 수 있음");
@@ -296,12 +306,14 @@ public class AddContractPage05 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     String contract_id = "";
     public void getContractId() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -318,6 +330,7 @@ public class AddContractPage05 extends AppCompatActivity {
                         try {
                             JSONArray Response = new JSONArray(response.body());
                             contract_id = Response.getJSONObject(0).getString("id");
+                            binding.loginAlertText.setVisibility(View.GONE);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -329,11 +342,13 @@ public class AddContractPage05 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     private void InputTerm(String write_term){
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("------setTermList------");
         dlog.i("contract_id : " + contract_id);
         dlog.i("write_term : " + write_term);
@@ -351,11 +366,7 @@ public class AddContractPage05 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         if (response.isSuccessful() && response.body() != null) {
-//                            try {
-//
-//                            } catch(Exception e){
-//                                e.printStackTrace();
-//                            }
+                            binding.loginAlertText.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -365,6 +376,7 @@ public class AddContractPage05 extends AppCompatActivity {
             @Override
             public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

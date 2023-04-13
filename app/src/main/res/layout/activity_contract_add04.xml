@@ -1,465 +1,486 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.contract.AddContractPage04"
-    tools:ignore="HardcodedText,ImageContrastCheck,TextContrastCheck" >
-
-    <LinearLayout
+    tools:ignore="HardcodedText,ImageContrastCheck,TextContrastCheck">
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="59dp"
-            android:layout_alignParentTop="true">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="근로계약상세"
-                android:textColor="#000000"
-                android:textSize="15sp"
-                tools:ignore="HardcodedText" />
-
-            <RelativeLayout
-                android:id="@+id/back_btn"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_centerVertical="true">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:background="@drawable/find_right_arrow"
-                    android:padding="20dp"
-                    android:rotation="180"
-                    tools:ignore="ImageContrastCheck" />
-            </RelativeLayout>
-        </RelativeLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:background="#ffffff"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gangwonedu_bold"
-                android:gravity="center"
-                android:text="근무 기본사항"
-                android:textColor="#000000"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="계약기간"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/top_bar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
+                android:layout_height="59dp"
+                android:layout_alignParentTop="true">
 
-                <RelativeLayout
-                    android:id="@+id/select01"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/select01date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:layout_toStartOf="@+id/select01tv"
-                        android:background="@drawable/grayback_gray_round"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="start|center"
-                        android:hint="날짜를 입력해주세요"
-                        android:paddingStart="15dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/select01tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="10dp"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="center"
-                        android:text="부터"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:id="@+id/select02"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/select02date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:layout_toStartOf="@+id/select02tv"
-                        android:background="@drawable/grayback_gray_round"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="start|center"
-                        android:hint="날짜를 입력해주세요"
-                        android:paddingStart="15dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/select02tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="center"
-                        android:text="까지"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-
-                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-                    android:id="@+id/cv_calendar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    app:mcv_calendarMode="month"
-                    app:mcv_selectionColor="#f79256" />
-
-                <LinearLayout
-                    android:id="@+id/select03"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/grayback_gray_round">
-
-                    <ImageView
-                        android:id="@+id/select03_round"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="15dp"
-                        android:background="@drawable/ic_empty_round"
-                        tools:ignore="ImageContrastCheck" />
-
-                    <TextView
-                        android:id="@+id/select03tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="15dp"
-                        android:drawableStart="@drawable/select_empty_round"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="center"
-                        android:text="기간의 정함이 없는 계약"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="26dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="근무요일"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/workyoil_list"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"/>
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="휴무일"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/restyoil_list"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:background="#F5F6F8"/>
-            
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="근무시간"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-            <TimePicker
-                android:id="@+id/time_setpicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:numbersBackgroundColor="#ffffff"
-                android:numbersSelectorColor="#6395EC"
-                android:numbersTextColor="@color/black"
-                android:theme="@style/NumberPicker"
-                android:visibility="gone"
-                android:timePickerMode="spinner" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:id="@+id/wtime01"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/wtime01tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="center"
-                        android:text="근무시작"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/wtime01time"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_toEndOf="@+id/wtime01tv"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="start|center"
-                        android:hint="시간을 입력해주세요"
-                        android:paddingStart="15dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="16sp" />
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/wtime02"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/wtime02tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="center"
-                        android:text="근무종료"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/wtime02time"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_toEndOf="@+id/wtime02tv"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="start|center"
-                        android:hint="시간을 입력해주세요"
-                        android:paddingStart="15dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="16sp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/resttime01"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/resttime01tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="center"
-                        android:text="휴게시작"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/resttime01time"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_toEndOf="@+id/resttime01tv"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="start|center"
-                        android:hint="시간을 입력해주세요"
-                        android:paddingStart="15dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="16sp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/resttime02"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/resttime02tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="center"
-                        android:text="휴게종료"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/resttime02time"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_toEndOf="@+id/resttime02tv"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:gravity="start|center"
-                        android:hint="시간을 입력해주세요"
-                        android:paddingStart="15dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="16sp" />
-
-                </RelativeLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:background="#F5F6F8"/>
-            
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="업무내용"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/input01"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/default_gray_round"
-                android:fontFamily="@font/pretendard_bold"
-                android:hint="업무내용을 입력해주세요"
-                android:inputType="text"
-                android:paddingStart="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#a9a9a9"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
-
-            <LinearLayout
-                android:id="@+id/next"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/new_blue"
-                android:layout_marginTop="40dp"
-                android:layout_alignParentBottom="true">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
-                    android:text="다음으로 2/6"
-                    android:textColor="@color/white"
+                    android:text="근로계약상세"
+                    android:textColor="#000000"
                     android:textSize="15sp"
                     tools:ignore="HardcodedText" />
+
+                <RelativeLayout
+                    android:id="@+id/back_btn"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:background="@drawable/find_right_arrow"
+                        android:padding="20dp"
+                        android:rotation="180"
+                        tools:ignore="ImageContrastCheck" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gangwonedu_bold"
+                    android:gravity="center"
+                    android:text="근무 기본사항"
+                    android:textColor="#000000"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="계약기간"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/select01"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/select01date"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@+id/select01tv"
+                            android:background="@drawable/grayback_gray_round"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="start|center"
+                            android:hint="날짜를 입력해주세요"
+                            android:paddingStart="15dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/select01tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="center"
+                            android:text="부터"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/select02"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/select02date"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@+id/select02tv"
+                            android:background="@drawable/grayback_gray_round"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="start|center"
+                            android:hint="날짜를 입력해주세요"
+                            android:paddingStart="15dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/select02tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_alignParentEnd="true"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="center"
+                            android:text="까지"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                        android:id="@+id/cv_calendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        app:mcv_calendarMode="month"
+                        app:mcv_selectionColor="#f79256" />
+
+                    <LinearLayout
+                        android:id="@+id/select03"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/grayback_gray_round">
+
+                        <ImageView
+                            android:id="@+id/select03_round"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/ic_empty_round"
+                            tools:ignore="ImageContrastCheck" />
+
+                        <TextView
+                            android:id="@+id/select03tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="15dp"
+                            android:drawableStart="@drawable/select_empty_round"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="center"
+                            android:text="기간의 정함이 없는 계약"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="26dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="근무요일"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/workyoil_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="휴무일"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/restyoil_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="#F5F6F8"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="근무시간"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+                <TimePicker
+                    android:id="@+id/time_setpicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:numbersBackgroundColor="#ffffff"
+                    android:numbersSelectorColor="#6395EC"
+                    android:numbersTextColor="@color/black"
+                    android:theme="@style/NumberPicker"
+                    android:visibility="gone"
+                    android:timePickerMode="spinner" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/wtime01"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/wtime01tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="center"
+                            android:text="근무시작"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/wtime01time"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/wtime01tv"
+                            android:background="@drawable/default_gray_round"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="start|center"
+                            android:hint="시간을 입력해주세요"
+                            android:paddingStart="15dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="16sp" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/wtime02"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/wtime02tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="center"
+                            android:text="근무종료"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/wtime02time"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/wtime02tv"
+                            android:background="@drawable/default_gray_round"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="start|center"
+                            android:hint="시간을 입력해주세요"
+                            android:paddingStart="15dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/resttime01"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/resttime01tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="center"
+                            android:text="휴게시작"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/resttime01time"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/resttime01tv"
+                            android:background="@drawable/default_gray_round"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="start|center"
+                            android:hint="시간을 입력해주세요"
+                            android:paddingStart="15dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/resttime02"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/resttime02tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="center"
+                            android:text="휴게종료"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/resttime02time"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_toEndOf="@+id/resttime02tv"
+                            android:background="@drawable/default_gray_round"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="start|center"
+                            android:hint="시간을 입력해주세요"
+                            android:paddingStart="15dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="#F5F6F8"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="업무내용"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/input01"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/default_gray_round"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:hint="업무내용을 입력해주세요"
+                    android:inputType="text"
+                    android:paddingStart="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#a9a9a9"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
+
+                <LinearLayout
+                    android:id="@+id/next"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/new_blue"
+                    android:layout_marginTop="40dp"
+                    android:layout_alignParentBottom="true">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="다음으로 2/6"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+    <RelativeLayout
+        android:id="@+id/login_alert_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4D000000"
+        android:clickable="false"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/loading_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerInParent="true"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+</RelativeLayout>
+

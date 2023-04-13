@@ -19,6 +19,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CommunityAdapter;
 import com.krafte.nebworks.adapter.SelectCateAdapter;
@@ -111,6 +113,11 @@ public class MoreListCommunityActivity extends AppCompatActivity {
         boardkind = shardpref.getString("boardkind","자유게시판");
 
         setAddBtnSetting();
+
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
 
         String pagetitle = "";
         switch (com_kind) {
@@ -219,6 +226,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
 
 
     public void setRecyclerView() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         //Best List
         allClear();
         dlog.i("position 0 setRecyclerView place_id : " + place_id);
@@ -334,6 +342,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                        binding.loginAlertText.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -344,6 +353,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -351,6 +361,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
     int total_cnt2 = 0;
 
     public void setRecyclerView2() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         //전체
         mList.clear();
         Retrofit retrofit = new Retrofit.Builder()
@@ -504,6 +515,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                        binding.loginAlertText.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -514,6 +526,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -570,6 +583,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
     int nomu_cnt = 0;
 
     public void TaxListSemu() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         allClear();
         dlog.i("position 0 setRecyclerView place_id : " + place_id);
         taxmList.clear();
@@ -617,6 +631,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                             }
                             taxmAdapter.notifyDataSetChanged();
                         }
+                        binding.loginAlertText.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -627,11 +642,13 @@ public class MoreListCommunityActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     public void TaxListNomu() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         allClear();
         dlog.i("position 0 setRecyclerView place_id : " + place_id);
         taxmList.clear();
@@ -680,6 +697,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
                             }
                             taxmAdapter2.notifyDataSetChanged();
                         }
+                        binding.loginAlertText.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -690,6 +708,7 @@ public class MoreListCommunityActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

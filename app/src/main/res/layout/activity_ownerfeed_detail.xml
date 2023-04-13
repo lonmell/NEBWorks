@@ -1,177 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:background="@color/white">
-        <RelativeLayout
-            android:id="@+id/top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="59dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="지원사업 공고"
-                android:textColor="#000000"
-                android:textSize="15sp"
-                tools:ignore="HardcodedText" />
-
-            <RelativeLayout
-                android:id="@+id/back_btn"
-                android:layout_width="59dp"
-                android:layout_height="59dp">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:background="@drawable/find_right_arrow"
-                    android:padding="20dp"
-                    android:rotation="180" />
-            </RelativeLayout>
-        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="25dp">
-            <TextView
-                android:id="@+id/cate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="cate"
-                android:fontFamily="@font/pretendard_bold"
-                android:textSize="17sp"
-                android:textColor="@color/new_blue"/>
-            <TextView
-                android:id="@+id/title"
+            android:background="@color/white">
+            <RelativeLayout
+                android:id="@+id/top_bar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="title"
-                android:fontFamily="@font/pretendard_bold"
-                android:textSize="25sp"
-                android:textColor="@color/black"/>
+                android:layout_height="59dp">
 
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="title"
-                android:layout_marginTop="60dp"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:textColor="#696969"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="지원사업 공고"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
 
+                <RelativeLayout
+                    android:id="@+id/back_btn"
+                    android:layout_width="59dp"
+                    android:layout_height="59dp">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:background="@drawable/find_right_arrow"
+                        android:padding="20dp"
+                        android:rotation="180" />
+                </RelativeLayout>
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="20dp"
-                android:background="#dbdbdb"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="25dp">
+                <TextView
+                    android:id="@+id/cate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="cate"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textSize="17sp"
+                    android:textColor="@color/new_blue"/>
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="title"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textSize="25sp"
+                    android:textColor="@color/black"/>
 
-            <!--소관부처-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:text="소관부처"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-            <TextView
-                android:id="@+id/department"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="소관부처"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="title"
+                    android:layout_marginTop="60dp"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:textSize="16sp"
+                    android:textColor="#696969"/>
 
-            <!--수행기관-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="수행기관"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/agency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="수행기관"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:textColor="@color/black"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#dbdbdb"/>
+
+                <!--소관부처-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="소관부처"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/department"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="소관부처"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"/>
+
+                <!--수행기관-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수행기관"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/agency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수행기관"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"/>
 
 
-            <!--신청기간-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="신청기간"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/period"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0000.00.00 ~ 0000.00.00"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:textColor="@color/black"/>
+                <!--신청기간-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="신청기간"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0000.00.00 ~ 0000.00.00"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"/>
 
-            <!--사업개요-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="사업개요"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/overview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:textColor="@color/black"/>
+                <!--사업개요-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="사업개요"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/overview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:fontFamily="@font/pretendard_regular"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"/>
 
-            <TextView
-                android:id="@+id/hashTag"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="지원사업 페이지로 이동하기"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/hashTag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="지원사업 페이지로 이동하기"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"/>
 
-            <TextView
-                android:id="@+id/link"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:autoLink="web"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:textColor="@color/new_blue"/>
+                <TextView
+                    android:id="@+id/link"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:autoLink="web"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:textSize="16sp"
+                    android:textColor="@color/new_blue"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+    <RelativeLayout
+        android:id="@+id/login_alert_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4D000000"
+        android:clickable="false"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/loading_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerInParent="true"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+</RelativeLayout>
+

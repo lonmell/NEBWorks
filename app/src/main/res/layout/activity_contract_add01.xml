@@ -192,4 +192,5 @@
             android:textSize="16sp"
             tools:ignore="HardcodedText" />
     </androidx.cardview.widget.CardView>
+
 </RelativeLayout>

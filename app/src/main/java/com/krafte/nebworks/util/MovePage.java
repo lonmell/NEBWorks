@@ -17,9 +17,6 @@ public interface MovePage {
 
     void FobiddenList(Context context);
 
-    //--ui.career
-    void Career(Context context);
-
     //--ui.community
     void CommunityAdd(Context context);
 

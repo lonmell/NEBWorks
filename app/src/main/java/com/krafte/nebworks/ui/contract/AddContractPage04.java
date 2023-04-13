@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.YoilStringAdapter;
 import com.krafte.nebworks.data.GetResultData;
@@ -153,6 +155,12 @@ public class AddContractPage04 extends AppCompatActivity {
             binding.cvCalendar.setVisibility(View.GONE);
             restYoil = yoil;
         });
+
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
+
     }
 
     String Time01 = "-99";
@@ -402,6 +410,7 @@ public class AddContractPage04 extends AppCompatActivity {
     }
 
     public void SaveContractWork() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractWorkInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -419,6 +428,7 @@ public class AddContractPage04 extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
                         try {
+                            binding.loginAlertText.setVisibility(View.GONE);
                             if (jsonResponse.replace("\"", "").equals("success")) {
                                 Toast_Nomal("근무 기본사항이 업데이트 완료되었습니다.");
                                 pm.AddContractPage05(mContext);
@@ -434,6 +444,7 @@ public class AddContractPage04 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -465,6 +476,7 @@ public class AddContractPage04 extends AppCompatActivity {
     String contract_id = "";
 
     public void getContractId() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -481,6 +493,7 @@ public class AddContractPage04 extends AppCompatActivity {
                         try {
                             JSONArray Response = new JSONArray(response.body());
                             contract_id = Response.getJSONObject(0).getString("id");
+                            binding.loginAlertText.setVisibility(View.GONE);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -492,6 +505,7 @@ public class AddContractPage04 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

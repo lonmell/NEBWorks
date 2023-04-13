@@ -1,269 +1,290 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.contract.AddContractPage07"
     tools:ignore="HardcodedText,ImageContrastCheck,TextContrastCheck" >
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="59dp"
-            android:layout_alignParentTop="true">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="근로계약상세"
-                android:textColor="#000000"
-                android:textSize="15sp"
-                tools:ignore="HardcodedText" />
-
-            <RelativeLayout
-                android:id="@+id/back_btn"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_centerVertical="true">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:background="@drawable/find_right_arrow"
-                    android:padding="20dp"
-                    android:rotation="180"
-                    tools:ignore="ImageContrastCheck" />
-            </RelativeLayout>
-        </RelativeLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gangwonedu_bold"
-                android:gravity="center"
-                android:text="근로자 인적사항"
-                android:textColor="#000000"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="이름"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-
-            <EditText
-                android:id="@+id/input01"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/default_gray_round"
-                android:fontFamily="@font/inter_regular"
-                android:hint="이름 입력"
-                android:inputType="text"
-                android:paddingStart="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#a9a9a9"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="26dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="주민등록번호"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-
-            <EditText
-                android:id="@+id/input02"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/default_gray_round"
-                android:fontFamily="@font/inter_regular"
-                android:hint="-제외 입력"
-                android:inputType="number"
-                android:maxEms="14"
-                android:maxLength="14"
-                android:paddingStart="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#a9a9a9"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="주소입력"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+            android:background="#ffffff"
+            android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/top_bar"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp">
+                android:layout_height="59dp"
+                android:layout_alignParentTop="true">
 
-                <EditText
-                    android:id="@+id/input03"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@+id/search_btn"
-                    android:background="@drawable/default_gray_round"
-                    android:fontFamily="@font/inter_regular"
-                    android:hint="기본주소"
-                    android:inputType="text"
-                    android:paddingStart="20dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#a9a9a9"
-                    android:textSize="16sp"
-                    tools:ignore="RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck" />
-
-                <TextView
-                    android:id="@+id/search_btn"
-                    android:layout_width="102dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:text="주소검색"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:gravity="center"
-                    android:textColor="#54585A"
-                    android:background="@drawable/grayback_gray_round" />
-            </RelativeLayout>
-
-            <EditText
-                android:id="@+id/input04"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/default_gray_round"
-                android:fontFamily="@font/inter_regular"
-                android:hint="상세주소"
-                android:inputType="text"
-                android:paddingStart="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#a9a9a9"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="26dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="휴대폰번호"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-
-            <EditText
-                android:id="@+id/input05"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/default_gray_round"
-                android:fontFamily="@font/inter_regular"
-                android:hint="-제외 입력"
-                android:inputType="phone"
-                android:paddingStart="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#a9a9a9"
-                android:textSize="16sp"
-                android:maxLength="11"
-                android:maxEms="11"
-                tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="26dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:gravity="center"
-                android:text="이메일주소"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-
-            <EditText
-                android:id="@+id/input06"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/default_gray_round"
-                android:fontFamily="@font/inter_regular"
-                android:hint="근로자 이메일 입력"
-                android:inputType="textEmailAddress"
-                android:paddingStart="20dp"
-                android:textColor="#000000"
-                android:textColorHint="#a9a9a9"
-                android:textSize="16sp"
-                tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
-            <androidx.cardview.widget.CardView
-                android:id="@+id/next"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="40dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/new_blue"
-                app:cardCornerRadius="5dp"
-                android:layout_alignParentBottom="true">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/pretendard_bold"
                     android:gravity="center"
-                    android:text="다음으로 5/6"
-                    android:textColor="@color/white"
+                    android:text="근로계약상세"
+                    android:textColor="#000000"
                     android:textSize="15sp"
                     tools:ignore="HardcodedText" />
-            </androidx.cardview.widget.CardView>
+
+                <RelativeLayout
+                    android:id="@+id/back_btn"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:background="@drawable/find_right_arrow"
+                        android:padding="20dp"
+                        android:rotation="180"
+                        tools:ignore="ImageContrastCheck" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gangwonedu_bold"
+                    android:gravity="center"
+                    android:text="근로자 인적사항"
+                    android:textColor="#000000"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="이름"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+
+                <EditText
+                    android:id="@+id/input01"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/default_gray_round"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="이름 입력"
+                    android:inputType="text"
+                    android:paddingStart="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#a9a9a9"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="26dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="주민등록번호"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+
+                <EditText
+                    android:id="@+id/input02"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/default_gray_round"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="-제외 입력"
+                    android:inputType="number"
+                    android:maxEms="14"
+                    android:maxLength="14"
+                    android:paddingStart="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#a9a9a9"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="주소입력"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="15dp">
+
+                    <EditText
+                        android:id="@+id/input03"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toStartOf="@+id/search_btn"
+                        android:background="@drawable/default_gray_round"
+                        android:fontFamily="@font/inter_regular"
+                        android:hint="기본주소"
+                        android:inputType="text"
+                        android:paddingStart="20dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#a9a9a9"
+                        android:textSize="16sp"
+                        tools:ignore="RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck" />
+
+                    <TextView
+                        android:id="@+id/search_btn"
+                        android:layout_width="102dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:text="주소검색"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:textColor="#54585A"
+                        android:background="@drawable/grayback_gray_round" />
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/input04"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/default_gray_round"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="상세주소"
+                    android:inputType="text"
+                    android:paddingStart="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#a9a9a9"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="26dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="휴대폰번호"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+
+                <EditText
+                    android:id="@+id/input05"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/default_gray_round"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="-제외 입력"
+                    android:inputType="phone"
+                    android:paddingStart="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#a9a9a9"
+                    android:textSize="16sp"
+                    android:maxLength="11"
+                    android:maxEms="11"
+                    tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="26dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="이메일주소"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+
+                <EditText
+                    android:id="@+id/input06"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/default_gray_round"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="근로자 이메일 입력"
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#a9a9a9"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck" />
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/next"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="40dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/new_blue"
+                    app:cardCornerRadius="5dp"
+                    android:layout_alignParentBottom="true">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="다음으로 5/6"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+    <RelativeLayout
+        android:id="@+id/login_alert_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4D000000"
+        android:clickable="false"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/loading_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerInParent="true"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+</RelativeLayout>
+

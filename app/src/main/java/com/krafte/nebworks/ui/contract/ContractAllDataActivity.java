@@ -118,6 +118,12 @@ public class ContractAllDataActivity extends AppCompatActivity {
         if(USER_INFO_AUTH.equals("0")){
             binding.editContractArea.setVisibility(View.VISIBLE);
         }
+
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
+
         sharedRemove();
         setBtnEvent();
     }

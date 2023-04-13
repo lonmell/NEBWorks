@@ -6,7 +6,6 @@ import android.content.Intent;
 import com.krafte.nebworks.ui.PushActivity;
 import com.krafte.nebworks.ui.approval.TaskApprovalDetail;
 import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
-import com.krafte.nebworks.ui.career.CareerActivity;
 import com.krafte.nebworks.ui.community.CommunityAddActivity;
 import com.krafte.nebworks.ui.community.CommunityDetailActivity;
 import com.krafte.nebworks.ui.community.MoreListCommunityActivity;
@@ -461,15 +460,6 @@ public class PageMoveClass implements MovePage {
     @Override
     public void FobiddenList(Context context) {
         Intent intent = new Intent(context, FobiddenListActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
-
-    //--ui.career
-    @Override
-    public void Career(Context context) {
-        Intent intent = new Intent(context, CareerActivity.class);
         context.startActivity(intent);
         //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

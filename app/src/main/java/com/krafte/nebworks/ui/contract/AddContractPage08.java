@@ -23,6 +23,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.krafte.nebworks.R;
@@ -127,6 +129,12 @@ public class AddContractPage08 extends AppCompatActivity {
         USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
         USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH","");
 
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
+
+
         MakeDirs();
         setBtnEvent();
     }
@@ -201,6 +209,7 @@ public class AddContractPage08 extends AppCompatActivity {
     }
 
     private void UpdateOwnerSign(){
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         owner_sign_url = "http://krafte.net/NEBWorks/image/sign_img/" + USER_INFO_ID + "_" + ImgfileMaker + ".JPEG";
         dlog.i("------UpdatePagePos------");
         dlog.i("contract_id : " + contract_id);
@@ -237,6 +246,7 @@ public class AddContractPage08 extends AppCompatActivity {
                                     }
                                     
                                 }
+                                binding.loginAlertText.setVisibility(View.GONE);
                             } catch(Exception e){
                                 e.printStackTrace();
                             }
@@ -249,6 +259,7 @@ public class AddContractPage08 extends AppCompatActivity {
             @Override
             public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -256,6 +267,7 @@ public class AddContractPage08 extends AppCompatActivity {
     String place_owner_id = "";
     //점주 > 근로자
     public void getUserToken(String user_id, String type, String message) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("-----getManagerToken-----");
         dlog.i("user_id : " + user_id);
         dlog.i("type : " + type);
@@ -287,6 +299,7 @@ public class AddContractPage08 extends AppCompatActivity {
                             PushFcmSend(id, "", message, token, "2", place_id);
                         }
                     }
+                    binding.loginAlertText.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -296,10 +309,12 @@ public class AddContractPage08 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
     public void AddPush(String title, String content, String user_id) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PushLogInputInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -317,6 +332,7 @@ public class AddContractPage08 extends AppCompatActivity {
                             String jsonResponse = rc.getBase64decode(response.body());
                             dlog.i("jsonResponse length : " + jsonResponse.length());
                             dlog.i("jsonResponse : " + jsonResponse);
+                            binding.loginAlertText.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -326,6 +342,7 @@ public class AddContractPage08 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -588,6 +605,7 @@ public class AddContractPage08 extends AppCompatActivity {
 
     String contract_id = "";
     public void getContractId() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -607,6 +625,7 @@ public class AddContractPage08 extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        binding.loginAlertText.setVisibility(View.GONE);
                     });
                 }
             }
@@ -615,6 +634,7 @@ public class AddContractPage08 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

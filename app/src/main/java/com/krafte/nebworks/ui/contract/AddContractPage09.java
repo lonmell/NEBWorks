@@ -1,18 +1,14 @@
 package com.krafte.nebworks.ui.contract;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +27,6 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.kakao.sdk.common.KakaoSdk;
-import com.kakao.sdk.common.util.KakaoCustomTabsClient;
-import com.kakao.sdk.link.LinkClient;
-import com.kakao.sdk.link.WebSharerClient;
-import com.kakao.sdk.template.model.Content;
-import com.kakao.sdk.template.model.FeedTemplate;
-import com.kakao.sdk.template.model.ItemContent;
-import com.kakao.sdk.template.model.Link;
-import com.kakao.sdk.template.model.Social;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.dataInterface.ContractGetAllInterface;
@@ -59,24 +47,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Locale;
 
-import jxl.CellView;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.format.Alignment;
-import jxl.format.Colour;
-import jxl.write.Label;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
-import jxl.write.WritableImage;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -137,6 +109,11 @@ public class AddContractPage09 extends AppCompatActivity {
         place_owner_id = shardpref.getString("place_owner_id", "");
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", "");
 
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
+
         // Kakao SDK 객체 초기화
         KakaoSdk.init(this, getString(R.string.kakao_native_key));
         setBtnEvent();
@@ -154,15 +131,6 @@ public class AddContractPage09 extends AppCompatActivity {
         binding.pdfDownload.setOnClickListener(v-> {
             requestCapture();
         });
-
-//        binding.backBtn.setOnClickListener(v -> {
-//            shardpref.remove("progress_pos");
-//            if(!shardpref.getString("progress_pos","").isEmpty()){
-//                pm.ContractFragment(mContext);
-//            }else{
-//                super.onBackPressed();
-//            }
-//        });
     }
 
     private void onPageOver() {
@@ -171,18 +139,6 @@ public class AddContractPage09 extends AppCompatActivity {
         String message = "[" + worker_name + "]근로자의 근로계약서 사인이 도착했습니다.";
         getUserToken(place_owner_id, "0", message);
         AddPush("근로계약서", message, place_owner_id);
-//        if(!kakaotitle.isEmpty()){
-//            //카카오 타이틀이 있을때
-//            if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
-//                kakaoLink();
-//            } else {
-//                webKakaoLink();
-//            }
-//            if(!emailtitle.isEmpty()){
-//                //이메일 타이틀이 있을때
-//            }
-//        }
-//        createExcel();
         RemoveShared();
         pm.ContractFragment(mContext);
     }
@@ -198,12 +154,6 @@ public class AddContractPage09 extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        if(!shardpref.getString("progress_pos","").isEmpty()){
-//            pm.ContractFragment(mContext);
-//        }else{
-//            super.onBackPressed();
-//        }
-//        shardpref.remove("progress_pos");
     }
 
     private void RemoveShared() {
@@ -212,65 +162,6 @@ public class AddContractPage09 extends AppCompatActivity {
         shardpref.remove("contract_email");
         shardpref.remove("worker_name");
     }
-
-    FeedTemplate feedTemplate = new FeedTemplate(
-            new Content(kakaotitle,
-                    "http://krafte.net/NEBWorks/identificon.png",
-                    new Link("https://www.naver.com",
-                            "https://www.naver.com"),
-                    "#근로계약서"
-            ),
-            new ItemContent("",
-                    "",
-                    "사장님!넵",
-                    "http://krafte.net/NEBWorks/identificon.png",
-                    "협업 툴"
-            ),
-            new Social(1004, 1004, 1004),
-            Arrays.asList(new com.kakao.sdk.template.model.Button("앱 다운로드", new Link("https://www.naver.com", "https://www.naver.com")))
-    );
-
-    public void kakaoLink() {
-        String TAG = "kakaoLink()";
-        // 카카오톡으로 카카오링크 공유 가능
-        LinkClient.getInstance().defaultTemplate(mContext, feedTemplate, null, (linkResult, error) -> {
-            if (error != null) {
-                Log.e("TAG", "카카오링크 보내기 실패", error);
-            } else if (linkResult != null) {
-                Log.d(TAG, "카카오링크 보내기 성공 ${linkResult.intent}");
-                mContext.startActivity(linkResult.getIntent());
-
-                // 카카오링크 보내기에 성공했지만 아래 경고 메시지가 존재할 경우 일부 컨텐츠가 정상 동작하지 않을 수 있습니다.
-                Log.w("TAG", "Warning Msg: " + linkResult.getWarningMsg());
-                Log.w("TAG", "Argument Msg: " + linkResult.getArgumentMsg());
-            }
-            return null;
-        });
-    }
-
-    public void webKakaoLink() {
-        String TAG = "webKakaoLink()";
-
-        // 카카오톡 미설치: 웹 공유 사용 권장
-        // 웹 공유 예시 코드
-        Uri sharerUrl = WebSharerClient.getInstance().defaultTemplateUri(feedTemplate);
-
-        // CustomTabs으로 웹 브라우저 열기
-        // 1. CustomTabs으로 Chrome 브라우저 열기
-        try {
-            KakaoCustomTabsClient.INSTANCE.openWithDefault(mContext, sharerUrl);
-        } catch (UnsupportedOperationException e) {
-            // Chrome 브라우저가 없을 때 예외처리
-        }
-
-        // 2. CustomTabs으로 디바이스 기본 브라우저 열기
-        try {
-            KakaoCustomTabsClient.INSTANCE.open(mContext, sharerUrl);
-        } catch (ActivityNotFoundException e) {
-            // 인터넷 브라우저가 없을 때 예외처리
-        }
-    }
-
 
     public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");
@@ -414,6 +305,7 @@ public class AddContractPage09 extends AppCompatActivity {
     String test_period = "";
 
     private void GetAllContract() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("------GetAllContract------");
         dlog.i("contract_id : " + contract_id);
         dlog.i("------GetAllContract------");
@@ -480,6 +372,7 @@ public class AddContractPage09 extends AppCompatActivity {
 
                                     getContractImage();
                                 }
+                                binding.loginAlertText.setVisibility(View.GONE);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -492,6 +385,7 @@ public class AddContractPage09 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -590,292 +484,6 @@ public class AddContractPage09 extends AppCompatActivity {
         }
 
 
-    }
-
-    public void createExcel() {
-        File file_path;
-
-        try {
-            file_path = new File(SD_PATH);
-            if (!file_path.isDirectory()) {//해당 경로의 파일이 없으면 생성시켜준다
-                file_path.mkdirs();
-            }
-
-            File sd = Environment.getExternalStorageDirectory();
-            String csvFile = place_name + "_" + worker_name + "_근로계약서.xls";
-
-            File directory = new File(sd.getAbsolutePath());
-
-            //create directory if not exist
-            if (!directory.isDirectory()) {
-                directory.mkdirs();
-            }
-
-            //file path
-            File file = new File(SD_PATH, csvFile);
-            WorkbookSettings wbSettings = new WorkbookSettings();
-            wbSettings.setLocale(new Locale(Locale.GERMAN.getLanguage(), Locale.GERMAN.getCountry()));
-            WritableWorkbook workbook;
-            workbook = Workbook.createWorkbook(file, wbSettings);
-
-            //Excel sheetA first sheetA
-            WritableSheet sheetA = workbook.createSheet("표준근로계약서", 0);
-
-            //--타이틀 부분 START
-            WritableFont title = new WritableFont(WritableFont.ARIAL, 17);
-            WritableCellFormat cellFormat = new WritableCellFormat(title);
-            title.setBoldStyle(WritableFont.BOLD);
-            cellFormat.setAlignment(Alignment.CENTRE);
-            cellFormat.setLocked(true);
-
-            WritableFont font_1 = new WritableFont(WritableFont.ARIAL, 10);
-            font_1.setColour(Colour.BLACK);
-            WritableCellFormat cellFormat_1 = new WritableCellFormat(font_1);
-            cellFormat_1.setAlignment(Alignment.LEFT);
-            cellFormat_1.setWrap(true);
-            cellFormat_1.setLocked(true);
-
-            WritableFont font_2 = new WritableFont(WritableFont.ARIAL, 8);
-            font_2.setColour(Colour.BLACK);
-            WritableCellFormat cellFormat_2 = new WritableCellFormat(font_2);
-            cellFormat_2.setAlignment(Alignment.LEFT);
-            cellFormat_2.setWrap(true);
-            cellFormat_2.setLocked(true);
-
-            WritableFont font_3 = new WritableFont(WritableFont.ARIAL, 10);
-            font_3.setColour(Colour.BLACK);
-            WritableCellFormat cellFormat_3 = new WritableCellFormat(font_3);
-            cellFormat_3.setAlignment(Alignment.CENTRE);
-            cellFormat_3.setWrap(true);
-            cellFormat_3.setLocked(true);
-
-            CellView cellView = new CellView();
-            cellView.setSize(50);
-            sheetA.setColumnView(1, cellView); // 첫번째 열의 셀 높이 변경
-            sheetA.setColumnView(2, cellView);
-            sheetA.setColumnView(3, cellView);
-            sheetA.setColumnView(4, cellView);
-            sheetA.setColumnView(5, cellView);
-            sheetA.setColumnView(6, cellView);
-            sheetA.setColumnView(7, cellView);
-            sheetA.setColumnView(8, cellView);
-            sheetA.setColumnView(9, cellView);
-
-            sheetA.setColumnView(1, 15);
-            sheetA.setColumnView(2, 15);
-            sheetA.setColumnView(3, 15);
-            sheetA.setColumnView(4, 15);
-            sheetA.setColumnView(5, 15);
-
-            sheetA.mergeCells(1, 3, 4, 3);//--타이틀 합체
-            Label label = new Label(1, 3, "표준근로계약서", cellFormat);
-            sheetA.addCell(label);
-
-            sheetA.mergeCells(1, 5, 4, 5);
-            Label label_1 = new Label(1, 5, place_name + "(이하 \"사업주\"라함) 과(와) " + worker_name + "(이하 \"근로자\"라 함) 은(는) 다음과 같이 근로계약을 체결한다.", cellFormat_1);
-            sheetA.setRowView(5, 550);
-            sheetA.addCell(label_1);
-
-            sheetA.mergeCells(1, 7, 4, 7);
-            Label label_2 = new Label(1, 7, "1. 근로계약 기간: " + contract_start + "부터 " + contract_end + "까지", cellFormat_1);
-            sheetA.addCell(label_2);
-
-            sheetA.mergeCells(1, 8, 4, 8);
-            Label label_3 = new Label(1, 8, "※ 근로계약기간을 정하지 않는 경우에는 \"근로개시일\"만 기재", cellFormat_2);
-            sheetA.addCell(label_3);
-
-            sheetA.mergeCells(1, 9, 4, 9);
-            Label label_4 = new Label(1, 9, "2. 근무 장소: " + address + " " + address_detail, cellFormat_1);
-            sheetA.addCell(label_4);
-
-            sheetA.mergeCells(1, 10, 4, 10);
-            Label label_5 = new Label(1, 10, "3. 업무의 내용: " + work_contents, cellFormat_1);
-            sheetA.addCell(label_5);
-
-            sheetA.mergeCells(1, 11, 4, 11);
-            Label label_6 = new Label(1, 11, "4. 소정근로기간: " + work_start + "부터 " + work_end + "까지 " + "(휴게시간: " + rest_start + "~" + rest_end + ")", cellFormat_1);
-            sheetA.addCell(label_6);
-
-            sheetA.mergeCells(1, 12, 4, 12);
-            String[] workYoil = work_yoil.split(",");
-            Label label_7 = new Label(1, 12, "5. 근무일/휴일: 매주 " + workYoil.length + "일(또는 매일단위) 근무, 주휴일 매주 " + rest_yoil + "요일", cellFormat_1);
-            sheetA.addCell(label_7);
-
-            sheetA.mergeCells(1, 13, 4, 13);
-            Label label_8 = new Label(1, 13, "6. 임금", cellFormat_1);
-            sheetA.addCell(label_8);
-
-            sheetA.mergeCells(1, 14, 4, 14);
-            Label label_9 = new Label(1, 14, "- 월(일, 시간)급: " + payment + "원", cellFormat_1);
-            sheetA.addCell(label_9);
-
-            sheetA.mergeCells(1, 15, 4, 15);
-            Label label_10 = new Label(1, 15, "- 상여금: 있음 ( ), 없음 (○)");
-            sheetA.addCell(label_10);
-
-            sheetA.mergeCells(1, 16, 4, 16);
-            Label label_11 = new Label(1, 16, "- 기타 급여 (재 수당 등): 있음 ( )                 원, 없음 (○)", cellFormat_1);
-            sheetA.addCell(label_11);
-
-            sheetA.mergeCells(1, 17, 4, 17);
-            Label label_12 = new Label(1, 17, "-                   원,                     원", cellFormat_1);
-            sheetA.addCell(label_12);
-
-            sheetA.mergeCells(1, 18, 4, 18);
-            Label label_12_1 = new Label(1, 18, "-                 원,                     원", cellFormat_1);
-            sheetA.addCell(label_12_1);
-
-            sheetA.mergeCells(1, 19, 4, 19);
-            Label label_13 = new Label(1, 19, "- 임금지급일: 매월 (매주 또는 매일) " + pay_loop + "일 (휴일의 경우 전일 지급)", cellFormat_1);
-            sheetA.addCell(label_13);
-
-            sheetA.mergeCells(1, 20, 4, 20);
-            Label label_14;
-            if (pay_type.equals("0")) {
-                label_14 = new Label(1, 20, "- 지급방법: 근로자에게 직접 지급(○), 근로자 명의 예금통장에 입금(  )", cellFormat_1);
-            } else {
-                label_14 = new Label(1, 20, "- 지급방법: 근로자에게 직접 지급(  ), 근로자 명의 예금통장에 입금(○)", cellFormat_1);
-            }
-            sheetA.addCell(label_14);
-
-            sheetA.mergeCells(1, 21, 4, 21);
-            Label label_15 = new Label(1, 21, "7. 연차유급휴가", cellFormat_1);
-            sheetA.addCell(label_15);
-
-            sheetA.mergeCells(1, 22, 4, 22);
-            Label label_16 = new Label(1, 22, "- 연차유급휴가는 근로기준법에서 정하는 바에 따라 부여함", cellFormat_1);
-            sheetA.addCell(label_16);
-
-            sheetA.mergeCells(1, 23, 4, 23);
-            Label label_17 = new Label(1, 23, "8. 사회보험 적용여부(해당란에 체크)", cellFormat_1);
-            sheetA.addCell(label_17);
-
-            sheetA.mergeCells(1, 24, 4, 24);
-            Label label_18;
-            if (insurance.contains("4대보험")) {
-                label_18 = new Label(1, 24, "■ 고용보험 ■ 산재보험 ■ 국민연금 ■ 건강보험", cellFormat_1);
-            } else {
-                label_18 = new Label(1, 24, "□ 고용보험 □ 산재보험 □ 국민연금 □ 건강보험", cellFormat_1);
-            }
-            sheetA.addCell(label_18);
-
-            sheetA.mergeCells(1, 25, 4, 25);
-            Label label_19 = new Label(1, 25, "9. 근로계약서 교부", cellFormat_1);
-            sheetA.addCell(label_19);
-
-            sheetA.mergeCells(1, 26, 4, 26);
-            Label label_20 = new Label(1, 26, "- 사업주는 근로계약을 체결함과 동시에 본 계약서를 사본하여 근로자의 교부요구와 관계없이 근로자에게 교부함 (근로기준법 제17조) 이행", cellFormat_1);
-            sheetA.setRowView(26, 550);
-            sheetA.addCell(label_20);
-
-            sheetA.mergeCells(1, 27, 4, 27);
-            Label label_21 = new Label(1, 27, "10. 기타", cellFormat_1);
-            sheetA.addCell(label_21);
-
-            sheetA.mergeCells(1, 28, 4, 28);
-            Label label_22 = new Label(1, 28, "- 이 계약에 정함이 없는 사항은 근로기준법령에 의함", cellFormat_1);
-            sheetA.addCell(label_22);
-
-            sheetA.mergeCells(1, 31, 4, 31);
-            Label label_23 = new Label(1, 31, created_at, cellFormat_3);
-            sheetA.addCell(label_23);
-
-            sheetA.mergeCells(1, 33, 4, 33);
-            Label label_24 = new Label(1, 33, "(사업주) 사업체 명: " + place_name + " (전화: " + owner_phone + ")", cellFormat_1);
-            sheetA.addCell(label_24);
-
-            sheetA.mergeCells(1, 34, 4, 34);
-            Label label_25 = new Label(1, 34, "주소: " + address + " " + address_detail, cellFormat_1);
-            sheetA.addCell(label_25);
-
-            sheetA.mergeCells(1, 35, 2, 35);
-            Label label_26 = new Label(1, 35, "대표자: " + owner_name, cellFormat_1);
-            sheetA.addCell(label_26);
-
-            Label label_26_1 = new Label(3, 35, "(서명)", cellFormat_1);
-            sheetA.addCell(label_26_1);
-
-            new Thread(() -> {
-                try {
-                    URL url = new URL(owner_sign);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setDoInput(true);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(input);
-                    WritableImage image = new WritableImage(3, 36, 3, 3, BitmapConvertFile(bitmap, SD_PATH, "owner_sign"));
-                    sheetA.addImage(image);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-
-
-            sheetA.mergeCells(1, 37, 4, 37);
-            Label label_27 = new Label(1, 37, "(근로자) 주소: " + worker_address + " " + worker_address_detail, cellFormat_1);
-            sheetA.addCell(label_27);
-
-            sheetA.mergeCells(1, 38, 4, 38);
-            Label label_28 = new Label(1, 38, "연락처: " + worker_phone, cellFormat_1);
-            sheetA.addCell(label_28);
-
-            sheetA.mergeCells(1, 39, 2, 39);
-            Label label_29 = new Label(1, 39, "성명: " + worker_name, cellFormat_1);
-            sheetA.addCell(label_29);
-
-            Label label_29_1 = new Label(3, 39, "(서명)", cellFormat_1);
-            sheetA.addCell(label_29_1);
-
-            new Thread(() -> {
-                try {
-                    URL url2 = new URL(worker_sign);
-                    HttpURLConnection connection2 = (HttpURLConnection) url2.openConnection();
-                    connection2.setDoInput(true);
-                    connection2.connect();
-                    InputStream input2 = connection2.getInputStream();
-                    Bitmap bitmap2 = BitmapFactory.decodeStream(input2);
-
-                    WritableImage image2 = new WritableImage(3, 40, 3, 3, BitmapConvertFile(bitmap2, SD_PATH, "worker_sign"));
-                    sheetA.addImage(image2);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-
-
-            // close workbook
-            workbook.write();
-//
-//                                            //--pdf 만들기 START
-//                                            // 엑셀 파일 읽기
-//                                            Workbook workbook2 = Workbook.getWorkbook(new File(SD_PATH + "/"  + change_place_name + " " + getYMdate + "월 출결표.xls"));
-//                                            Sheet sheet = workbook2.getSheet(0);
-//                                            // PDF 파일 생성
-//                                            Document document = new Document();
-//                                            PdfWriter.getInstance(document, new FileOutputStream(SD_PATH + "/" + change_place_name + " " + getYMdate + "월 출결표.pdf"));
-//                                            document.open();
-//
-//                                            // 테이블 생성
-//                                            PdfPTable table = new PdfPTable(sheet.getColumns());
-//                                            for (int row = 0; row < sheet.getRows(); row++) {
-//                                                for (int col = 0; col < sheet.getColumns(); col++) {
-//                                                    Cell cell = sheet.getCell(col, row);
-//                                                    table.addCell(cell.getContents());
-//                                                }
-//                                            }
-//
-//                                            // 테이블을 문서에 추가
-//                                            document.add(table);
-//
-//                                            // 문서 닫기
-//                                            document.close();
-//                                            //--pdf 만들기 END
-
-            workbook.close();
-            Toast_Nomal("다운로드 폴더에 Excel파일이 생성되었습니다.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private File BitmapConvertFile(Bitmap bitmap, String strFilePath, String name) {

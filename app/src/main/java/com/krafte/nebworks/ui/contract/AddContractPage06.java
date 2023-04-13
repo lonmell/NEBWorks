@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ContractTermAdapter;
 import com.krafte.nebworks.data.GetResultData;
@@ -91,6 +93,11 @@ public class AddContractPage06 extends AppCompatActivity {
         place_id        = shardpref.getString("place_id","0");
         USER_INFO_ID    = shardpref.getString("USER_INFO_ID","0");
 
+        Glide.with(this).load(R.raw.basic_loading)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(binding.loadingView);
+        binding.loginAlertText.setVisibility(View.GONE);
+
         setBtnEvent();
     }
 
@@ -102,6 +109,7 @@ public class AddContractPage06 extends AppCompatActivity {
 
 
     public void setTermList() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("------setTermList------");
         dlog.i("contract_id : " + contract_id);
         dlog.i("------setTermList------");
@@ -149,6 +157,7 @@ public class AddContractPage06 extends AppCompatActivity {
                                     }
                                 });
                                 dlog.i("SetNoticeListview Thread run! ");
+                                binding.loginAlertText.setVisibility(View.GONE);
                             } catch(JSONException e){
                                 e.printStackTrace();
                             }
@@ -161,6 +170,7 @@ public class AddContractPage06 extends AppCompatActivity {
             @Override
             public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
@@ -187,6 +197,7 @@ public class AddContractPage06 extends AppCompatActivity {
     }
 
     private void InputTerm(String write_term){
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("------InputTerm------");
         dlog.i("contract_id : " + contract_id);
         dlog.i("write_term : " + write_term);
@@ -217,6 +228,7 @@ public class AddContractPage06 extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+                        binding.loginAlertText.setVisibility(View.GONE);
                     });
                 }
             }
@@ -225,11 +237,13 @@ public class AddContractPage06 extends AppCompatActivity {
             @Override
             public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     private void DelTerm(String id){
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("------DelTerm------");
         dlog.i("contract_id : " + contract_id);
         dlog.i("id : " + id);
@@ -256,6 +270,7 @@ public class AddContractPage06 extends AppCompatActivity {
                                 }else{
                                     Toast_Nomal("특약이 삭제되지 않았습니다.");
                                 }
+                                binding.loginAlertText.setVisibility(View.GONE);
                             } catch(Exception e){
                                 e.printStackTrace();
                             }
@@ -268,12 +283,14 @@ public class AddContractPage06 extends AppCompatActivity {
             @Override
             public void onFailure (@NonNull Call< String > call, @NonNull Throwable t){
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
 
     String contract_id = "";
     public void getContractId() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ContractidInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -294,6 +311,7 @@ public class AddContractPage06 extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        binding.loginAlertText.setVisibility(View.GONE);
                     });
                 }
             }
@@ -302,6 +320,7 @@ public class AddContractPage06 extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
