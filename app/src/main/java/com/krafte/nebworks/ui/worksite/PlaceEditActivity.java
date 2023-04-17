@@ -378,6 +378,7 @@ public class PlaceEditActivity extends AppCompatActivity {
         dlog.i("-----getPlaceContents-----");
         dlog.i("place_id : " + place_id);
         dlog.i("owner_id : " + USER_INFO_ID);
+        dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
         dlog.i("-----getPlaceContents-----");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PlaceListInterface.URL)
@@ -796,6 +797,7 @@ public class PlaceEditActivity extends AppCompatActivity {
                                     if (i == 0) {
                                         Toast_Nomal("임시저장 완료되었습니다.");
                                     }
+                                    shardpref.putString("place_name", placeName);
                                     pm.PlaceEdit2Go(mContext);
                                 } else if (!jsonResponse.equals("[]") && jsonResponse.replace("\"", "").equals("duplicate")) {
                                     Toast_Nomal("중복되는 데이터가 있습니다.");

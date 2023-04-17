@@ -5,9 +5,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -15,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.PlaceSearchAdapter;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.data.UserCheckData;
@@ -254,6 +261,11 @@ public class PlaceSearchActivity extends AppCompatActivity {
                             ));
                         }
                         mAdapter.notifyDataSetChanged();
+                        mAdapter.setOnItemClickListener((v, position, accept_state) -> {
+                            if(accept_state.equals("1")){
+                                Toast_Nomal("이미 가입된 매장입니다.");
+                            }
+                        });
                         if(binding.searchStore.getText().length() == 0){
                             searchFilter("");
                         } else {
@@ -278,4 +290,17 @@ public class PlaceSearchActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) binding.getRoot().findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(mContext);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
 }

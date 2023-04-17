@@ -27,7 +27,6 @@ import com.krafte.nebworks.adapter.PaymentMemberAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectMemberActivity;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.data.PaymentData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.data.WorkGetallData;
 import com.krafte.nebworks.dataInterface.PayGetallInterface;
@@ -132,7 +131,6 @@ public class PayManagementActivity extends AppCompatActivity {
             gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
             Tap = shardpref.getString("Tap", "0");
 
-            SetPayCalenderData();
             fragmentStateAdapter = new FragmentStateAdapter(this, 4,mList3);
 //            calenderFragment.CalenderContext(mContext);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
@@ -377,6 +375,12 @@ public class PayManagementActivity extends AppCompatActivity {
         } else {
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
         }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        SetPayCalenderData();
     }
 
     @Override

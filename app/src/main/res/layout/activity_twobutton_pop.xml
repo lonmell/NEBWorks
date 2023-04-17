@@ -9,7 +9,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:alpha="0.87"
         android:layout_centerInParent="true"
         app:cardBackgroundColor="#ffffff"
         android:orientation="vertical"
@@ -25,7 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="3dp"
-                android:alpha="0.87"
                 android:gravity="center"
                 android:minHeight="120dp"
                 android:text="noti_text"

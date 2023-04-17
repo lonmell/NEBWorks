@@ -124,7 +124,6 @@ public class ContractAllDataActivity extends AppCompatActivity {
                 .skipMemoryCache(true).into(binding.loadingView);
         binding.loginAlertText.setVisibility(View.GONE);
 
-        sharedRemove();
         setBtnEvent();
     }
 
@@ -132,6 +131,12 @@ public class ContractAllDataActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         GetAllContract();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        sharedRemove();
     }
 
     private void sharedRemove(){

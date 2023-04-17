@@ -121,7 +121,7 @@ public class TaskListActivity extends AppCompatActivity {
     boolean chng_icon = false;
     Calendar cal;
     String format = "yyyy-MM-dd";
-    android.icu.text.SimpleDateFormat sdf = new SimpleDateFormat(format);
+    SimpleDateFormat sdf = new SimpleDateFormat(format);
     String toDay = "";
     String Year = "";
     String Month = "";
@@ -225,8 +225,9 @@ public class TaskListActivity extends AppCompatActivity {
                 binding.dateLayout.setVisibility(View.GONE);
                 binding.dateSelect.setVisibility(View.VISIBLE);
                 binding.line01.setVisibility(View.GONE);
-//                SetCalenderData();
             }
+            SetWorkGotoCalenderData();
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -457,164 +458,6 @@ public class TaskListActivity extends AppCompatActivity {
         });
     }
 
-//    private void SetCalenderData(){
-//        getYMPicker = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
-//        mList2.clear();
-//        dlog.i("------SetCalenderData------");
-//        dlog.i("place_id : " + change_place_id);
-//        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
-//        dlog.i("select_date : " + getYMPicker.substring(0,7));
-//        dlog.i("select_date2 : " + binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일",""));
-//        dlog.i("------SetCalenderData------");
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(WorkCalendersetData.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        WorkCalendersetData api = retrofit.create(WorkCalendersetData.class);
-//        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMPicker.substring(0,7));
-//        call2.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call2, @NonNull Response<String> response2) {
-//                String jsonResponse = rc.getBase64decode(response2.body());
-//                dlog.i("jsonResponse length : " + jsonResponse.length());
-//                dlog.i("jsonResponse : " + jsonResponse);
-//
-//                runOnUiThread(() -> {
-//                    //캘린더 내용 (업무가) 있을때
-//                    if (response2.isSuccessful() && jsonResponse != null) {
-//                        try {
-//                            JSONArray Response2 = new JSONArray(jsonResponse);
-//                            if (Response2.length() == 0) {
-//                                dlog.i("GET SIZE : " + Response2.length());
-//                                GetCalenderList(Year, Month, mList2,getYMPicker.substring(0,7));
-//                            } else {
-//                                for (int i = 0; i < Response2.length(); i++) {
-//                                    JSONObject jsonObject = Response2.getJSONObject(i);
-//                                    mList2.add(new CalendarSetData.CalendarSetData_list(
-//                                            jsonObject.getString("day"),
-//                                            jsonObject.getString("week"),
-//                                            Collections.singletonList(jsonObject.getString("task"))
-//                                    ));
-//                                }
-//                                GetCalenderList(Year, Month, mList2,getYMPicker.substring(0,7));
-//                            }
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            @SuppressLint("LongLogTag")
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                Log.e(TAG, "에러2 = " + t.getMessage());
-//            }
-//        });
-//    }
-//
-//    ArrayList<String> kind = new ArrayList<>();
-//    ArrayList<String> title = new ArrayList<>();
-//    ArrayList<String> task_overdate = new ArrayList<>();
-//
-//    ArrayList<String> write_name = new ArrayList<>();
-//    ArrayList<String> end = new ArrayList<>();
-//    public void GetCalenderList(String Year, String Month, ArrayList<CalendarSetData.CalendarSetData_list> mList2,String date) {
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(WorkCalenderInterface.URL)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
-//        WorkCalenderInterface api = retrofit.create(WorkCalenderInterface.class);
-//        Call<String> call = api.getData(Year,Month);
-//        call.enqueue(new Callback<String>() {
-//            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                Log.e(TAG, "GetCalenderList function START");
-//                Log.e(TAG, "response 1: " + response.isSuccessful());
-//                Log.e(TAG, "response 2: " + response.body());
-//                runOnUiThread(() -> {
-//                    if (response.isSuccessful() && response.body() != null) {
-//                        dlog.i("onResume place_id :" + place_id);
-//                        dlog.i("onResume USER_INFO_ID :" + USER_INFO_ID);
-//                        dlog.i("onResume getYMPicker :" + getYMPicker.substring(0,7));
-//                        dlog.i("onResume mList2 :" + mList2);
-//                        try{
-//                            String select_date = Year + "-" + Month;
-//                            JSONArray Response = new JSONArray(response.body());
-//                            mList = new ArrayList<>();
-//                            mAdapter = new WorkCalenderAdapter(mContext, mList, mList2, place_id, USER_INFO_ID, select_date, Month);
-////                            binding.createCalender.setAdapter(mAdapter);
-////                            binding.createCalender.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-//                            dlog.i("SetNoticeListview Thread run! ");
-//
-//                            if (Response.length() == 0) {
-//                                dlog.i("GET SIZE : " + Response.length());
-//                            } else {
-//                                for (int i = 0; i < Response.length(); i++) {
-//                                    JSONObject jsonObject = Response.getJSONObject(i);
-//                                    mAdapter.addItem(new WorkCalenderData.WorkCalenderData_list(
-//                                            jsonObject.getString("ym"),
-//                                            jsonObject.getString("Sun"),
-//                                            jsonObject.getString("Mon"),
-//                                            jsonObject.getString("Tue"),
-//                                            jsonObject.getString("Wed"),
-//                                            jsonObject.getString("Thu"),
-//                                            jsonObject.getString("Fri"),
-//                                            jsonObject.getString("Sat")
-//                                    ));
-//                                }
-//                                mAdapter.notifyDataSetChanged();
-//                                mAdapter.setOnItemClickListener(new WorkCalenderAdapter.OnItemClickListener() {
-//                                    @Override
-//                                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-//                                        dlog.i("data :" + data);
-//                                        try{
-//                                            kind = new ArrayList<>();
-//                                            title = new ArrayList<>();
-//                                            for (int i = 0; i < mList2.size(); i++) {
-//                                                if (data.equals(mList2.get(i).getDay().length() == 1?"0"+mList2.get(i).getDay():mList2.get(i).getDay())) {
-//                                                    JSONArray Response = new JSONArray(mList2.get(i).getTask().toString().replace("[[", "[").replace("]]", "]"));
-//                                                    for (int i3 = 0; i3 < Response.length(); i3++) {
-//                                                        JSONObject jsonObject = Response.getJSONObject(i3);
-//                                                        kind.add(jsonObject.getString("kind"));
-//                                                        title.add(jsonObject.getString("title"));
-//                                                    }
-//                                                }
-//                                            }
-//                                            shardpref.putString("task_date",WorkDay);
-//                                            dlog.i("WorkDay :" + WorkDay);
-//
-//                                            shardpref.putString("change_place_id", change_place_id.isEmpty()?place_id:change_place_id);
-//                                            shardpref.putString("change_member_id", change_member_id.isEmpty()?"":change_member_id);
-//                                            WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
-//                                            wgb.show(getSupportFragmentManager(),"WorkgotoBottomSheet");
-//                                        }catch (Exception e){
-//                                            dlog.i("onItemClick Exception :" + e);
-//                                        }
-//
-//                                    }
-//                                });
-//                            }
-//                        }catch (JSONException e){
-//                            dlog.i("JSONException :" + e);
-//                        }
-//                    }
-//                });
-//
-//            }
-//
-//            @Override
-//            @SuppressLint("LongLogTag")
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                Log.e(TAG, "에러2 = " + t.getMessage());
-//            }
-//        });
-//    }
-
-
     //미처리인 업무 세기
     int state_null = 0;
     String writer_id = "";
@@ -657,10 +500,6 @@ public class TaskListActivity extends AppCompatActivity {
                             binding.line01.setVisibility(View.INVISIBLE);
                             Log.i(TAG, "SetNoticeListview Thread run! ");
                             Log.i(TAG, "GET SIZE : " + Response.length());
-//                            check_cnt.setText("0건");
-//                            all_checkbox.setClickable(false);
-//                            all_checkbox.setEnabled(false);
-//                            all_checkbox.setBackgroundResource(R.drawable.checkbox_off);
                         } else {
                             binding.line01.setVisibility(View.VISIBLE);
                             binding.nodataArea.setVisibility(View.GONE);
@@ -733,24 +572,6 @@ public class TaskListActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-
-//                            check_cnt.setText(state_null + "건");
-
-                            dlog.i("state_null : " + state_null);
-//                            work_cnt.setText(String.valueOf(state_null));
-                            Todo_mAdapter.setOnItemClickListener((v, position, Tcnt, Fcnt) -> {
-                                try {
-                                    writer_id = Response.getJSONObject(position).getString("writer_id");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-//                                check_cnt.setText(Tcnt + "건");
-//                                if (Tcnt == mList.size() && Fcnt == 0) {
-//                                    all_checkbox.setBackgroundResource(R.drawable.checkbox_on);
-//                                } else {
-//                                    all_checkbox.setBackgroundResource(R.drawable.checkbox_off);
-//                                }
-                            });
                             Todo_mAdapter.notifyDataSetChanged();
                         }
                     } catch (JSONException e) {
@@ -900,7 +721,9 @@ public class TaskListActivity extends AppCompatActivity {
                                     ));
                                 }
                             }
-
+                            fragmentStateAdapter = new FragmentStateAdapter(fg.requireActivity(), 1,workGotoList2);
+                            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

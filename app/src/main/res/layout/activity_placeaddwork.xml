@@ -476,11 +476,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@color/blue_200"
-                        android:textColor="@color/new_blue"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="start|center"
                         android:paddingStart="15dp"
                         android:text="+ 추가하기"
+                        android:textColor="@color/new_blue"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:visibility="visible" />
@@ -522,8 +522,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:visibility="gone"
-                    android:background="@drawable/task_check_none" />
+                    android:background="@drawable/task_check_none"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/report_tv"
@@ -563,7 +563,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="30dp"
-                        android:background="@drawable/task_check_none"/>
+                        android:background="@drawable/task_check_none" />
 
                     <TextView
                         android:id="@+id/select01"
@@ -591,7 +591,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="30dp"
-                        android:background="@drawable/task_check_none"/>
+                        android:background="@drawable/task_check_none" />
 
                     <TextView
                         android:id="@+id/select02"

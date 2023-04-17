@@ -95,14 +95,15 @@
             app:cardBackgroundColor="@color/new_blue"
             app:cardCornerRadius="5dp">
             <TextView
+                android:id="@+id/applicant_storegroup_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="근무 신청"
                 android:textColor="#ffffff"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="15sp"
+                android:fontFamily="@font/pretendard_bold"
+                android:textSize="17sp"
                 tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
         </androidx.cardview.widget.CardView>
     </RelativeLayout>

@@ -69,7 +69,6 @@
             android:id="@+id/store_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha="0.8"
             android:background="#ffffff"
             android:orientation="horizontal"
             android:padding="5dp">

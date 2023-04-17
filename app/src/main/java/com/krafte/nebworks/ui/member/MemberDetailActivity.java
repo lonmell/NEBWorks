@@ -372,9 +372,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         SetAllMemberList();
-        SetAllMemberList(stub_place_id, stub_user_id);
-        SetContractList();
-        MainWorkCnt(stub_place_id, stub_user_id);
+
     }
 
     @Override
@@ -458,9 +456,11 @@ public class MemberDetailActivity extends AppCompatActivity {
                             binding.workdata04.setText(approval_cnt);
                             binding.workdata05.setText(reject_cnt);
                         }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    SetAllMemberList(stub_place_id, stub_user_id);
                 }
             }
 
@@ -492,8 +492,8 @@ public class MemberDetailActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         String jsonResponse = rc.getBase64decode(response.body());
-                        dlog.i("jsonResponse length : " + jsonResponse.length());
-                        dlog.i("jsonResponse : " + jsonResponse);
+                        dlog.i("SetAllMemberList jsonResponse length : " + jsonResponse.length());
+                        dlog.i("SetAllMemberList jsonResponse : " + jsonResponse);
                         Log.e("onSuccess : ", response.body());
                         try {
                             //Array데이터를 받아올 때
@@ -588,7 +588,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                 });
 
 
-                                if (!worker_sign_id.equals("null") && !owner_sign_id.equals("null")) {
+                                if (!contract_id.equals("")) {
                                     binding.contractState.setTextColor(Color.parseColor("#6395EC"));
                                     binding.contractState.setText("작성완료");
                                     binding.contractAllGo.setOnClickListener(v -> {
@@ -598,7 +598,12 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-                                    if (worker_sign_id.equals("null") && owner_sign_id.equals("null")) {
+                                    dlog.i("-----binding.contractAllGo.setOnClickListener-----");
+                                    dlog.i("worker_sign_id : " + worker_sign_id);
+                                    dlog.i("owner_sign_id : " + owner_sign_id);
+                                    dlog.i("getprogress_pos : " + getprogress_pos);
+                                    dlog.i("-----binding.contractAllGo.setOnClickListener-----");
+                                    if (worker_sign_id.equals("") && owner_sign_id.equals("")) {
                                         binding.contractState.setTextColor(Color.parseColor("#DD6540"));
                                         binding.contractState.setText("미처리");
                                         //미처리 일때 근로계약서 리스트 페이지로
@@ -727,6 +732,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
+                    SetContractList();
                 }
 
                 @Override
@@ -1087,11 +1093,11 @@ public class MemberDetailActivity extends AppCompatActivity {
                             dlog.i("contract_user_id : " + stub_user_id);
                             dlog.i("-----SetContractList2-----");
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                MainWorkCnt(stub_place_id, stub_user_id);
             }
 
             @Override

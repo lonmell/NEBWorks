@@ -53,6 +53,7 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
     List<String> mKind = new ArrayList<>();
     List<String> mTitle = new ArrayList<>();
     List<String> mTask_date = new ArrayList<>();
+    List<String> mWorkDiff = new ArrayList<>();
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position, String data, String yoil, String WorkDay);
@@ -94,12 +95,12 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
         String item = mData.get(position);
         try {
             holder.tv_date.setText(item);
-            if(dc.GET_YEAR.equals(year)
+            if (dc.GET_YEAR.equals(year)
                     && dc.GET_MONTH.equals(month)
-                    && dc.GET_DAY.equals((mData.get(position).length()==1?"0"+mData.get(position):mData.get(position)))){
+                    && dc.GET_DAY.equals((mData.get(position).length() == 1 ? "0" + mData.get(position) : mData.get(position)))) {
 //                holder.tv_date.setBackgroundColor(Color.parseColor("#EFF4FD"));
                 holder.item_total.setBackgroundColor(Color.parseColor("#EFF4FD"));
-            }else{
+            } else {
 //                holder.tv_date.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 holder.item_total.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
@@ -107,27 +108,28 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
                 @Override
                 public void run() {
                     // 실행할 함수 코드 작성
-                    // 근무현황
+                    if (kind == 2) {
+                        //근무현황
 //                        dlog.i("----------PARAMTER----------");
 //                        dlog.i("YEAR :: " + year);
 //                        dlog.i("MONTH :: " + month);
 //                        dlog.i("----------PARAMTER----------");
 
-                    if (mList.size() != 0) {
-                        mTask_month.clear();
-                        mDay.clear();
-                        mId.clear();
-                        mPlace_id.clear();
-                        mKind.clear();
-                        mTitle.clear();
-                        mTask_date.clear();
-                        for (int i = 0; i < mList.size(); i++) {
-                            if (mList.get(i).getTask_month().equals(month) && (!mData.get(position).equals(""))) {
-                                String task_year = mList.get(i).getTask_date().substring(0,4);
-                                String sumDate = year + "-" + month + "-" + item;
-//                                    if ((task_year.equals(year)) && mList.get(i).getTask_month().equals(month) && (!mData.get(position).equals(""))
-//                                        && mList.get(i).getDay().equals(getYoil(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(mData.get(position))))) {
-                                if(mList.get(i).getTask_date().equals(sumDate)){
+                        if (mList.size() != 0) {
+                            mTask_month.clear();
+                            mDay.clear();
+                            mId.clear();
+                            mPlace_id.clear();
+                            mKind.clear();
+                            mTitle.clear();
+                            mTask_date.clear();
+                            mWorkDiff.clear();
+
+                            for (int i = 0; i < mList.size(); i++) {
+                                String task_year = mList.get(i).getTask_date().substring(0, 4);
+                                if ( mList.get(i).getTask_month().equals(month)
+                                        && (!mData.get(position).equals(""))
+                                        && mList.get(i).getDay().equals(mData.get(position))) {
                                     mTask_month.add(mList.get(i).getTask_month());
                                     mDay.add(mList.get(i).getDay());
                                     mId.add(mList.get(i).getId());
@@ -137,24 +139,80 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
                                     mTask_date.add(mList.get(i).getTask_date());
                                 }
                             }
+                            dlog.i("------------mList2---------------");
+                            dlog.i(month + "월 " + item + "일");
+                            dlog.i("mKind : " + mKind.toString());
+                            dlog.i("mTask_month : " + mTask_month.toString());
+                            dlog.i("mDay : " + mDay.toString());
+                            dlog.i("mTitle : " + mTitle.toString());
+                            dlog.i("mTask_date : " + mTask_date.toString());
+                            dlog.i("------------mList2---------------");
+
+                                List<String> mTitlefac = new ArrayList<>(Arrays.asList(mTitle.toString().replace("[", "").replace("]", "").split(",")));
+
+                                mList2 = new ArrayList<>();
+                                mAdapter = new CalendarDayAdaper2(mContext, mList2);
+                                holder.task_list.setAdapter(mAdapter);
+                                holder.task_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                                for (int i2 = 0; i2 < mTask_month.size(); i2++) {
+                                    mAdapter.addItem(new WorkGetallData.WorkGetallData_list(
+                                            mTask_month.get(i2),
+                                            mDay.get(i2),
+                                            mId.get(i2),
+                                            mPlace_id.get(i2),
+                                            mKind.get(i2),
+                                            mTitle.get(i2),
+                                            mTask_date.get(i2)
+                                    ));
+                                    dlog.i("------------mList2---------------");
+                                    dlog.i(mTask_month.get(i2) + "월 " + mDay.get(i2) + "일");
+                                    dlog.i(month + "월 " + item + "일");
+                                    dlog.i("mKind : " + mKind.get(i2));
+                                    dlog.i("mTitle : " + mTitle.toString());
+                                    dlog.i("mTitlefac : " + mTitlefac);
+                                    dlog.i("mTask_date : " + mTask_date.get(i2));
+                                    dlog.i("------------mList2---------------");
+                                    if (mList.get(i2).getKind().equals("holiday") && mList.get(i2).getTask_month().equals(month)
+                                            && (mList.get(i2).getDay().equals(getYoil(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(mData.get(position)))))) {
+                                        holder.tv_date.setTextColor(Color.parseColor("#FF687A"));
+                                    }
+                                }
+
+                                mAdapter.notifyDataSetChanged();
                         }
-                        dlog.i("------------mList Result--------------");
-                        dlog.i(month + "월 " + item + "일");
-                        dlog.i("mTask_month : " + mTask_month.toString());
-                        dlog.i("mKind : " + mKind.toString());
-                        dlog.i("mTitle : " + mTitle.toString());
-                        dlog.i("mTask_date : " + mTask_date.toString());
-                        dlog.i("------------mList Result--------------");
-//                            dlog.i("------------mList---------------");
-                        List<String> mTitlefac = new ArrayList<>(Arrays.asList(mTitle.toString().replace("[", "").replace("]", "").split(",")));
-                        mList2 = new ArrayList<>();
-                        mAdapter = new CalendarDayAdaper2(mContext, mList2,item);
-                        holder.task_list.setAdapter(mAdapter);
-                        holder.task_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+                    } else {
+                        //할일 BottomSheet
+                        if (mList.size() != 0) {
+                            mTask_month.clear();
+                            mDay.clear();
+                            mId.clear();
+                            mPlace_id.clear();
+                            mKind.clear();
+                            mTitle.clear();
+                            mTask_date.clear();
+                            for (int i = 0; i < mList.size(); i++) {
+                                String task_year = mList.get(i).getTask_date().substring(0, 4);
+                                if ((task_year.equals(year)) && mList.get(i).getTask_month().equals(month) && (!mData.get(position).equals(""))) {
+//                                    dlog.i("DB에서 받아오는 DAY :: " + mList.get(i).getDay());
+//                                    dlog.i("JAVA 세팅되는 DAY :: " + Integer.parseInt(mData.get(position)));
+                                    if (mList.get(i).getDay().equals(mData.get(position))) {
+                                        mTask_month.add(mList.get(i).getTask_month());
+                                        mDay.add(mList.get(i).getDay());
+                                        mId.add(mList.get(i).getId());
+                                        mPlace_id.add(mList.get(i).getPlace_id());
+                                        mKind.add(mList.get(i).getKind());
+                                        mTitle.add(mList.get(i).getTitle());
+                                        mTask_date.add(mList.get(i).getTask_date());
+                                    }
+                                }
+                            }
+
+                            mList2 = new ArrayList<>();
+                            mAdapter = new CalendarDayAdaper2(mContext, mList2);
+                            holder.task_list.setAdapter(mAdapter);
+                            holder.task_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
 //                            dlog.i("mTask_month.size() : " + mTask_month.size());
-                        if(mTitle.size() != 0){
-                            dlog.i("mTitle.size() : " + mTitle.size());
-                            for (int i2 = 0; i2 < mTitle.size(); i2++) {
+                            for (int i2 = 0; i2 < mTask_month.size(); i2++) {
                                 mAdapter.addItem(new WorkGetallData.WorkGetallData_list(
                                         mTask_month.get(i2),
                                         mDay.get(i2),
@@ -164,22 +222,21 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
                                         mTitle.get(i2),
                                         mTask_date.get(i2)
                                 ));
-                                dlog.i("------------addItem--------------");
-                                dlog.i("mTask_month : " + mTask_month.get(i2) + " // mDay : " + mDay.get(i2));
+                                dlog.i("------------mList---------------");
+                                dlog.i(mTask_month.get(i2) + "월 " + mDay.get(i2) + "일");
                                 dlog.i(month + "월 " + item + "일");
                                 dlog.i("mKind : " + mKind.get(i2));
-                                dlog.i("mTitle : " + mTitlefac.get(i2));
+                                dlog.i("mTitle : " + mTitle.get(i2));
                                 dlog.i("mTask_date : " + mTask_date.get(i2));
-                                dlog.i("------------addItem--------------");
-                                if (mList.get(i2).getKind().equals("holiday") && mList.get(i2).getTask_month().equals(month)
-                                        && (mList.get(i2).getDay().equals(getYoil(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(mData.get(position)))))) {
+                                dlog.i("------------mList---------------");
+                                if (mList.get(i2).getKind().equals("holiday") && mList.get(i2).getTask_month().equals(month) && mList.get(i2).getDay().equals(item)) {
                                     holder.tv_date.setTextColor(Color.parseColor("#FF687A"));
                                 }
                             }
-                        }
-                        mAdapter.notifyDataSetChanged();
-                    }
 
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
                 }
             }, 300); // 0.3초 뒤에 실행됨 (3000ms = 3 seconds)
 
@@ -204,10 +261,10 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조
-            tv_date     = itemView.findViewById(R.id.tv_date);
-            task_list   = itemView.findViewById(R.id.task_list);
-            rl_date     = itemView.findViewById(R.id.rl_date);
-            item_total  = itemView.findViewById(R.id.item_total);
+            tv_date = itemView.findViewById(R.id.tv_date);
+            task_list = itemView.findViewById(R.id.task_list);
+            rl_date = itemView.findViewById(R.id.rl_date);
+            item_total = itemView.findViewById(R.id.item_total);
 
             shardpref = new PreferenceHelper(mContext);
 
@@ -255,4 +312,3 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
         return dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
     }
 }
-

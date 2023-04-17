@@ -33,7 +33,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Tap2OptionActivity extends Activity {
-
     private static final String TAG = "Tap2OptionActivity";
     Context mContext;
     private View view;

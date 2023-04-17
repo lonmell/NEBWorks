@@ -79,7 +79,6 @@ public class PlaceBottomNaviActivity extends Activity {
 
         binding.listSettingitem01.setText("매장 수정");
         binding.listSettingitem02.setText("매장 삭제");
-
         setBtnEvent();
     }
 

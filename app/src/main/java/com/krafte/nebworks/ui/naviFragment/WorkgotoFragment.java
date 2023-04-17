@@ -706,13 +706,6 @@ public class WorkgotoFragment extends Fragment {
                                 }
 
                                 dlog.i("state_null : " + state_null);
-                                Todo_mAdapter.setOnItemClickListener((v, position, Tcnt, Fcnt) -> {
-                                    try {
-                                        writer_id = Response.getJSONObject(position).getString("writer_id");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                });
                                 Todo_mAdapter.notifyDataSetChanged();
                             }
                         }

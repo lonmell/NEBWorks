@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
     Dlog dlog = new Dlog();
 
     public interface OnItemClickListener {
-        void onItemClick(View v, int position);
+        void onItemClick(View v, int position, String accept_state);
     }
 
     // 리스너 객체 참조를 저장하는 변수
@@ -92,8 +93,10 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(holder.store_thumnail);
+
         holder.item_store_name.setText(item.getName());
         holder.item_store_address.setText(item.getAddress());
+
         if(item.getOwner_phone().length() < 11){
             holder.item_owner_phone.setText("관리자 전화번호 : " + (item.getOwner_phone().equals("null")?"":item.getOwner_phone()));
         }else{
@@ -102,22 +105,29 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             holder.item_owner_phone.setText("관리자 전화번호 : " + ophone);
         }
 
+        if(item.getAccept_state().equals("1")){
+            holder.applicant_storegroup.setCardBackgroundColor(Color.parseColor("#dcdcdc"));
+            holder.applicant_storegroup_tv.setText("이미 가입된 매장입니다");
+            holder.applicant_storegroup_tv.setTextColor(Color.parseColor("#000000"));
+        }
 
         holder.applicant_storegroup.setOnClickListener(v -> {
             if (mListener != null) {
-                mListener.onItemClick(v, position);
+                mListener.onItemClick(v, position, item.getAccept_state());
             }
-            shardpref.putString("guin_store_no", item.getId());
-            shardpref.putString("place_id", item.getId());
-            Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-            intent.putExtra("data", "해당 매장에 근무신청을 보냅니다.");
-            intent.putExtra("flag", "그룹신청");
-            intent.putExtra("take_user_id", item.getOwner_id());
-            intent.putExtra("left_btn_txt", "취소");
-            intent.putExtra("right_btn_txt", "전송");
-            mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if(!item.getAccept_state().equals("1")){
+                shardpref.putString("guin_store_no", item.getId());
+                shardpref.putString("place_id", item.getId());
+                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                intent.putExtra("data", "해당 매장에 근무신청을 보냅니다.");
+                intent.putExtra("flag", "그룹신청");
+                intent.putExtra("take_user_id", item.getOwner_id());
+                intent.putExtra("left_btn_txt", "취소");
+                intent.putExtra("right_btn_txt", "전송");
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }
         });
     } // getItemCount : 전체 데이터의 개수를 리턴
 
@@ -135,7 +145,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView store_thumnail;
-        TextView item_store_name, item_store_address,item_owner_phone;
+        TextView item_store_name, item_store_address,item_owner_phone,applicant_storegroup_tv;
         CardView applicant_storegroup;
 
         ViewHolder(View itemView) {
@@ -147,6 +157,8 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             item_store_address      = itemView.findViewById(R.id.item_store_address);
             applicant_storegroup    = itemView.findViewById(R.id.applicant_storegroup);
             item_owner_phone        = itemView.findViewById(R.id.item_owner_phone);
+            applicant_storegroup_tv = itemView.findViewById(R.id.applicant_storegroup_tv);
+
             shardpref = new PreferenceHelper(mContext);
 
             itemView.setOnClickListener(view -> {

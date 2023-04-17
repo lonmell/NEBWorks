@@ -3,7 +3,6 @@ package com.krafte.nebworks.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.data.PlaceListData;
 import com.krafte.nebworks.dataInterface.MainContentsInterface;
-import com.krafte.nebworks.pop.PlaceBottomNaviActivity;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -58,7 +56,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
     RetrofitConnect rc = new RetrofitConnect();
 
     public interface OnItemClickListener {
-        void onItemClick(View v, int position);
+        void onItemClick(View v, int position, int kind);
     }
 
     private OnItemClickListener mListener = null;
@@ -71,18 +69,6 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
         this.mData = data;
         this.mContext = context;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
-
-
-    //--옵션창 열기
-    public interface OnClickOptionListener {
-        void onClick(View v);
-    }
-
-    private OnClickOptionListener Olistener = null;
-
-    public void setOnClickOption(OnClickOptionListener Olistener) {
-        this.Olistener = Olistener;
-    }
 
     @NonNull
     @Override
@@ -177,14 +163,12 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
 
             holder.item_peoplecnt.setText(item.getTotal_cnt());
             holder.list_setting.setOnClickListener(v -> {
-                shardpref.putString("place_id", item.getId());
-                shardpref.putString("place_name", item.getName());
-                shardpref.putString("place_owner_id", item.getOwner_id());
-                Intent intent = new Intent(mContext, PlaceBottomNaviActivity.class);
-                intent.putExtra("left_btn_txt", "닫기");
-                mContext.startActivity(intent);
-                ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                if (mListener != null) {
+                    mListener.onItemClick(v, position,1);
+                }
+//                shardpref.putString("edit_place_id", item.getId());
+//                shardpref.putString("edit_place_name", item.getName());
+//                shardpref.putString("edit_place_owner_id", item.getOwner_id());
             });
             PlaceWorkCheck(item.getId(), "0", "0", holder);
         } catch (Exception e) {
@@ -240,7 +224,7 @@ public class WorkplaceListAdapter extends RecyclerView.Adapter<WorkplaceListAdap
                     shardpref.putString("place_id", item.getId());
                     shardpref.putString("place_owner_id", item.getOwner_id());
                     if (mListener != null) {
-                        mListener.onItemClick(view, pos);
+                        mListener.onItemClick(view, pos,0);
                     }
 //                    pm.EmployerStoreSetting(mContext);
                 }

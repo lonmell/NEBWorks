@@ -117,7 +117,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/pretendard_regular"
                 android:gravity="start|center"
-                android:text="근무자 출근/퇴근 알림"
+                android:text="근무자 출근/퇴근, 공지사항 알림"
                 android:textSize="13sp"
                 android:layout_weight="1"
                 android:layout_marginTop="5dp"

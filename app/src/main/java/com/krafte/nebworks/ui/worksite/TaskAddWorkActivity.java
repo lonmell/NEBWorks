@@ -273,36 +273,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         });
 
-        binding.needReport.setOnClickListener(v -> {
-//            if (!NeedReportTF) {
-//                NeedReportTF = true;
-//                binding.needReport.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
-//                binding.reportTv.setTextColor(Color.parseColor("#ffffff"));
-//                binding.reportVisible.setVisibility(View.VISIBLE);
-//                binding.reportBtn.setBackgroundResource(R.drawable.task_check_white);
-//                TaskKind = "1";
-//                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round);
-//                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
-//                binding.select01Img.setBackgroundResource(R.drawable.task_check_blue);
-//                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
-//                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-//                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
-//            } else {
-//                NeedReportTF = false;
-//                binding.needReport.setBackgroundColor(Color.parseColor("#F5F6F8"));
-//                binding.reportTv.setTextColor(Color.parseColor("#000000"));
-//                binding.reportBtn.setBackgroundResource(R.drawable.task_check_none);
-//                binding.reportVisible.setVisibility(View.GONE);
-//
-//                binding.select01Box.setBackgroundResource(R.drawable.default_select_on_round_white);
-//                binding.select01.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-//                binding.select01Img.setBackgroundResource(R.drawable.task_check_none);
-//
-//                binding.select02Box.setBackgroundResource(R.drawable.default_select_on_round_white);
-//                binding.select02.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-//                binding.select02Img.setBackgroundResource(R.drawable.task_check_none);
-//            }
-        });
 
         binding.select01Box.setOnClickListener(v -> {
             TaskKind = "1";
@@ -325,7 +295,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             binding.select02Img.setBackgroundResource(R.drawable.task_check_blue);
         });
         binding.bottomBtnBox.setOnClickListener(v -> {
-            BtnOneCircleFun(false);
             if (SaveCheck()) {
                 SaveAddWork();
             }
@@ -524,7 +493,10 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             item_user_name = new ArrayList<>();
             item_user_img = new ArrayList<>();
             item_user_jikgup = new ArrayList<>();
-
+//            shardpref.putString("users", user_id.toString());
+//            shardpref.putString("usersn", user_name.toString());
+//            shardpref.putString("usersimg", user_img_path.toString());
+//            shardpref.putString("usersjikgup", user_img_jikgup.toString());
             String getuser_id = shardpref.getString("item_user_id", "").replace("  ", "").replace("[", "").replace("]", "");
             String getuser_name = shardpref.getString("item_user_name", "").replace("  ", "").replace("[", "").replace("]", "");
             String getuser_img = shardpref.getString("item_user_img", "").replace("  ", "").replace("[", "").replace("]", "");
@@ -983,15 +955,14 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                             if (!user_id.equals("")) {
                                                 SendUserCheck(1);
                                                 if (return_page.equals("TaskCalenderActivity")) {
-                                                    BtnOneCircleFun(true);
+                                                    
                                                     pm.CalenderBack(mContext);
                                                 } else {
                                                     shardpref.putInt("SELECT_POSITION", 1);
                                                     shardpref.putInt("SELECT_POSITION_sub", 0);
-                                                    BtnOneCircleFun(true);
+                                                    
                                                     pm.Main(mContext);
                                                 }
-
                                                 click_action = "PlaceWorkFragment";
                                                 dlog.i("EmployeeChannelId1 : " + EmployeeChannelId1);
                                                 RemoveShared();
@@ -999,16 +970,14 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                         } else {
                                             shardpref.putInt("SELECT_POSITION", 1);
                                             shardpref.putInt("SELECT_POSITION_sub", 0);
-                                            BtnOneCircleFun(true);
                                             pm.Main2(mContext);
                                         }
 
 
                                     } else if (jsonResponse.replace("\"", "").equals("fail") || jsonResponse.replace("\"", "").equals("fail")) {
-                                        BtnOneCircleFun(true);
                                         Toast.makeText(mContext, "동일한 업무가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        BtnOneCircleFun(true);
+                                        
                                         Toast.makeText(mContext, "서버입력 오류! 데이터를 입력할 수 없습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -1220,44 +1189,44 @@ public class TaskAddWorkActivity extends AppCompatActivity {
 
         if (WorkTitle.equals("")) {
             dlog.i("WorkTitle");
-            BtnOneCircleFun(true);
+            
             Toast.makeText(this, "할일을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else if (WorkContents.isEmpty()) {
             dlog.i("WorkContents");
-            BtnOneCircleFun(true);
+            
             Toast.makeText(this, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else if (TaskKind.isEmpty() && make_kind == 1) {
-            BtnOneCircleFun(true);
+            
             Toast.makeText(this, "완료방법을 선택해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (TaskKind.isEmpty() && make_kind == 4) {
             return true;
         } else if (WorkDay.isEmpty()) {
-            BtnOneCircleFun(true);
+            
             Toast.makeText(this, "업무날짜를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (start_time.equals("-99")) {
             dlog.i("StarTime");
-            BtnOneCircleFun(true);
+            
             Toast.makeText(this, "시작시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (end_time.equals("-99")) {
             dlog.i("StarTime");
-            BtnOneCircleFun(true);
+            
             Toast.makeText(this, "마감시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1])) {
             if (Integer.parseInt(splitStartDate[0]) < Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) < Integer.parseInt(splitEndDate[1])) {
                 return true;
             } else {
-                BtnOneCircleFun(true);
+                
                 Toast_Nomal("시작 시간이 종료 시간보다 큽니다. 다시 설정해주세요.");
                 return false;
             }
         } else if (Integer.parseInt(splitStartDate[0]) > Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) > Integer.parseInt(splitEndDate[1])) {
-            BtnOneCircleFun(true);
+            
             Toast_Nomal("시작 날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.");
             return false;
         } else if (user_id.equals("")) {
@@ -1268,17 +1237,17 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                     return true;
                 } else {
                     if (total_member_cnt == 0) {
-                        BtnOneCircleFun(true);
+                        
                         Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                         intent.putExtra("data", "등록된 직원이 없습니다. 직원을 추가 후 이용해 주세요.");
                         intent.putExtra("left_btn_txt", "닫기");
                         startActivity(intent);
                         overridePendingTransition(R.anim.translate_up, 0);
                     } else {
-                        BtnOneCircleFun(true);
+                        
                         Toast.makeText(this, "업무를 배정할 직원을 선택해주세요.", Toast.LENGTH_SHORT).show();
                     }
-                    BtnOneCircleFun(true);
+                    
                     return false;
                 }
 

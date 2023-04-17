@@ -607,25 +607,29 @@
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </LinearLayout>
 
-        <!--        <include-->
-        <!--            android:id="@+id/add_btn"-->
-        <!--            layout="@layout/addbtn" />-->
+        <include
+            android:id="@+id/add_btn"
+            layout="@layout/addbtn" />
+
         <androidx.core.widget.NestedScrollView
             android:id="@+id/calendar_area"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
             android:background="@color/white"
             android:fillViewport="true"
             android:visibility="gone">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <RelativeLayout
                     android:id="@+id/change_area"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:layout_marginEnd="20dp"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -643,9 +647,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/change_area"
-                    android:background="@color/white" />
+                    android:background="@color/white"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp" />
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
+
         <RelativeLayout
             android:id="@+id/login_alert_text"
             android:layout_width="match_parent"

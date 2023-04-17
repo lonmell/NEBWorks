@@ -1024,7 +1024,7 @@ public class FeedAddActivity extends AppCompatActivity {
                         dlog.i("-----getManagerToken-----");
                         boolean channelId = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId) {
-                            PushFcmSend(id, "", message, token, "2", place_id);
+                            PushFcmSend(id, "", message, token, "1", place_id);
                         }
                     }
                 } catch (JSONException e) {

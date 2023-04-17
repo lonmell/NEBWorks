@@ -217,17 +217,15 @@ public class CalenderFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-
+        dlog.i("CalenderFragment onResume state : " + state);
         if(sendList.size() == 0){
             switch (state) {
                 case 1:
+                case 3:
                     SetWorkGotoCalenderData();
                     break;
                 case 2:
                     SetWorkStatusCalenderData();
-                    break;
-                case 3:
-                    SetWorkGotoCalenderData();
                     break;
                 case 4:
                     SetPayCalenderData();
@@ -363,20 +361,18 @@ public class CalenderFragment extends Fragment {
 
     //-- 할일 다시 조회
     private void SetWorkGotoCalenderData() {
-        sendList.clear();
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
-        String getYMDate = year + "-" + month;
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
-        Log.i(TAG, "select_date : " + getYMDate);
+        Log.i(TAG, "select_date : " + dc.GET_YEAR);
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkTaskGetallInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkTaskGetallInterface api = retrofit.create(WorkTaskGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate,USER_INFO_AUTH);
+        Call<String> call2 = api.getData(place_id, USER_INFO_ID, dc.GET_YEAR,USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -407,7 +403,6 @@ public class CalenderFragment extends Fragment {
                                     ));
                                 }
                             }
-                            SetCalendar();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

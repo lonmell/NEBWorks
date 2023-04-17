@@ -645,11 +645,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
                                     shardpref.remove("item_user_name");
                                     shardpref.putInt("SELECT_POSITION", 2);
                                     if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
-                                        if(ReturnPageData.getInstance().getPage().equals("EmployeeProcess")){
-                                            pm.EmployeeProcess(mContext);
-                                        }else{
-                                            pm.Main2(mContext);
-                                        }
+                                        pm.Main2(mContext);
                                     }else if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("0")){
                                         if(ReturnPageData.getInstance().getPage().equals("AddMemberDetail")){
                                             shardpref.putInt("SELECT_POSITION",0);
@@ -660,11 +656,7 @@ public class AddWorkPartActivity extends AppCompatActivity {
                                         }
                                         pm.Main(mContext);
                                     }else if(!place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
-                                        if(ReturnPageData.getInstance().getPage().equals("EmployeeProcess")){
-                                            pm.EmployeeProcess(mContext);
-                                        }else{
-                                            pm.Main2(mContext);
-                                        }
+                                        pm.Main2(mContext);
                                     }
 //                                    getPartTimeYoil(setYoil);
                                 }

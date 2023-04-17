@@ -73,15 +73,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
     private boolean animationsLocked = false;
     private boolean delayEnterAnimation = true;
 
-    public interface OnItemClickListener {
-        void onItemClick(View v, int position, int Tcnt, int Fcnt);
-    }
-
-    private OnItemClickListener mListener = null;
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mListener = listener;
-    }
 
     public Tap2ListAdapter(Context context, ArrayList<TodolistData.TodolistData_list> data, FragmentManager fragmentManager, int kind) {//kind : 조회위치 [ 1 = 할일탭 / 2 = 캘린더>날짜선택>BottomSheet ]
         this.mData = data;
@@ -163,10 +154,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                 dlog.i("users : " + item.getUsers());
                 dlog.i("users Response : " + Response.length());
                 List<String> join_member = new ArrayList<>();
-//                mList = new ArrayList<>();
-//                mAdapter = new AdaperInMemberAdapter(mContext, mList);
-//                holder.member_list.setAdapter(mAdapter);
-//                holder.member_list.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
                 if (Response.length() == 0) {
                     Log.i(TAG, "GET SIZE 1: " + Response.length());
                     holder.member_name.setText("배정받은 직원이 없습니다");
@@ -340,7 +327,10 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
 //            }
 
             holder.list_setting.setOnClickListener(v -> {
-                if(kind == 1){
+                    dlog.i("------list_setting Tap2ListAdapter------");
+                    dlog.i("task_no : "            + item.getId());
+                    dlog.i("users : "            + user_id.toString());
+                    dlog.i("------Tap2ListAdapter------");
                     shardpref.putString("task_no", item.getId());
                     shardpref.putString("writer_id", item.getWriter_id());
                     shardpref.putString("kind", item.getKind());            // 0:할일, 1:일정
@@ -374,7 +364,6 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     mContext.startActivity(intent);
 //                    ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                }
             });
 
             //--아이템에 나타나기 애니메이션 줌

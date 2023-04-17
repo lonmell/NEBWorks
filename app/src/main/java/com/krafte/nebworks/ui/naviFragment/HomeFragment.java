@@ -540,7 +540,7 @@ public class HomeFragment extends Fragment {
                         binding.payLayout.setVisibility(View.VISIBLE);
                     } else {
                         binding.addMemberArea.setVisibility(View.VISIBLE);
-                        binding.payLayout.setVisibility(View.GONE);
+                        binding.payLayout.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

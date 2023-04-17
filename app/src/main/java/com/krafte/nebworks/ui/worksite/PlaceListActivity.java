@@ -36,6 +36,7 @@ import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityWorksiteBinding;
+import com.krafte.nebworks.pop.PlaceBottomNaviActivity;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DBConnection;
 import com.krafte.nebworks.util.DateCurrent;
@@ -135,7 +136,10 @@ public class PlaceListActivity extends AppCompatActivity {
             }
 
             setBtnEvent();
-
+            Glide.with(this).load(R.raw.basic_loading)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(binding.basicLoading);
+            binding.basicLoading.setVisibility(View.GONE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -376,6 +380,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
     int store_cnt = 0;
     public void GetPlaceList() {
+        binding.basicLoading.setVisibility(View.VISIBLE);
         dlog.i("------GetPlaceList------");
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
         dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
@@ -455,8 +460,9 @@ public class PlaceListActivity extends AppCompatActivity {
                                 binding.storeCnt.setText(store_cnt + "개");
 
                                 mAdapter.notifyDataSetChanged();
-                                mAdapter.setOnItemClickListener((v, pos) -> {
+                                mAdapter.setOnItemClickListener((v, pos, kind) -> {
                                     try {
+
                                         dlog.i("place_latitude : " + shardpref.getString("place_latitude", ""));
                                         dlog.i("place_longitude : " + shardpref.getString("place_longitude", ""));
                                         String owner_id = Response.getJSONObject(pos).getString("owner_id");
@@ -545,38 +551,44 @@ public class PlaceListActivity extends AppCompatActivity {
 
                                         shardpref.getString("member_io_kind",Response.getJSONObject(pos).getString("io_kind"));
                                         shardpref.getString("member_io_time",Response.getJSONObject(pos).getString("io_time"));
-
-                                        if (save_kind.equals("0")) {
-                                            //임시저장된 매장
-                                            pm.PlaceEditGo(mContext);
-                                        } else {
-                                            //저장된 매장
-                                            if (accept_state.equals("null")) {
-                                                if (!owner_id.equals(USER_INFO_ID)) {
-                                                    accept_state = "1";
-                                                } else {
-                                                    accept_state = "0";
-                                                }
-                                            }
-                                            shardpref.putInt("accept_state", Integer.parseInt(accept_state));
-                                            ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
-                                            shardpref.putInt("SELECT_POSITION", 0);
-                                            if(accept_state.equals("1")){
-                                                if(USER_INFO_AUTH.equals("")){
-                                                    LoginCheck(USER_INFO_EMAIL);
-                                                }else{
-                                                    if (USER_INFO_AUTH.equals("0")) {
-                                                        pm.Main(mContext);
+                                        if(kind == 0){
+                                            if (save_kind.equals("0")) {
+                                                //임시저장된 매장
+                                                pm.PlaceEditGo(mContext);
+                                            } else {
+                                                //저장된 매장
+                                                if (accept_state.equals("null")) {
+                                                    if (!owner_id.equals(USER_INFO_ID)) {
+                                                        accept_state = "1";
                                                     } else {
-                                                        pm.Main2(mContext);
-//                                                    InOutLogMember(place_id);
+                                                        accept_state = "0";
                                                     }
                                                 }
+                                                shardpref.putInt("accept_state", Integer.parseInt(accept_state));
+                                                ConfirmUserPlacemember(place_id, myid, owner_id, place_name);
+                                                shardpref.putInt("SELECT_POSITION", 0);
+                                                if(accept_state.equals("1")){
+                                                    if(USER_INFO_AUTH.equals("")){
+                                                        LoginCheck(USER_INFO_EMAIL);
+                                                    }else{
+                                                        if (USER_INFO_AUTH.equals("0")) {
+                                                            pm.Main(mContext);
+                                                        } else {
+                                                            pm.Main2(mContext);
+//                                                    InOutLogMember(place_id);
+                                                        }
+                                                    }
 
-                                            }else{
-                                                Toast_Nomal("승인 대기중인 매장입니다.");
+                                                }else{
+                                                    Toast_Nomal("승인 대기중인 매장입니다.");
+                                                }
                                             }
-
+                                        }else{
+                                            Intent intent = new Intent(mContext, PlaceBottomNaviActivity.class);
+                                            intent.putExtra("left_btn_txt", "닫기");
+                                            mContext.startActivity(intent);
+                                            ((Activity) mContext).overridePendingTransition(R.anim.translate_up, 0);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         }
                                     } catch (JSONException e) {
                                         dlog.i("GetPlaceList OnItemClickListener Exception :" + e);

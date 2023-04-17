@@ -155,15 +155,11 @@ public class WorkstatusFragment extends Fragment {
             place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
             USER_INFO_ID = UserCheckData.getInstance().getUser_id();
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
-            shardpref.remove("change_place_id");
+
             //shardpref Area
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
+            place_id = shardpref.getString("change_place_id", PlaceCheckData.getInstance().getPlace_id());
 
-//            if (USER_INFO_AUTH.equals("1")) {
-//                if (!place_owner_id.equals(USER_INFO_ID)) {
-//                    binding.addBtn.getRoot().setVisibility(View.GONE);
-//                }
-//            }
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             SELECT_POSITION = 1;
 
@@ -172,7 +168,6 @@ public class WorkstatusFragment extends Fragment {
                     .skipMemoryCache(true).into(binding.loadingView);
             binding.loginAlertText.setVisibility(View.GONE);
             fg = WorkStatusSubFragment1.newInstance();
-
 
             setBtnEvent();
             setAddBtnSetting();
@@ -464,15 +459,28 @@ public class WorkstatusFragment extends Fragment {
             binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
         });
 
-        binding.selectPlace.setText(place_name);
-        binding.changePlace.setTag(place_name);
+        String change_place_name = shardpref.getString("change_place_name", place_name);
+        binding.selectPlace.setText(change_place_name);
+        binding.changePlace.setTag(change_place_name);
 
         binding.changePlace.setOnClickListener(v -> {
             PlaceListBottomSheet plb = new PlaceListBottomSheet();
             plb.show(getChildFragmentManager(), "PlaceListBottomSheet");
             plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
+                //--UI 세팅
+                chng_icon = false;
+                binding.calendarArea.setVisibility(View.GONE);
+                binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+                binding.dateLayout.setVisibility(View.VISIBLE);
+                binding.dateSelect.setVisibility(View.GONE);
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+
+                //--UI 데이터 및 페이지 세팅
                 shardpref.putString("change_place_id", place_id);
+                shardpref.putString("change_place_name", place_name);
+
                 dlog.i("change_place_id : " + place_id);
+
                 binding.selectPlace.setText(place_name);
                 binding.changePlace.setTag(place_name);
 //                SetCalenderData(Year, Month);
@@ -541,6 +549,8 @@ public class WorkstatusFragment extends Fragment {
     }
 
     private void SetWorkStatusCalenderData() {
+        binding.changeIcon.setClickable(false);
+        binding.changeIcon2.setClickable(false);
         binding.loginAlertText.setVisibility(View.VISIBLE);
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = Year + "-" + Month;
@@ -554,7 +564,7 @@ public class WorkstatusFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkStatusGetallInterface api = retrofit.create(WorkStatusGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
+        Call<String> call2 = api.getData(shardpref.getString("change_place_id", PlaceCheckData.getInstance().getPlace_id()), USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -594,6 +604,8 @@ public class WorkstatusFragment extends Fragment {
                         }
                     }
                     binding.loginAlertText.setVisibility(View.GONE);
+                    binding.changeIcon.setClickable(true);
+                    binding.changeIcon2.setClickable(true);
                 });
             }
 
@@ -602,6 +614,8 @@ public class WorkstatusFragment extends Fragment {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러2 = " + t.getMessage());
                 binding.loginAlertText.setVisibility(View.GONE);
+                binding.changeIcon.setClickable(true);
+                binding.changeIcon2.setClickable(true);
             }
         });
 
@@ -618,6 +632,8 @@ public class WorkstatusFragment extends Fragment {
     }
 
     public void PlaceWorkCheck(String place_id) {
+        binding.changeIcon.setClickable(false);
+        binding.changeIcon2.setClickable(false);
         binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("PlaceWorkCheck place_id : " + place_id);
         dlog.i("PlaceWorkCheck USER_INFO_ID : " + USER_INFO_ID);
@@ -674,6 +690,8 @@ public class WorkstatusFragment extends Fragment {
                     });
                 }
                 binding.loginAlertText.setVisibility(View.GONE);
+                binding.changeIcon.setClickable(true);
+                binding.changeIcon2.setClickable(true);
             }
 
             @SuppressLint("LongLogTag")
@@ -681,6 +699,8 @@ public class WorkstatusFragment extends Fragment {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러1 = " + t.getMessage());
                 binding.loginAlertText.setVisibility(View.GONE);
+                binding.changeIcon.setClickable(true);
+                binding.changeIcon2.setClickable(true);
             }
         });
     }
@@ -690,6 +710,7 @@ public class WorkstatusFragment extends Fragment {
     private boolean isDragging = false;
 
     private void setAddBtnSetting() {
+        dlog.i("setAddBtnSetting / place_owner_id.equals(USER_INFO_ID) : " + place_owner_id.equals(USER_INFO_ID));
         add_worktime_btn = binding.getRoot().findViewById(R.id.add_worktime_btn);
         addbtn_tv = binding.getRoot().findViewById(R.id.addbtn_tv);
         addbtn_tv.setText("근무추가");

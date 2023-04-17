@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface MainWorkCntInterface {
     String URL = "http://krafte.net/NEBWorks/place/";
-    //http://krafte.net/NEBWorks/place/get_main2.php?place_id=24&user_id=16
+    //http://krafte.net/NEBWorks/place/get_main2.php?place_id=207&user_id=199
     @FormUrlEncoded
     @POST("get_main2.php")
     Call<String> getData(
