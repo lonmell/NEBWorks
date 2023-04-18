@@ -557,13 +557,17 @@ public class MemberManagement extends AppCompatActivity {
                                         try {
                                             dlog.i("mAdapter setOnItemClickListener2 Click!");
                                             dlog.i("position : " + position);
+                                            dlog.i("kind : " + kind);
 
                                             String getid = mList.get(position).getId();
+                                            String account = mList.get(position).getAccount();
                                             String place_name = mList.get(position).getPlace_name();
                                             String name = mList.get(position).getName();
                                             String phone = mList.get(position).getPhone();
                                             String jumin = mList.get(position).getJumin();
                                             String join_date = mList.get(position).getJoin_date();
+                                            String memplace_name = mList.get(position).getPlace_name();
+
                                             if (kind == 1) {
                                                 dlog.i("kind : " + kind);
                                                 dlog.i("id : " + getid);
@@ -582,6 +586,17 @@ public class MemberManagement extends AppCompatActivity {
                                                 startActivity(intent);
                                                 overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            } else if (kind == 4) {
+                                                if(USER_INFO_ID.equals(getid) || USER_INFO_AUTH.equals("0")){
+                                                    shardpref.putString("stub_place_id",place_id);
+                                                    shardpref.putString("stub_user_id",getid);
+                                                    shardpref.putString("stub_user_name",name);
+                                                    shardpref.putString("stub_user_account",account);
+                                                    shardpref.putString("change_place_name",memplace_name);
+                                                    pm.MemberDetail(mContext);
+                                                }else{
+                                                    Toast_Nomal("권한이 없습니다.");
+                                                }
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();

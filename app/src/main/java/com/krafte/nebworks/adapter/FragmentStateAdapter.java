@@ -2,6 +2,7 @@ package com.krafte.nebworks.adapter;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -25,6 +26,16 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
     String iYear = "";
     String iMonth = "";
     boolean datePickerState = false;
+
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+
+    private OnItemClickListener mListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
 
     // state: 1: workGoto 2: workStatus 3: taskApproval
     public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, int state, ArrayList<WorkGetallData.WorkGetallData_list> sendList) {
@@ -84,6 +95,7 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
     @Override
     public Fragment createFragment(int position) {
         Log.d("createFragment", String.valueOf(position));
+
         long itemId = getItemId(position);
 
         long year = itemId / 100L;
@@ -91,18 +103,17 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
 
         this.year = String.valueOf(Math.toIntExact(year));
         this.month = String.format("%02d", Math.toIntExact(month));
-
         Log.d("FragmentStateAdapter", "year, month : " + this.year + " " + this.month);
 
         return new CalenderFragment(this.year, this.month, state, sendList);
     }
 
     public String returnMonth() {
-        return month;
+        return this.month;
     }
 
     public String returnYear() {
-        return year;
+        return this.year;
     }
 
     @Override

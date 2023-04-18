@@ -65,7 +65,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class WorkgotoFragment extends Fragment {
+public class WorkgotoFragment extends Fragment implements CalenderFragment.OnButtonClickListener{
     private final static String TAG = "WorkgotoFragment";
     private WorkgotofragmentBinding binding;
     Context mContext;
@@ -192,11 +192,12 @@ public class WorkgotoFragment extends Fragment {
             change_place_id = place_id;
             change_member_id = "";
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
-            dlog.i("PlaceWorkActivity SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
             fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, workGotoList2);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+
 
             if (SELECT_POSITION_sub == 0) {
                 chng_icon = false;
@@ -343,6 +344,10 @@ public class WorkgotoFragment extends Fragment {
                         Month = toDay.substring(5, 7);
                         Day = toDay.substring(8, 10);
                         getYMPicker = Year + "-" + Month;
+                        binding.setdate.setText(Year + "년 " + Month + "월 ");
+                        int currentPosition = binding.calenderViewpager.getCurrentItem();
+                        binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
+                        binding.calenderViewpager.setOffscreenPageLimit(1);
                     } else {
                         cal.add(Calendar.DATE, -1);
                         toDay = sdf.format(cal.getTime());
@@ -375,6 +380,10 @@ public class WorkgotoFragment extends Fragment {
                         Month = toDay.substring(5, 7);
                         Day = toDay.substring(8, 10);
                         getYMPicker = Year + "-" + Month;
+                        binding.setdate.setText(Year + "년 " + Month + "월 ");
+                        int currentPosition = binding.calenderViewpager.getCurrentItem();
+                        binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
+                        binding.calenderViewpager.setOffscreenPageLimit(1);
                     } else {
                         cal.add(Calendar.DATE, +1);
                         toDay = sdf.format(cal.getTime());
@@ -421,6 +430,7 @@ public class WorkgotoFragment extends Fragment {
                     fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 1);
                     binding.calenderViewpager.setAdapter(fragmentStateAdapter);
                     binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
@@ -524,8 +534,8 @@ public class WorkgotoFragment extends Fragment {
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
                 binding.selectArea.setVisibility(View.GONE);
-                binding.dateLayout.setVisibility(View.GONE);
-                binding.dateSelect.setVisibility(View.VISIBLE);
+                binding.dateLayout.setVisibility(View.VISIBLE);
+                binding.dateSelect.setVisibility(View.GONE);
                 binding.setdate.setText(Year + "년 " + Month + "월");
                 binding.line01.setVisibility(View.GONE);
 //                SetCalenderData();
@@ -637,7 +647,35 @@ public class WorkgotoFragment extends Fragment {
                                 binding.nodataArea.setVisibility(View.GONE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                        if (USER_INFO_AUTH.equals("0")) {
+                                    if (USER_INFO_AUTH.equals("0")) {
+                                        Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
+                                                jsonObject.getString("id"),
+                                                jsonObject.getString("writer_id"),
+                                                jsonObject.getString("kind"),
+                                                jsonObject.getString("title"),
+                                                jsonObject.getString("contents"),
+                                                jsonObject.getString("complete_kind"),
+                                                Collections.singletonList(jsonObject.getString("users")),
+                                                jsonObject.getString("task_date"),
+                                                jsonObject.getString("start_time"),
+                                                jsonObject.getString("end_time"),
+                                                jsonObject.getString("sun"),
+                                                jsonObject.getString("mon"),
+                                                jsonObject.getString("tue"),
+                                                jsonObject.getString("wed"),
+                                                jsonObject.getString("thu"),
+                                                jsonObject.getString("fri"),
+                                                jsonObject.getString("sat"),
+                                                jsonObject.getString("img_path"),
+                                                jsonObject.getString("complete_yn"),
+                                                jsonObject.getString("incomplete_reason"),
+                                                jsonObject.getString("approval_state"),
+                                                jsonObject.getString("task_overdate"),
+                                                jsonObject.getString("reject_reason"),
+                                                jsonObject.getString("updated_at")
+                                        ));
+                                    } else {
+                                        if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
                                             Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
                                                     jsonObject.getString("id"),
                                                     jsonObject.getString("writer_id"),
@@ -664,36 +702,8 @@ public class WorkgotoFragment extends Fragment {
                                                     jsonObject.getString("reject_reason"),
                                                     jsonObject.getString("updated_at")
                                             ));
-                                        } else {
-                                            if (!jsonObject.getString("id").isEmpty() || !jsonObject.getString("id").equals("null")) {
-                                                Todo_mAdapter.addItem(new TodolistData.TodolistData_list(
-                                                        jsonObject.getString("id"),
-                                                        jsonObject.getString("writer_id"),
-                                                        jsonObject.getString("kind"),
-                                                        jsonObject.getString("title"),
-                                                        jsonObject.getString("contents"),
-                                                        jsonObject.getString("complete_kind"),
-                                                        Collections.singletonList(jsonObject.getString("users")),
-                                                        jsonObject.getString("task_date"),
-                                                        jsonObject.getString("start_time"),
-                                                        jsonObject.getString("end_time"),
-                                                        jsonObject.getString("sun"),
-                                                        jsonObject.getString("mon"),
-                                                        jsonObject.getString("tue"),
-                                                        jsonObject.getString("wed"),
-                                                        jsonObject.getString("thu"),
-                                                        jsonObject.getString("fri"),
-                                                        jsonObject.getString("sat"),
-                                                        jsonObject.getString("img_path"),
-                                                        jsonObject.getString("complete_yn"),
-                                                        jsonObject.getString("incomplete_reason"),
-                                                        jsonObject.getString("approval_state"),
-                                                        jsonObject.getString("task_overdate"),
-                                                        jsonObject.getString("reject_reason"),
-                                                        jsonObject.getString("updated_at")
-                                                ));
-                                            }
                                         }
+                                    }
                                 }
                                 for (int a = 0; a < Response.length(); a++) {
                                     dlog.i("approval_state 1 : " + Response.getJSONObject(a).getString("approval_state"));
@@ -902,5 +912,18 @@ public class WorkgotoFragment extends Fragment {
         startActivity(intent);
         activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    @Override
+    public void onButtonClicked(int kind) {
+        dlog.i("kind : " + kind);
+        int currentPosition = binding.calenderViewpager.getCurrentItem();
+        if(kind == -1){
+            // ViewPager2를 오른쪽으로 이동
+            binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
+        }else{
+            // ViewPager2를 오른쪽으로 이동
+            binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
+        }
     }
 }

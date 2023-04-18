@@ -216,6 +216,7 @@ public class PlaceListActivity extends AppCompatActivity {
     private boolean isDragging = false;
 
     private void setBtnEvent() {
+
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });

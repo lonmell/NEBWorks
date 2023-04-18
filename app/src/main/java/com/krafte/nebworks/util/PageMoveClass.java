@@ -61,13 +61,13 @@ import com.krafte.nebworks.ui.worksite.PlaceEditActivity2;
 import com.krafte.nebworks.ui.worksite.PlaceListActivity;
 import com.krafte.nebworks.ui.worksite.PlaceSearchActivity;
 import com.krafte.nebworks.ui.worksite.PlaceWorkDetailActivity;
-import com.krafte.nebworks.ui.worksite.TaskAddWorkActivity;
-import com.krafte.nebworks.ui.worksite.TaskDetailActivity;
-import com.krafte.nebworks.ui.worksite.TaskListActivity;
-import com.krafte.nebworks.ui.worksite.TaskReportActivity;
-import com.krafte.nebworks.ui.worksite.TaskReportDetailActivity;
-import com.krafte.nebworks.ui.worksite.TaskReuesAddActivity;
-import com.krafte.nebworks.ui.worksite.TaskReuseActivity;
+import com.krafte.nebworks.ui.task.TaskAddWorkActivity;
+import com.krafte.nebworks.ui.task.TaskDetailActivity;
+import com.krafte.nebworks.ui.task.TaskListActivity;
+import com.krafte.nebworks.ui.task.TaskReportActivity;
+import com.krafte.nebworks.ui.task.TaskReportDetailActivity;
+import com.krafte.nebworks.ui.task.TaskReuesAddActivity;
+import com.krafte.nebworks.ui.task.TaskReuseActivity;
 import com.krafte.nebworks.ui.workstatus.AddWorkPartActivity;
 
 public class PageMoveClass implements MovePage {

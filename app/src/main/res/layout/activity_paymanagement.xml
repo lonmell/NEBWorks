@@ -126,7 +126,7 @@
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/select_date_area"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -140,10 +140,8 @@
             android:layout_width="45dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_centerVertical="true"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -157,10 +155,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -204,9 +198,7 @@
             android:layout_width="45dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_centerVertical="true">
 
             <ImageView
                 android:id="@+id/change_icon"
@@ -215,7 +207,7 @@
                 android:layout_centerInParent="true"
                 android:background="@drawable/calendar_resize" />
         </RelativeLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
     <!-- TabLayou 을 배치한다. -->
     <LinearLayout
@@ -295,14 +287,14 @@
             android:id="@+id/calendar_area"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignTop="@+id/status_select_area"
+            android:layout_alignTop="@+id/select_date_area"
             android:background="@color/white"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/calender_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
         </RelativeLayout>
 

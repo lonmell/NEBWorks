@@ -152,6 +152,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
         fragmentStateAdapter = new FragmentStateAdapter(this, 1,workGotoList2);
         binding.calenderViewpager.setAdapter(fragmentStateAdapter);
         binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+        binding.calenderViewpager.setOffscreenPageLimit(1);
 
         change_place_id = place_id;
         change_member_id = "";
@@ -261,7 +262,11 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     Month = toDay.substring(5,7);
                     Day = toDay.substring(8,10);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
+                    int currentPosition = binding.calenderViewpager.getCurrentItem();
+                    binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
+                    binding.calenderViewpager.setOffscreenPageLimit(1);
 //                    SetCalenderData();
+
                 } else {
                     cal.add(Calendar.DATE, -1);
                     toDay = sdf.format(cal.getTime());
@@ -289,6 +294,9 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     Month = toDay.substring(5,7);
                     Day = toDay.substring(8,10);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
+                    int currentPosition = binding.calenderViewpager.getCurrentItem();
+                    binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
+                    binding.calenderViewpager.setOffscreenPageLimit(1);
 //                    SetCalenderData();
                 } else {
                     cal.add(Calendar.DATE, +1);
@@ -331,6 +339,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     fragmentStateAdapter = new FragmentStateAdapter(thisActivity, true, Year, Month, 1);
                     binding.calenderViewpager.setAdapter(fragmentStateAdapter);
                     binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                    binding.calenderViewpager.setOffscreenPageLimit(1);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
 //                    SetCalenderData();
                 } else {

@@ -372,7 +372,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         SetAllMemberList();
-
+        SetAllMemberList(stub_place_id, stub_user_id);
     }
 
     @Override
@@ -477,6 +477,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     String workpay = "";
     String CallNum = "";
     public void SetAllMemberList(String place_id, String user_id) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("SetAllMemberList place_id : " + place_id);
         dlog.i("SetAllMemberList user_id : " + user_id);
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
@@ -595,6 +596,8 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         if (mem_id.equals(USER_INFO_ID) || USER_INFO_AUTH.equals("0")) {
                                             shardpref.putString("contract_id", contract_id);
                                             pm.ContractAll(mContext);
+                                        }else {
+                                            Toast_Nomal("권한이 없습니다.");
                                         }
                                     });
                                 } else {
@@ -681,6 +684,7 @@ public class MemberDetailActivity extends AppCompatActivity {
 //                                    Toast_Nomal("근로계약서 작성이 완료되지 않았습니다.");
                                 }
                             }
+                            binding.loginAlertText.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -690,6 +694,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                     dlog.e("에러 = " + t.getMessage());
+                    binding.loginAlertText.setVisibility(View.GONE);
                 }
             });
         });
@@ -703,6 +708,7 @@ public class MemberDetailActivity extends AppCompatActivity {
     /*직원 정보 리스트 END*/
 
     public void SetAllMemberList() {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
         dlog.i("-----SetAllMemberList-----");
         dlog.i("place_id : " + place_id);
         dlog.i("USER_INFO_ID : " + USER_INFO_ID);
@@ -1025,7 +1031,7 @@ public class MemberDetailActivity extends AppCompatActivity {
                                         binding.nowPay.setText(String.valueOf(myFormatter.format(allPay)) + "원");
                                         binding.payTv.setText(String.valueOf(myFormatter.format(Integer.parseInt(workpay))) + "원");
                                         binding.payDiffBar.setMax(Integer.parseInt(allwcnt));
-                                        binding.payDiffBar.setProgress(Integer.parseInt(workpay));
+                                        binding.payDiffBar.setProgress(Integer.parseInt(iocnt));
                                         binding.payDiffBar.setOnTouchListener((v, event) -> {
                                             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                                                 return false;

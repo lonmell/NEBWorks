@@ -112,11 +112,11 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                     .into(holder.member_profile);
             if(item.getKind().equals("0")){
                 //승인대기상태
-                if(place_owner_id.equals(USER_INFO_ID)){
-
-                }else{
-
-                }
+//                if(place_owner_id.equals(USER_INFO_ID)){
+//
+//                }else{
+//
+//                }
                 holder.linear04.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
                 holder.linear01.setVisibility(View.GONE);
                 holder.linear02.setVisibility(View.GONE);
@@ -327,13 +327,16 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 //                    stub_user_id = shardpref.getString("stub_user_id", "0");
 //                    stub_user_account = shardpref.getString("stub_user_account", "");
 //                    change_place_name = shardpref.getString("change_place_name", "");
-                    WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(pos);
-                    shardpref.putString("stub_place_id",place_id);
-                    shardpref.putString("stub_user_id",item.getId());
-                    shardpref.putString("stub_user_name",item.getName());
-                    shardpref.putString("stub_user_account",item.getAccount());
-                    shardpref.putString("change_place_name",item.getPlace_name());
-                    pm.MemberDetail(mContext);
+                    if (mListener2 != null) {
+                        mListener2.onItemClick(view, pos,4);
+                    }
+//                    WorkPlaceMemberListData.WorkPlaceMemberListData_list item = mData.get(pos);
+//                    shardpref.putString("stub_place_id",place_id);
+//                    shardpref.putString("stub_user_id",item.getId());
+//                    shardpref.putString("stub_user_name",item.getName());
+//                    shardpref.putString("stub_user_account",item.getAccount());
+//                    shardpref.putString("change_place_name",item.getPlace_name());
+//                    pm.MemberDetail(mContext);
                 }
             });
 

@@ -623,30 +623,86 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
                 <RelativeLayout
-                    android:id="@+id/change_area"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="20dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:id="@+id/place_status3"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/place_status"
+                    android:layout_toStartOf="@+id/change_area"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp">
 
-                    <ImageView
-                        android:id="@+id/change_icon2"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/date_layout2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/calendar_resize" />
+                        android:orientation="horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toStartOf="@+id/change_area"
+                        android:layout_toEndOf="@+id/date_select">
+
+                        <RelativeLayout
+                            android:id="@+id/prev_date2"
+                            android:layout_width="40dp"
+                            android:layout_height="45dp"
+                            android:gravity="center|start">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/find_right_arrow"
+                                android:rotation="-180" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/setdate2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:fontFamily="@font/pretendard_bold"
+                            android:gravity="center"
+                            android:text="0000년 00월 00일"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <RelativeLayout
+                            android:id="@+id/next_date2"
+                            android:layout_width="40dp"
+                            android:layout_height="45dp"
+                            android:gravity="center|end">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/find_right_arrow" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/change_area"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:id="@+id/change_icon2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/calendar_resize" />
+                    </RelativeLayout>
                 </RelativeLayout>
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/calender_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/change_area"
+                    android:layout_below="@+id/place_status3"
                     android:background="@color/white"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp" />

@@ -159,18 +159,18 @@
             android:launchMode="singleTop" />
         <activity android:name=".ui.worksite.PlaceAddActivity" />
         <activity android:name=".ui.worksite.PlaceAddActivity2" />
-        <activity android:name=".ui.worksite.TaskAddWorkActivity" />
+        <activity android:name=".ui.task.TaskAddWorkActivity" />
         <activity android:name=".ui.worksite.PlaceWorkDetailActivity" />
         <activity android:name=".ui.worksite.PlaceEditActivity" />
         <activity android:name=".ui.worksite.PlaceEditActivity2" />
         <activity android:name=".ui.worksite.PlaceSearchActivity" />
         <activity android:name=".ui.worksite.PlaceAddCompletion" />
-        <activity android:name=".ui.worksite.TaskReuseActivity" />
-        <activity android:name=".ui.worksite.TaskReuesAddActivity" />
-        <activity android:name=".ui.worksite.TaskDetailActivity" />
-        <activity android:name=".ui.worksite.TaskReportActivity" />
-        <activity android:name=".ui.worksite.TaskReportDetailActivity" />
-        <activity android:name=".ui.worksite.TaskListActivity" /> <!-- Other -->
+        <activity android:name=".ui.task.TaskReuseActivity" />
+        <activity android:name=".ui.task.TaskReuesAddActivity" />
+        <activity android:name=".ui.task.TaskDetailActivity" />
+        <activity android:name=".ui.task.TaskReportActivity" />
+        <activity android:name=".ui.task.TaskReportDetailActivity" />
+        <activity android:name=".ui.task.TaskListActivity" /> <!-- Other -->
         <activity android:name=".ui.PinSelectLocationActivity" /> <!-- user -->
         <activity android:name=".ui.user.ProfileEditActivity" />
         <activity android:name=".ui.user.DeleteUserActivity" />
@@ -182,9 +182,6 @@
         <activity android:name=".ui.user.ChangePWActivity2" />
         <activity android:name=".ui.user.MyListActivity" />
         <activity android:name=".ui.user.FobiddenListActivity" /> <!-- career -->
-        <activity
-            android:name=".ui.career.CareerActivity"
-            android:theme="@style/Theme.Kogas" /> <!-- community -->
         <activity android:name=".ui.community.CommunityAddActivity" />
         <activity android:name=".ui.community.MoreListCommunityActivity" />
         <activity android:name=".ui.community.OwnerFeedDetailActivity" />

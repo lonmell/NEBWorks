@@ -13,10 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.CalendarDayAdaper;
-import com.krafte.nebworks.adapter.WorkCalenderAdapter;
-import com.krafte.nebworks.adapter.WorkStatusCalenderAdapter;
+import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.bottomsheet.WorkgotoBottomSheet;
 import com.krafte.nebworks.bottomsheet.WorkstatusBottomSheet;
 import com.krafte.nebworks.data.PlaceCheckData;
@@ -40,7 +41,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,25 +50,22 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class CalenderFragment extends Fragment {
     private final static String TAG = "CalenderFragment";
-    Timer timer = new Timer();
-
     String USER_INFO_ID = "";
     String place_id = "";
     DateCurrent dc = new DateCurrent();
 
     PreferenceHelper shardpref;
     RetrofitConnect rc = new RetrofitConnect();
-    WorkCalenderAdapter workCalenderAdapter;
-    WorkStatusCalenderAdapter workStatusCalenderAdapter;
     Dlog dlog = new Dlog();
     private FragmentCalenderBinding binding = null;
 
     Context mContext;
     Activity activity;
-    String year;
-    String month;
+    String year = "2023";
+    String month = "04";
+    String day = "01";
     int state;
-
+    FragmentStateAdapter fragmentStateAdapter;
     String change_place_id = "";
     String change_member_id = "";
 
@@ -92,7 +89,12 @@ public class CalenderFragment extends Fragment {
     //일
     List<String> sunDate = new ArrayList<>();
     String SetDay = "";
+    ViewPager2 viewPager;
 
+    private OnButtonClickListener mOnButtonClickListener;
+    public void setOnButtonClickListener(OnButtonClickListener listener) {
+        mOnButtonClickListener = listener;
+    }
 
     // state 1: WorkGoto
     public CalenderFragment(String year, String month, int state, ArrayList<WorkGetallData.WorkGetallData_list> sendList) {
@@ -101,6 +103,11 @@ public class CalenderFragment extends Fragment {
         this.state = state;
         this.sendList = sendList;
     }
+
+    public CalenderFragment() {
+
+    }
+
 
     public String getYear() {
         return year;
@@ -135,9 +142,23 @@ public class CalenderFragment extends Fragment {
         binding.calendarMonth.setText(month + "월");
 
         dlog.i("onCreateView sendList : " + sendList);
+        // Fragment 내에서 ViewPager2의 참조를 가져옴
+        viewPager = requireActivity().findViewById(R.id.calender_viewpager);
+        fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, sendList);
+
+        binding.prevDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnButtonClickListener != null) {
+                    mOnButtonClickListener.onButtonClicked(-1);
+                }
+            }
+        });
 
         return binding.getRoot();
     }
+
+
 
     private int getWeekOfYear(String date) {
         Calendar calendar = Calendar.getInstance();
@@ -153,66 +174,72 @@ public class CalenderFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Integer.parseInt(year), Integer.parseInt(month) - 1, 1);
-        // 3. 숫자 요일 구하기
-        dlog.i(month + "월은 : 1 ~ " + cal.getActualMaximum(Calendar.DAY_OF_MONTH) + "까지");
-        for (int i = 0; i < cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-            allDate.add(i, String.valueOf(i + 1));
-        }
-
-        monDate.add(0, "");
-        tueDate.add(0, "");
-        wedDate.add(0, "");
-        thuDate.add(0, "");
-        friDate.add(0, "");
-        satDate.add(0, "");
-        sunDate.add(0, "");
-
-        for (int i = 0; i < cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-            LocalDate date = LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(allDate.get(i)));
-//            System.out.println(date);
-            DayOfWeek dayOfWeek = date.getDayOfWeek();
-
-            int dayOfWeekNumber = dayOfWeek.getValue();
-            switch (dayOfWeekNumber) {
-                case 1:
-                    SetDay = year + "-" + month + "-" + allDate.get(i);
-                    dlog.i("monDate SetDay : " + SetDay);
-                    dlog.i("monDate getWeekOfYear(SetDay) : " + getWeekOfYear(SetDay));
-                    monDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
-                    break;
-                case 2:
-                    SetDay = year + "-" + month + "-" + allDate.get(i);
-                    tueDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
-                    break;
-                case 3:
-                    SetDay = year + "-" + month + "-" + allDate.get(i);
-                    wedDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
-                    break;
-                case 4:
-                    SetDay = year + "-" + month + "-" + allDate.get(i);
-                    thuDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
-                    break;
-                case 5:
-                    SetDay = year + "-" + month + "-" + allDate.get(i);
-                    friDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
-                    break;
-                case 6:
-                    SetDay = year + "-" + month + "-" + allDate.get(i);
-                    satDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
-                    break;
-                case 7:
-                    SetDay = year + "-" + month + "-" + allDate.get(i);
-                    sunDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
-                    break;
-            }
-        }
-        dlog.i("state: " + state);
-        SetCalendar();
+        setDate();
     }
 
+    private void setDate(){
+        try{
+            Calendar cal = Calendar.getInstance();
+
+            cal.set(Integer.parseInt(year), Integer.parseInt(month) - 1, 1);
+            // 3. 숫자 요일 구하기
+            dlog.i(month + "월은 : 1 ~ " + cal.getActualMaximum(Calendar.DAY_OF_MONTH) + "까지");
+            for (int i = 0; i < cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+                allDate.add(i, String.valueOf(i + 1));
+            }
+            monDate.add(0, "");
+            tueDate.add(0, "");
+            wedDate.add(0, "");
+            thuDate.add(0, "");
+            friDate.add(0, "");
+            satDate.add(0, "");
+            sunDate.add(0, "");
+
+            for (int i = 0; i < cal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+                LocalDate date = LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(allDate.get(i)));
+//            System.out.println(date);
+                DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+                int dayOfWeekNumber = dayOfWeek.getValue();
+                switch (dayOfWeekNumber) {
+                    case 1:
+                        SetDay = year + "-" + month + "-" + allDate.get(i);
+                        dlog.i("monDate SetDay : " + SetDay);
+                        dlog.i("monDate getWeekOfYear(SetDay) : " + getWeekOfYear(SetDay));
+                        monDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
+                        break;
+                    case 2:
+                        SetDay = year + "-" + month + "-" + allDate.get(i);
+                        tueDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
+                        break;
+                    case 3:
+                        SetDay = year + "-" + month + "-" + allDate.get(i);
+                        wedDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
+                        break;
+                    case 4:
+                        SetDay = year + "-" + month + "-" + allDate.get(i);
+                        thuDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
+                        break;
+                    case 5:
+                        SetDay = year + "-" + month + "-" + allDate.get(i);
+                        friDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
+                        break;
+                    case 6:
+                        SetDay = year + "-" + month + "-" + allDate.get(i);
+                        satDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
+                        break;
+                    case 7:
+                        SetDay = year + "-" + month + "-" + allDate.get(i);
+                        sunDate.add(getWeekOfYear(SetDay) - 1, allDate.get(i));
+                        break;
+                }
+            }
+            dlog.i("state: " + state);
+            SetCalendar();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onResume(){
@@ -234,6 +261,10 @@ public class CalenderFragment extends Fragment {
             SetCalendar();
         }
 
+    }
+
+    public interface OnButtonClickListener {
+        void onButtonClicked(int kind);
     }
 
     private void SetClickEvent(String WorkDay) {

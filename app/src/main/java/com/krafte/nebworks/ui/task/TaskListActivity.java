@@ -1,4 +1,4 @@
-package com.krafte.nebworks.ui.worksite;
+package com.krafte.nebworks.ui.task;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -28,21 +28,18 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
 import com.krafte.nebworks.adapter.Tap2ListAdapter;
-import com.krafte.nebworks.adapter.ViewPagerFregmentAdapter;
-import com.krafte.nebworks.adapter.WorkCalenderAdapter;
 import com.krafte.nebworks.bottomsheet.PaySelectMemberActivity;
 import com.krafte.nebworks.bottomsheet.PaySelectPlaceActivity;
 import com.krafte.nebworks.bottomsheet.TaskAddOption;
-import com.krafte.nebworks.data.CalendarSetData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.TodolistData;
 import com.krafte.nebworks.data.UserCheckData;
-import com.krafte.nebworks.data.WorkCalenderData;
 import com.krafte.nebworks.data.WorkGetallData;
 import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
 import com.krafte.nebworks.dataInterface.WorkTaskGetallInterface;
 import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
+import com.krafte.nebworks.ui.CalenderFragment;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
@@ -81,13 +78,7 @@ public class TaskListActivity extends AppCompatActivity {
     DateCurrent dc = new DateCurrent();
     Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
-    ViewPagerFregmentAdapter viewPagerFregmentAdapter;
-
-    WorkCalenderAdapter mAdapter;
     FragmentStateAdapter fragmentStateAdapter;
-    ArrayList<WorkCalenderData.WorkCalenderData_list> mList;
-    //Task all data
-    ArrayList<CalendarSetData.CalendarSetData_list> mList2 = new ArrayList<>();
 
 
     ArrayList<TodolistData.TodolistData_list> Todo_mList = new ArrayList<>();
@@ -135,7 +126,7 @@ public class TaskListActivity extends AppCompatActivity {
     String change_place_name = "";
     String change_member_id = "";
     String change_member_name = "";
-
+    CalenderFragment clfrg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +169,7 @@ public class TaskListActivity extends AppCompatActivity {
             fragmentStateAdapter = new FragmentStateAdapter(fg.requireActivity(), 1,workGotoList2);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
 
 
             setBtnEvent();
@@ -192,6 +184,7 @@ public class TaskListActivity extends AppCompatActivity {
         }
 
     }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
@@ -360,6 +353,7 @@ public class TaskListActivity extends AppCompatActivity {
                     fragmentStateAdapter = new FragmentStateAdapter(fg.requireActivity(), true, Year, Month, 1);
                     binding.calenderViewpager.setAdapter(fragmentStateAdapter);
                     binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                    binding.calenderViewpager.setOffscreenPageLimit(1);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
@@ -724,6 +718,7 @@ public class TaskListActivity extends AppCompatActivity {
                             fragmentStateAdapter = new FragmentStateAdapter(fg.requireActivity(), 1,workGotoList2);
                             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
                             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                            binding.calenderViewpager.setOffscreenPageLimit(1);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

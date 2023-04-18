@@ -333,7 +333,6 @@ public class WorkstatusFragment extends Fragment {
                     Day = toDay.substring(8, 10);
                     getYMPicker = Year + "-" + Month;
                     shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
-                    binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     cal.add(Calendar.DATE, -1);
                     toDay = sdf.format(cal.getTime());
@@ -348,6 +347,19 @@ public class WorkstatusFragment extends Fragment {
                 SendToday();
             }
         });
+        binding.prevDate2.setOnClickListener(v -> {
+            cal.add(Calendar.MONTH, -1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
+            binding.setdate2.setText(Year + "년 " + Month + "월 ");
+            int currentPosition = binding.calenderViewpager.getCurrentItem();
+            binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        });
         binding.nextDate.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -360,7 +372,6 @@ public class WorkstatusFragment extends Fragment {
                     Day = toDay.substring(8, 10);
                     getYMPicker = Year + "-" + Month;
                     shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
-                    binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     cal.add(Calendar.DATE, +1);
                     toDay = sdf.format(cal.getTime());
@@ -374,6 +385,19 @@ public class WorkstatusFragment extends Fragment {
 //                SetCalenderData(Year, Month);
                 SendToday();
             }
+        });
+        binding.nextDate2.setOnClickListener(v -> {
+            cal.add(Calendar.MONTH, + 1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
+            binding.setdate2.setText(Year + "년 " + Month + "월 ");
+            int currentPosition = binding.calenderViewpager.getCurrentItem();
+            binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
         });
 
         Calendar c = Calendar.getInstance();
@@ -404,6 +428,7 @@ public class WorkstatusFragment extends Fragment {
                     binding.calenderViewpager.setSaveFromParentEnabled(false);
                     binding.calenderViewpager.setAdapter(fragmentStateAdapter);
                     binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                    binding.calenderViewpager.setOffscreenPageLimit(1);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
@@ -446,8 +471,8 @@ public class WorkstatusFragment extends Fragment {
             binding.calendarArea.setVisibility(View.VISIBLE);
             binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
             binding.dateLayout.setVisibility(View.GONE);
-            binding.dateSelect.setVisibility(View.VISIBLE);
-            binding.setdate.setText(Year + "년 " + Month + "월");
+            binding.dateSelect.setVisibility(View.GONE);
+            binding.setdate2.setText(Year + "년 " + Month + "월 ");
         });
 
         binding.changeIcon2.setOnClickListener(v -> {
@@ -599,6 +624,7 @@ public class WorkstatusFragment extends Fragment {
                             fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
                             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
                             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                            binding.calenderViewpager.setOffscreenPageLimit(1);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
