@@ -70,6 +70,8 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
     String startTime = "";
     String endTime = "";
 
+    String place_owner_id = "";
+
     private boolean animationsLocked = false;
     private boolean delayEnterAnimation = true;
 
@@ -287,7 +289,11 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
                     state = "승인대기";
                     holder.approval_state.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
                 }else if(item.getApproval_state().equals("1")){
-                    state = "승인";
+                    if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+                        state = "완료";
+                    }else{
+                        state = "승인";
+                    }
                     holder.approval_state.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 }else if(item.getApproval_state().equals("2")){
                     state = "반려";
@@ -425,6 +431,7 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
             shardpref = new PreferenceHelper(mContext);
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             USER_INFO_ID = shardpref.getString("USER_INFO_ID", "0");
+            place_owner_id = shardpref.getString("place_owner_id","0");
 
             shardpref.remove("task_no");
             shardpref.remove("writer_id");

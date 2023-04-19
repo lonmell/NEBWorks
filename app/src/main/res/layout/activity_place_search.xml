@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    tools:context=".ui.worksite.PlaceSearchActivity">
+    tools:context=".ui.place.PlaceSearchActivity">
 
     <RelativeLayout
         android:id="@+id/top_bar"

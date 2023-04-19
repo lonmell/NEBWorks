@@ -51,10 +51,11 @@ public class CalendarDayAdaper2 extends RecyclerView.Adapter<CalendarDayAdaper2.
     @Override
     public void onBindViewHolder(@NonNull CalendarDayAdaper2.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         WorkGetallData.WorkGetallData_list item = mData.get(position);
-
+        dlog.i("------CalendarDayAdaper2------");
         dlog.i("mData size :" + mData.size());
         dlog.i("mData title :" + item.getTitle());
         dlog.i("mData kind :" + item.getKind());
+        dlog.i("------CalendarDayAdaper2------");
         try{
             if(mData.size() == 0){
 //                dlog.i("mData size :" + mData.size());
@@ -134,7 +135,8 @@ public class CalendarDayAdaper2 extends RecyclerView.Adapter<CalendarDayAdaper2.
                     holder.task_tv4.setText(mData.get(3).getTitle());
                     holder.task_tv4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                 }
-            }else if(mData.size() == 5){
+            }else {
+                mData.size();
                 if(mData.get(0).getKind().equals("holiday")){
                     holder.task_tv1.setText(mData.get(0).getTitle());
                     holder.task_tv1.setTextColor(Color.parseColor("#FF687A"));

@@ -321,7 +321,6 @@ public class MemberManagement extends AppCompatActivity {
 
     /*직원 전체 리스트 START*/
     RetrofitConnect rc = new RetrofitConnect();
-
     public void SetAllMemberList(String place_id) {
         mList.clear();
         total_member_cnt = 0;

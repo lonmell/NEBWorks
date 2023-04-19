@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
@@ -261,6 +262,47 @@ public class PayManagementActivity extends AppCompatActivity {
     String getYMPicker = "";
     FragmentTransaction transaction;
     String setDate = "";
+    int before_pos = 0;
+    int calPos = 0;
+
+    private void ScrollState(int kind) {
+        if (kind == 0) {
+            //왼쪽으로 슬라이드 - 버튼으로
+            before_pos = 0;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            int currentPosition = binding.calenderViewpager.getCurrentItem();
+            binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if (kind == 1) {
+            //오른쪽으로 슬라이드 - 버튼으로
+            before_pos = 0;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            int currentPosition = binding.calenderViewpager.getCurrentItem();
+            binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if (kind == 3) {
+            //왼쪽으로 슬라이드
+            cal.add(Calendar.MONTH, -1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if (kind == 4) {
+            //왼쪽으로 슬라이드
+            cal.add(Calendar.MONTH, +1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        }
+    }
+
     private void TimeSetFun() {
         transaction = getSupportFragmentManager().beginTransaction();
 
@@ -277,6 +319,25 @@ public class PayManagementActivity extends AppCompatActivity {
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
         }
 
+        binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                // 슬라이드가 끝난 후 작동할 이벤트
+                if (before_pos != position) {
+                    if (before_pos != 0) {
+                        calPos = position - before_pos;
+                        dlog.i("onPageScrollStateChanged state : " + calPos);
+                        if (calPos > 0) {
+                            ScrollState(4);
+                        } else {
+                            ScrollState(3);
+                        }
+                    }
+                    before_pos = position;
+                }
+            }
+        });
 
         binding.prevDate.setOnClickListener(v -> {
             dlog.i("prevDate Click!! PayManagementActivity");
@@ -287,11 +348,7 @@ public class PayManagementActivity extends AppCompatActivity {
             setDate = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월");
             if (chng_icon) {
-//                SetCalenderData(Year, Month);
-                binding.setdate.setText(Year + "년 " + Month + "월 ");
-                int currentPosition = binding.calenderViewpager.getCurrentItem();
-                binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
-                binding.calenderViewpager.setOffscreenPageLimit(1);
+                ScrollState(0);
             } else {
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
             }
@@ -306,11 +363,7 @@ public class PayManagementActivity extends AppCompatActivity {
             setDate = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월");
             if (chng_icon) {
-//                SetCalenderData(Year, Month);
-                binding.setdate.setText(Year + "년 " + Month + "월 ");
-                int currentPosition = binding.calenderViewpager.getCurrentItem();
-                binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
-                binding.calenderViewpager.setOffscreenPageLimit(1);
+                ScrollState(1);
             } else {
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, change_member_id, Year + "-" + Month, Tap);
             }

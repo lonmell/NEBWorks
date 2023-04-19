@@ -52,18 +52,17 @@ import com.krafte.nebworks.ui.user.MyListActivity;
 import com.krafte.nebworks.ui.user.ProfileEditActivity;
 import com.krafte.nebworks.ui.user.SearchAccountActivity;
 import com.krafte.nebworks.ui.user.VerificationActivity;
-import com.krafte.nebworks.ui.worksite.AddVacationActivity;
-import com.krafte.nebworks.ui.worksite.PlaceAddActivity;
-import com.krafte.nebworks.ui.worksite.PlaceAddActivity2;
-import com.krafte.nebworks.ui.worksite.PlaceAddCompletion;
-import com.krafte.nebworks.ui.worksite.PlaceEditActivity;
-import com.krafte.nebworks.ui.worksite.PlaceEditActivity2;
-import com.krafte.nebworks.ui.worksite.PlaceListActivity;
-import com.krafte.nebworks.ui.worksite.PlaceSearchActivity;
-import com.krafte.nebworks.ui.worksite.PlaceWorkDetailActivity;
+import com.krafte.nebworks.ui.place.AddVacationActivity;
+import com.krafte.nebworks.ui.place.PlaceAddActivity;
+import com.krafte.nebworks.ui.place.PlaceAddActivity2;
+import com.krafte.nebworks.ui.place.PlaceAddCompletion;
+import com.krafte.nebworks.ui.place.PlaceEditActivity;
+import com.krafte.nebworks.ui.place.PlaceEditActivity2;
+import com.krafte.nebworks.ui.place.PlaceListActivity;
+import com.krafte.nebworks.ui.place.PlaceSearchActivity;
+import com.krafte.nebworks.ui.place.PlaceWorkDetailActivity;
 import com.krafte.nebworks.ui.task.TaskAddWorkActivity;
 import com.krafte.nebworks.ui.task.TaskDetailActivity;
-import com.krafte.nebworks.ui.task.TaskListActivity;
 import com.krafte.nebworks.ui.task.TaskReportActivity;
 import com.krafte.nebworks.ui.task.TaskReportDetailActivity;
 import com.krafte.nebworks.ui.task.TaskReuesAddActivity;
@@ -385,13 +384,7 @@ public class PageMoveClass implements MovePage {
         //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
-    @Override
-    public void TaskList(Context context) {
-        Intent intent = new Intent(context, TaskListActivity.class);
-        context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.translate_right2, R.anim.translate_left2);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }
+
 
 
     //--ui.user

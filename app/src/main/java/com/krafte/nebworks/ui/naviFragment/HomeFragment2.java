@@ -831,6 +831,10 @@ public class HomeFragment2 extends Fragment {
                     } else {
                         binding.title.setText("나의 매장");
                     }
+                    if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+                        binding.ganpyenMenu.setVisibility(View.GONE);
+                        binding.bottomMenu.setVisibility(View.GONE);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -988,7 +992,6 @@ public class HomeFragment2 extends Fragment {
     Calendar cal;
     String format = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
-
     public void PlaceWorkCheck(String place_id, String auth, String kind) {
         dlog.i("----------PlaceWorkCheck----------");
         dlog.i("PlaceWorkCheck place_id : " + place_id);
@@ -1108,12 +1111,20 @@ public class HomeFragment2 extends Fragment {
                                                         }
                                                     }
                                                 });
-
                                             }
                                             mAdapter3.notifyDataSetChanged();
                                         }
                                     } catch (Exception e) {
                                         dlog.i("UserCheck Exception : " + e);
+                                    }
+                                }else {
+                                    if(kind.equals("3")){
+                                        dlog.i("----- jsonRespone Empty kind 3 -----");
+                                        dlog.i("place_id : " + place_id);
+                                        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+                                        dlog.i("today : " + today);
+                                        dlog.i("----- jsonRespone Empty kind 3 -----");
+                                        WritePaymentList(place_id, USER_INFO_ID, today);// 근로자 정보 및 최종급여
                                     }
                                 }
                             } catch (JSONException e) {
@@ -1198,7 +1209,6 @@ public class HomeFragment2 extends Fragment {
                                     public void onItemClick(View v, int position) {
                                         if (USER_INFO_AUTH.isEmpty()) {
                                             isAuth();
-                                        } else {
                                         }
                                     }
                                 });
@@ -1245,11 +1255,13 @@ public class HomeFragment2 extends Fragment {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(jsonResponse);
                         if (Response.toString().equals("[]")) {
+                            binding.realPaynum.setText("");
                             HomeFragment2.super.onResume();
                         } else {
                             dlog.i("workhour : " + Response.getJSONObject(0).getString("workhour"));
                             dlog.i("jikgup : " + Response.getJSONObject(0).getString("jikgup"));
                             dlog.i("payment : " + Response.getJSONObject(0).getString("payment"));
+                            dlog.i("paykind : " + Response.getJSONObject(0).getString("paykind"));
                             String workhour = Response.getJSONObject(0).getString("workhour");
                             String jikgup = Response.getJSONObject(0).getString("jikgup");
                             String payment = Response.getJSONObject(0).getString("payment");
@@ -1260,6 +1272,8 @@ public class HomeFragment2 extends Fragment {
                                 binding.realPaynum.setText("근무 " + workhour + "시간 X 시급 " + payment + "원 = " + myFormatter.format(allPay) + "원");
                             } else if (paykind.equals("월급")) {
                                 binding.realPaynum.setText(myFormatter.format(allPay) + "원");
+                            } else if (paykind.equals("null")){
+                                binding.realPaynum.setText("관리자의 직원상세정보 입력이 필요합니다.");
                             }
                         }
                         PlaceWorkCheck(place_id, USER_INFO_AUTH, "1");

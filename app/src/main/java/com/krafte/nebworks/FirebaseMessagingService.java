@@ -18,7 +18,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.krafte.nebworks.data.FCMMessageData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.ui.approval.TaskApprovalFragment;
 import com.krafte.nebworks.ui.contract.ContractFragmentActivity;
 import com.krafte.nebworks.ui.feed.FeedListActivity;
@@ -26,7 +25,7 @@ import com.krafte.nebworks.ui.main.MainFragment;
 import com.krafte.nebworks.ui.main.MainFragment2;
 import com.krafte.nebworks.ui.member.MemberManagement;
 import com.krafte.nebworks.ui.paymanagement.PayManagementActivity;
-import com.krafte.nebworks.ui.worksite.PlaceListActivity;
+import com.krafte.nebworks.ui.place.PlaceListActivity;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RandomOut;
 

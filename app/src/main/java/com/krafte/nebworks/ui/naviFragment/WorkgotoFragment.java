@@ -24,6 +24,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.FragmentStateAdapter;
@@ -65,7 +66,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class WorkgotoFragment extends Fragment implements CalenderFragment.OnButtonClickListener{
+public class WorkgotoFragment extends Fragment implements CalenderFragment.OnButtonClickListener {
     private final static String TAG = "WorkgotoFragment";
     private WorkgotofragmentBinding binding;
     Context mContext;
@@ -166,27 +167,27 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         try {
             dlog.DlogContext(mContext);
             //Singleton Area
-            place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
-            place_name          = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
-            place_owner_id      = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
-            place_owner_name    = shardpref.getString("place_owner_name", PlaceCheckData.getInstance().getPlace_owner_name());
-            place_address       = shardpref.getString("place_address", PlaceCheckData.getInstance().getPlace_address());
-            place_latitude      = shardpref.getString("place_latitude", PlaceCheckData.getInstance().getPlace_latitude());
-            place_longitude     = shardpref.getString("place_longitude", PlaceCheckData.getInstance().getPlace_longitude());
-            place_start_time    = shardpref.getString("place_start_time", PlaceCheckData.getInstance().getPlace_start_time());
-            place_end_time      = shardpref.getString("place_end_time", PlaceCheckData.getInstance().getPlace_end_time());
-            place_img_path      = shardpref.getString("place_img_path", PlaceCheckData.getInstance().getPlace_img_path());
-            place_start_date    = shardpref.getString("place_start_date", PlaceCheckData.getInstance().getPlace_start_date());
-            place_created_at    = shardpref.getString("place_created_at", PlaceCheckData.getInstance().getPlace_created_at());
+            place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            place_name = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
+            place_owner_id = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
+            place_owner_name = shardpref.getString("place_owner_name", PlaceCheckData.getInstance().getPlace_owner_name());
+            place_address = shardpref.getString("place_address", PlaceCheckData.getInstance().getPlace_address());
+            place_latitude = shardpref.getString("place_latitude", PlaceCheckData.getInstance().getPlace_latitude());
+            place_longitude = shardpref.getString("place_longitude", PlaceCheckData.getInstance().getPlace_longitude());
+            place_start_time = shardpref.getString("place_start_time", PlaceCheckData.getInstance().getPlace_start_time());
+            place_end_time = shardpref.getString("place_end_time", PlaceCheckData.getInstance().getPlace_end_time());
+            place_img_path = shardpref.getString("place_img_path", PlaceCheckData.getInstance().getPlace_img_path());
+            place_start_date = shardpref.getString("place_start_date", PlaceCheckData.getInstance().getPlace_start_date());
+            place_created_at = shardpref.getString("place_created_at", PlaceCheckData.getInstance().getPlace_created_at());
 
-            USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
-            USER_INFO_NAME      = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
-            return_page         = shardpref.getString("return_page", ReturnPageData.getInstance().getPage());
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+            USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
+            return_page = shardpref.getString("return_page", ReturnPageData.getInstance().getPage());
 
             //shardpref Area
-            SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
+            SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
+            USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
             setBtnEvent();
 
             change_place_id = place_id;
@@ -221,7 +222,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                 binding.dateLayout.setVisibility(View.GONE);
                 binding.dateSelect.setVisibility(View.VISIBLE);
                 binding.line01.setVisibility(View.GONE);
-//                SetCalenderData();
             }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
@@ -255,6 +255,19 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        chng_icon = false;
+        binding.calendarArea.setVisibility(View.GONE);
+        binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+        binding.selectArea.setVisibility(View.VISIBLE);
+        binding.dateLayout.setVisibility(View.VISIBLE);
+        binding.dateSelect.setVisibility(View.GONE);
+        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+        setRecyclerView();
     }
 
     @Override
@@ -320,6 +333,59 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         setRecyclerView();
     }
 
+    int before_pos = 0;
+    int calPos = 0;
+
+    private void ScrollState(int kind) {
+        if (kind == 0) {
+            //왼쪽으로 슬라이드 - 버튼으로
+            before_pos = 0;
+            cal.add(Calendar.MONTH, -1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            int currentPosition = binding.calenderViewpager.getCurrentItem();
+            binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if(kind == 1){
+            //오른쪽으로 슬라이드 - 버튼으로
+            before_pos = 0;
+            cal.add(Calendar.MONTH, +1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            int currentPosition = binding.calenderViewpager.getCurrentItem();
+            binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if(kind == 3){
+            //왼쪽으로 슬라이드
+            cal.add(Calendar.MONTH, -1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if(kind == 4){
+            //왼쪽으로 슬라이드
+            cal.add(Calendar.MONTH, +1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        }
+    }
+
     public void setBtnEvent() {
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
@@ -327,6 +393,27 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         Month = toDay.substring(5, 7);
         Day = toDay.substring(8, 10);
         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+
+
+        binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                // 슬라이드가 끝난 후 작동할 이벤트
+                if(before_pos != position){
+                    if(before_pos != 0){
+                        calPos = position - before_pos;
+                        dlog.i("onPageScrollStateChanged state : " + calPos);
+                        if (calPos > 0) {
+                            ScrollState(4);
+                        } else {
+                            ScrollState(3);
+                        }
+                    }
+                    before_pos = position;
+                }
+            }
+        });
 
         binding.prevDate.setOnClickListener(v -> {
             try {
@@ -338,16 +425,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                     isAuth();
                 } else {
                     if (chng_icon) {
-                        cal.add(Calendar.MONTH, -1);
-                        toDay = sdf.format(cal.getTime());
-                        Year = toDay.substring(0, 4);
-                        Month = toDay.substring(5, 7);
-                        Day = toDay.substring(8, 10);
-                        getYMPicker = Year + "-" + Month;
-                        binding.setdate.setText(Year + "년 " + Month + "월 ");
-                        int currentPosition = binding.calenderViewpager.getCurrentItem();
-                        binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
-                        binding.calenderViewpager.setOffscreenPageLimit(1);
+                        ScrollState(0);
                     } else {
                         cal.add(Calendar.DATE, -1);
                         toDay = sdf.format(cal.getTime());
@@ -374,16 +452,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                     isAuth();
                 } else {
                     if (chng_icon) {
-                        cal.add(Calendar.MONTH, +1);
-                        toDay = sdf.format(cal.getTime());
-                        Year = toDay.substring(0, 4);
-                        Month = toDay.substring(5, 7);
-                        Day = toDay.substring(8, 10);
-                        getYMPicker = Year + "-" + Month;
-                        binding.setdate.setText(Year + "년 " + Month + "월 ");
-                        int currentPosition = binding.calenderViewpager.getCurrentItem();
-                        binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
-                        binding.calenderViewpager.setOffscreenPageLimit(1);
+                        ScrollState(1);
                     } else {
                         cal.add(Calendar.DATE, +1);
                         toDay = sdf.format(cal.getTime());
@@ -412,12 +481,12 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                 int currentMonth = 0;
                 if (month < Integer.parseInt(Month)) {
                     currentMonth = (Integer.parseInt(Month) - (month + 1));
-                    cal.add(Calendar.MONTH, - (Integer.parseInt(Month) - (month + 1)));
-                    cal.add(Calendar.DAY_OF_MONTH, - (Integer.parseInt(Day) - (dayOfMonth)));
+                    cal.add(Calendar.MONTH, -(Integer.parseInt(Month) - (month + 1)));
+                    cal.add(Calendar.DAY_OF_MONTH, -(Integer.parseInt(Day) - (dayOfMonth)));
                 } else {
-                    currentMonth = ((month + 1)  - Integer.parseInt(Month));
-                    cal.add(Calendar.MONTH, ((month + 1)  - Integer.parseInt(Month)));
-                    cal.add(Calendar.DAY_OF_MONTH, ((dayOfMonth)  - Integer.parseInt(Day)));
+                    currentMonth = ((month + 1) - Integer.parseInt(Month));
+                    cal.add(Calendar.MONTH, ((month + 1) - Integer.parseInt(Month)));
+                    cal.add(Calendar.DAY_OF_MONTH, ((dayOfMonth) - Integer.parseInt(Day)));
                 }
                 Year = String.valueOf(year);
                 Month = String.valueOf(month + 1);
@@ -587,7 +656,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         TaskSelectWInterface api = retrofit.create(TaskSelectWInterface.class);
-        Call<String> call = api.getData(change_place_id, change_member_id, select_date.replace("월",""), USER_INFO_AUTH);
+        Call<String> call = api.getData(change_place_id, change_member_id, select_date.replace("월", ""), USER_INFO_AUTH);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -780,8 +849,12 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                         newX = initialX + dx;
                         newY = initialY + dy;
 
-                        if(lastnewX == 0){ lastnewX = newX; }
-                        if(lastnewY == 0){ lastnewY = newY; }
+                        if (lastnewX == 0) {
+                            lastnewX = newX;
+                        }
+                        if (lastnewY == 0) {
+                            lastnewY = newY;
+                        }
 
                         dlog.i("newX : " + newX);
                         dlog.i("newY : " + newY);
@@ -810,7 +883,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                                 TaskAddOption to = new TaskAddOption();
                                 to.show(getChildFragmentManager(), "TaskAddOption");
                             }
-                        }else{
+                        } else {
                             lastnewX = newX;
                             lastnewY = newY;
                         }
@@ -827,9 +900,10 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
 
 
     ArrayList<WorkGetallData.WorkGetallData_list> workGotoList2 = new ArrayList<>();
+
     private void SetWorkGotoCalenderData() {
         workGotoList2.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = Year + "-" + Month;
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
@@ -842,7 +916,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkTaskGetallInterface api = retrofit.create(WorkTaskGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate,USER_INFO_AUTH);
+        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -905,8 +979,8 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
 
     public void isAuth() {
         Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
-        intent.putExtra("flag","더미");
-        intent.putExtra("data","먼저 매장등록을 해주세요!");
+        intent.putExtra("flag", "더미");
+        intent.putExtra("data", "먼저 매장등록을 해주세요!");
         intent.putExtra("left_btn_txt", "닫기");
         intent.putExtra("right_btn_txt", "매장추가");
         startActivity(intent);
@@ -918,10 +992,10 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
     public void onButtonClicked(int kind) {
         dlog.i("kind : " + kind);
         int currentPosition = binding.calenderViewpager.getCurrentItem();
-        if(kind == -1){
+        if (kind == -1) {
             // ViewPager2를 오른쪽으로 이동
             binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
-        }else{
+        } else {
             // ViewPager2를 오른쪽으로 이동
             binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
         }

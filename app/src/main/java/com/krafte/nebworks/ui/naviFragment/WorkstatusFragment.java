@@ -23,6 +23,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -148,7 +149,6 @@ public class WorkstatusFragment extends Fragment {
 
         //UI 데이터 세팅
         try {
-
             //Singleton Area
             place_id = PlaceCheckData.getInstance().getPlace_id();
             place_name = PlaceCheckData.getInstance().getPlace_name();
@@ -218,6 +218,10 @@ public class WorkstatusFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     @Override
     public void onResume() {
@@ -240,7 +244,6 @@ public class WorkstatusFragment extends Fragment {
         shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
 
 //        SetCalenderData(Year, Month);
-
         if (USER_INFO_AUTH.isEmpty()) {
             binding.cnt01.setText("10");
             binding.cnt02.setText("2");
@@ -252,21 +255,100 @@ public class WorkstatusFragment extends Fragment {
 
         fg = WorkStatusSubFragment1.newInstance();
         setChildFragment(fg);
+
+        SetWorkStatusCalenderData();
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        SetWorkStatusCalenderData();
+    public void onStop(){
+        super.onStop();
+        chng_icon = false;
+        binding.calendarArea.setVisibility(View.GONE);
+        binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+        binding.dateLayout.setVisibility(View.VISIBLE);
+        binding.dateSelect.setVisibility(View.GONE);
+        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        shardpref.remove("FtoDay");
+    }
+
+    int before_pos = 0;
+    int calPos = 0;
+
+    private void ScrollState(int kind) {
+        if (kind == 0) {
+            //왼쪽으로 슬라이드 - 버튼으로
+            before_pos = 0;
+            cal.add(Calendar.MONTH, -1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate2.setText(Year + "년 " + Month + "월 ");
+            int currentPosition = binding.calenderViewpager.getCurrentItem();
+            binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if (kind == 1) {
+            //오른쪽으로 슬라이드 - 버튼으로
+            before_pos = 0;
+            cal.add(Calendar.MONTH, +1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate2.setText(Year + "년 " + Month + "월 ");
+            int currentPosition = binding.calenderViewpager.getCurrentItem();
+            binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if (kind == 3) {
+            //왼쪽으로 슬라이드
+            cal.add(Calendar.MONTH, -1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate2.setText(Year + "년 " + Month + "월 ");
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        } else if (kind == 4) {
+            //왼쪽으로 슬라이드
+            cal.add(Calendar.MONTH, +1);
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+            binding.setdate2.setText(Year + "년 " + Month + "월 ");
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        }
     }
 
     public void setBtnEvent() {
+        binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                // 슬라이드가 끝난 후 작동할 이벤트
+                if (before_pos != position) {
+                    if (before_pos != 0) {
+                        calPos = position - before_pos;
+                        dlog.i("onPageScrollStateChanged state : " + calPos);
+                        if (calPos > 0) {
+                            ScrollState(4);
+                        } else {
+                            ScrollState(3);
+                        }
+                    }
+                    before_pos = position;
+                }
+            }
+        });
+
         binding.statusFragmentbtn1.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -325,79 +407,37 @@ public class WorkstatusFragment extends Fragment {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                if (chng_icon) {
-                    cal.add(Calendar.MONTH, -1);
-                    toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    getYMPicker = Year + "-" + Month;
-                    shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
-                } else {
-                    cal.add(Calendar.DATE, -1);
-                    toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    getYMPicker = Year + "-" + Month;
-                    shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
-                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                }
-//                SetCalenderData(Year, Month);
+                cal.add(Calendar.DATE, -1);
+                toDay = sdf.format(cal.getTime());
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                getYMPicker = Year + "-" + Month;
+                shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 SendToday();
             }
         });
         binding.prevDate2.setOnClickListener(v -> {
-            cal.add(Calendar.MONTH, -1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
-            binding.setdate2.setText(Year + "년 " + Month + "월 ");
-            int currentPosition = binding.calenderViewpager.getCurrentItem();
-            binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
-            binding.calenderViewpager.setOffscreenPageLimit(1);
+            ScrollState(0);
         });
         binding.nextDate.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
             } else {
-                if (chng_icon) {
-                    cal.add(Calendar.MONTH, +1);
-                    toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    getYMPicker = Year + "-" + Month;
-                    shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
-                } else {
-                    cal.add(Calendar.DATE, +1);
-                    toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    getYMPicker = Year + "-" + Month;
-                    shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
-                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                }
-//                SetCalenderData(Year, Month);
+                cal.add(Calendar.DATE, +1);
+                toDay = sdf.format(cal.getTime());
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                getYMPicker = Year + "-" + Month;
+                shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 SendToday();
             }
         });
         binding.nextDate2.setOnClickListener(v -> {
-            cal.add(Calendar.MONTH, + 1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            shardpref.putString("commute_date", Year + "년 " + Month + "월 " + Day + "일");
-            binding.setdate2.setText(Year + "년 " + Month + "월 ");
-            int currentPosition = binding.calenderViewpager.getCurrentItem();
-            binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
-            binding.calenderViewpager.setOffscreenPageLimit(1);
+            ScrollState(1);
         });
 
         Calendar c = Calendar.getInstance();
@@ -468,6 +508,11 @@ public class WorkstatusFragment extends Fragment {
         }
         binding.changeIcon.setOnClickListener(v -> {
             chng_icon = true;
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
+            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+
             binding.calendarArea.setVisibility(View.VISIBLE);
             binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
             binding.dateLayout.setVisibility(View.GONE);
@@ -525,20 +570,6 @@ public class WorkstatusFragment extends Fragment {
                 }
             });
         });
-
-//        binding.createCalender.setOnTouchListener(new OnSwipeTouchListener(mContext) {
-//            @Override
-//            public void onSwipeLeft() {
-////                super.onSwipeLeft();
-//                setCalender(1);
-//            }
-//
-//            @Override
-//            public void onSwipeRight() {
-////                super.onSwipeRight();
-//                setCalender(-1);
-//            }
-//        });
 
         binding.statusChildFragmentContainer.setOnSwipeListener(new SwipeFrameLayout.OnSwipeListener() {
             @Override
@@ -621,10 +652,7 @@ public class WorkstatusFragment extends Fragment {
                                 }
                             }
                             dlog.i("workGotoList2 : " + workGotoList2);
-                            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
-                            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
-                            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
-                            binding.calenderViewpager.setOffscreenPageLimit(1);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

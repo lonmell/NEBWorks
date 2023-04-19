@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +26,9 @@ import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.InOutInsert2Interface;
 import com.krafte.nebworks.databinding.ActivityAddworkpartBinding;
 import com.krafte.nebworks.pop.SelectMemberPop;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
-import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,14 +52,6 @@ public class AddDatePartActivity extends AppCompatActivity {
     PageMoveClass pm = new PageMoveClass();
     PreferenceHelper shardpref;
     Dlog dlog = new Dlog();
-    DateCurrent dc = new DateCurrent();
-    ArrayList<String> mList;
-    Handler mHandler;
-    RetrofitConnect rc = new RetrofitConnect();
-
-
-    String Time01 = "-99";
-    String Time02 = "-99";
 
     //Shared
     String USER_INFO_EMAIL = "";

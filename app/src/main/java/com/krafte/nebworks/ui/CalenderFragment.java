@@ -41,6 +41,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -241,6 +242,7 @@ public class CalenderFragment extends Fragment {
         }
     }
 
+    Timer timer;
     @Override
     public void onResume(){
         super.onResume();
@@ -260,7 +262,6 @@ public class CalenderFragment extends Fragment {
             }
             SetCalendar();
         }
-
     }
 
     public interface OnButtonClickListener {
@@ -296,13 +297,13 @@ public class CalenderFragment extends Fragment {
     @Override
     public void onStop(){
         super.onStop();
-        monDate.clear();
-        tueDate.clear();
-        wedDate.clear();
-        thuDate.clear();
-        friDate.clear();
-        satDate.clear();
-        sunDate.clear();
+//        monDate.clear();
+//        tueDate.clear();
+//        wedDate.clear();
+//        thuDate.clear();
+//        friDate.clear();
+//        satDate.clear();
+//        sunDate.clear();
     }
     //--근무현황 캘린더 만들기
     private void SetCalendar() {
@@ -312,86 +313,129 @@ public class CalenderFragment extends Fragment {
         cadayAdapter1 = new CalendarDayAdaper(mContext, sunDate, month, year, sendList,state);
         binding.sunList.setAdapter(cadayAdapter1);
         binding.sunList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-        cadayAdapter1.notifyDataSetChanged();
-        cadayAdapter1.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+        binding.sunList.post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                dlog.i("cadayAdapter1 onItemClick");
-                SetClickEvent(WorkDay);
+            public void run() {
+                cadayAdapter1.notifyDataSetChanged();
+                cadayAdapter1.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                        dlog.i("cadayAdapter1 onItemClick");
+                        SetClickEvent(WorkDay);
+                    }
+                });
             }
         });
+
 
         cadayAdapter2 = new CalendarDayAdaper(mContext, monDate, month, year, sendList,state);
         binding.monList.setAdapter(cadayAdapter2);
         binding.monList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-        cadayAdapter2.notifyDataSetChanged();
-        cadayAdapter2.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+        binding.monList.post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                SetClickEvent(WorkDay);
+            public void run() {
+                cadayAdapter2.notifyDataSetChanged();
+                cadayAdapter2.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                        SetClickEvent(WorkDay);
+                    }
+                });
+
             }
         });
 
         cadayAdapter3 = new CalendarDayAdaper(mContext, tueDate, month, year, sendList,state);
         binding.tueList.setAdapter(cadayAdapter3);
         binding.tueList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-        cadayAdapter3.notifyDataSetChanged();
-        cadayAdapter3.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+        binding.tueList.post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                SetClickEvent(WorkDay);
+            public void run() {
+                cadayAdapter3.notifyDataSetChanged();
+                cadayAdapter3.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                        SetClickEvent(WorkDay);
+                    }
+                });
             }
         });
+
 
         cadayAdapter4 = new CalendarDayAdaper(mContext, wedDate, month, year, sendList,state);
         binding.wedList.setAdapter(cadayAdapter4);
         binding.wedList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-        cadayAdapter4.notifyDataSetChanged();
-        cadayAdapter4.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+        binding.wedList.post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                SetClickEvent(WorkDay);
+            public void run() {
+                cadayAdapter4.notifyDataSetChanged();
+                cadayAdapter4.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                        SetClickEvent(WorkDay);
+                    }
+                });
             }
         });
+
 
         cadayAdapter5 = new CalendarDayAdaper(mContext, thuDate, month, year, sendList,state);
         binding.thuList.setAdapter(cadayAdapter5);
         binding.thuList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-        cadayAdapter5.notifyDataSetChanged();
-        cadayAdapter5.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+        binding.thuList.post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                SetClickEvent(WorkDay);
+            public void run() {
+                cadayAdapter5.notifyDataSetChanged();
+                cadayAdapter5.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                        SetClickEvent(WorkDay);
+                    }
+                });
             }
         });
+
 
         cadayAdapter6 = new CalendarDayAdaper(mContext, friDate, month, year, sendList,state);
         binding.friList.setAdapter(cadayAdapter6);
         binding.friList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-        cadayAdapter6.notifyDataSetChanged();
-        cadayAdapter6.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+        binding.friList.post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                SetClickEvent(WorkDay);
+            public void run() {
+                cadayAdapter6.notifyDataSetChanged();
+                cadayAdapter6.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                        SetClickEvent(WorkDay);
+                    }
+                });
             }
         });
+
         
         cadayAdapter7 = new CalendarDayAdaper(mContext, satDate, month, year, sendList,state);
         binding.satList.setAdapter(cadayAdapter7);
         binding.satList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-        cadayAdapter7.notifyDataSetChanged();
-        cadayAdapter7.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+        binding.satList.post(new Runnable() {
             @Override
-            public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
-                SetClickEvent(WorkDay);
+            public void run() {
+                cadayAdapter7.notifyDataSetChanged();
+                cadayAdapter7.setOnItemClickListener(new CalendarDayAdaper.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position, String data, String yoil, String WorkDay) {
+                        SetClickEvent(WorkDay);
+                    }
+                });
             }
         });
+
     }
 
 
 
     //-- 할일 다시 조회
     private void SetWorkGotoCalenderData() {
+        sendList.clear();
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Log.i(TAG, "place_id : " + place_id);
@@ -501,14 +545,12 @@ public class CalenderFragment extends Fragment {
                     }
                 });
             }
-
             @Override
             @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러2 = " + t.getMessage());
             }
         });
-
     }
 
     //급여 현황 다시 조회
@@ -555,7 +597,6 @@ public class CalenderFragment extends Fragment {
                                     ));
                                 }
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

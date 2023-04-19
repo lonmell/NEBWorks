@@ -650,10 +650,14 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         inmember.addAll(Arrays.asList(user_id.split(",")));
 
         message = "수정된 업무가 있습니다.";
-        binding.workSave.setText("업무 수정");
+
         binding.inputWorktitle.setText(WorkTitle.equals("0")?"":WorkTitle);
         binding.inputWorkcontents.setText(WorkContents.equals("0")?"":WorkContents);
-
+        if (return_page.equals("task_reuse")) {
+            binding.workSave.setText("업무 추가");
+        } else {
+            binding.workSave.setText("업무 수정");
+        }
         //반복요일 세팅
         List<String> getYoil = new ArrayList<>();
         if (Mon.equals("1")) {

@@ -167,16 +167,27 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
             }else{
                 dlog.DlogContext(mContext);
-                if(item.getState().equals("null") && item.getContract_cnt().equals("0")){
+                dlog.i("item.getState() : " + item.getState());
+                dlog.i("item.getContract_cnt() : " + item.getContract_cnt());
+                if(item.getState().equals("null") && item.getContract_cnt().equals("0")){//둘다 안되잇을때
                     //직원 상세정보가 없을때
                     holder.add_detail.setVisibility(View.VISIBLE);
                     holder.linear04.setVisibility(place_owner_id.equals(USER_INFO_ID)?View.VISIBLE:View.GONE);
-
-                    holder.contract_state_tv.setText("근로계약서 미진행");
-
-//                    holder.contract_state.setVisibility(View.GONE);
-                    holder.state.setVisibility(View.GONE);
+                    if(item.getState().equals("null")){
+                        holder.state.setVisibility(View.GONE);
+                        holder.state_tv.setText("");
+                    }
+                    if(item.getContract_cnt().equals("0")){
+                        holder.contract_state_tv.setText("근로계약서 미진행");
+                    }
                 }else{
+                    if(item.getState().equals("null")){
+                        holder.state.setVisibility(View.GONE);
+                        holder.state_tv.setText("");
+                    }
+                    if(item.getContract_cnt().equals("0")){
+                        holder.contract_state_tv.setText("근로계약서 미진행");
+                    }
                     if(item.getJikgup().equals("대표님") || item.getJikgup().equals("관리자")){
                         holder.add_detail.setVisibility(View.VISIBLE);
                         holder.state.setVisibility(View.GONE);

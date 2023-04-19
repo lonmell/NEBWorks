@@ -289,7 +289,7 @@
             android:layout_height="match_parent"
             android:layout_alignTop="@+id/select_date_area"
             android:background="@color/white"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/calender_viewpager"

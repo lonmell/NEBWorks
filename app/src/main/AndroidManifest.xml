@@ -155,22 +155,22 @@
         <activity android:name=".ui.paymanagement.PaystuballActivity" /> <!-- state -->
         <!-- worksite -->
         <activity
-            android:name=".ui.worksite.PlaceListActivity"
+            android:name=".ui.place.PlaceListActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".ui.worksite.PlaceAddActivity" />
-        <activity android:name=".ui.worksite.PlaceAddActivity2" />
+        <activity android:name=".ui.place.PlaceAddActivity" />
+        <activity android:name=".ui.place.PlaceAddActivity2" />
         <activity android:name=".ui.task.TaskAddWorkActivity" />
-        <activity android:name=".ui.worksite.PlaceWorkDetailActivity" />
-        <activity android:name=".ui.worksite.PlaceEditActivity" />
-        <activity android:name=".ui.worksite.PlaceEditActivity2" />
-        <activity android:name=".ui.worksite.PlaceSearchActivity" />
-        <activity android:name=".ui.worksite.PlaceAddCompletion" />
+        <activity android:name=".ui.place.PlaceWorkDetailActivity" />
+        <activity android:name=".ui.place.PlaceEditActivity" />
+        <activity android:name=".ui.place.PlaceEditActivity2" />
+        <activity android:name=".ui.place.PlaceSearchActivity" />
+        <activity android:name=".ui.place.PlaceAddCompletion" />
         <activity android:name=".ui.task.TaskReuseActivity" />
         <activity android:name=".ui.task.TaskReuesAddActivity" />
         <activity android:name=".ui.task.TaskDetailActivity" />
         <activity android:name=".ui.task.TaskReportActivity" />
         <activity android:name=".ui.task.TaskReportDetailActivity" />
-        <activity android:name=".ui.task.TaskListActivity" /> <!-- Other -->
+        <!-- Other -->
         <activity android:name=".ui.PinSelectLocationActivity" /> <!-- user -->
         <activity android:name=".ui.user.ProfileEditActivity" />
         <activity android:name=".ui.user.DeleteUserActivity" />
@@ -287,7 +287,7 @@
         <activity
             android:name=".pop.PlacePhotoActivity"
             android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".ui.worksite.AddVacationActivity" />
+        <activity android:name=".ui.place.AddVacationActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

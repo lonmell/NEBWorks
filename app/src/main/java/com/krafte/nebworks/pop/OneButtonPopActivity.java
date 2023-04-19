@@ -19,7 +19,7 @@ import com.krafte.nebworks.databinding.ActivityOnebuttonPopBinding;
 import com.krafte.nebworks.ui.login.LoginActivity;
 import com.krafte.nebworks.ui.user.ChangePWActivity;
 import com.krafte.nebworks.ui.user.JoinActivity;
-import com.krafte.nebworks.ui.worksite.PlaceListActivity;
+import com.krafte.nebworks.ui.place.PlaceListActivity;
 import com.krafte.nebworks.util.PreferenceHelper;
 
 public class OneButtonPopActivity extends Activity {

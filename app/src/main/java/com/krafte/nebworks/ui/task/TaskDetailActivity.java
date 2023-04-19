@@ -1,5 +1,6 @@
 package com.krafte.nebworks.ui.task;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,25 +12,37 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.MemberListPopAdapter;
+import com.krafte.nebworks.data.GetResultData;
 import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.ReturnPageData;
 import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.data.WorkPlaceMemberListData;
+import com.krafte.nebworks.dataInterface.TaskOverInerface;
 import com.krafte.nebworks.databinding.ActivityTaskDetailBinding;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
+import com.krafte.nebworks.util.RetrofitConnect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class TaskDetailActivity extends AppCompatActivity {
     private ActivityTaskDetailBinding binding;
@@ -125,6 +138,12 @@ public class TaskDetailActivity extends AppCompatActivity {
 
             shardpref.putInt("SELECT_POSITION", 0);
             shardpref.putInt("SELECT_POSITION_sub", 1);
+
+            Glide.with(this).load(R.raw.basic_loading)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(binding.loadingView);
+            binding.loginAlertText.setVisibility(View.GONE);
+
             setBtnEvent();
 
         } catch (Exception e) {
@@ -193,22 +212,28 @@ public class TaskDetailActivity extends AppCompatActivity {
             if(USER_INFO_AUTH.equals("0")){//0-관리자 / 1- 근로자
                 binding.acceptTv.setText("수정하기");
             }else{
-                binding.acceptTv.setText("업무 보고하기");
-                int a = 0;
-                for(String str : user_id.replace("["," ").replace("]"," ").split(",")){
-                    dlog.i("acceptTv str : " + str.replace("["," ").replace("]"," "));
-                    USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
-                    dlog.i("USER_INFO_ID : " + shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id()));
-                    dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").contains(USER_INFO_ID));
-                    if(str.replace("[","").replace("]","").contains(USER_INFO_ID)){
-                        //배정 아이디가 포함되는 직원이 한명이라도 있을때는 업무 보고하기 버튼 보이기
-                        a++;
-                    }
-                    dlog.i("a.size() : " + a);
-                    if(a > 0){
-                        binding.acceptBtnBox.setVisibility(TaskKind.equals("3")?View.GONE:View.VISIBLE);
-                    }else{
-                        binding.acceptBtnBox.setVisibility(View.GONE);
+                if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+                    //바로 업무 완료
+                    binding.acceptTv.setText("업무 완료하기");
+                    binding.acceptBtnBox.setVisibility(View.VISIBLE);
+                }else{
+                    binding.acceptTv.setText("업무 보고하기");
+                    int a = 0;
+                    for(String str : user_id.replace("["," ").replace("]"," ").split(",")){
+                        dlog.i("acceptTv str : " + str.replace("["," ").replace("]"," "));
+                        USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+                        dlog.i("USER_INFO_ID : " + shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id()));
+                        dlog.i("str.equals(USER_INFO_ID) : " + str.replace("[","").replace("]","").contains(USER_INFO_ID));
+                        if(str.replace("[","").replace("]","").contains(USER_INFO_ID)){
+                            //배정 아이디가 포함되는 직원이 한명이라도 있을때는 업무 보고하기 버튼 보이기
+                            a++;
+                        }
+                        dlog.i("a.size() : " + a);
+                        if(a > 0){
+                            binding.acceptBtnBox.setVisibility(TaskKind.equals("3")?View.GONE:View.VISIBLE);
+                        }else{
+                            binding.acceptBtnBox.setVisibility(View.GONE);
+                        }
                     }
                 }
             }
@@ -388,7 +413,12 @@ public class TaskDetailActivity extends AppCompatActivity {
                     shardpref.putInt("SELECT_POSITION_sub", 0);
                     pm.addWorkGo(mContext);
                 }else{
-                    pm.TaskReport(mContext);
+                    if(place_owner_id.equals(USER_INFO_ID) && USER_INFO_AUTH.equals("1")){
+                        //바로 업무 완료
+                        setOverTask(task_no);
+                    }else{
+                        pm.TaskReport(mContext);
+                    }
                 }
             }else if(approval_state.equals("2")){
                 pm.TaskReport(mContext);
@@ -398,6 +428,56 @@ public class TaskDetailActivity extends AppCompatActivity {
         });
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
+        });
+    }
+
+    RetrofitConnect rc = new RetrofitConnect();
+    GetResultData resultData = new GetResultData();
+    public void setOverTask(String task_id) {
+        binding.loginAlertText.setVisibility(View.VISIBLE);
+        dlog.i("------setOverTask------");
+        dlog.i("place_id : " + place_id);
+        dlog.i("task_id : " + task_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("------setOverTask------");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaskOverInerface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaskOverInerface api = retrofit.create(TaskOverInerface.class);
+        Call<String> call = api.getData(place_id, task_id, USER_INFO_ID);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint({"LongLogTag", "SetTextI18n"})
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            runOnUiThread(() -> {
+                                dlog.i("resultData : " + resultData.getRESULT());
+                                if (jsonResponse.replace("\"", "").equals("success")) {
+                                    shardpref.putInt("SELECT_POSITION", 1);
+                                    shardpref.putInt("SELECT_POSITION_sub", 0);
+                                    pm.Main2(mContext);
+                                } else {
+                                    Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    });
+                    binding.loginAlertText.setVisibility(View.GONE);
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+                binding.loginAlertText.setVisibility(View.GONE);
+            }
         });
     }
 
