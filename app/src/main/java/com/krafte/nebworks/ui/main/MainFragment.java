@@ -50,7 +50,6 @@ import com.krafte.nebworks.ui.naviFragment.MoreFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkgotoFragment;
 import com.krafte.nebworks.ui.naviFragment.WorkstatusFragment;
 import com.krafte.nebworks.util.DBConnection;
-import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
@@ -59,7 +58,6 @@ import com.krafte.nebworks.util.RetrofitConnect;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -78,8 +76,6 @@ public class MainFragment extends AppCompatActivity {
     private static final String TAG = "TaskApprovalFragment";
     private ActivityMainfragmentBinding binding;
     Context mContext;
-    private final DateCurrent dc = new DateCurrent();
-    private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     //BottomNavigation
     ImageView bottom_icon01, bottom_icon02, bottom_icon03, bottom_icon04, bottom_icon05;
@@ -292,6 +288,9 @@ public class MainFragment extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
+        shardpref.remove("change_place_id");
+        shardpref.remove("change_place_name");
+
         if (paging_position == 0) {
             if(drawerLayout.isOpen()){
                 drawerLayout.closeDrawer(drawerView);
@@ -785,6 +784,8 @@ public class MainFragment extends AppCompatActivity {
     }
 
     private void ChangePosition(int i) {
+        shardpref.remove("change_place_id");
+        shardpref.remove("change_place_name");
         bottom_icon01.setBackgroundResource(R.drawable.ic_main_off);
         bottom_icon02.setBackgroundResource(R.drawable.ic_task_off);
         bottom_icon03.setBackgroundResource(R.drawable.ic_member_off);

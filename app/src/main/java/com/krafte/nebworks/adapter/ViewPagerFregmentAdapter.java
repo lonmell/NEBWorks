@@ -28,5 +28,8 @@ public class ViewPagerFregmentAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return mFragments.size();
     }
-
+    public void removeFragment(int position) {
+        mFragments.remove(position);
+        notifyItemRemoved(position);
+    }
 }

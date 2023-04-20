@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
@@ -184,15 +185,19 @@ public class MainFragment2 extends AppCompatActivity {
             bottom_icon03tv.setText(tabElement.get(2));
             bottom_icon04tv.setText(tabElement.get(3));
             bottom_icon05tv.setText(tabElement.get(4));
-
-            //점주일때
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            for (Fragment fragment : fragments) {
+                transaction.remove(fragment);
+            }
+            //알바일때때
             fragments.add(HomeFragment2.newInstance(0));
             fragments.add(WorkgotoFragment.newInstance(1));
             fragments.add(WorkstatusFragment.newInstance(2));
             fragments.add(CommunityFragment.newInstance(3));
             fragments.add(MoreFragment.newInstance(4));
-            viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
+            transaction.commit();
 
+            viewPagerFregmentAdapter = new ViewPagerFregmentAdapter(this, fragments);
             binding.viewPager.setAdapter(viewPagerFregmentAdapter);
 
             //ViewPager2와 TabLayout을 연결
@@ -307,6 +312,8 @@ public class MainFragment2 extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
+        shardpref.remove("change_place_id");
+        shardpref.remove("change_place_name");
         if (paging_position == 0) {
 //            shardpref.putString("event","backpressed");
             shardpref.remove("event");
@@ -848,6 +855,9 @@ public class MainFragment2 extends AppCompatActivity {
 
 
     private void ChangePosition(int i) {
+        shardpref.remove("change_place_id");
+        shardpref.remove("change_place_name");
+
         bottom_icon01.setBackgroundResource(R.drawable.ic_main_off);
         bottom_icon02.setBackgroundResource(R.drawable.ic_task_off);
         bottom_icon03.setBackgroundResource(R.drawable.ic_member_off);

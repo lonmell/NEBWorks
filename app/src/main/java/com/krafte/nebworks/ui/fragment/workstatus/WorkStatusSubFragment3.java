@@ -143,7 +143,6 @@ public class WorkStatusSubFragment3 extends Fragment {
     public void onDestroy(){
         super.onDestroy();
         shardpref.remove("FtoDay");
-        shardpref.remove("change_place_id");
     }
 
     @Override

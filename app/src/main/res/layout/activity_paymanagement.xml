@@ -198,7 +198,8 @@
             android:layout_width="45dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/change_icon"

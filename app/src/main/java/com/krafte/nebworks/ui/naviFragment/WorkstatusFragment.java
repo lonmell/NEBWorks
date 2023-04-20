@@ -94,6 +94,9 @@ public class WorkstatusFragment extends Fragment {
     String USER_INFO_ID = "";
     String USER_INFO_AUTH = "";
 
+    String change_place_id = "";
+    String change_place_name = "";
+
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
     boolean chng_icon = false;
@@ -150,18 +153,23 @@ public class WorkstatusFragment extends Fragment {
         //UI 데이터 세팅
         try {
             //Singleton Area
-            place_id = PlaceCheckData.getInstance().getPlace_id();
-            place_name = PlaceCheckData.getInstance().getPlace_name();
-            place_owner_id = PlaceCheckData.getInstance().getPlace_owner_id();
+            place_id = shardpref.getString("place_id",PlaceCheckData.getInstance().getPlace_id());
+            place_name = shardpref.getString("place_name",PlaceCheckData.getInstance().getPlace_name());
+            place_owner_id = shardpref.getString("place_owner_id",PlaceCheckData.getInstance().getPlace_owner_id());
             USER_INFO_ID = UserCheckData.getInstance().getUser_id();
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
             //shardpref Area
             SELECT_POSITION_sub = shardpref.getInt("SELECT_POSITION_sub", 0);
-            place_id = shardpref.getString("change_place_id", PlaceCheckData.getInstance().getPlace_id());
+            place_id = shardpref.getString("change_place_id", place_id);
 
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             SELECT_POSITION = 1;
+
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
+            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
 
             Glide.with(this).load(R.raw.basic_loading)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -255,7 +263,6 @@ public class WorkstatusFragment extends Fragment {
 
         fg = WorkStatusSubFragment1.newInstance();
         setChildFragment(fg);
-
         SetWorkStatusCalenderData();
     }
 
@@ -268,12 +275,15 @@ public class WorkstatusFragment extends Fragment {
         binding.dateLayout.setVisibility(View.VISIBLE);
         binding.dateSelect.setVisibility(View.GONE);
         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+        shardpref.remove("change_place_id");
+        shardpref.remove("change_place_name");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
+
 
     int before_pos = 0;
     int calPos = 0;
@@ -529,16 +539,25 @@ public class WorkstatusFragment extends Fragment {
             binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
         });
 
-        String change_place_name = shardpref.getString("change_place_name", place_name);
-        binding.selectPlace.setText(change_place_name);
+        change_place_name = shardpref.getString("change_place_name", place_name);
+        binding.selectPlace.setText(place_name);
         binding.changePlace.setTag(change_place_name);
 
         binding.changePlace.setOnClickListener(v -> {
             PlaceListBottomSheet plb = new PlaceListBottomSheet();
             plb.show(getChildFragmentManager(), "PlaceListBottomSheet");
-            plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
+            plb.setOnClickListener01((v1, getplace_id, getplace_name, place_owner_id) -> {
                 //--UI 세팅
                 chng_icon = false;
+                change_place_id = getplace_id;
+                change_place_name = getplace_name.isEmpty()?place_name:getplace_name;
+                SetWorkStatusCalenderData();
+
+                fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
+                binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                binding.calenderViewpager.setOffscreenPageLimit(1);
+
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
                 binding.dateLayout.setVisibility(View.VISIBLE);
@@ -546,14 +565,17 @@ public class WorkstatusFragment extends Fragment {
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
 
                 //--UI 데이터 및 페이지 세팅
-                shardpref.putString("change_place_id", place_id);
-                shardpref.putString("change_place_name", place_name);
+                shardpref.putString("change_place_id", getplace_id);
+                shardpref.putString("change_place_name", getplace_name);
+                dlog.i("change_place_id : " + change_place_id);
+                dlog.i("change_place_name : " + change_place_name);
 
-                dlog.i("change_place_id : " + place_id);
+                binding.selectPlace.setText(getplace_name);
+                binding.changePlace.setTag(getplace_name);
 
-                binding.selectPlace.setText(place_name);
-                binding.changePlace.setTag(place_name);
-//                SetCalenderData(Year, Month);
+                change_place_id = place_id;
+                change_place_name = USER_INFO_ID;
+
                 PlaceWorkCheck(place_id);
                 if (SELECT_POSITION == 1) {
                     fg = WorkStatusSubFragment1.newInstance();
@@ -600,18 +622,19 @@ public class WorkstatusFragment extends Fragment {
             getYMPicker = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
         }
-//        SetCalenderData(Year, Month);
         SendToday();
     }
 
     private void SetWorkStatusCalenderData() {
+        workGotoList2.clear();
         binding.changeIcon.setClickable(false);
         binding.changeIcon2.setClickable(false);
         binding.loginAlertText.setVisibility(View.VISIBLE);
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = Year + "-" + Month;
+        change_place_id = change_place_id.isEmpty()?place_id:change_place_id;
         Log.i(TAG, "------SetWorkStatusCalenderData------");
-        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
         Log.i(TAG, "select_date : " + getYMDate);
         Log.i(TAG, "------SetWorkStatusCalenderData------");
@@ -620,7 +643,7 @@ public class WorkstatusFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkStatusGetallInterface api = retrofit.create(WorkStatusGetallInterface.class);
-        Call<String> call2 = api.getData(shardpref.getString("change_place_id", PlaceCheckData.getInstance().getPlace_id()), USER_INFO_ID, getYMDate, USER_INFO_AUTH);
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -634,6 +657,10 @@ public class WorkstatusFragment extends Fragment {
                         Log.i(TAG, "SetWorkStatusCalenderData function START");
                         try {
                             JSONArray Response2 = new JSONArray(jsonResponse);
+                            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
+                            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                            binding.calenderViewpager.setOffscreenPageLimit(1);
                             if (Response2.length() == 0) {
                                 Log.i(TAG, "GET SIZE : " + Response2.length());
 //                                GetWorkGotoCalenderList(year, month, workGotoList2);
@@ -651,8 +678,7 @@ public class WorkstatusFragment extends Fragment {
                                     ));
                                 }
                             }
-                            dlog.i("workGotoList2 : " + workGotoList2);
-
+                            fragmentStateAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

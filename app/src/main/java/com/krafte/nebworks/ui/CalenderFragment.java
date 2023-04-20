@@ -41,7 +41,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,7 +67,10 @@ public class CalenderFragment extends Fragment {
     int state;
     FragmentStateAdapter fragmentStateAdapter;
     String change_place_id = "";
+    String change_place_name = "";
     String change_member_id = "";
+    String change_member_name = "";
+    String USER_INFO_AUTH = "";
 
     //근무현황 어댑터
     CalendarDayAdaper cadayAdapter1, cadayAdapter2, cadayAdapter3, cadayAdapter4, cadayAdapter5, cadayAdapter6, cadayAdapter7;
@@ -91,11 +93,6 @@ public class CalenderFragment extends Fragment {
     List<String> sunDate = new ArrayList<>();
     String SetDay = "";
     ViewPager2 viewPager;
-
-    private OnButtonClickListener mOnButtonClickListener;
-    public void setOnButtonClickListener(OnButtonClickListener listener) {
-        mOnButtonClickListener = listener;
-    }
 
     // state 1: WorkGoto
     public CalenderFragment(String year, String month, int state, ArrayList<WorkGetallData.WorkGetallData_list> sendList) {
@@ -135,6 +132,7 @@ public class CalenderFragment extends Fragment {
 
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
         place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+        change_place_id = shardpref.getString("change_place_id",place_id);
 
         shardpref.putString("calendar_year", year);
         shardpref.putString("calendar_month", month);
@@ -147,18 +145,8 @@ public class CalenderFragment extends Fragment {
         viewPager = requireActivity().findViewById(R.id.calender_viewpager);
         fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, sendList);
 
-        binding.prevDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnButtonClickListener != null) {
-                    mOnButtonClickListener.onButtonClicked(-1);
-                }
-            }
-        });
-
         return binding.getRoot();
     }
-
 
 
     private int getWeekOfYear(String date) {
@@ -178,8 +166,8 @@ public class CalenderFragment extends Fragment {
         setDate();
     }
 
-    private void setDate(){
-        try{
+    private void setDate() {
+        try {
             Calendar cal = Calendar.getInstance();
 
             cal.set(Integer.parseInt(year), Integer.parseInt(month) - 1, 1);
@@ -235,19 +223,17 @@ public class CalenderFragment extends Fragment {
                         break;
                 }
             }
-            dlog.i("state: " + state);
             SetCalendar();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    Timer timer;
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        dlog.i("CalenderFragment onResume state : " + state);
-        if(sendList.size() == 0){
+        dlog.i("state: " + state);
+        if (sendList.size() == 0) {
             switch (state) {
                 case 1:
                 case 3:
@@ -269,14 +255,14 @@ public class CalenderFragment extends Fragment {
     }
 
     private void SetClickEvent(String WorkDay) {
+        shardpref.putString("change_place_id", change_place_id.isEmpty() ? place_id : change_place_id);
+        shardpref.putString("change_member_id", change_member_id.isEmpty() ? "" : change_member_id);
+
         switch (state) {
             case 1:
                 try {
                     shardpref.putString("task_date", WorkDay);
                     Log.i(TAG, "WorkDay :" + WorkDay);
-
-                    shardpref.putString("change_place_id", change_place_id.isEmpty() ? place_id : change_place_id);
-                    shardpref.putString("change_member_id", change_member_id.isEmpty() ? "" : change_member_id);
                     if (!WorkDay.contains("null")) {
                         WorkgotoBottomSheet wgb = new WorkgotoBottomSheet();
                         wgb.show(getChildFragmentManager(), "WorkgotoBottomSheet");
@@ -294,8 +280,9 @@ public class CalenderFragment extends Fragment {
                 break;
         }
     }
+
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
 //        monDate.clear();
 //        tueDate.clear();
@@ -305,12 +292,13 @@ public class CalenderFragment extends Fragment {
 //        satDate.clear();
 //        sunDate.clear();
     }
+
     //--근무현황 캘린더 만들기
     private void SetCalendar() {
         dlog.i("sunDate : " + sunDate);
         dlog.i("monDate : " + String.valueOf(monDate));
-       
-        cadayAdapter1 = new CalendarDayAdaper(mContext, sunDate, month, year, sendList,state);
+
+        cadayAdapter1 = new CalendarDayAdaper(mContext, sunDate, month, year, sendList, state);
         binding.sunList.setAdapter(cadayAdapter1);
         binding.sunList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         binding.sunList.post(new Runnable() {
@@ -328,7 +316,7 @@ public class CalenderFragment extends Fragment {
         });
 
 
-        cadayAdapter2 = new CalendarDayAdaper(mContext, monDate, month, year, sendList,state);
+        cadayAdapter2 = new CalendarDayAdaper(mContext, monDate, month, year, sendList, state);
         binding.monList.setAdapter(cadayAdapter2);
         binding.monList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         binding.monList.post(new Runnable() {
@@ -345,7 +333,7 @@ public class CalenderFragment extends Fragment {
             }
         });
 
-        cadayAdapter3 = new CalendarDayAdaper(mContext, tueDate, month, year, sendList,state);
+        cadayAdapter3 = new CalendarDayAdaper(mContext, tueDate, month, year, sendList, state);
         binding.tueList.setAdapter(cadayAdapter3);
         binding.tueList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         binding.tueList.post(new Runnable() {
@@ -362,7 +350,7 @@ public class CalenderFragment extends Fragment {
         });
 
 
-        cadayAdapter4 = new CalendarDayAdaper(mContext, wedDate, month, year, sendList,state);
+        cadayAdapter4 = new CalendarDayAdaper(mContext, wedDate, month, year, sendList, state);
         binding.wedList.setAdapter(cadayAdapter4);
         binding.wedList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         binding.wedList.post(new Runnable() {
@@ -379,7 +367,7 @@ public class CalenderFragment extends Fragment {
         });
 
 
-        cadayAdapter5 = new CalendarDayAdaper(mContext, thuDate, month, year, sendList,state);
+        cadayAdapter5 = new CalendarDayAdaper(mContext, thuDate, month, year, sendList, state);
         binding.thuList.setAdapter(cadayAdapter5);
         binding.thuList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         binding.thuList.post(new Runnable() {
@@ -396,7 +384,7 @@ public class CalenderFragment extends Fragment {
         });
 
 
-        cadayAdapter6 = new CalendarDayAdaper(mContext, friDate, month, year, sendList,state);
+        cadayAdapter6 = new CalendarDayAdaper(mContext, friDate, month, year, sendList, state);
         binding.friList.setAdapter(cadayAdapter6);
         binding.friList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         binding.friList.post(new Runnable() {
@@ -412,8 +400,8 @@ public class CalenderFragment extends Fragment {
             }
         });
 
-        
-        cadayAdapter7 = new CalendarDayAdaper(mContext, satDate, month, year, sendList,state);
+
+        cadayAdapter7 = new CalendarDayAdaper(mContext, satDate, month, year, sendList, state);
         binding.satList.setAdapter(cadayAdapter7);
         binding.satList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         binding.satList.post(new Runnable() {
@@ -432,13 +420,12 @@ public class CalenderFragment extends Fragment {
     }
 
 
-
     //-- 할일 다시 조회
     private void SetWorkGotoCalenderData() {
         sendList.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         Log.i(TAG, "------SetWorkGotoCalenderData------");
-        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
         Log.i(TAG, "select_date : " + dc.GET_YEAR);
         Log.i(TAG, "------SetWorkGotoCalenderData------");
@@ -447,7 +434,7 @@ public class CalenderFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkTaskGetallInterface api = retrofit.create(WorkTaskGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, dc.GET_YEAR,USER_INFO_AUTH);
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, dc.GET_YEAR, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -499,7 +486,7 @@ public class CalenderFragment extends Fragment {
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = year + "-" + month;
         Log.i(TAG, "------SetWorkStatusCalenderData------");
-        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
         Log.i(TAG, "select_date : " + getYMDate);
         Log.i(TAG, "------SetWorkStatusCalenderData------");
@@ -508,7 +495,7 @@ public class CalenderFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkStatusGetallInterface api = retrofit.create(WorkStatusGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -545,6 +532,7 @@ public class CalenderFragment extends Fragment {
                     }
                 });
             }
+
             @Override
             @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
@@ -559,7 +547,7 @@ public class CalenderFragment extends Fragment {
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = year + "-" + month;
         Log.i(TAG, "------SetPayCalenderData------");
-        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
         Log.i(TAG, "select_date : " + getYMDate);
         Log.i(TAG, "------SetPayCalenderData------");
@@ -568,7 +556,7 @@ public class CalenderFragment extends Fragment {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PayGetallInterface api = retrofit.create(PayGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override

@@ -76,11 +76,10 @@ public class Tap2ListAdapter extends RecyclerView.Adapter<Tap2ListAdapter.ViewHo
     private boolean delayEnterAnimation = true;
 
 
-    public Tap2ListAdapter(Context context, ArrayList<TodolistData.TodolistData_list> data, FragmentManager fragmentManager, int kind) {//kind : 조회위치 [ 1 = 할일탭 / 2 = 캘린더>날짜선택>BottomSheet ]
+    public Tap2ListAdapter(Context context, ArrayList<TodolistData.TodolistData_list> data, int kind) {//kind : 조회위치 [ 1 = 할일탭 / 2 = 캘린더>날짜선택>BottomSheet ]
         this.mData = data;
         this.mContext = context;
         this.kind = kind;
-        this.fragmentManager = fragmentManager;
     } // onCreateViewHolder : 아이템 뷰를 위한 뷰홀더 객체를 생성하여 리턴
 
     @NonNull

@@ -153,10 +153,9 @@ public class MemberManagement extends AppCompatActivity {
             binding.changePlace.setOnClickListener(v -> {
                 PlaceListBottomSheet plb = new PlaceListBottomSheet();
                 plb.show(getSupportFragmentManager(), "PlaceListBottomSheet");
-                plb.setOnClickListener01((v1, place_id, place_name, place_owner_id) -> {
-                    shardpref.putString("change_place_id", place_id);
-                    dlog.i("change_place_id : " + place_id);
-                    SetAllMemberList(place_id);
+                plb.setOnClickListener01((v1, place_id2, place_name, place_owner_id) -> {
+                    SetAllMemberList(place_id2);
+                    place_id = place_id2;
                     binding.selectPlace.setText(place_name);
                     binding.changePlace.setTag(place_name);
                 });
@@ -185,7 +184,6 @@ public class MemberManagement extends AppCompatActivity {
                 ChangeMenu(4);
                 SetAllMemberList(place_id);
             });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -209,7 +207,6 @@ public class MemberManagement extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
 
     public void getNotReadFeedcnt() {

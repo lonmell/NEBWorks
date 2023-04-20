@@ -119,6 +119,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
             USER_INFO_ID    = shardpref.getString("USER_INFO_ID","");
             USER_INFO_NAME  = shardpref.getString("USER_INFO_NAME","");
             USER_INFO_AUTH  = shardpref.getString("USER_INFO_AUTH", "");
+            change_place_id = shardpref.getString("change_place_id", shardpref.getString("place_id",""));
 
             //shardpref Area
             SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
@@ -185,9 +186,12 @@ public class PayManagementActivity2 extends AppCompatActivity {
                     public void onClick(View v, String getplace_id, String getplace_name) {
                         change_place_id = getplace_id;
                         change_place_name = getplace_name;
-                        MonthTotal = 0;
                         dlog.i("change_place_id : " + getplace_id);
                         dlog.i("change_place_name : " + getplace_name);
+                        binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                        binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                        binding.calenderViewpager.setOffscreenPageLimit(1);
+
                         if (getplace_name.equals("전체매장")) {
                             binding.changePlaceTv.setText("전체매장");
                             change_place_id = "";
@@ -199,10 +203,18 @@ public class PayManagementActivity2 extends AppCompatActivity {
                             shardpref.putString("change_place_id", getplace_id);
                             shardpref.putString("change_place_name", getplace_name);
                         }
+                        shardpref.putString("change_place_id", getplace_id);
+                        shardpref.putString("change_place_name", getplace_name);
+
                         dlog.i("change_place_id : " + change_place_id);
                         dlog.i("change_place_name : " + change_place_name);
+
+                        change_place_id = place_id;
+                        change_place_name = USER_INFO_ID;
+
                         if (chng_icon) {
-//                            SetCalenderData(Year, Month);
+                            mList2.clear();
+                            SetPayCalenderData();
                         } else {
                             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, USER_INFO_ID, Year + "-" + Month, Tap);
                         }
@@ -565,7 +577,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
         String getYMDate = Year + "-" + Month;
         Log.i(TAG, "------SetPayCalenderData------");
-        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
         Log.i(TAG, "select_date : " + getYMDate);
         Log.i(TAG, "------SetPayCalenderData------");
@@ -574,7 +586,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         PayGetallInterface api = retrofit.create(PayGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -587,6 +599,10 @@ public class PayManagementActivity2 extends AppCompatActivity {
                         dlog.i("SetPayCalenderData jsonResponse : " + jsonResponse);
                         try {
                             JSONArray Response2 = new JSONArray(jsonResponse);
+                            //                            fragmentStateAdapter = new FragmentStateAdapter(this, 4, mList3);
+                            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                            binding.calenderViewpager.setOffscreenPageLimit(1);
                             if (Response2.length() == 0) {
                                 dlog.i("SetPayCalenderData GET SIZE : " + Response2.length());
                             } else {
@@ -603,7 +619,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
                                     ));
                                 }
                             }
-
+                            fragmentStateAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

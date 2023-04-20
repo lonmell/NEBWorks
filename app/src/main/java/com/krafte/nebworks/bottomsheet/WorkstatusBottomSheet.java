@@ -123,6 +123,12 @@ public class WorkstatusBottomSheet extends BottomSheetDialogFragment {
     WorkTapMemberAdapter mAdapter = null;
 
     public void setRecyclerView() {
+        dlog.i("-----setRecyclerView-----");
+        dlog.i("place_id : " + place_id);
+        dlog.i("USER_INFO_ID : " + USER_INFO_ID);
+        dlog.i("tap : " + 99);
+        dlog.i("getYMPicker : " + getYMPicker);
+        dlog.i("-----setRecyclerView-----");
         @SuppressLint({"NotifyDataSetChanged", "LongLogTag"}) Thread th = new Thread(() -> {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(WorkStatusTapInterface.URL)

@@ -151,11 +151,7 @@ public class WorkStatusSubFragment1 extends Fragment {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        if(shardpref == null){
-            shardpref = new PreferenceHelper(mContext);
-        }
-        shardpref.remove("FtoDay");
-        shardpref.remove("change_place_id");
+
     }
 
     @Override
@@ -164,7 +160,7 @@ public class WorkStatusSubFragment1 extends Fragment {
         toDay = shardpref.getString("FtoDay",toDay);
         dlog.i("post 날짜 :" + toDay);
         change_place_id = shardpref.getString("change_place_id","").equals("")?place_id:shardpref.getString("change_place_id","");
-        dlog.i("change_place_id :"  + change_place_id);
+        dlog.i("onResume change_place_id :"  + shardpref.getString("change_place_id",""));
         SetAllMemberList();
     }
 

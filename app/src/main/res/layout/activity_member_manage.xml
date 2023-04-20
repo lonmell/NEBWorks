@@ -136,10 +136,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
-                        android:fontFamily="@font/pretendard_bold"
                         android:layout_toStartOf="@+id/bottom_arrow"
-                        android:singleLine="true"
+                        android:fontFamily="@font/pretendard_bold"
                         android:gravity="start|center"
+                        android:singleLine="true"
                         android:text="매장선택"
                         android:textColor="@color/new_blue" />
 

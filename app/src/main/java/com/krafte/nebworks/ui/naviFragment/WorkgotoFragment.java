@@ -44,7 +44,6 @@ import com.krafte.nebworks.dataInterface.TaskSelectWInterface;
 import com.krafte.nebworks.dataInterface.WorkTaskGetallInterface;
 import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
-import com.krafte.nebworks.ui.CalenderFragment;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
 import com.krafte.nebworks.util.OnSwipeTouchListener;
@@ -66,7 +65,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class WorkgotoFragment extends Fragment implements CalenderFragment.OnButtonClickListener {
+public class WorkgotoFragment extends Fragment {
     private final static String TAG = "WorkgotoFragment";
     private WorkgotofragmentBinding binding;
     Context mContext;
@@ -111,7 +110,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
     int SELECT_POSITION = 0;
     int SELECT_POSITION_sub = 0;
 
-    boolean chng_icon = false;
+    boolean chng_icon;
     Calendar cal;
     String format = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -193,6 +192,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
             change_place_id = place_id;
             change_member_id = "";
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
+            dlog.i("SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
             fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, workGotoList2);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
@@ -242,12 +242,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         super.onResume();
         try {
             //기존에 저장된 반복데이터 삭제
-            shardpref.remove("return_page");
-            shardpref.remove("SET_TASK_TIME_VALUE");
-            shardpref.remove("yoillist");
-            shardpref.remove("RepeatTF");
-            shardpref.remove("RepeatKind");
-            shardpref.remove("overdate");
             RemoveShared();
             setAddBtnSetting();
             setRecyclerView();
@@ -258,9 +252,8 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
-        chng_icon = false;
         binding.calendarArea.setVisibility(View.GONE);
         binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
         binding.selectArea.setVisibility(View.VISIBLE);
@@ -273,12 +266,14 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
     @Override
     public void onDestroy() {
         super.onDestroy();
+        shardpref.remove("change_place_id");
+        shardpref.remove("change_place_name");
     }
 
     public void setDummyData() {
         binding.taskList.setVisibility(View.VISIBLE);
         Todo_mList = new ArrayList<>();
-        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getParentFragmentManager(), 1);
+        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, 1);
         binding.taskList.setAdapter(mAdapter);
         binding.taskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
         mAdapter.addItem(new WorkCalenderData.WorkCalenderData_list(
@@ -294,6 +289,12 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
     }
 
     private void RemoveShared() {
+        shardpref.remove("return_page");
+        shardpref.remove("SET_TASK_TIME_VALUE");
+        shardpref.remove("yoillist");
+        shardpref.remove("RepeatTF");
+        shardpref.remove("RepeatKind");
+        shardpref.remove("overdate");
         shardpref.remove("task_no");
         shardpref.remove("picker_year");
         shardpref.remove("picker_month");
@@ -306,14 +307,11 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         shardpref.remove("item_user_name");
         shardpref.remove("item_user_img");
         shardpref.remove("item_user_position");
-        shardpref.remove("change_member_id");
-        shardpref.remove("change_member_name");
-        shardpref.remove("change_place_id");
-        shardpref.remove("change_place_name");
     }
 
     private void setCalender(int state) {
         if (chng_icon) {
+            chng_icon = false;
             cal.add(Calendar.MONTH, state);
             toDay = sdf.format(cal.getTime());
             Year = toDay.substring(0, 4);
@@ -322,6 +320,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
             getYMPicker = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월 ");
         } else {
+            chng_icon = true;
             cal.add(Calendar.DATE, state);
             toDay = sdf.format(cal.getTime());
             Year = toDay.substring(0, 4);
@@ -350,7 +349,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
             int currentPosition = binding.calenderViewpager.getCurrentItem();
             binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
             binding.calenderViewpager.setOffscreenPageLimit(1);
-        } else if(kind == 1){
+        } else if (kind == 1) {
             //오른쪽으로 슬라이드 - 버튼으로
             before_pos = 0;
             cal.add(Calendar.MONTH, +1);
@@ -363,7 +362,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
             int currentPosition = binding.calenderViewpager.getCurrentItem();
             binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
             binding.calenderViewpager.setOffscreenPageLimit(1);
-        } else if(kind == 3){
+        } else if (kind == 3) {
             //왼쪽으로 슬라이드
             cal.add(Calendar.MONTH, -1);
             toDay = sdf.format(cal.getTime());
@@ -373,7 +372,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
             getYMPicker = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월 ");
             binding.calenderViewpager.setOffscreenPageLimit(1);
-        } else if(kind == 4){
+        } else if (kind == 4) {
             //왼쪽으로 슬라이드
             cal.add(Calendar.MONTH, +1);
             toDay = sdf.format(cal.getTime());
@@ -394,14 +393,13 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         Day = toDay.substring(8, 10);
         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
 
-
         binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 // 슬라이드가 끝난 후 작동할 이벤트
-                if(before_pos != position){
-                    if(before_pos != 0){
+                if (before_pos != position) {
+                    if (before_pos != 0) {
                         calPos = position - before_pos;
                         dlog.i("onPageScrollStateChanged state : " + calPos);
                         if (calPos > 0) {
@@ -417,10 +415,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
 
         binding.prevDate.setOnClickListener(v -> {
             try {
-//                String getDate = binding.setdate.getText().toString().replace("년 ", "-").replace("월 ", "-").replace("일", "");
-//                // 문자열 -> Date
-//                Date date = sdf.parse(getDate);
-//                dlog.i("Calendar.DATE : " + sdf.format(date));
                 if (USER_INFO_AUTH.isEmpty()) {
                     isAuth();
                 } else {
@@ -435,7 +429,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                         getYMPicker = Year + "-" + Month;
                         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                     }
-//                    SetCalenderData();
                     setRecyclerView();
                 }
             } catch (Exception e) {
@@ -444,10 +437,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         });
         binding.nextDate.setOnClickListener(v -> {
             try {
-//                String getDate = binding.setdate.getText().toString().replace("년 ", "-").replace("월 ", "-").replace("일", "");
-//                // 문자열 -> Date
-//                Date date = sdf.parse(getDate);
-//                dlog.i("Calendar.DATE : " + sdf.format(date));
                 if (USER_INFO_AUTH.isEmpty()) {
                     isAuth();
                 } else {
@@ -462,7 +451,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                         getYMPicker = Year + "-" + Month;
                         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                     }
-//                    SetCalenderData();
                     setRecyclerView();
                 }
             } catch (Exception e) {
@@ -499,7 +487,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                     fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 1);
                     binding.calenderViewpager.setAdapter(fragmentStateAdapter);
                     binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
-
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
@@ -529,6 +516,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                 }
             }
         });
+        binding.changePlaceTv.setText(place_name);
         binding.changePlace.setOnClickListener(v -> {
             if (USER_INFO_AUTH.isEmpty()) {
                 isAuth();
@@ -542,25 +530,33 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                             isAuth();
                         }
                         change_place_id = getplace_id;
-                        change_place_name = getplace_name;
+                        change_place_name = getplace_name.isEmpty()?place_name:getplace_name;
+                        SetWorkGotoCalenderData();
+
                         dlog.i("change_place_id : " + getplace_id);
                         dlog.i("change_place_name : " + getplace_name);
-                        if (getplace_name.equals("전체매장")) {
-                            binding.changePlaceTv.setText("전체매장");
-                            change_place_id = place_id;
-                            change_place_name = USER_INFO_ID;
-                            shardpref.putString("change_place_id", place_id);
-                            shardpref.putString("change_place_name", USER_INFO_ID);
-                        } else {
-                            binding.changePlaceTv.setText(getplace_name);
-                            shardpref.putString("change_place_id", getplace_id);
-                            shardpref.putString("change_place_name", getplace_name);
-                        }
+                        dlog.i("chng_icon : " + chng_icon);
+                        dlog.i("year : " + Year);
+                        dlog.i("month : " + Month);
+                        dlog.i("month : " + Day);
+
+                        fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, workGotoList2);
+                        binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                        binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                        binding.calenderViewpager.setOffscreenPageLimit(1);
+
+                        chng_icon = false;
+                        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+
+                        change_place_id = place_id;
+                        change_place_name = USER_INFO_ID;
+
+                        binding.changePlaceTv.setText(getplace_name);
+                        shardpref.putString("change_place_id", getplace_id);
+                        shardpref.putString("change_place_name", getplace_name);
                         dlog.i("change_place_id : " + change_place_id);
                         dlog.i("change_place_name : " + change_place_name);
-//                        SetCalenderData();
                         setRecyclerView();
-
                     }
                 });
             }
@@ -590,7 +586,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                         }
                         dlog.i("change_member_id : " + user_id);
                         dlog.i("change_member_name : " + user_name);
-//                        SetCalenderData();
                         setRecyclerView();
                     }
                 });
@@ -607,7 +602,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                 binding.dateSelect.setVisibility(View.GONE);
                 binding.setdate.setText(Year + "년 " + Month + "월");
                 binding.line01.setVisibility(View.GONE);
-//                SetCalenderData();
             } else {
                 chng_icon = false;
                 binding.calendarArea.setVisibility(View.GONE);
@@ -624,27 +618,28 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         binding.taskList.setOnTouchListener(new OnSwipeTouchListener(mContext) {
             @Override
             public void onSwipeLeft() {
-//                super.onSwipeLeft();
                 setCalender(1);
             }
 
             @Override
             public void onSwipeRight() {
-//                super.onSwipeRight();
                 setCalender(-1);
             }
         });
     }
 
-    CalenderFragment calenderFragment;
     //미처리인 업무 세기
     int state_null = 0;
-    String writer_id = "";
-
     public void setRecyclerView() {
         String select_date = binding.setdate.getText().toString().replace("년 ", "-").replace("월 ", "-").replace("일", "");
         if (change_member_id.isEmpty()) {
             change_member_id = USER_INFO_ID;
+        }
+        if(change_place_id.isEmpty()){
+            change_place_id = change_place_id.isEmpty()?place_id:change_place_id;
+        }
+        if(chng_icon && select_date.length() > 7){
+            select_date = select_date.substring(0,7);
         }
         dlog.i("setTodoWList place_id : " + change_place_id);
         dlog.i("setTodoWList USER_INFO_ID : " + change_member_id);
@@ -670,7 +665,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
                         Todo_mList = new ArrayList<>();
-                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getParentFragmentManager(), 1);
+                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, 1);
                         binding.taskList.setAdapter(Todo_mAdapter);
                         binding.taskList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         Log.i(TAG, "SetNoticeListview Thread run! ");
@@ -783,7 +778,6 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                                         }
                                     }
                                 }
-
                                 dlog.i("state_null : " + state_null);
                                 Todo_mAdapter.notifyDataSetChanged();
                             }
@@ -900,13 +894,12 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
 
 
     ArrayList<WorkGetallData.WorkGetallData_list> workGotoList2 = new ArrayList<>();
-
     private void SetWorkGotoCalenderData() {
         workGotoList2.clear();
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = Year + "-" + Month;
         Log.i(TAG, "------SetWorkGotoCalenderData------");
-        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "change_place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
         Log.i(TAG, "select_date : " + getYMDate);
         Log.i(TAG, "USER_INFO_AUTH : " + USER_INFO_AUTH);
@@ -916,7 +909,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkTaskGetallInterface api = retrofit.create(WorkTaskGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -930,6 +923,10 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                         Log.i(TAG, "SetWorkGotoCalenderData function START");
                         try {
                             JSONArray Response2 = new JSONArray(jsonResponse);
+                            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, workGotoList2);
+                            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                            binding.calenderViewpager.setOffscreenPageLimit(1);
                             if (Response2.length() == 0) {
                                 Log.i(TAG, "GET SIZE : " + Response2.length());
 //                                GetWorkGotoCalenderList(year, month, workGotoList2);
@@ -947,7 +944,7 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
                                     ));
                                 }
                             }
-
+                            fragmentStateAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -988,16 +985,16 @@ public class WorkgotoFragment extends Fragment implements CalenderFragment.OnBut
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
-    @Override
-    public void onButtonClicked(int kind) {
-        dlog.i("kind : " + kind);
-        int currentPosition = binding.calenderViewpager.getCurrentItem();
-        if (kind == -1) {
-            // ViewPager2를 오른쪽으로 이동
-            binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
-        } else {
-            // ViewPager2를 오른쪽으로 이동
-            binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
-        }
-    }
+//    @Override
+//    public void onButtonClicked(int kind) {
+//        dlog.i("kind : " + kind);
+//        int currentPosition = binding.calenderViewpager.getCurrentItem();
+//        if (kind == -1) {
+//            // ViewPager2를 오른쪽으로 이동
+//            binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
+//        } else {
+//            // ViewPager2를 오른쪽으로 이동
+//            binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
+//        }
+//    }
 }

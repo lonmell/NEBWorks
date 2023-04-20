@@ -123,6 +123,7 @@
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -184,10 +185,10 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="3dp"
-                        android:singleLine="true"
                         android:layout_toStartOf="@+id/check_btn"
                         android:fontFamily="@font/pretendard_bold"
                         android:gravity="start|center"
+                        android:singleLine="true"
                         android:text="전체매장"
                         android:textColor="@color/new_blue" />
 

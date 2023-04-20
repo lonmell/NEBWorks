@@ -136,7 +136,7 @@ public class WorkgotoBottomSheet extends BottomSheetDialogFragment {
                         //Array데이터를 받아올 때
                         JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
                         Todo_mList = new ArrayList<>();
-                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, getParentFragmentManager(), 1);
+                        Todo_mAdapter = new Tap2ListAdapter(mContext, Todo_mList, 1);
                         binding.placeList.setAdapter(Todo_mAdapter);
                         binding.placeList.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
                         Log.i(TAG, "SetNoticeListview Thread run! ");

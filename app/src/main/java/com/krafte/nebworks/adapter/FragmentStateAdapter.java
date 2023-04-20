@@ -108,6 +108,11 @@ public class FragmentStateAdapter extends androidx.viewpager2.adapter.FragmentSt
         return new CalenderFragment(this.year, this.month, state, sendList);
     }
 
+    public void updateSendList(ArrayList<WorkGetallData.WorkGetallData_list> newSendList) {
+        this.sendList = newSendList;
+        notifyDataSetChanged();
+    }
+
     public String returnMonth() {
         return this.month;
     }
