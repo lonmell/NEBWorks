@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,7 +73,8 @@ public class TaskApprovalFragment extends AppCompatActivity {
     String USER_INFO_NAME = "";
     String USER_INFO_AUTH = "";
     int SELECT_POSITION = 0;
-    String place_id;
+    String place_id = "";
+    String place_name = "";
     boolean wifi_certi_flag = false;
     boolean gps_certi_flag = false;
 
@@ -135,21 +137,20 @@ public class TaskApprovalFragment extends AppCompatActivity {
 
 
         //Singleton Area
-        USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
-        USER_INFO_NAME      = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
-        USER_INFO_AUTH      = shardpref.getString("USER_INFO_AUTH","");
-        place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
+        USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+        place_name = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
 
         //shardpref Area
-        SELECT_POSITION     = shardpref.getInt("SELECT_POSITION", 0);
-        wifi_certi_flag     = shardpref.getBoolean("wifi_certi_flag", false);
-        gps_certi_flag      = shardpref.getBoolean("gps_certi_flag", false);
-        return_page         = shardpref.getString("return_page","");
+        SELECT_POSITION = shardpref.getInt("SELECT_POSITION", 0);
+        wifi_certi_flag = shardpref.getBoolean("wifi_certi_flag", false);
+        gps_certi_flag = shardpref.getBoolean("gps_certi_flag", false);
+        return_page = shardpref.getString("return_page", "");
         shardpref.putString("return_page", "BusinessApprovalActivity");
 
-        SetWorkGotoCalenderData();
-
-        fragmentStateAdapter = new FragmentStateAdapter(this, 1,workGotoList2);
+        fragmentStateAdapter = new FragmentStateAdapter(this, 1, workGotoList2);
         binding.calenderViewpager.setAdapter(fragmentStateAdapter);
         binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
         binding.calenderViewpager.setOffscreenPageLimit(1);
@@ -165,19 +166,34 @@ public class TaskApprovalFragment extends AppCompatActivity {
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });
+
         setBtnEvent();
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
-        GetApprovalList("",select_date);
+        GetApprovalList("", select_date);
+        SetWorkGotoCalenderData();
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        GetApprovalList("",select_date);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        binding.calendarArea.setVisibility(View.GONE);
+        binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+        binding.selectArea.setVisibility(View.VISIBLE);
+        binding.dateLayout.setVisibility(View.VISIBLE);
+        binding.dateSelect.setVisibility(View.GONE);
+        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+        GetApprovalList("", select_date);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -185,7 +201,8 @@ public class TaskApprovalFragment extends AppCompatActivity {
     }
 
     String select_date = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-    private void ChangeTap(String i){
+
+    private void ChangeTap(String i) {
         Tap = i;
         binding.select01tv.setTextColor(Color.parseColor("#949494"));
         binding.select02tv.setTextColor(Color.parseColor("#949494"));
@@ -196,48 +213,49 @@ public class TaskApprovalFragment extends AppCompatActivity {
         binding.select03line.setBackgroundColor(Color.parseColor("#FFFFFF"));
         binding.select04line.setBackgroundColor(Color.parseColor("#FFFFFF"));
         select_date = Year + "-" + Month + "-" + Day;
-        if(i.equals("")){
+        if (i.equals("")) {
             binding.select01tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.select01line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
-        }else if(i.equals("0")){
+        } else if (i.equals("0")) {
             binding.select02tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.select02line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
-        }else if(i.equals("1")){
+        } else if (i.equals("1")) {
             binding.select03tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.select03line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
-        }else if(i.equals("2")){
+        } else if (i.equals("2")) {
             binding.select04tv.setTextColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.select04line.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
         }
     }
-    private void setBtnEvent(){
+
+    private void setBtnEvent() {
         binding.select01.setOnClickListener(v -> {
             ChangeTap("");
             dlog.i("select_date : " + select_date);
             dlog.i("change_place_id : " + change_place_id);
             dlog.i("change_member_id : " + change_member_id);
-            GetApprovalList(Tap,select_date);
+            GetApprovalList(Tap, select_date);
         });
         binding.select02.setOnClickListener(v -> {
             ChangeTap("0");
             dlog.i("select_date : " + select_date);
             dlog.i("change_place_id : " + change_place_id);
             dlog.i("change_member_id : " + change_member_id);
-            GetApprovalList(Tap,select_date);
+            GetApprovalList(Tap, select_date);
         });
         binding.select03.setOnClickListener(v -> {
             ChangeTap("1");
             dlog.i("select_date : " + select_date);
             dlog.i("change_place_id : " + change_place_id);
             dlog.i("change_member_id : " + change_member_id);
-            GetApprovalList(Tap,select_date);
+            GetApprovalList(Tap, select_date);
         });
         binding.select04.setOnClickListener(v -> {
             ChangeTap("2");
             dlog.i("select_date : " + select_date);
             dlog.i("change_place_id : " + change_place_id);
             dlog.i("change_member_id : " + change_member_id);
-            GetApprovalList(Tap,select_date);
+            GetApprovalList(Tap, select_date);
         });
 
         cal = Calendar.getInstance();
@@ -246,7 +264,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
         binding.setdate.setText(toDay);
         Year = toDay.substring(0, 4);
         Month = toDay.substring(5, 7);
-        Day = toDay.substring(8,10);
+        Day = toDay.substring(8, 10);
         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
 
         binding.prevDate.setOnClickListener(v -> {
@@ -258,24 +276,22 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 if (chng_icon) {
                     cal.add(Calendar.MONTH, -1);
                     toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0,4);
-                    Month = toDay.substring(5,7);
-                    Day = toDay.substring(8,10);
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                     int currentPosition = binding.calenderViewpager.getCurrentItem();
                     binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
                     binding.calenderViewpager.setOffscreenPageLimit(1);
-//                    SetCalenderData();
-
                 } else {
                     cal.add(Calendar.DATE, -1);
                     toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0,4);
-                    Month = toDay.substring(5,7);
-                    Day = toDay.substring(8,10);
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                     select_date = Year + "-" + Month + "-" + Day;
-                    GetApprovalList(Tap,select_date);
+                    GetApprovalList(Tap, select_date);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -290,23 +306,22 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 if (chng_icon) {
                     cal.add(Calendar.MONTH, +1);
                     toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0,4);
-                    Month = toDay.substring(5,7);
-                    Day = toDay.substring(8,10);
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                     int currentPosition = binding.calenderViewpager.getCurrentItem();
                     binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
                     binding.calenderViewpager.setOffscreenPageLimit(1);
-//                    SetCalenderData();
                 } else {
                     cal.add(Calendar.DATE, +1);
                     toDay = sdf.format(cal.getTime());
-                    Year = toDay.substring(0,4);
-                    Month = toDay.substring(5,7);
-                    Day = toDay.substring(8,10);
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                     select_date = Year + "-" + Month + "-" + Day;
-                    GetApprovalList(Tap,select_date);
+                    GetApprovalList(Tap, select_date);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -322,17 +337,17 @@ public class TaskApprovalFragment extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 if (month < Integer.parseInt(Month)) {
-                    cal.add(Calendar.MONTH, - (Integer.parseInt(Month) - (month + 1)));
-                    cal.add(Calendar.DAY_OF_MONTH, - (Integer.parseInt(Day) - (dayOfMonth)));
+                    cal.add(Calendar.MONTH, -(Integer.parseInt(Month) - (month + 1)));
+                    cal.add(Calendar.DAY_OF_MONTH, -(Integer.parseInt(Day) - (dayOfMonth)));
                 } else {
-                    cal.add(Calendar.MONTH, ((month + 1)  - Integer.parseInt(Month)));
-                    cal.add(Calendar.DAY_OF_MONTH, ((dayOfMonth)  - Integer.parseInt(Day)));
+                    cal.add(Calendar.MONTH, ((month + 1) - Integer.parseInt(Month)));
+                    cal.add(Calendar.DAY_OF_MONTH, ((dayOfMonth) - Integer.parseInt(Day)));
                 }
                 Year = String.valueOf(year);
-                Month = String.valueOf(month+1);
+                Month = String.valueOf(month + 1);
                 Day = String.valueOf(dayOfMonth);
-                Day = Day.length()==1?"0"+Day:Day;
-                Month = Month.length()==1?"0"+Month:Month;
+                Day = Day.length() == 1 ? "0" + Day : Day;
+                Month = Month.length() == 1 ? "0" + Month : Month;
                 binding.noDataTxt.setVisibility(View.GONE);
                 if (chng_icon) {
                     binding.calenderViewpager.setSaveFromParentEnabled(false);
@@ -344,9 +359,9 @@ public class TaskApprovalFragment extends AppCompatActivity {
 //                    SetCalenderData();
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                    GetApprovalList(Tap,select_date);
+                    GetApprovalList(Tap, select_date);
                 }
-                getYMPicker = binding.setdate.getText().toString().substring(0,7);
+                getYMPicker = binding.setdate.getText().toString().substring(0, 7);
 //                SetCalenderData();
 //                setRecyclerView();
                 select_date = Year + "-" + Month + "-" + Day;
@@ -365,34 +380,52 @@ public class TaskApprovalFragment extends AppCompatActivity {
             }
         });
 
+        FragmentActivity activity = this;
+        if (activity == null) {
+            throw new IllegalStateException("Activity cannot be null");
+        }
+
         binding.changePlace.setOnClickListener(v -> {
             PaySelectPlaceActivity psp = new PaySelectPlaceActivity();
             psp.show(getSupportFragmentManager(), "PaySelectPlaceActivity");
             psp.setOnClickListener(new PaySelectPlaceActivity.OnClickListener() {
                 @Override
                 public void onClick(View v, String getplace_id, String getplace_name) {
+
+                    cal = Calendar.getInstance();
+                    toDay = sdf.format(cal.getTime());
+                    dlog.i("오늘 :" + toDay);
+                    binding.setdate.setText(toDay);
+                    Year = toDay.substring(0, 4);
+                    Month = toDay.substring(5, 7);
+                    Day = toDay.substring(8, 10);
+                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                    chng_icon = false;
+
                     change_place_id = getplace_id;
-                    change_place_name = getplace_name;
+                    change_place_name = getplace_name.isEmpty() ? place_name : getplace_name;
+                    SetWorkGotoCalenderData();
+
                     dlog.i("change_place_id : " + getplace_id);
                     dlog.i("change_place_name : " + getplace_name);
-                    if (getplace_name.equals("전체매장")) {
-                        binding.changePlaceTv.setText("전체매장");
-                        change_place_id = place_id;
-                        change_place_name = USER_INFO_ID;
-                        shardpref.putString("change_place_id", place_id);
-                        shardpref.putString("change_place_name", USER_INFO_ID);
-                    } else {
-                        binding.changePlaceTv.setText(getplace_name);
-                        shardpref.putString("change_place_id", getplace_id);
-                        shardpref.putString("change_place_name", getplace_name);
-                    }
+                    fragmentStateAdapter = new FragmentStateAdapter(thisActivity, 1, workGotoList2);
+                    binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                    binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                    binding.calenderViewpager.setOffscreenPageLimit(1);
+
+                    binding.changePlaceTv.setText(getplace_name);
+                    shardpref.putString("change_place_id", getplace_id);
+                    shardpref.putString("change_place_name", getplace_name);
+//                    }
                     dlog.i("change_place_id : " + change_place_id);
                     dlog.i("change_place_name : " + change_place_name);
-                    if(Tap.equals("")){
-                        GetApprovalList(Tap,"");
-                    }else{
-                        GetApprovalList(Tap,select_date);
+
+                    if (Tap.equals("")) {
+                        GetApprovalList(Tap, "");
+                    } else {
+                        GetApprovalList(Tap, select_date);
                     }
+
 //                    SetCalenderData();
                 }
             });
@@ -421,29 +454,28 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     }
                     dlog.i("change_member_id : " + user_id);
                     dlog.i("change_member_name : " + user_name);
-                    if(Tap.equals("")){
-                        GetApprovalList(Tap,"");
-                    }else{
-                        GetApprovalList(Tap,select_date);
+                    if (Tap.equals("")) {
+                        GetApprovalList(Tap, "");
+                    } else {
+                        GetApprovalList(Tap, select_date);
                     }
-//                    SetCalenderData();
                 }
             });
         });
 
         binding.changeIcon.setOnClickListener(v -> {
-            if(!chng_icon){
+            if (!chng_icon) {
                 chng_icon = true;
                 binding.tabLayout.setVisibility(View.GONE);
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
                 binding.selectArea.setVisibility(View.GONE);
-                binding.dateLayout.setVisibility(View.GONE);
-                binding.dateSelect.setVisibility(View.VISIBLE);
+                binding.dateLayout.setVisibility(View.VISIBLE);
+                binding.dateSelect.setVisibility(View.GONE);
                 binding.noDataTxt.setVisibility(View.GONE);
                 binding.setdate.setText(Year + "년 " + Month + "월 ");
 //                SetCalenderData();
-            }else{
+            } else {
                 chng_icon = false;
                 binding.tabLayout.setVisibility(View.VISIBLE);
                 binding.calendarArea.setVisibility(View.GONE);
@@ -452,23 +484,23 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 binding.dateLayout.setVisibility(View.VISIBLE);
                 binding.dateSelect.setVisibility(View.GONE);
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                GetApprovalList(Tap,select_date);
+                GetApprovalList(Tap, select_date);
             }
         });
 
-//        binding.createCalender.setOnTouchListener(new OnSwipeTouchListener(mContext) {
-//            @Override
-//            public void onSwipeLeft() {
-////                super.onSwipeLeft();
-//                setCalender(1);
-//            }
-//
-//            @Override
-//            public void onSwipeRight() {
-////                super.onSwipeRight();
-//                setCalender(-1);
-//            }
-//        });
+        binding.totalApploveList1.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            @Override
+            public void onSwipeLeft() {
+//                super.onSwipeLeft();
+                setCalender(1);
+            }
+
+            @Override
+            public void onSwipeRight() {
+//                super.onSwipeRight();
+                setCalender(-1);
+            }
+        });
 
         binding.totalApploveList1.setOnTouchListener(new OnSwipeTouchListener(mContext) {
             @Override
@@ -503,13 +535,12 @@ public class TaskApprovalFragment extends AppCompatActivity {
             getYMPicker = Year + "-" + Month;
             binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
             select_date = Year + "-" + Month + "-" + Day;
-            GetApprovalList(Tap,select_date);
+            GetApprovalList(Tap, select_date);
         }
     }
 
     RetrofitConnect rc = new RetrofitConnect();
-    public void GetApprovalList(String state,String approval_date) {
-        binding.loginAlertText.setVisibility(View.VISIBLE);
+    public void GetApprovalList(String state, String approval_date) {
         dlog.i("approval_date: " + approval_date);
         dlog.i("select_date : " + select_date);
         dlog.i("change_place_id : " + change_place_id);
@@ -547,8 +578,8 @@ public class TaskApprovalFragment extends AppCompatActivity {
                             binding.noDataTxt.setVisibility(View.GONE);
                             for (int i = 0; i < Response.length(); i++) {
                                 JSONObject jsonObject = Response.getJSONObject(i);
-                                if(!change_member_id.isEmpty()){
-                                    if(jsonObject.getString("requester_id").equals(change_member_id)){
+                                if (!change_member_id.isEmpty()) {
+                                    if (jsonObject.getString("requester_id").equals(change_member_id)) {
                                         mAdapter.addItem(new TaskCheckData.TaskCheckData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("state"),
@@ -572,7 +603,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
                                                 Collections.singletonList(jsonObject.getString("users"))
                                         ));
                                     }
-                                }else{
+                                } else {
                                     mAdapter.addItem(new TaskCheckData.TaskCheckData_list(
                                             jsonObject.getString("id"),
                                             jsonObject.getString("state"),
@@ -604,32 +635,32 @@ public class TaskApprovalFragment extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러 = " + t.getMessage());
-                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }
+
     ArrayList<WorkGetallData.WorkGetallData_list> workGotoList2 = new ArrayList<>();
+
     private void SetWorkGotoCalenderData() {
-        binding.loginAlertText.setVisibility(View.VISIBLE);
         workGotoList2.clear();
-        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH","");
+        String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        String getYMDate = Year + "-" + Month;
         Log.i(TAG, "------SetWorkGotoCalenderData------");
-        Log.i(TAG, "place_id : " + place_id);
+        Log.i(TAG, "place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
-        Log.i(TAG, "select_date : " + dc.GET_YEAR);
+        Log.i(TAG, "select_date : " + getYMDate);
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkTaskGetallInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkTaskGetallInterface api = retrofit.create(WorkTaskGetallInterface.class);
-        Call<String> call2 = api.getData(place_id, USER_INFO_ID, dc.GET_YEAR,USER_INFO_AUTH);
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override
@@ -643,6 +674,10 @@ public class TaskApprovalFragment extends AppCompatActivity {
                         Log.i(TAG, "SetWorkGotoCalenderData function START");
                         try {
                             JSONArray Response2 = new JSONArray(jsonResponse);
+                            fragmentStateAdapter = new FragmentStateAdapter(thisActivity, 1, workGotoList2);
+                            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                            binding.calenderViewpager.setOffscreenPageLimit(1);
                             if (Response2.length() == 0) {
                                 Log.i(TAG, "GET SIZE : " + Response2.length());
 //                                GetWorkGotoCalenderList(year, month, workGotoList2);
@@ -660,20 +695,18 @@ public class TaskApprovalFragment extends AppCompatActivity {
                                     ));
                                 }
                             }
-
+                            fragmentStateAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 });
-                binding.loginAlertText.setVisibility(View.GONE);
             }
 
             @Override
             @SuppressLint("LongLogTag")
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "에러2 = " + t.getMessage());
-                binding.loginAlertText.setVisibility(View.GONE);
             }
         });
     }

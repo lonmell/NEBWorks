@@ -32,7 +32,6 @@ import com.krafte.nebworks.dataInterface.AllMemberInterface;
 import com.krafte.nebworks.dataInterface.FCMCrerateInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.FCMUpdateInterface;
-import com.krafte.nebworks.dataInterface.FeedNotiInterface;
 import com.krafte.nebworks.dataInterface.PlaceListInterface;
 import com.krafte.nebworks.dataInterface.UserSelectInterface;
 import com.krafte.nebworks.databinding.ActivityWorksiteBinding;
@@ -174,7 +173,6 @@ public class PlaceListActivity extends AppCompatActivity {
             dlog.i("-----onResume-----");
             if(!USER_INFO_EMAIL.isEmpty() && !USER_INFO_AUTH.isEmpty() && !USER_INFO_ID.isEmpty()){
                 GetPlaceList();
-                getNotReadFeedcnt();
             } else {
                 binding.storeCnt.setText("0개");
                 binding.noData.setVisibility(View.VISIBLE);
@@ -301,9 +299,6 @@ public class PlaceListActivity extends AppCompatActivity {
         binding.addPlace2.setOnClickListener(v -> {
             onStartAuth();
         });
-        binding.notiArea.setOnClickListener(v -> {
-            pm.FeedList(mContext);
-        });
         binding.logoutArea.setOnClickListener(v -> {
             Logout();
         });
@@ -419,13 +414,11 @@ public class PlaceListActivity extends AppCompatActivity {
                                 dlog.i("SIZE : " + Response.length());
                                 if (jsonResponse.equals("[]")) {
                                     binding.noData.setVisibility(View.VISIBLE);
-                                    binding.notiArea.setVisibility(View.GONE);
                                     dlog.i("SetNoticeListview Thread run! ");
                                     dlog.i("GET SIZE : " + Response.length());
                                     binding.storeCnt.setText(Response.length() + "개");
                                 } else {
                                     binding.noData.setVisibility(View.GONE);
-                                    binding.notiArea.setVisibility(View.VISIBLE);
                                     for (int i = 0; i < Response.length(); i++) {
                                         JSONObject jsonObject = Response.getJSONObject(i);
                                         store_cnt++;
@@ -616,49 +609,7 @@ public class PlaceListActivity extends AppCompatActivity {
     }
 
 
-    public void getNotReadFeedcnt() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FeedNotiInterface.URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        FeedNotiInterface api = retrofit.create(FeedNotiInterface.class);
-        Call<String> call = api.getData("", "", "","1",USER_INFO_ID,"자유게시판");
-        call.enqueue(new Callback<String>() {
-            @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                dlog.e("getNotReadFeedcnt");
-                dlog.e( "response 1: " + response.isSuccessful());
-                if (response.isSuccessful() && response.body() != null && response.body().length() != 0) {
-                    String jsonResponse = rc.getBase64decode(response.body());
-                    dlog.i("jsonResponse length : " + jsonResponse.length());
-                    dlog.i("jsonResponse : " + jsonResponse);
-                    try {
-                        //Array데이터를 받아올 때
-                        JSONArray Response = new JSONArray(jsonResponse);
-                        if(!jsonResponse.equals("[]") && Response.length() != 0){
-                            String NotRead = Response.getJSONObject(0).getString("notread_feed");
-                            if(NotRead.equals("0") || NotRead.isEmpty()){
-                                binding.notiRed.setVisibility(View.INVISIBLE);
-                            }else{
-                                binding.notiRed.setVisibility(View.VISIBLE);
-                            }
-                        }else{
-                            binding.notiRed.setVisibility(View.INVISIBLE);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
 
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                dlog.e( "에러 = " + t.getMessage());
-            }
-        });
-    }
 
     public void ConfirmUserPlacemember(String place_id, String myid, String owner_id, String place_name) {
         dlog.i("---------SetAllMemberList Check---------");

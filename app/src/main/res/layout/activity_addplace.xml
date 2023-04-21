@@ -797,6 +797,16 @@
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
+                <TimePicker
+                    android:id="@+id/time_setpicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:numbersBackgroundColor="#ffffff"
+                    android:numbersSelectorColor="@color/new_blue"
+                    android:numbersTextColor="@color/black"
+                    android:theme="@style/NumberPicker"
+                    android:timePickerMode="spinner"
+                    android:visibility="gone" />
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -851,17 +861,6 @@
                             android:textSize="16sp" />
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
-
-                <TimePicker
-                    android:id="@+id/time_setpicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:numbersBackgroundColor="#ffffff"
-                    android:numbersSelectorColor="@color/new_blue"
-                    android:numbersTextColor="@color/black"
-                    android:theme="@style/NumberPicker"
-                    android:timePickerMode="spinner"
-                    android:visibility="gone" />
 
             </LinearLayout>
 

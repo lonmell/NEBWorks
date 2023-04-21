@@ -40,35 +40,6 @@
             android:textSize="16sp" />
 
         <RelativeLayout
-            android:id="@+id/noti_area"
-            android:layout_width="59dp"
-            android:layout_height="59dp"
-            app:layout_constraintEnd_toStartOf="@id/logout_area"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" >
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/noti_red"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                app:cardCornerRadius="60dp"
-                android:layout_alignTop="@+id/notice"
-                android:layout_alignEnd="@+id/notice"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#DD6540"/>
-
-            <ImageView
-                android:id="@+id/notice"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="18dp"
-                android:background="@drawable/bell" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
             android:id="@+id/logout_area"
             android:layout_width="59dp"
             android:layout_height="59dp"
@@ -150,7 +121,6 @@
             android:id="@+id/place_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/add_place"
             android:layout_marginTop="20dp" />
 
         <LinearLayout

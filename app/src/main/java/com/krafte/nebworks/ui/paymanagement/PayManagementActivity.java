@@ -219,9 +219,6 @@ public class PayManagementActivity extends AppCompatActivity {
                         dlog.i("change_place_id : " + change_place_id);
                         dlog.i("change_place_name : " + change_place_name);
 
-                        change_place_id = place_id;
-                        change_place_name = USER_INFO_ID;
-
                         if (chng_icon) {
                             SetPayCalenderData();
                         } else {

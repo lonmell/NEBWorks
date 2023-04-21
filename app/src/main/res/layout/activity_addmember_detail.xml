@@ -947,6 +947,7 @@
                 android:id="@+id/other_info_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -957,234 +958,241 @@
                     android:background="@color/gray" />
 
                 <!--기타 정보 START-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:text="기타 정보"
-                    android:textColor="@color/black"
-                    android:textSize="26sp" />
-
-                <!--이름-->
                 <LinearLayout
+                    android:id="@+id/other_detail_area"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:visibility="visible">
-
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:text="나이"
-                        android:textColor="#949494"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-
-                    <EditText
-                        android:id="@+id/inputbox07"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:hint="ex)26"
-                        android:importantForAutofill="no"
-                        android:inputType="number"
-                        android:maxEms="10"
-                        android:maxLength="10"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="5dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:text="기타 정보"
                         android:textColor="@color/black"
-                        android:textColorHint="#a9a9a9"
-                        android:textSize="17sp"
-                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                        android:textSize="26sp" />
 
-                </LinearLayout>
-
-                <!--이름-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:text="이메일"
-                        android:textColor="#949494"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-
-                    <EditText
-                        android:id="@+id/inputbox08"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:hint="ex) abcd@email.com"
-                        android:importantForAutofill="no"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="5dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="#a9a9a9"
-                        android:textSize="17sp"
-                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-
-                </LinearLayout>
-
-                <!--주소-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:text="주소"
-                        android:textColor="#949494"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-
-                    <EditText
-                        android:id="@+id/inputbox09"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:hint="주소입력"
-                        android:importantForAutofill="no"
-                        android:inputType="textEmailAddress"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="5dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="#a9a9a9"
-                        android:textSize="17sp"
-                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
-
-                </LinearLayout>
-
-                <!--자기소개-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:text="자기소개"
-                        android:textColor="#949494"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
-
+                    <!--이름-->
                     <LinearLayout
-                        android:id="@+id/inputbox10_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/default_gray_round">
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:visibility="visible">
 
-                        <EditText
-                            android:id="@+id/inputbox10"
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="15dp"
-                            android:background="#00ff0000"
                             android:fontFamily="@font/inter_regular"
-                            android:gravity="start|top"
-                            android:hint="자기소개"
-                            android:inputType="textMultiLine"
-                            android:maxEms="200"
-                            android:maxLength="200"
-                            android:minHeight="150dp"
+                            android:gravity="start|center"
+                            android:text="나이"
+                            android:textColor="#949494"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <EditText
+                            android:id="@+id/inputbox07"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/default_gray_round"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:hint="ex)26"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxEms="10"
+                            android:maxLength="10"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="5dp"
                             android:textColor="@color/black"
                             android:textColorHint="#a9a9a9"
                             android:textSize="17sp"
                             tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
                     </LinearLayout>
 
-
-                </LinearLayout>
-
-                <!--경력 및 학력-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:visibility="visible">
-
-                    <TextView
+                    <!--이름-->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:text="경력 및 학력"
-                        android:textColor="#949494"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:visibility="visible">
 
-                    <EditText
-                        android:id="@+id/inputbox11"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:text="이메일"
+                            android:textColor="#949494"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <EditText
+                            android:id="@+id/inputbox08"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/default_gray_round"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:hint="ex) abcd@email.com"
+                            android:importantForAutofill="no"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="#a9a9a9"
+                            android:textSize="17sp"
+                            tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
+                    </LinearLayout>
+
+                    <!--주소-->
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/default_gray_round"
-                        android:fontFamily="@font/inter_regular"
-                        android:gravity="start|center"
-                        android:hint="경력 혹은 학력 입력"
-                        android:importantForAutofill="no"
-                        android:inputType="textEmailAddress"
-                        android:maxEms="10"
-                        android:maxLength="10"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="5dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="#a9a9a9"
-                        android:textSize="17sp"
-                        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:visibility="visible">
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:text="주소"
+                            android:textColor="#949494"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <EditText
+                            android:id="@+id/inputbox09"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/default_gray_round"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:hint="주소입력"
+                            android:importantForAutofill="no"
+                            android:inputType="textEmailAddress"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="#a9a9a9"
+                            android:textSize="17sp"
+                            tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
+                    </LinearLayout>
+
+                    <!--자기소개-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:text="자기소개"
+                            android:textColor="#949494"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <LinearLayout
+                            android:id="@+id/inputbox10_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/default_gray_round">
+
+                            <EditText
+                                android:id="@+id/inputbox10"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="15dp"
+                                android:background="#00ff0000"
+                                android:fontFamily="@font/inter_regular"
+                                android:gravity="start|top"
+                                android:hint="자기소개"
+                                android:inputType="textMultiLine"
+                                android:maxEms="200"
+                                android:maxLength="200"
+                                android:minHeight="150dp"
+                                android:textColor="@color/black"
+                                android:textColorHint="#a9a9a9"
+                                android:textSize="17sp"
+                                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <!--경력 및 학력-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:text="경력 및 학력"
+                            android:textColor="#949494"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <EditText
+                            android:id="@+id/inputbox11"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/default_gray_round"
+                            android:fontFamily="@font/inter_regular"
+                            android:gravity="start|center"
+                            android:hint="경력 혹은 학력 입력"
+                            android:importantForAutofill="no"
+                            android:inputType="textEmailAddress"
+                            android:maxEms="10"
+                            android:maxLength="10"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="#a9a9a9"
+                            android:textSize="17sp"
+                            tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+                </LinearLayout>
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/addMemberBtn"

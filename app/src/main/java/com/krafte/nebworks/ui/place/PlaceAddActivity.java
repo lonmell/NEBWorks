@@ -448,6 +448,23 @@ public class PlaceAddActivity extends AppCompatActivity {
 //            SELECTTIME = false;
             binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
             binding.inputbox09box.setCardBackgroundColor(Color.parseColor("#ffffff"));
+//            WorkTimePicker wtp = new WorkTimePicker();
+//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+//                @Override
+//                public void onClick(View v, String hour, String min) {
+//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("hourOfDay");
+//                    shardpref.remove("minute");
+//                    GetTime = Time01 + ":" + Time02;
+//                    shardpref.putString("input_pop_time",GetTime);
+//                    if (!hour.equals("0")) {
+//                        binding.inputbox08.setText(GetTime);
+//                    }
+//                }
+//            });
         });
 
         binding.inputbox09box.setOnClickListener(v -> {
@@ -458,6 +475,24 @@ public class PlaceAddActivity extends AppCompatActivity {
 //            SELECTTIME = true;
             binding.inputbox08box.setCardBackgroundColor(Color.parseColor("#ffffff"));
             binding.inputbox09box.setCardBackgroundColor(Color.parseColor("#f2f2f2"));
+
+//            WorkTimePicker wtp = new WorkTimePicker();
+//            wtp.show(getSupportFragmentManager(),"WorkTimePicker");
+//            wtp.setOnClickListener(new WorkTimePicker.OnClickListener() {
+//                @Override
+//                public void onClick(View v, String hour, String min) {
+//                    Time01 = String.valueOf(hour).length() == 1 ? "0" + String.valueOf(hour) : String.valueOf(hour);
+//                    Time02 = String.valueOf(min).length() == 1 ? "0" + String.valueOf(min) : String.valueOf(min);
+//                    shardpref.remove("timeSelect_flag");
+//                    shardpref.remove("hourOfDay");
+//                    shardpref.remove("minute");
+//                    GetTime = Time01 + ":" + Time02;
+//                    shardpref.putString("input_pop_time",GetTime);
+//                    if (!hour.equals("0")) {
+//                        binding.inputbox09.setText(GetTime);
+//                    }
+//                }
+//            });
         });
 
         binding.timeSetpicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {

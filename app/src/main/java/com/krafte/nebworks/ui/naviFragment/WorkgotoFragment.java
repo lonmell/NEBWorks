@@ -46,7 +46,6 @@ import com.krafte.nebworks.databinding.WorkgotofragmentBinding;
 import com.krafte.nebworks.pop.TwoButtonPopActivity;
 import com.krafte.nebworks.util.DateCurrent;
 import com.krafte.nebworks.util.Dlog;
-import com.krafte.nebworks.util.OnSwipeTouchListener;
 import com.krafte.nebworks.util.PageMoveClass;
 import com.krafte.nebworks.util.PreferenceHelper;
 import com.krafte.nebworks.util.RetrofitConnect;
@@ -199,30 +198,6 @@ public class WorkgotoFragment extends Fragment {
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
             binding.calenderViewpager.setOffscreenPageLimit(1);
 
-
-            if (SELECT_POSITION_sub == 0) {
-                chng_icon = false;
-                binding.calendarArea.setVisibility(View.GONE);
-                binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
-                binding.setdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 " + dc.GET_DAY + "일");
-                binding.selectArea.setVisibility(View.VISIBLE);
-                binding.dateLayout.setVisibility(View.VISIBLE);
-                binding.dateSelect.setVisibility(View.GONE);
-                if (USER_INFO_AUTH.isEmpty()) {
-                    setDummyData();
-                } else {
-                    setRecyclerView();
-                }
-            } else if (SELECT_POSITION_sub == 1) {
-                chng_icon = true;
-                binding.setdate.setText(dc.GET_YEAR + "년 " + dc.GET_MONTH + "월 ");
-                binding.calendarArea.setVisibility(View.VISIBLE);
-                binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
-                binding.selectArea.setVisibility(View.GONE);
-                binding.dateLayout.setVisibility(View.GONE);
-                binding.dateSelect.setVisibility(View.VISIBLE);
-                binding.line01.setVisibility(View.GONE);
-            }
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
@@ -234,15 +209,7 @@ public class WorkgotoFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
         try {
-            //기존에 저장된 반복데이터 삭제
-            RemoveShared();
             setAddBtnSetting();
             setRecyclerView();
             SetWorkGotoCalenderData();
@@ -251,21 +218,21 @@ public class WorkgotoFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     @Override
     public void onStop() {
         super.onStop();
-        binding.calendarArea.setVisibility(View.GONE);
-        binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
-        binding.selectArea.setVisibility(View.VISIBLE);
-        binding.dateLayout.setVisibility(View.VISIBLE);
-        binding.dateSelect.setVisibility(View.GONE);
-        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-        setRecyclerView();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        RemoveShared();
         shardpref.remove("change_place_id");
         shardpref.remove("change_place_name");
     }
@@ -307,29 +274,6 @@ public class WorkgotoFragment extends Fragment {
         shardpref.remove("item_user_name");
         shardpref.remove("item_user_img");
         shardpref.remove("item_user_position");
-    }
-
-    private void setCalender(int state) {
-        if (chng_icon) {
-            chng_icon = false;
-            cal.add(Calendar.MONTH, state);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate.setText(Year + "년 " + Month + "월 ");
-        } else {
-            chng_icon = true;
-            cal.add(Calendar.DATE, state);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-        }
-        setRecyclerView();
     }
 
     int before_pos = 0;
@@ -419,6 +363,7 @@ public class WorkgotoFragment extends Fragment {
                     isAuth();
                 } else {
                     if (chng_icon) {
+                        dlog.i("binding.prevDate chng_icon : " + chng_icon);
                         ScrollState(0);
                     } else {
                         cal.add(Calendar.DATE, -1);
@@ -526,9 +471,13 @@ public class WorkgotoFragment extends Fragment {
                 psp.setOnClickListener(new PaySelectPlaceActivity.OnClickListener() {
                     @Override
                     public void onClick(View v, String getplace_id, String getplace_name) {
-                        if (USER_INFO_AUTH.isEmpty()) {
-                            isAuth();
-                        }
+                        toDay = sdf.format(cal.getTime());
+                        Year = toDay.substring(0, 4);
+                        Month = toDay.substring(5, 7);
+                        Day = toDay.substring(8, 10);
+                        getYMPicker = Year + "-" + Month+ "월 " + Day + "일";
+                        dlog.i("PaySelectPlaceActivity getYMPicker : "+ Year + "년 " + Month + "월 " + Day + "일");
+
                         change_place_id = getplace_id;
                         change_place_name = getplace_name.isEmpty()?place_name:getplace_name;
                         SetWorkGotoCalenderData();
@@ -545,11 +494,6 @@ public class WorkgotoFragment extends Fragment {
                         binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
                         binding.calenderViewpager.setOffscreenPageLimit(1);
 
-                        chng_icon = false;
-                        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-
-                        change_place_id = place_id;
-                        change_place_name = USER_INFO_ID;
 
                         binding.changePlaceTv.setText(getplace_name);
                         shardpref.putString("change_place_id", getplace_id);
@@ -557,6 +501,8 @@ public class WorkgotoFragment extends Fragment {
                         dlog.i("change_place_id : " + change_place_id);
                         dlog.i("change_place_name : " + change_place_name);
                         setRecyclerView();
+                        Month = String.valueOf(Integer.parseInt(Month)).length() == 1 ? "0" + String.valueOf(Integer.parseInt(Month)) : String.valueOf(Integer.parseInt(Month));
+                        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                     }
                 });
             }
@@ -593,6 +539,14 @@ public class WorkgotoFragment extends Fragment {
         });
 
         binding.changeIcon.setOnClickListener(v -> {
+            cal = Calendar.getInstance();
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+
+            binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+//            binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
             if (!chng_icon) {
                 chng_icon = true;
                 binding.calendarArea.setVisibility(View.VISIBLE);
@@ -615,17 +569,17 @@ public class WorkgotoFragment extends Fragment {
         });
 
 
-        binding.taskList.setOnTouchListener(new OnSwipeTouchListener(mContext) {
-            @Override
-            public void onSwipeLeft() {
-                setCalender(1);
-            }
-
-            @Override
-            public void onSwipeRight() {
-                setCalender(-1);
-            }
-        });
+//        binding.taskList.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+//            @Override
+//            public void onSwipeLeft() {
+//                setCalender(1);
+//            }
+//
+//            @Override
+//            public void onSwipeRight() {
+//                setCalender(-1);
+//            }
+//        });
     }
 
     //미처리인 업무 세기
@@ -636,15 +590,18 @@ public class WorkgotoFragment extends Fragment {
             change_member_id = USER_INFO_ID;
         }
         if(change_place_id.isEmpty()){
-            change_place_id = change_place_id.isEmpty()?place_id:change_place_id;
+            change_place_id = place_id;
         }
         if(chng_icon && select_date.length() > 7){
             select_date = select_date.substring(0,7);
         }
+        dlog.i("----------setRecyclerView setTodoWList----------");
         dlog.i("setTodoWList place_id : " + change_place_id);
         dlog.i("setTodoWList USER_INFO_ID : " + change_member_id);
         dlog.i("setTodoWList select_date : " + select_date);
         dlog.i("setTodoWList USER_INFO_AUTH : " + USER_INFO_AUTH);
+        dlog.i("----------setRecyclerView setTodoWList----------");
+
         Todo_mList.clear();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TaskSelectWInterface.URL)

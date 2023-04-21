@@ -573,9 +573,6 @@ public class WorkstatusFragment extends Fragment {
                 binding.selectPlace.setText(getplace_name);
                 binding.changePlace.setTag(getplace_name);
 
-                change_place_id = place_id;
-                change_place_name = USER_INFO_ID;
-
                 PlaceWorkCheck(place_id);
                 if (SELECT_POSITION == 1) {
                     fg = WorkStatusSubFragment1.newInstance();
