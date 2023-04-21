@@ -112,15 +112,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp">
 
-                <ImageView
-                    android:id="@+id/date_select"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/calendar" />
-
                 <LinearLayout
                     android:id="@+id/date_layout"
                     android:layout_width="match_parent"

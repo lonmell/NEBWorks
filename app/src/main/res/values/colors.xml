@@ -33,5 +33,6 @@
     <color name="gray_200">#DBDBDB</color>
     <color name="gray_400">#949494</color>
     <color name="gray_500">#54585A</color>
+    <color name="gray_f1f1f1">#F1F1F1</color>
 </resources>
 
