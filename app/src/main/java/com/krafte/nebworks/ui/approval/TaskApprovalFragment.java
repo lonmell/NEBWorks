@@ -270,10 +270,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
 
         binding.prevDate.setOnClickListener(v -> {
             try {
-//                String getDate = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
-//                // 문자열 -> Date
-//                Date date = sdf.parse(getDate);
-//                dlog.i("Calendar.DATE : " + sdf.format(date));
                 if (chng_icon) {
                     cal.add(Calendar.MONTH, -1);
                     toDay = sdf.format(cal.getTime());
@@ -302,10 +298,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
         });
         binding.nextDate.setOnClickListener(v -> {
             try {
-//                String getDate = binding.setdate.getText().toString().replace("년 ","-").replace("월 ","-").replace("일","");
-//                // 문자열 -> Date
-//                Date date = sdf.parse(getDate);
-//                dlog.i("Calendar.DATE : " + sdf.format(date));
                 if (chng_icon) {
                     cal.add(Calendar.MONTH, +1);
                     toDay = sdf.format(cal.getTime());
@@ -363,14 +355,11 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
                     binding.calenderViewpager.setOffscreenPageLimit(1);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
-//                    SetCalenderData();
                 } else {
                     binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                     GetApprovalList(Tap, select_date);
                 }
                 getYMPicker = binding.setdate.getText().toString().substring(0, 7);
-//                SetCalenderData();
-//                setRecyclerView();
                 select_date = Year + "-" + Month + "-" + Day;
             }
         }, mYear, mMonth, mDay);
@@ -421,7 +410,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 binding.changePlaceTv.setText(getplace_name);
                 shardpref.putString("change_place_id", getplace_id);
                 shardpref.putString("change_place_name", getplace_name);
-//                    }
                 dlog.i("change_place_id : " + change_place_id);
                 dlog.i("change_place_name : " + change_place_name);
 
@@ -430,8 +418,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 } else {
                     GetApprovalList(Tap, select_date);
                 }
-
-//                    SetCalenderData();
             });
         });
 
@@ -487,7 +473,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 binding.dateSelect.setVisibility(View.GONE);
                 binding.noDataTxt.setVisibility(View.GONE);
                 binding.setdate.setText(Year + "년 " + Month + "월 ");
-//                SetCalenderData();
             } else {
                 chng_icon = false;
                 cal = Calendar.getInstance();
@@ -581,7 +566,6 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 Log.e(TAG, "response 1: " + response.isSuccessful());
                 Log.e(TAG, "response 2: " + rc.getBase64decode(response.body()));
                 if (response.isSuccessful() && response.body() != null) {
-//                    Log.e(TAG,"GetWorkStateInfo2 function onSuccess : " + jsonResponse);
                     try {
                         JSONArray Response = new JSONArray(rc.getBase64decode(response.body()));
 
