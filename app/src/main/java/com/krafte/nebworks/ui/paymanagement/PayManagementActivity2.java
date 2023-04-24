@@ -257,24 +257,20 @@ public class PayManagementActivity2 extends AppCompatActivity {
         } else if (kind == 3) {
             //왼쪽으로 슬라이드
             cal.add(Calendar.MONTH, -1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate.setText(Year + "년 " + Month + "월 ");
             binding.calenderViewpager.setOffscreenPageLimit(1);
         } else if (kind == 4) {
             //왼쪽으로 슬라이드
             cal.add(Calendar.MONTH, +1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate.setText(Year + "년 " + Month + "월 ");
             binding.calenderViewpager.setOffscreenPageLimit(1);
         }
+        toDay = sdf.format(cal.getTime());
+        Year = toDay.substring(0, 4);
+        Month = toDay.substring(5, 7);
+        Day = toDay.substring(8, 10);
+        getYMPicker = Year + "-" + Month;
+        shardpref.putString("calendar_year", Year);
+        shardpref.putString("calendar_month", Month);
+        binding.setdate.setText(Year + "년 " + Month + "월 ");
     }
 
     private void TimeSetFun() {
@@ -377,11 +373,11 @@ public class PayManagementActivity2 extends AppCompatActivity {
             }
         }, mYear, mMonth, mDay);
 
-        binding.setdate.setOnClickListener(view -> {
-            if (binding.setdate.isClickable()) {
-                datePickerDialog.show();
-            }
-        });
+//        binding.setdate.setOnClickListener(view -> {
+//            if (binding.setdate.isClickable()) {
+//                datePickerDialog.show();
+//            }
+//        });
 
         binding.dateSelect.setOnClickListener(view -> {
             if (binding.setdate.isClickable()) {
@@ -418,8 +414,10 @@ public class PayManagementActivity2 extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy(){
         super.onDestroy();
+        shardpref.remove("calendar_year");
+        shardpref.remove("calendar_month");
     }
 
     // 직원 급여 명세서 리스트

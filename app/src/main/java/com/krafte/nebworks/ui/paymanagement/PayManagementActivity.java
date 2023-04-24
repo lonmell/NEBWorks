@@ -280,38 +280,34 @@ public class PayManagementActivity extends AppCompatActivity {
         if (kind == 0) {
             //왼쪽으로 슬라이드 - 버튼으로
             before_pos = 0;
-            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            cal.add(Calendar.MONTH, -1);
             int currentPosition = binding.calenderViewpager.getCurrentItem();
             binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
             binding.calenderViewpager.setOffscreenPageLimit(1);
         } else if (kind == 1) {
             //오른쪽으로 슬라이드 - 버튼으로
             before_pos = 0;
-            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            cal.add(Calendar.MONTH, +1);
             int currentPosition = binding.calenderViewpager.getCurrentItem();
             binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
             binding.calenderViewpager.setOffscreenPageLimit(1);
         } else if (kind == 3) {
             //왼쪽으로 슬라이드
             cal.add(Calendar.MONTH, -1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate.setText(Year + "년 " + Month + "월 ");
             binding.calenderViewpager.setOffscreenPageLimit(1);
         } else if (kind == 4) {
             //왼쪽으로 슬라이드
             cal.add(Calendar.MONTH, +1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate.setText(Year + "년 " + Month + "월 ");
             binding.calenderViewpager.setOffscreenPageLimit(1);
         }
+        toDay = sdf.format(cal.getTime());
+        Year = toDay.substring(0, 4);
+        Month = toDay.substring(5, 7);
+        Day = toDay.substring(8, 10);
+        getYMPicker = Year + "-" + Month;
+        shardpref.putString("calendar_year", Year);
+        shardpref.putString("calendar_month", Month);
+        binding.setdate.setText(Year + "년 " + Month + "월 ");
     }
 
     private void TimeSetFun() {
@@ -324,6 +320,9 @@ public class PayManagementActivity extends AppCompatActivity {
         Month = toDay.substring(5, 7);
         binding.setdate.setText(Year + "년 " + Month + "월");
         setDate = Year + "-" + Month;
+        shardpref.putString("calendar_year", Year);
+        shardpref.putString("calendar_month", Month);
+
         if (chng_icon) {
 //            SetCalenderData(Year, Month);
         } else {
@@ -357,6 +356,8 @@ public class PayManagementActivity extends AppCompatActivity {
             Year = toDay.substring(0, 4);
             Month = toDay.substring(5, 7);
             setDate = Year + "-" + Month;
+            shardpref.putString("calendar_year", Year);
+            shardpref.putString("calendar_month", Month);
             binding.setdate.setText(Year + "년 " + Month + "월");
             if (chng_icon) {
                 ScrollState(0);
@@ -372,6 +373,8 @@ public class PayManagementActivity extends AppCompatActivity {
             Year = toDay.substring(0, 4);
             Month = toDay.substring(5, 7);
             setDate = Year + "-" + Month;
+            shardpref.putString("calendar_year", Year);
+            shardpref.putString("calendar_month", Month);
             binding.setdate.setText(Year + "년 " + Month + "월");
             if (chng_icon) {
                 ScrollState(1);
@@ -401,6 +404,8 @@ public class PayManagementActivity extends AppCompatActivity {
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 binding.setdate.setText(year + "-" + Month);
+                shardpref.putString("calendar_year", Year);
+                shardpref.putString("calendar_month", Month);
                 getYMPicker = binding.setdate.getText().toString().substring(0, 7);
                 if (chng_icon) {
                     binding.calenderViewpager.setSaveFromParentEnabled(false);
@@ -463,8 +468,10 @@ public class PayManagementActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy(){
         super.onDestroy();
+        shardpref.remove("calendar_year");
+        shardpref.remove("calendar_month");
     }
 
     // 직원 급여 명세서 리스트

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,7 +95,12 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         PaymentData.PaymentData_list item = mData.get(position);
         try{
-            AllPayment = Integer.parseInt(item.getTotal_payment().equals("null")?"0":item.getTotal_payment()) + Integer.parseInt(item.getSecond_pay().equals("null")?"0":item.getSecond_pay()) + Integer.parseInt(item.getOverwork_pay().equals("null")?"0":item.getOverwork_pay());
+            String totalPayment = item.getTotal_payment().equals("null")?"0":item.getTotal_payment().isEmpty()?"0":item.getTotal_payment();
+            String Second_pay = item.getSecond_pay().equals("null")?"0":item.getSecond_pay().isEmpty()?"0":item.getSecond_pay();
+            String Overwork_pay = item.getOverwork_pay().equals("null")?"0":item.getOverwork_pay().isEmpty()?"0":item.getOverwork_pay();
+            AllPayment = Integer.parseInt(totalPayment)
+                    + Integer.parseInt(Second_pay)
+                    + Integer.parseInt(Overwork_pay);
 
             if(USER_INFO_AUTH.equals("1")){
                 holder.total_pay.setVisibility(View.GONE);
@@ -110,13 +114,13 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
                         holder.gongje_box.setVisibility(View.GONE);
                         holder.send_user_state.setVisibility(View.GONE);
                         holder.write_payment.setVisibility(View.GONE);
-                        holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                        //holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
                         holder.progress_tvarea.setVisibility(View.VISIBLE);
                     }else{
                         holder.gongje_box.setVisibility(View.VISIBLE);
                         holder.send_user_state.setVisibility(View.GONE);
                         holder.write_payment.setVisibility(View.GONE);
-                        holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                        //holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
                         holder.progress_tvarea.setVisibility(View.VISIBLE);
                     }
                 }else if(Tap.equals("1")){
@@ -139,13 +143,13 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
                         holder.gongje_box.setVisibility(View.GONE);
                         holder.send_user_state.setVisibility(View.GONE);
                         holder.write_payment.setVisibility(View.VISIBLE);
-                        holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                        //holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
                         holder.progress_tvarea.setVisibility(View.VISIBLE);
                     }else{
                         holder.gongje_box.setVisibility(View.VISIBLE);
                         holder.send_user_state.setVisibility(View.GONE);
                         holder.write_payment.setVisibility(View.GONE);
-                        holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
+                        //holder.weekly_worktime_progress.setVisibility(View.VISIBLE);
                         holder.progress_tvarea.setVisibility(View.GONE);
                     }
                 }else if(Tap.equals("1")){
@@ -182,8 +186,8 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
             holder.weekly_worktime_progress.setMax(Integer.parseInt(item.getPayment()));
             holder.weekly_worktime_progress.setProgress(Integer.parseInt(item.getTotal_payment()));
 
-            holder.nowpay.setText("예상 급여 " + myFormatter.format(Integer.parseInt(item.getTotal_payment())) + "원");
-            holder.mypay.setText("계약 급여 " + myFormatter.format(Integer.parseInt(item.getPayment())) + "원");
+            holder.nowpay.setText(myFormatter.format(Integer.parseInt(item.getTotal_payment())) + "원");
+            holder.mypay.setText(myFormatter.format(Integer.parseInt(item.getPayment())) + "원");
 
 
             holder.write_payment.setOnClickListener(v -> {
@@ -215,7 +219,7 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
         ProgressBar weekly_worktime_progress;
         TextView nowpay,mypay,result_pay,result_gongje;
         LinearLayout gongje_box,send_user_state;
-        RelativeLayout progress_tvarea;
+        LinearLayout progress_tvarea;
         ImageView profile_setimg;
         CardView paystub_resend,send_money,write_payment;
 
@@ -259,72 +263,78 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
                 int pos = getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     // 리스너 객체의 메서드 호출.
-                    PaymentData.PaymentData_list item = mData.get(pos);
-                    if(USER_INFO_AUTH.equals("1")){
-                        if(!item.getBasic_pay().equals("null")
-                                || !item.getSecond_pay().equals("null")
-                                || !item.getOverwork_pay().equals("null")
-                                || !item.getMeal_allowance_yn().equals("null")
-                                || !item.getStore_insurance_yn().equals("null")
-                                || !item.getMeal_pay().equals("null")){
-                            shardpref.putString("select_month",selectdate.substring(5,7));
-                            shardpref.putString("stub_place_id",item.getStore_no());
-                            shardpref.putString("stub_user_id",item.getUser_id());
-                            shardpref.putString("stub_user_name",item.getUser_name());
-                            shardpref.putString("stub_jikgup",item.getJikgup());
-                            shardpref.putString("stub_basic_pay",item.getBasic_pay());
-                            shardpref.putString("stub_second_pay",item.getSecond_pay());
-                            shardpref.putString("stub_overwork_pay",item.getOverwork_pay());
-                            shardpref.putString("stub_meal_allowance_yn",item.getMeal_allowance_yn());
-                            shardpref.putString("stub_store_insurance_yn",item.getStore_insurance_yn());
-                            shardpref.putString("stub_gongjeynpay",item.getGongjeynpay());
-                            shardpref.putString("stub_total_payment",item.getTotal_payment());
-                            shardpref.putString("stub_workday",item.getWorkday());
-                            shardpref.putString("stub_total_workday",item.getTotal_workday());
-                            shardpref.putString("stub_total_workhour", item.getWorkhour());
-                            shardpref.putString("stub_payment",item.getPayment());
-                            shardpref.putString("stub_selectdate",selectdate);
-                            shardpref.putString("stub_meal_pay",item.getMeal_pay());
+                    try{
+                        if(mData.size() != 0){//데이터 세팅전에 클릭하지 않도록 예외처리
+                            PaymentData.PaymentData_list item = mData.get(pos);
+                            if(USER_INFO_AUTH.equals("1")){
+                                if(!item.getBasic_pay().equals("null")
+                                        || !item.getSecond_pay().equals("null")
+                                        || !item.getOverwork_pay().equals("null")
+                                        || !item.getMeal_allowance_yn().equals("null")
+                                        || !item.getStore_insurance_yn().equals("null")
+                                        || !item.getMeal_pay().equals("null")){
+                                    shardpref.putString("select_month",selectdate.substring(5,7));
+                                    shardpref.putString("stub_place_id",item.getStore_no());
+                                    shardpref.putString("stub_user_id",item.getUser_id());
+                                    shardpref.putString("stub_user_name",item.getUser_name());
+                                    shardpref.putString("stub_jikgup",item.getJikgup());
+                                    shardpref.putString("stub_basic_pay",item.getBasic_pay());
+                                    shardpref.putString("stub_second_pay",item.getSecond_pay());
+                                    shardpref.putString("stub_overwork_pay",item.getOverwork_pay());
+                                    shardpref.putString("stub_meal_allowance_yn",item.getMeal_allowance_yn());
+                                    shardpref.putString("stub_store_insurance_yn",item.getStore_insurance_yn());
+                                    shardpref.putString("stub_gongjeynpay",item.getGongjeynpay());
+                                    shardpref.putString("stub_total_payment",item.getTotal_payment());
+                                    shardpref.putString("stub_workday",item.getWorkday());
+                                    shardpref.putString("stub_total_workday",item.getTotal_workday());
+                                    shardpref.putString("stub_total_workhour", item.getWorkhour());
+                                    shardpref.putString("stub_payment",item.getPayment());
+                                    shardpref.putString("stub_selectdate",selectdate);
+                                    shardpref.putString("stub_meal_pay",item.getMeal_pay());
 //                        shardpref.putString("returnPage","");
-                            pm.PaystubAll(mContext);
-                        }else{
-                            Toast.makeText(mContext,"작성된 급여명세서 데이터가 없습니다.",Toast.LENGTH_SHORT).show();
-                        }
-                    }else if(USER_INFO_AUTH.equals("0")){
-                        if(Tap.equals("0")){
-                            shardpref.putString("stub_place_id",item.getStore_no());
-                            shardpref.putString("stub_user_id",item.getUser_id());
-                            shardpref.putString("stub_user_account",item.getAccount());
-                            pm.MemberDetail(mContext);
-                        }else if(Tap.equals("1")){
-                            if(!item.getBasic_pay().equals("null")
-                                    || !item.getSecond_pay().equals("null")
-                                    || !item.getOverwork_pay().equals("null")
-                                    || !item.getMeal_allowance_yn().equals("null")
-                                    || !item.getStore_insurance_yn().equals("null")
-                                    || !item.getMeal_pay().equals("null")){
-                                shardpref.putString("select_month",selectdate.substring(5,7));
-                                shardpref.putString("stub_place_id",item.getStore_no());
-                                shardpref.putString("stub_user_id",item.getUser_id());
-                                shardpref.putString("stub_user_name",item.getUser_name());
-                                shardpref.putString("stub_jikgup",item.getJikgup());
-                                shardpref.putString("stub_basic_pay",item.getBasic_pay());
-                                shardpref.putString("stub_second_pay",item.getSecond_pay());
-                                shardpref.putString("stub_overwork_pay",item.getOverwork_pay());
-                                shardpref.putString("stub_meal_allowance_yn",item.getMeal_allowance_yn());
-                                shardpref.putString("stub_store_insurance_yn",item.getStore_insurance_yn());
-                                shardpref.putString("stub_gongjeynpay",item.getGongjeynpay());
-                                shardpref.putString("stub_total_payment",item.getTotal_payment());
-                                shardpref.putString("stub_workday",item.getWorkday());
-                                shardpref.putString("stub_total_workday",item.getTotal_workday());
-                                shardpref.putString("stub_total_workhour", item.getWorkhour());
-                                shardpref.putString("stub_payment",item.getPayment());
-                                shardpref.putString("stub_selectdate",selectdate);
-                                shardpref.putString("stub_meal_pay",item.getMeal_pay());
+                                    pm.PaystubAll(mContext);
+                                }else{
+                                    Toast.makeText(mContext,"작성된 급여명세서 데이터가 없습니다.",Toast.LENGTH_SHORT).show();
+                                }
+                            }else if(USER_INFO_AUTH.equals("0")){
+                                if(Tap.equals("0")){
+                                    shardpref.putString("stub_place_id",item.getStore_no());
+                                    shardpref.putString("stub_user_id",item.getUser_id());
+                                    shardpref.putString("stub_user_account",item.getAccount());
+                                    pm.MemberDetail(mContext);
+                                }else if(Tap.equals("1")){
+                                    if(!item.getBasic_pay().equals("null")
+                                            || !item.getSecond_pay().equals("null")
+                                            || !item.getOverwork_pay().equals("null")
+                                            || !item.getMeal_allowance_yn().equals("null")
+                                            || !item.getStore_insurance_yn().equals("null")
+                                            || !item.getMeal_pay().equals("null")){
+                                        shardpref.putString("select_month",selectdate.substring(5,7));
+                                        shardpref.putString("stub_place_id",item.getStore_no());
+                                        shardpref.putString("stub_user_id",item.getUser_id());
+                                        shardpref.putString("stub_user_name",item.getUser_name());
+                                        shardpref.putString("stub_jikgup",item.getJikgup());
+                                        shardpref.putString("stub_basic_pay",item.getBasic_pay());
+                                        shardpref.putString("stub_second_pay",item.getSecond_pay());
+                                        shardpref.putString("stub_overwork_pay",item.getOverwork_pay());
+                                        shardpref.putString("stub_meal_allowance_yn",item.getMeal_allowance_yn());
+                                        shardpref.putString("stub_store_insurance_yn",item.getStore_insurance_yn());
+                                        shardpref.putString("stub_gongjeynpay",item.getGongjeynpay());
+                                        shardpref.putString("stub_total_payment",item.getTotal_payment());
+                                        shardpref.putString("stub_workday",item.getWorkday());
+                                        shardpref.putString("stub_total_workday",item.getTotal_workday());
+                                        shardpref.putString("stub_total_workhour", item.getWorkhour());
+                                        shardpref.putString("stub_payment",item.getPayment());
+                                        shardpref.putString("stub_selectdate",selectdate);
+                                        shardpref.putString("stub_meal_pay",item.getMeal_pay());
 //                        shardpref.putString("returnPage","");
-                                pm.PaystubAll(mContext);
+                                        pm.PaystubAll(mContext);
+                                    }
+                                }
                             }
                         }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 }
             });

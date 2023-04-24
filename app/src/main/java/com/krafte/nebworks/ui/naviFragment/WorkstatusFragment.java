@@ -109,6 +109,7 @@ public class WorkstatusFragment extends Fragment {
     String Month = "";
     String Day = "";
     String getYMPicker = "";
+    Handler mHandler;
 
     public static WorkstatusFragment newInstance(int number) {
         WorkstatusFragment fragment = new WorkstatusFragment();
@@ -130,7 +131,6 @@ public class WorkstatusFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             int num = getArguments().getInt("number");
             Log.i(TAG, "num : " + num);
@@ -153,9 +153,9 @@ public class WorkstatusFragment extends Fragment {
         //UI 데이터 세팅
         try {
             //Singleton Area
-            place_id = shardpref.getString("place_id",PlaceCheckData.getInstance().getPlace_id());
-            place_name = shardpref.getString("place_name",PlaceCheckData.getInstance().getPlace_name());
-            place_owner_id = shardpref.getString("place_owner_id",PlaceCheckData.getInstance().getPlace_owner_id());
+            place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            place_name = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
+            place_owner_id = shardpref.getString("place_owner_id", PlaceCheckData.getInstance().getPlace_owner_id());
             USER_INFO_ID = UserCheckData.getInstance().getUser_id();
             USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
 
@@ -165,11 +165,6 @@ public class WorkstatusFragment extends Fragment {
 
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             SELECT_POSITION = 1;
-
-            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
-            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
-            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
-            binding.calenderViewpager.setOffscreenPageLimit(1);
 
             Glide.with(this).load(R.raw.basic_loading)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -190,7 +185,6 @@ public class WorkstatusFragment extends Fragment {
 
     private void SendToday() {
         shardpref.putString("FtoDay", toDay);
-
         if (SELECT_POSITION_sub == 0) {
             binding.statusFragmentline1.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
             binding.statusFragmentline2.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -229,11 +223,6 @@ public class WorkstatusFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         cal = Calendar.getInstance();
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);
@@ -243,6 +232,9 @@ public class WorkstatusFragment extends Fragment {
         Month = toDay.substring(5, 7);
         Day = toDay.substring(8, 10);
         getYMPicker = Year + "-" + Month;
+        shardpref.putString("calendar_year", Year);
+        shardpref.putString("calendar_month", Month);
+
         if (chng_icon) {
             binding.setdate.setText(Year + "년 " + Month + "월 ");
         } else {
@@ -263,25 +255,25 @@ public class WorkstatusFragment extends Fragment {
 
         fg = WorkStatusSubFragment1.newInstance();
         setChildFragment(fg);
-        SetWorkStatusCalenderData();
     }
 
     @Override
-    public void onStop(){
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
         super.onStop();
-        chng_icon = false;
-        binding.calendarArea.setVisibility(View.GONE);
-        binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
-        binding.dateLayout.setVisibility(View.VISIBLE);
-        binding.dateSelect.setVisibility(View.GONE);
-        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-        shardpref.remove("change_place_id");
-        shardpref.remove("change_place_name");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        shardpref.remove("change_place_id");
+        shardpref.remove("change_place_name");
+        shardpref.remove("calendar_year");
+        shardpref.remove("calendar_month");
     }
 
 
@@ -293,12 +285,6 @@ public class WorkstatusFragment extends Fragment {
             //왼쪽으로 슬라이드 - 버튼으로
             before_pos = 0;
             cal.add(Calendar.MONTH, -1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate2.setText(Year + "년 " + Month + "월 ");
             int currentPosition = binding.calenderViewpager.getCurrentItem();
             binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
             binding.calenderViewpager.setOffscreenPageLimit(1);
@@ -306,36 +292,26 @@ public class WorkstatusFragment extends Fragment {
             //오른쪽으로 슬라이드 - 버튼으로
             before_pos = 0;
             cal.add(Calendar.MONTH, +1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate2.setText(Year + "년 " + Month + "월 ");
             int currentPosition = binding.calenderViewpager.getCurrentItem();
             binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
             binding.calenderViewpager.setOffscreenPageLimit(1);
         } else if (kind == 3) {
             //왼쪽으로 슬라이드
             cal.add(Calendar.MONTH, -1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate2.setText(Year + "년 " + Month + "월 ");
             binding.calenderViewpager.setOffscreenPageLimit(1);
         } else if (kind == 4) {
             //왼쪽으로 슬라이드
             cal.add(Calendar.MONTH, +1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            Day = toDay.substring(8, 10);
-            getYMPicker = Year + "-" + Month;
-            binding.setdate2.setText(Year + "년 " + Month + "월 ");
             binding.calenderViewpager.setOffscreenPageLimit(1);
         }
+        toDay = sdf.format(cal.getTime());
+        Year = toDay.substring(0, 4);
+        Month = toDay.substring(5, 7);
+        Day = toDay.substring(8, 10);
+        getYMPicker = Year + "-" + Month;
+        shardpref.putString("calendar_year", Year);
+        shardpref.putString("calendar_month", Month);
+        binding.setdate2.setText(Year + "년 " + Month + "월 ");
     }
 
     public void setBtnEvent() {
@@ -471,20 +447,21 @@ public class WorkstatusFragment extends Fragment {
                 Day = String.valueOf(dayOfMonth);
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
-                dlog.i("datePickerDialog workGotoList2 : " + workGotoList2);
+                dlog.i("datePickerDialog DATE : " + Year + "년 " + Month + "월 " + Day + "일");
 
-                if (chng_icon) {
-                    fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 2);
-                    binding.calenderViewpager.setSaveFromParentEnabled(false);
-                    binding.calenderViewpager.setAdapter(fragmentStateAdapter);
-                    binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
-                    binding.calenderViewpager.setOffscreenPageLimit(1);
-                    binding.setdate.setText(Year + "년 " + Month + "월 ");
-                } else {
-                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                }
+//                SetWorkStatusCalenderData();
+                chng_icon = false;
+                change_place_id = place_id;
+                change_place_name = place_name;
+
+                shardpref.putString("calendar_year", Year);
+                shardpref.putString("calendar_month", Month);
+
+                binding.setdate2.setText(Year + "년 " + Month + "월 ");
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
                 getYMPicker = Year + "년 " + Month + "월 ";
                 toDay = Year + "-" + Month + "-" + Day;
+
                 SendToday();
 //                SetCalenderData(String.valueOf(year), Month);
             }
@@ -518,6 +495,22 @@ public class WorkstatusFragment extends Fragment {
         }
         binding.changeIcon.setOnClickListener(v -> {
             chng_icon = true;
+            cal = Calendar.getInstance();
+            toDay = sdf.format(cal.getTime());
+            dlog.i("오늘 :" + toDay);
+            binding.setdate.setText(toDay);
+            shardpref.putString("FtoDay", toDay);
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 2);
+            binding.calenderViewpager.setSaveFromParentEnabled(false);
+            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+
             fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
@@ -532,6 +525,16 @@ public class WorkstatusFragment extends Fragment {
 
         binding.changeIcon2.setOnClickListener(v -> {
             chng_icon = false;
+            cal = Calendar.getInstance();
+            toDay = sdf.format(cal.getTime());
+            dlog.i("오늘 :" + toDay);
+            binding.setdate.setText(toDay);
+            shardpref.putString("FtoDay", toDay);
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+            getYMPicker = Year + "-" + Month;
+
             binding.calendarArea.setVisibility(View.GONE);
             binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
             binding.dateLayout.setVisibility(View.VISIBLE);
@@ -540,9 +543,8 @@ public class WorkstatusFragment extends Fragment {
         });
 
         change_place_name = shardpref.getString("change_place_name", place_name);
-        binding.selectPlace.setText(place_name);
-        binding.changePlace.setTag(change_place_name);
 
+        binding.changePlace.setTag(change_place_name);
         binding.changePlace.setOnClickListener(v -> {
             PlaceListBottomSheet plb = new PlaceListBottomSheet();
             plb.show(getChildFragmentManager(), "PlaceListBottomSheet");
@@ -550,8 +552,18 @@ public class WorkstatusFragment extends Fragment {
                 //--UI 세팅
                 chng_icon = false;
                 change_place_id = getplace_id;
-                change_place_name = getplace_name.isEmpty()?place_name:getplace_name;
-                SetWorkStatusCalenderData();
+                change_place_name = getplace_name.isEmpty() ? place_name : getplace_name;
+//                SetWorkStatusCalenderData();
+
+                cal = Calendar.getInstance();
+                toDay = sdf.format(cal.getTime());
+                dlog.i("오늘 :" + toDay);
+                binding.setdate.setText(toDay);
+                shardpref.putString("FtoDay", toDay);
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                getYMPicker = Year + "-" + Month;
 
                 fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
                 binding.calenderViewpager.setAdapter(fragmentStateAdapter);
@@ -629,7 +641,7 @@ public class WorkstatusFragment extends Fragment {
         binding.loginAlertText.setVisibility(View.VISIBLE);
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = Year + "-" + Month;
-        change_place_id = change_place_id.isEmpty()?place_id:change_place_id;
+        change_place_id = change_place_id.isEmpty() ? place_id : change_place_id;
         Log.i(TAG, "------SetWorkStatusCalenderData------");
         Log.i(TAG, "place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);

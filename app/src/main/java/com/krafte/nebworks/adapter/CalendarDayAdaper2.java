@@ -51,11 +51,11 @@ public class CalendarDayAdaper2 extends RecyclerView.Adapter<CalendarDayAdaper2.
     @Override
     public void onBindViewHolder(@NonNull CalendarDayAdaper2.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         WorkGetallData.WorkGetallData_list item = mData.get(position);
-        dlog.i("------CalendarDayAdaper2------");
-        dlog.i("mData size :" + mData.size());
-        dlog.i("mData title :" + item.getTitle());
-        dlog.i("mData kind :" + item.getKind());
-        dlog.i("------CalendarDayAdaper2------");
+//        dlog.i("------CalendarDayAdaper2------");
+//        dlog.i("mData size :" + mData.size());
+//        dlog.i("mData title :" + item.getTitle());
+//        dlog.i("mData kind :" + item.getKind());
+//        dlog.i("------CalendarDayAdaper2------");
         try{
             if(mData.size() == 0){
 //                dlog.i("mData size :" + mData.size());

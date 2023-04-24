@@ -159,12 +159,12 @@ public class AddPaystubActivity extends AppCompatActivity {
 
         shardpref.putString("returnPage", "BusinessApprovalActivity");
         dlog.i("기본급 : " + select_payment);
-
+        dlog.i("select_month : " + select_month);
         setBtnEvent();
         GetInsurancePercent();
 
         binding.name.setText(select_user_name);
-        binding.selectMonth.setText(select_month.substring(6,8) + "월");
+//        binding.selectMonth.setText(select_month.substring(6,8) + "월");
         binding.totalWorkDay.setText(select_workday);
         binding.totalWorkHour.setText(select_total_workhour);
         binding.minimumPay.setText("9,160");
@@ -644,7 +644,9 @@ public class AddPaystubActivity extends AppCompatActivity {
         dlog.i("select0304 : " + select0304);
         dlog.i("select0506 : " + select0506);
         dlog.i("employee_memo : " + get_employee_memo);
-        dlog.i("ALL PAYMENT 0 : " + Integer.parseInt(select_total_payment) +"+"+ Integer.parseInt(get_edit_expenses.replace(",","")) +"+"+ Integer.parseInt(get_edit_overwork.replace(",","")));
+        dlog.i("ALL PAYMENT 0 : " + Integer.parseInt(select_total_payment.isEmpty()?"0":select_total_payment)
+                +"+"+ Integer.parseInt(get_edit_expenses.isEmpty()?"0":get_edit_expenses.replace(",",""))
+                +"+"+ Integer.parseInt(get_edit_overwork.isEmpty()?"0":get_edit_overwork.replace(",","")));
         dlog.i("insurance01p : " + insurance01p);
         dlog.i("insurance02p : " + insurance02p);
         dlog.i("insurance03p : " + insurance03p);

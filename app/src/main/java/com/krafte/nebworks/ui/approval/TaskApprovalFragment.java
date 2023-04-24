@@ -185,15 +185,14 @@ public class TaskApprovalFragment extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        binding.calendarArea.setVisibility(View.GONE);
-        binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
-        binding.selectArea.setVisibility(View.VISIBLE);
-        binding.dateLayout.setVisibility(View.VISIBLE);
-        binding.dateSelect.setVisibility(View.GONE);
-        binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-        GetApprovalList("", select_date);
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        shardpref.remove("calendar_year");
+        shardpref.remove("calendar_month");
+    }
 
     @Override
     public void onBackPressed() {
@@ -266,6 +265,8 @@ public class TaskApprovalFragment extends AppCompatActivity {
         Month = toDay.substring(5, 7);
         Day = toDay.substring(8, 10);
         binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+        shardpref.putString("calendar_year", Year);
+        shardpref.putString("calendar_month", Month);
 
         binding.prevDate.setOnClickListener(v -> {
             try {
@@ -280,6 +281,8 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     Month = toDay.substring(5, 7);
                     Day = toDay.substring(8, 10);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
+                    shardpref.putString("calendar_year", Year);
+                    shardpref.putString("calendar_month", Month);
                     int currentPosition = binding.calenderViewpager.getCurrentItem();
                     binding.calenderViewpager.setCurrentItem(currentPosition - 1, true);
                     binding.calenderViewpager.setOffscreenPageLimit(1);
@@ -310,6 +313,8 @@ public class TaskApprovalFragment extends AppCompatActivity {
                     Month = toDay.substring(5, 7);
                     Day = toDay.substring(8, 10);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
+                    shardpref.putString("calendar_year", Year);
+                    shardpref.putString("calendar_month", Month);
                     int currentPosition = binding.calenderViewpager.getCurrentItem();
                     binding.calenderViewpager.setCurrentItem(currentPosition + 1, true);
                     binding.calenderViewpager.setOffscreenPageLimit(1);
@@ -348,6 +353,8 @@ public class TaskApprovalFragment extends AppCompatActivity {
                 Day = String.valueOf(dayOfMonth);
                 Day = Day.length() == 1 ? "0" + Day : Day;
                 Month = Month.length() == 1 ? "0" + Month : Month;
+                shardpref.putString("calendar_year", Year);
+                shardpref.putString("calendar_month", Month);
                 binding.noDataTxt.setVisibility(View.GONE);
                 if (chng_icon) {
                     binding.calenderViewpager.setSaveFromParentEnabled(false);
@@ -388,46 +395,43 @@ public class TaskApprovalFragment extends AppCompatActivity {
         binding.changePlace.setOnClickListener(v -> {
             PaySelectPlaceActivity psp = new PaySelectPlaceActivity();
             psp.show(getSupportFragmentManager(), "PaySelectPlaceActivity");
-            psp.setOnClickListener(new PaySelectPlaceActivity.OnClickListener() {
-                @Override
-                public void onClick(View v, String getplace_id, String getplace_name) {
+            psp.setOnClickListener((v1, getplace_id, getplace_name) -> {
 
-                    cal = Calendar.getInstance();
-                    toDay = sdf.format(cal.getTime());
-                    dlog.i("오늘 :" + toDay);
-                    binding.setdate.setText(toDay);
-                    Year = toDay.substring(0, 4);
-                    Month = toDay.substring(5, 7);
-                    Day = toDay.substring(8, 10);
-                    binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
-                    chng_icon = false;
+                cal = Calendar.getInstance();
+                toDay = sdf.format(cal.getTime());
+                dlog.i("오늘 :" + toDay);
+                binding.setdate.setText(toDay);
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                chng_icon = false;
 
-                    change_place_id = getplace_id;
-                    change_place_name = getplace_name.isEmpty() ? place_name : getplace_name;
-                    SetWorkGotoCalenderData();
+                change_place_id = getplace_id;
+                change_place_name = getplace_name.isEmpty() ? place_name : getplace_name;
+                SetWorkGotoCalenderData();
 
-                    dlog.i("change_place_id : " + getplace_id);
-                    dlog.i("change_place_name : " + getplace_name);
-                    fragmentStateAdapter = new FragmentStateAdapter(thisActivity, 1, workGotoList2);
-                    binding.calenderViewpager.setAdapter(fragmentStateAdapter);
-                    binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
-                    binding.calenderViewpager.setOffscreenPageLimit(1);
+                dlog.i("change_place_id : " + getplace_id);
+                dlog.i("change_place_name : " + getplace_name);
+                fragmentStateAdapter = new FragmentStateAdapter(thisActivity, 1, workGotoList2);
+                binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+                binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
+                binding.calenderViewpager.setOffscreenPageLimit(1);
 
-                    binding.changePlaceTv.setText(getplace_name);
-                    shardpref.putString("change_place_id", getplace_id);
-                    shardpref.putString("change_place_name", getplace_name);
+                binding.changePlaceTv.setText(getplace_name);
+                shardpref.putString("change_place_id", getplace_id);
+                shardpref.putString("change_place_name", getplace_name);
 //                    }
-                    dlog.i("change_place_id : " + change_place_id);
-                    dlog.i("change_place_name : " + change_place_name);
+                dlog.i("change_place_id : " + change_place_id);
+                dlog.i("change_place_name : " + change_place_name);
 
-                    if (Tap.equals("")) {
-                        GetApprovalList(Tap, "");
-                    } else {
-                        GetApprovalList(Tap, select_date);
-                    }
+                if (Tap.equals("")) {
+                    GetApprovalList(Tap, "");
+                } else {
+                    GetApprovalList(Tap, select_date);
+                }
 
 //                    SetCalenderData();
-                }
             });
         });
 
@@ -466,6 +470,15 @@ public class TaskApprovalFragment extends AppCompatActivity {
         binding.changeIcon.setOnClickListener(v -> {
             if (!chng_icon) {
                 chng_icon = true;
+                cal = Calendar.getInstance();
+                toDay = sdf.format(cal.getTime());
+                dlog.i("오늘 :" + toDay);
+                binding.setdate.setText(toDay);
+                shardpref.putString("FtoDay", toDay);
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                getYMPicker = Year + "-" + Month;
                 binding.tabLayout.setVisibility(View.GONE);
                 binding.calendarArea.setVisibility(View.VISIBLE);
                 binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
@@ -477,6 +490,15 @@ public class TaskApprovalFragment extends AppCompatActivity {
 //                SetCalenderData();
             } else {
                 chng_icon = false;
+                cal = Calendar.getInstance();
+                toDay = sdf.format(cal.getTime());
+                dlog.i("오늘 :" + toDay);
+                binding.setdate.setText(toDay);
+                shardpref.putString("FtoDay", toDay);
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                Day = toDay.substring(8, 10);
+                getYMPicker = Year + "-" + Month;
                 binding.tabLayout.setVisibility(View.VISIBLE);
                 binding.calendarArea.setVisibility(View.GONE);
                 binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);

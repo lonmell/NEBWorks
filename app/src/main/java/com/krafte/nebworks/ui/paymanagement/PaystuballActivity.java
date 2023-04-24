@@ -353,7 +353,9 @@ public class PaystuballActivity extends AppCompatActivity {
                             dlog.i("insurance03p : " + insurance03p);
                             dlog.i("insurance04p : " + insurance04p);
                             dlog.i("--------GetInsurancePercent--------");
-
+                            stub_basic_pay = stub_basic_pay.equals("null")?"0":stub_basic_pay.isEmpty()?"0":stub_basic_pay;
+                            stub_second_pay = stub_second_pay.equals("null")?"0":stub_second_pay.isEmpty()?"0":stub_second_pay;
+                            stub_overwork_pay = stub_overwork_pay.equals("null")?"0":stub_overwork_pay.isEmpty()?"0":stub_overwork_pay;
                             int GetJigupPay = Integer.parseInt(stub_basic_pay) + Integer.parseInt(stub_second_pay) + Integer.parseInt(stub_overwork_pay) + Integer.parseInt(stub_meal_pay);
                             int GetGongJePay = 0;
 

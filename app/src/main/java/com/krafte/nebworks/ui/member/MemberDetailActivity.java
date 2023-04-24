@@ -328,11 +328,11 @@ public class MemberDetailActivity extends AppCompatActivity {
             }
         }, mYear, mMonth, mDay);
 
-        binding.setdate.setOnClickListener(view -> {
-            if (binding.setdate.isClickable()) {
-                datePickerDialog.show();
-            }
-        });
+//        binding.setdate.setOnClickListener(view -> {
+//            if (binding.setdate.isClickable()) {
+//                datePickerDialog.show();
+//            }
+//        });
 
         binding.inoutPrint.setOnClickListener(v -> {
 //            dlog.i("-----inoutPrint-----");

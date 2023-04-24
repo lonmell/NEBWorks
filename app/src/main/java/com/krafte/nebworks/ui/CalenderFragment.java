@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -61,8 +62,8 @@ public class CalenderFragment extends Fragment {
 
     Context mContext;
     Activity activity;
-    String year = "2023";
-    String month = "04";
+    String year = "";
+    String month = "";
     String day = "01";
     int state;
     FragmentStateAdapter fragmentStateAdapter;
@@ -132,15 +133,17 @@ public class CalenderFragment extends Fragment {
 
         USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
         place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
-        change_place_id = shardpref.getString("change_place_id",place_id);
+        change_place_id = shardpref.getString("change_place_id", place_id);
 
-        shardpref.putString("calendar_year", year);
-        shardpref.putString("calendar_month", month);
+//        shardpref.putString("calendar_year", year);
+//        shardpref.putString("calendar_month", month);
 
         binding.calendarYear.setText(year + "년");
         binding.calendarMonth.setText(month + "월");
 
         dlog.i("onCreateView sendList : " + sendList);
+        dlog.i("onCreateView year : " + year);
+        dlog.i("onCreateView month : " + month);
         // Fragment 내에서 ViewPager2의 참조를 가져옴
         viewPager = requireActivity().findViewById(R.id.calender_viewpager);
         fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, sendList);
@@ -155,7 +158,7 @@ public class CalenderFragment extends Fragment {
         int year = Integer.parseInt(dates[0]);
         int month = Integer.parseInt(dates[1]);
         int day = Integer.parseInt(dates[2]);
-        dlog.i("getWeekOfYear date : " + String.valueOf(year) + "-" + (String.valueOf(month).length() == 1 ? "0" + String.valueOf(month) : String.valueOf(month)) + "-" + (String.valueOf(day).length() == 1 ? "0" + String.valueOf(day) : String.valueOf(day)));
+//        dlog.i("getWeekOfYear date : " + String.valueOf(year) + "-" + (String.valueOf(month).length() == 1 ? "0" + String.valueOf(month) : String.valueOf(month)) + "-" + (String.valueOf(day).length() == 1 ? "0" + String.valueOf(day) : String.valueOf(day)));
         calendar.set(year, month - 1, Integer.parseInt(String.valueOf(day).length() == 1 ? "0" + String.valueOf(day) : String.valueOf(day)));
         return calendar.get(Calendar.WEEK_OF_MONTH);
     }
@@ -163,12 +166,22 @@ public class CalenderFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        setDate();
     }
 
     private void setDate() {
         try {
+            monDate.clear();
+            tueDate.clear();
+            wedDate.clear();
+            thuDate.clear();
+            friDate.clear();
+            satDate.clear();
+            sunDate.clear();
+
+            dlog.i("Calendar year : " + shardpref.getString("calendar_year", year) + "/ month : " + shardpref.getString("calendar_month", month));
             Calendar cal = Calendar.getInstance();
+            year = shardpref.getString("calendar_year", year);
+            month = shardpref.getString("calendar_month", month);
 
             cal.set(Integer.parseInt(year), Integer.parseInt(month) - 1, 1);
             // 3. 숫자 요일 구하기
@@ -232,26 +245,20 @@ public class CalenderFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        dlog.i("state: " + state);
-        if (sendList.size() == 0) {
-            switch (state) {
-                case 1:
-                case 3:
-                    SetWorkGotoCalenderData();
-                    break;
-                case 2:
-                    SetWorkStatusCalenderData();
-                    break;
-                case 4:
-                    SetPayCalenderData();
-                    break;
-            }
-            SetCalendar();
+        dlog.i("onResume state: " + state);
+        switch (state) {
+            case 1:
+            case 3:
+                SetWorkGotoCalenderData();
+                break;
+            case 2:
+                SetWorkStatusCalenderData();
+                break;
+            case 4:
+                SetPayCalenderData();
+                break;
         }
-    }
-
-    public interface OnButtonClickListener {
-        void onButtonClicked(int kind);
+        setDate();
     }
 
     private void SetClickEvent(String WorkDay) {
@@ -284,13 +291,13 @@ public class CalenderFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-//        monDate.clear();
-//        tueDate.clear();
-//        wedDate.clear();
-//        thuDate.clear();
-//        friDate.clear();
-//        satDate.clear();
-//        sunDate.clear();
+        monDate.clear();
+        tueDate.clear();
+        wedDate.clear();
+        thuDate.clear();
+        friDate.clear();
+        satDate.clear();
+        sunDate.clear();
     }
 
     //--근무현황 캘린더 만들기
@@ -314,6 +321,14 @@ public class CalenderFragment extends Fragment {
                 });
             }
         });
+        binding.sunList.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return true; // 스크롤 이벤트 무시
+                }
+                return false;
+            }
+        });
 
 
         cadayAdapter2 = new CalendarDayAdaper(mContext, monDate, month, year, sendList, state);
@@ -332,6 +347,14 @@ public class CalenderFragment extends Fragment {
 
             }
         });
+        binding.monList.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return true; // 스크롤 이벤트 무시
+                }
+                return false;
+            }
+        });
 
         cadayAdapter3 = new CalendarDayAdaper(mContext, tueDate, month, year, sendList, state);
         binding.tueList.setAdapter(cadayAdapter3);
@@ -346,6 +369,14 @@ public class CalenderFragment extends Fragment {
                         SetClickEvent(WorkDay);
                     }
                 });
+            }
+        });
+        binding.tueList.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return true; // 스크롤 이벤트 무시
+                }
+                return false;
             }
         });
 
@@ -365,6 +396,14 @@ public class CalenderFragment extends Fragment {
                 });
             }
         });
+        binding.wedList.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return true; // 스크롤 이벤트 무시
+                }
+                return false;
+            }
+        });
 
 
         cadayAdapter5 = new CalendarDayAdaper(mContext, thuDate, month, year, sendList, state);
@@ -380,6 +419,14 @@ public class CalenderFragment extends Fragment {
                         SetClickEvent(WorkDay);
                     }
                 });
+            }
+        });
+        binding.thuList.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return true; // 스크롤 이벤트 무시
+                }
+                return false;
             }
         });
 
@@ -399,6 +446,14 @@ public class CalenderFragment extends Fragment {
                 });
             }
         });
+        binding.friList.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return true; // 스크롤 이벤트 무시
+                }
+                return false;
+            }
+        });
 
 
         cadayAdapter7 = new CalendarDayAdaper(mContext, satDate, month, year, sendList, state);
@@ -416,6 +471,14 @@ public class CalenderFragment extends Fragment {
                 });
             }
         });
+        binding.satList.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return true; // 스크롤 이벤트 무시
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -424,17 +487,18 @@ public class CalenderFragment extends Fragment {
     private void SetWorkGotoCalenderData() {
         sendList.clear();
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
+        String getYMDate = year + "-" + month;
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Log.i(TAG, "place_id : " + change_place_id);
         Log.i(TAG, "USER_INFO_ID : " + USER_INFO_ID);
-        Log.i(TAG, "select_date : " + dc.GET_YEAR);
+        Log.i(TAG, "select_date : " + getYMDate);
         Log.i(TAG, "------SetWorkGotoCalenderData------");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WorkTaskGetallInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         WorkTaskGetallInterface api = retrofit.create(WorkTaskGetallInterface.class);
-        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, dc.GET_YEAR, USER_INFO_AUTH);
+        Call<String> call2 = api.getData(change_place_id, USER_INFO_ID, getYMDate, USER_INFO_AUTH);
         call2.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n", "NotifyDataSetChanged"})
             @Override

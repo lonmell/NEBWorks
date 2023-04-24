@@ -83,51 +83,101 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="4">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pretendard_bold"
                     android:text="근로일수"
+                    android:layout_weight="1"
                     android:textColor="@color/black"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/work_day"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_regular"
                     android:text="0일"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="10dp"
                     android:textColor="#6A6A6A"
                     tools:ignore="HardcodedText" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pretendard_bold"
                     android:text="총 근로시간"
+                    android:layout_weight="1"
                     android:textColor="@color/black"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/work_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_regular"
                     android:text="0시간"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:textSize="13sp"
                     android:textColor="#6A6A6A"
                     tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/progress_tvarea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:weightSum="4"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="실제 급여"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:id="@+id/nowpay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text=""
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="계약 급여"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:id="@+id/mypay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text=""
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:textSize="13sp"
+                    android:textColor="@color/black" />
+
             </LinearLayout>
 
             <ProgressBar
@@ -141,35 +191,11 @@
                 android:indeterminate="false"
                 android:max="300"
                 android:progress="0"
+                android:visibility="gone"
                 android:progressBackgroundTint="#f2f2f2"
                 android:progressDrawable="@drawable/progressbar_style" />
 
-            <RelativeLayout
-                android:id="@+id/progress_tvarea"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp">
 
-                <TextView
-                    android:id="@+id/nowpay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:fontFamily="@font/inter_regular"
-                    android:text="실제 급여"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/mypay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:fontFamily="@font/inter_regular"
-                    android:text="계약 급여"
-                    android:textColor="@color/black" />
-            </RelativeLayout>
             <LinearLayout
                 android:id="@+id/gongje_box"
                 android:layout_width="match_parent"
@@ -241,7 +267,9 @@
                 android:id="@+id/write_payment"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_margin="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="15dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/new_blue"
                 app:cardCornerRadius="5dp">
