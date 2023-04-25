@@ -1056,13 +1056,7 @@ public class HomeFragment2 extends Fragment {
                                         } else if (kind.equals("2")) {
                                             binding.inCnt.setText(Response.getJSONObject(0).getString("i_cnt"));
                                             binding.outCnt.setText(Response.getJSONObject(0).getString("o_cnt"));
-                                            //결근 숫자에서 휴가숫자는 빠지지 않기때문에 결근-휴가수를 빼줘야한다
-                                            if (Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) == 0) {
-                                                binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
-                                            } else if (Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt")) > 0) {
-                                                binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
-                                                        - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
-                                            }
+                                            binding.notinCnt.setText(Response.getJSONObject(0).getString("absence_cnt"));
                                             binding.restCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("rest_cnt"))
                                                     + Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
                                             dlog.i("-----MainData-----");

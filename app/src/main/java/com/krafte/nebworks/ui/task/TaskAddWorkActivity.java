@@ -564,6 +564,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                 item_user_jikgup.get(i).trim(),
                                 "",
                                 "",
+                                "",
                                 ""
                         ));
                     }
@@ -756,6 +757,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                         "",
                         "",
                         item_user_jikgup.get(i).trim(),
+                        "",
                         "",
                         "",
                         ""

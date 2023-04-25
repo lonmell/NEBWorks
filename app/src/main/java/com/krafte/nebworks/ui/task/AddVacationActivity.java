@@ -1,4 +1,4 @@
-package com.krafte.nebworks.ui.place;
+package com.krafte.nebworks.ui.task;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -79,16 +79,16 @@ public class AddVacationActivity extends AppCompatActivity {
         mContext = this;
         dlog.DlogContext(mContext);
         shardpref = new PreferenceHelper(mContext);
-        place_owner_id  = shardpref.getString("place_owner_id","");
+        place_owner_id = shardpref.getString("place_owner_id", "");
 
         dlog.i("place_owner_id: " + place_owner_id);
 
-        place_id            = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
-        place_name          = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
-        USER_INFO_ID        = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
-        USER_INFO_NAME        = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
-        overdate            = shardpref.getString("overdate", "");
-        user_id             = shardpref.getString("users", "");
+        place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+        place_name = shardpref.getString("place_name", PlaceCheckData.getInstance().getPlace_name());
+        USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+        USER_INFO_NAME = shardpref.getString("USER_INFO_NAME", UserCheckData.getInstance().getUser_name());
+        overdate = shardpref.getString("overdate", "");
+        user_id = shardpref.getString("users", "");
 
 
         binding.storeName.setText(place_name);
@@ -197,6 +197,7 @@ public class AddVacationActivity extends AppCompatActivity {
         });
     }
 
+    int va_daycnt = 0;
     private void getDays() {
         String start = binding.eventStarttime.getText().toString();
         String end = binding.eventEndttime.getText().toString();
@@ -206,15 +207,21 @@ public class AddVacationActivity extends AppCompatActivity {
             Date startDate = dateFormat.parse(start);
             Date endDate = dateFormat.parse(end);
 
-            dlog.i("startDate , endDate" + startDate +  " " + endDate);
+            dlog.i("startDate , endDate" + startDate + " " + endDate);
 
             long diffSec = (endDate.getTime() - startDate.getTime()) / 1000;
 
             binding.vacationDayCnt.setText(diffSec / (24 * 60 * 60) + 1 + "일");
+
+            va_daycnt = Integer.parseInt(String.valueOf(diffSec / (24 * 60 * 60) + 1));
+            if (va_daycnt < 0) {
+                binding.vacationDayCnt.setText("1일 미만으로 신청할 수 없습니다.");
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
+
 
     private boolean saveCheck() {
         start_time = binding.eventStarttime.getText().toString();
@@ -222,6 +229,7 @@ public class AddVacationActivity extends AppCompatActivity {
 
         String[] splitStartDate = start_time.split("-");
         String[] splitEndDate = end_time.split("-");
+
 
         if (start_time.isEmpty()) {
             Toast_Nomal("시작날짜를 입력해주세요.");
@@ -240,6 +248,9 @@ public class AddVacationActivity extends AppCompatActivity {
             } else {
                 return true;
             }
+        } else if (va_daycnt < 0) {
+            Toast_Nomal("1일 미만으로 신청할 수 없습니다.");
+            return false;
         } else {
             return true;
         }
@@ -247,6 +258,7 @@ public class AddVacationActivity extends AppCompatActivity {
 
 
     RetrofitConnect rc = new RetrofitConnect();
+
     public void addVacation() {
         dlog.i("------------------addVacation------------------");
         String WorkTitle = binding.inputWorktitle.getText().toString();
@@ -346,7 +358,7 @@ public class AddVacationActivity extends AppCompatActivity {
                         boolean channelId1 = Response.getJSONObject(0).getString("channel2").equals("1");
                         if (!token.isEmpty() && channelId1) {
                             String message = "[" + place_name + "] 에서 " + user_name + "님의 휴가 신청이 도착했습니다.";
-                            AddPush("휴가신청" ,message, place_owner_id);
+                            AddPush("휴가신청", message, place_owner_id);
                             PushFcmSend(id, "", message, token, "2", place_id);
                         }
                     }
@@ -354,6 +366,7 @@ public class AddVacationActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 dlog.e("에러 = " + t.getMessage());
@@ -393,6 +406,7 @@ public class AddVacationActivity extends AppCompatActivity {
 
     DBConnection dbConnection = new DBConnection();
     String click_action = "";
+
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {

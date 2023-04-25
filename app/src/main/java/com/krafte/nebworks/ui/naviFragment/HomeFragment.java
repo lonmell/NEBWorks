@@ -681,8 +681,6 @@ public class HomeFragment extends Fragment {
                                                 binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
                                                         - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
                                             }
-//                                            binding.notinCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("absence_cnt"))
-//                                                    - Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
                                             binding.restCnt.setText(String.valueOf(Integer.parseInt(Response.getJSONObject(0).getString("rest_cnt"))
                                                     + Integer.parseInt(Response.getJSONObject(0).getString("vaca_cnt"))));
 

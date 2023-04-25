@@ -200,6 +200,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
                             holder.pay.setText("상세정보 입력 전");
                             holder.pay.setTextColor(Color.parseColor("#a9a9a9"));
                         }else{
+                            holder.paykind.setText(item.getPaykind());
                             holder.pay.setText(item.getPay());
                             holder.pay.setTextColor(Color.parseColor("#000000"));
                         }
@@ -295,7 +296,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name,jikgup,pay,state_tv,contract_area_tv,add_detail_tv,contract_state_tv;
+        TextView name,jikgup,pay,state_tv,contract_area_tv,add_detail_tv,contract_state_tv,paykind;
         CardView add_detail,state,contract_state,contract_area;
         RelativeLayout list_setting, total_item;
         LinearLayout linear01,linear02,linear04;
@@ -307,6 +308,7 @@ public class WorkplaceMemberAdapter extends RecyclerView.Adapter<WorkplaceMember
             name                = itemView.findViewById(R.id.name);
             jikgup              = itemView.findViewById(R.id.jikgup);
             pay                 = itemView.findViewById(R.id.pay);
+            paykind             = itemView.findViewById(R.id.paykind);
             state_tv            = itemView.findViewById(R.id.state_tv);
 
             state               = itemView.findViewById(R.id.state);

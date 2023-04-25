@@ -112,20 +112,22 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp">
 
-                <LinearLayout
+<!--                android:layout_toStartOf="@+id/change_area"-->
+<!--                android:layout_toEndOf="@+id/date_select"-->
+                <RelativeLayout
                     android:id="@+id/date_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@+id/change_area"
-                    android:layout_toEndOf="@+id/date_select">
+                    android:layout_marginEnd="10dp">
 
                     <RelativeLayout
                         android:id="@+id/prev_date"
                         android:layout_width="40dp"
                         android:layout_height="45dp"
+                        android:layout_alignParentStart="true"
                         android:gravity="center|start">
 
                         <ImageView
@@ -146,12 +148,15 @@
                         android:gravity="center"
                         android:text="0000년 00월 00일"
                         android:textColor="@color/black"
+                        android:layout_toStartOf="@+id/next_date"
+                        android:layout_toEndOf="@+id/prev_date"
                         android:textSize="20sp" />
 
                     <RelativeLayout
                         android:id="@+id/next_date"
                         android:layout_width="40dp"
                         android:layout_height="45dp"
+                        android:layout_alignParentEnd="true"
                         android:gravity="center|end">
 
                         <ImageView
@@ -159,12 +164,14 @@
                             android:layout_height="20dp"
                             android:background="@drawable/find_right_arrow" />
                     </RelativeLayout>
-                </LinearLayout>
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/change_area"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
+                    android:visibility="invisible"
+                    android:clickable="false"
                     android:layout_alignParentEnd="true">
 
                     <ImageView

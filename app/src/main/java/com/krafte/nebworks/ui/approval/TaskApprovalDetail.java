@@ -337,6 +337,7 @@ public class TaskApprovalDetail extends AppCompatActivity {
                                 item_user_jikgup.get(i).trim(),
                                 "",
                                 "",
+                                "",
                                 ""
                         ));
                     }

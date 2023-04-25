@@ -104,6 +104,7 @@
                     android:layout_weight="1"
                     android:gravity="end"
                     android:textSize="13sp"
+                    android:singleLine="true"
                     android:layout_marginEnd="10dp"
                     android:textColor="#6A6A6A"
                     tools:ignore="HardcodedText" />
@@ -125,6 +126,7 @@
                     android:text="0시간"
                     android:layout_weight="1"
                     android:gravity="end"
+                    android:singleLine="true"
                     android:textSize="13sp"
                     android:textColor="#6A6A6A"
                     tools:ignore="HardcodedText" />
@@ -156,8 +158,9 @@
                     android:text=""
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:textSize="13sp"
+                    android:singleLine="true"
                     android:layout_marginEnd="10dp"
+                    android:textSize="13sp"
                     android:textColor="@color/black" />
                 <TextView
                     android:layout_width="match_parent"
@@ -174,6 +177,7 @@
                     android:fontFamily="@font/inter_regular"
                     android:text=""
                     android:gravity="end"
+                    android:singleLine="true"
                     android:layout_weight="1"
                     android:textSize="13sp"
                     android:textColor="@color/black" />
@@ -203,6 +207,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -214,52 +219,52 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:weightSum="4">
 
                         <TextView
-                            android:layout_width="100dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/pretendard_bold"
                             android:gravity="start|center"
                             android:text="급여"
+                            android:layout_weight="1"
                             android:textColor="@color/black"
                             tools:ignore="HardcodedText" />
 
                         <TextView
                             android:id="@+id/result_pay"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_regular"
                             android:gravity="end|center"
                             android:text="0"
+                            android:textSize="13sp"
+                            android:singleLine="true"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
                             android:textColor="#6A6A6A" />
 
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal">
-
                         <TextView
-                            android:layout_width="100dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/pretendard_bold"
                             android:gravity="start|center"
                             android:text="공제"
+                            android:layout_weight="1"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:id="@+id/result_gongje"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_regular"
                             android:gravity="end|center"
                             android:text="0"
+                            android:singleLine="true"
+                            android:textSize="13sp"
+                            android:layout_weight="1"
                             android:textColor="#6A6A6A" />
-
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

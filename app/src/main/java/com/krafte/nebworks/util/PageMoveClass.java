@@ -52,7 +52,7 @@ import com.krafte.nebworks.ui.user.MyListActivity;
 import com.krafte.nebworks.ui.user.ProfileEditActivity;
 import com.krafte.nebworks.ui.user.SearchAccountActivity;
 import com.krafte.nebworks.ui.user.VerificationActivity;
-import com.krafte.nebworks.ui.place.AddVacationActivity;
+import com.krafte.nebworks.ui.task.AddVacationActivity;
 import com.krafte.nebworks.ui.place.PlaceAddActivity;
 import com.krafte.nebworks.ui.place.PlaceAddActivity2;
 import com.krafte.nebworks.ui.place.PlaceAddCompletion;

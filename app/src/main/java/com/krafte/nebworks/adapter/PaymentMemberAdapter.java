@@ -168,6 +168,7 @@ public class PaymentMemberAdapter extends RecyclerView.Adapter<PaymentMemberAdap
 
             int result_gongje_int = Integer.parseInt(insurance1)+Integer.parseInt(insurance2)+Integer.parseInt(insurance3)+Integer.parseInt(insurance4);
             String resultGonjeTv = myFormatter.format(result_gongje_int);
+            dlog.i("item.getTotal_payment() :" + item.getTotal_payment());
             holder.result_pay.setText(myFormatter.format(Integer.parseInt(item.getTotal_payment())) + "원");
             holder.result_gongje.setText(resultGonjeTv + "원");
 

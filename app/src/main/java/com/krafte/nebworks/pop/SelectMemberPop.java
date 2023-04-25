@@ -137,6 +137,7 @@ public class SelectMemberPop extends Activity {
                                                 jsonObject.getString("join_date"),
                                                 jsonObject.getString("state"),
                                                 jsonObject.getString("jikgup"),
+                                                jsonObject.getString("paykind"),
                                                 jsonObject.getString("pay"),
                                                 jsonObject.getString("worktime"),
                                                 jsonObject.getString("contract_cnt")
