@@ -177,6 +177,12 @@ public class community_fragment2  extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        cal = Calendar.getInstance();
+        toDay = sdf.format(cal.getTime());
+        dlog.i("오늘 :" + toDay);
+        toDay = shardpref.getString("FtoDay",toDay);
+        Handler handler = new Handler();
+        handler.postDelayed(this::GetCrawling, 0);// 0.8초
     }
 
     @Override
@@ -187,12 +193,7 @@ public class community_fragment2  extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        cal = Calendar.getInstance();
-        toDay = sdf.format(cal.getTime());
-        dlog.i("오늘 :" + toDay);
-        toDay = shardpref.getString("FtoDay",toDay);
-        Handler handler = new Handler();
-        handler.postDelayed(this::GetCrawling, 0);// 0.8초
+
     }
 
     @SuppressLint("NotifyDataSetChanged")

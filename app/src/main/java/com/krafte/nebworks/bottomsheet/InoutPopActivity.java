@@ -42,7 +42,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -100,6 +99,37 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
     ImageView inout_icon;
     TextView Setinout_tv, Setinout_tv2, in_time, close_btn, inout_insert, inout_settv;
     LinearLayout time_area;
+
+    Handler handler = new Handler();
+    long now = System.currentTimeMillis();
+    Date mDate = new Date(now);
+
+    @SuppressLint("SimpleDateFormat")
+    java.text.SimpleDateFormat simpleDate_time = new java.text.SimpleDateFormat("HH:mm:ss");
+
+    String GET_TIME = simpleDate_time.format(mDate);
+    String io_state = "";
+    String getMySSID = "";
+
+    String jongeob = "";
+    String today = "";
+    String format = "HH:mm";
+    public boolean compareDate2() throws ParseException {
+        today = dc.GET_TIME;
+        boolean returntf = false;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date date1 = sdf.parse(today);
+            Date date2 = sdf.parse(jongeob.substring(3));
+//            System.out.println(sdf.format(date1));
+//            System.out.println(sdf.format(date2));
+
+            returntf = date1.after(date2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returntf;
+    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -406,44 +436,6 @@ public class InoutPopActivity extends BottomSheetDialogFragment {
         shardpref.putInt("SELECT_POSITION_sub", 0);
 //        pm.Main2(mContext);
         dismiss();
-    }
-
-
-    Handler handler = new Handler();
-    long now = System.currentTimeMillis();
-    Date mDate = new Date(now);
-
-    @SuppressLint("SimpleDateFormat")
-    java.text.SimpleDateFormat simpleDate_time = new java.text.SimpleDateFormat("HH:mm:ss");
-
-    String GET_TIME = simpleDate_time.format(mDate);
-    String title = "";
-    String io_state = "";
-    String input_date = "";
-    String getMySSID = "";
-
-    String jongeob = "";
-    Calendar cal;
-    String today = "";
-    String format = "HH:mm";
-    SimpleDateFormat sdf = new SimpleDateFormat(format);
-
-
-    public boolean compareDate2() throws ParseException {
-        today = dc.GET_TIME;
-        boolean returntf = false;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            Date date1 = sdf.parse(today);
-            Date date2 = sdf.parse(jongeob.substring(3));
-//            System.out.println(sdf.format(date1));
-//            System.out.println(sdf.format(date2));
-
-            returntf = date1.after(date2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return returntf;
     }
 
     RetrofitConnect rc = new RetrofitConnect();

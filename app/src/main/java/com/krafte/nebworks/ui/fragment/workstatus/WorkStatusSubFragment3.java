@@ -132,6 +132,11 @@ public class WorkStatusSubFragment3 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        cal = Calendar.getInstance();
+        toDay = shardpref.getString("FtoDay",sdf.format(cal.getTime()));
+        change_place_id = shardpref.getString("change_place_id","").isEmpty()?PlaceCheckData.getInstance().getPlace_id():shardpref.getString("change_place_id","");
+        dlog.i("change_place_id :"  + change_place_id);
+        SetAllMemberList();
     }
 
     @Override
@@ -148,13 +153,7 @@ public class WorkStatusSubFragment3 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        cal = Calendar.getInstance();
-        toDay = sdf.format(cal.getTime());
-        dlog.i("오늘 :" + toDay);
-        toDay = shardpref.getString("FtoDay",toDay);
-        change_place_id = shardpref.getString("change_place_id","").isEmpty()?PlaceCheckData.getInstance().getPlace_id():shardpref.getString("change_place_id","");
-        dlog.i("change_place_id :"  + change_place_id);
-        SetAllMemberList();
+
     }
 
     private void setBtnEvent() {

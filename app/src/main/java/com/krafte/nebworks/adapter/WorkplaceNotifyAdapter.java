@@ -1,13 +1,10 @@
 package com.krafte.nebworks.adapter;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -103,22 +100,22 @@ public class WorkplaceNotifyAdapter extends RecyclerView.Adapter<WorkplaceNotify
             }else{
                 holder.read_yn.setVisibility(View.GONE);
             }
-            if(loadlist == 0){
-                //--아이템에 나타나기 애니메이션 줌
-                holder.item_total.setTranslationY(150);
-                holder.item_total.setAlpha(0.f);
-                holder.item_total.animate().translationY(0).alpha(1.f)
-                        .setStartDelay(delayEnterAnimation ? 20 * (position) : 0) // position 마다 시간차를 조금 주고..
-                        .setInterpolator(new DecelerateInterpolator(2.f))
-                        .setDuration(300)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                animationsLocked = true; // 진입시에만 animation 하도록 하기 위함
-                            }
-                        });
-                loadlist++;
-            }
+//            if(loadlist == 0){
+//                //--아이템에 나타나기 애니메이션 줌
+//                holder.item_total.setTranslationY(150);
+//                holder.item_total.setAlpha(0.f);
+//                holder.item_total.animate().translationY(0).alpha(1.f)
+//                        .setStartDelay(delayEnterAnimation ? 20 * (position) : 0) // position 마다 시간차를 조금 주고..
+//                        .setInterpolator(new DecelerateInterpolator(2.f))
+//                        .setDuration(300)
+//                        .setListener(new AnimatorListenerAdapter() {
+//                            @Override
+//                            public void onAnimationEnd(Animator animation) {
+//                                animationsLocked = true; // 진입시에만 animation 하도록 하기 위함
+//                            }
+//                        });
+//                loadlist++;
+//            }
         }catch (Exception e){
             dlog.i("Exception : " + e);
         }

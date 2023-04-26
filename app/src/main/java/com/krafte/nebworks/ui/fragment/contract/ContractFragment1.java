@@ -21,7 +21,6 @@ import com.krafte.nebworks.R;
 import com.krafte.nebworks.adapter.ContractListAdapter;
 import com.krafte.nebworks.data.ContractData;
 import com.krafte.nebworks.data.PlaceCheckData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.ContractListInterface;
 import com.krafte.nebworks.dataInterface.FCMSelectInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
@@ -127,14 +126,13 @@ public class ContractFragment1 extends Fragment {
 
     }
 
-
     String searchNmae = "";
     Handler mHandler;
     int Cnt = 0;
     int Cnt1 = 0;
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart(){
+        super.onStart();
         mList = new ArrayList<>();
         searchmList = new ArrayList<>();
         timer = new Timer();
@@ -163,6 +161,11 @@ public class ContractFragment1 extends Fragment {
         };
         timer = new Timer();
         timer.schedule(timerTask,0,1000);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

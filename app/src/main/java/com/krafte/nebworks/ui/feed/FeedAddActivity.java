@@ -18,15 +18,20 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.net.ParseException;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.loader.content.CursorLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -154,8 +159,8 @@ public class FeedAddActivity extends AppCompatActivity {
         //UI 데이터 세팅
         try {
             setBtnEvent();
-            USER_INFO_ID    = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
-            place_id        = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
+            USER_INFO_ID = shardpref.getString("USER_INFO_ID", UserCheckData.getInstance().getUser_id());
+            place_id = shardpref.getString("place_id", PlaceCheckData.getInstance().getPlace_id());
             USER_INFO_EMAIL = shardpref.getString("USER_INFO_EMAIL", UserCheckData.getInstance().getUser_account());
 
             shardpref.putInt("SELECT_POSITION", 0);
@@ -219,7 +224,7 @@ public class FeedAddActivity extends AppCompatActivity {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
             AllMemberInterface api = retrofit.create(AllMemberInterface.class);
-            Call<String> call = api.getData(place_id,"");
+            Call<String> call = api.getData(place_id, "");
 
             call.enqueue(new Callback<String>() {
                 @Override
@@ -339,20 +344,20 @@ public class FeedAddActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Year = String.valueOf(year);
-                Month = String.valueOf(month+1);
+                Month = String.valueOf(month + 1);
                 Day = String.valueOf(dayOfMonth);
-                Day = Day.length()==1?"0"+Day:Day;
-                Month = Month.length()==1?"0"+Month:Month;
-                binding.eventStarttime.setText(year +"-" + Month + "-" + Day);
-                getYMPicker = binding.eventStarttime.getText().toString().substring(0,7);
+                Day = Day.length() == 1 ? "0" + Day : Day;
+                Month = Month.length() == 1 ? "0" + Month : Month;
+                binding.eventStarttime.setText(year + "-" + Month + "-" + Day);
+                getYMPicker = binding.eventStarttime.getText().toString().substring(0, 7);
             }
         }, mYear, mMonth, mDay);
 
         binding.eventStarttime.setOnClickListener(v -> {
-            if(binding.eventStarttime.getText().toString().isEmpty()){
+            if (binding.eventStarttime.getText().toString().isEmpty()) {
                 String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
                 binding.eventStarttime.setText(today);
-            }else{
+            } else {
                 shardpref.putInt("timeSelect_flag", 1);
                 if (binding.eventStarttime.isClickable()) {
                     datePickerDialog.show();
@@ -364,33 +369,38 @@ public class FeedAddActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Year = String.valueOf(year);
-                Month = String.valueOf(month+1);
+                Month = String.valueOf(month + 1);
                 Day = String.valueOf(dayOfMonth);
-                Day = Day.length()==1?"0"+Day:Day;
-                Month = Month.length()==1?"0"+Month:Month;
-                binding.eventEndttime.setText(year +"-" + Month + "-" + Day);
-                getYMPicker = binding.eventEndttime.getText().toString().substring(0,7);
+                Day = Day.length() == 1 ? "0" + Day : Day;
+                Month = Month.length() == 1 ? "0" + Month : Month;
+                binding.eventEndttime.setText(year + "-" + Month + "-" + Day);
+                getYMPicker = binding.eventEndttime.getText().toString().substring(0, 7);
             }
         }, mYear, mMonth, mDay);
         binding.eventEndttime.setOnClickListener(v -> {
-            if(binding.eventEndttime.getText().toString().isEmpty()){
-                String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
-                binding.eventEndttime.setText(today);
-            }else{
-                shardpref.putInt("timeSelect_flag", 2);
-                if (binding.eventEndttime.isClickable()) {
-                    datePickerDialog2.show();
+            if (binding.eventStarttime.getText().toString().isEmpty()) {
+                //이벤트 시작일이 정해지지 않았을때
+                Toast_Nomal("이벤트 시작일을 입력해주세요.");
+            } else {
+                if (binding.eventEndttime.getText().toString().isEmpty()) {
+                    String today = dc.GET_YEAR + "-" + dc.GET_MONTH + "-" + dc.GET_DAY;
+                    binding.eventEndttime.setText(today);
+                } else {
+                    shardpref.putInt("timeSelect_flag", 2);
+                    if (binding.eventEndttime.isClickable()) {
+                        datePickerDialog2.show();
+                    }
                 }
             }
         });
 
         binding.selectFix.setOnClickListener(v -> {
-            if(!FIXYN){
+            if (!FIXYN) {
                 FIXYN = true;
                 binding.selectFixRound.setBackgroundResource(R.drawable.ic_full_round_check);
                 binding.selectFix.setBackgroundResource(R.drawable.default_select_on_round);
                 binding.selectFixTv.setTextColor(Color.parseColor("#000000"));
-            }else{
+            } else {
                 FIXYN = false;
                 binding.selectFixRound.setBackgroundResource(R.drawable.ic_empty_round);
                 binding.selectFix.setBackgroundResource(R.drawable.default_gray_round);
@@ -399,6 +409,26 @@ public class FeedAddActivity extends AppCompatActivity {
         });
     }
 
+    boolean returntf = false;
+    public boolean compareDate2(String startevent, String endevent) throws ParseException {
+        try {
+            android.icu.text.SimpleDateFormat sdf = new android.icu.text.SimpleDateFormat("yyyy-mm-dd");
+            Date date1 = sdf.parse(startevent);
+            Date date2 = sdf.parse(endevent);
+
+            if (date1.after(date2)) {
+                Toast_Nomal("종료시간이 시작시간보다 이전입니다.");
+                binding.eventEndttime.setText("");
+                returntf = false;
+            }else{
+                returntf = true;
+            }
+//            returntf = date1.after(date2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returntf;
+    }
 
     private void permissionCheck() {
         PermissionListener permissionlistener = new PermissionListener() {
@@ -443,7 +473,7 @@ public class FeedAddActivity extends AppCompatActivity {
     String io_state = "";
 
     public void UserCheck() {
-        try{
+        try {
             mem_id = shardpref.getString("mem_id", UserCheckData.getInstance().getUser_id());
             mem_name = shardpref.getString("mem_name", UserCheckData.getInstance().getUser_name());
             mem_phone = shardpref.getString("mem_phone", UserCheckData.getInstance().getUser_phone());
@@ -465,7 +495,7 @@ public class FeedAddActivity extends AppCompatActivity {
             dlog.i("------UserCheck-------");
 
             binding.userName.setText(mem_name + "|" + mem_jikgup);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -481,16 +511,16 @@ public class FeedAddActivity extends AppCompatActivity {
         dlog.i("Profile Url : " + inputImage);
         dlog.i("EventStart : " + binding.eventStarttime.getText().toString());
         dlog.i("EventEnd : " + binding.eventEndttime.getText().toString());
-        dlog.i("fix_yn : " + (FIXYN?"y":"n"));
+        dlog.i("fix_yn : " + (FIXYN ? "y" : "n"));
         dlog.i("-----AddStroeNoti Check-----");
-        fix_yn = (FIXYN?"y":"n");
+        fix_yn = (FIXYN ? "y" : "n");
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(FeedNotiAddInterface.URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         FeedNotiAddInterface api = retrofit.create(FeedNotiAddInterface.class);
-        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, inputImage, "",noti_event_start,noti_event_end,"1","","","",fix_yn);
+        Call<String> call = api.getData(place_id, noti_title, noti_contents, USER_INFO_ID, noti_link, inputImage, "", noti_event_start, noti_event_end, "1", "", "", "", fix_yn);
         call.enqueue(new Callback<String>() {
             @SuppressLint({"LongLogTag", "SetTextI18n"})
             @Override
@@ -530,7 +560,7 @@ public class FeedAddActivity extends AppCompatActivity {
 
                                     }
                                     dlog.i("inmember size : " + inmember.size());
-                                    if(inmember.size() > 0){
+                                    if (inmember.size() > 0) {
                                         SendUserCheck();
                                     }
                                     Toast.makeText(mContext, "매장 공지사항 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show();
@@ -595,7 +625,13 @@ public class FeedAddActivity extends AppCompatActivity {
                 }
             }
         } else {
-            return true;
+            String startevent = binding.eventStarttime.getText().toString();
+            String endevent = binding.eventEndttime.getText().toString();
+            if(compareDate2(startevent, endevent)){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 
@@ -980,6 +1016,7 @@ public class FeedAddActivity extends AppCompatActivity {
     String message = "";
     String click_action = "";
     String tag = "";
+
     private void SendUserCheck() {
         List<String> member = new ArrayList<>();
         dlog.i("보내야 하는 직원 배열 :" + inmember);
@@ -1041,6 +1078,7 @@ public class FeedAddActivity extends AppCompatActivity {
     }
 
     DBConnection dbConnection = new DBConnection();
+
     private void PushFcmSend(String topic, String title, String message, String token, String tag, String place_id) {
         @SuppressLint("SetTextI18n")
         Thread th = new Thread(() -> {
@@ -1057,8 +1095,22 @@ public class FeedAddActivity extends AppCompatActivity {
     }
     /* -- 할일 추가 FCM 전송 영역 */
 
-    private void BtnOneCircleFun(boolean tf){
+    private void BtnOneCircleFun(boolean tf) {
         binding.workSave.setClickable(tf);
         binding.workSave.setEnabled(tf);
+    }
+
+    public void Toast_Nomal(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView toast_textview = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
     }
 }

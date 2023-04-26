@@ -360,7 +360,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="매장사진"
+                android:text="공지사진"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"

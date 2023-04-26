@@ -140,7 +140,11 @@ public class WorkStatusSubFragment1 extends Fragment {
     public void onStart() {
         super.onStart();
         cal = Calendar.getInstance();
-        toDay = sdf.format(cal.getTime());
+        toDay = shardpref.getString("FtoDay",sdf.format(cal.getTime()));
+        dlog.i("post 날짜 :" + toDay);
+        change_place_id = shardpref.getString("change_place_id","").equals("")?place_id:shardpref.getString("change_place_id","");
+        dlog.i("onResume change_place_id :"  + shardpref.getString("change_place_id",""));
+        SetAllMemberList();
     }
 
     @Override
@@ -151,17 +155,12 @@ public class WorkStatusSubFragment1 extends Fragment {
     @Override
     public void onDestroy(){
         super.onDestroy();
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        toDay = shardpref.getString("FtoDay",toDay);
-        dlog.i("post 날짜 :" + toDay);
-        change_place_id = shardpref.getString("change_place_id","").equals("")?place_id:shardpref.getString("change_place_id","");
-        dlog.i("onResume change_place_id :"  + shardpref.getString("change_place_id",""));
-        SetAllMemberList();
+
     }
 
     /*직원 전체 리스트 START*/

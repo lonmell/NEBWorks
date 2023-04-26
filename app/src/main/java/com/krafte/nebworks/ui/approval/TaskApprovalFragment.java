@@ -9,8 +9,13 @@ import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -166,7 +171,10 @@ public class TaskApprovalFragment extends AppCompatActivity {
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });
-
+        if(!CheckingData()){
+            Toast_Nomal("사용자 데이터를 찾을 수 없습니다\n다시 시도해주세요");
+            pm.PlaceList(mContext);
+        }
         setBtnEvent();
     }
 
@@ -523,7 +531,21 @@ public class TaskApprovalFragment extends AppCompatActivity {
             }
         });
     }
-
+    private boolean CheckingData(){
+        if(USER_INFO_ID.isEmpty()){
+            return false;
+        }else if(USER_INFO_NAME.isEmpty()){
+            return false;
+        }else if(USER_INFO_AUTH.isEmpty()){
+            return false;
+        }else if(place_id.isEmpty()){
+            return false;
+        }else if(place_name.isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
+    }
     private void setCalender(int state) {
         if (chng_icon) {
             cal.add(Calendar.MONTH, state);
@@ -717,4 +739,17 @@ public class TaskApprovalFragment extends AppCompatActivity {
         });
     }
 
+    public void Toast_Nomal(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_normal_toast, (ViewGroup)findViewById(R.id.toast_layout));
+        TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+        toast_textview.setText(String.valueOf(message));
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+        //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+        toast.setGravity(Gravity.BOTTOM, 0, 0); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+        toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+        toast.setView(layout);
+        toast.show();
+    }
 }

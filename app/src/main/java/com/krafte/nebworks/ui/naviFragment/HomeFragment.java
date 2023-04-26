@@ -215,6 +215,8 @@ public class HomeFragment extends Fragment {
         super.onStart();
         getPlaceData();
         getWifiState();
+        UserCheck();
+        SetAllMemberList();
         PlaceWorkCheck(place_id, USER_INFO_AUTH, "0");
         timer = new Timer();
     }

@@ -155,7 +155,13 @@ public class community_fragment4 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        cal = Calendar.getInstance();
+        toDay = sdf.format(cal.getTime());
+        dlog.i("오늘 :" + toDay);
+        toDay = shardpref.getString("FtoDay", toDay);
 
+        setCateList();
+        getFobiddenWord();
     }
 
     @Override
@@ -166,13 +172,7 @@ public class community_fragment4 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        cal = Calendar.getInstance();
-        toDay = sdf.format(cal.getTime());
-        dlog.i("오늘 :" + toDay);
-        toDay = shardpref.getString("FtoDay", toDay);
 
-        setCateList();
-        getFobiddenWord();
     }
 
     private void setBtnEvent() {

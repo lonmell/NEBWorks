@@ -18,9 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.krafte.nebworks.adapter.TaxListAdapter;
 import com.krafte.nebworks.data.GetResultData;
-import com.krafte.nebworks.data.PlaceCheckData;
 import com.krafte.nebworks.data.TaxMemberData;
-import com.krafte.nebworks.data.UserCheckData;
 import com.krafte.nebworks.dataInterface.TaxMemListInterface;
 import com.krafte.nebworks.databinding.CommunityFragment3Binding;
 import com.krafte.nebworks.util.DateCurrent;
@@ -133,6 +131,11 @@ public class community_fragment3 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        cal = Calendar.getInstance();
+        toDay = sdf.format(cal.getTime());
+        dlog.i("오늘 :" + toDay);
+        toDay = shardpref.getString("FtoDay",toDay);
+        setRecyclerView();
     }
 
     @Override
@@ -143,11 +146,7 @@ public class community_fragment3 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        cal = Calendar.getInstance();
-        toDay = sdf.format(cal.getTime());
-        dlog.i("오늘 :" + toDay);
-        toDay = shardpref.getString("FtoDay",toDay);
-        setRecyclerView();
+
     }
 
     private void setBtnEvent() {

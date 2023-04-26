@@ -129,8 +129,8 @@ public class ContractFragment3 extends Fragment {
     int Cnt = 0;
     int Cnt1 = 0;
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         mList = new ArrayList<>();
         searchmList = new ArrayList<>();
         TimerTask timerTask = new TimerTask() {
@@ -158,6 +158,11 @@ public class ContractFragment3 extends Fragment {
         };
         timer = new Timer();
         timer.schedule(timerTask,0,1000);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
