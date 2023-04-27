@@ -788,6 +788,10 @@ public class CommunityDetailActivity extends AppCompatActivity {
                                             subcomment_id = writer_id;
                                             subcomment_name = "@" + writer_name + "  ";
                                             binding.addCommentTxt.setText(subcomment_name);
+                                            int subcom_len = binding.addCommentTxt.getText().toString().length();
+                                            if(subcomment_name.length() != 0){
+                                                binding.addCommentTxt.setSelection(subcom_len);
+                                            }
                                         }
                                     });
                                 }

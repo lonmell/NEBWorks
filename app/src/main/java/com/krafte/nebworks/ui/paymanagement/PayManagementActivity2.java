@@ -294,18 +294,19 @@ public class PayManagementActivity2 extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 // 슬라이드가 끝난 후 작동할 이벤트
-                if (before_pos != position) {
-                    if (before_pos != 0) {
-                        calPos = position - before_pos;
-                        dlog.i("onPageScrollStateChanged state : " + calPos);
-                        if (calPos > 0) {
-                            ScrollState(4);
-                        } else {
-                            ScrollState(3);
-                        }
-                    }
-                    before_pos = position;
-                }
+//                if (before_pos != position) {
+//                    if (before_pos != 0) {
+//                        calPos = position - before_pos;
+//                        dlog.i("onPageScrollStateChanged state : " + calPos);
+//                        if (calPos > 0) {
+//                            ScrollState(4);
+//                        } else {
+//                            ScrollState(3);
+//                        }
+//                    }
+//                    before_pos = position;
+//                }
+                binding.calenderViewpager.setUserInputEnabled(false);
             }
         });
 

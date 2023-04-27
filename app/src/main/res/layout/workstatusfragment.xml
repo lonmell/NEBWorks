@@ -169,8 +169,6 @@
                                         android:layout_width="45dp"
                                         android:layout_height="45dp"
                                         android:layout_alignParentEnd="true"
-                                        android:clickable="false"
-                                        android:visibility="invisible"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintTop_toTopOf="parent">
@@ -632,7 +630,7 @@
                     android:layout_below="@+id/place_status"
                     android:layout_toStartOf="@+id/change_area"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp">
 
                     <LinearLayout

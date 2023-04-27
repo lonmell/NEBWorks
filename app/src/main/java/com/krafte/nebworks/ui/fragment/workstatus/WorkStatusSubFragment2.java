@@ -186,7 +186,7 @@ public class WorkStatusSubFragment2 extends Fragment {
                             JSONArray Response = new JSONArray(jsonResponse);
 
                             mList = new ArrayList<>();
-                            mAdapter = new WorkTapMemberAdapter(mContext, mList, "1",getParentFragmentManager());
+                            mAdapter = new WorkTapMemberAdapter(mContext, mList, "",getParentFragmentManager());
                             binding.allMemberlist.setAdapter(mAdapter);
                             binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
 
@@ -198,7 +198,7 @@ public class WorkStatusSubFragment2 extends Fragment {
                                 binding.allMemberlist.setVisibility(View.VISIBLE);
                                 for (int i = 0; i < Response.length(); i++) {
                                     JSONObject jsonObject = Response.getJSONObject(i);
-                                    if(jsonObject.getString("commuting").equals("근무중") || jsonObject.getString("commuting").equals("퇴근")){
+                                    if(jsonObject.getString("commuting").equals("근무중") || jsonObject.getString("commuting").equals("퇴근")) {
                                         mAdapter.addItem(new WorkStatusTapData.WorkStatusTapData_list(
                                                 jsonObject.getString("id"),
                                                 jsonObject.getString("place_id"),
@@ -220,10 +220,12 @@ public class WorkStatusSubFragment2 extends Fragment {
                                                 jsonObject.getString("vaca_accept"),
                                                 jsonObject.getString("hdd")
                                         ));
-                                    } else {
-                                        binding.nodataArea.setVisibility(View.VISIBLE);
-                                        binding.allMemberlist.setVisibility(View.GONE);
                                     }
+                                }
+                                dlog.i("1mList.size() : " + mList.size());
+                                if(mList.size() == 0){
+                                    binding.nodataArea.setVisibility(View.VISIBLE);
+                                    binding.allMemberlist.setVisibility(View.GONE);
                                 }
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.setOnItemClickListener2((v, position) -> {

@@ -182,11 +182,12 @@ public class PlaceListActivity extends AppCompatActivity {
         }
     }
 
-
+    int titleClick = 0;
     @Override
     public void onResume() {
         super.onResume();
         try{
+            titleClick = 0;
             dlog.i("onResume!");
             shardpref.remove("page_state");
             event                         = shardpref.getString("event", "");
@@ -213,8 +214,19 @@ public class PlaceListActivity extends AppCompatActivity {
 
     private boolean isDragging = false;
 
-    private void setBtnEvent() {
 
+    private void setBtnEvent() {
+        binding.title.setOnClickListener(v -> {
+            //테스트 페이지 만들때
+//            if(titleClick < 3){
+//                titleClick++;
+//            }else{
+//                Intent intent = new Intent(mContext, CalTestActivity.class);
+//                mContext.startActivity(intent);
+//                //((Activity) context).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            }
+        });
         binding.backBtn.setOnClickListener(v -> {
             super.onBackPressed();
         });

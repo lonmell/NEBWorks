@@ -192,7 +192,6 @@ public class WorkStatusSubFragment3 extends Fragment {
                             mAdapter = new WorkTapMemberAdapter(mContext, mList, "",getParentFragmentManager());
                             binding.allMemberlist.setAdapter(mAdapter);
                             binding.allMemberlist.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false));
-
                             if (Response.length() == 0) {
                                 binding.nodataArea.setVisibility(View.VISIBLE);
                                 binding.allMemberlist.setVisibility(View.GONE);
@@ -223,10 +222,12 @@ public class WorkStatusSubFragment3 extends Fragment {
                                                     jsonObject.getString("vaca_accept"),
                                                     jsonObject.getString("hdd")
                                             ));
-                                        } else {
-                                            binding.nodataArea.setVisibility(View.VISIBLE);
-                                            binding.allMemberlist.setVisibility(View.GONE);
                                         }
+                                }
+                                dlog.i("2mList.size() : " + mList.size());
+                                if(mList.size() == 0){
+                                    binding.nodataArea.setVisibility(View.VISIBLE);
+                                    binding.allMemberlist.setVisibility(View.GONE);
                                 }
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.setOnItemClickListener2((v, position) -> {

@@ -105,23 +105,22 @@
 
             <RelativeLayout
                 android:id="@+id/place_status2"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_below="@+id/place_status"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp">
 
-<!--                android:layout_toStartOf="@+id/change_area"-->
-<!--                android:layout_toEndOf="@+id/date_select"-->
                 <RelativeLayout
                     android:id="@+id/date_layout"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp">
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/change_area">
 
                     <RelativeLayout
                         android:id="@+id/prev_date"
@@ -170,8 +169,6 @@
                     android:id="@+id/change_area"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:visibility="invisible"
-                    android:clickable="false"
                     android:layout_alignParentEnd="true">
 
                     <ImageView

@@ -117,6 +117,8 @@
                     android:scheme="@string/kakao_2_native_key" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.place.CalTestActivity" />
         <activity android:name=".ui.PushActivity" /> <!-- approval -->
         <activity android:name=".ui.approval.TaskApprovalFragment" />
         <activity android:name=".ui.approval.TaskApprovalDetail" /> <!-- feed -->

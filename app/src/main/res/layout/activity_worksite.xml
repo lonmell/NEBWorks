@@ -28,6 +28,7 @@
                 android:rotation="180" />
         </LinearLayout>
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +38,7 @@
             android:fontFamily="@font/pretendard_bold"
             android:text="매장관리"
             android:textColor="#000000"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:id="@+id/logout_area"

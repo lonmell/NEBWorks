@@ -225,10 +225,12 @@ public class WorkStatusSubFragment4 extends Fragment {
                                                 jsonObject.getString("vaca_accept"),
                                                 jsonObject.getString("hdd")
                                         ));
-                                    } else {
-                                        binding.nodataArea.setVisibility(View.VISIBLE);
-                                        binding.allMemberlist.setVisibility(View.GONE);
                                     }
+                                }
+                                dlog.i("3mList.size() : " + mList.size());
+                                if(mList.size() == 0){
+                                    binding.nodataArea.setVisibility(View.VISIBLE);
+                                    binding.allMemberlist.setVisibility(View.GONE);
                                 }
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.setOnItemClickListener2((v, position) -> {
