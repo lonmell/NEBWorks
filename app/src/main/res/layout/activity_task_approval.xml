@@ -187,7 +187,7 @@
                         android:fontFamily="@font/pretendard_bold"
                         android:gravity="center"
                         android:textSize="20sp"
-                        android:text="0000년 00월 00일"
+                        android:text=""
                         android:textColor="@color/black" />
 
                     <RelativeLayout

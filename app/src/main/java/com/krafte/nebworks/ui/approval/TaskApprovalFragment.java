@@ -462,6 +462,13 @@ public class TaskApprovalFragment extends AppCompatActivity {
         });
 
         binding.changeIcon.setOnClickListener(v -> {
+            cal = Calendar.getInstance();
+            toDay = sdf.format(cal.getTime());
+            Year = toDay.substring(0, 4);
+            Month = toDay.substring(5, 7);
+            Day = toDay.substring(8, 10);
+
+            binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
             if (!chng_icon) {
                 chng_icon = true;
                 cal = Calendar.getInstance();
@@ -569,6 +576,7 @@ public class TaskApprovalFragment extends AppCompatActivity {
     }
 
     RetrofitConnect rc = new RetrofitConnect();
+
     public void GetApprovalList(String state, String approval_date) {
         dlog.i("approval_date: " + approval_date);
         dlog.i("select_date : " + select_date);

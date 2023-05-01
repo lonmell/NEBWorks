@@ -115,7 +115,7 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
 //                        dlog.i("MONTH :: " + month);
 //                        dlog.i("----------PARAMTER----------");
 
-                        if (mList.size() != 0) {
+                        if (mList.size() != 0 && mData.size() != 0) {
                             mTask_month.clear();
                             mDay.clear();
                             mId.clear();
@@ -182,7 +182,7 @@ public class CalendarDayAdaper extends RecyclerView.Adapter<CalendarDayAdaper.Vi
                         }
                     } else {
                         //할일 BottomSheet
-                        if (mList.size() != 0) {
+                        if (mList.size() != 0 && mData.size() != 0) {
                             mTask_month.clear();
                             mDay.clear();
                             mId.clear();

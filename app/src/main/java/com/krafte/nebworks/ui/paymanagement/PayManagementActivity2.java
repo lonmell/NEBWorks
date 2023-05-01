@@ -143,7 +143,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
                 if (!chng_icon) {
                     chng_icon = true;
                     binding.tabLayout.setVisibility(View.GONE);
-                    binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
+                    binding.changeIconImg.setBackgroundResource(R.drawable.list_up_icon);
                     binding.setdate.setText(Year + "년 " + Month + "월 ");
                     binding.dateLayout.setVisibility(View.VISIBLE);
                     binding.dateSelect.setVisibility(View.GONE);
@@ -153,7 +153,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
                 } else {
                     chng_icon = false;
                     binding.tabLayout.setVisibility(View.VISIBLE);
-                    binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+                    binding.changeIconImg.setBackgroundResource(R.drawable.calendar_resize);
                     binding.setdate.setText(Year + "년 " + Month + "월");
                     binding.dateLayout.setVisibility(View.VISIBLE);
                     binding.dateSelect.setVisibility(View.GONE);
@@ -406,6 +406,30 @@ public class PayManagementActivity2 extends AppCompatActivity {
 //            SetCalenderData(Year, Month);
         } else {
             WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, USER_INFO_ID, Year + "-" + Month, Tap);
+        }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        if (!chng_icon) {
+            chng_icon = true;
+            binding.tabLayout.setVisibility(View.GONE);
+            binding.changeIconImg.setBackgroundResource(R.drawable.list_up_icon);
+            binding.setdate.setText(Year + "년 " + Month + "월 ");
+            binding.dateLayout.setVisibility(View.VISIBLE);
+            binding.dateSelect.setVisibility(View.GONE);
+            binding.allMemberlist.setVisibility(View.GONE);
+            binding.calendarArea.setVisibility(View.VISIBLE);
+        } else {
+            chng_icon = false;
+            binding.tabLayout.setVisibility(View.VISIBLE);
+            binding.changeIconImg.setBackgroundResource(R.drawable.calendar_resize);
+            binding.setdate.setText(Year + "년 " + Month + "월");
+            binding.dateLayout.setVisibility(View.VISIBLE);
+            binding.dateSelect.setVisibility(View.GONE);
+            binding.allMemberlist.setVisibility(View.VISIBLE);
+            binding.calendarArea.setVisibility(View.GONE);
         }
     }
 

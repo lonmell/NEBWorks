@@ -55,6 +55,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -422,14 +424,15 @@ public class ContractAllDataActivity extends AppCompatActivity {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
-        File f = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.jpg");
+//        File f = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.jpg");
+        File f = new File(SD_PATH, place_name + "_근로계약서.jpg");
         try {
             //파일을 생성하기전 해당 경로의 파일을 한번 삭제한다
-            if (f.delete()) {
-                System.out.println("파일이 삭제되었습니다.");
-            } else {
-                System.out.println("파일을 삭제할 수 없습니다.");
-            }
+//            if (f.delete()) {
+//                System.out.println("파일이 삭제되었습니다.");
+//            } else {
+//                System.out.println("파일을 삭제할 수 없습니다.");
+//            }
 
             f.createNewFile();
             FileOutputStream fo = new FileOutputStream(f);
@@ -437,7 +440,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
 
             Document document = new Document();
 
-            PdfWriter.getInstance(document, new FileOutputStream(SD_PATH + "/" + place_name + "_" + worker_name + "_근로계약서.pdf"));
+            PdfWriter.getInstance(document, Files.newOutputStream(Paths.get(SD_PATH + "/" + place_name + "_근로계약서.pdf")));
             document.open();
 
             Image image = Image.getInstance(f.toString());
@@ -455,7 +458,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        File file = new File(SD_PATH, place_name + "_" + worker_name + "_근로계약서.pdf");
+        File file = new File(SD_PATH, place_name + "_근로계약서.pdf");
         Uri uri = FileProvider.getUriForFile(this, "com.krafte.nebworks.provider", file);
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("application/pdf");
@@ -477,7 +480,7 @@ public class ContractAllDataActivity extends AppCompatActivity {
             }
 
             File sd = Environment.getExternalStorageDirectory();
-            String csvFile = place_name + "_" + worker_name + "_근로계약서.xls";
+            String csvFile = place_name + "_근로계약서.xls";
 
             File directory = new File(sd.getAbsolutePath());
 

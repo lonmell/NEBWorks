@@ -72,7 +72,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * 해당 매장의 할일 추가
  * */
 public class TaskAddWorkActivity extends AppCompatActivity {
-    private static final String TAG = "EmployerAddWorkActivity";
+    private static final String TAG = "TaskAddWorkActivity";
     Context mContext;
     private ActivityPlaceaddworkBinding binding;
 
@@ -840,8 +840,6 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.inputTime02.setText(String.format("오후 %02d:%02d", endHour, endMin));
             }
         }
-
-
         dlog.i("-----getTaskContents END-----");
     }
 
@@ -1193,46 +1191,44 @@ public class TaskAddWorkActivity extends AppCompatActivity {
         user_id = String.valueOf(item_user_id).replace("[", "").replace("]", "").replace(" ", "").trim();
         overdate = overdate.replace("년 ", "-").replace("월 ", "-").replace("일", "").trim();
 
+        dlog.i("TaskKind : " + TaskKind + " / make_kind : " + make_kind);
         if (WorkTitle.equals("")) {
             dlog.i("WorkTitle");
-            
             Toast.makeText(this, "할일을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else if (WorkContents.isEmpty()) {
             dlog.i("WorkContents");
-            
+
             Toast.makeText(this, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             return false;
         } else if (TaskKind.isEmpty() && make_kind == 1) {
-            
             Toast.makeText(this, "완료방법을 선택해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (TaskKind.isEmpty() && make_kind == 4) {
             return true;
         } else if (WorkDay.isEmpty()) {
-            
             Toast.makeText(this, "업무날짜를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (start_time.equals("-99")) {
             dlog.i("StarTime");
-            
+
             Toast.makeText(this, "시작시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (end_time.equals("-99")) {
             dlog.i("StarTime");
-            
+
             Toast.makeText(this, "마감시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         } else if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1])) {
             if (Integer.parseInt(splitStartDate[0]) < Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) < Integer.parseInt(splitEndDate[1])) {
                 return true;
             } else {
-                
+
                 Toast_Nomal("시작 시간이 종료 시간보다 큽니다. 다시 설정해주세요.");
                 return false;
             }
         } else if (Integer.parseInt(splitStartDate[0]) > Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) > Integer.parseInt(splitEndDate[1])) {
-            
+
             Toast_Nomal("시작 날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.");
             return false;
         } else if (user_id.equals("")) {
@@ -1243,17 +1239,17 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                     return true;
                 } else {
                     if (total_member_cnt == 0) {
-                        
+
                         Intent intent = new Intent(mContext, OneButtonPopActivity.class);
                         intent.putExtra("data", "등록된 직원이 없습니다. 직원을 추가 후 이용해 주세요.");
                         intent.putExtra("left_btn_txt", "닫기");
                         startActivity(intent);
                         overridePendingTransition(R.anim.translate_up, 0);
                     } else {
-                        
+
                         Toast.makeText(this, "업무를 배정할 직원을 선택해주세요.", Toast.LENGTH_SHORT).show();
                     }
-                    
+
                     return false;
                 }
 

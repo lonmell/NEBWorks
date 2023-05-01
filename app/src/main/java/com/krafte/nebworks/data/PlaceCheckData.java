@@ -1,6 +1,9 @@
 package com.krafte.nebworks.data;
 
+import android.content.Context;
+
 public class PlaceCheckData {
+    Context mContext;
     private static String place_id = "0";
     private static String place_name = "0";
     private static String place_owner_id = "0";
