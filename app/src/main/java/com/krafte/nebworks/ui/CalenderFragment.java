@@ -166,6 +166,7 @@ public class CalenderFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        setDate();
     }
 
     private void setDate() {
@@ -264,7 +265,6 @@ public class CalenderFragment extends Fragment {
     private void SetClickEvent(String WorkDay) {
         shardpref.putString("change_place_id", change_place_id.isEmpty() ? place_id : change_place_id);
         shardpref.putString("change_member_id", change_member_id.isEmpty() ? "" : change_member_id);
-
         switch (state) {
             case 1:
                 try {
@@ -546,7 +546,7 @@ public class CalenderFragment extends Fragment {
 
     //-- 근무현황 다시 조회
     private void SetWorkStatusCalenderData() {
-        sendList.clear();
+//        sendList.clear();
         String USER_INFO_AUTH = shardpref.getString("USER_INFO_AUTH", "");
         String getYMDate = year + "-" + month;
         Log.i(TAG, "------SetWorkStatusCalenderData------");
@@ -577,6 +577,7 @@ public class CalenderFragment extends Fragment {
                                 Log.i(TAG, "GET SIZE : " + Response2.length());
 //                                GetWorkGotoCalenderList(year, month, workGotoList2);
                             } else {
+                                sendList.clear();
                                 for (int i = 0; i < Response2.length(); i++) {
                                     JSONObject jsonObject = Response2.getJSONObject(i);
                                     sendList.add(new WorkGetallData.WorkGetallData_list(

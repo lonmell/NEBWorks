@@ -11,63 +11,62 @@
         <TextView
             android:id="@+id/task_tv1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text=""
             android:textSize="10sp"
             android:gravity="center"
-            android:singleLine="true"
             android:textColor="#ffffff"
             android:padding="2dp"/>
-        <TextView
-            android:id="@+id/task_tv2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="10sp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:layout_margin="1dp"
-            android:textColor="#ffffff"
-            android:padding="2dp"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:id="@+id/task_tv2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text=""-->
+<!--            android:textSize="10sp"-->
+<!--            android:gravity="center"-->
+<!--            android:singleLine="true"-->
+<!--            android:layout_margin="1dp"-->
+<!--            android:textColor="#ffffff"-->
+<!--            android:padding="2dp"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:id="@+id/task_tv3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="10sp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:layout_margin="1dp"
-            android:textColor="#ffffff"
-            android:padding="2dp"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:id="@+id/task_tv3"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text=""-->
+<!--            android:textSize="10sp"-->
+<!--            android:gravity="center"-->
+<!--            android:singleLine="true"-->
+<!--            android:layout_margin="1dp"-->
+<!--            android:textColor="#ffffff"-->
+<!--            android:padding="2dp"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:id="@+id/task_tv4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="10sp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:layout_margin="1dp"
-            android:textColor="#ffffff"
-            android:padding="2dp"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:id="@+id/task_tv4"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text=""-->
+<!--            android:textSize="10sp"-->
+<!--            android:gravity="center"-->
+<!--            android:singleLine="true"-->
+<!--            android:layout_margin="1dp"-->
+<!--            android:textColor="#ffffff"-->
+<!--            android:padding="2dp"-->
+<!--            tools:ignore="HardcodedText" />-->
 
-        <TextView
-            android:id="@+id/task_tv5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="10sp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:layout_margin="1dp"
-            android:textColor="#ffffff"
-            android:padding="2dp"
-            tools:ignore="HardcodedText" />
+<!--        <TextView-->
+<!--            android:id="@+id/task_tv5"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text=""-->
+<!--            android:textSize="10sp"-->
+<!--            android:gravity="center"-->
+<!--            android:singleLine="true"-->
+<!--            android:layout_margin="1dp"-->
+<!--            android:textColor="#ffffff"-->
+<!--            android:padding="2dp"-->
+<!--            tools:ignore="HardcodedText" />-->
 
 </LinearLayout>

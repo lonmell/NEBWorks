@@ -155,9 +155,7 @@ public class community_fragment1 extends Fragment {
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);
         toDay = shardpref.getString("FtoDay", toDay);
-
         setCateList();
-        getFobiddenWord();
     }
 
     @Override
@@ -168,7 +166,7 @@ public class community_fragment1 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        getFobiddenWord();
     }
 
     private void setBtnEvent() {
@@ -358,6 +356,7 @@ public class community_fragment1 extends Fragment {
                             if (Response.length() == 0) {
                                 binding.bestListTitle.setVisibility(View.GONE);
                                 binding.bestList.setVisibility(View.GONE);
+                                BestmAdapter.notifyDataSetChanged();
                                 Log.i(TAG, "GET SIZE : " + rc.placeNotiData_lists.size());
                             } else {
                                 binding.bestListTitle.setVisibility(View.VISIBLE);
@@ -500,6 +499,7 @@ public class community_fragment1 extends Fragment {
                             if (Response.length() == 0) {
                                 binding.noDataTxt2.setVisibility(View.VISIBLE);
                                 dlog.i("GET SIZE : " + rc.placeNotiData_lists.size());
+                                mAdapter.notifyDataSetChanged();
                             } else {
                                 binding.noDataTxt2.setVisibility(View.GONE);
                                 for (int i = 0; i < Response.length(); i++) {
@@ -580,7 +580,6 @@ public class community_fragment1 extends Fragment {
                         mAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(View v, int position) {
-
                                 if (USER_INFO_AUTH.isEmpty()) {
                                     isAuth();
                                 } else {

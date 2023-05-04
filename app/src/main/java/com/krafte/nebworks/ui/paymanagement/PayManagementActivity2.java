@@ -138,7 +138,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
             binding.backBtn.setOnClickListener(v -> {
                 super.onBackPressed();
             });
-
+            binding.calendarArea.setVisibility(View.GONE);
             binding.changeIcon.setOnClickListener(v -> {
                 if (!chng_icon) {
                     chng_icon = true;
@@ -155,6 +155,7 @@ public class PayManagementActivity2 extends AppCompatActivity {
                     binding.tabLayout.setVisibility(View.VISIBLE);
                     binding.changeIconImg.setBackgroundResource(R.drawable.calendar_resize);
                     binding.setdate.setText(Year + "년 " + Month + "월");
+//                    setDate = binding.setdate.getText().toString()
                     binding.dateLayout.setVisibility(View.VISIBLE);
                     binding.dateSelect.setVisibility(View.GONE);
                     binding.allMemberlist.setVisibility(View.VISIBLE);
@@ -283,29 +284,26 @@ public class PayManagementActivity2 extends AppCompatActivity {
         Month = toDay.substring(5, 7);
         binding.setdate.setText(Year + "년 " + Month + "월");
         setDate = Year + "-" + Month;
-        if (chng_icon) {
-//            SetCalenderData(Year, Month);
-        } else {
-            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, USER_INFO_ID, Year + "-" + Month, Tap);
-        }
+
+        WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, USER_INFO_ID, Year + "-" + Month, Tap);
 
         binding.calenderViewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 // 슬라이드가 끝난 후 작동할 이벤트
-//                if (before_pos != position) {
-//                    if (before_pos != 0) {
-//                        calPos = position - before_pos;
-//                        dlog.i("onPageScrollStateChanged state : " + calPos);
-//                        if (calPos > 0) {
-//                            ScrollState(4);
-//                        } else {
-//                            ScrollState(3);
-//                        }
-//                    }
-//                    before_pos = position;
-//                }
+                if (before_pos != position) {
+                    if (before_pos != 0) {
+                        calPos = position - before_pos;
+                        dlog.i("onPageScrollStateChanged state : " + calPos);
+                        if (calPos > 0) {
+                            ScrollState(4);
+                        } else {
+                            ScrollState(3);
+                        }
+                    }
+                    before_pos = position;
+                }
                 binding.calenderViewpager.setUserInputEnabled(false);
             }
         });
@@ -313,30 +311,34 @@ public class PayManagementActivity2 extends AppCompatActivity {
         binding.prevDate.setOnClickListener(v -> {
             dlog.i("prevDate Click!! PayManagementActivity");
             cal.add(Calendar.MONTH, -1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            setDate = Year + "-" + Month;
-            binding.setdate.setText(Year + "년 " + Month + "월");
             if (chng_icon) {
                 ScrollState(0);
             } else {
+                toDay = sdf.format(cal.getTime());
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                setDate = Year + "-" + Month;
+                binding.setdate.setText(Year + "년 " + Month + "월");
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, USER_INFO_ID, Year + "-" + Month, Tap);
             }
+//            ScrollState(0);
+//            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, USER_INFO_ID, Year + "-" + Month, Tap);
         });
         binding.nextDate.setOnClickListener(v -> {
             dlog.i("nextDate Click!! PayManagementActivity");
             cal.add(Calendar.MONTH, +1);
-            toDay = sdf.format(cal.getTime());
-            Year = toDay.substring(0, 4);
-            Month = toDay.substring(5, 7);
-            setDate = Year + "-" + Month;
-            binding.setdate.setText(Year + "년 " + Month + "월");
             if (chng_icon) {
                 ScrollState(1);
             } else {
+                toDay = sdf.format(cal.getTime());
+                Year = toDay.substring(0, 4);
+                Month = toDay.substring(5, 7);
+                setDate = Year + "-" + Month;
+                binding.setdate.setText(Year + "년 " + Month + "월");
                 WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, USER_INFO_ID, Year + "-" + Month, Tap);
             }
+//            ScrollState(1);
+//            WritePaymentList(change_place_id.equals("") ? place_id : change_place_id, USER_INFO_ID, Year + "-" + Month, Tap);
         });
 
         Calendar c = Calendar.getInstance();
@@ -412,25 +414,25 @@ public class PayManagementActivity2 extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        if (!chng_icon) {
-            chng_icon = true;
-            binding.tabLayout.setVisibility(View.GONE);
-            binding.changeIconImg.setBackgroundResource(R.drawable.list_up_icon);
-            binding.setdate.setText(Year + "년 " + Month + "월 ");
-            binding.dateLayout.setVisibility(View.VISIBLE);
-            binding.dateSelect.setVisibility(View.GONE);
-            binding.allMemberlist.setVisibility(View.GONE);
-            binding.calendarArea.setVisibility(View.VISIBLE);
-        } else {
-            chng_icon = false;
-            binding.tabLayout.setVisibility(View.VISIBLE);
-            binding.changeIconImg.setBackgroundResource(R.drawable.calendar_resize);
-            binding.setdate.setText(Year + "년 " + Month + "월");
-            binding.dateLayout.setVisibility(View.VISIBLE);
-            binding.dateSelect.setVisibility(View.GONE);
-            binding.allMemberlist.setVisibility(View.VISIBLE);
-            binding.calendarArea.setVisibility(View.GONE);
-        }
+//        if (!chng_icon) {
+//            chng_icon = true;
+//            binding.tabLayout.setVisibility(View.GONE);
+//            binding.changeIconImg.setBackgroundResource(R.drawable.list_up_icon);
+//            binding.setdate.setText(Year + "년 " + Month + "월 ");
+//            binding.dateLayout.setVisibility(View.VISIBLE);
+//            binding.dateSelect.setVisibility(View.GONE);
+//            binding.allMemberlist.setVisibility(View.GONE);
+//            binding.calendarArea.setVisibility(View.VISIBLE);
+//        } else {
+//            chng_icon = false;
+//            binding.tabLayout.setVisibility(View.VISIBLE);
+//            binding.changeIconImg.setBackgroundResource(R.drawable.calendar_resize);
+//            binding.setdate.setText(Year + "년 " + Month + "월");
+//            binding.dateLayout.setVisibility(View.VISIBLE);
+//            binding.dateSelect.setVisibility(View.GONE);
+//            binding.allMemberlist.setVisibility(View.VISIBLE);
+//            binding.calendarArea.setVisibility(View.GONE);
+//        }
     }
 
     @Override

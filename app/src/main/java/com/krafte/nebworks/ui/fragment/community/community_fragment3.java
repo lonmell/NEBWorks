@@ -135,7 +135,6 @@ public class community_fragment3 extends Fragment {
         toDay = sdf.format(cal.getTime());
         dlog.i("오늘 :" + toDay);
         toDay = shardpref.getString("FtoDay",toDay);
-        setRecyclerView();
     }
 
     @Override
@@ -146,7 +145,7 @@ public class community_fragment3 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        setRecyclerView();
     }
 
     private void setBtnEvent() {

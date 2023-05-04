@@ -161,7 +161,6 @@ public class community_fragment4 extends Fragment {
         toDay = shardpref.getString("FtoDay", toDay);
 
         setCateList();
-        getFobiddenWord();
     }
 
     @Override
@@ -172,7 +171,7 @@ public class community_fragment4 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        getFobiddenWord();
     }
 
     private void setBtnEvent() {
@@ -365,6 +364,7 @@ public class community_fragment4 extends Fragment {
                                 binding.bestListTitle.setVisibility(View.GONE);
                                 binding.bestList.setVisibility(View.GONE);
                                 Log.i(TAG, "GET SIZE : " + rc.placeNotiData_lists.size());
+                                BestmAdapter.notifyDataSetChanged();
                             } else {
                                 binding.bestListTitle.setVisibility(View.VISIBLE);
                                 binding.bestList.setVisibility(View.VISIBLE);
@@ -506,6 +506,7 @@ public class community_fragment4 extends Fragment {
                             if (Response.length() == 0) {
                                 binding.noDataTxt2.setVisibility(View.VISIBLE);
                                 dlog.i("GET SIZE : " + rc.placeNotiData_lists.size());
+                                mAdapter.notifyDataSetChanged();
                             } else {
                                 binding.noDataTxt2.setVisibility(View.GONE);
                                 for (int i = 0; i < Response.length(); i++) {

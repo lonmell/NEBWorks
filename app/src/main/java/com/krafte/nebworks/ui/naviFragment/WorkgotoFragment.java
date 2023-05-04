@@ -206,9 +206,24 @@ public class WorkgotoFragment extends Fragment {
             shardpref.putString("calendar_year", Year);
             shardpref.putString("calendar_month", Month);
 
+            dlog.i("onStart chng_icon : " + chng_icon);
+            if (chng_icon) {
+                binding.calendarArea.setVisibility(View.VISIBLE);
+                binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
+                binding.selectArea.setVisibility(View.GONE);
+                binding.dateLayout.setVisibility(View.VISIBLE);
+                binding.setdate.setText(Year + "년 " + Month + "월");
+                binding.line01.setVisibility(View.GONE);
+                SetWorkGotoCalenderData();
+            } else {
+                binding.calendarArea.setVisibility(View.GONE);
+                binding.changeIcon.setBackgroundResource(R.drawable.calendar_resize);
+                binding.selectArea.setVisibility(View.VISIBLE);
+                binding.dateLayout.setVisibility(View.VISIBLE);
+                binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
+                setRecyclerView();
+            }
             setAddBtnSetting();
-            setRecyclerView();
-            SetWorkGotoCalenderData();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -279,6 +294,7 @@ public class WorkgotoFragment extends Fragment {
     int currentPosition = 0;
 
     private void ScrollState(int kind) {
+//        SetWorkGotoCalenderData();
         if (kind == 0) {
             //왼쪽으로 슬라이드 - 버튼으로
             before_pos = 0;

@@ -122,6 +122,8 @@
             android:id="@+id/change_icon"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:visibility="invisible"
+            android:clickable="false"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             app:layout_constraintEnd_toEndOf="parent"

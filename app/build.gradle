@@ -10,8 +10,8 @@ android {
         applicationId "com.krafte.nebworks"
         minSdk 26
         targetSdk 32
-        versionCode 64
-        versionName "64"
+        versionCode 69
+        versionName "69"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -68,7 +68,6 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

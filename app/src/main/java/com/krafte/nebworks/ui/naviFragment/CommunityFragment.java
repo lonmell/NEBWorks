@@ -206,6 +206,7 @@ public class CommunityFragment extends Fragment {
     }
 
     private void ChangePage(int i) {
+        dlog.i("ChangePage pos : " + String.valueOf(i));
         binding.selectFragmenttv1.setTextColor(Color.parseColor("#696969"));
         binding.selectFragmentline1.setBackgroundColor(Color.parseColor("#FFFFFF"));
         binding.selectFragmenttv2.setTextColor(Color.parseColor("#696969"));

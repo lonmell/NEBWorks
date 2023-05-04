@@ -217,7 +217,7 @@ public class PlaceListActivity extends AppCompatActivity {
 
     private void setBtnEvent() {
         binding.title.setOnClickListener(v -> {
-            //테스트 페이지 만들때
+//            //테스트 페이지 만들때
 //            if(titleClick < 3){
 //                titleClick++;
 //            }else{
