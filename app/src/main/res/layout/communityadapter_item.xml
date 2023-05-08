@@ -41,7 +41,7 @@
         android:singleLine="true"
         android:text="0"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:id="@+id/list_setting"

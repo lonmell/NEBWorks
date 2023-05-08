@@ -56,7 +56,8 @@ public class Tap2OptionActivity extends Activity {
     String TaskNo = "";
     int make_kind = 0;
     String store_no = "";
-
+    String end_time = "";
+    
     //Other
     private final DateCurrent dc = new DateCurrent();
     private final DecimalFormat decimalFormat = new DecimalFormat("#,###");
@@ -87,7 +88,8 @@ public class Tap2OptionActivity extends Activity {
         SELECTED_POSITION = shardpref.getInt("SELECTED_POSITION", 0);
         TaskNo = shardpref.getString("task_no", "-1");
         make_kind = shardpref.getInt("make_kind", 0);
-
+        end_time = shardpref.getString("end_time","");
+        
         list_settingitem01 = findViewById(R.id.list_settingitem01);
         list_settingitem02 = findViewById(R.id.list_settingitem02);
         close_btn = findViewById(R.id.close_btn);
@@ -127,12 +129,31 @@ public class Tap2OptionActivity extends Activity {
             pm.addWorkGo(mContext);
         });
         list_settingitem02.setOnClickListener(v -> {
-            TaskDel();
-            finish();
-            Intent intent = new Intent();
-            intent.putExtra("result", "Close Popup");
-            setResult(RESULT_OK, intent);
-            overridePendingTransition(0, R.anim.translate_down);
+            if (end_time.length() > 6) {
+               //반복할일이 아닌 경우
+                TaskDel();
+                finish();
+                Intent intent = new Intent();
+                intent.putExtra("result", "Close Popup");
+                setResult(RESULT_OK, intent);
+                overridePendingTransition(0, R.anim.translate_down);
+            } else {
+                //반복할일인 경우
+                finish();
+                Intent intent = new Intent(mContext, TwoButtonPopActivity.class);
+                intent.putExtra("flag", "반복할일삭제");
+                intent.putExtra("data", "해당 업무를 삭제하면\n모든날짜에서 삭제됩니다.");
+                intent.putExtra("left_btn_txt", "닫기");
+                intent.putExtra("right_btn_txt", "삭제");
+                startActivity(intent);
+                overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                intent = new Intent();
+                intent.putExtra("result", "Close Popup");
+                setResult(RESULT_OK, intent);
+                overridePendingTransition(0, R.anim.translate_down);
+            }
         });
 
         close_btn.setOnClickListener(v -> {
@@ -159,6 +180,39 @@ public class Tap2OptionActivity extends Activity {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     runOnUiThread(() -> {
+                        shardpref.remove("task_no");
+                        shardpref.remove("writer_id");
+                        shardpref.remove("kind");
+                        shardpref.remove("title");
+                        shardpref.remove("contents");
+                        shardpref.remove("complete_kind");
+                        shardpref.remove("users");
+                        shardpref.remove("usersn");
+                        shardpref.remove("usersimg");
+                        shardpref.remove("usersjikgup");
+                        shardpref.remove("task_date");
+                        shardpref.remove("start_time");
+                        shardpref.remove("end_time");
+                        shardpref.remove("sun");
+                        shardpref.remove("mon");
+                        shardpref.remove("tue");
+                        shardpref.remove("wed");
+                        shardpref.remove("thu");
+                        shardpref.remove("fri");
+                        shardpref.remove("sat");
+                        shardpref.remove("img_path");
+                        shardpref.remove("complete_yn");
+                        shardpref.remove("incomplete_reason");
+                        shardpref.remove("approval_state");
+                        shardpref.remove("overdate");
+                        shardpref.remove("reject_reason");
+                        shardpref.remove("updated_at");
+                        shardpref.remove("make_kind");
+                        shardpref.remove("item_user_id");
+                        shardpref.remove("item_user_name");
+                        shardpref.remove("item_user_img");
+                        shardpref.remove("item_user_position");
+                        shardpref.remove("yoillist");
                         if (response.isSuccessful() && response.body() != null) {
                             String jsonResponse = rc.getBase64decode(response.body());
                             dlog.i("jsonResponse length : " + jsonResponse.length());

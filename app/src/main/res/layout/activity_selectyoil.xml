@@ -54,7 +54,7 @@
         android:gravity="start|center"
         android:text="근무요일을\n선택해주세요"
         android:textColor="#000000"
-        android:textSize="25dp" />
+        android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_list"

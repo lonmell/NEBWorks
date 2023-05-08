@@ -41,6 +41,7 @@ import com.krafte.nebworks.dataInterface.MemberOutPlaceInterface2;
 import com.krafte.nebworks.dataInterface.PlaceDelInterface;
 import com.krafte.nebworks.dataInterface.PlaceMemberAddInterface;
 import com.krafte.nebworks.dataInterface.PushLogInputInterface;
+import com.krafte.nebworks.dataInterface.TaskDelInterface;
 import com.krafte.nebworks.dataInterface.UserDelInterface;
 import com.krafte.nebworks.databinding.ActivityTwobuttonPopBinding;
 import com.krafte.nebworks.util.DBConnection;
@@ -322,6 +323,8 @@ public class TwoButtonPopActivity extends Activity {
                     pm.AddWorkPart(mContext);
                 } else if(flag.equals("근로계약서수정")){
                     pm.AddContractPage03(mContext);
+                } else if(flag.equals("반복할일삭제")){
+                    RoopTaskDel();
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -795,7 +798,79 @@ public class TwoButtonPopActivity extends Activity {
         });
     }
 
+    public void RoopTaskDel() {
+        String TaskNo = shardpref.getString("task_no", "-1");
+        dlog.i("TaskDel id : " + TaskNo);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TaskDelInterface.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        TaskDelInterface api = retrofit.create(TaskDelInterface.class);
+        Call<String> call = api.getData(TaskNo);
+        call.enqueue(new Callback<String>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    runOnUiThread(() -> {
+                        shardpref.remove("task_no");
+                        shardpref.remove("writer_id");
+                        shardpref.remove("kind");
+                        shardpref.remove("title");
+                        shardpref.remove("contents");
+                        shardpref.remove("complete_kind");
+                        shardpref.remove("users");
+                        shardpref.remove("usersn");
+                        shardpref.remove("usersimg");
+                        shardpref.remove("usersjikgup");
+                        shardpref.remove("task_date");
+                        shardpref.remove("start_time");
+                        shardpref.remove("end_time");
+                        shardpref.remove("sun");
+                        shardpref.remove("mon");
+                        shardpref.remove("tue");
+                        shardpref.remove("wed");
+                        shardpref.remove("thu");
+                        shardpref.remove("fri");
+                        shardpref.remove("sat");
+                        shardpref.remove("img_path");
+                        shardpref.remove("complete_yn");
+                        shardpref.remove("incomplete_reason");
+                        shardpref.remove("approval_state");
+                        shardpref.remove("overdate");
+                        shardpref.remove("reject_reason");
+                        shardpref.remove("updated_at");
+                        shardpref.remove("make_kind");
+                        shardpref.remove("item_user_id");
+                        shardpref.remove("item_user_name");
+                        shardpref.remove("item_user_img");
+                        shardpref.remove("item_user_position");
+                        shardpref.remove("yoillist");
+                        if (response.isSuccessful() && response.body() != null) {
+                            String jsonResponse = rc.getBase64decode(response.body());
+                            dlog.i("jsonResponse length : " + jsonResponse.length());
+                            dlog.i("jsonResponse : " + jsonResponse);
+                            try {
+                                if(jsonResponse.replace("\"","").equals("success")){
+                                    dlog.i("jsonResponse2 : " + response.body().replace("\"","").equals("success"));
+                                    Toast_Nomal("해당 업무가 삭제완료되었습니다.");
+                                    ClosePop();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
 
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                dlog.e("에러1 = " + t.getMessage());
+            }
+        });
+    }
     //근로자 > 점주 ( 초대수락 FCM )
     public void getUserToken(String user_id, String type, String message) {
         dlog.i("-----getManagerToken-----");

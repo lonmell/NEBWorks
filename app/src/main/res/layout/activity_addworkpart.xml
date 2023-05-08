@@ -44,7 +44,7 @@
                 android:fontFamily="@font/pretendard_bold"
                 android:text="근무시간 추가"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
 
         </RelativeLayout>

@@ -30,7 +30,7 @@
                 android:gravity="center"
                 android:text="[아르바이트생이 너무 괜...]\n게시글을 신고하시겠습니까?"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="match_parent"

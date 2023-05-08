@@ -40,7 +40,7 @@
             android:fontFamily="@font/pretendard_bold"
             android:text="전체 급여 관리"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

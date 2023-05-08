@@ -54,12 +54,8 @@ public class MoreFragment extends Fragment {
     PageMoveClass pm = new PageMoveClass();
     Dlog dlog = new Dlog();
     PreferenceHelper shardpref;
-    DateCurrent dc = new DateCurrent();
-    Handler handler = new Handler();
     RetrofitConnect rc = new RetrofitConnect();
 
-    ImageView more_icon;
-    TextView more_tv;
     String USER_INFO_ID = "";
     String USER_LOGIN_METHOD = "";
     String USER_INFO_AUTH = "";
@@ -69,7 +65,6 @@ public class MoreFragment extends Fragment {
     String place_name = "";
     String place_owner_id = "";
     String place_owner_name = "";
-    String place_management_office = "";
     String place_address = "";
     String place_latitude = "";
     String place_longitude = "";

@@ -85,7 +85,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="title"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"

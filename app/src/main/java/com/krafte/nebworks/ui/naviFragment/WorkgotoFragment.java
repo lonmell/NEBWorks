@@ -232,6 +232,7 @@ public class WorkgotoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setRecyclerView();
     }
 
     @Override

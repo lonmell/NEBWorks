@@ -39,7 +39,7 @@
             android:gravity="center"
             android:text="결제현황"
             android:textColor="#000"
-            android:textSize="22sp"
+            android:textSize="20sp"
             tools:ignore="HardcodedText" />
     </RelativeLayout>
 

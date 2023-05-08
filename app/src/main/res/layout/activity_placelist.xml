@@ -21,7 +21,7 @@
         android:gravity="start|center"
         android:text="매장명"
         android:textColor="#000000"
-        android:textSize="25dp" />
+        android:textSize="20sp" />
 
 
     <RelativeLayout

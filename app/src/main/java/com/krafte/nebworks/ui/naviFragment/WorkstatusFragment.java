@@ -195,16 +195,18 @@ public class WorkstatusFragment extends Fragment {
         Month = toDay.substring(5, 7);
         Day = toDay.substring(8, 10);
 
-        fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 2);
-        binding.calenderViewpager.setSaveFromParentEnabled(false);
-        binding.calenderViewpager.setAdapter(fragmentStateAdapter);
-        binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), true);
-        binding.calenderViewpager.setOffscreenPageLimit(1);
+        if(fragmentStateAdapter != null){
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 2);
+            binding.calenderViewpager.setSaveFromParentEnabled(false);
+            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
 
-        fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
-        binding.calenderViewpager.setAdapter(fragmentStateAdapter);
-        binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), true);
-        binding.calenderViewpager.setOffscreenPageLimit(1);
+            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
+            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), true);
+            binding.calenderViewpager.setOffscreenPageLimit(1);
+        }
     }
     private void SendToday() {
         shardpref.putString("FtoDay", toDay);

@@ -23,7 +23,7 @@
             android:gravity="start|center"
             android:text="신규 직원 추가"
             android:textColor="#000000"
-            android:textSize="25dp" />
+            android:textSize="20sp" />
         <LinearLayout
             android:id="@+id/cancel"
             android:layout_width="45dp"

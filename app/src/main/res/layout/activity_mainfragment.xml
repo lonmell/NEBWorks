@@ -49,7 +49,7 @@
                     android:fontFamily="@font/pretendard_bold"
                     android:text=""
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="20sp" />
 
                 <RelativeLayout
                     android:id="@+id/noti_area"

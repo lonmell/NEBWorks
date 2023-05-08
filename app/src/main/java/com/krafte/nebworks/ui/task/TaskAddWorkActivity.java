@@ -470,11 +470,15 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 binding.repeatBtn.setBackgroundResource(R.drawable.task_check_white);
                 binding.selectRepeatBtn.setBackgroundColor(ContextCompat.getColor(mContext, R.color.new_blue));
                 binding.repeatTv.setTextColor(Color.parseColor("#ffffff"));
+                binding.inputDateBox01.setVisibility(View.GONE);
+                binding.inputDateBox02.setVisibility(View.GONE);
             } else {
                 RepeatCheck = false;
                 binding.repeatBtn.setBackgroundResource(R.drawable.task_check_none);
                 binding.selectRepeatBtn.setBackgroundColor(Color.parseColor("#F5F6F8"));
                 binding.repeatTv.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                binding.inputDateBox01.setVisibility(View.VISIBLE);
+                binding.inputDateBox02.setVisibility(View.VISIBLE);
             }
 
             //캘린더 세팅
@@ -579,6 +583,7 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                 a++;
                 getTaskContents();
             }
+            mem_mAdapter.notifyDataSetChanged();
             binding.inputWorktitle.clearFocus();
             binding.inputWorkcontents.clearFocus();
 
@@ -600,8 +605,17 @@ public class TaskAddWorkActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStop(){
+        super.onStop();
+    }
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        shardpref.remove("item_user_id");
+        shardpref.remove("item_user_name");
+        shardpref.remove("item_user_img");
+        shardpref.remove("item_user_position");
+        shardpref.remove("yoillist");
     }
 
     String today = "";
@@ -954,7 +968,11 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                     if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         dlog.i("SelectEmployeeid : " + user_id);
-
+                                        shardpref.remove("item_user_id");
+                                        shardpref.remove("item_user_name");
+                                        shardpref.remove("item_user_img");
+                                        shardpref.remove("item_user_position");
+                                        shardpref.remove("yoillist");
                                         if (USER_INFO_AUTH.equals("0")) {
                                             if (!user_id.equals("")) {
                                                 SendUserCheck(1);
@@ -1032,6 +1050,11 @@ public class TaskAddWorkActivity extends AppCompatActivity {
                                     if (jsonResponse.replace("\"", "").equals("success") || jsonResponse.replace("\"", "").equals("success")) {
                                         dlog.i("assignment_kind : " + assignment_kind);
                                         dlog.i("SelectEmployeeid : " + user_id);
+                                        shardpref.remove("item_user_id");
+                                        shardpref.remove("item_user_name");
+                                        shardpref.remove("item_user_img");
+                                        shardpref.remove("item_user_position");
+                                        shardpref.remove("yoillist");
                                         String return_page = shardpref.getString("return_page", "");
 
                                         if (!user_id.equals("")) {
@@ -1223,12 +1246,19 @@ public class TaskAddWorkActivity extends AppCompatActivity {
             if (Integer.parseInt(splitStartDate[0]) < Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) < Integer.parseInt(splitEndDate[1])) {
                 return true;
             } else {
-
-                Toast_Nomal("시작 시간이 종료 시간보다 큽니다. 다시 설정해주세요.");
-                return false;
+                if(RepeatCheck){
+                    if (Integer.parseInt(splitStartTime[0]) > Integer.parseInt(splitEndTime[0]) || Integer.parseInt(splitStartTime[1]) > Integer.parseInt(splitEndTime[1])) {
+                        Toast_Nomal("시작 시간이 종료 시간보다 큽니다. 다시 설정해주세요.");
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }else{
+                    Toast_Nomal("시작 시간이 종료 시간보다 큽니다. 다시 설정해주세요.");
+                    return false;
+                }
             }
         } else if (Integer.parseInt(splitStartDate[0]) > Integer.parseInt(splitEndDate[0]) || Integer.parseInt(splitStartDate[1]) > Integer.parseInt(splitEndDate[1])) {
-
             Toast_Nomal("시작 날짜가 종료 날짜보다 큽니다. 다시 설정해주세요.");
             return false;
         } else if (user_id.equals("")) {

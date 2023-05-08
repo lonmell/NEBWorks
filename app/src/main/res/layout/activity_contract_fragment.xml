@@ -40,7 +40,7 @@
             android:fontFamily="@font/pretendard_bold"
             android:text="근로계약 목록"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

@@ -121,7 +121,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             String title = "";
             String content = "";
 
-            if(forbiList.size() != 0){
+            if(forbiList.size() != 0 && (!forbiList.equals("null") || !forbiList.equals(""))){
                 for(int i = 0; i < forbiList.size(); i++){
                     if(item.getTitle().contains(forbiList.get(i).replace(" ",""))){
                         title = item.getTitle().replace(forbiList.get(i).replace(" ","")," ○○○ ");

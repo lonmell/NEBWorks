@@ -45,7 +45,7 @@
                 android:fontFamily="@font/pretendard_bold"
                 android:text="직원관리"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <RelativeLayout
                 android:id="@+id/noti_area"
