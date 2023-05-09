@@ -195,7 +195,6 @@ public class WorkstatusFragment extends Fragment {
         Month = toDay.substring(5, 7);
         Day = toDay.substring(8, 10);
 
-        if(fragmentStateAdapter != null){
             fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 2);
             binding.calenderViewpager.setSaveFromParentEnabled(false);
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
@@ -206,7 +205,6 @@ public class WorkstatusFragment extends Fragment {
             binding.calenderViewpager.setAdapter(fragmentStateAdapter);
             binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), true);
             binding.calenderViewpager.setOffscreenPageLimit(1);
-        }
     }
     private void SendToday() {
         shardpref.putString("FtoDay", toDay);
@@ -294,7 +292,11 @@ public class WorkstatusFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        SettingCal();
+        try{
+            SettingCal();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -480,7 +482,11 @@ public class WorkstatusFragment extends Fragment {
                 Month = Month.length() == 1 ? "0" + Month : Month;
                 dlog.i("datePickerDialog DATE : " + Year + "년 " + Month + "월 " + Day + "일");
 
-                SettingCal();
+                try{
+                    SettingCal();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 SetWorkStatusCalenderData();
                 chng_icon = false;
                 change_place_id = place_id;
@@ -538,7 +544,11 @@ public class WorkstatusFragment extends Fragment {
             Day = toDay.substring(8, 10);
             getYMPicker = Year + "-" + Month;
 
-            SettingCal();
+            try{
+                SettingCal();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             binding.calendarArea.setVisibility(View.VISIBLE);
             binding.changeIcon.setBackgroundResource(R.drawable.list_up_icon);
             binding.dateLayout.setVisibility(View.GONE);
@@ -594,7 +604,11 @@ public class WorkstatusFragment extends Fragment {
                 Day = toDay.substring(8, 10);
                 getYMPicker = Year + "-" + Month;
 
-                SettingCal();
+                try{
+                    SettingCal();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 binding.setdate.setText(Year + "년 " + Month + "월 " + Day + "일");
 
                 //--UI 데이터 및 페이지 세팅
@@ -689,7 +703,11 @@ public class WorkstatusFragment extends Fragment {
                         Log.i(TAG, "SetWorkStatusCalenderData function START");
                         try {
                             JSONArray Response2 = new JSONArray(jsonResponse);
-                            SettingCal();
+                            try{
+                                SettingCal();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
 //                            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 2, workGotoList2);
 //                            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
 //                            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);

@@ -180,16 +180,34 @@ public class WorkgotoFragment extends Fragment {
             dlog.i("USER_INFO_AUTH : " + USER_INFO_AUTH);
             dlog.i("SELECT_POSITION_sub : " + SELECT_POSITION_sub);
 
-            fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, workGotoList2);
-            binding.calenderViewpager.setAdapter(fragmentStateAdapter);
-            binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), false);
-            binding.calenderViewpager.setOffscreenPageLimit(1);
-
+            SettingCal();
         } catch (Exception e) {
             dlog.i("onCreate Exception : " + e);
         }
 
         return binding.getRoot();
+    }
+
+    private void SettingCal(){
+        cal = Calendar.getInstance();
+        toDay = sdf.format(cal.getTime());
+        dlog.i("오늘 :" + toDay);
+        binding.setdate.setText(toDay);
+        shardpref.putString("FtoDay", toDay);
+        Year = toDay.substring(0, 4);
+        Month = toDay.substring(5, 7);
+        Day = toDay.substring(8, 10);
+
+        fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), true, Year, Month, 1);
+        binding.calenderViewpager.setSaveFromParentEnabled(false);
+        binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+        binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), true);
+        binding.calenderViewpager.setOffscreenPageLimit(1);
+
+        fragmentStateAdapter = new FragmentStateAdapter(requireActivity(), 1, workGotoList2);
+        binding.calenderViewpager.setAdapter(fragmentStateAdapter);
+        binding.calenderViewpager.setCurrentItem(fragmentStateAdapter.returnPosition(), true);
+        binding.calenderViewpager.setOffscreenPageLimit(1);
     }
 
     @SuppressLint("SetTextI18n")
